@@ -1,5 +1,9 @@
 # VisionTrack
 
+[![CI](https://github.com/hulagerushikesh/visiontrack/actions/workflows/ci.yml/badge.svg)](https://github.com/hulagerushikesh/visiontrack/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 **Online multi-object tracking, built from first principles.**
 
 A tracking-by-detection system that follows many objects across a video and

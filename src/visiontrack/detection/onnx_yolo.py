@@ -134,5 +134,5 @@ class OnnxYoloDetector:
             if not idxs:
                 break
             ious = iou_matrix(boxes[i][None], boxes[idxs])[0]
-            idxs = [j for j, iou in zip(idxs, ious) if iou <= self.iou_threshold]
+            idxs = [j for j, iou in zip(idxs, ious, strict=False) if iou <= self.iou_threshold]
         return keep

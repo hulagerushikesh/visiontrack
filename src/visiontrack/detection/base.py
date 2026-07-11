@@ -7,8 +7,9 @@ plugged in behind :class:`Detector`.
 """
 from __future__ import annotations
 
+from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
-from typing import Iterable, Protocol, Sequence
+from typing import Protocol
 
 import numpy as np
 

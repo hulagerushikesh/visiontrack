@@ -163,7 +163,7 @@ def associate(
     matches = []
     matched_rows: set[int] = set()
     matched_cols: set[int] = set()
-    for r, c in zip(row_ind, col_ind):
+    for r, c in zip(row_ind, col_ind, strict=False):
         if cost[r, c] <= max_cost:
             matches.append((int(r), int(c)))
             matched_rows.add(int(r))

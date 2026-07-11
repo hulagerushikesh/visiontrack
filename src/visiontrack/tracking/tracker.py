@@ -30,7 +30,7 @@ from ..core.geometry import iou_matrix, xyxy_to_xyah
 from ..core.kalman import KalmanBoxTracker, chi2_gating_threshold
 from ..detection.base import Detection, detections_to_array
 from .config import TrackerConfig
-from .track import Track, TrackState
+from .track import Track
 
 __all__ = ["ByteTracker", "TrackObservation"]
 
