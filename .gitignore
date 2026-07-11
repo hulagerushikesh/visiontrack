@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# OS
+.DS_Store
+
+# Notebooks / scratch
+.ipynb_checkpoints/
+
+# Generated demo outputs (keep the curated ones in assets/)
+examples/*.png
+examples/*.gif

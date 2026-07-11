@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "visiontrack"
+version = "0.1.0"
+description = "Online multi-object tracking (Kalman + Hungarian + ByteTrack) built from scratch on NumPy"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Rushikesh Hulage" }]
+keywords = ["computer-vision", "multi-object-tracking", "kalman-filter", "bytetrack", "sort"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+    "Intended Audience :: Science/Research",
+]
+dependencies = ["numpy>=1.23"]
+
+[project.optional-dependencies]
+viz = ["matplotlib>=3.6", "pillow>=9.0"]
+onnx = ["onnxruntime>=1.15"]
+dev = ["pytest>=7.0", "scipy>=1.9", "matplotlib>=3.6", "pillow>=9.0"]
+
+[project.scripts]
+visiontrack = "visiontrack.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["src"]
