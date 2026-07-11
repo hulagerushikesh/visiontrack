@@ -20,3 +20,13 @@ venv/
 # Generated demo outputs (keep the curated ones in assets/)
 examples/*.png
 examples/*.gif
+
+# MOT dataset caches (regenerate with data/cache/precompute.py). The committed
+# frozen splits under data/splits/ are intentionally NOT ignored.
+data/cache/*.npz
+data/cache/**/*.npz
+# Raw datasets should never be committed (root-anchored so they do NOT match
+# the src/visiontrack/datasets/ code package).
+/MOT17/
+/datasets/
+/data/MOT17/

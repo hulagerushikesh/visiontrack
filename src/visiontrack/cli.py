@@ -99,6 +99,8 @@ def cmd_demo(args) -> int:
 
 
 def cmd_eval(args) -> int:
+    if args.dataset == "mot17":
+        return _cmd_eval_mot17(args)
     scene = _scene_from_args(args)
     cfg = TrackerConfig()
     metrics, _, _ = _run_sequence(scene, cfg)
@@ -107,6 +109,71 @@ def cmd_eval(args) -> int:
     else:
         for k, v in metrics.as_dict().items():
             print(f"{k:>10}: {v}")
+    return 0
+
+
+def _mot17_readers(args):
+    """Return sequence readers for the requested detector, preferring the cache.
+
+    Uses cached ``.npz`` files when present (so the raw frames can be gone),
+    otherwise reads the raw dataset live from ``--data-root``.
+    """
+    from pathlib import Path
+
+    from .datasets.cache import CachedSequence
+    from .datasets.splits import load_split
+    from .detection.mot_loader import MOT17Sequence, discover_sequences
+
+    split = load_split(args.split_file)
+    detector = args.detector
+    cache_dir = Path(args.cache_dir)
+
+    readers = []
+    if cache_dir.exists():
+        for vid in split.video_ids():
+            npz = cache_dir / f"{vid}-{detector}.npz"
+            if npz.exists():
+                readers.append(CachedSequence(npz))
+    if readers:
+        return split, readers, "cache"
+
+    if args.data_root:
+        seq_dirs = discover_sequences(args.data_root, "train", detector)
+        readers = [MOT17Sequence(d) for d in seq_dirs]
+        if readers:
+            return split, readers, "raw"
+
+    raise SystemExit(
+        "No MOT17 data found. Run data/cache/precompute.py first, or pass "
+        "--data-root pointing at your MOT17 download."
+    )
+
+
+def _cmd_eval_mot17(args) -> int:
+    from .eval.mot17 import evaluate_sequences
+
+    split, readers, source = _mot17_readers(args)
+    cfg = TrackerConfig()
+    print(
+        f"MOT17 {args.split}  |  detector={args.detector}  |  source={source}  |  "
+        f"{len(readers)} sequences  |  split='{split.name}'"
+    )
+    overall, reports = evaluate_sequences(readers, cfg, split, args.split, per_sequence=True)
+
+    headline = ["MOTA", "IDF1", "HOTA", "DetA", "AssA", "IDSW", "MOTP"]
+    if reports:
+        print(f"\n{'sequence':<18} " + " ".join(f"{k:>7}" for k in headline))
+        print("-" * (19 + 8 * len(headline)))
+        for r in reports:
+            print(
+                f"{r.name:<18} "
+                + " ".join(f"{r.metrics.get(k, 0):>7.3f}" for k in headline)
+            )
+        print("-" * (19 + 8 * len(headline)))
+    print(f"{'OVERALL':<18} " + " ".join(f"{overall.get(k, 0):>7.3f}" for k in headline))
+
+    if args.json:
+        print("\n" + json.dumps(overall, indent=2))
     return 0
 
 
@@ -172,9 +239,31 @@ def build_parser() -> argparse.ArgumentParser:
     p_demo.add_argument("--fps", type=int, default=15)
     p_demo.set_defaults(func=cmd_demo)
 
-    p_eval = sub.add_parser("eval", help="print CLEAR-MOT metrics")
+    p_eval = sub.add_parser("eval", help="print tracking metrics (synthetic or MOT17)")
     add_scene_args(p_eval)
     p_eval.add_argument("--json", action="store_true", help="emit JSON")
+    p_eval.add_argument(
+        "--dataset",
+        default="synthetic",
+        choices=["synthetic", "mot17"],
+        help="evaluate the synthetic scene (default) or real MOT17",
+    )
+    p_eval.add_argument(
+        "--split",
+        default="val",
+        choices=["train", "val", "all"],
+        help="MOT17 subset to evaluate (default: val)",
+    )
+    p_eval.add_argument(
+        "--split-file", default="mot17_val_half", help="frozen split name in data/splits/"
+    )
+    p_eval.add_argument("--detector", default="FRCNN", choices=["DPM", "FRCNN", "SDP"])
+    p_eval.add_argument(
+        "--cache-dir", default="data/cache/mot17", help="MOT17 npz cache directory"
+    )
+    p_eval.add_argument(
+        "--data-root", default=None, help="raw MOT17 root (used only if cache is absent)"
+    )
     p_eval.set_defaults(func=cmd_eval)
 
     p_ab = sub.add_parser("ablate", help="compare tracker component variants")
