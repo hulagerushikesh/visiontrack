@@ -145,7 +145,7 @@ class MotAccumulator:
             # Maximise IoU == minimise (1 - IoU); forbid sub-threshold pairs.
             cost = 1.0 - sub
             rows, cols = linear_assignment(cost)
-            for r, c in zip(rows, cols):
+            for r, c in zip(rows, cols, strict=False):
                 if sub[r, c] >= self.iou_threshold:
                     gi, hj = free_gt[r], free_hyp[c]
                     matched_gt.add(gi)
@@ -212,6 +212,6 @@ def evaluate_sequence(
     if len(frames_gt) != len(frames_hyp):
         raise ValueError("ground-truth and hypothesis frame counts differ")
     acc = MotAccumulator(iou_threshold=iou_threshold)
-    for (gt_ids, gt_boxes), (hyp_ids, hyp_boxes) in zip(frames_gt, frames_hyp):
+    for (gt_ids, gt_boxes), (hyp_ids, hyp_boxes) in zip(frames_gt, frames_hyp, strict=False):
         acc.update(gt_ids, gt_boxes, hyp_ids, hyp_boxes)
     return acc.result()

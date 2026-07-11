@@ -13,7 +13,7 @@ Two outputs are provided:
 from __future__ import annotations
 
 import colorsys
-from typing import Sequence
+from collections.abc import Sequence
 
 import numpy as np
 
@@ -132,7 +132,7 @@ def animate_scene(
                         linewidth=1.0,
                     )
                 )
-        for tid, box in zip(frame.track_ids, frame.track_boxes):
+        for tid, box in zip(frame.track_ids, frame.track_boxes, strict=False):
             color = color_for_id(tid)
             ax.add_patch(
                 Rectangle(

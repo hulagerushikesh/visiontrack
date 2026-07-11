@@ -1,4 +1,3 @@
-import numpy as np
 
 from visiontrack.detection.base import Detection
 from visiontrack.detection.synthetic import SyntheticScene, SyntheticSceneConfig
@@ -43,7 +42,7 @@ def test_track_survives_short_occlusion():
     confirmed_id = tracker.update([_linear_detection(5)])[0].track_id
 
     # Drop detections for a few frames (occlusion) ...
-    for t in range(6, 11):
+    for _ in range(6, 11):
         tracker.update([])
     # ... then it reappears; the id must persist (coasted on Kalman motion).
     obs = tracker.update([_linear_detection(11)])
