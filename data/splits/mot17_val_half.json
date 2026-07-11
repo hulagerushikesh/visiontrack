@@ -1,0 +1,16 @@
+{
+  "name": "mot17_val_half",
+  "frozen": true,
+  "protocol": "val-half",
+  "rationale": "MOT17 test has no public ground truth, so evaluation uses a fixed split of MOT17-train. We adopt the widely-used 'val-half' convention (as in ByteTrack/FairMOT): the FIRST half of each of the 7 train videos is 'train', the SECOND half is 'val'. Splitting *within* each video (rather than holding out whole videos) keeps every scene/camera represented in both halves, and makes our val numbers directly comparable to published 'MOT17 val-half' results. Frame ranges are 1-indexed and inclusive; the split point is floor(length/2). Ground truth is shared across the three public-detector variants (DPM/FRCNN/SDP) of each video, so the split is keyed by the base video id.",
+  "half_frame": "train = [1, floor(L/2)], val = [floor(L/2)+1, L]",
+  "sequences": {
+    "MOT17-02": {"length": 600,  "train": [1, 300],  "val": [301, 600]},
+    "MOT17-04": {"length": 1050, "train": [1, 525],  "val": [526, 1050]},
+    "MOT17-05": {"length": 837,  "train": [1, 418],  "val": [419, 837]},
+    "MOT17-09": {"length": 525,  "train": [1, 262],  "val": [263, 525]},
+    "MOT17-10": {"length": 654,  "train": [1, 327],  "val": [328, 654]},
+    "MOT17-11": {"length": 900,  "train": [1, 450],  "val": [451, 900]},
+    "MOT17-13": {"length": 750,  "train": [1, 375],  "val": [376, 750]}
+  }
+}
