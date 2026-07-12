@@ -21,7 +21,9 @@ dependencies = ["numpy>=1.23"]
 [project.optional-dependencies]
 viz = ["matplotlib>=3.6", "pillow>=9.0"]
 onnx = ["onnxruntime>=1.15"]
-dev = ["pytest>=7.0", "scipy>=1.9", "matplotlib>=3.6", "pillow>=9.0"]
+# Statistical-rigor harness under experiments/ (not needed by the core package).
+experiments = ["pandas>=1.5", "pyarrow>=10", "scipy>=1.9", "pyyaml>=6", "matplotlib>=3.6"]
+dev = ["pytest>=7.0", "scipy>=1.9", "matplotlib>=3.6", "pillow>=9.0", "pandas>=1.5", "pyarrow>=10", "pyyaml>=6"]
 
 [project.scripts]
 visiontrack = "visiontrack.cli:main"
@@ -32,7 +34,7 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
-pythonpath = ["src"]
+pythonpath = ["src", "."]  # "." makes the experiments/ harness importable in tests
 
 [tool.ruff]
 line-length = 100
