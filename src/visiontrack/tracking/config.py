@@ -44,6 +44,19 @@ class TrackerConfig:
     class_aware: bool = True
     """Forbid matching a track to a detection of a different class."""
 
+    # -- association cost (the ablation surface, see tracking/cost.py) ----
+    w_iou: float = 1.0
+    """Weight of the motion (IoU/GIoU) term in the association cost."""
+
+    w_app: float = 0.0
+    """Weight of the appearance (re-ID cosine) term. 0 disables it (RQ1)."""
+
+    w_unc: float = 0.0
+    """Weight of the soft Kalman-uncertainty term. 0 disables it (RQ3)."""
+
+    use_giou: bool = False
+    """Use ``1 − GIoU`` instead of ``1 − IoU`` for the motion term."""
+
     def __post_init__(self) -> None:
         if not (0 <= self.low_score_thresh <= self.high_score_thresh <= 1):
             raise ValueError("require 0 <= low_score_thresh <= high_score_thresh <= 1")
@@ -51,3 +64,13 @@ class TrackerConfig:
             raise ValueError("n_init must be >= 1")
         if self.max_age < 1:
             raise ValueError("max_age must be >= 1")
+        if min(self.w_iou, self.w_app, self.w_unc) < 0:
+            raise ValueError("cost weights must be non-negative")
+
+    def cost_weights(self):
+        """Return the :class:`~visiontrack.tracking.cost.CostWeights` view."""
+        from .cost import CostWeights
+
+        return CostWeights(
+            w_iou=self.w_iou, w_app=self.w_app, w_unc=self.w_unc, use_giou=self.use_giou
+        )

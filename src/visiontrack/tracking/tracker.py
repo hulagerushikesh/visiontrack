@@ -30,6 +30,12 @@ from ..core.geometry import iou_matrix, xyxy_to_xyah
 from ..core.kalman import KalmanBoxTracker, chi2_gating_threshold
 from ..detection.base import Detection, detections_to_array
 from .config import TrackerConfig
+from .cost import (
+    appearance_distance,
+    build_association_cost,
+    motion_distance,
+    uncertainty_distance,
+)
 from .track import Track
 
 __all__ = ["ByteTracker", "TrackObservation"]
@@ -59,6 +65,7 @@ class ByteTracker:
     def __init__(self, config: TrackerConfig | None = None) -> None:
         self.cfg = config or TrackerConfig()
         self.kf = KalmanBoxTracker()
+        self._weights = self.cfg.cost_weights()
         self.tracks: list[Track] = []
         self._next_id = 1
         self._frame = -1
@@ -153,30 +160,75 @@ class ByteTracker:
         det_boxes = detections_to_array(dets)
         ious = iou_matrix(track_boxes, det_boxes)  # (T, D)
 
-        # Base cost: lower IoU -> higher cost.
-        cost = 1.0 - ious
-        max_cost = 1.0 - iou_thresh
+        weights = self._weights
 
-        # Forbid geometrically impossible or class-mismatched pairs by pushing
-        # their cost above the acceptance threshold.
-        forbidden = ious < iou_thresh
+        # Motion term: GIoU only when requested, else the plain 1 - IoU that
+        # build_association_cost would default to (kept None to stay identical).
+        motion = (
+            motion_distance(track_boxes, det_boxes, use_giou=True)
+            if weights.use_giou
+            else None
+        )
+
+        # Forbidden class pairings (-1 == class-agnostic, matches anything).
+        class_mismatch = None
         if self.cfg.class_aware:
             det_classes = np.array([d.class_id for d in dets])
             track_classes = np.array([t.class_id for t in tracks])
-            # A class id of -1 means "class-agnostic" and matches anything.
-            mismatch = (track_classes[:, None] != det_classes[None, :]) & (
-                track_classes[:, None] != -1
-            ) & (det_classes[None, :] != -1)
-            forbidden |= mismatch
+            class_mismatch = (
+                (track_classes[:, None] != det_classes[None, :])
+                & (track_classes[:, None] != -1)
+                & (det_classes[None, :] != -1)
+            )
 
-        if gate and self.cfg.use_mahalanobis_gating:
+        # Kalman gating distances — needed to gate, and/or for the soft
+        # uncertainty term when it is switched on.
+        gating_d2 = None
+        gate_thresh = None
+        want_gate = gate and self.cfg.use_mahalanobis_gating
+        if want_gate or weights.uncertainty_on:
             det_xyah = xyxy_to_xyah(det_boxes)
-            for ti, track in enumerate(tracks):
-                d2 = self.kf.gating_distance(track.mean, track.covariance, det_xyah)
-                forbidden[ti] |= d2 > self._gate
+            gating_d2 = np.stack(
+                [self.kf.gating_distance(t.mean, t.covariance, det_xyah) for t in tracks]
+            )
+            if want_gate:
+                gate_thresh = self._gate
 
-        cost = np.where(forbidden, max_cost + 1.0, cost)
+        uncertainty = (
+            uncertainty_distance(gating_d2, self._gate)
+            if weights.uncertainty_on and gating_d2 is not None
+            else None
+        )
+
+        # Appearance term (RQ1) — inert until tracks/detections carry
+        # embeddings; kept as a hook so the surface is complete.
+        appearance = self._appearance_matrix(tracks, dets) if weights.appearance_on else None
+
+        cost, max_cost = build_association_cost(
+            ious,
+            weights,
+            iou_thresh,
+            motion=motion,
+            class_mismatch=class_mismatch,
+            gating_d2=gating_d2,
+            gate_thresh=gate_thresh,
+            appearance=appearance,
+            uncertainty=uncertainty,
+        )
         return associate(cost, max_cost)
+
+    def _appearance_matrix(self, tracks, dets):
+        """Appearance cost hook. Returns ``(T, D)`` cosine distances if both
+        sides carry embeddings, else ``None`` (the term is then skipped).
+
+        The per-track appearance gallery lands in Phase 3; until then tracks
+        have no feature and this returns ``None``.
+        """
+        track_feats = [getattr(t, "feature", None) for t in tracks]
+        det_feats = [d.feature for d in dets]
+        if any(f is None for f in track_feats) or any(f is None for f in det_feats):
+            return None
+        return appearance_distance(np.stack(track_feats), np.stack(det_feats))
 
     def _apply_match(self, track: Track, det: Detection) -> None:
         track.update(det.xyxy, det.class_id, det.score)
