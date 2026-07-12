@@ -1,0 +1,22 @@
+# Synthetic sweep exercising the statistical-rigor harness.
+# A run is fully specified by this file (its SHA-256 is the config hash).
+name: synth_baseline
+dataset: synthetic
+sequences: [1, 2, 3]        # scene families; each (sequence, seed) is one scene
+seeds: [0, 1, 2, 3, 4]
+baseline: baseline
+metrics: [MOTA, IDF1, HOTA, IDSW]
+scene:
+  num_objects: 8
+  num_frames: 80
+  occlusion_iou: 0.35
+  false_positive_rate: 0.5
+variants:
+  - name: baseline
+    overrides: {}
+  - name: baseline_copy      # identical to baseline -> p=1 sanity
+    overrides: {}
+  - name: no_recovery        # disable ByteTrack low-score recovery
+    overrides: {low_score_thresh: 0.5}
+  - name: no_gating          # disable Mahalanobis gating
+    overrides: {use_mahalanobis_gating: false}

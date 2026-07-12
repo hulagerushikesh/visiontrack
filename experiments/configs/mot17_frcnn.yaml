@@ -1,0 +1,21 @@
+# Real MOT17 (FRCNN public detections) sweep. Requires the cache:
+#   python data/cache/precompute.py --data-root <MOT17> --detector FRCNN --out data/cache/mot17
+# The tracker is deterministic on cached detections, so seeds label cells only
+# (a hook for future stochastic components); use one seed here.
+name: mot17_frcnn_val
+dataset: mot17
+detector: FRCNN
+split: val
+split_file: mot17_val_half
+cache_dir: data/cache/mot17
+sequences: [MOT17-02, MOT17-04, MOT17-05, MOT17-09, MOT17-10, MOT17-11, MOT17-13]
+seeds: [0]
+baseline: baseline
+metrics: [MOTA, IDF1, HOTA, IDSW]
+variants:
+  - name: baseline
+    overrides: {}
+  - name: no_recovery
+    overrides: {low_score_thresh: 0.5}
+  - name: no_gating
+    overrides: {use_mahalanobis_gating: false}

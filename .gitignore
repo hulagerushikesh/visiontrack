@@ -25,6 +25,12 @@ examples/*.gif
 # frozen splits under data/splits/ are intentionally NOT ignored.
 data/cache/*.npz
 data/cache/**/*.npz
+
+# Generated experiment artifacts (regenerate via experiments/run_matrix.py).
+# Configs under experiments/configs/ ARE committed.
+*.parquet
+results*.parquet
+experiments/reports/
 # Raw datasets should never be committed (root-anchored so they do NOT match
 # the src/visiontrack/datasets/ code package).
 /MOT17/

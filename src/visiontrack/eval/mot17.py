@@ -29,7 +29,13 @@ from ..tracking.tracker import ByteTracker
 from .hota import FramePair, compute_hota, compute_identity
 from .mot import MotAccumulator
 
-__all__ = ["preprocess_frame", "run_sequence", "evaluate_sequences", "SequenceReport"]
+__all__ = [
+    "preprocess_frame",
+    "run_sequence",
+    "evaluate_sequences",
+    "evaluate_frames",
+    "SequenceReport",
+]
 
 # Large per-sequence id offset so pooled sequences never share gt/tracker ids
 # (pooling with unique ids == trackeval's count-level combination across seqs).
@@ -109,8 +115,13 @@ def run_sequence(
     return frames
 
 
-def _metrics_from_frames(frames: list[FramePair]) -> dict[str, float]:
-    """Compute CLEAR-MOT + IDF1 + HOTA over already-preprocessed frames."""
+def evaluate_frames(frames: list[FramePair]) -> dict[str, float]:
+    """Compute CLEAR-MOT + IDF1 + HOTA over already-preprocessed frames.
+
+    ``frames`` is a list of ``(gt_ids, gt_boxes, tracker_ids, tracker_boxes)``
+    with ``xyxy`` boxes. Dataset-agnostic — used for both MOT17 and synthetic
+    evaluation.
+    """
     acc = MotAccumulator(iou_threshold=0.5)
     for g_ids, g_box, t_ids, t_box in frames:
         acc.update(g_ids, g_box, t_ids, t_box)
@@ -118,6 +129,10 @@ def _metrics_from_frames(frames: list[FramePair]) -> dict[str, float]:
     ident = compute_identity(frames).as_dict()
     hota = compute_hota(frames).as_dict()
     return {**clear, **ident, **hota}
+
+
+# Backwards-compatible internal alias.
+_metrics_from_frames = evaluate_frames
 
 
 @dataclass(slots=True)
