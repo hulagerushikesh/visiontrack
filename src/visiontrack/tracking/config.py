@@ -57,6 +57,9 @@ class TrackerConfig:
     use_giou: bool = False
     """Use ``1 − GIoU`` instead of ``1 − IoU`` for the motion term."""
 
+    appearance_ema_alpha: float = 0.9
+    """EMA memory for a track's appearance gallery (higher = smoother)."""
+
     def __post_init__(self) -> None:
         if not (0 <= self.low_score_thresh <= self.high_score_thresh <= 1):
             raise ValueError("require 0 <= low_score_thresh <= high_score_thresh <= 1")

@@ -231,7 +231,7 @@ class ByteTracker:
         return appearance_distance(np.stack(track_feats), np.stack(det_feats))
 
     def _apply_match(self, track: Track, det: Detection) -> None:
-        track.update(det.xyxy, det.class_id, det.score)
+        track.update(det.xyxy, det.class_id, det.score, feature=det.feature)
 
     def _spawn(self, det: Detection) -> None:
         self.tracks.append(
@@ -244,6 +244,8 @@ class ByteTracker:
                 n_init=self.cfg.n_init,
                 max_age=self.cfg.max_age,
                 start_frame=self._frame,
+                feature=det.feature,
+                ema_alpha=self.cfg.appearance_ema_alpha,
             )
         )
         self._next_id += 1

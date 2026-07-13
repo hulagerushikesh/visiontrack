@@ -128,6 +128,35 @@ def test_cached_detections_adapter_is_a_detector(seq_dir, tmp_path):
     assert len(adapter) == 3
 
 
+def test_cached_sequence_attaches_aligned_embeddings(seq_dir, tmp_path):
+    seq = MOT17Sequence(seq_dir)
+    det_npz = save_sequence_cache(seq, tmp_path / "MOT17-99-FRCNN.npz")
+
+    # Build an embedding cache aligned row-for-row with the detection cache.
+    with np.load(det_npz) as z:
+        det_frame = z["det_frame"]
+        n = det_frame.shape[0]
+    emb = np.arange(n * 3, dtype=np.float32).reshape(n, 3)  # distinct per row
+    emb_npz = tmp_path / "MOT17-99-FRCNN.colorhist.emb.npz"
+    np.savez_compressed(emb_npz, emb=emb, emb_frame=det_frame, embedder="test", dim=3)
+
+    cached = CachedSequence(det_npz, emb_path=emb_npz)
+    # Frame 1 has two detections -> two features, aligned to the first two rows.
+    dets = cached.frame(1).detections()
+    assert all(d.feature is not None for d in dets)
+    assert dets[0].feature.shape == (3,)
+    np.testing.assert_allclose(dets[0].feature, emb[0])
+
+
+def test_misaligned_embedding_cache_raises(seq_dir, tmp_path):
+    seq = MOT17Sequence(seq_dir)
+    det_npz = save_sequence_cache(seq, tmp_path / "seq.npz")
+    bad = tmp_path / "seq.bad.emb.npz"
+    np.savez_compressed(bad, emb=np.zeros((999, 3), dtype=np.float32))
+    with pytest.raises(ValueError):
+        CachedSequence(det_npz, emb_path=bad)
+
+
 def test_frozen_split_ranges_and_base_id():
     split = load_split("mot17_val_half")
     assert video_base_id("MOT17-02-SDP") == "MOT17-02"
