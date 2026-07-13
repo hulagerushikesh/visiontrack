@@ -86,7 +86,7 @@ class CachedSequence:
     cache with no dependency on the raw dataset.
     """
 
-    def __init__(self, npz_path: str | Path) -> None:
+    def __init__(self, npz_path: str | Path, emb_path: str | Path | None = None) -> None:
         self.path = Path(npz_path)
         with np.load(self.path, allow_pickle=False) as z:
             self.name = str(z["name"])
@@ -105,6 +105,19 @@ class CachedSequence:
             self._gt_conf = z["gt_conf"].astype(np.float64)
             self._gt_vis = z["gt_vis"].astype(np.float64)
 
+        # Optional appearance embeddings, aligned row-for-row with the detection
+        # arrays above (same order as this cache's det_frame/det_xyxy).
+        self._det_feat = None
+        if emb_path is not None:
+            with np.load(emb_path, allow_pickle=False) as e:
+                feats = e["emb"].astype(np.float64)
+            if feats.shape[0] != self._det_xyxy.shape[0]:
+                raise ValueError(
+                    f"embedding cache misaligned: {feats.shape[0]} embeddings vs "
+                    f"{self._det_xyxy.shape[0]} detections in {self.path.name}"
+                )
+            self._det_feat = feats
+
         self._det_index = self._build_index(self._det_frame)
         self._gt_index = self._build_index(self._gt_frame)
 
@@ -121,9 +134,10 @@ class CachedSequence:
     def frame(self, idx: int) -> FrameData:
         di = self._det_index.get(idx)
         if di is None:
-            det_xyxy, det_scores = np.empty((0, 4)), np.empty((0,))
+            det_xyxy, det_scores, det_feat = np.empty((0, 4)), np.empty((0,)), None
         else:
             det_xyxy, det_scores = self._det_xyxy[di], self._det_score[di]
+            det_feat = None if self._det_feat is None else self._det_feat[di]
 
         gi = self._gt_index.get(idx)
         if gi is None:
@@ -148,6 +162,7 @@ class CachedSequence:
             gt_classes=gt_classes,
             gt_conf=gt_conf,
             gt_vis=gt_vis,
+            det_features=det_feat,
         )
 
     def __iter__(self) -> Iterator[FrameData]:

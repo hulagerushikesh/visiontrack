@@ -46,6 +46,8 @@ class Track:
         "max_age",
         "start_frame",
         "history",
+        "feature",
+        "ema_alpha",
     )
 
     def __init__(
@@ -58,6 +60,8 @@ class Track:
         n_init: int = 3,
         max_age: int = 30,
         start_frame: int = 0,
+        feature: np.ndarray | None = None,
+        ema_alpha: float = 0.9,
     ) -> None:
         self.track_id = track_id
         self.kf = kf
@@ -74,6 +78,15 @@ class Track:
         self.start_frame = start_frame
         self.history: list[np.ndarray] = [self.to_xyxy()]
 
+        # Appearance gallery (EMA of matched-detection embeddings); None until
+        # an embedding is seen. Used only when the cost's w_app > 0.
+        self.ema_alpha = ema_alpha
+        self.feature: np.ndarray | None = None
+        if feature is not None:
+            from ..appearance.gallery import update_gallery
+
+            self.feature = update_gallery(None, feature, ema_alpha)
+
     # -- geometry accessors ----------------------------------------------
     def to_xyah(self) -> np.ndarray:
         return self.mean[:4].copy()
@@ -88,8 +101,18 @@ class Track:
         self.age += 1
         self.time_since_update += 1
 
-    def update(self, detection_xyxy: np.ndarray, class_id: int, score: float) -> None:
-        """Correct the state with a matched detection and promote if ready."""
+    def update(
+        self,
+        detection_xyxy: np.ndarray,
+        class_id: int,
+        score: float,
+        feature: np.ndarray | None = None,
+    ) -> None:
+        """Correct the state with a matched detection and promote if ready.
+
+        If the detection carries an appearance ``feature``, the track's EMA
+        gallery is updated with it.
+        """
         self.mean, self.covariance = self.kf.update(
             self.mean, self.covariance, xyxy_to_xyah(detection_xyxy)
         )
@@ -98,6 +121,11 @@ class Track:
         self.hits += 1
         self.time_since_update = 0
         self.history.append(self.to_xyxy())
+
+        if feature is not None:
+            from ..appearance.gallery import update_gallery
+
+            self.feature = update_gallery(self.feature, feature, self.ema_alpha)
 
         if self.state == TrackState.TENTATIVE and self.hits >= self.n_init:
             self.state = TrackState.CONFIRMED

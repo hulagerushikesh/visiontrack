@@ -103,11 +103,21 @@ class FrameData:
     gt_classes: np.ndarray     # (G,)
     gt_conf: np.ndarray        # (G,) 0/1 consider flag
     gt_vis: np.ndarray         # (G,) visibility in [0, 1]
+    det_features: np.ndarray | None = None  # (D, F) appearance embeddings, if cached
 
     def detections(self) -> list[Detection]:
-        """Public detections as :class:`Detection` objects (class-agnostic)."""
+        """Public detections as :class:`Detection` objects (class-agnostic).
+
+        Attaches cached appearance embeddings when available.
+        """
+        feats = self.det_features
         return [
-            Detection(xyxy=self.det_xyxy[i], score=float(self.det_scores[i]), class_id=0)
+            Detection(
+                xyxy=self.det_xyxy[i],
+                score=float(self.det_scores[i]),
+                class_id=0,
+                feature=None if feats is None else feats[i],
+            )
             for i in range(self.det_xyxy.shape[0])
         ]
 
