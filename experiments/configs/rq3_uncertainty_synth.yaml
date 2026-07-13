@@ -1,0 +1,24 @@
+# RQ3 synthetic sweep: does folding calibrated Kalman uncertainty into the
+# association cost (soft, w_unc>0) beat the fixed hard gate (w_unc=0) under
+# HIGH detector noise? Synthetic is the controlled probe (dial the noise, many
+# seeds for significance). See also the noised-MOT17 confirmation.
+name: rq3_uncertainty_synth
+dataset: synthetic
+sequences: [1, 2, 3, 4]
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+baseline: motion_gate
+metrics: [HOTA, IDF1, AssA, IDSW, MOTA]
+scene:
+  num_objects: 10
+  num_frames: 80
+  loc_noise_std: 8.0        # heavy localisation jitter
+  miss_rate: 0.2
+  false_positive_rate: 2.0  # lots of clutter
+  occlusion_iou: 0.35
+variants:
+  - name: motion_gate           # w_unc=0: hard Mahalanobis gate only
+    overrides: {}
+  - name: soft_unc_0.3
+    overrides: {w_unc: 0.3}
+  - name: soft_unc_0.6
+    overrides: {w_unc: 0.6}

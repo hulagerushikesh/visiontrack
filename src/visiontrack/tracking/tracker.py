@@ -64,7 +64,11 @@ class ByteTracker:
 
     def __init__(self, config: TrackerConfig | None = None) -> None:
         self.cfg = config or TrackerConfig()
-        self.kf = KalmanBoxTracker()
+        scale = self.cfg.kf_noise_scale
+        self.kf = KalmanBoxTracker(
+            std_weight_position=(1.0 / 20.0) * scale,
+            std_weight_velocity=(1.0 / 160.0) * scale,
+        )
         self._weights = self.cfg.cost_weights()
         self.tracks: list[Track] = []
         self._next_id = 1

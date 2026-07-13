@@ -43,26 +43,30 @@ Detection cache: 5.2 MB. Embedding cache (32-dim color histogram, 7 seqs):
 | w_app | HOTA | IDF1 | AssA | MOTA | IDSW |
 |------:|------|------|------|------|-----:|
 | 0.00  | 0.497 | 0.570 | 0.587 | 0.469 | 188 |
-| 0.15  | +0.002 | +0.004 | +0.005 | −0.001 | 190 |
-| 0.30  | +0.004 | +0.005 | +0.009 | −0.001 | 183 |
-| 0.60  | **+0.005** | **+0.007** | **+0.011** | −0.000 | **178 (−10)** |
+| 0.15  | +0.001 | +0.000 | +0.001 | −0.000 | 186 |
+| 0.30  | +0.001 | +0.001 | +0.002 | −0.000 | 182 |
+| 0.60  | +0.001 | +0.002 | +0.003 | +0.001 | **170 (−18)** |
 
 ![appearance on MOT17](../assets/appearance_mot17_frcnn.png)
 
+> **Numbers updated after the Phase 5 cost fix.** Phase 5 found that the
+> original cost let a soft term *veto* feasible pairs (shrinking the gate); the
+> corrected cost uses the terms purely to **rank** in-gate pairs (see
+> `docs/PHASE5.md`). These are the corrected, ranking-cost numbers.
+
 ### Reading it honestly
 
-- **Appearance helps association on MOT17, modestly.** The gains land in
-  **AssA** (+0.011) and **IDF1** (+0.007) — the *association* metrics — while
-  DetA is unchanged (appearance can't add detections). HOTA rises through AssA.
-- **ID switches fall 188 → 178 (−5%)** as `w_app` increases — the cleanest
-  signal, and exactly what appearance is for.
-- **MOTA is flat** — expected: MOTA is detection-dominated and appearance only
-  touches association.
-- **Not statistically significant** at p<0.05 over 7 sequences. The effect is
-  directionally consistent but small, because an HSV colour histogram is a
-  *weak* descriptor. This is the honest result, not a cherry-pick — and it sets
-  up the obvious next lever: a deep re-ID embedder (`OnnxReID`) drops in behind
-  the same interface and should widen the gap.
+- **Appearance's clearest effect is on ID switches: 188 → 170 (−10%)** as
+  `w_app` increases — exactly what appearance is for (holding identity through
+  ambiguity). The gain shows up in AssA/IDF1 too, but tiny (+0.002–0.003).
+- **HOTA barely moves (+0.001)** and **MOTA is flat** — expected: appearance
+  touches only *association*, not detection, and an HSV colour histogram is a
+  *weak* descriptor.
+- **Not statistically significant** at p<0.05 over 7 sequences — directionally
+  consistent, small in magnitude. The honest read: a cheap appearance cue nudges
+  identity stability on MOT17 but won't move HOTA much. The obvious next lever is
+  a deep re-ID embedder (`OnnxReID`), which drops in behind the same interface
+  and should widen the gap.
 
 This supports the RQ1 hypothesis on MOT17 (diverse pedestrian appearance ⇒
 appearance helps). The predicted **sign flip on DanceTrack** (near-identical
