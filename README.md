@@ -4,205 +4,151 @@
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-**Online multi-object tracking, built from first principles.**
+**A from-scratch multi-object tracker, used as a controlled study of *when* the field's standard tricks actually help.**
 
-A tracking-by-detection system that follows many objects across a video and
-assigns each a stable identity. The hard parts — the **Kalman filter**, the
-**Hungarian assignment algorithm**, and the **ByteTrack two-stage association**
-— are implemented from scratch on NumPy, not delegated to a library. The
-result runs in real time (200–2300 FPS on CPU) and is validated end-to-end
-against CLEAR-MOT metrics.
-
-![tracked trajectories](assets/trajectories.png)
-
-*Seven simulated objects tracked over 120 frames. Note tracks **#3** and **#7**
-cross in the centre and keep their identities — the job of the motion model +
-gated assignment.*
+The tracker — an 8-state **Kalman filter**, an O(n³) **Hungarian** solver, and **ByteTrack** two-stage association — is implemented from first principles on NumPy, with no ML framework in the core. On top of it sits a reproducible experiment harness that measures, on **real MOT17** with seed variance and paired significance tests, whether **appearance** and **uncertainty-aware association** actually improve tracking. Several of the answers are honest negatives — which is the point.
 
 ---
 
-## Why this project
+## Abstract
 
-Most tracking repos are a thin wrapper over `ultralytics` + a vendored
-tracker. This one is the opposite: the detector is pluggable and optional,
-while the estimation and association math is the deliverable and is
-**independently tested** (the Hungarian solver is checked against SciPy on
-hundreds of random matrices; the Kalman filter is checked for convergence and
-covariance behaviour).
+Most tracking repositories are a thin wrapper over a detector plus a vendored tracker; every reported number is a single run on one configuration. VisionTrack inverts that: the estimation and association math *is* the deliverable (independently tested against SciPy and `trackeval`), and it is used to run a **falsifiable study**. We reproduce a from-scratch ByteTrack baseline on MOT17 public detections (HOTA/IDF1 verified against `trackeval` to within `1.4e-3`), then ablate two common enhancements under seed variance and Wilcoxon significance:
 
-It demonstrates, concretely:
+- **Appearance (RQ1)** — a per-track re-ID cost helps *association* on MOT17 (ID switches 188 → 170) but the effect is small and not significant with a cheap descriptor.
+- **Uncertainty (RQ3)** — folding calibrated Kalman uncertainty into the cost is **null**, and *calibrating* the filter to real motion is **actively harmful** under detector noise (ID switches 40 → 400+). The filter's apparent under-confidence turns out to be a robustness feature, not a bug.
 
-| Area | What's shown |
-|------|--------------|
-| Probabilistic state estimation | An 8-state constant-velocity Kalman filter with height-scaled, Joseph-form updates and Mahalanobis gating |
-| Combinatorial optimization | An O(n³) Kuhn–Munkres / shortest-augmenting-path linear-assignment solver for rectangular cost matrices |
-| Algorithm design | ByteTrack-style two-stage association that recovers occluded objects from *low-confidence* detections |
-| Software architecture | Clean layering (core → detection → tracking → eval → viz), typed configs, a structural `Detector` interface, zero framework dependencies in the core |
-| Evaluation rigor | A from-scratch CLEAR-MOT implementation (MOTA/MOTP/IDSW/MT/ML) and an ablation harness that quantifies each component's contribution |
+![tracked trajectories](assets/trajectories.png)
 
-## Install
+*Synthetic sanity check: seven objects over 120 frames — tracks **#3** and **#7** cross in the centre and keep their identities.*
 
-```bash
-cd visiontrack
-pip install -e ".[dev]"          # core + tests + viz
-# core only needs numpy; extras: [viz] (matplotlib+pillow), [onnx] (onnxruntime)
-```
+---
 
-## Quickstart
+## Research questions
 
-```python
-from visiontrack import ByteTracker, TrackerConfig, Detection
+| | Question | Answer on MOT17 |
+|---|---|---|
+| **RQ1** | Does an appearance (re-ID) association cost improve tracking? | Small, consistent ↓ in ID switches; negligible HOTA change (weak descriptor) |
+| **RQ3** | Does folding *calibrated* Kalman uncertainty into the cost reduce switches under noise? | **No** — null as a soft cost; calibrating the filter *hurts* badly under detector noise |
+| RQ2 | Does a learned motion residual help? | Deferred — needs a maneuver-heavy dataset; MOT17 motion is near-linear (see §Limitations) |
 
-tracker = ByteTracker(TrackerConfig())
-for frame_detections in stream:            # list[Detection] per frame
-    for obs in tracker.update(frame_detections):
-        print(obs.track_id, obs.xyxy, obs.score)
-```
+The value is the same whichever way each result falls: a controlled study that shows a trick *doesn't* help is a contribution, not a failure.
 
-Everything runs on a built-in **synthetic scene generator**, so there is
-nothing to download:
+---
 
-```bash
-visiontrack demo  --plot traj.png --gif out.gif   # simulate + track + render
-visiontrack eval  --json                          # print CLEAR-MOT metrics
-visiontrack ablate                                # component contribution table
-```
+## Method
 
-## How it works
+**The from-scratch core** (`core/`, NumPy only):
 
-Each frame runs the classic predict → associate → update loop:
+- **Kalman filter** — 8-state constant-velocity model in DeepSORT's `xyah` parametrization, height-scaled noise for scale-invariance, Joseph-form covariance update, Mahalanobis gating. Convergence-tested.
+- **Hungarian assignment** — rectangular O(n³) Kuhn–Munkres with dual potentials; validated against `scipy.optimize.linear_sum_assignment` on 150 random matrices.
+- **ByteTrack two-stage association** + a `Tentative → Confirmed → Deleted` lifecycle FSM.
+
+**The ablation surface** (`tracking/cost.py`): the association cost is factored so each hypothesis is one weighted term with a hard gate deciding feasibility and the terms only *ranking* feasible pairs (DeepSORT-style fusion):
 
 ```
-                 ┌─────────────┐   detections (this frame)
-   tracks ──────►│   PREDICT   │        │
-   (Kalman       │  advance KF │        ▼
-    state)       └─────┬───────┘   split by confidence
-                       │            ┌──────────┴──────────┐
-                       ▼          high-score          low-score
-              ┌──────────────────┐   │                    │
-              │  STAGE 1 assoc.  │◄──┘  IoU cost + Mahalanobis gate
-              │  (confirmed ×    │
-              │   high-score)    │──unmatched tracks──┐
-              └────────┬─────────┘                    ▼
-                       │                    ┌──────────────────┐
-                 matched updates            │  STAGE 2 assoc.  │
-                       │                    │  recover with    │
-                       ▼                    │  low-score dets  │
-              ┌──────────────────┐          └────────┬─────────┘
-              │ create / delete  │◄──unmatched high───┘
-              │  (lifecycle FSM) │
-              └──────────────────┘
+cost = w_iou·motion  ⊕  w_app·appearance  ⊕  w_unc·uncertainty      (gate: IoU + class + Mahalanobis)
 ```
 
-- **Kalman filter** (`core/kalman.py`) — state `[cx, cy, aspect, h, ẋ]`,
-  constant-velocity model, noise scaled by object height for scale-invariance.
-  Association uses the **Mahalanobis distance** in innovation space, so the
-  gate widens automatically for uncertain (new or long-occluded) tracks.
-- **Assignment** (`core/assignment.py`) — a rectangular O(n³) Hungarian solver
-  with dual potentials, wrapped by a gated `associate()` that returns matched
-  pairs plus the leftover rows/columns.
-- **Two-stage association** (`tracking/tracker.py`) — the ByteTrack insight:
-  don't discard weak detections. Confident boxes match first; tracks left
-  unmatched get a second chance against the low-confidence boxes, which is how
-  partially-occluded objects keep their IDs.
-- **Lifecycle** (`tracking/track.py`) — a `Tentative → Confirmed → Deleted`
-  state machine: new tracks must survive `n_init` frames to confirm (rejects
-  false positives), and confirmed tracks coast up to `max_age` frames through
-  occlusion before deletion.
+At `w_app = w_unc = 0` this is **bit-identical** to the plain `1 − IoU` baseline, so every ablation toggles exactly one variable.
+
+**Rigor** (`eval/`, `experiments/`):
+
+- **Metrics**: from-scratch **CLEAR-MOT + IDF1 + HOTA**, cross-checked against `trackeval` end-to-end on real MOT17 (MOTA/IDF1 exact, HOTA within `1.4e-3`).
+- **Seed variance + paired significance**: every configuration is run over seeds; variants are compared paired (same sequences/seeds) with a **paired bootstrap + Wilcoxon** test and Cohen's d.
+- **Compute once**: detections and appearance embeddings are cached to disk (5.2 MB + 6.3 MB for all of MOT17-train), so the raw ~5 GB of frames can be deleted and every experiment runs CPU-only in seconds.
+
+---
 
 ## Results
 
-CLEAR-MOT on the synthetic benchmark (`visiontrack eval`, 6 objects, 120
-frames, with detector miss/false-positive/occlusion noise):
+### Baseline — from-scratch ByteTrack on real MOT17 (val-half, public detections)
 
-```
-MOTA=0.902  MOTP=0.919  IDSW=0  FP=0  FN=54  precision=1.000  recall=0.902  MT=6 ML=0
-```
+| detector | MOTA | IDF1 | HOTA | DetA | AssA |
+|----------|-----:|-----:|-----:|-----:|-----:|
+| **SDP**   | 0.624 | 0.673 | 0.565 | 0.542 | 0.589 |
+| **FRCNN** | 0.469 | 0.570 | 0.497 | 0.423 | 0.587 |
+| **DPM**   | 0.115 | 0.182 | 0.193 | 0.093 | 0.404 |
 
-**Throughput** (`benchmarks/bench_tracker.py`, CPU, single-threaded):
+Squarely in the public-detection neighbourhood (the famous ~76 MOTA ByteTrack uses a private YOLOX detector), with the expected detector ordering. `scripts/xcheck_mot17_trackeval.py` confirms our whole pipeline (preprocessing + metrics) matches `trackeval` on a real sequence.
 
-| objects | avg dets/frame | mean ms | p95 ms | FPS | MOTA | IDSW |
-|--------:|---------------:|--------:|-------:|----:|-----:|-----:|
-| 4  | 3.1  | 0.43 | 0.55 | 2334 | 0.892 | 0 |
-| 8  | 4.9  | 0.65 | 0.96 | 1541 | 0.902 | 0 |
-| 16 | 7.9  | 1.11 | 1.87 |  903 | 0.900 | 0 |
-| 32 | 13.5 | 2.02 | 3.76 |  494 | 0.893 | 0 |
-| 64 | 27.9 | 4.68 | 8.59 |  214 | 0.889 | 0 |
+### RQ1 — appearance (MOT17 FRCNN, from-scratch colour-histogram embedder)
 
-Comfortably real-time (≥30 FPS) up to 64 concurrent objects.
+| w_app | HOTA | IDF1 | AssA | IDSW |
+|------:|------|------|------|-----:|
+| 0.0 (motion only) | 0.497 | 0.570 | 0.587 | 188 |
+| 0.6 | +0.001 | +0.002 | +0.003 | **170 (−18)** |
 
-**Ablation** (`visiontrack ablate`, crowded 16-object stress scene) — each
-component earns its place:
+![appearance](assets/appearance_mot17_frcnn.png)
 
-```
-variant                         MOTA    MOTP   IDSW     FP     FN
-----------------------------------------------------------------
-full (bytetrack + gating)      0.865   0.917      0      0    153
-no low-score recovery          0.860   0.918      0      0    159   ← +6 misses
-no Mahalanobis gating          0.865   0.916      1      0    152   ← +1 ID switch
-class-agnostic                 0.865   0.917      0      0    153
-```
+Appearance's clearest effect is on **ID switches** (−10%); HOTA barely moves. Directionally consistent but not significant with a cheap descriptor — a deep re-ID model (`appearance/reid_onnx.py`, drop-in) is the lever to widen it. [Details →](docs/PHASE3.md)
 
-The low-score recovery stage reduces missed detections; the Mahalanobis gate
-prevents an identity switch in the crowd. (On easy scenes these effects
-shrink — the harness reports the honest, scene-dependent contribution rather
-than a cherry-picked number.)
+### RQ3 — calibrated uncertainty (the interesting negative)
 
-## Using a real detector
+Stepping the Kalman filter along real MOT17 GT, the innovation χ² is **0.15** where a calibrated filter would give **4.0** — it is ~25× *under-confident*, so its 95% gate captures **100%** of innovations and never rejects.
 
-The tracker consumes anything satisfying the `Detector` protocol. A YOLOv8-style
-ONNX backend is included (optional `onnxruntime`):
+![calibration](assets/kalman_calibration.png)
 
-```python
-from visiontrack.detection.onnx_yolo import OnnxYoloDetector
-from visiontrack import ByteTracker
+Consequences, measured:
 
-detector = OnnxYoloDetector("yolov8n.onnx", class_filter={0})  # persons only
-tracker = ByteTracker()
-for frame in video:                       # H×W×3 uint8
-    tracker.update(detector.detect(frame))
+- Folding uncertainty into the cost (`w_unc`) is **null** (the gate is inert, the signal near-constant).
+- *Calibrating* the filter (`kf_noise_scale=0.19`) is **catastrophic under detector noise**: HOTA −0.205, **ID switches 40 → 400+** (both p<0.05). A tight gate tuned to clean motion rejects noisy-but-correct detections and tracks fragment.
+
+**The loose gate is a robustness feature, not a bug.** This unifies with the ablation finding that disabling the gate barely changes clean-data results. [Details →](docs/PHASE5.md)
+
+### Throughput
+
+Real-time on CPU (single-threaded): **2334 FPS** at 4 objects down to **214 FPS** at 64 — comfortably ≥30 FPS across the range (`benchmarks/bench_tracker.py`).
+
+---
+
+## Reproduce
+
+```bash
+make install                 # editable install with all extras
+make test                    # 253 tests
+make reproduce-synth         # synthetic harness + RQ3 probe — NO dataset needed
 ```
 
-## Project layout
+Full real-data reproduction (after a one-time cache build — see [docs/PHASE0.md](docs/PHASE0.md)):
+
+```bash
+python data/cache/precompute.py            --data-root ~/MOT17 --detector FRCNN --out data/cache/mot17
+python data/cache/precompute_embeddings.py --data-root ~/MOT17 --detector FRCNN --cache-dir data/cache/mot17
+make reproduce               # regenerates every table and figure above
+```
+
+Every run is pinned by a config hash; bootstrap resampling and synthetic scenes are seeded. Each phase has a runbook in [`docs/`](docs/) (`PHASE0.md` … `PHASE5.md`).
+
+---
+
+## Engineering
+
+- **Zero ML-framework dependency in the core** — just NumPy. Heavy/optional deps (`scipy`, `pandas`, `matplotlib`, `pillow`, `onnxruntime`, `torch`) are isolated in extras (`[experiments]`, `[appearance]`, `[onnx]`) and lazily imported; nothing in `core/` imports them.
+- **253 tests**: unit, property (Hungarian vs SciPy), convergence (Kalman), metric cross-checks (HOTA/IDF1 vs `trackeval`), and end-to-end integration with a MOTA floor.
+- **CI** on Python 3.10/3.11/3.12 + ruff.
 
 ```
 src/visiontrack/
-  core/          geometry.py · kalman.py · assignment.py   ← the from-scratch math
-  detection/     base.py (Detection + Detector protocol)
-                 synthetic.py (scene simulator / eval oracle)
-                 onnx_yolo.py (optional real detector)
-  tracking/      track.py (lifecycle FSM) · tracker.py (ByteTrack) · config.py
-  eval/          mot.py (CLEAR-MOT metrics)
-  viz/           draw.py (matplotlib rendering, optional)
-  cli.py         demo / eval / ablate subcommands
-tests/           geometry · kalman · assignment (vs SciPy) · tracker · MOT
-benchmarks/      bench_tracker.py
-examples/        demo_synthetic.py
+  core/        geometry · kalman · assignment          ← from-scratch math
+  detection/   base · synthetic · onnx_yolo · mot_loader · noise
+  appearance/  embedder (colour-hist) · reid_onnx · gallery   (RQ1)
+  tracking/    tracker · track (FSM) · cost (ablation surface) · config
+  eval/        mot (CLEAR-MOT) · hota (HOTA/IDF1) · stats · calibration (RQ3)
+  datasets/    splits (frozen) · cache (detections + embeddings)
+experiments/   run_matrix · analyze · appearance_study · uncertainty_study · configs/
+data/cache/    precompute · precompute_embeddings
+scripts/       xcheck_mot17_trackeval.py
 ```
 
-## Testing
+---
 
-```bash
-pytest            # ~180 checks: unit + property + integration
-```
+## Limitations & honest negatives
 
-The suite includes property tests (the custom Hungarian solver must reach
-SciPy's optimal cost on 150 random matrices), Kalman convergence tests, and an
-end-to-end integration test that asserts a MOTA / ID-switch floor on the
-synthetic scene — a genuine regression gate.
-
-## Design notes & limitations
-
-- **Motion-only association.** Identity is maintained purely from motion +
-  geometry (no appearance embeddings). This is fast and robust for typical
-  frame rates; the `Detection.feature` field and the `_match` cost hook are the
-  intended extension points for adding a re-ID model (DeepSORT-style).
-- **Linear motion model.** Constant-velocity is the right default for short
-  horizons; abrupt manoeuvres over long occlusions are the known failure mode,
-  which is exactly what `max_age` bounds.
-- **Synthetic evaluation.** The included benchmark is simulated for
-  reproducibility. The metrics code is dataset-agnostic — point it at MOT17
-  ground truth and it works unchanged.
+- **Public-detection, train/val split** — reproducible and self-contained, not test-server leaderboard numbers (deliberate).
+- **RQ1 uses a weak descriptor** — an HSV colour histogram; the deep re-ID hook is built but unused for the headline numbers.
+- **RQ2 (learned motion residual) is deferred** — it needs a maneuver-heavy dataset (SportsMOT/DanceTrack); MOT17 pedestrian motion is near-linear (the calibration study measured how smooth), so a residual is a predicted null on the available data.
+- **The cross-dataset RQ1 crossover** (appearance helping on MOT17 but hurting on near-identical DanceTrack) awaits those datasets — a storage constraint, not a code one; the loaders reuse the MOT-format parser.
+- **Interactive demo** — a deployed toggle-the-branches demo is future work (needs a hosting decision).
 
 ## License
 

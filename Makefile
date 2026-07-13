@@ -1,0 +1,44 @@
+# VisionTrack — reproducibility & dev targets.
+# Override the interpreter if needed:  make test PY=python3.11
+PY ?= python3
+
+.PHONY: help install test lint reproduce reproduce-synth figures clean
+
+help:
+	@echo "targets:"
+	@echo "  install          editable install with all extras"
+	@echo "  test             run the test suite"
+	@echo "  lint             ruff check"
+	@echo "  reproduce-synth  regenerate synthetic results (NO dataset needed; CI smoke)"
+	@echo "  reproduce        full reproduction (needs the MOT17 cache; see docs/PHASE0.md)"
+
+install:
+	$(PY) -m pip install -e ".[dev,experiments,appearance]"
+
+test:
+	$(PY) -m pytest -q
+
+lint:
+	$(PY) -m ruff check src tests experiments data
+
+# Synthetic-only: reproduces the harness + RQ3 synthetic probe with no data.
+reproduce-synth:
+	$(PY) -m experiments.run_matrix --config experiments/configs/synth_baseline.yaml --out results_synth.parquet
+	$(PY) -m experiments.analyze --results results_synth.parquet --out-md docs/results_synth.md
+	$(PY) -m experiments.run_matrix --config experiments/configs/rq3_uncertainty_synth.yaml --out results_rq3_synth.parquet
+	$(PY) -m experiments.analyze --results results_rq3_synth.parquet --baseline motion_gate
+
+# Full reproduction of every real-data table and figure in the README.
+# Prerequisite (one-time): build the caches, see docs/PHASE0.md and docs/PHASE3.md:
+#   $(PY) data/cache/precompute.py            --data-root <MOT17> --detector FRCNN --out data/cache/mot17
+#   $(PY) data/cache/precompute_embeddings.py --data-root <MOT17> --detector FRCNN --cache-dir data/cache/mot17
+reproduce: reproduce-synth
+	@echo "== baseline (all detectors) =="
+	$(PY) -m visiontrack.cli eval --dataset mot17 --split val --detector FRCNN
+	@echo "== RQ1 appearance =="
+	$(PY) -m experiments.appearance_study --detector FRCNN --out-fig assets/appearance_mot17_frcnn.png
+	@echo "== RQ3 calibration + noise =="
+	$(PY) -m experiments.uncertainty_study --detector FRCNN --out-fig assets/kalman_calibration.png
+
+clean:
+	rm -f results*.parquet
