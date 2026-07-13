@@ -60,6 +60,11 @@ class TrackerConfig:
     appearance_ema_alpha: float = 0.9
     """EMA memory for a track's appearance gallery (higher = smoother)."""
 
+    kf_noise_scale: float = 1.0
+    """Scale on the Kalman filter's position/velocity noise. <1 shrinks the
+    covariance (a more *confident* filter, tighter gate). Used to calibrate the
+    filter, which on real MOT17 is badly under-confident (RQ3)."""
+
     def __post_init__(self) -> None:
         if not (0 <= self.low_score_thresh <= self.high_score_thresh <= 1):
             raise ValueError("require 0 <= low_score_thresh <= high_score_thresh <= 1")

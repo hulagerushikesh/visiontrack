@@ -134,10 +134,17 @@ def build_association_cost(
     cost = weights.w_iou * base_motion
     max_cost = weights.w_iou * (1.0 - iou_thresh)
 
+    # The gate (the `forbidden` mask below) is the sole feasibility mechanism;
+    # the appearance/uncertainty terms only *rank* feasible pairs. So each term
+    # also raises max_cost by its maximum possible contribution, ensuring a
+    # feasible (in-gate) pair is never rejected merely for scoring high on a
+    # soft term — that would turn a ranker into a veto and shrink the gate.
     if weights.appearance_on and appearance is not None:
         cost = cost + weights.w_app * appearance
+        max_cost += weights.w_app * 2.0  # cosine distance is in [0, 2]
     if weights.uncertainty_on and uncertainty is not None:
         cost = cost + weights.w_unc * uncertainty
+        max_cost += weights.w_unc * 1.0  # normalized uncertainty is in [0, 1]
 
     forbidden = ious < iou_thresh
     if class_mismatch is not None:
