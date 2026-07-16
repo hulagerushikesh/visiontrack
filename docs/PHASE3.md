@@ -80,9 +80,28 @@ toward the appearance-consistent assignment. `tests/test_mot_loader.py` adds
 embedding-cache alignment (and misalignment → error). Behavior is unchanged
 when `w_app=0`: all prior tracker/eval tests pass untouched. **244 tests pass.**
 
+### Does a stronger hand-crafted descriptor help? (No.)
+
+To test whether the weak descriptor is the bottleneck, a **vertical-stripe**
+histogram (`SpatialColorHistogramEmbedder` — head/torso/legs colour layout, the
+classic cheap re-ID trick) was run head-to-head with the global one:
+
+| embedder (w_app=0.6) | HOTA Δ | AssA Δ | IDSW |
+|---|---|---|---|
+| global colour histogram | +0.001 | +0.003 | 188 → **170** |
+| vertical-stripe (spatial) | +0.002 | +0.003 | 188 → 175 |
+
+The spatial descriptor is **not better** (marginally worse on IDSW) — coarser
+per-stripe bins plus jittery public-detection boxes offset the layout benefit,
+and neither is significant. Takeaway: hand-crafted colour appearance is near its
+ceiling on MOT17; the real lever is a **learned deep re-ID** (`OnnxReID`), not a
+fancier hand-crafted feature. Run either via
+`experiments.appearance_study --embedder {colorhist,spatial}`.
+
 ## Notes / limitations
 
-- Colour histogram is deliberately weak; `OnnxReID` is the drop-in upgrade.
+- Colour histogram (global or spatial) is deliberately weak; `OnnxReID` is the
+  drop-in upgrade and the intended way to widen the appearance gap.
 - Cross-dataset crossover (DanceTrack/SportsMOT) deferred for storage.
 - Appearance deps (`matplotlib`, `pillow`) are in the `[appearance]` extra,
   lazily imported; core still needs only NumPy.

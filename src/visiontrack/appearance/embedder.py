@@ -76,6 +76,68 @@ class ColorHistogramEmbedder:
         return feats
 
 
+class SpatialColorHistogramEmbedder:
+    """Vertical-stripe HSV colour histogram (from scratch).
+
+    A global histogram ignores *where* colour sits in the box, so a
+    dark-top/light-bottom person and a light-top/dark-bottom person look
+    identical. Splitting the crop into horizontal stripes (roughly head /
+    torso / legs for a pedestrian) and histogramming each keeps that coarse
+    spatial layout — the classic cheap re-ID descriptor, and a stronger
+    appearance cue than the global one, still with no model download.
+    """
+
+    def __init__(
+        self, stripes: int = 3, h_bins: int = 8, s_bins: int = 4, v_bins: int = 4
+    ) -> None:
+        self.stripes = stripes
+        self.h_bins = h_bins
+        self.s_bins = s_bins
+        self.v_bins = v_bins
+        self.dim = stripes * (h_bins + s_bins + v_bins)
+
+    def _hist(self, channel: np.ndarray, bins: int) -> np.ndarray:
+        h, _ = np.histogram(channel, bins=bins, range=(0.0, 1.0))
+        total = h.sum()
+        return h / total if total > 0 else h.astype(np.float64)
+
+    def embed(self, image: np.ndarray, boxes: np.ndarray) -> np.ndarray:
+        from matplotlib.colors import rgb_to_hsv
+
+        image = np.asarray(image)
+        boxes = np.asarray(boxes, dtype=np.float64).reshape(-1, 4)
+        H, W = image.shape[:2]
+        feats = np.zeros((boxes.shape[0], self.dim), dtype=np.float64)
+
+        for i, (x1, y1, x2, y2) in enumerate(boxes):
+            xa, xb = int(np.clip(x1, 0, W - 1)), int(np.clip(x2, 1, W))
+            ya, yb = int(np.clip(y1, 0, H - 1)), int(np.clip(y2, 1, H))
+            if xb <= xa or yb <= ya:
+                continue
+            crop = image[ya:yb, xa:xb, :3].astype(np.float64) / 255.0
+            hsv = rgb_to_hsv(crop)
+            edges = np.linspace(0, hsv.shape[0], self.stripes + 1).astype(int)
+            parts = []
+            for s in range(self.stripes):
+                band = hsv[edges[s] : max(edges[s] + 1, edges[s + 1])]
+                parts.append(self._hist(band[..., 0], self.h_bins))
+                parts.append(self._hist(band[..., 1], self.s_bins))
+                parts.append(self._hist(band[..., 2], self.v_bins))
+            hist = np.concatenate(parts)
+            norm = np.linalg.norm(hist)
+            feats[i] = hist / norm if norm > 0 else hist
+        return feats
+
+
+def make_embedder(name: str):
+    """Factory: ``'colorhist'`` or ``'spatial'`` -> an embedder instance."""
+    if name == "colorhist":
+        return ColorHistogramEmbedder()
+    if name == "spatial":
+        return SpatialColorHistogramEmbedder()
+    raise ValueError(f"unknown embedder: {name!r}")
+
+
 class IdentityEmbedder:
     """Deterministic test embedder: features come from caller-supplied vectors.
 

@@ -43,17 +43,17 @@ def main(argv: list[str] | None = None) -> int:
     if src.exists() and str(src) not in sys.path:
         sys.path.insert(0, str(src))
 
-    from visiontrack.appearance.embedder import ColorHistogramEmbedder
+    from visiontrack.appearance.embedder import make_embedder
 
     parser = argparse.ArgumentParser(description="Precompute MOT17 appearance embeddings")
     parser.add_argument("--data-root", required=True, help="MOT17 root (contains train/)")
     parser.add_argument("--split", default="train")
     parser.add_argument("--detector", default="FRCNN", choices=["DPM", "FRCNN", "SDP"])
     parser.add_argument("--cache-dir", default="data/cache/mot17", help="detection cache dir")
-    parser.add_argument("--embedder", default="colorhist", choices=["colorhist"])
+    parser.add_argument("--embedder", default="colorhist", choices=["colorhist", "spatial"])
     args = parser.parse_args(argv)
 
-    embedder = ColorHistogramEmbedder()
+    embedder = make_embedder(args.embedder)
     cache_dir = Path(args.cache_dir)
     npzs = sorted(cache_dir.glob(f"*-{args.detector}.npz"))
     npzs = [p for p in npzs if not p.name.endswith(".emb.npz")]
