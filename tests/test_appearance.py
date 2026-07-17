@@ -112,3 +112,72 @@ def test_appearance_on_keeps_single_object_stable():
         for o in tracker.update([_det(100 + 5 * t, [1.0, 0.0])]):
             ids.add(o.track_id)
     assert len(ids) == 1
+
+
+# -- OnnxReID: preprocessing + fixed-batch logic (no model / onnxruntime) -----
+# The real .onnx weights are gitignored and onnxruntime isn't a core dep, so we
+# exercise the deterministic logic (ImageNet normalization, batch padding, row
+# slicing, L2-norm) against a fake session, bypassing __init__.
+from visiontrack.appearance.reid_onnx import _IMAGENET_MEAN, _IMAGENET_STD, OnnxReID  # noqa: E402
+
+
+class _FakeSession:
+    """Records the batch size it was handed; returns a per-image constant."""
+
+    def __init__(self, batch, dim):
+        self.batch, self.dim, self.seen = batch, dim, []
+
+    def run(self, _outputs, feed):
+        x = next(iter(feed.values()))
+        self.seen.append(x.shape[0])
+        # one scalar per image (mean of its pixels), broadcast to dim
+        vals = x.reshape(x.shape[0], -1).mean(axis=1, keepdims=True)
+        return [np.repeat(vals, self.dim, axis=1).astype(np.float32)]
+
+
+def _fake_reid(batch=16, dim=512, h=256, w=128):
+    o = OnnxReID.__new__(OnnxReID)
+    o._session = _FakeSession(batch, dim)
+    o._input_name = "input"
+    o.batch, o.input_h, o.input_w, o.dim = batch, h, w, dim
+    o.mean, o.std, o.bgr = _IMAGENET_MEAN, _IMAGENET_STD, False
+    return o
+
+
+def test_onnx_preprocess_applies_imagenet_normalization():
+    reid = _fake_reid()
+    gray = np.full((50, 30, 3), 128, dtype=np.uint8)  # ~0.502 after /255
+    chw = reid._preprocess(gray)
+    assert chw.shape == (3, 256, 128)  # CHW at the model's spatial size
+    expected = (128 / 255.0 - _IMAGENET_MEAN) / _IMAGENET_STD
+    for c in range(3):
+        assert chw[c].mean() == pytest.approx(expected[c], abs=1e-4)
+
+
+def test_onnx_pads_partial_batch_and_slices_back():
+    reid = _fake_reid(batch=16)
+    img = np.random.default_rng(0).integers(0, 255, (400, 200, 3), dtype=np.uint8)
+    boxes = np.array([[10, 10, 40, 90], [50, 20, 90, 120], [100, 30, 150, 200]], float)
+    feats = reid.embed(img, boxes)
+    assert feats.shape == (3, 512)
+    assert reid._session.seen == [16]  # padded up to the fixed batch, one call
+    for row in feats:
+        assert np.linalg.norm(row) == pytest.approx(1.0, abs=1e-6)
+
+
+def test_onnx_chunks_more_than_one_batch():
+    reid = _fake_reid(batch=16)
+    img = np.random.default_rng(1).integers(0, 255, (500, 500, 3), dtype=np.uint8)
+    boxes = np.array([[i, i, i + 20, i + 40] for i in range(20)], float)  # 20 > 16
+    feats = reid.embed(img, boxes)
+    assert feats.shape == (20, 512)
+    assert reid._session.seen == [16, 16]  # 16 + (4 padded to 16)
+
+
+def test_onnx_zero_area_box_maps_to_zero_row():
+    reid = _fake_reid(batch=16)
+    img = np.random.default_rng(2).integers(0, 255, (200, 200, 3), dtype=np.uint8)
+    boxes = np.array([[10, 10, 60, 90], [30, 30, 30, 30]], float)  # 2nd degenerate
+    feats = reid.embed(img, boxes)
+    assert np.linalg.norm(feats[0]) == pytest.approx(1.0, abs=1e-6)
+    assert np.all(feats[1] == 0.0)

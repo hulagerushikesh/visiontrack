@@ -129,12 +129,24 @@ class SpatialColorHistogramEmbedder:
         return feats
 
 
-def make_embedder(name: str):
-    """Factory: ``'colorhist'`` or ``'spatial'`` -> an embedder instance."""
+def make_embedder(name: str, model_path: str | None = None):
+    """Factory: build an embedder by name.
+
+    ``'colorhist'`` / ``'spatial'`` are the from-scratch, no-download descriptors.
+    ``'onnx'`` builds the deep re-ID :class:`~visiontrack.appearance.reid_onnx.OnnxReID`
+    from ``model_path`` (requires ``onnxruntime``; imported lazily here so the
+    other embedders never pull the optional dependency).
+    """
     if name == "colorhist":
         return ColorHistogramEmbedder()
     if name == "spatial":
         return SpatialColorHistogramEmbedder()
+    if name == "onnx":
+        if not model_path:
+            raise ValueError("embedder 'onnx' requires model_path=<path to .onnx>")
+        from visiontrack.appearance.reid_onnx import OnnxReID
+
+        return OnnxReID(model_path)
     raise ValueError(f"unknown embedder: {name!r}")
 
 

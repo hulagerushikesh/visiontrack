@@ -11,7 +11,7 @@ storage constraint means DanceTrack/SportsMOT don't fit yet.
 | Piece | Where | Role |
 |-------|-------|------|
 | Embedders | [`appearance/embedder.py`](../src/visiontrack/appearance/embedder.py) | `ColorHistogramEmbedder` (from-scratch HSV histogram, **no download**), `IdentityEmbedder` (tests) |
-| Optional deep re-ID | [`appearance/reid_onnx.py`](../src/visiontrack/appearance/reid_onnx.py) | `OnnxReID` — pretrained OSNet/FastReID ONNX behind the same interface (lazy) |
+| Deep re-ID (wired) | [`appearance/reid_onnx.py`](../src/visiontrack/appearance/reid_onnx.py) | `OnnxReID` — pretrained OSNet/FastReID ONNX behind the same interface (lazy); batch-padded, ImageNet-normalized. **Run and reported below** — the strongest RQ1 result |
 | EMA gallery | [`appearance/gallery.py`](../src/visiontrack/appearance/gallery.py) | per-track appearance memory (`update_gallery`) |
 | Track wiring | [`tracking/track.py`](../src/visiontrack/tracking/track.py) | tracks carry an EMA `feature`, updated from matched detections |
 | Cost hook | already in place (Phase 2) | `w_app` term in `build_association_cost` |
@@ -98,10 +98,77 @@ ceiling on MOT17; the real lever is a **learned deep re-ID** (`OnnxReID`), not a
 fancier hand-crafted feature. Run either via
 `experiments.appearance_study --embedder {colorhist,spatial}`.
 
+### Does deep re-ID help? (Yes — the real lever, as predicted.)
+
+The colour-histogram sections above predicted the hand-crafted cue was near its
+ceiling and a **learned deep re-ID** would widen the gap. We tested that: a
+pretrained **OSNet-x0.25** re-ID CNN (trained on **MSMT17**), exported to ONNX
+(512-dim, ~0.9 MB), run through `OnnxReID` behind the same embedder interface —
+no change to the tracker, cost, or study. Preprocessing matches torchreid
+(RGB → 256×128 → ImageNet mean/std); the export pins a **fixed batch of 16**, so
+`OnnxReID` chunks + zero-pads crops. Embeddings are precomputed once
+(66.6 MB cache) exactly like the colour histograms, so the sweep stays CPU-only.
+
+**Head-to-head on MOT17 val-half (FRCNN), Δ vs the `w_app=0` baseline**
+(HOTA 0.497 / IDF1 0.570 / AssA 0.587 / MOTA 0.469 / **IDSW 188**), same 7-seq
+pairing, `*` = p<0.05 (Wilcoxon):
+
+| w_app | embedder | HOTA | IDF1 | AssA | MOTA | IDSW |
+|------:|----------|------|------|------|------|-----:|
+| 0.15 | colorhist | +0.001 | +0.000 | +0.001 | −0.000 | 186 |
+| 0.15 | **OSNet** | +0.002 | +0.003 | +0.005 | +0.001 | **174 (−14)** |
+| 0.30 | colorhist | +0.001 | +0.001 | +0.002 | −0.000 | 182 |
+| 0.30 | **OSNet** | +0.003 | +0.004 | +0.007 | +0.001 | **169 (−19)** |
+| 0.60 | colorhist | +0.001 | +0.002 | +0.003 | +0.001 | 170 |
+| 0.60 | **OSNet** | +0.004 | +0.004 | +0.008 | +0.001 | **163 (−25)** |
+| 0.90 | colorhist | +0.002 | +0.003 | +0.004 | +0.001 | 167 |
+| 0.90 | **OSNet** | +0.004 | +0.005 | +0.008 | +0.001 | **163 (−25)** |
+
+![deep re-ID appearance on MOT17](../assets/appearance_mot17_frcnn_osnet.png)
+
+Reading it honestly:
+
+- **Deep re-ID roughly doubles-to-quadruples appearance's association gain.** At
+  `w_app=0.6`: AssA +0.008 vs colorhist's +0.003, IDF1 +0.004 vs +0.002, HOTA
+  +0.004 vs +0.001, and **IDSW 188 → 163 (−13%)** vs colorhist's → 170 (−10%).
+- **The deep cue is trusted early.** OSNet already cuts 14 ID switches at
+  `w_app=0.15`, the weight where the colour histogram has barely moved (−2). A
+  reliable descriptor earns weight; a weak one has to be dialed up before it
+  helps, and even then helps less.
+- **It saturates** by `w_app≈0.6` (163, flat to 0.9) — beyond that, appearance is
+  no longer the binding constraint on MOT17's near-linear pedestrian motion.
+- **HOTA/MOTA still barely move** and **nothing clears p<0.05 over 7 sequences.**
+  Appearance only touches *association*, not detection, so DetA-driven HOTA/MOTA
+  are capped; and n=7 with small magnitudes can't reach significance. The signed,
+  monotone, larger-than-colorhist effect is the honest result — a stronger
+  *positive* than Phase 3's, still shy of significance on this small MOT17 half.
+
+This closes the Phase 3 prediction: the descriptor **was** the bottleneck, deep
+re-ID is the lever, and the direction is exactly as hypothesised. The remaining
+way to reach significance is the deferred cross-dataset half (more sequences, and
+the DanceTrack sign-flip), not a still-fancier feature.
+
+**Reproduce (needs a re-ID `.onnx`; weights are gitignored, not shipped):**
+
+```bash
+# one-time: fetch a pretrained re-ID model (MSMT17 OSNet-x0.25, ~0.9 MB)
+curl -L -o models/osnet_x0_25_msmt17.onnx \
+  https://huggingface.co/anriha/osnet_x0_25_msmt17/resolve/main/osnet_x0_25_msmt17.onnx
+python data/cache/precompute_embeddings.py --data-root ~/Downloads/MOT17 \
+  --detector FRCNN --cache-dir data/cache/mot17 \
+  --embedder onnx --model-path models/osnet_x0_25_msmt17.onnx
+python -m experiments.appearance_study --detector FRCNN --embedder onnx \
+  --weights 0.0,0.15,0.3,0.6,0.9 --out-fig assets/appearance_mot17_frcnn_osnet.png
+```
+
 ## Notes / limitations
 
-- Colour histogram (global or spatial) is deliberately weak; `OnnxReID` is the
-  drop-in upgrade and the intended way to widen the appearance gap.
+- Colour histogram (global or spatial) is deliberately weak; the `OnnxReID`
+  deep re-ID upgrade **is now run and reported above** — it roughly doubles the
+  gain and drives IDSW to 163, the best MOT17 appearance result here.
+- Re-ID model weights (`models/*.onnx`) are **gitignored, not committed** — they
+  carry their own dataset (MSMT17) licence, so the repo stays weight-clean like
+  it stays imagery-clean; regenerate the cache from your own download.
 - Cross-dataset crossover (DanceTrack/SportsMOT) deferred for storage.
 - Appearance deps (`matplotlib`, `pillow`) are in the `[appearance]` extra,
   lazily imported; core still needs only NumPy.

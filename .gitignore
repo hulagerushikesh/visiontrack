@@ -37,3 +37,8 @@ docs/results_*.md
 /MOT17/
 /datasets/
 /data/MOT17/
+
+# Pretrained re-ID model weights (OSNet ONNX etc.) — downloaded on demand, not
+# committed (own dataset licenses; keep the repo weight-free like the imagery).
+models/
+*.onnx
