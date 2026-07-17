@@ -31,7 +31,7 @@ Most tracking repositories are a thin wrapper over a detector plus a vendored tr
 
 | | Question | Answer on MOT17 |
 |---|---|---|
-| **RQ1** | Does an appearance (re-ID) association cost improve tracking? | Small, consistent ↓ in ID switches; negligible HOTA change (weak descriptor) |
+| **RQ1** | Does an appearance (re-ID) association cost improve tracking? | Yes for identity: deep re-ID cuts ID switches −13% (2× a hand-crafted histogram); HOTA barely moves, not significant on 7 seqs |
 | **RQ3** | Does folding *calibrated* Kalman uncertainty into the cost reduce switches under noise? | **No** — null as a soft cost; calibrating the filter *hurts* badly under detector noise |
 | RQ2 | Does a learned motion residual help? | Deferred — needs a maneuver-heavy dataset; MOT17 motion is near-linear (see §Limitations) |
 
@@ -59,7 +59,7 @@ At `w_app = w_unc = 0` this is **bit-identical** to the plain `1 − IoU` baseli
 
 - **Metrics**: from-scratch **CLEAR-MOT + IDF1 + HOTA**, cross-checked against `trackeval` end-to-end on real MOT17 (MOTA/IDF1 exact, HOTA within `1.4e-3`).
 - **Seed variance + paired significance**: every configuration is run over seeds; variants are compared paired (same sequences/seeds) with a **paired bootstrap + Wilcoxon** test and Cohen's d.
-- **Compute once**: detections and appearance embeddings are cached to disk (5.2 MB + 6.3 MB for all of MOT17-train), so the raw ~5 GB of frames can be deleted and every experiment runs CPU-only in seconds.
+- **Compute once**: detections and appearance embeddings are cached to disk (5.2 MB detections; 6.3 MB colour-histogram or 67 MB deep-re-ID features for all of MOT17-train), so the raw ~5 GB of frames can be deleted and every experiment runs CPU-only in seconds.
 
 ---
 
@@ -75,16 +75,18 @@ At `w_app = w_unc = 0` this is **bit-identical** to the plain `1 − IoU` baseli
 
 Squarely in the public-detection neighbourhood (the famous ~76 MOTA ByteTrack uses a private YOLOX detector), with the expected detector ordering. `scripts/xcheck_mot17_trackeval.py` confirms our whole pipeline (preprocessing + metrics) matches `trackeval` on a real sequence.
 
-### RQ1 — appearance (MOT17 FRCNN, from-scratch colour-histogram embedder)
+### RQ1 — appearance (MOT17 FRCNN), from-scratch histogram vs deep re-ID
 
-| w_app | HOTA | IDF1 | AssA | IDSW |
-|------:|------|------|------|-----:|
-| 0.0 (motion only) | 0.497 | 0.570 | 0.587 | 188 |
-| 0.6 | +0.001 | +0.002 | +0.003 | **170 (−18)** |
+Δ vs the `w_app=0` motion-only baseline (HOTA 0.497 / IDF1 0.570 / AssA 0.587 / IDSW 188), same 7-sequence pairing:
 
-![appearance](assets/appearance_mot17_frcnn.png)
+| w_app=0.6 embedder | HOTA | IDF1 | AssA | IDSW |
+|--------------------|------|------|------|-----:|
+| from-scratch colour histogram | +0.001 | +0.002 | +0.003 | 170 (−18) |
+| **deep re-ID** (OSNet-x0.25, MSMT17, ONNX) | **+0.004** | **+0.004** | **+0.008** | **163 (−25)** |
 
-Appearance's clearest effect is on **ID switches** (−10%); HOTA barely moves. Directionally consistent but not significant with a cheap descriptor — a deep re-ID model (`appearance/reid_onnx.py`, drop-in) is the lever to widen it. [Details →](docs/PHASE3.md)
+![deep re-ID appearance](assets/appearance_mot17_frcnn_osnet.png)
+
+Appearance's clearest effect is on **ID switches**. A deep re-ID embedder — a pretrained OSNet run through `appearance/reid_onnx.py` behind the same interface — **roughly doubles** the association gain over the hand-crafted histogram and cuts ID switches to **163 (−13%)**, and it earns that weight *early* (−14 IDSW already at `w_app=0.15`). HOTA/MOTA barely move (appearance touches association, not detection) and nothing clears p<0.05 over 7 sequences — a stronger positive than the histogram, still honestly shy of significance on this MOT17 half. [Details →](docs/PHASE3.md)
 
 ### RQ3 — calibrated uncertainty (the interesting negative)
 
@@ -149,7 +151,7 @@ scripts/       xcheck_mot17_trackeval.py
 ## Limitations & honest negatives
 
 - **Public-detection, train/val split** — reproducible and self-contained, not test-server leaderboard numbers (deliberate).
-- **RQ1 uses a weak descriptor** — an HSV colour histogram; the deep re-ID hook is built but unused for the headline numbers.
+- **RQ1's effect is real but small on MOT17** — a deep re-ID embedder (OSNet-x0.25, MSMT17) is wired and reported alongside the from-scratch histogram, and roughly doubles the association gain, but even so the deltas don't reach p<0.05 over 7 sequences; reaching significance needs the deferred cross-dataset half, not a better feature. Re-ID weights carry a non-commercial dataset licence and are **not committed** (regenerate from your own download).
 - **RQ2 (learned motion residual) is deferred** — it needs a maneuver-heavy dataset (SportsMOT/DanceTrack); MOT17 pedestrian motion is near-linear (the calibration study measured how smooth), so a residual is a predicted null on the available data.
 - **The cross-dataset RQ1 crossover** (appearance helping on MOT17 but hurting on near-identical DanceTrack) awaits those datasets — a storage constraint, not a code one; the loaders reuse the MOT-format parser.
 - **Interactive demo** — a deployed toggle-the-branches demo is future work (needs a hosting decision).

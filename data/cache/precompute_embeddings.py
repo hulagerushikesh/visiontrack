@@ -50,10 +50,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--split", default="train")
     parser.add_argument("--detector", default="FRCNN", choices=["DPM", "FRCNN", "SDP"])
     parser.add_argument("--cache-dir", default="data/cache/mot17", help="detection cache dir")
-    parser.add_argument("--embedder", default="colorhist", choices=["colorhist", "spatial"])
+    parser.add_argument("--embedder", default="colorhist", choices=["colorhist", "spatial", "onnx"])
+    parser.add_argument("--model-path", default=None,
+                        help="path to a re-ID .onnx (required when --embedder onnx)")
     args = parser.parse_args(argv)
 
-    embedder = make_embedder(args.embedder)
+    embedder = make_embedder(args.embedder, model_path=args.model_path)
     cache_dir = Path(args.cache_dir)
     npzs = sorted(cache_dir.glob(f"*-{args.detector}.npz"))
     npzs = [p for p in npzs if not p.name.endswith(".emb.npz")]
