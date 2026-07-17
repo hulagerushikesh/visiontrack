@@ -8,9 +8,9 @@
 
 The tracker — an 8-state **Kalman filter**, an O(n³) **Hungarian** solver, and **ByteTrack** two-stage association — is implemented from first principles on NumPy, with no ML framework in the core. On top of it sits a reproducible experiment harness that measures, on **real MOT17** with seed variance and paired significance tests, whether **appearance** and **uncertainty-aware association** actually improve tracking. Several of the answers are honest negatives — which is the point.
 
-![VisionTrack on MOT17-09](assets/mot17_demo.gif)
+![VisionTrack tracking demo](assets/tracking.gif)
 
-*The from-scratch tracker on a real MOT17 clip — public detections in, stable per-object IDs out. Regenerate with `python scripts/render_mot17_demo.py`.*
+*The tracker on a synthetic scene — boxes in, stable per-object IDs out. A **real-MOT17** version can be rendered locally on your own copy of the dataset with `python scripts/render_mot17_demo.py` (the frames aren't redistributed here — MOT17 is under a non-commercial share-alike licence).*
 
 ---
 
