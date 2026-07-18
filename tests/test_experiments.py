@@ -1,4 +1,6 @@
 """Smoke tests for the experiment harness (config, runner, matrix, analyze)."""
+import pytest
+
 from experiments.config import ExperimentConfig, VariantSpec
 from experiments.runner import evaluate_cell
 
@@ -94,3 +96,27 @@ def test_baseline_vs_baseline_is_not_significant():
     assert c.delta == 0.0
     assert c.p_wilcoxon == 1.0
     assert c.ci_low == 0.0 and c.ci_high == 0.0
+
+
+# -- RQ1 multi-detector stratification covariates -----------------------------
+def test_density_occlusion_covariates():
+    import numpy as np
+
+    from experiments.appearance_multidetector import density_occlusion
+
+    # 3 frames: counts 2,1,3 -> density mean = 2.0; only conf>0 boxes count.
+    frames = [
+        (np.array([1.0, 1.0]), np.array([0.9, 0.3])),          # 1 occluded (<0.5)
+        (np.array([1.0, 0.0]), np.array([0.2, 0.2])),          # 1 active, occluded
+        (np.array([1.0, 1.0, 1.0]), np.array([1.0, 1.0, 0.4])),  # 1 occluded
+    ]
+    density, occ = density_occlusion(frames)
+    assert density == pytest.approx((2 + 1 + 3) / 3)
+    # active boxes = 2+1+3 = 6; occluded (vis<0.5) = 1+1+1 = 3 -> 0.5
+    assert occ == pytest.approx(3 / 6)
+
+
+def test_density_occlusion_empty_is_zero():
+    from experiments.appearance_multidetector import density_occlusion
+
+    assert density_occlusion([]) == (0.0, 0.0)
