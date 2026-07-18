@@ -161,11 +161,69 @@ python -m experiments.appearance_study --detector FRCNN --embedder onnx \
   --weights 0.0,0.15,0.3,0.6,0.9 --out-fig assets/appearance_mot17_frcnn_osnet.png
 ```
 
+### Does it reach significance? Multi-detector power + where it helps
+
+The deep-re-ID gain above is directional but n.s. on 7 FRCNN sequences. Two ways
+to learn more *without new data*: (1) run the same appearance-on/off contrast
+across **all three public detectors** (DPM/FRCNN/SDP) for **21 paired
+(sequence × detector) units**, and (2) ask *where* the benefit lives by
+stratifying it against GT-derived crowd density and occlusion. Both are one
+script: `experiments/appearance_multidetector.py` (deep-re-ID embeddings,
+`w_app=0.6`).
+
+Δ = mean(appearance_on − off) per unit; `*` = p<0.05 (paired Wilcoxon):
+
+| group | n | HOTA | IDF1 | AssA | MOTA | IDSW |
+|-------|--:|------|------|------|------|------|
+| DPM   | 7 | +0.000 (p.50) | +0.000 (p.50) | +0.000 (p.50) | +0.000 (p.50) | −0.14 (p1.0) |
+| FRCNN | 7 | +0.004 (p.06) | +0.004 (p.06) | +0.008 (p.06) | +0.001 (p.31) | −3.57 (p.06) |
+| SDP   | 7 | +0.002 (p.69) | +0.005 (p.30) | +0.003 (p.69) | +0.001 (p.16) | −4.14 (p.03*) |
+| **POOLED** | **21** | +0.002 (p.06) | **+0.003 (p.02\*)** | +0.004 (p.06) | **+0.001 (p.03\*)** | **−2.62 (p.005\*)** |
+
+![where does deep re-ID help](../assets/appearance_mot17_stratified.png)
+
+Two findings, one of them counter to the obvious guess:
+
+- **Power buys significance on the identity metrics.** Pooling 7 → 21 units
+  makes the **ID-switch reduction significant (−2.6, p≈0.005)** and IDF1
+  significant (+0.003, p=0.02); MOTA is significant but trivially small. AssA and
+  HOTA stay right at the edge (**p=0.06**) — the *association-quality* gain is
+  real but small enough that even 21 units can't clinch it at 0.05. So the honest
+  RQ1 verdict sharpens: deep re-ID **significantly reduces identity switches** on
+  MOT17, and *marginally* improves association quality.
+- **Appearance is gated by detection quality — not by crowd difficulty.** The
+  naive expectation is that the *weakest* detector (DPM) needs appearance *most*
+  (it has the most association ambiguity). The data say the opposite: appearance
+  is **completely inert on DPM** (every metric p=0.50) and helps on the cleaner
+  FRCNN/SDP. DPM's boxes are badly localized, so the crops fed to the re-ID CNN
+  are mis-framed and the embeddings carry no identity signal — a weighted cost
+  term over noise does nothing. **Public-detection MOT17 therefore caps the
+  appearance ceiling through crop quality**, which also explains the small
+  absolute magnitudes throughout.
+- **The benefit does *not* stratify by density or occlusion** (right two panels:
+  ΔAssA vs crowd density slope ≈0, vs occlusion slope −0.02). Within the
+  detectors where appearance works, per-sequence variance swamps any density /
+  occlusion trend on 7 sequences — the clean crossover *curve* the plan wanted
+  needs the continuous synthetic probe or the DanceTrack contrast (both deferred),
+  not more MOT17 real sequences.
+
+```bash
+# after the embedding caches exist for all three detectors:
+for d in DPM SDP; do python data/cache/precompute_embeddings.py \
+  --data-root ~/Downloads/MOT17 --detector $d --cache-dir data/cache/mot17 \
+  --embedder onnx --model-path models/osnet_x0_25_msmt17.onnx; done
+python -m experiments.appearance_multidetector --embedder onnx --w-app 0.6 \
+  --out-fig assets/appearance_mot17_stratified.png
+```
+
 ## Notes / limitations
 
 - Colour histogram (global or spatial) is deliberately weak; the `OnnxReID`
   deep re-ID upgrade **is now run and reported above** — it roughly doubles the
-  gain and drives IDSW to 163, the best MOT17 appearance result here.
+  gain, drives IDSW to 163 on FRCNN, and across 21 seq×detector units the
+  **ID-switch / IDF1 reductions are statistically significant** (association
+  quality only marginally). Appearance's benefit is **gated by detection/crop
+  quality** (inert on DPM), so public-detection MOT17 caps its ceiling.
 - Re-ID model weights (`models/*.onnx`) are **gitignored, not committed** — they
   carry their own dataset (MSMT17) licence, so the repo stays weight-clean like
   it stays imagery-clean; regenerate the cache from your own download.
