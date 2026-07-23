@@ -204,8 +204,8 @@ Two findings, one of them counter to the obvious guess:
   ΔAssA vs crowd density slope ≈0, vs occlusion slope −0.02). Within the
   detectors where appearance works, per-sequence variance swamps any density /
   occlusion trend on 7 sequences — the clean crossover *curve* the plan wanted
-  needs the continuous synthetic probe or the DanceTrack contrast (both deferred),
-  not more MOT17 real sequences.
+  needs the continuous **synthetic probe** (next section) or the DanceTrack
+  contrast, not more MOT17 real sequences.
 
 ```bash
 # after the embedding caches exist for all three detectors:
@@ -214,6 +214,57 @@ for d in DPM SDP; do python data/cache/precompute_embeddings.py \
   --embedder onnx --model-path models/osnet_x0_25_msmt17.onnx; done
 python -m experiments.appearance_multidetector --embedder onnx --w-app 0.6 \
   --out-fig assets/appearance_mot17_stratified.png
+```
+
+### The controlled crossover probe (synthetic): when does appearance help?
+
+Real MOT17 sits at *one* end of RQ1 (diverse pedestrians → appearance helps) and
+you cannot dial appearance similarity on a fixed dataset. The synthetic generator
+can: it now emits a per-object unit appearance vector whose inter-object
+similarity is a single knob, `appearance_diversity` (0 = identical "dancers",
+1 = distinct "pedestrians"), plus per-detection observation noise (worse under
+occlusion). Because the number of RNG draws is independent of the knob, **scene
+geometry and detector noise are held fixed while only appearance varies** — a
+clean controlled probe. `experiments/appearance_crossover.py` sweeps the knob and
+runs appearance off (`w_app=0`) vs on over 24 paired seeds per level.
+
+Δ = mean(on − off) over seeds; `*` = p<0.05 (paired Wilcoxon); hard scene
+(25 objects, high localisation noise so motion is genuinely ambiguous):
+
+| diversity | Δ AssA | Δ IDF1 | Δ IDSW |
+|----------:|--------|--------|--------|
+| 0.0 (identical) | +0.004\* | +0.003\* | −0.08 |
+| 0.15 | +0.005\* | +0.004\* | −0.25 |
+| 0.30 | +0.006\* | +0.006\* | −1.04 |
+| 0.50 | +0.007\* | +0.007\* | −1.38 |
+| 0.70 | +0.008\* | +0.008\* | −1.21 |
+| 1.0 (distinct) | +0.007\* | +0.006\* | −0.83 |
+
+![synthetic appearance crossover](../assets/appearance_crossover_synth.png)
+
+What it shows — and the honest twist:
+
+- **Appearance's association benefit grows with object distinctness** (Δ AssA
+  +0.004 → +0.008, Δ IDF1 likewise), **significant at every level (p<0.05)**.
+  That is the RQ1 direction, traced cleanly and controlled — the half MOT17
+  can't show.
+- **But it never flips to *harmful*.** Even for *identical* objects (diversity 0)
+  appearance is weakly helpful, not harmful. Unbiased embedding noise on
+  look-alike objects yields a near-**uniform** appearance cost — it doesn't
+  change the assignment argmin, so it is **inert, not misleading**. The predicted
+  DanceTrack "appearance hurts" regime therefore does **not** appear here.
+- **Why the sign never flips — the useful conclusion.** Making appearance *hurt*
+  requires it to be *confidently wrong*, not merely uninformative: an object's
+  descriptor drifting over time so its gallery matches a look-alike neighbour
+  (non-stationary appearance), or a corrupted gallery. Visual *similarity alone*
+  is not enough. That reframes the RQ1 crossover: the risk is **confident
+  misidentification**, not identical appearance per se. (Δ IDSW trends the same
+  way — most negative at moderate diversity — but is not individually significant;
+  the association-quality metrics are the reliable signal.)
+
+```bash
+python -m experiments.appearance_crossover --w-app 0.8 --seeds 24 \
+  --num-objects 25 --num-frames 120 --out-fig assets/appearance_crossover_synth.png
 ```
 
 ## Notes / limitations
