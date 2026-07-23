@@ -291,6 +291,64 @@ python -m experiments.appearance_crossover --w-app 0.8 --seeds 24 \
   --num-objects 25 --num-frames 120 --appearance-drift-std 0.1
 ```
 
+### The real cross-dataset test: DanceTrack (and the hypothesis is refuted)
+
+The synthetic probe said appearance never hurts *in simulation*. The decisive
+test is real **DanceTrack** — near-identical dancers (appearance uninformative)
+in heavy non-linear motion (the CV motion prior struggles), the case the RQ1
+hypothesis predicted appearance would **hurt**. DanceTrack ships no public
+detections, so we use **oracle-perturbed GT** (jitter/drop/FP via
+`detection/noise.py`) — the same protocol as the synthetic probe, which holds
+detection quality fixed and isolates appearance's effect on association. Deep
+re-ID (OSNet) embeddings come from the *real dancer crops*.
+`experiments/dancetrack_appearance.py`, 12 val sequences, full length:
+
+Δ vs the `w_app=0` motion-only baseline (HOTA 0.359 / IDF1 0.384 / AssA 0.214 /
+**IDSW 217**); `*` = p<0.05 (Wilcoxon over 12 sequences):
+
+| w_app | HOTA | IDF1 | AssA | IDSW |
+|------:|------|------|------|------|
+| 0.15 | +0.002 | +0.003 | +0.002 | **−6.4\*** |
+| 0.30 | +0.001 | +0.003 | −0.000 | **−8.2\*** |
+| 0.60 | +0.002 | +0.003 | +0.001 | **−15.3\*** |
+
+![appearance on DanceTrack](../assets/appearance_dancetrack.png)
+
+- **Appearance HELPS on DanceTrack — it does not hurt.** ID switches drop
+  significantly (217 → 202, −7%, p<0.05), IDF1 rises, nothing regresses. The
+  predicted **sign-flip does not occur.** The motion-only baseline is genuinely
+  hard (AssA **0.214** vs MOT17's 0.587 — non-linear dance wrecks association even
+  with near-oracle boxes), so there is ample room for appearance to hurt, and it
+  simply doesn't.
+- **Why the hypothesis fails — the unifying result.** Two reasons: (1) even in
+  matching outfits, OSNet embeddings retain *some* discriminative signal (build,
+  exact shade, pose) from clean crops, a weak but non-negative cue; (2) decisively,
+  our gated cost lets appearance only **rank within the motion gate, never veto a
+  feasible motion match** (the Phase 5 fix — see `docs/PHASE5.md`). The classic
+  "appearance hurts on DanceTrack" failures come from trackers where a confident
+  appearance match *overrides* motion; a properly gated ranking cost structurally
+  cannot do that. Across **all three probes — MOT17 (helps), the synthetic
+  crossover + drift (helps/inert, never hurts), and DanceTrack (helps)** — a
+  gated appearance cost is **robustly beneficial-or-neutral.** The RQ1 crossover
+  is not a property of appearance on uniform-appearance data; it is a property of
+  *appearance-vetoing* cost designs.
+- **Scope.** Oracle-perturbed detections give clean crops that favour appearance;
+  a poor real detector would localise dancers worse and weaken it (cf. the DPM
+  result). The cost is weighted-and-gated, not pure-appearance. 12 of 25 val
+  sequences. The claim is scoped accordingly: *a gated ranking appearance cost
+  does not hurt, even on DanceTrack.*
+
+```bash
+# needs the DanceTrack val frames (HF noahcao/dancetrack, CC-BY-4.0) unzipped to ~/Downloads/dancetrack
+python data/cache/precompute_dancetrack.py --data-root ~/Downloads/dancetrack --split val \
+  --out data/cache/dancetrack --limit 12
+python data/cache/precompute_embeddings.py --data-root ~/Downloads/dancetrack --split val \
+  --cache-dir data/cache/dancetrack --glob 'dancetrack*.npz' \
+  --embedder onnx --model-path models/osnet_x0_25_msmt17.onnx
+python -m experiments.dancetrack_appearance --embedder onnx --weights 0.0,0.15,0.3,0.6 \
+  --out-fig assets/appearance_dancetrack.png
+```
+
 ## Notes / limitations
 
 - Colour histogram (global or spatial) is deliberately weak; the `OnnxReID`
