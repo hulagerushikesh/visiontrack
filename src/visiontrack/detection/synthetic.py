@@ -37,6 +37,7 @@ class SceneObject:
     born: int = 0
     dies: int = 10_000
     _phase: float = 0.0
+    appearance: np.ndarray | None = None  # unit "true" Re-ID descriptor (RQ1 probe)
 
     def box_at(self, t: int) -> np.ndarray:
         cx, cy = self.pos + self.vel * t
@@ -74,6 +75,12 @@ class SyntheticSceneConfig:
     score_false: tuple[float, float] = (0.10, 0.55)  # score range for FP
     occlusion_iou: float = 0.55       # if two GT boxes overlap more, the
                                       # occluded one is likely dropped
+    # Appearance (Re-ID) probe for RQ1. OFF by default (dim=0) so scenes with no
+    # appearance are byte-identical to before — no extra RNG is drawn.
+    appearance_dim: int = 0           # 0 = no appearance; >0 emits det features
+    appearance_diversity: float = 1.0  # 0 = all objects identical … 1 = fully distinct
+    appearance_noise_std: float = 0.15  # obs. noise added to each detection's feature
+    appearance_occluded_noise_mult: float = 2.5  # embeddings degrade under occlusion
     seed: int = 0
 
 
@@ -112,7 +119,33 @@ class SyntheticScene:
                     _phase=float(rng.uniform(0, 2 * np.pi)),
                 )
             )
+        self._assign_appearance(objects)
         return objects
+
+    def _assign_appearance(self, objects: list[SceneObject]) -> None:
+        """Give each object a unit appearance vector, dialled by diversity.
+
+        ``appearance = normalize((1 - d) * prototype + d * random_i)`` where the
+        prototype is shared: ``d=0`` makes every object identical (the DanceTrack
+        regime where appearance is uninformative), ``d=1`` makes them fully
+        distinct (the MOT17 regime where it helps). The number of RNG draws is
+        independent of ``d``, so a scene's geometry/noise is held fixed while only
+        appearance varies — a valid controlled probe. No draws when disabled.
+        """
+        cfg = self.cfg
+        if cfg.appearance_dim <= 0:
+            return
+        rng = self._rng
+        d = float(np.clip(cfg.appearance_diversity, 0.0, 1.0))
+        proto = self._unit(rng.normal(size=cfg.appearance_dim))
+        for obj in objects:
+            ri = self._unit(rng.normal(size=cfg.appearance_dim))
+            obj.appearance = self._unit((1.0 - d) * proto + d * ri)
+
+    @staticmethod
+    def _unit(v: np.ndarray) -> np.ndarray:
+        n = np.linalg.norm(v)
+        return v / n if n > 0 else v
 
     # -- per-frame simulation --------------------------------------------
     def _in_bounds(self, box: np.ndarray) -> bool:
@@ -157,7 +190,15 @@ class SyntheticScene:
             box = self._fix_box(gt_boxes[k] + rng.normal(0, noise, size=4))
             score_range = cfg.score_false if is_occluded else cfg.score_true
             score = float(rng.uniform(*score_range))
-            detections.append(Detection(xyxy=box, score=score, class_id=obj.class_id))
+            feature = None
+            if obj.appearance is not None:
+                fn = cfg.appearance_noise_std * (
+                    cfg.appearance_occluded_noise_mult if is_occluded else 1.0
+                )
+                feature = self._unit(obj.appearance + rng.normal(0, fn, size=obj.appearance.shape))
+            detections.append(
+                Detection(xyxy=box, score=score, class_id=obj.class_id, feature=feature)
+            )
 
         # False positives: Poisson-distributed spurious boxes.
         n_fp = rng.poisson(cfg.false_positive_rate)
@@ -167,7 +208,12 @@ class SyntheticScene:
             w = h * rng.uniform(0.3, 0.8)
             box = self._fix_box([cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2])
             score = float(rng.uniform(*cfg.score_false))
-            detections.append(Detection(xyxy=box, score=score, class_id=int(rng.integers(0, 3))))
+            feature = None
+            if cfg.appearance_dim > 0:
+                feature = self._unit(rng.normal(size=cfg.appearance_dim))
+            detections.append(
+                Detection(xyxy=box, score=score, class_id=int(rng.integers(0, 3)), feature=feature)
+            )
 
         rng.shuffle(detections)  # detectors do not emit in a stable order
         return Frame(index=t, detections=detections, gt_boxes=gt_boxes, gt_ids=gt_ids)
