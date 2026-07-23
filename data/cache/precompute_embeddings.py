@@ -53,14 +53,19 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--embedder", default="colorhist", choices=["colorhist", "spatial", "onnx"])
     parser.add_argument("--model-path", default=None,
                         help="path to a re-ID .onnx (required when --embedder onnx)")
+    parser.add_argument("--glob", default=None,
+                        help="cache glob (default '*-DETECTOR.npz'; e.g. 'dancetrack*.npz')")
     args = parser.parse_args(argv)
+
+    from visiontrack.detection.dancetrack_loader import frame_filename
 
     embedder = make_embedder(args.embedder, model_path=args.model_path)
     cache_dir = Path(args.cache_dir)
-    npzs = sorted(cache_dir.glob(f"*-{args.detector}.npz"))
+    pattern = args.glob or f"*-{args.detector}.npz"
+    npzs = sorted(cache_dir.glob(pattern))
     npzs = [p for p in npzs if not p.name.endswith(".emb.npz")]
     if not npzs:
-        print(f"No detection caches *-{args.detector}.npz in {cache_dir}; run precompute.py first")
+        print(f"No detection caches '{pattern}' in {cache_dir}; run the precompute first")
         return 1
 
     total = 0
@@ -80,8 +85,8 @@ def main(argv: list[str] | None = None) -> int:
             by_frame.setdefault(int(f), []).append(i)
 
         for frame_idx, rows in by_frame.items():
-            img_path = img_dir / f"{frame_idx:06d}.jpg"
-            if not img_path.exists():
+            img_path = frame_filename(img_dir, frame_idx)  # 6- or 8-digit, auto
+            if img_path is None or not img_path.exists():
                 continue
             image = _load_image(img_path)
             rows_arr = np.asarray(rows)
