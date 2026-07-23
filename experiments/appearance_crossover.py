@@ -65,6 +65,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--num-frames", type=int, default=120)
     parser.add_argument("--appearance-dim", type=int, default=64)
     parser.add_argument("--appearance-noise-std", type=float, default=0.15)
+    parser.add_argument("--appearance-drift-std", type=float, default=0.0,
+                        help=">0 makes descriptors non-stationary (the harm-mechanism probe)")
     # Scene difficulty — appearance can only act when motion is ambiguous, so
     # these expose the noise/occlusion knobs that create that ambiguity.
     parser.add_argument("--loc-noise-std", type=float, default=12.0)
@@ -81,6 +83,7 @@ def main(argv: list[str] | None = None) -> int:
     scene_kwargs = dict(
         num_objects=args.num_objects, num_frames=args.num_frames,
         appearance_dim=args.appearance_dim, appearance_noise_std=args.appearance_noise_std,
+        appearance_drift_std=args.appearance_drift_std,
         loc_noise_std=args.loc_noise_std, miss_rate=args.miss_rate,
         occluded_miss_rate=args.occluded_miss_rate,
         false_positive_rate=args.false_positive_rate, occlusion_iou=args.occlusion_iou,

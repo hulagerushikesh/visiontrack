@@ -253,18 +253,42 @@ What it shows — and the honest twist:
   look-alike objects yields a near-**uniform** appearance cost — it doesn't
   change the assignment argmin, so it is **inert, not misleading**. The predicted
   DanceTrack "appearance hurts" regime therefore does **not** appear here.
-- **Why the sign never flips — the useful conclusion.** Making appearance *hurt*
-  requires it to be *confidently wrong*, not merely uninformative: an object's
-  descriptor drifting over time so its gallery matches a look-alike neighbour
-  (non-stationary appearance), or a corrupted gallery. Visual *similarity alone*
-  is not enough. That reframes the RQ1 crossover: the risk is **confident
-  misidentification**, not identical appearance per se. (Δ IDSW trends the same
-  way — most negative at moderate diversity — but is not individually significant;
-  the association-quality metrics are the reliable signal.)
+- **Does non-stationary appearance make it hurt? No — it helps *more*.** The
+  natural next hypothesis: appearance turns harmful when it is *confidently wrong*
+  — an object's descriptor drifting so its EMA gallery goes stale and matches a
+  look-alike neighbour. The generator models this (`appearance_drift_std`: each
+  object's descriptor walks along a fixed random direction). Tested across
+  diversities, drift **never** flips the sign — it makes Δ IDSW *more* negative
+  and significant (below, w_app=0.8, 16 seeds). The reason is geometric:
+  independent random walks in high-dim space push objects *apart* (random
+  directions are near-orthogonal), so drift makes them **more** distinguishable,
+  not confusable.
+
+  | diversity | Δ IDSW, drift 0 | Δ IDSW, drift 0.1 |
+  |----------:|-----------------|-------------------|
+  | 0.0 (identical) | −0.62 (n.s.) | **−4.56\*** |
+  | 0.15 | −0.94 (n.s.) | **−4.69\*** |
+  | 0.30 | −1.75 (n.s.) | **−4.69\*** |
+
+- **The refined conclusion.** *Two* natural mechanisms — visual similarity and
+  descriptor drift — both fail to make appearance hurt: similarity is inert
+  (uniform cost), drift actively helps (objects diverge). In a cost-based
+  ByteTrack with an EMA gallery, appearance is **robustly non-harmful** here; it
+  helps or is inert. Reproducing the DanceTrack "appearance hurts" regime needs
+  *convergent* confusion — objects genuinely converging in appearance space, or an
+  association policy that commits hard to a wrong appearance match — not mere
+  similarity or non-stationarity. (Δ IDSW without drift trends the same way as
+  Δ AssA — most negative at moderate diversity — but is not individually
+  significant; the association-quality metrics are the reliable signal.)
 
 ```bash
+# stationary crossover (the figure above):
 python -m experiments.appearance_crossover --w-app 0.8 --seeds 24 \
   --num-objects 25 --num-frames 120 --out-fig assets/appearance_crossover_synth.png
+# harm probe — re-run with drift on and compare the IDSW column (it gets MORE
+# negative, not positive):
+python -m experiments.appearance_crossover --w-app 0.8 --seeds 24 \
+  --num-objects 25 --num-frames 120 --appearance-drift-std 0.1
 ```
 
 ## Notes / limitations
