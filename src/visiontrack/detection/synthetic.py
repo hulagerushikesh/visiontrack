@@ -38,6 +38,7 @@ class SceneObject:
     dies: int = 10_000
     _phase: float = 0.0
     appearance: np.ndarray | None = None  # unit "true" Re-ID descriptor (RQ1 probe)
+    appearance_drift: np.ndarray | None = None  # per-frame drift direction (non-stationary)
 
     def box_at(self, t: int) -> np.ndarray:
         cx, cy = self.pos + self.vel * t
@@ -81,6 +82,7 @@ class SyntheticSceneConfig:
     appearance_diversity: float = 1.0  # 0 = all objects identical … 1 = fully distinct
     appearance_noise_std: float = 0.15  # obs. noise added to each detection's feature
     appearance_occluded_noise_mult: float = 2.5  # embeddings degrade under occlusion
+    appearance_drift_std: float = 0.0  # per-frame descriptor drift; >0 = non-stationary
     seed: int = 0
 
 
@@ -141,6 +143,14 @@ class SyntheticScene:
         for obj in objects:
             ri = self._unit(rng.normal(size=cfg.appearance_dim))
             obj.appearance = self._unit((1.0 - d) * proto + d * ri)
+            # Non-stationary appearance: each object's descriptor walks along a
+            # fixed random direction, so a track's EMA gallery goes stale and can
+            # match a look-alike neighbour better than the true (drifted) object —
+            # the "confident misidentification" mechanism that actually makes
+            # appearance *hurt*. Drawn only when enabled, to keep the stationary
+            # crossover reproducible.
+            if cfg.appearance_drift_std > 0:
+                obj.appearance_drift = self._unit(rng.normal(size=cfg.appearance_dim))
 
     @staticmethod
     def _unit(v: np.ndarray) -> np.ndarray:
@@ -195,7 +205,10 @@ class SyntheticScene:
                 fn = cfg.appearance_noise_std * (
                     cfg.appearance_occluded_noise_mult if is_occluded else 1.0
                 )
-                feature = self._unit(obj.appearance + rng.normal(0, fn, size=obj.appearance.shape))
+                true = obj.appearance
+                if obj.appearance_drift is not None:
+                    true = self._unit(true + obj.appearance_drift * cfg.appearance_drift_std * t)
+                feature = self._unit(true + rng.normal(0, fn, size=true.shape))
             detections.append(
                 Detection(xyxy=box, score=score, class_id=obj.class_id, feature=feature)
             )

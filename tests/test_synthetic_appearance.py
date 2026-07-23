@@ -75,3 +75,32 @@ def test_appearance_is_deterministic():
     f2 = SyntheticScene(_cfg(appearance_dim=32)).frame(2)
     for a, b in zip(f1.detections, f2.detections, strict=True):
         np.testing.assert_array_equal(a.feature, b.feature)
+
+
+def test_drift_off_by_default_stationary_appearance():
+    scene = SyntheticScene(_cfg(appearance_dim=32))  # drift_std default 0
+    assert scene.cfg.appearance_drift_std == 0.0
+    assert all(o.appearance_drift is None for o in scene._objects)
+
+
+def _unique_feature_count(scene):
+    """Number of distinct detection features across the whole scene."""
+    seen = set()
+    for f in scene:
+        for d in f.detections:
+            seen.add(tuple(np.round(d.feature, 5)))
+    return len(seen)
+
+
+def test_drift_makes_appearance_non_stationary():
+    # With observation noise and false positives off, a *stationary* object emits
+    # the same feature every frame → distinct features ≈ #objects. Drift makes
+    # each object's descriptor move per frame → far more distinct features.
+    kw = dict(appearance_dim=64, appearance_noise_std=0.0, num_objects=3, num_frames=60,
+              miss_rate=0.0, occluded_miss_rate=0.0, false_positive_rate=0.0,
+              loc_noise_std=0.0)
+    stationary = _unique_feature_count(SyntheticScene(_cfg(**kw, appearance_drift_std=0.0)))
+    drifting = _unique_feature_count(SyntheticScene(_cfg(**kw, appearance_drift_std=0.05)))
+
+    assert stationary <= 3  # one persistent feature per object
+    assert drifting > 20  # non-stationary: many distinct descriptors over time
