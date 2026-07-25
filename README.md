@@ -158,7 +158,15 @@ scripts/       xcheck_mot17_trackeval.py
 - **RQ1's effect is real but small on MOT17** — a deep re-ID embedder (OSNet-x0.25, MSMT17) roughly doubles the association gain over the from-scratch histogram; pooling all three detectors (21 units) makes the **ID-switch/IDF1 reduction significant**, but association quality (AssA/HOTA) stays marginal and the benefit is capped by public-detection crop quality. A controlled **synthetic probe** (dialing inter-object appearance similarity) confirms the benefit *grows with object distinctness* and is significant on AssA/IDF1 — but never flips to *harmful*. And the decisive test — real **DanceTrack** (near-identical dancers, non-linear motion, the predicted "appearance hurts" case) — **refutes the hypothesis**: deep re-ID *still* significantly cuts ID switches there (217→202, p<0.05). Across all three probes a gated appearance cost is robustly beneficial-or-neutral. The "appearance hurts on DanceTrack" failure is a property of *appearance-vetoing* designs, not of uniform appearance itself — our cost only lets appearance **rank within the motion gate, never veto** a feasible match. Re-ID weights carry a non-commercial dataset licence and are **not committed** (regenerate from your own download).
 - **RQ2 (learned motion residual) is deferred** — it needs a maneuver-heavy dataset (SportsMOT/DanceTrack); MOT17 pedestrian motion is near-linear (the calibration study measured how smooth), so a residual is a predicted null on the available data.
 - **The cross-dataset RQ1 test is done on DanceTrack, with a scope caveat** — detections are oracle-perturbed GT (DanceTrack ships none), which gives clean crops that *favour* appearance; a poor real detector would weaken it (cf. DPM). The cost is weighted-and-gated, not pure-appearance. So the refutation is scoped: *a gated ranking appearance cost does not hurt, even on DanceTrack.* SportsMOT (RQ2 maneuver data) is still deferred.
-- **Interactive demo** — a deployed toggle-the-branches demo is future work (needs a hosting decision).
+## Interactive demo
+
+A self-contained, pre-baked demo that makes the RQ1 result tangible: the same
+synthetic scene tracked two ways — motion-only vs motion + appearance — with the
+running ID-switch count side by side. Boxes are coloured by track ID, so a colour
+flip on a moving object *is* a switch.
+
+- **Build it:** `make demo` → open [`viz/webdemo/index.html`](viz/webdemo/index.html) in any browser (no server, no dataset, no toolchain — inference is pre-baked from the NumPy tracker on a synthetic scene).
+- On the selected scene, appearance cuts ID switches **37 → 29 (−22%)** and lifts IDF1 — the study result, watchable frame by frame.
 
 ## License
 

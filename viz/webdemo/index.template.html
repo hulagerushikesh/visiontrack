@@ -1,0 +1,292 @@
+<title>VisionTrack — when does appearance help?</title>
+<style>
+  :root {
+    --bg: #f4f6f9; --surface: #ffffff; --border: #d9dee6; --ink: #10151c;
+    --muted: #5a6472; --accent: #2f7ae5; --warn: #d5722a; --good: #2a9d6a;
+    --screen: #0c0f14; --screen-grid: rgba(255,255,255,.05); --screen-edge: #232a34;
+    --radius: 12px; --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1116; --surface: #171b22; --border: #2a313c; --ink: #e6eaf0;
+      --muted: #8b95a5; --accent: #4c9aff; --warn: #e8833a; --good: #37b679;
+      --screen: #0a0d12; --screen-edge: #232a34;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f4f6f9; --surface: #ffffff; --border: #d9dee6; --ink: #10151c;
+    --muted: #5a6472; --accent: #2f7ae5; --warn: #d5722a; --good: #2a9d6a;
+    --screen: #0c0f14; --screen-edge: #232a34;
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e1116; --surface: #171b22; --border: #2a313c; --ink: #e6eaf0;
+    --muted: #8b95a5; --accent: #4c9aff; --warn: #e8833a; --good: #37b679;
+    --screen: #0a0d12; --screen-edge: #232a34;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .wrap {
+    font-family: var(--sans); color: var(--ink); background: var(--bg);
+    min-height: 100%; padding: clamp(16px, 4vw, 40px);
+    display: flex; flex-direction: column; align-items: center; gap: 22px;
+  }
+  .masthead { width: 100%; max-width: 900px; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 12px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 8px;
+  }
+  h1 { font-size: clamp(22px, 4vw, 32px); line-height: 1.15; margin: 0 0 8px;
+       text-wrap: balance; font-weight: 650; letter-spacing: -.01em; }
+  .lede { color: var(--muted); margin: 0; max-width: 62ch; font-size: 15px; line-height: 1.55; }
+  .stage { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 14px; }
+  .seg {
+    display: inline-flex; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 4px; gap: 4px; align-self: flex-start;
+  }
+  .seg button {
+    font-family: var(--sans); font-size: 14px; font-weight: 550; color: var(--muted);
+    background: transparent; border: 0; padding: 8px 16px; border-radius: 7px;
+    cursor: pointer; transition: background .15s, color .15s; white-space: nowrap;
+  }
+  .seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+  .seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .viewport {
+    position: relative; width: 100%; aspect-ratio: 16 / 9; background: var(--screen);
+    border: 1px solid var(--screen-edge); border-radius: var(--radius); overflow: hidden;
+  }
+  canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .hud {
+    position: absolute; left: 14px; top: 12px; font-family: var(--mono);
+    font-size: 12px; color: #aeb8c6; letter-spacing: .04em; pointer-events: none;
+    text-shadow: 0 1px 2px rgba(0,0,0,.6);
+  }
+  .transport { display: flex; align-items: center; gap: 14px; }
+  .play {
+    font-family: var(--sans); font-size: 14px; font-weight: 600; color: #fff;
+    background: var(--accent); border: 0; border-radius: 8px; padding: 9px 18px;
+    cursor: pointer; min-width: 92px;
+  }
+  .play:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  input[type="range"] { flex: 1; accent-color: var(--accent); height: 4px; cursor: pointer; }
+  .frame-no { font-family: var(--mono); font-size: 13px; color: var(--muted);
+              font-variant-numeric: tabular-nums; min-width: 74px; text-align: right; }
+  .metrics {
+    width: 100%; max-width: 900px; display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 12px;
+  }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+  .card .k { font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
+             text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+  .card .v { font-family: var(--mono); font-size: 26px; font-weight: 600;
+             font-variant-numeric: tabular-nums; line-height: 1; }
+  .card.switches .v { color: var(--warn); transition: transform .12s; }
+  .card.switches.flash .v { transform: scale(1.18); }
+  .card .sub { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 6px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 16px 22px; max-width: 900px; width: 100%;
+            font-size: 13px; color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .swatch { width: 22px; height: 0; border-top-width: 3px; border-top-style: solid; }
+  .foot { max-width: 900px; width: 100%; color: var(--muted); font-size: 13px;
+          line-height: 1.6; border-top: 1px solid var(--border); padding-top: 14px; }
+  .foot code { font-family: var(--mono); font-size: 12px; color: var(--ink); }
+  a { color: var(--accent); }
+  @media (max-width: 640px) { .metrics { grid-template-columns: 1fr 1fr; } }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <p class="eyebrow">VisionTrack · RQ1 live</p>
+    <h1>When does appearance help a tracker hold identity?</h1>
+    <p class="lede">Same synthetic scene, same detections — one tracker uses motion
+      only, the other adds a re-ID appearance cost. Watch the boxes: each keeps the
+      colour of its <em>track ID</em>, so a colour flip on a moving object <em>is</em>
+      an identity switch. Toggle the two and compare the running count.</p>
+  </header>
+
+  <div class="stage">
+    <div class="seg" id="seg" role="group" aria-label="Tracker configuration"></div>
+    <div class="viewport">
+      <canvas id="cv" width="1280" height="720"></canvas>
+      <div class="hud" id="hud">frame</div>
+    </div>
+    <div class="transport">
+      <button class="play" id="play" aria-label="Play or pause">Pause</button>
+      <input type="range" id="scrub" min="0" value="0" aria-label="Scrub frames" />
+      <span class="frame-no" id="frameNo">0 / 0</span>
+    </div>
+  </div>
+
+  <div class="metrics" id="metrics"></div>
+
+  <div class="legend">
+    <span><span class="swatch" style="border-top-color:var(--muted);border-top-style:dashed"></span> ground truth</span>
+    <span><span class="swatch" style="border-top-color:var(--accent);border-top-width:4px"></span> tracker box (colour = track ID)</span>
+    <span><span class="swatch" style="border-top-color:var(--warn);border-top-width:4px"></span> identity switch this frame</span>
+  </div>
+
+  <p class="foot">
+    Inference is pre-baked from the from-scratch NumPy tracker on a controlled
+    synthetic scene (no real imagery). The full study — deep re-ID on real MOT17
+    and DanceTrack, with significance tests — is in
+    <code>docs/PHASE3.md</code>. The honest headline: a <em>gated</em> appearance
+    cost that only ranks within the motion gate is robustly beneficial-or-neutral,
+    even on look-alike dancers; it never has to hurt.
+  </p>
+</div>
+
+<script>
+const DEMO_DATA = /*__DEMO_DATA__*/null;
+(function () {
+  const D = DEMO_DATA;
+  if (!D) return;
+  const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
+  const W = cv.width, H = cv.height, SX = W / D.width, SY = H / D.height;
+  let active = 0, frame = 0, playing = true, lastT = 0;
+  const FPS = 20, N = D.num_frames;
+
+  const hue = id => (id * 137.508) % 360;
+  const trackColor = id => `hsl(${hue(id)},70%,60%)`;
+  const gtColor = id => `hsla(${hue(id)},45%,65%,.42)`;
+
+  // Segmented control.
+  const seg = document.getElementById("seg");
+  D.configs.forEach((c, i) => {
+    const b = document.createElement("button");
+    b.textContent = c.label; b.setAttribute("aria-pressed", i === 0);
+    b.onclick = () => { active = i; syncSeg(); render(); buildMetrics(); };
+    seg.appendChild(b);
+  });
+  const syncSeg = () => [...seg.children].forEach((b, i) =>
+    b.setAttribute("aria-pressed", i === active));
+
+  // Which frames incur a new switch, per config (for the red flash).
+  const switchFrames = D.configs.map(c => {
+    const s = new Set(); let prev = 0;
+    c.switches.forEach((v, f) => { if (v > prev) s.add(f); prev = v; });
+    return s;
+  });
+
+  const scrub = document.getElementById("scrub");
+  scrub.max = N - 1;
+  scrub.oninput = () => { frame = +scrub.value; playing = false; setPlay(); render(); };
+  const playBtn = document.getElementById("play");
+  playBtn.onclick = () => { playing = !playing; setPlay(); if (playing) lastT = 0; };
+  const setPlay = () => playBtn.textContent = playing ? "Pause" : "Play";
+
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) { playing = false; setPlay(); }
+
+  function roundRect(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function render() {
+    const cfg = D.configs[active], rec = cfg.frames[frame];
+    ctx.clearRect(0, 0, W, H);
+    // faint grid
+    ctx.strokeStyle = getComputedStyle(document.documentElement)
+      .getPropertyValue("--screen-grid") || "rgba(255,255,255,.05)";
+    ctx.lineWidth = 1;
+    for (let x = 0; x <= W; x += 80) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+    for (let y = 0; y <= H; y += 80) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+    // ground truth (thin dashed)
+    ctx.setLineDash([6, 6]); ctx.lineWidth = 2;
+    for (const [id, x1, y1, x2, y2] of rec.gt) {
+      ctx.strokeStyle = gtColor(id);
+      ctx.strokeRect(x1 * SX, y1 * SY, (x2 - x1) * SX, (y2 - y1) * SY);
+    }
+    ctx.setLineDash([]);
+
+    // short motion trails per track (last 10 frames)
+    const trail = 10;
+    for (let f = Math.max(0, frame - trail); f < frame; f++) {
+      const a = (f - (frame - trail)) / trail * 0.5;
+      for (const [id, x1, y1, x2, y2] of cfg.frames[f].tr) {
+        ctx.fillStyle = `hsla(${hue(id)},70%,60%,${a * .5})`;
+        const cx = (x1 + x2) / 2 * SX, cy = (y1 + y2) / 2 * SY;
+        ctx.beginPath(); ctx.arc(cx, cy, 3, 0, 7); ctx.fill();
+      }
+    }
+
+    // tracker boxes (bold, colour = track id)
+    const flashing = switchFrames[active].has(frame);
+    ctx.lineWidth = 4;
+    for (const [id, x1, y1, x2, y2] of rec.tr) {
+      ctx.strokeStyle = trackColor(id);
+      roundRect(x1 * SX, y1 * SY, (x2 - x1) * SX, (y2 - y1) * SY, 6); ctx.stroke();
+      // id tag
+      ctx.font = "600 15px ui-monospace, Menlo, monospace";
+      const tag = "#" + id, tw = ctx.measureText(tag).width;
+      ctx.fillStyle = trackColor(id);
+      ctx.fillRect(x1 * SX, y1 * SY - 20, tw + 12, 20);
+      ctx.fillStyle = "#0a0d12"; ctx.fillText(tag, x1 * SX + 6, y1 * SY - 5);
+    }
+    if (flashing) {
+      ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--warn");
+      ctx.lineWidth = 6;
+      for (const [id, x1, y1, x2, y2] of rec.tr) {
+        roundRect(x1 * SX - 3, y1 * SY - 3, (x2 - x1) * SX + 6, (y2 - y1) * SY + 6, 8);
+        ctx.stroke();
+      }
+    }
+
+    document.getElementById("hud").textContent =
+      cfg.label + " · frame " + (frame + 1) + "/" + N;
+    document.getElementById("frameNo").textContent = (frame + 1) + " / " + N;
+    scrub.value = frame;
+    updateSwitchCard(cfg.switches[frame], flashing);
+  }
+
+  function buildMetrics() {
+    const cfg = D.configs[active], other = D.configs[active ^ 1];
+    const m = cfg.metrics;
+    const el = document.getElementById("metrics");
+    el.innerHTML = "";
+    const dSw = m.IDSW - other.metrics.IDSW;  // this config minus the other
+    const swSub = dSw === 0 ? `${m.IDSW} total`
+      : `${m.IDSW} total · ${dSw < 0 ? "−" + (-dSw) : "+" + dSw} vs “${other.label}”`;
+    const cards = [
+      { cls: "switches", k: "ID switches", v: "0", id: "swVal", sub: swSub },
+      { k: "IDF1", v: m.IDF1.toFixed(3), sub: "identity F1" },
+      { k: "AssA", v: m.AssA.toFixed(3), sub: "association" },
+      { k: "MOTA", v: m.MOTA.toFixed(3), sub: "detection" },
+    ];
+    for (const c of cards) {
+      const d = document.createElement("div");
+      d.className = "card" + (c.cls ? " " + c.cls : "");
+      d.innerHTML = `<p class="k">${c.k}</p><div class="v"${c.id ? ` id="${c.id}"` : ""}>${c.v}</div><p class="sub">${c.sub}</p>`;
+      el.appendChild(d);
+    }
+    updateSwitchCard(cfg.switches[frame], false);
+  }
+  function updateSwitchCard(val, flash) {
+    const v = document.getElementById("swVal"); if (!v) return;
+    v.textContent = val;
+    const card = v.closest(".card");
+    if (flash) { card.classList.add("flash"); setTimeout(() => card.classList.remove("flash"), 130); }
+  }
+
+  function loop(t) {
+    if (playing) {
+      if (!lastT) lastT = t;
+      if (t - lastT >= 1000 / FPS) {
+        frame = (frame + 1) % N; lastT = t;
+        if (frame === 0) { /* loop */ }
+        render();
+      }
+    }
+    requestAnimationFrame(loop);
+  }
+
+  syncSeg(); buildMetrics(); render(); requestAnimationFrame(loop);
+})();
+</script>

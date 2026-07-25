@@ -2,13 +2,14 @@
 # Override the interpreter if needed:  make test PY=python3.11
 PY ?= python3
 
-.PHONY: help install test lint reproduce reproduce-synth figures clean
+.PHONY: help install test lint reproduce reproduce-synth demo figures clean
 
 help:
 	@echo "targets:"
 	@echo "  install          editable install with all extras"
 	@echo "  test             run the test suite"
 	@echo "  lint             ruff check"
+	@echo "  demo             build the self-contained interactive demo (viz/webdemo/index.html)"
 	@echo "  reproduce-synth  regenerate synthetic results (NO dataset needed; CI smoke)"
 	@echo "  reproduce        full reproduction (needs the MOT17 cache; see docs/PHASE0.md)"
 
@@ -19,7 +20,7 @@ test:
 	$(PY) -m pytest -q
 
 lint:
-	$(PY) -m ruff check src tests experiments data
+	$(PY) -m ruff check src tests experiments data viz
 
 # Synthetic-only: reproduces the harness + RQ3 synthetic probe with no data.
 reproduce-synth:
@@ -39,6 +40,10 @@ reproduce: reproduce-synth
 	$(PY) -m experiments.appearance_study --detector FRCNN --out-fig assets/appearance_mot17_frcnn.png
 	@echo "== RQ3 calibration + noise =="
 	$(PY) -m experiments.uncertainty_study --detector FRCNN --out-fig assets/kalman_calibration.png
+
+# Build the pre-baked interactive demo (synthetic scene; no dataset needed).
+demo:
+	$(PY) viz/webdemo/build_demo_data.py
 
 clean:
 	rm -f results*.parquet
