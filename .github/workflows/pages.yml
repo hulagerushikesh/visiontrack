@@ -1,0 +1,55 @@
+name: Deploy demo to Pages
+
+# Publishes the self-contained interactive demo (viz/webdemo/index.html) to
+# GitHub Pages. The demo is pre-baked static HTML — no build, no server, no
+# dataset — so deployment is just "stage the file as the site root and upload".
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "viz/webdemo/index.html"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+# Least-privilege token scoped to what Pages deployment needs.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One in-flight deploy at a time; don't cancel a running one mid-publish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: build & deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # enablement:true creates the Pages site on first run using the
+      # workflow's own GITHUB_TOKEN — no manual Settings toggle needed.
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Stage demo as site root
+        run: |
+          mkdir -p _site
+          cp viz/webdemo/index.html _site/index.html
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
