@@ -45,5 +45,11 @@ reproduce: reproduce-synth
 demo:
 	$(PY) viz/webdemo/build_demo_data.py
 
+# RQ2: train the from-scratch motion residual and run the tracking ablation
+# (needs the MOT17 + DanceTrack GT caches).
+residual:
+	$(PY) -m experiments.train_residual --out models/motion_residual.npz
+	$(PY) -m experiments.residual_ablation --model models/motion_residual.npz
+
 clean:
 	rm -f results*.parquet
