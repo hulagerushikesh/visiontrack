@@ -74,6 +74,25 @@ class ByteTracker:
         self._next_id = 1
         self._frame = -1
         self._gate = chi2_gating_threshold(dof=4)
+        # RQ2: optional learned motion residual (lazy — no-op when path is None).
+        from .motion.residual import MotionResidual
+
+        self._residual = MotionResidual.from_path(self.cfg.motion_residual_path)
+
+    def _apply_residual(self, track: Track) -> None:
+        """Correct a track's just-predicted centre with the learned residual (RQ2).
+
+        No-op unless a residual model is loaded. Uses the track's observed centre
+        history and its predicted box height as the scale; nudges the xyah mean's
+        centre (``mean[0:2]``) by the residual, leaving covariance/velocity alone.
+        """
+        if self._residual.model is None or len(track.history) < 2:
+            return
+        centers = np.array([[(b[0] + b[2]) / 2.0, (b[1] + b[3]) / 2.0]
+                            for b in track.history])
+        corr = self._residual.correct(centers, float(track.mean[3]))
+        track.mean[0] += corr[0]
+        track.mean[1] += corr[1]
 
     # -- public API -------------------------------------------------------
     def update(self, detections: list[Detection]) -> list[TrackObservation]:
@@ -82,6 +101,7 @@ class ByteTracker:
 
         for track in self.tracks:
             track.predict()
+            self._apply_residual(track)
 
         high = [d for d in detections if d.score >= self.cfg.high_score_thresh]
         low = [

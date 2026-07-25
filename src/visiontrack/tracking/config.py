@@ -65,6 +65,11 @@ class TrackerConfig:
     covariance (a more *confident* filter, tighter gate). Used to calibrate the
     filter, which on real MOT17 is badly under-confident (RQ3)."""
 
+    motion_residual_path: str | None = None
+    """Path to a from-scratch learned motion-residual ``.npz`` (RQ2). When set,
+    the predicted centre is corrected by the residual before association. ``None``
+    keeps the pure constant-velocity Kalman prediction (behaviour unchanged)."""
+
     def __post_init__(self) -> None:
         if not (0 <= self.low_score_thresh <= self.high_score_thresh <= 1):
             raise ValueError("require 0 <= low_score_thresh <= high_score_thresh <= 1")

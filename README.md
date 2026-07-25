@@ -32,8 +32,8 @@ Most tracking repositories are a thin wrapper over a detector plus a vendored tr
 | | Question | Answer on MOT17 |
 |---|---|---|
 | **RQ1** | Does an appearance (re-ID) association cost improve tracking? | Yes — deep re-ID **significantly** cuts ID switches on **both MOT17 and DanceTrack** (p<0.05). The predicted "appearance hurts on near-identical dancers" **sign-flip does not occur**: a gated cost that only *ranks* within the motion gate is robustly beneficial-or-neutral |
+| **RQ2** | Does a learned motion residual on top of constant-velocity help? | **It helps *prediction* only where motion is non-linear** (DanceTrack next-centre error −12.5%; MOT17 +21.5% worse, since CV is already ~1px there) — but that gain **hurts *tracking*** on both (train-on-GT/infer-on-noisy skew + it perturbs the association gate). A from-scratch NumPy MLP |
 | **RQ3** | Does folding *calibrated* Kalman uncertainty into the cost reduce switches under noise? | **No** — null as a soft cost; calibrating the filter *hurts* badly under detector noise |
-| RQ2 | Does a learned motion residual help? | Deferred — needs a maneuver-heavy dataset; MOT17 motion is near-linear (see §Limitations) |
 
 The value is the same whichever way each result falls: a controlled study that shows a trick *doesn't* help is a contribution, not a failure.
 
@@ -91,6 +91,17 @@ Appearance's clearest effect is on **ID switches**. A deep re-ID embedder — a 
 Pooling all **three public detectors** (DPM/FRCNN/SDP → 21 seq×detector units) for statistical power, the **ID-switch and IDF1 reductions become significant** (paired Wilcoxon p<0.05); association-quality (AssA/HOTA) stays marginal (p≈0.06). The instructive twist: appearance is **completely inert on the weak DPM detector** — its poorly-localized boxes yield mis-framed crops, so the re-ID embeddings carry no identity signal. **Detection/crop quality gates whether appearance helps at all**, the opposite of the "weak detector needs it most" intuition, and it doesn't stratify by crowd density or occlusion. [Details →](docs/PHASE3.md)
 
 ![where deep re-ID helps](assets/appearance_mot17_stratified.png)
+
+### RQ2 — learned motion residual (helps prediction, hurts tracking)
+
+A from-scratch NumPy MLP (hand-written back-prop + Adam — no framework) predicts a correction to the constant-velocity Kalman mean, trained on GT trajectories.
+
+| | CV next-centre error | + residual |
+|---|---|---|
+| MOT17 (near-linear) | 1.05 px | **1.27 (−21% worse)** |
+| DanceTrack (non-linear) | 6.89 px | **6.03 (+12% better)** |
+
+Open-loop, the residual helps *exactly* where motion is non-linear — but wired into the tracker it **hurts identity on both** (DanceTrack HOTA −0.043, +29 IDSW; MOT17 HOTA −0.013, +12 IDSW). Trained on clean GT but fed the tracker's noisy estimates, its correction mis-fires and perturbs the association gate. A better predictor that makes a worse tracker. [Details →](docs/PHASE4.md)
 
 ### RQ3 — calibrated uncertainty (the interesting negative)
 
@@ -156,7 +167,7 @@ scripts/       xcheck_mot17_trackeval.py
 
 - **Public-detection, train/val split** — reproducible and self-contained, not test-server leaderboard numbers (deliberate).
 - **RQ1's effect is real but small on MOT17** — a deep re-ID embedder (OSNet-x0.25, MSMT17) roughly doubles the association gain over the from-scratch histogram; pooling all three detectors (21 units) makes the **ID-switch/IDF1 reduction significant**, but association quality (AssA/HOTA) stays marginal and the benefit is capped by public-detection crop quality. A controlled **synthetic probe** (dialing inter-object appearance similarity) confirms the benefit *grows with object distinctness* and is significant on AssA/IDF1 — but never flips to *harmful*. And the decisive test — real **DanceTrack** (near-identical dancers, non-linear motion, the predicted "appearance hurts" case) — **refutes the hypothesis**: deep re-ID *still* significantly cuts ID switches there (217→202, p<0.05). Across all three probes a gated appearance cost is robustly beneficial-or-neutral. The "appearance hurts on DanceTrack" failure is a property of *appearance-vetoing* designs, not of uniform appearance itself — our cost only lets appearance **rank within the motion gate, never veto** a feasible match. Re-ID weights carry a non-commercial dataset licence and are **not committed** (regenerate from your own download).
-- **RQ2 (learned motion residual) is deferred** — it needs a maneuver-heavy dataset (SportsMOT/DanceTrack); MOT17 pedestrian motion is near-linear (the calibration study measured how smooth), so a residual is a predicted null on the available data.
+- **RQ2 (learned motion residual) is answered — an honest negative.** A from-scratch NumPy MLP (hand-written back-prop, no framework) lowers open-loop next-centre error on DanceTrack (−12.5%) but not MOT17 (near-linear, ~1px CV error → +21.5% worse); crucially, inside the tracker it **hurts** on both (train-on-GT / infer-on-noisy-estimates distribution shift + it perturbs the association gate). Trained on GT trajectories; weights gitignored. [Details → docs/PHASE4.md](docs/PHASE4.md)
 - **The cross-dataset RQ1 test is done on DanceTrack, with a scope caveat** — detections are oracle-perturbed GT (DanceTrack ships none), which gives clean crops that *favour* appearance; a poor real detector would weaken it (cf. DPM). The cost is weighted-and-gated, not pure-appearance. So the refutation is scoped: *a gated ranking appearance cost does not hurt, even on DanceTrack.* SportsMOT (RQ2 maneuver data) is still deferred.
 ## Interactive demo
 
