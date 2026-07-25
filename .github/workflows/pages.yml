@@ -33,12 +33,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # enablement:true creates the Pages site on first run using the
-      # workflow's own GITHUB_TOKEN — no manual Settings toggle needed.
+      # Assumes Pages is enabled with Source = "GitHub Actions" (a one-time
+      # repo setting). The default GITHUB_TOKEN cannot *create* a Pages site
+      # (that is an admin action), so we do not use enablement:true here.
       - name: Configure Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - name: Stage demo as site root
         run: |
