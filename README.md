@@ -3,7 +3,7 @@
 [![CI](https://github.com/hulagerushikesh/visiontrack/actions/workflows/ci.yml/badge.svg)](https://github.com/hulagerushikesh/visiontrack/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Live demo](https://img.shields.io/badge/demo-live-2f7ae5.svg)](https://hulagerushikesh.github.io/visiontrack/)
+[![Live demo](https://img.shields.io/badge/demo-visiontrack.hulage.in-2f7ae5.svg)](https://visiontrack.hulage.in)
 
 **A from-scratch multi-object tracker, used as a controlled study of *when* the field's standard tricks actually help.**
 
@@ -177,7 +177,7 @@ synthetic scene tracked two ways — motion-only vs motion + appearance — with
 running ID-switch count side by side. Boxes are coloured by track ID, so a colour
 flip on a moving object *is* a switch.
 
-- **Try it live:** **[hulagerushikesh.github.io/visiontrack](https://hulagerushikesh.github.io/visiontrack/)** — no install, runs in the browser (deployed from `viz/webdemo/` via GitHub Pages).
+- **Try it live:** **[visiontrack.hulage.in/demo](https://visiontrack.hulage.in/demo)** — no install, runs in the browser (deployed from `viz/webdemo/` via Vercel; project home at [visiontrack.hulage.in](https://visiontrack.hulage.in)).
 - **Build it locally:** `make demo` → open [`viz/webdemo/index.html`](viz/webdemo/index.html) in any browser (no server, no dataset, no toolchain — inference is pre-baked from the NumPy tracker on a synthetic scene).
 - On the selected scene, appearance cuts ID switches **37 → 29 (−22%)** and lifts IDF1 — the study result, watchable frame by frame.
 
