@@ -10,7 +10,7 @@ on:
     paths:
       - "viz/webdemo/index.html"
       - ".github/workflows/pages.yml"
-  workflow_dispatch:
+  workflow_dispatch:  # allow manual re-runs from the Actions tab
 
 # Least-privilege token scoped to what Pages deployment needs.
 permissions:
