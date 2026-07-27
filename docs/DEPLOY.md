@@ -1,42 +1,52 @@
-# Deploying the interactive demo (GitHub Pages)
+# Deploying the site (Vercel + custom subdomain)
 
-The interactive demo (`viz/webdemo/index.html`) is a **single self-contained
-static HTML file** — inference is pre-baked from the NumPy tracker, so there is
-no build step, server, or dataset at serve time. It is published to GitHub Pages.
+The public site is a **static bundle** — a landing hub plus three self-contained
+HTML pages (interactive demo, study guide, CV roadmap). There is no build step,
+server, or dataset at serve time. It is hosted on **Vercel** at a custom
+subdomain of `hulage.in`.
 
-**Live URL:** https://hulagerushikesh.github.io/visiontrack/
+**Live URL:** https://visiontrack.hulage.in
 
-## How it works
+## What gets deployed
 
-`.github/workflows/pages.yml` runs on every push that touches
-`viz/webdemo/index.html` (or the workflow itself), and on manual dispatch:
+| Route | Serves | Source file |
+|-------|--------|-------------|
+| `/` | Landing hub | `web/index.html` |
+| `/demo` | Interactive tracker demo | `viz/webdemo/index.html` |
+| `/study` | VisionTrack study guide | `docs/LEARNING_PATH.html` |
+| `/roadmap` | CV junior→research roadmap | `docs/CV_ROADMAP.html` |
 
-1. `actions/configure-pages@v5` reads the Pages config. **One-time setup:**
-   Pages must be enabled with *Settings → Pages → Build and deployment →
-   Source → **GitHub Actions***. The default workflow `GITHUB_TOKEN` cannot
-   *create* a Pages site (that is an admin action — attempting it fails with
-   `Resource not accessible by integration`), so this first toggle is manual.
-   After it, every push redeploys automatically with no further manual steps.
-2. Copies `viz/webdemo/index.html` to `_site/index.html` so the demo is served
-   at the site **root** (clean URL, not `/viz/webdemo/index.html`).
-3. `upload-pages-artifact` + `deploy-pages` publish it.
+Routing is defined in [`vercel.json`](../vercel.json) (`cleanUrls` + `rewrites`).
+[`.vercelignore`](../.vercelignore) restricts the deployment to the static site —
+the Python project (`src/`, `tests/`, `experiments/`, `pyproject.toml`, …) is not
+uploaded, so Vercel treats the repo as a plain static site (no build).
 
-The token is least-privilege (`pages: write`, `id-token: write`, `contents:
-read`) and deploys run one-at-a-time via a `pages` concurrency group.
+## One-time setup (in the Vercel dashboard)
 
-## Regenerating the demo before deploy
+1. Sign in to **vercel.com** with GitHub.
+2. **Add New → Project** → import `hulagerushikesh/visiontrack`.
+3. On the import screen:
+   - **Framework Preset:** `Other`
+   - **Build Command:** leave empty
+   - **Output Directory:** leave empty (serves the repo root)
+   - **Root Directory:** `.`
+4. **Deploy.** The project goes live on a `*.vercel.app` URL first.
 
-The committed `index.html` is generated from `index.template.html` +
-`build_demo_data.py`:
+## Attaching the subdomain
 
-```bash
-make demo        # re-runs the tracker, re-inlines per-frame data into index.html
-```
+1. Project → **Settings → Domains** → add `visiontrack.hulage.in`.
+2. Vercel shows a DNS record to create. For a subdomain it is a **CNAME**:
 
-Commit the regenerated `viz/webdemo/index.html` and the push triggers a redeploy.
+   | Type | Name | Value |
+   |------|------|-------|
+   | CNAME | `visiontrack` | `cname.vercel-dns.com` |
 
-## First-run note
+3. Add that CNAME in the DNS provider that manages `hulage.in`. This only
+   touches the `visiontrack` subdomain — the apex (`hulage.in`) is untouched.
+4. Wait for Vercel to verify (minutes, up to ~an hour). Vercel auto-provisions
+   the TLS certificate. Done.
 
-Before the first deploy, enable Pages once (*Settings → Pages → Source →
-GitHub Actions*). Then re-run the workflow from the Actions tab (or push any
-change to `viz/webdemo/index.html`). Subsequent deploys need no manual step.
+## Ongoing
+
+Every push to `main` triggers an automatic Vercel redeploy. To refresh the demo
+content, run `make demo` (regenerates `viz/webdemo/index.html`) and push.
