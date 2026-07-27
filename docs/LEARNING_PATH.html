@@ -1,0 +1,929 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+</head>
+<body>
+<title>VisionTrack — Study Guide</title>
+<style>
+  :root {
+    --bg: #f4f7fb; --surface: #ffffff; --surface-2: #f0f3f8; --border: #dbe2ec;
+    --ink: #0e141b; --ink-2: #33404f; --muted: #5c6773; --faint: #8a94a1;
+    --accent: #2f7ae5; --accent-soft: #e7f0fd; --good: #1f9d63; --good-soft: #e3f5eb;
+    --amber: #c07a12;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --shadow: 0 1px 2px rgba(13,20,30,.04), 0 6px 22px rgba(13,20,30,.05);
+    --maxw: 940px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0c0f15; --surface: #141922; --surface-2: #1a2029; --border: #26303c;
+      --ink: #e7ebf1; --ink-2: #b7c0cd; --muted: #8792a1; --faint: #616d7c;
+      --accent: #5aa2ff; --accent-soft: #16283f; --good: #37c07e; --good-soft: #12281d;
+      --amber: #e0a94a;
+      --shadow: 0 1px 2px rgba(0,0,0,.35), 0 8px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f4f7fb; --surface: #ffffff; --surface-2: #f0f3f8; --border: #dbe2ec;
+    --ink: #0e141b; --ink-2: #33404f; --muted: #5c6773; --faint: #8a94a1;
+    --accent: #2f7ae5; --accent-soft: #e7f0fd; --good: #1f9d63; --good-soft: #e3f5eb;
+    --amber: #c07a12; --shadow: 0 1px 2px rgba(13,20,30,.04), 0 6px 22px rgba(13,20,30,.05);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0c0f15; --surface: #141922; --surface-2: #1a2029; --border: #26303c;
+    --ink: #e7ebf1; --ink-2: #b7c0cd; --muted: #8792a1; --faint: #616d7c;
+    --accent: #5aa2ff; --accent-soft: #16283f; --good: #37c07e; --good-soft: #12281d;
+    --amber: #e0a94a; --shadow: 0 1px 2px rgba(0,0,0,.35), 0 8px 30px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: var(--sans); line-height: 1.6;
+    font-size: 16px; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 22px 120px; }
+
+  /* ---------- header / readout ---------- */
+  header.top {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .top-inner { max-width: var(--maxw); margin: 0 auto; padding: 12px 22px; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 3px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .top h1 { font-size: 19px; margin: 0; letter-spacing: -.01em; font-weight: 700; }
+  .readout {
+    display: flex; align-items: center; gap: 14px; margin-top: 10px; flex-wrap: wrap;
+  }
+  .bar {
+    flex: 1 1 240px; height: 8px; min-width: 180px; border-radius: 20px;
+    background: var(--surface-2); border: 1px solid var(--border); overflow: hidden;
+  }
+  .bar > i { display: block; height: 100%; width: 0%;
+    background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 60%, var(--good)));
+    transition: width .5s cubic-bezier(.4,0,.2,1); }
+  .pct { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700;
+    font-size: 15px; color: var(--ink); min-width: 3.4em; text-align: right; }
+  .count-note { font-family: var(--mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .controls { display: flex; gap: 8px; }
+  .controls button {
+    font-family: var(--mono); font-size: 11px; letter-spacing: .04em; text-transform: uppercase;
+    color: var(--muted); background: var(--surface); border: 1px solid var(--border);
+    padding: 5px 10px; border-radius: 7px; cursor: pointer; transition: .15s;
+  }
+  .controls button:hover { color: var(--ink); border-color: var(--accent); }
+  .controls button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ---------- intro ---------- */
+  .intro { padding: 34px 0 8px; }
+  .intro h2 { font-size: 15px; margin: 0 0 8px; font-weight: 700; letter-spacing: -.01em; }
+  .lede { color: var(--ink-2); font-size: 16.5px; max-width: 65ch; margin: 0 0 14px; }
+  .lede strong { color: var(--ink); }
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; font-family: var(--mono);
+    font-size: 12px; color: var(--muted); border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border); padding: 12px 0; margin-top: 6px; }
+  .legend b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- stage spine ---------- */
+  .stage { position: relative; padding: 30px 0 4px 0; }
+  .stage-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 4px; }
+  .idx { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--accent);
+    letter-spacing: .05em; background: var(--accent-soft); padding: 3px 9px; border-radius: 6px;
+    white-space: nowrap; }
+  .stage-head h3 { font-size: 22px; margin: 0; letter-spacing: -.02em; font-weight: 700; text-wrap: balance; flex: 1; }
+  .stage-count { font-family: var(--mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .stage-count.done { color: var(--good); }
+  .stage-sub { color: var(--muted); font-size: 14.5px; margin: 2px 0 16px; max-width: 68ch; }
+
+  /* ---------- topic cards ---------- */
+  details.topic {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    margin: 9px 0; box-shadow: var(--shadow); overflow: hidden;
+  }
+  details.topic[open] { border-color: color-mix(in srgb, var(--accent) 40%, var(--border)); }
+  summary { list-style: none; cursor: pointer; padding: 15px 17px; display: flex;
+    align-items: center; gap: 13px; user-select: none; }
+  summary::-webkit-details-marker { display: none; }
+  summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 12px; }
+  .chev { flex: none; width: 16px; height: 16px; color: var(--faint); transition: transform .22s ease; }
+  details[open] .chev { transform: rotate(90deg); color: var(--accent); }
+  .topic-title { flex: 1; min-width: 0; }
+  .topic-title .t { font-weight: 650; font-size: 16px; letter-spacing: -.01em; display: block; }
+  .topic-title .k { color: var(--muted); font-size: 13.5px; display: block; margin-top: 1px; }
+  .mini {
+    flex: none; font-family: var(--mono); font-size: 11px; font-variant-numeric: tabular-nums;
+    color: var(--muted); background: var(--surface-2); border: 1px solid var(--border);
+    padding: 3px 8px; border-radius: 20px; white-space: nowrap;
+  }
+  .mini.done { color: var(--good); background: var(--good-soft); border-color: color-mix(in srgb, var(--good) 35%, var(--border)); }
+
+  .body { padding: 2px 17px 18px; border-top: 1px solid var(--border); }
+  .body > * + * { margin-top: 14px; }
+  .block-label { font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--faint); margin: 0 0 5px; }
+  .body p { margin: 0; color: var(--ink-2); }
+  .body p.why { color: var(--ink-2); }
+  .body p.why b { color: var(--ink); }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-family: var(--mono); font-size: 12px; color: var(--ink-2);
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px;
+    padding: 3px 8px; }
+  .chip b { color: var(--accent); font-weight: 600; }
+
+  ul.learn { margin: 0; padding-left: 18px; color: var(--ink-2); }
+  ul.learn li { margin: 4px 0; }
+  ul.learn li b { color: var(--ink); font-weight: 600; }
+
+  .resource { font-size: 13.5px; color: var(--muted); }
+  .resource b { color: var(--ink-2); font-weight: 600; }
+  .resource .r { display: block; margin: 3px 0; }
+
+  /* ---------- milestones / checkboxes ---------- */
+  .milestones { display: flex; flex-direction: column; gap: 2px;
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 9px; padding: 6px; }
+  label.ms { display: flex; align-items: flex-start; gap: 10px; padding: 7px 8px;
+    border-radius: 7px; cursor: pointer; transition: background .12s; }
+  label.ms:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+  label.ms input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .box { flex: none; width: 19px; height: 19px; margin-top: 1px; border-radius: 6px;
+    border: 1.5px solid var(--faint); background: var(--surface); display: grid; place-items: center;
+    transition: .15s; }
+  .box svg { width: 12px; height: 12px; stroke: #fff; stroke-width: 3.2; fill: none;
+    stroke-dasharray: 18; stroke-dashoffset: 18; transition: stroke-dashoffset .2s ease .02s; }
+  label.ms input:checked + .box { background: var(--good); border-color: var(--good); }
+  label.ms input:checked + .box svg { stroke-dashoffset: 0; }
+  label.ms input:focus-visible + .box { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .ms-txt { font-size: 14.5px; color: var(--ink-2); }
+  label.ms input:checked ~ .ms-txt { color: var(--faint); text-decoration: line-through;
+    text-decoration-color: color-mix(in srgb, var(--good) 60%, transparent); }
+  .ms-txt code { font-family: var(--mono); font-size: 12.5px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; color: var(--ink); }
+
+  .callout { border-left: 3px solid var(--accent); background: var(--accent-soft);
+    padding: 10px 14px; border-radius: 0 8px 8px 0; font-size: 14px; color: var(--ink-2); }
+  .callout b { color: var(--ink); }
+  .callout.neg { border-color: var(--amber); background: color-mix(in srgb, var(--amber) 12%, transparent); }
+
+  footer.foot { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border);
+    font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  footer.foot b { color: var(--ink-2); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  @media (max-width: 560px) {
+    .stage-head h3 { font-size: 19px; }
+    .topic-title .k { display: none; }
+    .body { padding-left: 13px; padding-right: 13px; }
+  }
+</style>
+
+<header class="top">
+  <div class="top-inner">
+    <p class="eyebrow"><span class="dot"></span> VisionTrack · self-paced study guide</p>
+    <h1>From-scratch multi-object tracking — the concepts, in order</h1>
+    <div class="readout">
+      <div class="bar" aria-hidden="true"><i id="barfill"></i></div>
+      <span class="pct" id="pct">0%</span>
+      <span class="count-note" id="countnote">0 / 0 milestones</span>
+      <span class="controls">
+        <button id="expandAll" type="button">Expand all</button>
+        <button id="collapseAll" type="button">Collapse</button>
+        <button id="reset" type="button">Reset</button>
+      </span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="intro">
+    <p class="lede">This is a map of everything inside <strong>VisionTrack</strong>, arranged as a
+    learning path. Each stage builds on the one before it — the numbering <em>is</em> the dependency
+    chain. Every topic tells you <strong>what it is</strong>, <strong>why it matters</strong>,
+    <strong>where it lives in your code</strong>, the concepts to actually learn, and a short checklist.
+    Tick the boxes as you go — <strong>your progress is saved in this browser</strong>.</p>
+    <p class="lede">Work top-to-bottom the first time. Stages <b>0–5</b> are the tracker itself (the
+    part you'd re-derive on a whiteboard in an interview). Stages <b>6–9</b> are the research layer
+    (the three questions the project actually answers). Stages <b>10–12</b> are the platform,
+    delivery, and where to take it next.</p>
+    <div class="legend">
+      <span><b>Goal:</b> understand it well enough to redesign it</span>
+      <span><b>Format:</b> read the concept → open the file → tick the milestone</span>
+      <span><b>Files</b> shown as <code style="font-family:var(--mono)">path/name.py</code> are in your repo</span>
+    </div>
+  </section>
+
+  <!-- ================= STAGE 0 ================= -->
+  <section class="stage" data-stage>
+    <div class="stage-head">
+      <span class="idx">00</span>
+      <h3>Orientation — the problem you're solving</h3>
+      <span class="stage-count"></span>
+    </div>
+    <p class="stage-sub">Before any math: what "multi-object tracking" means, and the shape of the pipeline everything else plugs into.</p>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">What is tracking-by-detection?</span><span class="k">Detector finds boxes each frame; the tracker gives them stable IDs over time</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">A detector answers "where are the objects <b>in this frame</b>?" — it has no memory, so box #3 in frame 10 has no relationship to box #3 in frame 11. <b>Tracking</b> is the job of stitching those per-frame detections into persistent <b>tracks</b>, each with one identity that survives across frames, occlusions, and missed detections. "Tracking-by-detection" means you take detections as given and only solve the association problem — which is what this whole project is about.</p></div>
+        <div><p class="block-label">The loop, once per frame</p>
+          <ul class="learn">
+            <li><b>Predict</b> — move each existing track forward with a motion model (Kalman).</li>
+            <li><b>Associate</b> — match this frame's detections to predicted tracks (Hungarian on a cost matrix).</li>
+            <li><b>Update</b> — correct matched tracks with their detection; start tracks for unmatched detections; age-out tracks that keep missing.</li>
+          </ul>
+        </div>
+        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>tracking/</b>tracker.py</span><span class="chip"><b>README.md</b> (the mini-paper)</span><span class="chip"><b>viz/webdemo/</b>index.html</span></div></div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s0-demo"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Open the live demo and watch a colour flip = one ID switch</span></label>
+            <label class="ms"><input type="checkbox" data-id="s0-readme"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Read the README abstract + RQ statements; write the 3 questions in your own words</span></label>
+            <label class="ms"><input type="checkbox" data-id="s0-cli"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Run <code>visiontrack demo</code> and <code>visiontrack eval</code> locally</span></label>
+            <label class="ms"><input type="checkbox" data-id="s0-trace"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Trace the predict→associate→update loop for one frame in <code>tracker.py</code></span></label>
+          </div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= STAGE 1 ================= -->
+  <section class="stage" data-stage>
+    <div class="stage-head">
+      <span class="idx">01</span>
+      <h3>Geometry &amp; detections</h3>
+      <span class="stage-count"></span>
+    </div>
+    <p class="stage-sub">The primitives: how a box is represented, and how you measure whether two boxes are "the same place".</p>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Bounding boxes, IoU &amp; GIoU</span><span class="k">Box parametrizations and the overlap metric that drives motion association</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">A box can be written as corners <code>(x1,y1,x2,y2)</code>, centre-size <code>(x,y,w,h)</code>, or the Kalman-friendly <code>(x,y,a,h)</code> (centre, aspect-ratio, height). <b>IoU</b> (intersection over union) is the overlap score in [0,1] — the backbone of motion-only association. <b>GIoU</b> extends it so that <em>non-overlapping</em> boxes still get a meaningful gradient (plain IoU is 0 for any two disjoint boxes, which loses information about how far apart they are).</p></div>
+        <div><p class="block-label">Learn</p>
+          <ul class="learn">
+            <li><b>Why <code>xyah</code>?</b> — aspect ratio + height change slowly and roughly independently, so they're better Kalman state variables than raw width/height.</li>
+            <li><b>IoU as a distance</b> — association cost is usually <code>1 − IoU</code>, so identical boxes cost 0.</li>
+            <li><b>GIoU's extra term</b> — penalises the empty space in the smallest enclosing box.</li>
+          </ul>
+        </div>
+        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>core/</b>geometry.py</span><span class="chip"><b>tracking/</b>cost.py (motion_distance)</span></div></div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s1-iou"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Hand-compute IoU for two overlapping boxes, then check against <code>geometry.py</code></span></label>
+            <label class="ms"><input type="checkbox" data-id="s1-giou"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why GIoU ≠ IoU for two disjoint boxes</span></label>
+            <label class="ms"><input type="checkbox" data-id="s1-param"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Convert a box between <code>xyxy</code>, <code>xywh</code>, and <code>xyah</code> by hand</span></label>
+          </div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= STAGE 2 ================= -->
+  <section class="stage" data-stage>
+    <div class="stage-head">
+      <span class="idx">02</span>
+      <h3>State estimation — the Kalman filter</h3>
+      <span class="stage-count"></span>
+    </div>
+    <p class="stage-sub">The mathematical heart. A Kalman filter is how each track "remembers" where it is and how fast it's moving, as a probability cloud it updates every frame. Spend the most time here.</p>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Belief as a Gaussian: mean &amp; covariance</span><span class="k">A track's state isn't a point — it's a distribution with uncertainty</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">The filter never claims to know exactly where an object is. It carries a <b>mean</b> (best guess of state) and a <b>covariance</b> (how unsure it is, and how the variables correlate). Right after a detection the cloud is tight; after several missed frames it balloons. That growing-and-shrinking uncertainty is what later powers the gate and RQ3.</p></div>
+        <div><p class="block-label">Learn</p>
+          <ul class="learn">
+            <li><b>The 8-state vector</b> — <code>[x, y, a, h, vx, vy, va, vh]</code>: position + its velocities (constant-velocity model).</li>
+            <li><b>Covariance intuition</b> — the diagonal is per-variable variance; off-diagonals encode "if I'm wrong about x, I'm probably wrong about vx too".</li>
+          </ul>
+        </div>
+        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>core/</b>kalman.py</span></div></div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s2-state"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Name all 8 state variables and why velocities are included</span></label>
+            <label class="ms"><input type="checkbox" data-id="s2-cov"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain what a covariance matrix encodes in one sentence</span></label>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Predict &amp; update — the two-step cycle</span><span class="k">Motion pushes the belief forward; a measurement pulls it back</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why"><b>Predict:</b> apply the motion model (positions advance by their velocities), and <em>grow</em> the covariance by the <b>process noise</b> Q (the model isn't perfect). <b>Update:</b> when a detection arrives, blend prediction and measurement weighted by their relative certainties — the <b>Kalman gain</b>. Confident measurement + unsure prediction ⇒ trust the measurement, and vice-versa. This optimal blending <em>is</em> the Kalman filter.</p></div>
+        <div><p class="block-label">Learn</p>
+          <ul class="learn">
+            <li><b>Process noise Q vs measurement noise R</b> — Q = "how wrong is my motion model", R = "how noisy is the detector". This repo scales both by object height (bigger/closer ⇒ more pixel noise).</li>
+            <li><b>The Kalman gain K</b> — the ratio that decides who to trust; derive it once.</li>
+            <li><b>Joseph-form update</b> — a rewrite of the covariance update that stays numerically stable (symmetric, positive-definite) instead of drifting — worth knowing why the "obvious" formula is avoided.</li>
+          </ul>
+        </div>
+        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>core/</b>kalman.py (predict / update)</span></div></div>
+        <div class="callout"><b>Interview-grade:</b> being able to derive predict/update and explain the Joseph form from memory is exactly the "senior CV depth" signal this project was built to show.</div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s2-predict"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Write out the predict equations (mean + covariance) by hand</span></label>
+            <label class="ms"><input type="checkbox" data-id="s2-gain"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain the Kalman gain as a trust ratio between Q and R</span></label>
+            <label class="ms"><input type="checkbox" data-id="s2-joseph"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Say why the Joseph form is used instead of the naive covariance update</span></label>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Mahalanobis distance &amp; gating</span><span class="k">Uncertainty-aware distance that rejects impossible matches before assignment</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">Euclidean distance treats every direction equally; <b>Mahalanobis</b> distance divides by the covariance, so a detection that's far in a <em>confident</em> direction is "expensive" but the same distance in an <em>uncertain</em> direction is cheap. A hard <b>gate</b> uses a χ² threshold on this distance to declare some track–detection pairs simply infeasible (never matched), shrinking the assignment problem and preventing absurd jumps.</p></div>
+        <div><p class="block-label">Learn</p>
+          <ul class="learn">
+            <li><b>Why χ²</b> — a squared Mahalanobis distance of a Gaussian innovation is χ²-distributed, so the gate threshold is a p-value on "could this be the same object?".</li>
+            <li><b>Gate as feasibility, not ranking</b> — remember this; it becomes the key fix in Stage 7/9.</li>
+          </ul>
+        </div>
+        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>core/</b>kalman.py (gating_distance)</span><span class="chip"><b>tracking/</b>cost.py (gate)</span></div></div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s2-maha"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain Mahalanobis vs Euclidean with the "confident direction" example</span></label>
+            <label class="ms"><input type="checkbox" data-id="s2-gate"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain what the χ² gate threshold rejects and why</span></label>
+          </div>
+        </div>
+        <div><p class="block-label">Go deeper</p><p class="resource"><span class="r"><b>Welch &amp; Bishop</b> — "An Introduction to the Kalman Filter" (the classic gentle tutorial).</span><span class="r"><b>Roger Labbe</b> — "Kalman and Bayesian Filters in Python" (free interactive book).</span><span class="r"><b>Bewley et al. 2016</b> — "SORT" (the minimal Kalman+Hungarian tracker this descends from).</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= STAGE 3 ================= -->
+  <section class="stage" data-stage>
+    <div class="stage-head">
+      <span class="idx">03</span>
+      <h3>Data association — the assignment problem</h3>
+      <span class="stage-count"></span>
+    </div>
+    <p class="stage-sub">Given a cost for every track–detection pair, find the one-to-one matching with the lowest total cost. This is a classic combinatorial-optimization problem with an exact polynomial solution.</p>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">The Hungarian algorithm</span><span class="k">Exact minimum-cost bipartite matching in O(n³)</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">You have a cost matrix (rows = tracks, cols = detections). A greedy "each track grabs its cheapest detection" can fail badly — two tracks may fight over one detection while a good global match goes unused. The <b>Hungarian algorithm</b> finds the provably optimal one-to-one assignment. This repo implements a rectangular O(n³) version with <b>dual potentials</b> (the algorithm's certificate of optimality), validated against SciPy.</p></div>
+        <div><p class="block-label">Learn</p>
+          <ul class="learn">
+            <li><b>Assignment problem</b> — the formal statement (a permutation minimizing total cost).</li>
+            <li><b>Primal–dual intuition</b> — potentials/labels that prove no cheaper matching exists; you don't need every detail, but grasp why duality gives optimality.</li>
+            <li><b>Rectangular case</b> — #tracks ≠ #detections; handled by padding / allowing non-matches.</li>
+            <li><b>Alternatives</b> — greedy and auction algorithms exist; know the trade-off (speed vs optimality).</li>
+          </ul>
+        </div>
+        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>core/</b>assignment.py</span><span class="chip"><b>tests/</b> (cross-checked vs scipy.linear_sum_assignment)</span></div></div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s3-greedy"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Construct a 2×2 cost matrix where greedy matching is worse than optimal</span></label>
+            <label class="ms"><input type="checkbox" data-id="s3-dual"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain (roughly) how dual potentials certify optimality</span></label>
+            <label class="ms"><input type="checkbox" data-id="s3-rect"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Trace how unmatched tracks/detections fall out of the solver</span></label>
+          </div>
+        </div>
+        <div><p class="block-label">Go deeper</p><p class="resource"><span class="r"><b>Kuhn 1955</b> — "The Hungarian Method for the Assignment Problem" (the original).</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= STAGE 4 ================= -->
+  <section class="stage" data-stage>
+    <div class="stage-head">
+      <span class="idx">04</span>
+      <h3>Putting it together — ByteTrack &amp; the track lifecycle</h3>
+      <span class="stage-count"></span>
+    </div>
+    <p class="stage-sub">The orchestration: how a full tracker sequences association, decides when to trust weak detections, and manages tracks being born, confirmed, and killed.</p>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">ByteTrack two-stage association</span><span class="k">Match high-confidence detections first, then recover tracks with the leftover low-confidence ones</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">Most trackers throw away low-score detections. ByteTrack's insight: a low-score box is often a <em>real</em> object that's briefly occluded or blurred, not noise. So it associates in <b>two rounds</b> — high-score detections to tracks first, then a second round matching still-unmatched tracks against the <em>low</em>-score leftovers. This single idea recovers many would-be ID switches, which is why it's the baseline here.</p></div>
+        <div><p class="block-label">Learn</p>
+          <ul class="learn">
+            <li><b>Two-stage flow</b> — round 1 (high) → round 2 (low, only for unmatched tracks) → create/kill.</li>
+            <li><b>The factored cost surface</b> — <code>cost.py</code> assembles <code>w_iou·motion ⊕ w_app·appearance ⊕ w_unc·uncertainty</code>, all under the gate. Setting the extra weights to 0 recovers pure ByteTrack (bit-identical) — that's the ablation surface the whole study rides on.</li>
+          </ul>
+        </div>
+        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>tracking/</b>tracker.py</span><span class="chip"><b>tracking/</b>cost.py</span></div></div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s4-two"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why keeping low-score detections cuts ID switches</span></label>
+            <label class="ms"><input type="checkbox" data-id="s4-cost"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Find where the 3 cost weights combine in <code>cost.py</code></span></label>
+          </div>
+        </div>
+        <div><p class="block-label">Go deeper</p><p class="resource"><span class="r"><b>Zhang et al. 2022</b> — "ByteTrack: Multi-Object Tracking by Associating Every Detection Box".</span></p></div>
+      </div>
+    </details>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Track lifecycle — the state machine</span><span class="k">Tentative → Confirmed → Deleted, so a one-frame blip doesn't spawn a permanent ghost</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">A new detection could be a real object or a false positive. So tracks start <b>Tentative</b>, become <b>Confirmed</b> only after matching for N consecutive frames, and get <b>Deleted</b> after missing for M frames. This finite-state machine is what keeps the ID set clean — too eager and you get flicker-ghosts, too cautious and you drop real objects.</p></div>
+        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>tracking/</b>track.py (FSM)</span><span class="chip"><b>tracking/</b>config.py (n_init, max_age)</span></div></div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s4-fsm"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Draw the 3-state diagram with its transition conditions</span></label>
+            <label class="ms"><input type="checkbox" data-id="s4-tune"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Predict what happens if <code>max_age</code> is set too high vs too low</span></label>
+          </div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= STAGE 5 ================= -->
+  <section class="stage" data-stage>
+    <div class="stage-head">
+      <span class="idx">05</span>
+      <h3>Evaluation &amp; metrics</h3>
+      <span class="stage-count"></span>
+    </div>
+    <p class="stage-sub">You can't improve what you can't measure. These are the standard MOT metrics — and understanding what each rewards is the difference between "looks better" and "is better".</p>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">CLEAR-MOT: MOTA, MOTP, IDSW</span><span class="k">The classic detection-weighted metrics — and their blind spot</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why"><b>MOTA</b> aggregates false positives, misses, and ID switches into one number; <b>MOTP</b> is localization precision; <b>IDSW</b> counts how often a track's identity jumps to a different object. Key limitation: MOTA is dominated by detection errors and barely reflects <em>identity</em> quality — a tracker can have great MOTA and still swap IDs constantly. That's the motivation for HOTA/IDF1.</p></div>
+        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>eval/</b>mot.py</span></div></div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s5-mota"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Write the MOTA formula and say which error type dominates it</span></label>
+            <label class="ms"><input type="checkbox" data-id="s5-idsw"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Define an ID switch precisely (what counts, what doesn't)</span></label>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">HOTA &amp; IDF1 — measuring identity</span><span class="k">Association-aware metrics; why HOTA is the modern standard</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why"><b>IDF1</b> measures how consistently each ground-truth identity is covered by a single track. <b>HOTA</b> explicitly factors performance into <b>detection</b> accuracy × <b>association</b> accuracy, so improvements in identity handling actually show up — which is exactly what appearance/motion tricks target. Your repo implements both from scratch and <b>cross-checks them against <code>trackeval</code> to within 1e-3</b>, so downstream numbers are trustworthy.</p></div>
+        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>eval/</b>hota.py</span><span class="chip"><b>scripts/</b>xcheck_mot17_trackeval.py</span></div></div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s5-hota"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain HOTA's DetA × AssA split and why it beats MOTA for this study</span></label>
+            <label class="ms"><input type="checkbox" data-id="s5-xcheck"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Understand why cross-checking against trackeval matters for credibility</span></label>
+          </div>
+        </div>
+        <div><p class="block-label">Go deeper</p><p class="resource"><span class="r"><b>Luiten et al. 2021</b> — "HOTA: A Higher Order Metric for Evaluating Multi-Object Tracking".</span><span class="r"><b>Ristani et al. 2016</b> — IDF1 (from the DukeMTMC paper).</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= STAGE 6 ================= -->
+  <section class="stage" data-stage>
+    <div class="stage-head">
+      <span class="idx">06</span>
+      <h3>Statistical rigor — what makes it research</h3>
+      <span class="stage-count"></span>
+    </div>
+    <p class="stage-sub">The line between "a tracker" and "a study". Every claim here is mean±std with a significance test, and every run is reproducible from its config hash.</p>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Seeds, paired tests &amp; effect size</span><span class="k">Is a +0.004 HOTA real, or noise? Significance testing answers it</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">A single number is a coin flip. This repo runs each configuration over multiple seeds/sequences and reports <b>mean ± std</b>. To compare a variant vs its baseline it uses <b>paired</b> tests (same sequences, same seeds) — a <b>Wilcoxon signed-rank</b> test and a <b>paired bootstrap</b> confidence interval, plus <b>Cohen's d</b> effect size. "Paired" is what gives the tiny-but-consistent appearance gains their statistical power.</p></div>
+        <div><p class="block-label">Learn</p>
+          <ul class="learn">
+            <li><b>p-value</b> — probability of seeing this difference if the variant did nothing.</li>
+            <li><b>Why paired &gt; unpaired</b> — cancels per-sequence difficulty, so it detects small consistent effects (this is how 7→21 units flipped IDSW to p≈0.005).</li>
+            <li><b>Bootstrap CI</b> — resample to get an interval without assuming normality.</li>
+            <li><b>Effect size</b> — significance ≠ importance; report both.</li>
+          </ul>
+        </div>
+        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>eval/</b>stats.py</span><span class="chip"><b>experiments/</b>analyze.py</span></div></div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s6-paired"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why a paired test has more power than an unpaired one here</span></label>
+            <label class="ms"><input type="checkbox" data-id="s6-p"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">State what a p-value does and does not mean</span></label>
+            <label class="ms"><input type="checkbox" data-id="s6-sanity"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Understand the baseline-vs-baseline p≈1 sanity check</span></label>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Reproducibility — config hashing</span><span class="k">A run is fully specified by the SHA-256 of its config</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">Every experiment is defined by a typed config (dataclass + YAML). Hashing it to a <b>config hash</b> means a result is traceable to the exact settings that produced it, caches can key on it, and "did I already run this?" is answerable. The project deliberately <em>avoided</em> Hydra/OmegaConf to keep dependencies light — a documented trade-off worth understanding as an engineering decision.</p></div>
+        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>experiments/</b>config.py</span><span class="chip"><b>experiments/</b>run_matrix.py</span></div></div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s6-hash"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain what the config hash buys you (traceability + caching)</span></label>
+          </div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= STAGE 7 ================= -->
+  <section class="stage" data-stage>
+    <div class="stage-head">
+      <span class="idx">07</span>
+      <h3>RQ1 — Appearance re-ID (the main thesis)</h3>
+      <span class="stage-count"></span>
+    </div>
+    <p class="stage-sub">The centerpiece question: when does adding a visual "what does this object look like?" signal help association, and when does it hurt? The answer here is the project's strongest result.</p>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Embeddings, cosine cost &amp; the EMA gallery</span><span class="k">Turn a crop into a vector; match by appearance similarity; remember it over time</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">An <b>embedding</b> maps an object crop to a vector where "same person" points the same way. <b>Cosine distance</b> between a detection's embedding and a track's stored appearance becomes an extra association cost. Because a single frame can be blurry, each track keeps an <b>EMA gallery</b> — an exponentially-weighted running average of its matched embeddings — so identity is remembered, DeepSORT-style. Your repo has both a hand-crafted <b>colour histogram</b> embedder (no model) and a deep <b>OSNet ONNX</b> re-ID model.</p></div>
+        <div><p class="block-label">Learn</p>
+          <ul class="learn">
+            <li><b>Hand-crafted vs learned</b> — colour histograms are cheap but near a ceiling; deep re-ID (OSNet) roughly 2–4× the association gain.</li>
+            <li><b>EMA gallery</b> — the momentum term trades stability vs adaptivity.</li>
+            <li><b>Compute-once caching</b> — embeddings are the only GPU-ish step; precomputed to <code>.npz</code> so experiments stay CPU-fast.</li>
+          </ul>
+        </div>
+        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>appearance/</b>embedder.py</span><span class="chip"><b>appearance/</b>reid_onnx.py (OSNet)</span><span class="chip"><b>appearance/</b>gallery.py</span></div></div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s7-emb"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain what a re-ID embedding is and why cosine distance</span></label>
+            <label class="ms"><input type="checkbox" data-id="s7-ema"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain the EMA gallery and its stability/adaptivity trade-off</span></label>
+          </div>
+        </div>
+        <div><p class="block-label">Go deeper</p><p class="resource"><span class="r"><b>Wojke et al. 2017</b> — "DeepSORT" (appearance + Kalman).</span><span class="r"><b>Zhou et al. 2019</b> — "OSNet" (the re-ID network you're running).</span></p></div>
+      </div>
+    </details>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">The key insight: rank, don't veto</span><span class="k">Why appearance is robustly helpful-or-neutral — and never hurts here</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">The famous prediction was "appearance <em>hurts</em> on near-identical dancers (DanceTrack)". This project <b>tested it on real DanceTrack and refuted it</b> — appearance helped there too. The reason is the single most important design idea in the codebase: appearance is <b>gated</b>. The motion gate decides which pairs are <em>feasible</em>; the appearance term only <b>ranks</b> within that feasible set — it can never <em>veto</em> a good motion match. A bug where extra terms shrank the gate was fixed so each term also raises <code>max_cost</code>. "Appearance hurts" is a property of appearance-<em>vetoing</em> trackers, not of uniform-looking objects.</p></div>
+        <div><p class="block-label">The evidence chain</p>
+          <ul class="learn">
+            <li><b>MOT17</b> — deep re-ID cuts ID switches significantly (pooled 21 seq×detector units, p≈0.005).</li>
+            <li><b>Detector-quality gradient</b> — inert on weak DPM (bad crops → useless embeddings); crop quality gates appearance, not scene ambiguity.</li>
+            <li><b>Synthetic probe</b> — dial appearance diversity 0→1; benefit grows with distinctness, never flips negative.</li>
+            <li><b>DanceTrack</b> — the hypothesis's own test case; appearance still helps.</li>
+          </ul>
+        </div>
+        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>tracking/</b>cost.py (the gate fix)</span><span class="chip"><b>experiments/</b>appearance_multidetector.py</span><span class="chip"><b>experiments/</b>appearance_crossover.py</span><span class="chip"><b>experiments/</b>dancetrack_appearance.py</span></div></div>
+        <div class="callout"><b>This is the result to be able to tell as a story.</b> The unifying claim — <em>a gated ranking appearance cost is robustly beneficial-or-neutral across MOT17, synthetic, and DanceTrack</em> — is the portfolio headline.</div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s7-gate"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain "rank not veto" and why it makes appearance non-harmful</span></label>
+            <label class="ms"><input type="checkbox" data-id="s7-refute"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Retell the refuted DanceTrack hypothesis and why it was wrong</span></label>
+            <label class="ms"><input type="checkbox" data-id="s7-gradient"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain the detector-quality gradient (why DPM kills appearance)</span></label>
+          </div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= STAGE 8 ================= -->
+  <section class="stage" data-stage>
+    <div class="stage-head">
+      <span class="idx">08</span>
+      <h3>RQ2 — Learned motion residual (honest negative)</h3>
+      <span class="stage-count"></span>
+    </div>
+    <p class="stage-sub">Can a small neural net correct the constant-velocity Kalman prediction on non-linear motion? A neat result: it improves prediction in isolation but makes the tracker worse — and understanding <em>why</em> is the lesson.</p>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">A from-scratch MLP &amp; the open-loop/closed-loop gap</span><span class="k">Hand-written backprop; why a better predictor can be a worse tracker</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">The residual is a 2-layer <b>tanh MLP</b> that predicts a correction to the Kalman mean from the last few velocities — implemented in <b>pure NumPy with hand-written backprop + Adam</b> (matching the repo's from-scratch ethos; torch was installed but deliberately unused). It's a great chance to actually learn how a neural net trains under the hood.</p></div>
+        <div><p class="block-label">The two-level result (learn this pattern)</p>
+          <ul class="learn">
+            <li><b>Open-loop</b> (fed clean ground-truth history): lowers next-centre error on DanceTrack −12.5% (non-linear) but +21.5% <em>worse</em> on near-linear MOT17. "Helps only non-linear motion" — confirmed.</li>
+            <li><b>Closed-loop</b> (inside the tracker): <em>hurts both</em>. Trained on clean GT trajectories but fed the tracker's own <em>noisy estimated</em> history — a <b>train/serve distribution shift</b> — and it perturbs the association gate, creating switches.</li>
+            <li><b>Lesson</b> — evaluating a component in isolation can lie; the system-level metric is what counts.</li>
+          </ul>
+        </div>
+        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>tracking/motion/</b>residual.py</span><span class="chip"><b>experiments/</b>train_residual.py</span><span class="chip"><b>experiments/</b>residual_ablation.py</span></div></div>
+        <div class="callout neg"><b>Honest negative.</b> Reporting a well-measured negative result is a contribution, not a failure — it's a core part of what makes this a study rather than a demo.</div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s8-mlp"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Walk through the MLP forward pass + one backprop step in <code>residual.py</code></span></label>
+            <label class="ms"><input type="checkbox" data-id="s8-shift"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain the train-on-GT / serve-on-noisy distribution shift</span></label>
+            <label class="ms"><input type="checkbox" data-id="s8-gap"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why open-loop gains didn't survive closed-loop</span></label>
+          </div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= STAGE 9 ================= -->
+  <section class="stage" data-stage>
+    <div class="stage-head">
+      <span class="idx">09</span>
+      <h3>RQ3 — Calibrated uncertainty (honest negative)</h3>
+      <span class="stage-count"></span>
+    </div>
+    <p class="stage-sub">Should you trust the Kalman filter's own covariance as a soft association weight, and recalibrate it if it's miscalibrated? The surprising answer: the "wrong" loose gate is actually a robustness feature.</p>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Reliability, calibration &amp; why tightening hurts</span><span class="k">Are gated innovations really χ²? What happens if you force them to be</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">If the filter is well-calibrated, squared innovations should follow a χ²(4) distribution. Measuring this along GT trajectories showed the filter is badly <b>under-confident</b> — mean χ² ≈ 0.15 vs the expected 4 — so the Mahalanobis gate is effectively <b>inert</b> (this also explains an earlier null result). The tempting fix is to <b>recalibrate</b> (shrink the covariance so the gate is "correct"). Doing so under detector noise was <b>catastrophic</b> (HOTA −0.205, IDSW 40→402): a tight gate rejects noisy-but-correct detections.</p></div>
+        <div><p class="block-label">Learn</p>
+          <ul class="learn">
+            <li><b>Reliability diagram</b> — plotting empirical vs expected coverage to judge calibration.</li>
+            <li><b>The counterintuitive conclusion</b> — a <em>loose</em> gate is a robustness feature under noise; "textbook-correct" calibration is wrong for tracking-by-detection.</li>
+          </ul>
+        </div>
+        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>eval/</b>calibration.py</span><span class="chip"><b>detection/</b>noise.py</span><span class="chip"><b>experiments/</b>uncertainty_study.py</span></div></div>
+        <div class="callout neg"><b>Honest negative #2.</b> Together with RQ2, this is the project's intellectual honesty on display — two tricks the literature assumes help, measured and found not to.</div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s9-chi"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why gated innovations should be χ² and what "under-confident" means</span></label>
+            <label class="ms"><input type="checkbox" data-id="s9-loose"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why a loose gate is a feature under detector noise</span></label>
+          </div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= STAGE 10 ================= -->
+  <section class="stage" data-stage>
+    <div class="stage-head">
+      <span class="idx">10</span>
+      <h3>Datasets, caching &amp; the platform</h3>
+      <span class="stage-count"></span>
+    </div>
+    <p class="stage-sub">The engineering that makes a 3-dataset × N-seed × 3-thesis matrix tractable on a laptop with no GPU — plus the dataset and licensing realities.</p>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">MOT17, DanceTrack, the MOT format &amp; licensing</span><span class="k">Real data, public detections, and why one dataset's frames can't ship</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why"><b>MOT17</b> = pedestrians with diverse appearance and <b>public detections</b> (DPM/FRCNN/SDP) so trackers compare without a detector confound. <b>DanceTrack</b> = near-identical outfits + non-linear motion (RQ1's hard case); it ships <em>no</em> detections, so this repo uses oracle-perturbed GT. Both use the same MOT text format (a shared parser). <b>Licensing matters</b>: MOT17 is CC BY-NC-SA (non-commercial, incompatible with the repo's MIT), so real frames are gitignored and were purged from history; DanceTrack is CC-BY (permissive).</p></div>
+        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>detection/</b>mot_loader.py</span><span class="chip"><b>detection/</b>dancetrack_loader.py</span><span class="chip"><b>datasets/</b>splits.py, cache.py</span></div></div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s10-public"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why public detections make tracker comparisons fair</span></label>
+            <label class="ms"><input type="checkbox" data-id="s10-lic"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why MOT17 frames are gitignored but DanceTrack figures are fine</span></label>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Compute-once caching &amp; the from-scratch discipline</span><span class="k">Why the core stays NumPy-only and heavy deps stay lazy</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">Detection and embedding are the only expensive steps — so they run <b>once per dataset</b> and serialize to <code>data/cache/</code>. Every tracking experiment then reads cached <code>(boxes, scores, embeddings, gt)</code> and runs CPU-only in seconds. The <b>architectural rule</b>: <code>core/</code> imports nothing but NumPy; scipy/torch/onnxruntime/matplotlib live in optional <b>extras</b>, lazily imported, never in the core. That discipline is what keeps the project installable and the "from-scratch" claim honest.</p></div>
+        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>data/cache/</b>precompute_embeddings.py</span><span class="chip"><b>detection/</b>cached.py</span><span class="chip"><b>pyproject.toml</b> (extras)</span></div></div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s10-cache"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain the compute-once cache and what it makes tractable</span></label>
+            <label class="ms"><input type="checkbox" data-id="s10-lazy"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Find one lazy import and explain why it isn't top-level</span></label>
+          </div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= STAGE 11 ================= -->
+  <section class="stage" data-stage>
+    <div class="stage-head">
+      <span class="idx">11</span>
+      <h3>Delivery — reproduce, demo, communicate</h3>
+      <span class="stage-count"></span>
+    </div>
+    <p class="stage-sub">A result nobody can reproduce or understand isn't a result. The three deliverables: a one-command reproduce, an interactive demo, and a README that reads like a paper.</p>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">make reproduce, CI, the demo &amp; the mini-paper</span><span class="k">The reviewer-facing surface and how it's kept honest</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why"><code>make reproduce</code> regenerates every table and figure from the caches; a synthetic smoke subset runs in <b>CI</b> as a regression gate. The <b>interactive demo</b> (<code>viz/webdemo/</code>) pre-bakes the tracker over a synthetic scene so anyone can watch appearance cut ID switches in the browser — now deployed to GitHub Pages. The <b>README</b> is written as a mini-paper (abstract → RQs → method → results → honest limitations). Learning to <em>communicate</em> the work this way is as much the skill as building it.</p></div>
+        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>Makefile</b></span><span class="chip"><b>.github/workflows/</b>ci.yml, pages.yml</span><span class="chip"><b>viz/webdemo/</b>build_demo_data.py</span><span class="chip"><b>README.md</b></span></div></div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s11-repro"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Run <code>make reproduce-synth</code> and read what it regenerates</span></label>
+            <label class="ms"><input type="checkbox" data-id="s11-demo"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Read <code>build_demo_data.py</code> — see how inference is pre-baked into HTML</span></label>
+            <label class="ms"><input type="checkbox" data-id="s11-paper"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Re-read the README as a paper: can you defend each claim?</span></label>
+          </div>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================= STAGE 12 ================= -->
+  <section class="stage" data-stage>
+    <div class="stage-head">
+      <span class="idx">12</span>
+      <h3>Where to take it next — redesign &amp; advance</h3>
+      <span class="stage-count"></span>
+    </div>
+    <p class="stage-sub">Once the above is solid, these are the real directions to make it more advanced. Each is a genuine research/engineering arc, roughly easiest → hardest.</p>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Modern motion trackers: OC-SORT &amp; BoT-SORT</span><span class="k">The current strong baselines beyond vanilla ByteTrack</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">Direction</p><p class="why">Implement <b>OC-SORT</b> (observation-centric re-update that fixes Kalman error accumulation during occlusion) and <b>BoT-SORT</b> (camera-motion compensation + a better appearance fusion). Both slot directly onto your existing cost surface and give a concrete "we improved the baseline" story with your own significance testing.</p></div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s12-ocsort"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Read OC-SORT + BoT-SORT; note which slots into <code>cost.py</code> vs <code>kalman.py</code></span></label>
+          </div>
+        </div>
+        <div><p class="block-label">Go deeper</p><p class="resource"><span class="r"><b>Cao et al. 2023</b> — "OC-SORT". <b>Aharon et al. 2022</b> — "BoT-SORT".</span></p></div>
+      </div>
+    </details>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Real detector + more datasets</span><span class="k">Close the biggest scope caveats in the current study</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">Direction</p><p class="why">Two natural extensions already scoped in your docs: (1) run a real <b>YOLOX</b> ONNX detector on DanceTrack instead of oracle-perturbed GT — removes the "clean crops favour appearance" caveat on the marquee RQ1 result; (2) add <b>SportsMOT</b> as a second maneuver dataset to properly stress RQ2's motion residual. Both are pure additions to the loader/cache layer you already have.</p></div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s12-yolox"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Sketch how a real YOLOX pass would change the DanceTrack RQ1 conclusion</span></label>
+            <label class="ms"><input type="checkbox" data-id="s12-sports"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Identify what a SportsMOT loader would reuse vs add</span></label>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details class="topic">
+      <summary>
+        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Learned &amp; end-to-end tracking</span><span class="k">The research frontier: transformers and graph-based association</span></span>
+        <span class="mini"></span>
+      </summary>
+      <div class="body">
+        <div><p class="block-label">Direction</p><p class="why">The frontier moves association from hand-designed costs to <b>learned</b> ones: <b>GNN</b> association (nodes = detections/tracks, edges = match scores), and <b>end-to-end transformer</b> trackers (MOTR / TrackFormer) that jointly detect and track with attention. Ambitious, but your clean cost-surface + rigorous-eval harness is the ideal platform to measure whether they actually beat a well-tuned classical tracker — which is exactly the honest-measurement thesis, one level up.</p></div>
+        <div><p class="block-label">Milestones</p>
+          <div class="milestones">
+            <label class="ms"><input type="checkbox" data-id="s12-e2e"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Read one end-to-end tracker (MOTR or TrackFormer); note what it replaces</span></label>
+            <label class="ms"><input type="checkbox" data-id="s12-gnn"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Sketch how a learned-cost head could plug into your existing gate</span></label>
+          </div>
+        </div>
+        <div><p class="block-label">Go deeper</p><p class="resource"><span class="r"><b>Zeng et al. 2022</b> — "MOTR". <b>Meinhardt et al. 2022</b> — "TrackFormer". <b>Brasó &amp; Leal-Taixé 2020</b> — "MPNTrack" (GNN association).</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <footer class="foot">
+    <p><b>VisionTrack study guide.</b> Progress is stored locally in your browser (localStorage) — it stays on this device. Concept order mirrors the repo's own dependency chain: <b>core → tracking → eval → experiments</b>. Build the mental model here, then change the code with intent.</p>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var KEY = "visiontrack-study-progress-v1";
+    var boxes = Array.prototype.slice.call(document.querySelectorAll('input[type=checkbox][data-id]'));
+    var state = {};
+    try { state = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { state = {}; }
+
+    function save() {
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+    }
+
+    function pct(done, total) { return total ? Math.round(done * 100 / total) : 0; }
+
+    function refresh() {
+      var total = boxes.length, done = 0;
+      boxes.forEach(function (b) { if (b.checked) done++; });
+      document.getElementById('barfill').style.width = pct(done, total) + '%';
+      document.getElementById('pct').textContent = pct(done, total) + '%';
+      document.getElementById('countnote').textContent = done + ' / ' + total + ' milestones';
+
+      // per-stage counts
+      document.querySelectorAll('section.stage[data-stage]').forEach(function (sec) {
+        var arr = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox][data-id]'));
+        var dd = 0;
+        arr.forEach(function (b) { if (b.checked) dd++; });
+        var el = sec.querySelector('.stage-count');
+        if (el) {
+          el.textContent = dd + '/' + arr.length + ' done';
+          el.classList.toggle('done', dd === arr.length && arr.length > 0);
+        }
+      });
+
+      // per-topic mini counts
+      document.querySelectorAll('details.topic').forEach(function (t) {
+        var arr = Array.prototype.slice.call(t.querySelectorAll('input[type=checkbox][data-id]'));
+        var dd = 0; arr.forEach(function (b) { if (b.checked) dd++; });
+        var mini = t.querySelector('.mini');
+        if (mini) {
+          mini.textContent = dd + '/' + arr.length;
+          mini.classList.toggle('done', dd === arr.length && arr.length > 0);
+        }
+      });
+    }
+
+    boxes.forEach(function (b) {
+      if (state[b.dataset.id]) b.checked = true;
+      b.addEventListener('change', function () {
+        state[b.dataset.id] = b.checked;
+        if (!b.checked) delete state[b.dataset.id];
+        save(); refresh();
+      });
+    });
+
+    document.getElementById('expandAll').addEventListener('click', function () {
+      document.querySelectorAll('details.topic').forEach(function (d) { d.open = true; });
+    });
+    document.getElementById('collapseAll').addEventListener('click', function () {
+      document.querySelectorAll('details.topic').forEach(function (d) { d.open = false; });
+    });
+    document.getElementById('reset').addEventListener('click', function () {
+      if (!confirm('Clear all checked milestones on this device?')) return;
+      state = {}; save();
+      boxes.forEach(function (b) { b.checked = false; });
+      refresh();
+    });
+
+    refresh();
+  })();
+</script>
+
+</body>
+</html>
