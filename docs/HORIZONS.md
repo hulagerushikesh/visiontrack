@@ -42,13 +42,17 @@ gap) + **OCM** (observed-velocity-direction consistency term). Implemented from
 scratch in `tracking/motion/oc.py`, gated off by default (baseline bit-identical),
 in the zoo as the `oc_sort` preset. Details → [`OC_SORT.md`](OC_SORT.md).
 
-**Finding (synthetic scope):** OC-SORT's mechanics don't help here — neutral on
-clean/linear motion (Kalman already suffices), mildly harmful under high
-observation noise (MOTA −0.010, p<0.01). The component ablation also caught a real
-bug (a naive ORU re-init blew the covariance open, −0.058 MOTA; fixed by anchoring
-to the pre-gap state → −0.009). The regime OC-SORT is *designed* for — non-linear
-motion with clean detections — needs real data; **DanceTrack is the fair test**,
-queued.
+**Finding — an honest across-the-board negative (in this study's setting).**
+OC-SORT's mechanics don't help: neutral on clean/linear synthetic motion, mildly
+harmful under synthetic noise, and — on the **fair DanceTrack test** (its intended
+non-linear regime) — *significantly* harmful (IDSW **+19.8, p=0.01\*** vs the
+single-stage `sort` baseline). Key insight: ORU's **straight-line** virtual
+trajectory poorly models non-linear dance motion, so it injects a wrong velocity
+and causes switches. The component ablation also caught a real bug (naive ORU
+re-init blew the covariance open, −0.058 MOTA; fixed by anchoring to the pre-gap
+state → −0.009). Scoped: not a refutation of OC-SORT's paper (different detectors/
+tuning). Bonus: the same DanceTrack run reproduced RQ1 (appearance cuts IDSW
+−15, p<0.01\*), cross-validating the harness. Details → [`OC_SORT.md`](OC_SORT.md).
 
 ### H1.3 — Camera-motion compensation (RQ4) + error taxonomy
 - **RQ4:** add global motion compensation (GMC, BoT-SORT's key idea) and ask
