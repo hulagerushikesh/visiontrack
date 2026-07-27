@@ -181,6 +181,14 @@ flip on a moving object *is* a switch.
 - **Build it locally:** `make demo` → open [`viz/webdemo/index.html`](viz/webdemo/index.html) in any browser (no server, no dataset, no toolchain — inference is pre-baked from the NumPy tracker on a synthetic scene).
 - On the selected scene, appearance cuts ID switches **37 → 29 (−22%)** and lifts IDF1 — the study result, watchable frame by frame.
 
+## Study guide
+
+New to the concepts? [`docs/LEARNING_PATH.html`](docs/LEARNING_PATH.html) is a
+self-paced, interactive learning path — a topic-by-topic map (Kalman → Hungarian →
+ByteTrack → metrics → the three research questions → where to take it next) where
+every concept links to the file it lives in, with progress checkboxes saved in your
+browser. Open it in any browser; it's a single self-contained file.
+
 ## License
 
 MIT
