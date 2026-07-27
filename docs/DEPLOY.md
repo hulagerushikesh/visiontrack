@@ -16,10 +16,12 @@ subdomain of `hulage.in`.
 | `/study` | VisionTrack study guide | `docs/LEARNING_PATH.html` |
 | `/roadmap` | CV junior→research roadmap | `docs/CV_ROADMAP.html` |
 
-Routing is defined in [`vercel.json`](../vercel.json) (`cleanUrls` + `rewrites`).
-[`.vercelignore`](../.vercelignore) restricts the deployment to the static site —
-the Python project (`src/`, `tests/`, `experiments/`, `pyproject.toml`, …) is not
-uploaded, so Vercel treats the repo as a plain static site (no build).
+Both the build and routing are defined in [`vercel.json`](../vercel.json). It uses
+an explicit `builds` list (`@vercel/static` for exactly the five static entries
+above) plus `routes` for the clean URLs. Declaring `builds` **disables Vercel's
+zero-config auto-detection** — without it, Vercel sees `pyproject.toml` and wrongly
+tries the Python builder (`No python entrypoint found`). With it, only the static
+files are deployed; the Python project is ignored.
 
 ## One-time setup (in the Vercel dashboard)
 
