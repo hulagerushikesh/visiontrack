@@ -2,7 +2,7 @@
 # Override the interpreter if needed:  make test PY=python3.11
 PY ?= python3
 
-.PHONY: help install test lint reproduce reproduce-synth demo figures clean
+.PHONY: help install test lint reproduce reproduce-synth demo zoo residual figures clean
 
 help:
 	@echo "targets:"
@@ -44,6 +44,12 @@ reproduce: reproduce-synth
 # Build the pre-baked interactive demo (synthetic scene; no dataset needed).
 demo:
 	$(PY) viz/webdemo/build_demo_data.py
+
+# Tracker zoo: significance-tested comparison of the lineage presets
+# (single-stage SORT, DeepSORT, ByteTrack, ByteTrack+ReID, GIoU) on a hard
+# synthetic scene. No dataset needed; writes docs/results_tracker_zoo.md.
+zoo:
+	$(PY) -m experiments.tracker_zoo --out-md docs/results_tracker_zoo.md
 
 # RQ2: train the from-scratch motion residual and run the tracking ablation
 # (needs the MOT17 + DanceTrack GT caches).
