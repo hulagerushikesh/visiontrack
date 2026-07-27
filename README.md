@@ -183,11 +183,16 @@ flip on a moving object *is* a switch.
 
 ## Study guide
 
-New to the concepts? [`docs/LEARNING_PATH.html`](docs/LEARNING_PATH.html) is a
-self-paced, interactive learning path — a topic-by-topic map (Kalman → Hungarian →
-ByteTrack → metrics → the three research questions → where to take it next) where
-every concept links to the file it lives in, with progress checkboxes saved in your
-browser. Open it in any browser; it's a single self-contained file.
+New to the concepts? Two self-paced, interactive learning files (single self-contained
+HTML, progress checkboxes saved in your browser — open in any browser):
+
+- [`docs/LEARNING_PATH.html`](docs/LEARNING_PATH.html) — **this project, topic by topic**:
+  Kalman → Hungarian → ByteTrack → metrics → the three research questions → where to take
+  it next, with every concept linked to the file it lives in.
+- [`docs/CV_ROADMAP.html`](docs/CV_ROADMAP.html) — **the whole field, in order**: a
+  junior → mid → senior → research computer-vision roadmap (foundations → deep learning →
+  detection/segmentation/tracking → transformers/generative/3D → production → doing research),
+  with what-to-build and canonical resources at each stage.
 
 ## License
 
