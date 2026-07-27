@@ -1,19 +1,16 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "rewrites": [
-    { "source": "/", "destination": "/web/index.html" },
-    { "source": "/demo", "destination": "/viz/webdemo/index.html" },
-    { "source": "/study", "destination": "/docs/LEARNING_PATH.html" },
-    { "source": "/roadmap", "destination": "/docs/CV_ROADMAP.html" }
+  "builds": [
+    { "src": "web/index.html", "use": "@vercel/static" },
+    { "src": "viz/webdemo/index.html", "use": "@vercel/static" },
+    { "src": "docs/LEARNING_PATH.html", "use": "@vercel/static" },
+    { "src": "docs/CV_ROADMAP.html", "use": "@vercel/static" },
+    { "src": "assets/**", "use": "@vercel/static" }
   ],
-  "headers": [
-    {
-      "source": "/assets/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=86400" }
-      ]
-    }
+  "routes": [
+    { "src": "/", "dest": "/web/index.html" },
+    { "src": "/demo/?", "dest": "/viz/webdemo/index.html" },
+    { "src": "/study/?", "dest": "/docs/LEARNING_PATH.html" },
+    { "src": "/roadmap/?", "dest": "/docs/CV_ROADMAP.html" },
+    { "src": "/assets/(.*)", "dest": "/assets/$1" }
   ]
 }
