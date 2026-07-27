@@ -17,6 +17,7 @@ preset                  defining idea                                 flags
 ``bytetrack``           two-stage: recover with low-score detections  2 stage
 ``bytetrack_reid``      two-stage IoU **+** appearance (BoT-SORT-lite) 2 stage, w_app
 ``bytetrack_giou``      two-stage, GIoU motion term                   2 stage, GIoU
+``oc_sort``             single-stage + observation-centric OCM+ORU     1 stage, w_ocm, ORU
 ======================  ============================================  ==========
 
 "Single stage" is expressed by collapsing the low/high score band
@@ -25,9 +26,10 @@ do — exactly SORT's single detection threshold. Appearance presets require the
 detections to carry embeddings (the synthetic appearance channel, or a MOT17
 Re-ID cache); with no embeddings the ``w_app`` term is simply inert.
 
-OC-SORT is intentionally **absent** here: its observation-centric re-update and
-momentum need new Kalman/track mechanics rather than a config flag, and land as a
-first-class option in a later phase (see ``docs/HORIZONS.md``).
+``oc_sort`` uses genuinely new mechanics rather than a config flag alone — the
+observation-centric momentum term and re-update live in
+:mod:`visiontrack.tracking.motion.oc` and are switched on here via ``w_ocm`` and
+``use_oru``.
 
 Usage::
 
@@ -68,6 +70,14 @@ PRESETS: dict[str, dict] = {
     },
     "bytetrack_giou": {
         "use_giou": True,  # two-stage, GIoU motion term
+    },
+    "oc_sort": {
+        # Observation-centric SORT: single-stage IoU (like SORT) + OCM momentum
+        # term + observation-centric re-update on re-match. No appearance.
+        "high_score_thresh": _SINGLE_STAGE_THRESH,
+        "low_score_thresh": _SINGLE_STAGE_THRESH,
+        "w_ocm": 0.2,
+        "use_oru": True,
     },
 }
 

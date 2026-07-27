@@ -46,6 +46,7 @@ class CostWeights:
     w_iou: float = 1.0
     w_app: float = 0.0
     w_unc: float = 0.0
+    w_ocm: float = 0.0
     use_giou: bool = False
 
     @property
@@ -55,6 +56,10 @@ class CostWeights:
     @property
     def uncertainty_on(self) -> bool:
         return self.w_unc > 0.0
+
+    @property
+    def momentum_on(self) -> bool:
+        return self.w_ocm > 0.0
 
 
 def motion_distance(
@@ -100,6 +105,7 @@ def build_association_cost(
     gate_thresh: float | None = None,
     appearance: np.ndarray | None = None,
     uncertainty: np.ndarray | None = None,
+    momentum: np.ndarray | None = None,
 ) -> tuple[np.ndarray, float]:
     """Assemble the gated, weighted ``(T, D)`` cost matrix for ``associate``.
 
@@ -145,6 +151,9 @@ def build_association_cost(
     if weights.uncertainty_on and uncertainty is not None:
         cost = cost + weights.w_unc * uncertainty
         max_cost += weights.w_unc * 1.0  # normalized uncertainty is in [0, 1]
+    if weights.momentum_on and momentum is not None:
+        cost = cost + weights.w_ocm * momentum
+        max_cost += weights.w_ocm * 1.0  # normalized momentum angle is in [0, 1]
 
     forbidden = ious < iou_thresh
     if class_mismatch is not None:

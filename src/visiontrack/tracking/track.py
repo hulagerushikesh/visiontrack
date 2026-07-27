@@ -46,6 +46,8 @@ class Track:
         "max_age",
         "start_frame",
         "history",
+        "last_observation",
+        "last_obs_state",
         "feature",
         "ema_alpha",
     )
@@ -77,6 +79,14 @@ class Track:
         self.max_age = max_age
         self.start_frame = start_frame
         self.history: list[np.ndarray] = [self.to_xyxy()]
+        # Raw last measurement in xyah (not the filtered estimate) — the anchor
+        # for OC-SORT's observation-centric re-update. Set on every match.
+        self.last_observation: np.ndarray = xyxy_to_xyah(detection_xyxy)
+        # Filter state (mean, cov) as of the last observation, frozen through any
+        # coasting gap — the start point OC-SORT's ORU re-runs from.
+        self.last_obs_state: tuple[np.ndarray, np.ndarray] = (
+            self.mean.copy(), self.covariance.copy()
+        )
 
         # Appearance gallery (EMA of matched-detection embeddings); None until
         # an embedding is seen. Used only when the cost's w_app > 0.
@@ -107,15 +117,24 @@ class Track:
         class_id: int,
         score: float,
         feature: np.ndarray | None = None,
+        state: tuple[np.ndarray, np.ndarray] | None = None,
     ) -> None:
         """Correct the state with a matched detection and promote if ready.
 
         If the detection carries an appearance ``feature``, the track's EMA
-        gallery is updated with it.
+        gallery is updated with it. If ``state`` (a ``(mean, covariance)`` pair)
+        is given it replaces the Kalman update — used by OC-SORT's re-update,
+        which has already rebuilt the state along a virtual trajectory.
         """
-        self.mean, self.covariance = self.kf.update(
-            self.mean, self.covariance, xyxy_to_xyah(detection_xyxy)
-        )
+        measurement = xyxy_to_xyah(detection_xyxy)
+        if state is not None:
+            self.mean, self.covariance = state
+        else:
+            self.mean, self.covariance = self.kf.update(
+                self.mean, self.covariance, measurement
+            )
+        self.last_observation = measurement
+        self.last_obs_state = (self.mean.copy(), self.covariance.copy())
         self.class_id = class_id
         self.score = score
         self.hits += 1

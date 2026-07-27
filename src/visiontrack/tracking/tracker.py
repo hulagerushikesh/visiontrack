@@ -228,6 +228,14 @@ class ByteTracker:
         # embeddings; kept as a hook so the surface is complete.
         appearance = self._appearance_matrix(tracks, dets) if weights.appearance_on else None
 
+        # Observation-centric momentum (OC-SORT, H1.2) — rewards matches aligned
+        # with the track's observed direction of motion. Inert without w_ocm.
+        momentum = None
+        if weights.momentum_on:
+            from .motion.oc import momentum_cost
+
+            momentum = momentum_cost(tracks, det_boxes, self.cfg.ocm_delta_t)
+
         cost, max_cost = build_association_cost(
             ious,
             weights,
@@ -238,6 +246,7 @@ class ByteTracker:
             gate_thresh=gate_thresh,
             appearance=appearance,
             uncertainty=uncertainty,
+            momentum=momentum,
         )
         return associate(cost, max_cost)
 
@@ -255,7 +264,25 @@ class ByteTracker:
         return appearance_distance(np.stack(track_feats), np.stack(det_feats))
 
     def _apply_match(self, track: Track, det: Detection) -> None:
-        track.update(det.xyxy, det.class_id, det.score, feature=det.feature)
+        # OC-SORT ORU: if this track was lost for >1 frame, rebuild its state
+        # along a virtual trajectory between its last observation and this one,
+        # undoing the drift accumulated while coasting. Read last_observation
+        # *before* update() overwrites it.
+        state = None
+        if self.cfg.use_oru and track.time_since_update > 1:
+            from ..core.geometry import xyxy_to_xyah
+            from .motion.oc import observation_centric_reupdate
+
+            start_mean, start_cov = track.last_obs_state
+            state = observation_centric_reupdate(
+                self.kf,
+                start_mean,
+                start_cov,
+                track.last_observation,
+                xyxy_to_xyah(det.xyxy),
+                track.time_since_update,
+            )
+        track.update(det.xyxy, det.class_id, det.score, feature=det.feature, state=state)
 
     def _spawn(self, det: Detection) -> None:
         self.tracks.append(
