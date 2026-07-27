@@ -35,14 +35,20 @@ regime decides the winner — on ambiguous-motion scenes appearance re-ID helps
 occlusion-heavy scenes the two-stage recovery is the significant win over
 single-stage SORT instead. "It depends" — measured, not asserted.
 
-### H1.2 — OC-SORT (observation-centric) — *next*
-The first method needing **new mechanics**, not a config flag:
-- **ORU** (observation-centric re-update): when a lost track re-associates,
-  re-run the Kalman update along a virtual trajectory between the last and new
-  observations, undoing the error accumulated while coasting on prediction.
-- **OCM** (observation-centric momentum): a velocity-direction consistency term
-  in the association cost.
-Lands as a first-class tracker option + a `oc_sort` preset in the zoo.
+### H1.2 — OC-SORT (observation-centric) ✅ *done*
+The first method needing **new mechanics**, not a config flag — **ORU**
+(observation-centric re-update along a virtual trajectory across an occlusion
+gap) + **OCM** (observed-velocity-direction consistency term). Implemented from
+scratch in `tracking/motion/oc.py`, gated off by default (baseline bit-identical),
+in the zoo as the `oc_sort` preset. Details → [`OC_SORT.md`](OC_SORT.md).
+
+**Finding (synthetic scope):** OC-SORT's mechanics don't help here — neutral on
+clean/linear motion (Kalman already suffices), mildly harmful under high
+observation noise (MOTA −0.010, p<0.01). The component ablation also caught a real
+bug (a naive ORU re-init blew the covariance open, −0.058 MOTA; fixed by anchoring
+to the pre-gap state → −0.009). The regime OC-SORT is *designed* for — non-linear
+motion with clean detections — needs real data; **DanceTrack is the fair test**,
+queued.
 
 ### H1.3 — Camera-motion compensation (RQ4) + error taxonomy
 - **RQ4:** add global motion compensation (GMC, BoT-SORT's key idea) and ask
@@ -99,4 +105,4 @@ Ranked by fit to the actual moat:
 - A "reproduce in Colab" badge.
 
 ## Status
-- H1.1 — done. Next: H1.2 (OC-SORT).
+- H1.1 — done. H1.2 (OC-SORT) — done. Next: H1.3 (CMC/RQ4 + error taxonomy).
