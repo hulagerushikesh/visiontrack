@@ -80,8 +80,12 @@ class MotMetrics:
 class MotAccumulator:
     """Streaming CLEAR-MOT accumulator; feed one frame at a time."""
 
-    def __init__(self, iou_threshold: float = 0.5) -> None:
+    def __init__(self, iou_threshold: float = 0.5, on_switch=None) -> None:
         self.iou_threshold = iou_threshold
+        # Optional hook fired on each identity switch, for error-taxonomy
+        # analysis. Signature: on_switch(frame, gt_id, prev_hyp, new_hyp,
+        # gt_index, gt_ids, gt_boxes). Default None -> zero behaviour change.
+        self._on_switch = on_switch
         self._tp = 0
         self._fp = 0
         self._fn = 0
@@ -162,6 +166,10 @@ class MotAccumulator:
             prev = self._last_hyp.get(g)
             if prev is not None and prev != h:
                 self._idsw += 1
+                if self._on_switch is not None:
+                    self._on_switch(
+                        self._frames - 1, g, prev, h, gi, gt_ids, gt_boxes
+                    )
             self._last_hyp[g] = h
 
         self._fp += n_hyp - len(matched_hyp)

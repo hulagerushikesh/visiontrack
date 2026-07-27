@@ -54,12 +54,18 @@ state → −0.009). Scoped: not a refutation of OC-SORT's paper (different dete
 tuning). Bonus: the same DanceTrack run reproduced RQ1 (appearance cuts IDSW
 −15, p<0.01\*), cross-validating the harness. Details → [`OC_SORT.md`](OC_SORT.md).
 
-### H1.3 — Camera-motion compensation (RQ4) + error taxonomy
-- **RQ4:** add global motion compensation (GMC, BoT-SORT's key idea) and ask
-  *when does it help?* — a genuinely new research question, strongest on
-  moving-camera sequences.
-- **Error taxonomy:** auto-classify each ID switch by cause (occlusion /
-  crowding / fast motion) → the "money figure" that turns numbers into insight.
+### H1.3 — Error taxonomy ✅ *done* · Camera-motion compensation (RQ4) — *queued*
+- **Error taxonomy ✅** — auto-classifies each ID switch by cause (occlusion /
+  crowding / fast motion) via an opt-in `on_switch` hook on the CLEAR-MOT
+  accumulator, reporting each condition's *lift* over its base rate. **DanceTrack
+  finding:** switches are ~**4× over-represented under fast motion** (lift 3.86×),
+  while occlusion/crowding barely discriminate (so pervasive they're near base
+  rate). The discriminating driver of switches is *motion*, not occlusion —
+  explains why DanceTrack is hard and why motion is the lever. Details →
+  [`ERROR_TAXONOMY.md`](ERROR_TAXONOMY.md). `make taxonomy`.
+- **RQ4 (CMC/GMC)** — *queued.* Global motion compensation (BoT-SORT's key idea),
+  asking *when does it help?* — strongest on moving-camera sequences. Needs image
+  frames for global-motion estimation.
 
 ### H1.x — Optional, resource-heavier
 - Real **YOLOX** detector on DanceTrack (removes the oracle-perturbed-GT caveat).
