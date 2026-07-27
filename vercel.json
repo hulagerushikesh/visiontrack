@@ -1,0 +1,19 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/", "destination": "/web/index.html" },
+    { "source": "/demo", "destination": "/viz/webdemo/index.html" },
+    { "source": "/study", "destination": "/docs/LEARNING_PATH.html" },
+    { "source": "/roadmap", "destination": "/docs/CV_ROADMAP.html" }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400" }
+      ]
+    }
+  ]
+}

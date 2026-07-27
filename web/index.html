@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>VisionTrack — from-scratch multi-object tracking</title>
+<meta name="description" content="A from-scratch NumPy multi-object tracker used as a controlled study of when appearance, learned motion, and uncertainty actually help online tracking.">
+<style>
+  :root {
+    --bg: #f4f7fb; --surface: #ffffff; --surface-2: #f0f3f8; --border: #dbe2ec;
+    --ink: #0e141b; --ink-2: #33404f; --muted: #5c6773; --faint: #8a94a1;
+    --accent: #2f7ae5; --accent-soft: #e7f0fd; --good: #1f9d63;
+    --screen: #0c0f14; --screen-edge: #232a34;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --shadow: 0 1px 2px rgba(13,20,30,.05), 0 10px 34px rgba(13,20,30,.07);
+    --maxw: 960px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b0e14; --surface: #141922; --surface-2: #1a2029; --border: #26303c;
+      --ink: #e7ebf1; --ink-2: #b7c0cd; --muted: #8792a1; --faint: #616d7c;
+      --accent: #5aa2ff; --accent-soft: #16283f; --good: #37c07e;
+      --screen: #06080c; --screen-edge: #232a34;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 40px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f4f7fb; --surface: #ffffff; --surface-2: #f0f3f8; --border: #dbe2ec;
+    --ink: #0e141b; --ink-2: #33404f; --muted: #5c6773; --faint: #8a94a1;
+    --accent: #2f7ae5; --accent-soft: #e7f0fd; --good: #1f9d63;
+    --screen: #0c0f14; --screen-edge: #232a34;
+    --shadow: 0 1px 2px rgba(13,20,30,.05), 0 10px 34px rgba(13,20,30,.07);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0b0e14; --surface: #141922; --surface-2: #1a2029; --border: #26303c;
+    --ink: #e7ebf1; --ink-2: #b7c0cd; --muted: #8792a1; --faint: #616d7c;
+    --accent: #5aa2ff; --accent-soft: #16283f; --good: #37c07e;
+    --screen: #06080c; --screen-edge: #232a34;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 40px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans);
+    line-height: 1.6; font-size: 16px; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  /* nav */
+  nav { border-bottom: 1px solid var(--border); }
+  .nav-in { max-width: var(--maxw); margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+  .brand { font-family: var(--mono); font-weight: 700; letter-spacing: .02em; font-size: 15px; display: flex; align-items: center; gap: 9px; }
+  .brand .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .nav-in .spacer { flex: 1; }
+  .nav-in a.ghlink { font-family: var(--mono); font-size: 13px; color: var(--muted); text-decoration: none; padding: 6px 12px; border: 1px solid var(--border); border-radius: 8px; }
+  .nav-in a.ghlink:hover { color: var(--ink); border-color: var(--accent); }
+
+  /* hero */
+  .hero { padding: 68px 0 30px; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin: 0 0 14px; }
+  h1 { font-size: clamp(30px, 5vw, 46px); line-height: 1.08; letter-spacing: -.025em; margin: 0 0 18px; font-weight: 800; text-wrap: balance; max-width: 16ch; }
+  .lede { font-size: 18px; color: var(--ink-2); max-width: 60ch; margin: 0 0 26px; }
+  .lede b { color: var(--ink); }
+  .cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 9px; font-weight: 650; font-size: 15px;
+    padding: 12px 20px; border-radius: 10px; text-decoration: none; transition: .16s; border: 1px solid transparent; }
+  .btn.primary { background: var(--accent); color: #fff; }
+  .btn.primary:hover { filter: brightness(1.07); transform: translateY(-1px); }
+  .btn.ghost { background: var(--surface); color: var(--ink); border-color: var(--border); }
+  .btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* screen / hero visual */
+  .screen { margin: 40px 0 8px; background: var(--screen); border: 1px solid var(--screen-edge);
+    border-radius: 16px; padding: 14px; box-shadow: var(--shadow); }
+  .screen-bar { display: flex; gap: 6px; padding: 4px 6px 12px; }
+  .screen-bar i { width: 11px; height: 11px; border-radius: 50%; background: #2b333f; display: block; }
+  .screen img { width: 100%; display: block; border-radius: 8px; background: #04060a; }
+  .screen-cap { font-family: var(--mono); font-size: 12px; color: var(--faint); text-align: center; margin: 12px 0 2px; }
+
+  /* cards */
+  .section-label { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); margin: 56px 0 16px; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 720px) { .cards { grid-template-columns: 1fr; } }
+  .card { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px; text-decoration: none; color: inherit; transition: .16s; box-shadow: var(--shadow); }
+  .card:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .card .ic { width: 38px; height: 38px; border-radius: 10px; background: var(--accent-soft); color: var(--accent);
+    display: grid; place-items: center; margin-bottom: 14px; }
+  .card .ic svg { width: 20px; height: 20px; }
+  .card h3 { margin: 0 0 6px; font-size: 17px; letter-spacing: -.01em; }
+  .card p { margin: 0; color: var(--muted); font-size: 14px; flex: 1; }
+  .card .go { font-family: var(--mono); font-size: 12px; color: var(--accent); margin-top: 16px; display: flex; align-items: center; gap: 6px; }
+
+  /* result strip */
+  .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0 8px; }
+  @media (max-width: 720px) { .facts { grid-template-columns: 1fr; } }
+  .fact { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+  .fact .n { font-family: var(--mono); font-weight: 800; font-size: 22px; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .fact .n span { color: var(--good); }
+  .fact .l { color: var(--muted); font-size: 13.5px; margin-top: 4px; }
+
+  footer { margin-top: 64px; border-top: 1px solid var(--border); }
+  .foot-in { max-width: var(--maxw); margin: 0 auto; padding: 26px 24px 60px; font-family: var(--mono); font-size: 12.5px; color: var(--muted); display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+  .foot-in a { color: var(--muted); text-decoration: none; }
+  .foot-in a:hover { color: var(--accent); }
+  .foot-in .spacer { flex: 1; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <span class="brand"><span class="dot"></span> VisionTrack</span>
+    <span class="spacer"></span>
+    <a class="ghlink" href="https://github.com/hulagerushikesh/visiontrack" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <section class="hero">
+    <p class="eyebrow">From-scratch multi-object tracking · a controlled study</p>
+    <h1>When do the field's standard tricks actually help tracking?</h1>
+    <p class="lede">An online tracking-by-detection system — an 8-state <b>Kalman filter</b>, an
+    O(n³) <b>Hungarian</b> solver, and <b>ByteTrack</b> association — built from first principles on
+    NumPy, then used as a <b>reproducible, significance-tested study</b> of when appearance re-ID,
+    learned motion, and calibrated uncertainty pay off on real data (MOT17, DanceTrack). Several
+    answers are honest negatives — which is the point.</p>
+    <div class="cta-row">
+      <a class="btn primary" href="/demo">▶ Open the interactive demo</a>
+      <a class="btn ghost" href="https://github.com/hulagerushikesh/visiontrack" target="_blank" rel="noopener">Read the mini-paper</a>
+    </div>
+
+    <div class="screen">
+      <div class="screen-bar"><i></i><i></i><i></i></div>
+      <img src="/assets/tracking.gif" alt="VisionTrack tracking a synthetic scene — stable per-object IDs">
+      <p class="screen-cap">the tracker on a synthetic scene — boxes in, stable per-object IDs out</p>
+    </div>
+  </section>
+
+  <p class="section-label">Explore</p>
+  <div class="cards">
+    <a class="card" href="/demo">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg></span>
+      <h3>Interactive demo</h3>
+      <p>Watch the same scene tracked motion-only vs motion + appearance, with the live ID-switch count side by side.</p>
+      <span class="go">Try it →</span>
+    </a>
+    <a class="card" href="/study">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+      <h3>Study guide</h3>
+      <p>A self-paced walk through this codebase — Kalman → Hungarian → ByteTrack → metrics → the three research questions.</p>
+      <span class="go">Learn the project →</span>
+    </a>
+    <a class="card" href="/roadmap">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></span>
+      <h3>CV roadmap</h3>
+      <p>A junior → research computer-vision learning path, in order, with build tasks and canonical resources at every tier.</p>
+      <span class="go">Follow the roadmap →</span>
+    </a>
+  </div>
+
+  <p class="section-label">A few results</p>
+  <div class="facts">
+    <div class="fact"><div class="n">188 → 163</div><div class="l"><b>RQ1</b> — deep re-ID cuts MOT17 ID switches <span>−13%</span> (significant, pooled)</div></div>
+    <div class="fact"><div class="n">refuted</div><div class="l"><b>RQ1</b> — "appearance hurts on DanceTrack" hypothesis, tested and disproven</div></div>
+    <div class="fact"><div class="n">281</div><div class="l">tests passing · NumPy-only core · HOTA cross-checked vs trackeval</div></div>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-in">
+    <span>VisionTrack · MIT</span>
+    <a href="https://github.com/hulagerushikesh/visiontrack" target="_blank" rel="noopener">github.com/hulagerushikesh/visiontrack</a>
+    <span class="spacer"></span>
+    <a href="/demo">demo</a>
+    <a href="/study">study guide</a>
+    <a href="/roadmap">roadmap</a>
+  </div>
+</footer>
+
+</body>
+</html>
