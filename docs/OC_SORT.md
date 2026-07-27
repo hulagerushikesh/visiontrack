@@ -43,24 +43,47 @@ re-initialising — keeping the covariance tight. That turned a catastrophic
 regression into a mild one. *Running the ablation before believing the result is
 the point.*
 
-## Honest finding (synthetic scope)
+## Honest finding — an across-the-board negative (in this study's setting)
 
-Across the synthetic regimes, OC-SORT's mechanics **do not help**:
+Across the synthetic regimes **and** the fair real-data test, OC-SORT's mechanics
+do not help:
 
-- **Clean, near-linear motion + occlusion gaps:** exactly neutral (Δ=0, IDSW=0).
-  The Kalman filter already nails linear motion, so there is nothing for ORU to
+- **Synthetic, clean + near-linear motion:** exactly neutral (Δ=0, IDSW=0). The
+  Kalman filter already nails linear motion, so there is nothing for ORU to
   re-anchor and OCM's directional prior is redundant.
-- **High observation noise (8px jitter):** mildly *harmful* (MOTA −0.010, p<0.01;
-  driven mostly by OCM). When observation noise swamps the motion signal, the
-  observed-velocity direction is unreliable, so the momentum prior misleads and
-  the virtual trajectory is built from noisy endpoints.
+- **Synthetic, high observation noise (8px):** mildly *harmful* (MOTA −0.010,
+  p<0.01; OCM-driven). Noisy observations make the observed-velocity direction
+  unreliable, so the momentum prior misleads.
+- **DanceTrack val (12 seqs) — OC-SORT's *intended* non-linear regime:**
+  significantly *harmful*. Paired vs the fair single-stage baseline `sort`:
+  **IDSW +19.8 (p=0.01\*)**, MOTA −0.003 (p=0.01*), HOTA −0.006 (n.s.). More ID
+  switches, not fewer.
 
-This is consistent with the project's recurring result: **a trick helps only in
-its intended regime.** OC-SORT is designed for *genuinely non-linear* motion with
-*clean* detections (sports/dance). The synthetic generator's linear motion can't
-create that regime, so the fair test is **DanceTrack** (real non-linear dance
-motion) — queued alongside the project's other DanceTrack-scale runs.
+**Why it backfires on DanceTrack — the key insight.** ORU rebuilds the state
+along a **straight-line** virtual trajectory between the last and new
+observation. Dancers move highly **non-linearly** (they curve and spin), so a
+straight line is a *poor* model of the true path across the gap — ORU injects a
+wrong velocity, which then causes switches. The linear virtual-trajectory
+assumption fails precisely where motion is most non-linear — the regime it was
+meant to help. OCM compounds it: with oracle-perturbed (noisy) detections, the
+observed-velocity direction is itself unreliable.
+
+**Scope — this is not a refutation of OC-SORT the paper.** This study uses
+oracle-perturbed GT detections, a weighted-and-gated single-stage core, and 12
+DanceTrack val sequences. OC-SORT's published gains use real detectors and its
+own tuning. The honest, scoped claim is: *in this controlled setting, OC-SORT's
+observation-centric mechanics do not improve association and increase ID
+switches on non-linear motion.*
+
+**Bonus — harness cross-validation.** The same DanceTrack zoo run independently
+reproduced the project's marquee RQ1 result: the appearance presets (`deepsort`,
+`bytetrack_reid`) significantly cut ID switches (−15.7 / −15.2 IDSW, p<0.01*),
+i.e. appearance *helps* on DanceTrack — through a completely different code path
+than the original RQ1 study. That the zoo recovers the known result is evidence
+the comparison harness is sound.
 
 ## Status
 Implemented, tested (11 tests, `tests/test_oc_sort.py`), in the zoo as the
-`oc_sort` preset. Fair non-linear real-data test (DanceTrack) deferred.
+`oc_sort` preset. Fair non-linear real-data test on DanceTrack **done** — an
+honest negative, scoped as above. Reproduce with
+`python -m experiments.tracker_zoo --dataset dancetrack`.
