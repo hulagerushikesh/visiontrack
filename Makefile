@@ -2,7 +2,7 @@
 # Override the interpreter if needed:  make test PY=python3.11
 PY ?= python3
 
-.PHONY: help install test lint reproduce reproduce-synth demo zoo residual figures clean
+.PHONY: help install test lint reproduce reproduce-synth demo zoo taxonomy residual figures clean
 
 help:
 	@echo "targets:"
@@ -50,6 +50,12 @@ demo:
 # synthetic scene. No dataset needed; writes docs/results_tracker_zoo.md.
 zoo:
 	$(PY) -m experiments.tracker_zoo --out-md docs/results_tracker_zoo.md
+
+# ID-switch error taxonomy: classify why the tracker swaps identities
+# (occlusion / crowding / fast motion). Needs the DanceTrack caches.
+taxonomy:
+	$(PY) -m experiments.error_taxonomy --dataset dancetrack --preset bytetrack \
+		--out-md docs/results_error_taxonomy_dancetrack.md
 
 # RQ2: train the from-scratch motion residual and run the tracking ablation
 # (needs the MOT17 + DanceTrack GT caches).
