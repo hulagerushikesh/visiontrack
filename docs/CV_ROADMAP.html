@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+</head>
+<body>
+<title>Computer Vision — Junior → Research Roadmap</title>
+<style>
+  :root {
+    --bg: #f4f7fb; --surface: #ffffff; --surface-2: #f0f3f8; --border: #dbe2ec;
+    --ink: #0e141b; --ink-2: #33404f; --muted: #5c6773; --faint: #8a94a1;
+    --accent: #2f7ae5; --accent-soft: #e7f0fd; --good: #1f9d63; --good-soft: #e3f5eb;
+    --t-junior: #1f9d63; --t-mid: #2f7ae5; --t-senior: #6b57d6; --t-research: #c07a12;
+    --t-junior-s: #e3f5eb; --t-mid-s: #e7f0fd; --t-senior-s: #ece9fb; --t-research-s: #f7edda;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --shadow: 0 1px 2px rgba(13,20,30,.04), 0 6px 22px rgba(13,20,30,.05);
+    --maxw: 940px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0c0f15; --surface: #141922; --surface-2: #1a2029; --border: #26303c;
+      --ink: #e7ebf1; --ink-2: #b7c0cd; --muted: #8792a1; --faint: #616d7c;
+      --accent: #5aa2ff; --accent-soft: #16283f; --good: #37c07e; --good-soft: #12281d;
+      --t-junior: #37c07e; --t-mid: #5aa2ff; --t-senior: #9a86ff; --t-research: #e0a94a;
+      --t-junior-s: #12281d; --t-mid-s: #16283f; --t-senior-s: #221d3a; --t-research-s: #2e2410;
+      --shadow: 0 1px 2px rgba(0,0,0,.35), 0 8px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f4f7fb; --surface: #ffffff; --surface-2: #f0f3f8; --border: #dbe2ec;
+    --ink: #0e141b; --ink-2: #33404f; --muted: #5c6773; --faint: #8a94a1;
+    --accent: #2f7ae5; --accent-soft: #e7f0fd; --good: #1f9d63; --good-soft: #e3f5eb;
+    --t-junior: #1f9d63; --t-mid: #2f7ae5; --t-senior: #6b57d6; --t-research: #c07a12;
+    --t-junior-s: #e3f5eb; --t-mid-s: #e7f0fd; --t-senior-s: #ece9fb; --t-research-s: #f7edda;
+    --shadow: 0 1px 2px rgba(13,20,30,.04), 0 6px 22px rgba(13,20,30,.05);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0c0f15; --surface: #141922; --surface-2: #1a2029; --border: #26303c;
+    --ink: #e7ebf1; --ink-2: #b7c0cd; --muted: #8792a1; --faint: #616d7c;
+    --accent: #5aa2ff; --accent-soft: #16283f; --good: #37c07e; --good-soft: #12281d;
+    --t-junior: #37c07e; --t-mid: #5aa2ff; --t-senior: #9a86ff; --t-research: #e0a94a;
+    --t-junior-s: #12281d; --t-mid-s: #16283f; --t-senior-s: #221d3a; --t-research-s: #2e2410;
+    --shadow: 0 1px 2px rgba(0,0,0,.35), 0 8px 30px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans);
+    line-height: 1.6; font-size: 16px; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 22px 120px; }
+
+  header.top { position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--border); }
+  .top-inner { max-width: var(--maxw); margin: 0 auto; padding: 12px 22px; }
+  .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 3px; display: flex; align-items: center; gap: 8px; }
+  .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .top h1 { font-size: 19px; margin: 0; letter-spacing: -.01em; font-weight: 700; }
+  .readout { display: flex; align-items: center; gap: 14px; margin-top: 10px; flex-wrap: wrap; }
+  .bar { flex: 1 1 240px; height: 8px; min-width: 180px; border-radius: 20px;
+    background: var(--surface-2); border: 1px solid var(--border); overflow: hidden; }
+  .bar > i { display: block; height: 100%; width: 0%;
+    background: linear-gradient(90deg, var(--t-junior), var(--t-mid) 40%, var(--t-senior) 72%, var(--t-research));
+    transition: width .5s cubic-bezier(.4,0,.2,1); }
+  .pct { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 700;
+    font-size: 15px; color: var(--ink); min-width: 3.4em; text-align: right; }
+  .count-note { font-family: var(--mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .controls { display: flex; gap: 8px; }
+  .controls button { font-family: var(--mono); font-size: 11px; letter-spacing: .04em; text-transform: uppercase;
+    color: var(--muted); background: var(--surface); border: 1px solid var(--border);
+    padding: 5px 10px; border-radius: 7px; cursor: pointer; transition: .15s; }
+  .controls button:hover { color: var(--ink); border-color: var(--accent); }
+  .controls button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .intro { padding: 34px 0 8px; }
+  .lede { color: var(--ink-2); font-size: 16.5px; max-width: 65ch; margin: 0 0 14px; }
+  .lede strong { color: var(--ink); }
+  .tierkey { display: flex; gap: 10px; flex-wrap: wrap; border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border); padding: 14px 0; margin-top: 6px; }
+  .tierkey .k { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+  .tierkey .k b { color: var(--ink-2); font-weight: 600; }
+
+  .tier { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 5px; font-weight: 700; white-space: nowrap; }
+  .tier.junior { color: var(--t-junior); background: var(--t-junior-s); }
+  .tier.mid { color: var(--t-mid); background: var(--t-mid-s); }
+  .tier.senior { color: var(--t-senior); background: var(--t-senior-s); }
+  .tier.research { color: var(--t-research); background: var(--t-research-s); }
+
+  .stage { position: relative; padding: 26px 0 4px 0; }
+  .stage-head { display: flex; align-items: center; gap: 12px; margin-bottom: 5px; flex-wrap: wrap; }
+  .idx { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--accent);
+    letter-spacing: .05em; background: var(--accent-soft); padding: 3px 9px; border-radius: 6px; white-space: nowrap; }
+  .stage-head h3 { font-size: 21px; margin: 0; letter-spacing: -.02em; font-weight: 700; text-wrap: balance; flex: 1; min-width: 200px; }
+  .stage-count { font-family: var(--mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .stage-count.done { color: var(--good); }
+  .stage-sub { color: var(--muted); font-size: 14.5px; margin: 2px 0 14px; max-width: 68ch; }
+
+  details.topic { background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    margin: 9px 0; box-shadow: var(--shadow); overflow: hidden; }
+  details.topic[open] { border-color: color-mix(in srgb, var(--accent) 40%, var(--border)); }
+  summary { list-style: none; cursor: pointer; padding: 15px 17px; display: flex; align-items: center; gap: 13px; user-select: none; }
+  summary::-webkit-details-marker { display: none; }
+  summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 12px; }
+  .chev { flex: none; width: 16px; height: 16px; color: var(--faint); transition: transform .22s ease; }
+  details[open] .chev { transform: rotate(90deg); color: var(--accent); }
+  .topic-title { flex: 1; min-width: 0; }
+  .topic-title .t { font-weight: 650; font-size: 16px; letter-spacing: -.01em; display: block; }
+  .topic-title .k { color: var(--muted); font-size: 13.5px; display: block; margin-top: 1px; }
+  .mini { flex: none; font-family: var(--mono); font-size: 11px; font-variant-numeric: tabular-nums;
+    color: var(--muted); background: var(--surface-2); border: 1px solid var(--border);
+    padding: 3px 8px; border-radius: 20px; white-space: nowrap; }
+  .mini.done { color: var(--good); background: var(--good-soft); border-color: color-mix(in srgb, var(--good) 35%, var(--border)); }
+
+  .body { padding: 2px 17px 18px; border-top: 1px solid var(--border); }
+  .body > * + * { margin-top: 14px; }
+  .block-label { font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--faint); margin: 0 0 5px; }
+  .body p { margin: 0; color: var(--ink-2); }
+  .body p.why b { color: var(--ink); }
+
+  ul.learn { margin: 0; padding-left: 18px; color: var(--ink-2); }
+  ul.learn li { margin: 4px 0; }
+  ul.learn li b { color: var(--ink); font-weight: 600; }
+
+  .resource { font-size: 13.5px; color: var(--muted); }
+  .resource .r { display: block; margin: 3px 0; }
+  .resource b { color: var(--ink-2); font-weight: 600; }
+
+  .milestones { display: flex; flex-direction: column; gap: 2px;
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 9px; padding: 6px; }
+  label.ms { display: flex; align-items: flex-start; gap: 10px; padding: 7px 8px; border-radius: 7px; cursor: pointer; transition: background .12s; }
+  label.ms:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+  label.ms input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .box { flex: none; width: 19px; height: 19px; margin-top: 1px; border-radius: 6px;
+    border: 1.5px solid var(--faint); background: var(--surface); display: grid; place-items: center; transition: .15s; }
+  .box svg { width: 12px; height: 12px; stroke: #fff; stroke-width: 3.2; fill: none;
+    stroke-dasharray: 18; stroke-dashoffset: 18; transition: stroke-dashoffset .2s ease .02s; }
+  label.ms input:checked + .box { background: var(--good); border-color: var(--good); }
+  label.ms input:checked + .box svg { stroke-dashoffset: 0; }
+  label.ms input:focus-visible + .box { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .ms-txt { font-size: 14.5px; color: var(--ink-2); }
+  label.ms input:checked ~ .ms-txt { color: var(--faint); text-decoration: line-through;
+    text-decoration-color: color-mix(in srgb, var(--good) 60%, transparent); }
+  .ms-txt code { font-family: var(--mono); font-size: 12.5px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; color: var(--ink); }
+
+  .callout { border-left: 3px solid var(--accent); background: var(--accent-soft);
+    padding: 10px 14px; border-radius: 0 8px 8px 0; font-size: 14px; color: var(--ink-2); }
+  .callout b { color: var(--ink); }
+  .callout.vt { border-color: var(--t-senior); background: var(--t-senior-s); }
+
+  footer.foot { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border);
+    font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  footer.foot b { color: var(--ink-2); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  @media (max-width: 560px) { .stage-head h3 { font-size: 18px; } .topic-title .k { display: none; } .body { padding-left: 13px; padding-right: 13px; } }
+</style>
+
+<header class="top">
+  <div class="top-inner">
+    <p class="eyebrow"><span class="dot"></span> Computer Vision · junior → research roadmap</p>
+    <h1>Learn computer vision in order — foundations to the research frontier</h1>
+    <div class="readout">
+      <div class="bar" aria-hidden="true"><i id="barfill"></i></div>
+      <span class="pct" id="pct">0%</span>
+      <span class="count-note" id="countnote">0 / 0 milestones</span>
+      <span class="controls">
+        <button id="expandAll" type="button">Expand all</button>
+        <button id="collapseAll" type="button">Collapse</button>
+        <button id="reset" type="button">Reset</button>
+      </span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="intro">
+    <p class="lede">A single ordered path through computer vision — from the math you can't skip to
+    doing original research. The <strong>numbering is the order</strong>: each stage assumes the ones
+    before it. Every stage carries a <strong>level badge</strong> (junior → mid → senior → research) so
+    you always know where you are, and gives you <strong>what &amp; why</strong>, the concepts to learn,
+    something to <strong>build</strong>, canonical resources, and a checklist. Ticking boxes
+    <strong>saves your progress in this browser</strong>.</p>
+    <p class="lede">Don't rush the tiers. <strong>Junior</strong> (00–02) is classical vision + the math;
+    <strong>mid</strong> (03–09) is deep learning and the core tasks; <strong>senior</strong> (10–15) is
+    modern architectures, generative &amp; 3D, and production; <strong>research</strong> (16–18) is reading,
+    reproducing, and producing new knowledge. Build a small project at the end of every tier — that's
+    what turns "watched a course" into "can do the job".</p>
+    <div class="tierkey">
+      <span class="k"><span class="tier junior">Junior</span> <b>foundations &amp; classical CV</b></span>
+      <span class="k"><span class="tier mid">Mid</span> <b>deep learning &amp; core tasks</b></span>
+      <span class="k"><span class="tier senior">Senior</span> <b>modern, generative, 3D, production</b></span>
+      <span class="k"><span class="tier research">Research</span> <b>read, reproduce, create</b></span>
+    </div>
+  </section>
+
+  <!-- ============ 00 ============ -->
+  <section class="stage" data-stage>
+    <div class="stage-head"><span class="idx">00</span><h3>Prerequisites — the math &amp; code you can't skip</h3><span class="tier junior">Junior</span><span class="stage-count"></span></div>
+    <p class="stage-sub">Everything downstream is linear algebra, calculus, and probability wearing a costume. Get comfortable here and the rest stops feeling like magic.</p>
+    <details class="topic">
+      <summary><svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Linear algebra, calculus, probability &amp; Python/NumPy</span><span class="k">Vectors, matrices, gradients, distributions — and the tools to compute with them</span></span><span class="mini"></span></summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">Images are tensors; models are matrix multiplies; training is gradient descent; uncertainty is probability. You don't need a math degree, but you do need fluency with <b>vectors/matrices, dot products, eigenvectors, gradients/chain rule, and basic probability</b>. In parallel, get genuinely fast with <b>Python + NumPy</b> (vectorized array thinking) — it's the lingua franca of the whole field.</p></div>
+        <div><p class="block-label">Learn</p><ul class="learn">
+          <li><b>Linear algebra</b> — matrix multiply, transpose/inverse, rank, eigen/SVD, why they matter geometrically.</li>
+          <li><b>Calculus</b> — partial derivatives, the chain rule (this <em>is</em> backprop).</li>
+          <li><b>Probability</b> — distributions, expectation/variance, Bayes' rule, Gaussians.</li>
+          <li><b>NumPy</b> — broadcasting, indexing, vectorization instead of loops.</li>
+        </ul></div>
+        <div class="callout vt"><b>You've already touched this:</b> the Kalman filter and Hungarian solver in your VisionTrack project are pure linear algebra + probability — revisit them once this clicks and they'll read like plain English.</div>
+        <div><p class="block-label">Milestones</p><div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="r00-la"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Watch 3Blue1Brown "Essence of Linear Algebra" end-to-end</span></label>
+          <label class="ms"><input type="checkbox" data-id="r00-np"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Implement a matrix multiply and a numerical gradient in <code>NumPy</code>, no loops</span></label>
+          <label class="ms"><input type="checkbox" data-id="r00-prob"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain Bayes' rule and a Gaussian in your own words</span></label>
+        </div></div>
+        <div><p class="block-label">Resources</p><p class="resource"><span class="r"><b>3Blue1Brown</b> — Essence of Linear Algebra / Calculus (YouTube).</span><span class="r"><b>Gilbert Strang</b> — Linear Algebra (MIT OCW). <b>NumPy</b> official "absolute basics" guide.</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 01 ============ -->
+  <section class="stage" data-stage>
+    <div class="stage-head"><span class="idx">01</span><h3>Digital images &amp; classical processing</h3><span class="tier junior">Junior</span><span class="stage-count"></span></div>
+    <p class="stage-sub">Before deep learning, understand what an image <em>is</em> and the operations that shaped the field for 40 years — they still power preprocessing and augmentation today.</p>
+    <details class="topic">
+      <summary><svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Pixels, colour spaces, filtering &amp; convolution</span><span class="k">Histograms, blur/sharpen, edges, morphology — the classical toolbox</span></span><span class="mini"></span></summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">An image is a grid of intensities (per channel). <b>Convolution</b> — sliding a small kernel over the image — is the single most important operation in vision; it does blurring, sharpening, and <b>edge detection</b> (Sobel/Canny), and it's literally what a CNN learns. Learn <b>colour spaces</b> (RGB/HSV/grayscale), <b>histograms</b>, <b>thresholding</b>, and <b>morphology</b> (erode/dilate) hands-on with OpenCV.</p></div>
+        <div><p class="block-label">Learn</p><ul class="learn">
+          <li><b>Convolution &amp; kernels</b> — the operation underneath everything.</li>
+          <li><b>Edges &amp; gradients</b> — Sobel, Canny; why gradients localize structure.</li>
+          <li><b>Colour spaces &amp; histograms</b> — HSV for colour, histogram equalization.</li>
+        </ul></div>
+        <div class="callout vt"><b>Connection:</b> your colour-histogram appearance embedder in VisionTrack is exactly this classical toolbox used as a feature.</div>
+        <div><p class="block-label">Milestones</p><div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="r01-conv"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Implement 2D convolution by hand, then match it with OpenCV/SciPy</span></label>
+          <label class="ms"><input type="checkbox" data-id="r01-edge"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Run a Canny edge detector and explain each step</span></label>
+          <label class="ms"><input type="checkbox" data-id="r01-proj"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt"><b>Build:</b> a small OpenCV script — load, blur, edge-detect, threshold an image</span></label>
+        </div></div>
+        <div><p class="block-label">Resources</p><p class="resource"><span class="r"><b>Szeliski</b> — "Computer Vision: Algorithms and Applications" (free online; chs. 3–4).</span><span class="r"><b>OpenCV-Python</b> tutorials (official docs).</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 02 ============ -->
+  <section class="stage" data-stage>
+    <div class="stage-head"><span class="idx">02</span><h3>Features &amp; multi-view geometry</h3><span class="tier junior">Junior</span><span class="stage-count"></span></div>
+    <p class="stage-sub">How classical vision found and matched keypoints across images, and how cameras turn 3D into 2D. This is the backbone of SLAM, AR, and 3D reconstruction.</p>
+    <details class="topic">
+      <summary><svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Keypoints (SIFT/ORB), matching, homography &amp; epipolar geometry</span><span class="k">The camera model, feature matching, and two-view geometry</span></span><span class="mini"></span></summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why"><b>Feature detectors/descriptors</b> (SIFT, ORB) find repeatable keypoints and describe them so the same point can be matched across images — the basis of panorama stitching and SLAM. <b>Multi-view geometry</b> is the math of cameras: the <b>pinhole model</b>, intrinsics/extrinsics, <b>calibration</b>, <b>homography</b>, and the <b>epipolar constraint</b> that relates two views (and enables stereo depth).</p></div>
+        <div><p class="block-label">Learn</p><ul class="learn">
+          <li><b>Detectors &amp; descriptors</b> — Harris corners, SIFT/ORB, RANSAC for robust matching.</li>
+          <li><b>Camera model</b> — projection, intrinsic K, distortion, calibration.</li>
+          <li><b>Two-view geometry</b> — homography, fundamental/essential matrix, epipolar lines, stereo/triangulation.</li>
+        </ul></div>
+        <div><p class="block-label">Milestones</p><div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="r02-match"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Detect + match ORB features between two photos of the same scene</span></label>
+          <label class="ms"><input type="checkbox" data-id="r02-homog"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt"><b>Build:</b> stitch two overlapping images into a panorama via homography + RANSAC</span></label>
+          <label class="ms"><input type="checkbox" data-id="r02-cam"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain the pinhole camera model and what calibration recovers</span></label>
+        </div></div>
+        <div><p class="block-label">Resources</p><p class="resource"><span class="r"><b>Hartley &amp; Zisserman</b> — "Multiple View Geometry" (the reference). <b>Szeliski</b> chs. 7–12.</span><span class="r"><b>First Principles of Computer Vision</b> (Shree Nayar, Columbia — YouTube series).</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 03 ============ -->
+  <section class="stage" data-stage>
+    <div class="stage-head"><span class="idx">03</span><h3>Machine learning fundamentals</h3><span class="tier mid">Mid</span><span class="stage-count"></span></div>
+    <p class="stage-sub">The ideas underneath every model: learning from data, loss functions, optimization, and the bias/variance tug-of-war. Skip this and deep learning becomes cargo-cult.</p>
+    <details class="topic">
+      <summary><svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Supervised learning, loss, gradient descent &amp; generalization</span><span class="k">Train/val/test, overfitting, regularization, the bias–variance trade-off</span></span><span class="mini"></span></summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">A model is a function with parameters; <b>training</b> is minimizing a <b>loss</b> over data via <b>gradient descent</b>. The whole game is <b>generalization</b> — doing well on data you haven't seen. That means understanding <b>overfitting/underfitting</b>, <b>regularization</b>, the <b>train/val/test split</b>, and cross-validation. Start with linear/logistic regression before neural nets — every deep-learning concept is already here in miniature.</p></div>
+        <div><p class="block-label">Learn</p><ul class="learn">
+          <li><b>Loss functions</b> — MSE, cross-entropy, and what they reward.</li>
+          <li><b>Gradient descent</b> — learning rate, SGD vs batch, convergence.</li>
+          <li><b>Bias–variance</b> — over/underfitting, regularization (L2, early stopping).</li>
+          <li><b>Evaluation</b> — proper splits, why the test set is sacred.</li>
+        </ul></div>
+        <div><p class="block-label">Milestones</p><div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="r03-lr"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Implement linear + logistic regression with gradient descent from scratch</span></label>
+          <label class="ms"><input type="checkbox" data-id="r03-over"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Reproduce an overfitting curve and fix it with regularization</span></label>
+          <label class="ms"><input type="checkbox" data-id="r03-split"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why leaking the test set invalidates a result</span></label>
+        </div></div>
+        <div><p class="block-label">Resources</p><p class="resource"><span class="r"><b>Andrew Ng</b> — Machine Learning (Coursera/Stanford CS229 for depth).</span><span class="r"><b>StatQuest</b> (Josh Starmer, YouTube) for intuition.</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 04 ============ -->
+  <section class="stage" data-stage>
+    <div class="stage-head"><span class="idx">04</span><h3>Neural networks &amp; backpropagation</h3><span class="tier mid">Mid</span><span class="stage-count"></span></div>
+    <p class="stage-sub">The engine of modern CV. Build one from scratch once — hand-derive backprop — and you'll never be mystified by a framework again.</p>
+    <details class="topic">
+      <summary><svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">MLPs, activations, backprop &amp; optimizers</span><span class="k">Forward pass, the chain rule as backprop, SGD/Adam</span></span><span class="mini"></span></summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">A neural net stacks linear layers + <b>non-linear activations</b> (ReLU) so it can approximate complex functions. <b>Backpropagation</b> is just the chain rule applied efficiently to compute gradients of the loss w.r.t. every weight; <b>optimizers</b> (SGD, momentum, <b>Adam</b>) use those gradients to update. Understanding this cold is the single highest-leverage thing in the roadmap.</p></div>
+        <div><p class="block-label">Learn</p><ul class="learn">
+          <li><b>Forward pass</b> — layers, weights, biases, activations.</li>
+          <li><b>Backprop</b> — computational graph, chain rule, gradient flow.</li>
+          <li><b>Optimizers</b> — SGD → momentum → Adam; learning-rate intuition.</li>
+        </ul></div>
+        <div class="callout vt"><b>You've already done this once:</b> VisionTrack's RQ2 motion residual is a from-scratch NumPy MLP with hand-written backprop + Adam. Re-read <code>residual.py</code> after this stage — it's a perfect concrete example.</div>
+        <div><p class="block-label">Milestones</p><div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="r04-mlp"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt"><b>Build:</b> a 2-layer MLP in pure NumPy with hand-written backprop; train on a toy set</span></label>
+          <label class="ms"><input type="checkbox" data-id="r04-micrograd"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Follow Karpathy's "micrograd" and rebuild the autograd engine</span></label>
+          <label class="ms"><input type="checkbox" data-id="r04-adam"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why Adam converges differently from plain SGD</span></label>
+        </div></div>
+        <div><p class="block-label">Resources</p><p class="resource"><span class="r"><b>Andrej Karpathy</b> — "Neural Networks: Zero to Hero" (micrograd → makemore).</span><span class="r"><b>3Blue1Brown</b> — Neural Networks series. <b>Goodfellow et al.</b> — "Deep Learning" book.</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 05 ============ -->
+  <section class="stage" data-stage>
+    <div class="stage-head"><span class="idx">05</span><h3>CNNs &amp; training deep networks</h3><span class="tier mid">Mid</span><span class="stage-count"></span></div>
+    <p class="stage-sub">Convolutional networks are how vision went deep. Learn the architecture ideas <em>and</em> the practical craft of actually getting a net to train.</p>
+    <details class="topic">
+      <summary><svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Conv layers, classic architectures &amp; the training craft</span><span class="k">Pooling, receptive fields, ResNet, batchnorm, augmentation, transfer learning</span></span><span class="mini"></span></summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">A <b>CNN</b> reuses the same small kernels across the image (weight sharing) so it learns local patterns efficiently — edges → textures → parts → objects up the stack. Study the architecture lineage (<b>LeNet → AlexNet → VGG → ResNet</b>; skip connections are the key unlock) and the <b>practical craft</b>: data augmentation, <b>batch normalization</b>, dropout, learning-rate schedules, and <b>transfer learning</b> (fine-tuning a pretrained backbone — what you'll actually do 90% of the time).</p></div>
+        <div><p class="block-label">Learn</p><ul class="learn">
+          <li><b>Conv mechanics</b> — kernels, stride, padding, pooling, receptive field.</li>
+          <li><b>Architectures</b> — why ResNet's residual connections enabled very deep nets.</li>
+          <li><b>Training craft</b> — augmentation, batchnorm, schedules, and how to debug a net that won't learn.</li>
+          <li><b>Transfer learning</b> — feature extraction vs fine-tuning.</li>
+        </ul></div>
+        <div><p class="block-label">Milestones</p><div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="r05-cnn"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt"><b>Build:</b> train a small CNN on CIFAR-10 in PyTorch to a decent accuracy</span></label>
+          <label class="ms"><input type="checkbox" data-id="r05-ft"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Fine-tune a pretrained ResNet on your own small dataset</span></label>
+          <label class="ms"><input type="checkbox" data-id="r05-resnet"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain the vanishing-gradient problem and how residual connections fix it</span></label>
+        </div></div>
+        <div><p class="block-label">Resources</p><p class="resource"><span class="r"><b>Stanford CS231n</b> — "CNNs for Visual Recognition" (the canonical course; notes are free).</span><span class="r"><b>fast.ai</b> — Practical Deep Learning. <b>He et al. 2015</b> — "ResNet".</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 06 ============ -->
+  <section class="stage" data-stage>
+    <div class="stage-head"><span class="idx">06</span><h3>Image classification — the backbone task</h3><span class="tier mid">Mid</span><span class="stage-count"></span></div>
+    <p class="stage-sub">The task that launched the deep-learning era (AlexNet, 2012). Everything else — detection, segmentation — is built on a classification backbone.</p>
+    <details class="topic">
+      <summary><svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">ImageNet, backbones &amp; evaluation</span><span class="k">The architecture lineage and top-1/top-5 accuracy</span></span><span class="mini"></span></summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">Classification = "what object is in this image?" <b>ImageNet</b> + AlexNet showed deep CNNs crush classical methods, kicking off the modern era. The evolution of <b>backbones</b> (VGG → ResNet → EfficientNet → ConvNeXt) is a story of accuracy vs compute; these pretrained backbones become the feature extractor for <em>every</em> downstream task, so knowing them is foundational.</p></div>
+        <div><p class="block-label">Learn</p><ul class="learn">
+          <li><b>The lineage</b> — what each landmark architecture changed and why.</li>
+          <li><b>Metrics</b> — top-1/top-5 accuracy, confusion matrices.</li>
+          <li><b>Backbone reuse</b> — how classification pretraining transfers to detection/segmentation.</li>
+        </ul></div>
+        <div><p class="block-label">Milestones</p><div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="r06-paper"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Read the AlexNet + ResNet papers; note the one idea each contributed</span></label>
+          <label class="ms"><input type="checkbox" data-id="r06-bench"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Benchmark 2–3 pretrained backbones on the same dataset; compare accuracy vs speed</span></label>
+        </div></div>
+        <div><p class="block-label">Resources</p><p class="resource"><span class="r"><b>Krizhevsky et al. 2012</b> — "AlexNet". <b>Simonyan &amp; Zisserman 2014</b> — "VGG".</span><span class="r"><b>timm</b> (PyTorch Image Models) — the practical backbone zoo.</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 07 ============ -->
+  <section class="stage" data-stage>
+    <div class="stage-head"><span class="idx">07</span><h3>Object detection</h3><span class="tier mid">Mid</span><span class="stage-count"></span></div>
+    <p class="stage-sub">"What objects are where?" — boxes + labels. The most industrially useful CV task, and the input to your tracking work.</p>
+    <details class="topic">
+      <summary><svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">R-CNN → YOLO, anchors, NMS &amp; mAP</span><span class="k">Two-stage vs one-stage detectors and how detection is scored</span></span><span class="mini"></span></summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">Detection predicts a <b>bounding box + class</b> per object. Learn the two families: <b>two-stage</b> (R-CNN → Fast → Faster R-CNN: propose regions, then classify) and <b>one-stage</b> (<b>YOLO</b>, SSD, RetinaNet: predict directly, faster). Core mechanics that recur everywhere: <b>anchors</b>, <b>IoU</b>, <b>non-max suppression (NMS)</b>, and the <b>mAP</b> metric. YOLO is what you'd deploy in practice.</p></div>
+        <div><p class="block-label">Learn</p><ul class="learn">
+          <li><b>Two-stage vs one-stage</b> — the accuracy/speed trade-off.</li>
+          <li><b>Anchors &amp; NMS</b> — proposal generation and duplicate removal.</li>
+          <li><b>mAP</b> — precision/recall curves, IoU thresholds, AP averaging.</li>
+        </ul></div>
+        <div class="callout vt"><b>Direct link:</b> VisionTrack consumes detections as input. Running a real YOLOX detector on DanceTrack is one of your project's own "next steps" — this stage is the prerequisite for it.</div>
+        <div><p class="block-label">Milestones</p><div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="r07-yolo"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt"><b>Build:</b> train/fine-tune a YOLO model on a custom dataset; visualize predictions</span></label>
+          <label class="ms"><input type="checkbox" data-id="r07-map"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Compute mAP by hand for a tiny example; explain the IoU threshold's effect</span></label>
+          <label class="ms"><input type="checkbox" data-id="r07-nms"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Implement NMS from scratch</span></label>
+        </div></div>
+        <div><p class="block-label">Resources</p><p class="resource"><span class="r"><b>Ren et al. 2015</b> — "Faster R-CNN". <b>Redmon et al. 2016</b> — "YOLO".</span><span class="r"><b>Ultralytics YOLO</b> docs (practical). <b>Lin et al. 2017</b> — "Focal Loss / RetinaNet".</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 08 ============ -->
+  <section class="stage" data-stage>
+    <div class="stage-head"><span class="idx">08</span><h3>Segmentation</h3><span class="tier mid">Mid</span><span class="stage-count"></span></div>
+    <p class="stage-sub">Pixel-level understanding: label every pixel (semantic) or every object's exact mask (instance). Powers medical imaging, autonomous driving, photo editing.</p>
+    <details class="topic">
+      <summary><svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Semantic, instance &amp; panoptic — FCN, U-Net, Mask R-CNN</span><span class="k">Encoder–decoder nets and per-pixel/per-mask prediction</span></span><span class="mini"></span></summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why"><b>Semantic segmentation</b> classifies each pixel (road/car/person) — <b>FCN</b>, <b>U-Net</b> (encoder–decoder with skip connections), <b>DeepLab</b> (atrous convolutions). <b>Instance segmentation</b> separates individual objects with per-object masks — <b>Mask R-CNN</b> (detection + a mask head). <b>Panoptic</b> unifies both. U-Net in particular is everywhere (medical, diffusion models), so learn it well.</p></div>
+        <div><p class="block-label">Learn</p><ul class="learn">
+          <li><b>Encoder–decoder + skips</b> — how U-Net recovers spatial detail.</li>
+          <li><b>Semantic vs instance vs panoptic</b> — what each outputs.</li>
+          <li><b>Metrics</b> — IoU / mean-IoU, Dice coefficient.</li>
+        </ul></div>
+        <div><p class="block-label">Milestones</p><div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="r08-unet"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt"><b>Build:</b> train a U-Net for semantic segmentation; report mean-IoU</span></label>
+          <label class="ms"><input type="checkbox" data-id="r08-inst"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain how Mask R-CNN adds masks on top of Faster R-CNN</span></label>
+        </div></div>
+        <div><p class="block-label">Resources</p><p class="resource"><span class="r"><b>Ronneberger et al. 2015</b> — "U-Net". <b>He et al. 2017</b> — "Mask R-CNN".</span><span class="r"><b>Kirillov et al. 2023</b> — "Segment Anything (SAM)" — the modern foundation model.</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 09 ============ -->
+  <section class="stage" data-stage>
+    <div class="stage-head"><span class="idx">09</span><h3>Embeddings, metric learning &amp; tracking (video)</h3><span class="tier mid">Mid</span><span class="stage-count"></span></div>
+    <p class="stage-sub">Moving from single images to identity and time: representations where "same thing" is close, and following objects across video frames.</p>
+    <details class="topic">
+      <summary><svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Contrastive/triplet loss, re-ID, optical flow &amp; multi-object tracking</span><span class="k">Similarity embeddings, and the detect→predict→associate video loop</span></span><span class="mini"></span></summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why"><b>Metric learning</b> trains embeddings so same-identity items are near and different ones far (<b>triplet</b>/<b>contrastive</b> loss) — the basis of face recognition and person <b>re-ID</b>. <b>Video</b> adds time: <b>optical flow</b> (per-pixel motion), <b>action recognition</b>, and <b>multi-object tracking</b> (MOT) — detect each frame, predict motion (Kalman), associate (Hungarian), manage identities (ByteTrack/DeepSORT).</p></div>
+        <div><p class="block-label">Learn</p><ul class="learn">
+          <li><b>Metric learning</b> — triplet/contrastive loss, hard-negative mining, cosine similarity.</li>
+          <li><b>Tracking</b> — Kalman + Hungarian + ByteTrack; ID switches, HOTA/IDF1 metrics.</li>
+          <li><b>Video representations</b> — optical flow, temporal models.</li>
+        </ul></div>
+        <div class="callout vt"><b>This is your home turf.</b> VisionTrack is a full from-scratch implementation of this entire stage — Kalman, Hungarian, ByteTrack, re-ID embeddings, HOTA/IDF1. If you can teach this stage from your own repo, you've mastered it.</div>
+        <div><p class="block-label">Milestones</p><div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="r09-triplet"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Train an embedding with triplet loss; visualize the clusters (t-SNE/UMAP)</span></label>
+          <label class="ms"><input type="checkbox" data-id="r09-vt"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Walk through your own VisionTrack tracker end-to-end and explain each stage</span></label>
+          <label class="ms"><input type="checkbox" data-id="r09-flow"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain what optical flow computes and one method for it</span></label>
+        </div></div>
+        <div><p class="block-label">Resources</p><p class="resource"><span class="r"><b>Schroff et al. 2015</b> — "FaceNet" (triplet loss). <b>Wojke et al. 2017</b> — "DeepSORT".</span><span class="r"><b>Zhang et al. 2022</b> — "ByteTrack". <b>Luiten et al. 2021</b> — "HOTA".</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 10 ============ -->
+  <section class="stage" data-stage>
+    <div class="stage-head"><span class="idx">10</span><h3>Vision Transformers &amp; attention</h3><span class="tier senior">Senior</span><span class="stage-count"></span></div>
+    <p class="stage-sub">The architecture that took over. Attention replaced convolution as the default for large-scale vision — and unified vision with language.</p>
+    <details class="topic">
+      <summary><svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Self-attention, ViT, DETR &amp; Swin</span><span class="k">Patches as tokens, and detection/segmentation reframed with transformers</span></span><span class="mini"></span></summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why"><b>Self-attention</b> lets every element attend to every other, capturing long-range relationships convolution struggles with. <b>ViT</b> chops an image into patches and treats them as tokens — with enough data it beats CNNs. <b>DETR</b> reframes detection as set prediction (no anchors, no NMS). <b>Swin</b> reintroduces hierarchy/locality for efficiency. Attention is also the bridge to multimodal models (next stage).</p></div>
+        <div><p class="block-label">Learn</p><ul class="learn">
+          <li><b>Attention</b> — queries/keys/values, multi-head, positional encoding.</li>
+          <li><b>ViT</b> — patch embedding, why it needs scale (data/pretraining).</li>
+          <li><b>Transformer detection</b> — DETR's set prediction + bipartite matching (Hungarian again!).</li>
+        </ul></div>
+        <div class="callout vt"><b>Nice echo:</b> DETR matches predictions to ground truth with the <em>Hungarian algorithm</em> — the exact solver you implemented in VisionTrack, now inside a transformer's loss.</div>
+        <div><p class="block-label">Milestones</p><div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="r10-attn"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Implement scaled dot-product self-attention from scratch</span></label>
+          <label class="ms"><input type="checkbox" data-id="r10-vit"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Read the ViT + DETR papers; explain what each removed from the CNN pipeline</span></label>
+        </div></div>
+        <div><p class="block-label">Resources</p><p class="resource"><span class="r"><b>Vaswani et al. 2017</b> — "Attention Is All You Need". <b>Dosovitskiy et al. 2020</b> — "ViT".</span><span class="r"><b>Carion et al. 2020</b> — "DETR". <b>Karpathy</b> — "Let's build GPT" (attention, hands-on).</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 11 ============ -->
+  <section class="stage" data-stage>
+    <div class="stage-head"><span class="idx">11</span><h3>Self-supervised &amp; multimodal learning</h3><span class="tier senior">Senior</span><span class="stage-count"></span></div>
+    <p class="stage-sub">How to learn from unlabeled data, and how vision met language. This is where foundation models come from.</p>
+    <details class="topic">
+      <summary><svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Contrastive (SimCLR/MoCo), masked (MAE) &amp; CLIP</span><span class="k">Pretext tasks, learned representations, and image–text alignment</span></span><span class="mini"></span></summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">Labels are expensive; <b>self-supervised learning</b> creates its own supervision. <b>Contrastive</b> methods (SimCLR, MoCo) pull augmentations of the same image together; <b>masked</b> methods (MAE) hide patches and reconstruct them. <b>CLIP</b> trains on image–text pairs so images and captions share an embedding space — enabling zero-shot classification and powering text-to-image generation. These pretrained representations are the "foundation" everything now fine-tunes from.</p></div>
+        <div><p class="block-label">Learn</p><ul class="learn">
+          <li><b>Contrastive learning</b> — positive/negative pairs, InfoNCE loss.</li>
+          <li><b>Masked image modeling</b> — MAE's reconstruction objective.</li>
+          <li><b>CLIP</b> — joint image–text embedding, zero-shot transfer.</li>
+        </ul></div>
+        <div><p class="block-label">Milestones</p><div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="r11-clip"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt"><b>Build:</b> use a pretrained CLIP for zero-shot image classification</span></label>
+          <label class="ms"><input type="checkbox" data-id="r11-ssl"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain contrastive vs masked pretraining and when each wins</span></label>
+        </div></div>
+        <div><p class="block-label">Resources</p><p class="resource"><span class="r"><b>Chen et al. 2020</b> — "SimCLR". <b>He et al. 2021</b> — "MAE".</span><span class="r"><b>Radford et al. 2021</b> — "CLIP".</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 12 ============ -->
+  <section class="stage" data-stage>
+    <div class="stage-head"><span class="idx">12</span><h3>Generative models — GANs → diffusion</h3><span class="tier senior">Senior</span><span class="stage-count"></span></div>
+    <p class="stage-sub">Making images, not just reading them. Diffusion models power today's text-to-image systems; understand the lineage that got there.</p>
+    <details class="topic">
+      <summary><svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">VAEs, GANs &amp; diffusion (DDPM → Stable Diffusion)</span><span class="k">Latent variables, adversarial training, and iterative denoising</span></span><span class="mini"></span></summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why"><b>Generative models</b> learn the data distribution so they can sample new images. <b>VAEs</b> (encode to a latent, decode back), <b>GANs</b> (a generator vs a discriminator in a minimax game — sharp but unstable), and <b>diffusion models</b> (learn to reverse a gradual noising process — now state of the art). <b>Latent diffusion</b> (Stable Diffusion) runs the process in a compressed latent for efficiency; text conditioning via CLIP gives text-to-image.</p></div>
+        <div><p class="block-label">Learn</p><ul class="learn">
+          <li><b>VAE</b> — latent space, the reparameterization trick.</li>
+          <li><b>GAN</b> — adversarial loss, mode collapse, why training is fragile.</li>
+          <li><b>Diffusion</b> — forward noising / learned reverse denoising; the U-Net backbone; conditioning.</li>
+        </ul></div>
+        <div><p class="block-label">Milestones</p><div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="r12-gan"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt"><b>Build:</b> train a small GAN or VAE on MNIST/faces; inspect samples</span></label>
+          <label class="ms"><input type="checkbox" data-id="r12-diff"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain the diffusion forward/reverse process and why U-Net is used</span></label>
+        </div></div>
+        <div><p class="block-label">Resources</p><p class="resource"><span class="r"><b>Goodfellow et al. 2014</b> — "GANs". <b>Ho et al. 2020</b> — "DDPM".</span><span class="r"><b>Rombach et al. 2022</b> — "Latent Diffusion / Stable Diffusion". <b>Lil'Log</b> (Weng) diffusion post.</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 13 ============ -->
+  <section class="stage" data-stage>
+    <div class="stage-head"><span class="idx">13</span><h3>3D vision &amp; neural rendering</h3><span class="tier senior">Senior</span><span class="stage-count"></span></div>
+    <p class="stage-sub">Recovering and representing the 3D world from images. Robotics, AR/VR, autonomous driving, and the NeRF/Gaussian-splatting wave.</p>
+    <details class="topic">
+      <summary><svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Depth, point clouds, SfM/SLAM, NeRF &amp; Gaussian splatting</span><span class="k">From 2D pixels to 3D geometry and novel-view synthesis</span></span><span class="mini"></span></summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">Builds on your Stage-02 geometry. <b>Depth estimation</b> (stereo or monocular), <b>point clouds</b> (and nets like PointNet), <b>Structure-from-Motion / SLAM</b> (reconstruct scene + camera path from many views). The modern wave is <b>neural rendering</b>: <b>NeRF</b> represents a scene as a continuous function you can render from any viewpoint; <b>3D Gaussian Splatting</b> does it far faster. High-impact, geometry-heavy, and increasingly hot.</p></div>
+        <div><p class="block-label">Learn</p><ul class="learn">
+          <li><b>Depth &amp; point clouds</b> — stereo/mono depth, PointNet on unordered points.</li>
+          <li><b>SfM/SLAM</b> — multi-view reconstruction + localization.</li>
+          <li><b>Neural rendering</b> — NeRF's volumetric rendering; Gaussian splatting's speed win.</li>
+        </ul></div>
+        <div><p class="block-label">Milestones</p><div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="r13-depth"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Run a monocular depth model; visualize the depth map</span></label>
+          <label class="ms"><input type="checkbox" data-id="r13-nerf"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt"><b>Build:</b> train a NeRF or Gaussian-splat on a small captured scene</span></label>
+        </div></div>
+        <div><p class="block-label">Resources</p><p class="resource"><span class="r"><b>Mildenhall et al. 2020</b> — "NeRF". <b>Kerbl et al. 2023</b> — "3D Gaussian Splatting".</span><span class="r"><b>Qi et al. 2017</b> — "PointNet".</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 14 ============ -->
+  <section class="stage" data-stage>
+    <div class="stage-head"><span class="idx">14</span><h3>Production CV, efficiency &amp; MLOps</h3><span class="tier senior">Senior</span><span class="stage-count"></span></div>
+    <p class="stage-sub">A model in a notebook isn't a product. Seniority is largely about shipping: making models fast, small, reliable, and monitored.</p>
+    <details class="topic">
+      <summary><svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Deployment, ONNX/TensorRT, quantization, edge &amp; monitoring</span><span class="k">From weights to a served, efficient, observable system</span></span><span class="mini"></span></summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">The gap between research and impact. <b>Export</b> (ONNX) and <b>optimize</b> (TensorRT, quantization to int8, pruning, distillation) to hit latency budgets; deploy to <b>server or edge</b> (mobile/embedded); build <b>serving</b> (batching, throughput/latency SLOs) and <b>monitoring</b> (data drift, performance regressions). This is also where reproducibility, versioning, and CI/CD for models live.</p></div>
+        <div><p class="block-label">Learn</p><ul class="learn">
+          <li><b>Model optimization</b> — quantization, pruning, distillation; the accuracy/latency trade-off.</li>
+          <li><b>Runtimes</b> — ONNX Runtime, TensorRT; CPU vs GPU vs edge.</li>
+          <li><b>MLOps</b> — experiment tracking, model registry, monitoring/drift, CI for models.</li>
+        </ul></div>
+        <div class="callout vt"><b>You've practiced this:</b> VisionTrack runs OSNet re-ID via ONNX Runtime on CPU, keeps a NumPy-only core with lazy heavy deps, hashes configs for reproducibility, and gates results in CI — all production-mindset patterns.</div>
+        <div><p class="block-label">Milestones</p><div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="r14-onnx"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt"><b>Build:</b> export a model to ONNX, quantize it, and benchmark latency before/after</span></label>
+          <label class="ms"><input type="checkbox" data-id="r14-serve"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Wrap a model in a small inference service; measure throughput and p95 latency</span></label>
+          <label class="ms"><input type="checkbox" data-id="r14-track"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Use an experiment tracker (W&amp;B/MLflow) on one real training run</span></label>
+        </div></div>
+        <div><p class="block-label">Resources</p><p class="resource"><span class="r"><b>Made With ML</b> (Goku Mohandas) — MLOps course. <b>ONNX Runtime</b> / <b>NVIDIA TensorRT</b> docs.</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 15 ============ -->
+  <section class="stage" data-stage>
+    <div class="stage-head"><span class="idx">15</span><h3>Data, evaluation &amp; experimental rigor</h3><span class="tier senior">Senior</span><span class="stage-count"></span></div>
+    <p class="stage-sub">The unglamorous skills that separate credible results from noise — and the bridge into research.</p>
+    <details class="topic">
+      <summary><svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Datasets, annotation, metrics, significance &amp; reproducibility</span><span class="k">Measuring honestly — the difference between "looks better" and "is better"</span></span><span class="mini"></span></summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">Models are only as good as the data and the yardstick. Learn to build/clean <b>datasets</b>, handle <b>class imbalance</b> and label noise, choose the <b>right metric</b> for the task, and — crucially — report results with <b>seed variance and significance tests</b>, not a single lucky number. Reproducibility (fixed seeds, config hashing, cached artifacts) is what makes a result trustworthy.</p></div>
+        <div><p class="block-label">Learn</p><ul class="learn">
+          <li><b>Metrics per task</b> — accuracy/mAP/IoU/HOTA and their blind spots.</li>
+          <li><b>Statistical rigor</b> — mean±std, paired tests, bootstrap CIs, effect size.</li>
+          <li><b>Reproducibility</b> — seeds, config hashing, ablations that isolate one variable.</li>
+        </ul></div>
+        <div class="callout vt"><b>This is literally what VisionTrack demonstrates.</b> Its whole thesis is honest measurement — paired Wilcoxon tests, bootstrap CIs, config hashes, and two reported "honest negatives". That's a portfolio-grade example of this stage.</div>
+        <div><p class="block-label">Milestones</p><div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="r15-sig"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Run one experiment over ≥5 seeds and report mean±std + a paired test</span></label>
+          <label class="ms"><input type="checkbox" data-id="r15-abl"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Design an ablation that changes exactly one variable and defend it</span></label>
+        </div></div>
+        <div><p class="block-label">Resources</p><p class="resource"><span class="r"><b>Your own VisionTrack</b> <code>eval/stats.py</code> + the study-guide's rigor stage. Papers-with-Code for benchmark norms.</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 16 ============ -->
+  <section class="stage" data-stage>
+    <div class="stage-head"><span class="idx">16</span><h3>Reading &amp; reproducing papers</h3><span class="tier research">Research</span><span class="stage-count"></span></div>
+    <p class="stage-sub">The research on-ramp. Before you can create new knowledge, you must be able to absorb and verify existing work fluently.</p>
+    <details class="topic">
+      <summary><svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">How to read a paper, and reproduce its result</span><span class="k">The three-pass method, then re-implement and match the numbers</span></span><span class="mini"></span></summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">Research literacy is a trainable skill. Use the <b>three-pass method</b> (skim → grasp → deeply verify), keep a literature log, and — the real level-up — <b>reproduce</b> a paper's headline result from scratch. Reproducing forces you to confront the details papers gloss over and is the single best bridge from "consumer" to "producer" of research.</p></div>
+        <div><p class="block-label">Learn</p><ul class="learn">
+          <li><b>Reading strategy</b> — three passes; identify the one core contribution.</li>
+          <li><b>Reproduction</b> — re-implement, match reported numbers, note the gaps.</li>
+          <li><b>Critical reading</b> — spot weak baselines, cherry-picked metrics, missing ablations.</li>
+        </ul></div>
+        <div><p class="block-label">Milestones</p><div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="r16-read"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Read 10 landmark CV papers using the three-pass method; keep notes</span></label>
+          <label class="ms"><input type="checkbox" data-id="r16-repro"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt"><b>Build:</b> reproduce one paper's key result from scratch and match its number</span></label>
+        </div></div>
+        <div><p class="block-label">Resources</p><p class="resource"><span class="r"><b>Keshav</b> — "How to Read a Paper" (the three-pass method). <b>Papers with Code</b>, <b>arXiv</b>, <b>Yannic Kilcher</b> paper walkthroughs.</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 17 ============ -->
+  <section class="stage" data-stage>
+    <div class="stage-head"><span class="idx">17</span><h3>Doing original research</h3><span class="tier research">Research</span><span class="stage-count"></span></div>
+    <p class="stage-sub">Producing new knowledge: forming a falsifiable question, designing clean experiments, and communicating the result honestly.</p>
+    <details class="topic">
+      <summary><svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Hypotheses, experimental design, writing &amp; peer review</span><span class="k">From a question to a defensible, communicated contribution</span></span><span class="mini"></span></summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">Research is a loop: find a <b>gap</b>, form a <b>falsifiable hypothesis</b>, design <b>controlled experiments</b> that isolate the variable, run them with statistical rigor, and <b>write it up</b> so others can verify. A well-measured negative result is a contribution. Learn the norms: strong baselines, honest ablations, clear limitations, reproducible code — and how peer review works.</p></div>
+        <div><p class="block-label">Learn</p><ul class="learn">
+          <li><b>Framing</b> — a falsifiable question with a predicted outcome, not "let's try X".</li>
+          <li><b>Design</b> — controls, ablations, confounds, significance.</li>
+          <li><b>Communication</b> — paper structure (abstract→method→results→limitations), figures, a clear story.</li>
+        </ul></div>
+        <div class="callout vt"><b>You already did a mini version of this.</b> VisionTrack is a controlled study with falsifiable RQs, paired significance tests, honest negatives, and a mini-paper README. Turning it into a short workshop paper or blog write-up is a concrete Stage-17 exercise.</div>
+        <div><p class="block-label">Milestones</p><div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="r17-q"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Write one falsifiable research question with a predicted result and an ablation plan</span></label>
+          <label class="ms"><input type="checkbox" data-id="r17-write"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt"><b>Build:</b> write up a small study (e.g. VisionTrack) as a paper/blog with figures</span></label>
+        </div></div>
+        <div><p class="block-label">Resources</p><p class="resource"><span class="r"><b>Michael Nielsen</b> — "Principles of Effective Research". <b>Distill.pub</b> for exemplary communication. University "how to do research" guides.</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 18 ============ -->
+  <section class="stage" data-stage>
+    <div class="stage-head"><span class="idx">18</span><h3>Frontier &amp; open problems</h3><span class="tier research">Research</span><span class="stage-count"></span></div>
+    <p class="stage-sub">Where the field is going. Pick a thread, go deep, and contribute — this is a moving target, so learning-to-learn matters more than any single topic.</p>
+    <details class="topic">
+      <summary><svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topic-title"><span class="t">Foundation models, VLMs, embodied &amp; robust vision</span><span class="k">Open directions: generalist models, video understanding, reliability</span></span><span class="mini"></span></summary>
+      <div class="body">
+        <div><p class="block-label">What & why</p><p class="why">Active frontiers as of the mid-2020s: <b>vision-language models</b> (VLMs) that reason over images and text; <b>promptable foundation models</b> (SAM-style) that generalize across tasks; <b>video &amp; long-horizon</b> understanding; <b>embodied/robotic</b> vision; <b>efficiency</b> (doing more with less compute); and <b>robustness, safety, and fairness</b> (distribution shift, adversarial examples, bias). The meta-skill is staying current and picking a niche to own.</p></div>
+        <div><p class="block-label">Learn / do</p><ul class="learn">
+          <li><b>Pick one thread</b> and read its last ~2 years of key papers.</li>
+          <li><b>Follow the field</b> — arXiv, top venues (CVPR/ICCV/ECCV/NeurIPS), strong newsletters/blogs.</li>
+          <li><b>Contribute</b> — open-source a reproduction, write a survey blog, or propose a small novel study.</li>
+        </ul></div>
+        <div><p class="block-label">Milestones</p><div class="milestones">
+          <label class="ms"><input type="checkbox" data-id="r18-niche"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Choose a frontier niche; read its 10 most-cited recent papers</span></label>
+          <label class="ms"><input type="checkbox" data-id="r18-contrib"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt"><b>Build:</b> ship one public contribution — reproduction, survey, or novel mini-study</span></label>
+        </div></div>
+        <div><p class="block-label">Resources</p><p class="resource"><span class="r"><b>CVPR/ICCV/ECCV/NeurIPS</b> proceedings. <b>arxiv-sanity</b>, <b>Papers with Code</b> trending, <b>The Batch</b> (deeplearning.ai).</span></p></div>
+      </div>
+    </details>
+  </section>
+
+  <footer class="foot">
+    <p><b>Computer Vision roadmap.</b> Progress is stored locally in this browser (localStorage). Order matters: don't skip a tier's foundations. Build one small project per tier — a classical-CV demo, a trained detector, a deployed model, a reproduced paper — and your portfolio grows in lockstep with your understanding. Companion file: the VisionTrack study guide, which is a deep dive into stage 09.</p>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var KEY = "cv-roadmap-progress-v1";
+    var boxes = Array.prototype.slice.call(document.querySelectorAll('input[type=checkbox][data-id]'));
+    var state = {};
+    try { state = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { state = {}; }
+    function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+    function pct(done, total) { return total ? Math.round(done * 100 / total) : 0; }
+    function refresh() {
+      var total = boxes.length, done = 0;
+      boxes.forEach(function (b) { if (b.checked) done++; });
+      document.getElementById('barfill').style.width = pct(done, total) + '%';
+      document.getElementById('pct').textContent = pct(done, total) + '%';
+      document.getElementById('countnote').textContent = done + ' / ' + total + ' milestones';
+      document.querySelectorAll('section.stage[data-stage]').forEach(function (sec) {
+        var arr = Array.prototype.slice.call(sec.querySelectorAll('input[type=checkbox][data-id]'));
+        var dd = 0; arr.forEach(function (b) { if (b.checked) dd++; });
+        var el = sec.querySelector('.stage-count');
+        if (el) { el.textContent = dd + '/' + arr.length + ' done'; el.classList.toggle('done', dd === arr.length && arr.length > 0); }
+      });
+      document.querySelectorAll('details.topic').forEach(function (t) {
+        var arr = Array.prototype.slice.call(t.querySelectorAll('input[type=checkbox][data-id]'));
+        var dd = 0; arr.forEach(function (b) { if (b.checked) dd++; });
+        var mini = t.querySelector('.mini');
+        if (mini) { mini.textContent = dd + '/' + arr.length; mini.classList.toggle('done', dd === arr.length && arr.length > 0); }
+      });
+    }
+    boxes.forEach(function (b) {
+      if (state[b.dataset.id]) b.checked = true;
+      b.addEventListener('change', function () {
+        state[b.dataset.id] = b.checked;
+        if (!b.checked) delete state[b.dataset.id];
+        save(); refresh();
+      });
+    });
+    document.getElementById('expandAll').addEventListener('click', function () {
+      document.querySelectorAll('details.topic').forEach(function (d) { d.open = true; });
+    });
+    document.getElementById('collapseAll').addEventListener('click', function () {
+      document.querySelectorAll('details.topic').forEach(function (d) { d.open = false; });
+    });
+    document.getElementById('reset').addEventListener('click', function () {
+      if (!confirm('Clear all checked milestones on this device?')) return;
+      state = {}; save();
+      boxes.forEach(function (b) { b.checked = false; });
+      refresh();
+    });
+    refresh();
+  })();
+</script>
+
+</body>
+</html>
