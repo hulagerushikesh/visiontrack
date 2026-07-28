@@ -219,6 +219,28 @@ def cmd_ablate(args) -> int:
     return 0
 
 
+def cmd_track(args: argparse.Namespace) -> int:
+    """Track a real video file with a YOLOX detector and write an annotated video."""
+    from .detection.yolox_onnx import YoloxDetector
+    from .tracking.config import TrackerConfig
+    from .video import track_video
+
+    class_filter = None if args.all_classes else {0}  # default: person only
+    detector = YoloxDetector(
+        args.model, input_size=args.input_size,
+        conf_threshold=args.conf, class_filter=class_filter,
+    )
+    print(f"tracking {args.input} -> {args.output}  (model={args.model})")
+    summary = track_video(
+        args.input, args.output, detector,
+        TrackerConfig(), class_filter=class_filter,
+        max_frames=args.max_frames, progress=True,
+    )
+    print(f"done: {summary.frames} frames, {summary.unique_tracks} unique tracks "
+          f"@ {summary.fps:.1f} fps -> {summary.output_path}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="visiontrack", description="Online multi-object tracking demo & evaluation"
@@ -269,6 +291,17 @@ def build_parser() -> argparse.ArgumentParser:
     p_ab = sub.add_parser("ablate", help="compare tracker component variants")
     add_scene_args(p_ab)
     p_ab.set_defaults(func=cmd_ablate)
+
+    p_track = sub.add_parser("track", help="track a real video (needs [video] extra + YOLOX)")
+    p_track.add_argument("input", help="input video path (e.g. clip.mp4)")
+    p_track.add_argument("output", help="annotated output video path")
+    p_track.add_argument("--model", required=True, help="YOLOX .onnx model path")
+    p_track.add_argument("--input-size", type=int, default=416, help="YOLOX square input side")
+    p_track.add_argument("--conf", type=float, default=0.25, help="detector confidence threshold")
+    p_track.add_argument("--all-classes", action="store_true",
+                         help="track all COCO classes (default: person only)")
+    p_track.add_argument("--max-frames", type=int, default=None, help="stop after N frames")
+    p_track.set_defaults(func=cmd_track)
 
     return parser
 

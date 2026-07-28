@@ -84,10 +84,13 @@ tuning). Bonus: the same DanceTrack run reproduced RQ1 (appearance cuts IDSW
 Today the tracker is dataset-bound. This horizon lets anyone point it at their
 own video.
 
-### H2.1 — Run on an arbitrary video
-`visiontrack track input.mp4 --out annotated.mp4` with a real ONNX detector
-(the biggest usability unlock — no "my own video" path exists today). A clean
-`Tracker` façade API for library use.
+### H2.1 — Run on an arbitrary video ✅ *done*
+`visiontrack track input.mp4 out.mp4 --model yolox_nano.onnx` — decodes the video
+(imageio+ffmpeg, `[video]` extra), detects with a YOLOX ONNX model, tracks, and
+writes an annotated H.264 video with per-track coloured boxes + ids. The
+`track_video` pipeline is detector-agnostic (any `detect(frame)->[Detection]`),
+so it's tested end-to-end over a real mp4 with a stub detector — no model in CI.
+Details → [`VIDEO.md`](VIDEO.md).
 
 ### H2.2 — Real-time webcam demo + per-component profiling
 Local webcam loop; report FPS per component on the M2 (honest performance numbers).
