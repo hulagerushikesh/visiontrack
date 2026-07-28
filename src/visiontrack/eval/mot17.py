@@ -90,17 +90,23 @@ def run_sequence(
     cfg: TrackerConfig,
     first: int,
     last: int,
+    camera_shifts=None,
 ) -> list[FramePair]:
     """Track a sequence's ``[first, last]`` frames and return preprocessed pairs.
 
     ``seq`` is any reader with ``iter_range(first, last)`` yielding
     :class:`~visiontrack.detection.mot_loader.FrameData` (a live
     :class:`MOT17Sequence` or a :class:`CachedSequence`).
+
+    ``camera_shifts`` optionally supplies per-frame ``(sx, sy)`` global camera
+    translations (RQ4 GMC), indexed by position within ``[first, last]``; passed
+    to the tracker when ``cfg.use_gmc`` is set.
     """
     tracker = ByteTracker(cfg)
     frames: list[FramePair] = []
-    for fd in seq.iter_range(first, last):
-        observations = tracker.update(fd.detections())
+    for i, fd in enumerate(seq.iter_range(first, last)):
+        shift = camera_shifts[i] if camera_shifts is not None and i < len(camera_shifts) else None
+        observations = tracker.update(fd.detections(), camera_shift=shift)
         if observations:
             tr_ids = np.array([o.track_id for o in observations], dtype=np.int64)
             tr_boxes = np.stack([o.xyxy for o in observations], axis=0)

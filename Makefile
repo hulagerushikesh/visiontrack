@@ -2,7 +2,7 @@
 # Override the interpreter if needed:  make test PY=python3.11
 PY ?= python3
 
-.PHONY: help install test lint reproduce reproduce-synth demo zoo taxonomy residual figures clean
+.PHONY: help install test lint reproduce reproduce-synth demo zoo taxonomy gmc residual figures clean
 
 help:
 	@echo "targets:"
@@ -56,6 +56,11 @@ zoo:
 taxonomy:
 	$(PY) -m experiments.error_taxonomy --dataset dancetrack --preset bytetrack \
 		--out-md docs/results_error_taxonomy_dancetrack.md
+
+# RQ4 global motion compensation study (needs MOT17 det + <seq>.gmc.npz caches;
+# build the latter with data/cache/precompute_gmc.py over the img1 frames).
+gmc:
+	$(PY) -m experiments.gmc_study --detector FRCNN --out-md docs/results_gmc_rq4.md
 
 # RQ2: train the from-scratch motion residual and run the tracking ablation
 # (needs the MOT17 + DanceTrack GT caches).

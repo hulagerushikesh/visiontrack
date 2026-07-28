@@ -94,14 +94,34 @@ class ByteTracker:
         track.mean[0] += corr[0]
         track.mean[1] += corr[1]
 
+    def _apply_camera_shift(self, track: Track, shift) -> None:
+        """Shift a track's predicted centre by the camera translation (RQ4 GMC).
+
+        The Kalman prediction assumes a static camera; on a moving camera the
+        whole scene translates by ``shift = (sx, sy)`` px, so we add it to the
+        predicted centre (``mean[0:2]``) to keep the box on its object.
+        """
+        track.mean[0] += shift[0]
+        track.mean[1] += shift[1]
+
     # -- public API -------------------------------------------------------
-    def update(self, detections: list[Detection]) -> list[TrackObservation]:
-        """Advance the tracker by one frame and return confirmed observations."""
+    def update(
+        self, detections: list[Detection], camera_shift=None
+    ) -> list[TrackObservation]:
+        """Advance the tracker by one frame and return confirmed observations.
+
+        ``camera_shift`` is an optional ``(sx, sy)`` global camera translation for
+        this frame (RQ4 GMC); applied to every track's prediction when
+        ``use_gmc`` is set. ``None`` keeps the static-camera behaviour.
+        """
         self._frame += 1
 
+        do_gmc = self.cfg.use_gmc and camera_shift is not None
         for track in self.tracks:
             track.predict()
             self._apply_residual(track)
+            if do_gmc:
+                self._apply_camera_shift(track, camera_shift)
 
         high = [d for d in detections if d.score >= self.cfg.high_score_thresh]
         low = [
