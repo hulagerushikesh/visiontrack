@@ -21,6 +21,9 @@ dependencies = ["numpy>=1.23"]
 [project.optional-dependencies]
 viz = ["matplotlib>=3.6", "pillow>=9.0"]
 onnx = ["onnxruntime>=1.15"]
+# Run the tracker on real video files: decode/encode via imageio + ffmpeg,
+# detect with an ONNX model. Lazily imported; never touched by the core.
+video = ["onnxruntime>=1.15", "imageio>=2.31", "imageio-ffmpeg>=0.4", "pillow>=9.0"]
 # Appearance / re-ID: the from-scratch colour-histogram embedder uses
 # matplotlib's rgb_to_hsv; embedding precompute reads frames with Pillow.
 appearance = ["matplotlib>=3.6", "pillow>=9.0"]
