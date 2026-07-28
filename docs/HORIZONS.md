@@ -63,9 +63,15 @@ tuning). Bonus: the same DanceTrack run reproduced RQ1 (appearance cuts IDSW
   rate). The discriminating driver of switches is *motion*, not occlusion —
   explains why DanceTrack is hard and why motion is the lever. Details →
   [`ERROR_TAXONOMY.md`](ERROR_TAXONOMY.md). `make taxonomy`.
-- **RQ4 (CMC/GMC)** — *queued.* Global motion compensation (BoT-SORT's key idea),
-  asking *when does it help?* — strongest on moving-camera sequences. Needs image
-  frames for global-motion estimation.
+- **RQ4 (CMC/GMC) ✅** — from-scratch phase-correlation global motion compensation
+  (translation-only, NumPy FFT; `use_gmc` gated off by default). The estimator
+  recovers MOT17's known static/moving split with no priors (static seqs ~0px,
+  moving 3–9px). **Finding:** GMC helps *iff* the camera moves — a strict no-op on
+  static cameras (Δ=0, p=1) and a consistent improvement on moving ones (IDSW
+  −6.25, IDF1 +0.021), though underpowered (n=4, p≈0.12). Details →
+  [`GMC_RQ4.md`](GMC_RQ4.md). `make gmc`.
+
+**Horizon 1 complete.**
 
 ### H1.x — Optional, resource-heavier
 - Real **YOLOX** detector on DanceTrack (removes the oracle-perturbed-GT caveat).
@@ -115,4 +121,5 @@ Ranked by fit to the actual moat:
 - A "reproduce in Colab" badge.
 
 ## Status
-- H1.1 — done. H1.2 (OC-SORT) — done. Next: H1.3 (CMC/RQ4 + error taxonomy).
+- **Horizon 1 complete** (H1.1 zoo, H1.2 OC-SORT, H1.3 error taxonomy + RQ4 GMC).
+- Next: **Horizon 2** — H2.1 run on an arbitrary video.

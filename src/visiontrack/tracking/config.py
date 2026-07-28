@@ -83,6 +83,12 @@ class TrackerConfig:
     occlusion gap, rebuild the track state along a virtual trajectory between the
     last and new observations. ``False`` keeps the plain Kalman update."""
 
+    # -- global motion compensation (RQ4, H1.3) --------------------------
+    use_gmc: bool = False
+    """Shift each track's predicted centre by the estimated per-frame camera
+    translation (supplied to ``update(..., camera_shift=...)``) before
+    association. ``False`` (and/or no shift supplied) keeps behaviour unchanged."""
+
     def __post_init__(self) -> None:
         if not (0 <= self.low_score_thresh <= self.high_score_thresh <= 1):
             raise ValueError("require 0 <= low_score_thresh <= high_score_thresh <= 1")
