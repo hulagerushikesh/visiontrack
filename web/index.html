@@ -80,8 +80,8 @@
 
   /* cards */
   .section-label { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); margin: 56px 0 16px; }
-  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  @media (max-width: 720px) { .cards { grid-template-columns: 1fr; } }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+  @media (max-width: 460px) { .cards { grid-template-columns: 1fr; } }
   .card { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--border);
     border-radius: 14px; padding: 22px; text-decoration: none; color: inherit; transition: .16s; box-shadow: var(--shadow); }
   .card:hover { border-color: var(--accent); transform: translateY(-3px); }
@@ -160,6 +160,12 @@
       <p>A junior → research computer-vision learning path, in order, with build tasks and canonical resources at every tier.</p>
       <span class="go">Follow the roadmap →</span>
     </a>
+    <a class="card" href="/benchmark">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+      <h3>Benchmark report</h3>
+      <p>The honest MOT benchmarking tool: a leaderboard with paired significance and an ID-switch error taxonomy, in one report.</p>
+      <span class="go">See the report →</span>
+    </a>
   </div>
 
   <p class="section-label">A few results</p>
@@ -206,9 +212,9 @@
       </ul>
     </div>
     <div class="rz">
-      <div class="rz-h"><h3>Horizon 3 — product direction</h3><span class="tag wip">planned</span></div>
+      <div class="rz-h"><h3>Horizon 3 — product direction</h3><span class="tag done">complete</span></div>
       <ul>
-        <li class="no"><span class="bx">·</span><span><b>Honest MOT benchmarking tool</b> — the harness, productized</span></li>
+        <li class="ok"><span class="bx">✓</span><span><b>Honest MOT benchmarking tool</b> — leaderboard + significance + error taxonomy in one report (<a href="/benchmark" style="color:var(--accent)">view →</a>)</span></li>
       </ul>
     </div>
   </div>

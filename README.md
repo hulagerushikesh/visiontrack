@@ -145,6 +145,8 @@ visiontrack track input.mp4 out.mp4 --model models/yolox_nano.onnx
 
 Full public API: [docs/API.md](docs/API.md) · packaging/release: [docs/RELEASE.md](docs/RELEASE.md).
 
+**Benchmark a set of trackers** into one report (leaderboard + paired significance + ID-switch error taxonomy) — `make benchmark`, or see the live report at **[visiontrack.hulage.in/benchmark](https://visiontrack.hulage.in/benchmark)**.
+
 ## Reproduce
 
 ```bash
