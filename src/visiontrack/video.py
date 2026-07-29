@@ -24,7 +24,13 @@ import numpy as np
 from .tracking.config import TrackerConfig
 from .tracking.tracker import ByteTracker, TrackObservation
 
-__all__ = ["track_video", "VideoSummary", "color_for_id", "draw_observations"]
+__all__ = [
+    "track_video",
+    "track_webcam",
+    "VideoSummary",
+    "color_for_id",
+    "draw_observations",
+]
 
 
 @dataclass(slots=True)
@@ -119,3 +125,56 @@ def track_video(
 
     return VideoSummary(frames=n, unique_tracks=len(seen_ids), fps=fps,
                         output_path=output_path)
+
+
+def track_webcam(
+    detector,
+    config: TrackerConfig | None = None,
+    *,
+    on_frame=None,
+    class_filter: set[int] | None = None,
+    device: str = "<video0>",
+    max_frames: int | None = None,
+) -> VideoSummary:
+    """Track a live webcam stream in real time, invoking ``on_frame`` per frame.
+
+    Reuses the same detect→track→draw path as :func:`track_video`, but pulls
+    frames from the camera and hands each annotated frame to ``on_frame`` (for a
+    GUI/window, or a headless sink) instead of encoding a file. ``on_frame`` is
+    called as ``on_frame(annotated_rgb, observations)``; if ``None``, frames are
+    simply processed (useful for a smoke/latency test).
+
+    ``device`` is the imageio-ffmpeg camera spec (``"<video0>"`` on Linux/macOS).
+    Real cameras aren't available in CI, so this is thin and untested there; the
+    frame-processing core it shares with ``track_video`` is what the tests cover.
+    """
+    try:  # pragma: no cover - needs a camera + the [video] extra
+        import imageio.v2 as imageio
+    except ImportError as exc:
+        raise ImportError(
+            "track_webcam needs the [video] extra: pip install 'visiontrack[video]'"
+        ) from exc
+
+    reader = imageio.get_reader(device)  # pragma: no cover - hardware-dependent
+    tracker = ByteTracker(config or TrackerConfig())
+    seen_ids: set[int] = set()
+    n = 0
+    try:  # pragma: no cover - hardware-dependent
+        for frame in reader:
+            frame = np.asarray(frame)[:, :, :3]
+            dets = detector.detect(frame)
+            if class_filter is not None:
+                dets = [d for d in dets if d.class_id in class_filter]
+            obs = tracker.update(dets)
+            for o in obs:
+                seen_ids.add(o.track_id)
+            annotated = draw_observations(frame, obs)
+            if on_frame is not None:
+                on_frame(annotated, obs)
+            n += 1
+            if max_frames is not None and n >= max_frames:
+                break
+    finally:  # pragma: no cover
+        reader.close()
+    return VideoSummary(frames=n, unique_tracks=len(seen_ids), fps=0.0,
+                        output_path="<webcam>")
