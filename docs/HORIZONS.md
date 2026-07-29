@@ -99,9 +99,15 @@ Details → [`VIDEO.md`](VIDEO.md).
   detection is. Honest numbers, no dataset needed.
 - **Real-time webcam** loop — *queued* (thin capture loop over the same pipeline).
 
-### H2.3 — Package & document
-`pip install visiontrack`, a stable public API, an mkdocs API-reference site.
-Turns the repo into a real library, not just a study.
+### H2.3 — Package & document ✅ *done*
+`pip install visiontrack` (+ `[video]` extra). Stable top-level public API
+(`__all__`: `ByteTracker`, `TrackerConfig`, `preset`, `track_video`,
+`track_webcam`, `MotAccumulator`, …) guarded by a test; `visiontrack` console
+entry point. Full metadata + verified `python -m build` (sdist+wheel) + a
+tag-triggered PyPI release workflow via Trusted Publishing (no token). Public-API
+reference [`API.md`](API.md), release runbook [`RELEASE.md`](RELEASE.md). Also
+`track_webcam` (live-stream variant of the pipeline). *Publishing itself needs the
+owner's PyPI account — the repo is release-ready.*
 
 ---
 
@@ -129,4 +135,5 @@ Ranked by fit to the actual moat:
 
 ## Status
 - **Horizon 1 complete** (H1.1 zoo, H1.2 OC-SORT, H1.3 error taxonomy + RQ4 GMC).
-- Next: **Horizon 2** — H2.1 run on an arbitrary video.
+- **Horizon 2 complete** (H2.1 video, H2.2 profiling, H2.3 package + API + release).
+- Next: **Horizon 3** — the honest MOT benchmarking tool (productize the harness).

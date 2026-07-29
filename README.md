@@ -123,11 +123,33 @@ Real-time on CPU (single-threaded): **2334 FPS** at 4 objects down to **214 FPS*
 
 ---
 
+## Install & use
+
+```bash
+pip install visiontrack            # core: NumPy only
+pip install 'visiontrack[video]'   # + run on your own video files
+```
+
+```python
+from visiontrack import ByteTracker, TrackerConfig
+tracker = ByteTracker(TrackerConfig())
+for frame_detections in stream:            # list[Detection]
+    observations = tracker.update(frame_detections)
+```
+
+Track a real video from the command line (needs a YOLOX ONNX model, see [docs/VIDEO.md](docs/VIDEO.md)):
+
+```bash
+visiontrack track input.mp4 out.mp4 --model models/yolox_nano.onnx
+```
+
+Full public API: [docs/API.md](docs/API.md) · packaging/release: [docs/RELEASE.md](docs/RELEASE.md).
+
 ## Reproduce
 
 ```bash
 make install                 # editable install with all extras
-make test                    # 253 tests
+make test                    # full test suite
 make reproduce-synth         # synthetic harness + RQ3 probe — NO dataset needed
 ```
 
