@@ -2,7 +2,7 @@
 # Override the interpreter if needed:  make test PY=python3.11
 PY ?= python3
 
-.PHONY: help install test lint reproduce reproduce-synth demo zoo taxonomy gmc profile residual figures clean
+.PHONY: help install test lint reproduce reproduce-synth demo zoo taxonomy gmc profile benchmark residual figures clean
 
 help:
 	@echo "targets:"
@@ -65,6 +65,12 @@ gmc:
 # Profile tracker throughput (FPS vs scene load) on this CPU. No dataset needed.
 profile:
 	$(PY) -m experiments.profile_fps --out-md docs/results_profile_fps.md
+
+# The benchmarking tool (H3): leaderboard + significance + error taxonomy in one
+# self-contained report. No dataset needed; writes the HTML served at /benchmark.
+benchmark:
+	$(PY) -m experiments.benchmark --out-html web/benchmark.html \
+		--out-md docs/results_benchmark_synth.md
 
 # RQ2: train the from-scratch motion residual and run the tracking ablation
 # (needs the MOT17 + DanceTrack GT caches).

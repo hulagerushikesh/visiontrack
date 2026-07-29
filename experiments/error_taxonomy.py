@@ -131,9 +131,9 @@ def _synthetic_frames(preset_name: str, sequences, seeds, scene):
     frames = []
     for seq in sequences:
         for seed in seeds:
-            scene = SyntheticScene(SyntheticSceneConfig(seed=seq * 1000 + seed, **scene))
+            sc = SyntheticScene(SyntheticSceneConfig(seed=seq * 1000 + seed, **scene))
             tracker = ByteTracker(preset(preset_name))
-            for f in scene:
+            for f in sc:
                 obs = tracker.update(f.detections)
                 if obs:
                     ti = np.array([o.track_id for o in obs], dtype=np.int64)

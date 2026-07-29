@@ -111,14 +111,17 @@ owner's PyPI account — the repo is release-ready.*
 
 ---
 
-## Horizon 3 — Product direction (the future)
+## Horizon 3 — Product direction
 
-Ranked by fit to the actual moat:
-
-1. **Honest MOT benchmarking tool** *(best fit)* — plug in a tracker/detector,
-   get a rigorous, significance-tested comparison + failure analysis +
-   reproducible report. This is the H1 harness, productized; evaluation done
-   *well* is a real gap.
+1. **Honest MOT benchmarking tool ✅ *done*** — one command
+   (`python -m experiments.benchmark`, `make benchmark`) runs a set of trackers and
+   emits a single **reproducible report**: a leaderboard (mean±std), **paired
+   significance** vs a baseline (Wilcoxon, since every tracker sees identical
+   detections/seeds), an **ID-switch error taxonomy**, and repro metadata (config
+   hash, seeds) — rendered to markdown **and** a self-contained, theme-aware HTML
+   page served live at [**/benchmark**](https://visiontrack.hulage.in/benchmark).
+   This is the H1 harness + analyze + taxonomy unified behind one entry point;
+   evaluation done *well* is the real gap, and this fills it.
 2. **Teaching product** — an interactive MOT course/mini-textbook on this
    codebase + the existing study guide and roadmap (already ~60% of a curriculum).
 3. **Vertical app** (retail footfall / sports / traffic) — highest ceiling, but a
@@ -136,4 +139,5 @@ Ranked by fit to the actual moat:
 ## Status
 - **Horizon 1 complete** (H1.1 zoo, H1.2 OC-SORT, H1.3 error taxonomy + RQ4 GMC).
 - **Horizon 2 complete** (H2.1 video, H2.2 profiling, H2.3 package + API + release).
-- Next: **Horizon 3** — the honest MOT benchmarking tool (productize the harness).
+- **Horizon 3 started** — the honest MOT benchmarking tool is built &amp; live at
+  `/benchmark`. All three horizons now have a shipped deliverable.
