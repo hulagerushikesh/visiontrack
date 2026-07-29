@@ -50,7 +50,8 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-q"
+addopts = "-q -m 'not slow'"  # real-data/long tests are opt-in: pytest -m slow
+markers = ["slow: real-data or long-running tests (need dataset caches); opt in with -m slow"]
 pythonpath = ["src", "."]  # "." makes the experiments/ harness importable in tests
 
 [tool.ruff]

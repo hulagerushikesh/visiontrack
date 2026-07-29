@@ -2,6 +2,7 @@
   "builds": [
     { "src": "web/index.html", "use": "@vercel/static" },
     { "src": "web/benchmark.html", "use": "@vercel/static" },
+    { "src": "web/benchmark-dancetrack.html", "use": "@vercel/static" },
     { "src": "viz/webdemo/index.html", "use": "@vercel/static" },
     { "src": "docs/LEARNING_PATH.html", "use": "@vercel/static" },
     { "src": "docs/CV_ROADMAP.html", "use": "@vercel/static" },
@@ -10,6 +11,7 @@
   "routes": [
     { "src": "/", "dest": "/web/index.html" },
     { "src": "/benchmark/?", "dest": "/web/benchmark.html" },
+    { "src": "/benchmark/dancetrack/?", "dest": "/web/benchmark-dancetrack.html" },
     { "src": "/demo/?", "dest": "/viz/webdemo/index.html" },
     { "src": "/study/?", "dest": "/docs/LEARNING_PATH.html" },
     { "src": "/roadmap/?", "dest": "/docs/CV_ROADMAP.html" },
