@@ -1,0 +1,53 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>MOT benchmark — dancetrack</title><style>
+:root{--bg:#f4f7fb;--surface:#fff;--surface2:#f0f3f8;--border:#dbe2ec;--ink:#0e141b;
+--ink2:#33404f;--muted:#5c6773;--accent:#2f7ae5;--good:#1f9d63;--warn:#d5722a;
+--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+@media(prefers-color-scheme:dark){:root{--bg:#0b0e14;--surface:#141922;--surface2:#1a2029;
+--border:#26303c;--ink:#e7ebf1;--ink2:#b7c0cd;--muted:#8792a1;--accent:#5aa2ff;--good:#37c07e;--warn:#e8833a}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:900px;margin:0 auto;padding:40px 22px 90px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+h1{font-size:27px;letter-spacing:-.02em;margin:0 0 14px}
+h2{font-size:18px;letter-spacing:-.01em;margin:38px 0 6px}
+.meta{font-family:var(--mono);font-size:12.5px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;margin:0 0 6px}
+.meta span{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:3px 9px}
+.note{color:var(--muted);font-size:13.5px;margin:8px 0 0}
+.scroll{overflow-x:auto;border:1px solid var(--border);border-radius:12px;margin-top:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:9px 13px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--border)}
+th:first-child,td:first-child{text-align:left;font-family:var(--mono);font-size:12.5px}
+thead th{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--surface2)}
+tbody tr:last-child td{border-bottom:none}
+tr.base td:first-child{color:var(--accent);font-weight:700}
+.best{background:color-mix(in srgb,var(--good) 14%,transparent);font-weight:700}
+.sig{color:var(--good);font-weight:700}.neg{color:var(--warn)}
+.bar{position:relative;background:var(--surface2);border:1px solid var(--border);border-radius:6px;height:22px;min-width:120px}
+.bar>i{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--accent);opacity:.85}
+.bar.hot>i{background:var(--warn)}
+.lift{font-family:var(--mono);font-weight:700}
+footer{margin-top:44px;border-top:1px solid var(--border);padding-top:16px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+footer a{color:var(--accent);text-decoration:none}
+</style></head><body>
+<div class="wrap">
+<p class="eyebrow">VisionTrack · honest MOT benchmark</p>
+<h1>Tracker comparison — dancetrack</h1>
+<div class="meta"><span>dataset: dancetrack</span><span>baseline: bytetrack</span><span>runs/tracker: 12</span><span>sequences: 12</span><span>seeds: 1</span><span>config: dancetrack</span></div>
+<p class="note">Every tracker sees identical detections and seeds, so Δ vs the
+baseline is a paired comparison (Wilcoxon <span class="sig">*</span> = p&lt;0.05).
+🏆-highlighted cell = best tracker for that metric.</p>
+<h2>Leaderboard</h2>
+<div class="scroll"><table><thead><tr><th>tracker</th><th>MOTA</th><th>IDF1</th><th>HOTA</th><th>IDSW</th></tr></thead><tbody><tr><td>sort</td><td>0.767 <span class='sig'>(+0.000)</span></td><td>0.384 <span class='neg'>(-0.000)</span></td><td>0.360 <span class='sig'>(+0.001)</span></td><td>215.833 <span class='neg'>(-1.000)</span></td></tr><tr><td>deepsort</td><td class='best'>0.768 <span class='sig'>(+0.001)</span></td><td>0.388 <span class='sig'>(+0.004)</span></td><td>0.362 <span class='sig'>(+0.003)</span></td><td class='best'>201.167 <span class='neg'>(-15.667<span class='sig'>*</span>)</span></td></tr><tr class='base'><td>bytetrack</td><td>0.766±0.076</td><td>0.384±0.177</td><td>0.359±0.141</td><td>216.833±236.426</td></tr><tr><td>bytetrack_reid</td><td>0.768 <span class='sig'>(+0.001)</span></td><td>0.387 <span class='sig'>(+0.003)</span></td><td>0.361 <span class='sig'>(+0.002)</span></td><td>201.583 <span class='neg'>(-15.250<span class='sig'>*</span>)</span></td></tr><tr><td>bytetrack_giou</td><td>0.765 <span class='neg'>(-0.001)</span></td><td class='best'>0.393 <span class='sig'>(+0.009)</span></td><td class='best'>0.364 <span class='sig'>(+0.005)</span></td><td>210.750 <span class='neg'>(-6.083<span class='sig'>*</span>)</span></td></tr><tr><td>oc_sort</td><td>0.763 <span class='neg'>(-0.003<span class='sig'>*</span>)</span></td><td>0.374 <span class='neg'>(-0.010)</span></td><td>0.354 <span class='neg'>(-0.005)</span></td><td>235.667 <span class='sig'>(+18.833<span class='sig'>*</span>)</span></td></tr></tbody></table></div>
+<h2>Why <code>bytetrack</code> swaps identities</h2>
+<p class="note">2685 ID switches classified by local scene
+condition. <b>Lift</b> = P(condition | switch) / P(condition | any GT); &gt;1 means
+switches are over-represented there — the failure mode to attack.</p>
+<div class="scroll"><table><thead><tr><th>condition</th><th>% of switches</th>
+<th>base rate</th><th>lift</th><th>over-representation</th></tr></thead>
+<tbody><tr><td>occlusion</td><td>75%</td><td>69%</td><td class='lift'>1.09×</td><td><div class='bar'><i style='width:28%'></i></div></td></tr><tr><td>crowding</td><td>43%</td><td>38%</td><td class='lift'>1.15×</td><td><div class='bar'><i style='width:30%'></i></div></td></tr><tr><td>motion</td><td>3%</td><td>1%</td><td class='lift'>3.86×</td><td><div class='bar hot'><i style='width:100%'></i></div></td></tr></tbody></table></div>
+<footer>Reproduce: <code>python -m experiments.benchmark</code> ·
+<a href="https://github.com/hulagerushikesh/visiontrack">github.com/hulagerushikesh/visiontrack</a></footer>
+</div></body></html>

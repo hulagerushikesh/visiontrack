@@ -1,9 +1,16 @@
 """Tests for the Horizon-3 benchmarking tool (experiments/benchmark.py)."""
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
 from experiments.benchmark import BenchmarkReport, run_benchmark
+
+_DANCETRACK_CACHES = sorted(
+    p for p in Path("data/cache/dancetrack").glob("dancetrack*.npz")
+    if not p.name.endswith(".emb.npz")
+) if Path("data/cache/dancetrack").exists() else []
 
 
 @pytest.fixture(scope="module")
@@ -59,3 +66,16 @@ def test_metadata_present(report):
     assert m["baseline"] == "bytetrack"
     assert m["runs_per_tracker"] == 2  # 1 seq * 2 seeds
     assert len(m["config_hash"]) == 12
+
+
+@pytest.mark.slow
+@pytest.mark.skipif(len(_DANCETRACK_CACHES) < 2,
+                    reason="DanceTrack caches not present (real-data path)")
+def test_dancetrack_real_data_benchmark():
+    # Real-data path: leaderboard over DanceTrack sequences (paired by sequence).
+    rep = run_benchmark("dancetrack", ["sort", "bytetrack"], "bytetrack")
+    assert rep.dataset == "dancetrack"
+    assert [r["name"] for r in rep.leaderboard] == ["sort", "bytetrack"]
+    assert rep.meta["runs_per_tracker"] == len(_DANCETRACK_CACHES)
+    assert rep.meta["idsw_classified"] > 0  # real switches classified
+    assert rep.to_html().startswith("<!doctype html>")

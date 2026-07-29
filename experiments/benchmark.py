@@ -34,6 +34,7 @@ from experiments.error_taxonomy import (  # noqa: E402
     _CROWD_THRESH,
     _FAST_THRESH,
     _OCC_THRESH,
+    _dancetrack_frames,
     _rate,
     _run_frames,
     _synthetic_frames,
@@ -74,27 +75,75 @@ class BenchmarkReport:
         return _render_html(self)
 
 
+def _dancetrack_df(names: list, cache_dir: str, embedder: str):
+    """Run each tracker over the DanceTrack caches → a tidy leaderboard frame."""
+    from dataclasses import replace
+
+    import pandas as pd
+
+    from visiontrack.datasets.cache import CachedSequence
+    from visiontrack.eval.mot17 import evaluate_frames, run_sequence
+    from visiontrack.tracking.config import TrackerConfig
+
+    readers = []
+    for det in sorted(Path(cache_dir).glob("dancetrack*.npz")):
+        if det.name.endswith(".emb.npz"):
+            continue
+        emb = det.with_name(det.stem + f".{embedder}.emb.npz")
+        readers.append(CachedSequence(det, emb_path=emb) if emb.exists()
+                       else CachedSequence(det))
+    if not readers:
+        raise FileNotFoundError(f"no DanceTrack caches in {cache_dir}")
+
+    rows = []
+    for name in names:
+        cfg = replace(TrackerConfig(), **preset_overrides(name))
+        for r in readers:
+            m = evaluate_frames(run_sequence(r, cfg, 1, len(r)))
+            rows.append({"variant": name, "sequence": r.name, "seed": 0,
+                         **{k: m.get(k) for k in _METRICS}})
+    return pd.DataFrame(rows), [r.name for r in readers]
+
+
 def run_benchmark(
     dataset: str = "synthetic",
     tracker_names: list | None = None,
     baseline: str = "bytetrack",
     sequences: list | None = None,
     seeds: list | None = None,
+    cache_dir: str = "data/cache/dancetrack",
+    embedder: str = "onnx",
 ) -> BenchmarkReport:
-    """Run the trackers, score them, and assemble a :class:`BenchmarkReport`."""
+    """Run the trackers, score them, and assemble a :class:`BenchmarkReport`.
+
+    ``dataset`` is ``"synthetic"`` (no data needed) or ``"dancetrack"`` (reads the
+    detection + Re-ID caches under ``cache_dir``).
+    """
     names = tracker_names or list(PRESET_NAMES)
     if baseline not in names:
         names = [baseline, *names]
-    sequences = sequences or [1, 2, 3]
-    seeds = seeds or [0, 1, 2, 3, 4]
 
-    variants = [VariantSpec(n, preset_overrides(n)) for n in names]
-    exp = ExperimentConfig(
-        name=f"benchmark_{dataset}", dataset=dataset, sequences=sequences,
-        seeds=seeds, baseline=baseline, metrics=_METRICS, scene=_ZOO_SCENE,
-        variants=variants,
-    )
-    df = run(exp)
+    # -- source the per-(tracker, unit) metrics frame -------------------
+    if dataset == "synthetic":
+        sequences = sequences or [1, 2, 3]
+        seeds = seeds or [0, 1, 2, 3, 4]
+        variants = [VariantSpec(n, preset_overrides(n)) for n in names]
+        exp = ExperimentConfig(
+            name="benchmark_synthetic", dataset="synthetic", sequences=sequences,
+            seeds=seeds, baseline=baseline, metrics=_METRICS, scene=_ZOO_SCENE,
+            variants=variants,
+        )
+        df = run(exp)
+        config_hash = exp.config_hash()
+        units = sequences
+        taxo_frames = _synthetic_frames(baseline, sequences, seeds, _ZOO_SCENE)
+    elif dataset == "dancetrack":
+        df, seq_names = _dancetrack_df(names, cache_dir, embedder)
+        config_hash = "dancetrack"
+        units, seeds = seq_names, [0]
+        taxo_frames = _dancetrack_frames(baseline, cache_dir, embedder)
+    else:
+        raise ValueError(f"unsupported dataset {dataset!r} (synthetic | dancetrack)")
 
     # -- leaderboard: summary + paired comparison vs baseline ------------
     leaderboard = []
@@ -111,8 +160,7 @@ def run_benchmark(
         leaderboard.append({"name": name, "summary": summ, "compare": comp})
 
     # -- error taxonomy for the baseline --------------------------------
-    frames = _synthetic_frames(baseline, sequences, seeds, _ZOO_SCENE)
-    switches, background, idsw = _run_frames(frames, baseline)
+    switches, background, idsw = _run_frames(taxo_frames, baseline)
     conds = [("occlusion", _OCC_THRESH), ("crowding", _CROWD_THRESH), ("motion", _FAST_THRESH)]
     taxonomy = []
     for key, thr in conds:
@@ -122,9 +170,9 @@ def run_benchmark(
 
     meta = {
         "dataset": dataset, "baseline": baseline, "trackers": names,
-        "sequences": sequences, "seeds": seeds,
-        "runs_per_tracker": len(sequences) * len(seeds),
-        "config_hash": exp.config_hash(), "idsw_classified": len(switches),
+        "sequences": units, "seeds": seeds,
+        "runs_per_tracker": len(df[df.variant == baseline]),
+        "config_hash": config_hash, "idsw_classified": len(switches),
     }
     return BenchmarkReport(dataset, baseline, _METRICS, leaderboard, taxonomy, meta)
 
@@ -170,17 +218,21 @@ def _render_html(rep: BenchmarkReport) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run the MOT benchmarking tool")
-    parser.add_argument("--dataset", default="synthetic", choices=["synthetic"])
+    parser.add_argument("--dataset", default="synthetic",
+                        choices=["synthetic", "dancetrack"])
     parser.add_argument("--trackers", default=None,
                         help="comma-separated preset names (default: all)")
     parser.add_argument("--baseline", default="bytetrack")
+    parser.add_argument("--cache-dir", default="data/cache/dancetrack")
+    parser.add_argument("--embedder", default="onnx")
     parser.add_argument("--out-md", default=None)
     parser.add_argument("--out-html", default=None)
     args = parser.parse_args(argv)
 
     names = args.trackers.split(",") if args.trackers else None
     print(f"benchmarking {args.dataset} …")
-    rep = run_benchmark(args.dataset, names, args.baseline)
+    rep = run_benchmark(args.dataset, names, args.baseline,
+                        cache_dir=args.cache_dir, embedder=args.embedder)
     print("\n" + rep.to_markdown())
     if args.out_md:
         Path(args.out_md).write_text(rep.to_markdown() + "\n")

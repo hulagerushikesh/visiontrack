@@ -121,7 +121,11 @@ owner's PyPI account — the repo is release-ready.*
    hash, seeds) — rendered to markdown **and** a self-contained, theme-aware HTML
    page served live at [**/benchmark**](https://visiontrack.hulage.in/benchmark).
    This is the H1 harness + analyze + taxonomy unified behind one entry point;
-   evaluation done *well* is the real gap, and this fills it.
+   evaluation done *well* is the real gap, and this fills it. Runs on **synthetic**
+   (reproducible, no data) and **real DanceTrack** data
+   ([/benchmark/dancetrack](https://visiontrack.hulage.in/benchmark/dancetrack)) —
+   the real-data report reproduces the study's findings (deep re-ID cuts IDSW
+   −15\*, OC-SORT hurts +19\*, fast-motion 3.9× lift) through one tool.
 2. **Teaching product** — an interactive MOT course/mini-textbook on this
    codebase + the existing study guide and roadmap (already ~60% of a curriculum).
 3. **Vertical app** (retail footfall / sports / traffic) — highest ceiling, but a

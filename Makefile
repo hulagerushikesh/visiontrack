@@ -2,7 +2,7 @@
 # Override the interpreter if needed:  make test PY=python3.11
 PY ?= python3
 
-.PHONY: help install test lint reproduce reproduce-synth demo zoo taxonomy gmc profile benchmark residual figures clean
+.PHONY: help install test lint reproduce reproduce-synth demo zoo taxonomy gmc profile benchmark benchmark-dancetrack residual figures clean
 
 help:
 	@echo "targets:"
@@ -71,6 +71,12 @@ profile:
 benchmark:
 	$(PY) -m experiments.benchmark --out-html web/benchmark.html \
 		--out-md docs/results_benchmark_synth.md
+
+# Same tool on real DanceTrack data (needs the DanceTrack det + Re-ID caches).
+benchmark-dancetrack:
+	$(PY) -m experiments.benchmark --dataset dancetrack \
+		--out-html web/benchmark-dancetrack.html \
+		--out-md docs/results_benchmark_dancetrack.md
 
 # RQ2: train the from-scratch motion residual and run the tracking ablation
 # (needs the MOT17 + DanceTrack GT caches).
