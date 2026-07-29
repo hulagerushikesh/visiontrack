@@ -2,7 +2,7 @@
 # Override the interpreter if needed:  make test PY=python3.11
 PY ?= python3
 
-.PHONY: help install test lint reproduce reproduce-synth demo zoo taxonomy gmc residual figures clean
+.PHONY: help install test lint reproduce reproduce-synth demo zoo taxonomy gmc profile residual figures clean
 
 help:
 	@echo "targets:"
@@ -61,6 +61,10 @@ taxonomy:
 # build the latter with data/cache/precompute_gmc.py over the img1 frames).
 gmc:
 	$(PY) -m experiments.gmc_study --detector FRCNN --out-md docs/results_gmc_rq4.md
+
+# Profile tracker throughput (FPS vs scene load) on this CPU. No dataset needed.
+profile:
+	$(PY) -m experiments.profile_fps --out-md docs/results_profile_fps.md
 
 # RQ2: train the from-scratch motion residual and run the tracking ablation
 # (needs the MOT17 + DanceTrack GT caches).
