@@ -92,8 +92,12 @@ writes an annotated H.264 video with per-track coloured boxes + ids. The
 so it's tested end-to-end over a real mp4 with a stub detector — no model in CI.
 Details → [`VIDEO.md`](VIDEO.md).
 
-### H2.2 — Real-time webcam demo + per-component profiling
-Local webcam loop; report FPS per component on the M2 (honest performance numbers).
+### H2.2 — Throughput profiling ✅ · real-time webcam — *queued*
+- **Throughput profile ✅** — `experiments/profile_fps.py` (`make profile`) times
+  `tracker.update()` vs scene load on CPU: **1783 FPS @ 5 objects → 188 FPS @ 60**
+  on the M2. So the from-scratch tracker is *never* the real-time bottleneck;
+  detection is. Honest numbers, no dataset needed.
+- **Real-time webcam** loop — *queued* (thin capture loop over the same pipeline).
 
 ### H2.3 — Package & document
 `pip install visiontrack`, a stable public API, an mkdocs API-reference site.
