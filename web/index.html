@@ -148,18 +148,6 @@
       <p>Watch the same scene tracked motion-only vs motion + appearance, with the live ID-switch count side by side.</p>
       <span class="go">Try it →</span>
     </a>
-    <a class="card" href="/study">
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
-      <h3>Study guide</h3>
-      <p>A self-paced walk through this codebase — Kalman → Hungarian → ByteTrack → metrics → the three research questions.</p>
-      <span class="go">Learn the project →</span>
-    </a>
-    <a class="card" href="/roadmap">
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></span>
-      <h3>CV roadmap</h3>
-      <p>A junior → research computer-vision learning path, in order, with build tasks and canonical resources at every tier.</p>
-      <span class="go">Follow the roadmap →</span>
-    </a>
     <a class="card" href="/benchmark">
       <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
       <h3>Benchmark report</h3>
@@ -174,50 +162,6 @@
     <div class="fact"><div class="n">refuted</div><div class="l"><b>RQ1</b> — "appearance hurts on DanceTrack" hypothesis, tested and disproven</div></div>
     <div class="fact"><div class="n">327</div><div class="l">tests passing · NumPy-only core · HOTA cross-checked vs trackeval</div></div>
   </div>
-
-  <style>
-    .roadmap { margin-top: 8px; }
-    .rz { margin: 22px 0; }
-    .rz-h { display: flex; align-items: baseline; gap: 10px; margin: 0 0 10px; }
-    .rz-h h3 { margin: 0; font-size: 16px; letter-spacing: -.01em; }
-    .rz-h .tag { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
-      padding: 2px 7px; border-radius: 5px; font-weight: 700; }
-    .rz-h .tag.done { color: var(--good); background: color-mix(in srgb, var(--good) 15%, transparent); }
-    .rz-h .tag.wip { color: var(--warn, #d5722a); background: color-mix(in srgb, #d5722a 15%, transparent); }
-    .rz ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
-    .rz li { display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; color: var(--ink-2); }
-    .rz li .bx { flex: none; width: 18px; height: 18px; border-radius: 5px; display: grid; place-items: center;
-      font-size: 12px; font-weight: 800; margin-top: 1px; }
-    .rz li.ok .bx { background: var(--good); color: #fff; }
-    .rz li.no .bx { background: var(--surface-2); border: 1.5px solid var(--border); color: transparent; }
-    .rz li b { color: var(--ink); font-weight: 600; }
-  </style>
-  <p class="section-label">Roadmap progress</p>
-  <div class="roadmap">
-    <div class="rz">
-      <div class="rz-h"><h3>Horizon 1 — deepen the research</h3><span class="tag done">complete</span></div>
-      <ul>
-        <li class="ok"><span class="bx">✓</span><span><b>Tracker zoo</b> — SORT/DeepSORT/ByteTrack/+ReID/GIoU/OC-SORT, significance-tested</span></li>
-        <li class="ok"><span class="bx">✓</span><span><b>OC-SORT</b> from scratch (OCM+ORU) — honest negative, ablation caught a real bug</span></li>
-        <li class="ok"><span class="bx">✓</span><span><b>ID-switch error taxonomy</b> — fast motion 3.9× over-represented on DanceTrack</span></li>
-        <li class="ok"><span class="bx">✓</span><span><b>RQ4 global motion compensation</b> — helps iff the camera moves</span></li>
-      </ul>
-    </div>
-    <div class="rz">
-      <div class="rz-h"><h3>Horizon 2 — make it usable</h3><span class="tag done">complete</span></div>
-      <ul>
-        <li class="ok"><span class="bx">✓</span><span><b>Run on any video</b> — <code>visiontrack track in.mp4 out.mp4</code> (YOLOX + tracker)</span></li>
-        <li class="ok"><span class="bx">✓</span><span><b>Throughput profile</b> — 188–1783 FPS on CPU; the tracker is never the bottleneck</span></li>
-        <li class="ok"><span class="bx">✓</span><span><b>Real-time webcam</b> loop + <b>PyPI-ready</b> package, stable API, release workflow</span></li>
-      </ul>
-    </div>
-    <div class="rz">
-      <div class="rz-h"><h3>Horizon 3 — product direction</h3><span class="tag done">complete</span></div>
-      <ul>
-        <li class="ok"><span class="bx">✓</span><span><b>Honest MOT benchmarking tool</b> — leaderboard + significance + error taxonomy in one report (<a href="/benchmark" style="color:var(--accent)">view →</a>)</span></li>
-      </ul>
-    </div>
-  </div>
 </div>
 
 <footer>
@@ -226,8 +170,7 @@
     <a href="https://github.com/hulagerushikesh/visiontrack" target="_blank" rel="noopener">github.com/hulagerushikesh/visiontrack</a>
     <span class="spacer"></span>
     <a href="/demo">demo</a>
-    <a href="/study">study guide</a>
-    <a href="/roadmap">roadmap</a>
+    <a href="/benchmark">benchmark</a>
   </div>
 </footer>
 
