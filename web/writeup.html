@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>What I learned building a tracker from scratch — VisionTrack</title>
+<meta name="description" content="I built a multi-object tracker from first principles on NumPy, then used it to test whether the field's standard tricks — appearance re-ID, learned motion, calibrated uncertainty — actually help. Several answers are honest negatives. Here is the story.">
+<link rel="canonical" href="https://visiontrack.hulage.in/writeup">
+<meta name="theme-color" content="#0b0e14">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="VisionTrack">
+<meta property="og:url" content="https://visiontrack.hulage.in/writeup">
+<meta property="og:title" content="What I learned building a multi-object tracker from scratch">
+<meta property="og:description" content="A from-scratch NumPy tracker, used as a controlled study of when appearance, learned motion, and calibrated uncertainty actually help online tracking — several answers are honest negatives.">
+<meta property="og:image" content="https://visiontrack.hulage.in/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="VisionTrack — a from-scratch NumPy multi-object tracker with per-object id boxes over a synthetic scene.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What I learned building a multi-object tracker from scratch">
+<meta name="twitter:description" content="A from-scratch NumPy tracker used as a controlled, significance-tested study of when the field's standard tricks actually help — with honest negatives.">
+<meta name="twitter:image" content="https://visiontrack.hulage.in/assets/og-image.png">
+<style>
+  :root {
+    --bg: #f4f7fb; --surface: #ffffff; --surface-2: #f0f3f8; --border: #dbe2ec;
+    --ink: #0e141b; --ink-2: #33404f; --muted: #5c6773; --faint: #8a94a1;
+    --accent: #2f7ae5; --accent-soft: #e7f0fd; --good: #1f9d63; --warn: #c2410c;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --shadow: 0 1px 2px rgba(13,20,30,.05), 0 10px 34px rgba(13,20,30,.07);
+    --maxw: 720px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b0e14; --surface: #141922; --surface-2: #1a2029; --border: #26303c;
+      --ink: #e7ebf1; --ink-2: #b7c0cd; --muted: #8792a1; --faint: #616d7c;
+      --accent: #5aa2ff; --accent-soft: #16283f; --good: #37c07e; --warn: #f0864a;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 40px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f4f7fb; --surface: #ffffff; --surface-2: #f0f3f8; --border: #dbe2ec;
+    --ink: #0e141b; --ink-2: #33404f; --muted: #5c6773; --faint: #8a94a1;
+    --accent: #2f7ae5; --accent-soft: #e7f0fd; --good: #1f9d63; --warn: #c2410c;
+  }
+  :root[data-theme="dark"] {
+    --bg: #0b0e14; --surface: #141922; --surface-2: #1a2029; --border: #26303c;
+    --ink: #e7ebf1; --ink-2: #b7c0cd; --muted: #8792a1; --faint: #616d7c;
+    --accent: #5aa2ff; --accent-soft: #16283f; --good: #37c07e; --warn: #f0864a;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans);
+    line-height: 1.7; font-size: 17px; -webkit-font-smoothing: antialiased; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  nav { border-bottom: 1px solid var(--border); }
+  .nav-in { max-width: var(--maxw); margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+  .brand { font-family: var(--mono); font-weight: 700; letter-spacing: .02em; font-size: 15px; display: flex; align-items: center; gap: 9px; color: var(--ink); }
+  .brand a { color: inherit; }
+  .brand .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .nav-in .spacer { flex: 1; }
+  .nav-in a.ghlink { font-family: var(--mono); font-size: 13px; color: var(--muted); padding: 6px 12px; border: 1px solid var(--border); border-radius: 8px; }
+  .nav-in a.ghlink:hover { color: var(--ink); border-color: var(--accent); text-decoration: none; }
+
+  main { max-width: var(--maxw); margin: 0 auto; padding: 0 24px 96px; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin: 56px 0 16px; }
+  h1 { font-size: clamp(30px, 5vw, 44px); line-height: 1.1; letter-spacing: -.025em; margin: 0 0 20px; font-weight: 800; text-wrap: balance; }
+  .byline { font-family: var(--mono); font-size: 13px; color: var(--faint); margin: 0 0 8px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .standfirst { font-size: 20px; color: var(--ink-2); margin: 8px 0 40px; line-height: 1.55; }
+  .standfirst b { color: var(--ink); }
+
+  h2 { font-size: 25px; letter-spacing: -.02em; margin: 52px 0 6px; font-weight: 750; text-wrap: balance; }
+  h2 .rq { font-family: var(--mono); font-size: 13px; color: var(--accent); display: block; letter-spacing: .1em; margin-bottom: 2px; }
+  h3 { font-size: 18px; margin: 32px 0 4px; letter-spacing: -.01em; }
+  p { margin: 16px 0; }
+  strong { color: var(--ink); }
+  em { color: var(--ink-2); }
+  code { font-family: var(--mono); font-size: .86em; background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 5px; padding: 1px 6px; color: var(--ink-2); }
+
+  blockquote { margin: 26px 0; padding: 4px 22px; border-left: 3px solid var(--accent);
+    color: var(--ink-2); font-size: 19px; font-style: italic; }
+
+  .callout { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--good);
+    border-radius: 10px; padding: 16px 20px; margin: 26px 0; box-shadow: var(--shadow); font-size: 16px; }
+  .callout.neg { border-left-color: var(--warn); }
+  .callout .k { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); display: block; margin-bottom: 4px; }
+  .callout p { margin: 0; }
+
+  figure { margin: 30px 0; }
+  figure img { width: 100%; display: block; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); }
+  figcaption { font-size: 13.5px; color: var(--muted); text-align: center; margin-top: 10px; font-family: var(--mono); }
+
+  .scroll { overflow-x: auto; margin: 24px 0; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+  th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  th { font-family: var(--mono); font-size: 12px; letter-spacing: .04em; color: var(--muted); font-weight: 600; background: var(--surface-2); }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--mono); }
+  tr:last-child td { border-bottom: none; }
+  .good { color: var(--good); }
+  .warn { color: var(--warn); }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 52px 0; }
+
+  .endcta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+  .btn { display: inline-flex; align-items: center; gap: 9px; font-weight: 650; font-size: 15px;
+    padding: 12px 20px; border-radius: 10px; border: 1px solid transparent; }
+  .btn:hover { text-decoration: none; }
+  .btn.primary { background: var(--accent); color: #fff; }
+  .btn.primary:hover { filter: brightness(1.07); }
+  .btn.ghost { background: var(--surface); color: var(--ink); border-color: var(--border); }
+  .btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  footer { border-top: 1px solid var(--border); }
+  .foot-in { max-width: var(--maxw); margin: 0 auto; padding: 26px 24px 60px; font-family: var(--mono); font-size: 12.5px; color: var(--muted); display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+  .foot-in a { color: var(--muted); }
+  .foot-in .spacer { flex: 1; }
+
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <span class="brand"><span class="dot"></span> <a href="/">VisionTrack</a></span>
+    <span class="spacer"></span>
+    <a class="ghlink" href="https://github.com/hulagerushikesh/visiontrack" target="_blank" rel="noopener">GitHub ↗</a>
+  </div>
+</nav>
+
+<main>
+  <p class="eyebrow">Write-up · a controlled study</p>
+  <h1>A better trick that makes a worse tracker</h1>
+  <p class="byline"><span>VisionTrack</span><span>·</span><span>from-scratch multi-object tracking</span></p>
+  <p class="standfirst">I built a multi-object tracker from first principles on NumPy — no ML
+  framework in the core — and then used it as a lab bench to ask a question most
+  tracking repos never do: <b>when do the field's standard tricks actually help?</b>
+  Three of the answers are honest negatives, and the negatives turned out to be the
+  most interesting part.</p>
+
+  <h2>The setup, and why it's built the hard way</h2>
+  <p>Most tracking repositories are a thin wrapper: someone else's detector, someone
+  else's vendored tracker, and a single reported number for a single configuration.
+  You can't ask a counterfactual of a black box. So I inverted the priority — the
+  estimation and association math <em>is</em> the deliverable, and it exists to be
+  ablated.</p>
+  <p>The core is three pieces, each written from scratch and independently tested:
+  an <strong>8-state constant-velocity Kalman filter</strong> (DeepSORT's <code>xyah</code>
+  parametrization, Joseph-form covariance update, Mahalanobis gating), a rectangular
+  <strong>O(n³) Hungarian solver</strong> (validated against SciPy on 150 random
+  matrices), and <strong>ByteTrack</strong> two-stage association over a
+  <code>Tentative → Confirmed → Deleted</code> lifecycle. No <code>torch</code>, no
+  <code>scipy</code> in the hot path — just NumPy.</p>
+  <p>The trick that makes the whole study possible is one design choice in the
+  association cost. It's <em>factored</em>: a hard gate (IoU + class + Mahalanobis)
+  decides which detection–track pairs are even <em>feasible</em>, and then each
+  hypothesis is a single weighted term that only <em>ranks</em> the feasible pairs.</p>
+  <blockquote>cost = w_iou·motion ⊕ w_app·appearance ⊕ w_unc·uncertainty</blockquote>
+  <p>At <code>w_app = w_unc = 0</code> this is <strong>bit-identical</strong> to the
+  plain <code>1 − IoU</code> baseline. So every experiment toggles exactly one variable
+  against a frozen reference, over multiple seeds, compared with a paired bootstrap and
+  a Wilcoxon test. The from-scratch HOTA/IDF1 metrics are cross-checked against the
+  standard <code>trackeval</code> to within <code>1.4e-3</code>. That's the moat: not
+  speed, but <em>honest measurement</em>.</p>
+
+  <hr>
+
+  <h2><span class="rq">RQ1 — Appearance</span>The result I spent the longest trying to disprove</h2>
+  <p>Appearance re-ID is the crowd favourite: give each track a visual descriptor,
+  add its cosine distance to the cost, and identities should survive crossings and
+  occlusions. On MOT17 it does help — but modestly. A cheap from-scratch colour
+  histogram barely moves the needle; a pretrained <strong>deep re-ID</strong> model
+  (OSNet-x0.25, run through ONNX behind the same interface) roughly doubles the gain
+  and cuts ID switches from 188 to <strong>163 (−13%)</strong>.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>MOT17 FRCNN · Δ vs motion-only</th><th class="num">HOTA</th><th class="num">IDF1</th><th class="num">AssA</th><th class="num">IDSW</th></tr></thead>
+    <tbody>
+      <tr><td>from-scratch colour histogram</td><td class="num">+0.001</td><td class="num">+0.002</td><td class="num">+0.003</td><td class="num">170 (−18)</td></tr>
+      <tr><td><strong>deep re-ID (OSNet)</strong></td><td class="num good">+0.004</td><td class="num good">+0.004</td><td class="num good">+0.008</td><td class="num good">163 (−25)</td></tr>
+    </tbody>
+  </table></div>
+  <p>Pooling all three public detectors for statistical power (21 sequence×detector
+  units), the ID-switch and IDF1 reductions become <strong>significant</strong>
+  (p&lt;0.05). But there's a twist that runs opposite to intuition: appearance is
+  <strong>completely inert on the weakest detector (DPM)</strong>. Its mislocalized
+  boxes produce mis-framed crops, so the embeddings carry no identity signal.
+  <em>Crop quality gates whether appearance helps at all</em> — not the amount of
+  association ambiguity, which is the thing everyone assumes it fixes.</p>
+
+  <figure>
+    <img src="/assets/appearance_mot17_stratified.png" alt="Stratified analysis of where deep re-ID appearance helps on MOT17">
+    <figcaption>where deep re-ID earns its weight — pooled across three detectors</figcaption>
+  </figure>
+
+  <h3>Trying to make it hurt</h3>
+  <p>The textbook warning is that appearance <em>hurts</em> when objects look alike —
+  the DanceTrack case, a stage full of near-identical dancers. I went looking for that
+  failure on purpose, four ways:</p>
+  <p><strong>1. A synthetic probe.</strong> I added a controlled appearance channel to
+  the scene generator with one knob from "identical dancers" to "distinct pedestrians,"
+  holding geometry and noise fixed. The benefit <em>grew</em> with distinctness and was
+  significant at every level — but it never flipped to harmful. Even for identical
+  objects, unbiased embedding noise averages to a near-uniform cost: appearance goes
+  <em>inert</em>, not misleading.</p>
+  <p><strong>2. Descriptor drift.</strong> Maybe non-stationary appearance — a stale
+  gallery confidently matching the wrong object — is the real hazard. I made each
+  object's descriptor random-walk over time. It <em>still</em> didn't hurt; it helped
+  <em>more</em>. The geometric reason is quietly beautiful: independent random walks in
+  high dimensions are near-orthogonal, so drifting objects <em>diverge</em> in
+  appearance space and become <em>more</em> distinguishable, not less.</p>
+  <p><strong>3. Real DanceTrack.</strong> The decisive test. On 12 real DanceTrack
+  sequences — near-identical dancers, wildly non-linear motion, motion-only AssA of
+  just 0.214 so there is <em>ample</em> room to hurt — deep re-ID still
+  <strong>significantly cut ID switches (217 → 202, p&lt;0.05)</strong>. The marquee
+  hypothesis, refuted on its home turf.</p>
+  <div class="callout">
+    <span class="k">The unifying result</span>
+    <p>"Appearance hurts on DanceTrack" is a property of trackers that let appearance
+    <em>veto</em> a match — override the motion model and commit to a look-alike. This
+    tracker's cost only lets appearance <strong>rank within the motion gate, never veto
+    a feasible pair</strong>. Under that one design rule, a gated appearance cost is
+    <strong>robustly beneficial-or-neutral</strong> across every regime I could build
+    or download. Making it harmful takes <em>confident misidentification</em>, which is
+    an architecture choice, not a property of similar-looking objects.</p>
+  </div>
+
+  <hr>
+
+  <h2><span class="rq">RQ2 — Learned motion</span>A better predictor, a worse tracker</h2>
+  <p>Constant velocity is a crude motion model. So I trained a small MLP — from scratch
+  in NumPy, hand-written back-propagation and Adam, no framework — to predict a
+  <em>correction</em> to the Kalman mean from recent velocities. Open-loop, evaluated on
+  ground-truth trajectories, it does exactly what theory predicts:</p>
+  <div class="scroll"><table>
+    <thead><tr><th>next-centre error</th><th class="num">constant velocity</th><th class="num">+ residual</th></tr></thead>
+    <tbody>
+      <tr><td>MOT17 (near-linear)</td><td class="num">1.05 px</td><td class="num warn">1.27 (−21% worse)</td></tr>
+      <tr><td>DanceTrack (non-linear)</td><td class="num">6.89 px</td><td class="num good">6.03 (+12% better)</td></tr>
+    </tbody>
+  </table></div>
+  <p>It helps precisely where motion is non-linear and can't help where CV is already
+  accurate to a pixel. A clean, sensible result — until you wire it into the tracker.
+  Closed-loop, it <strong>hurts identity on both datasets</strong> (DanceTrack HOTA
+  −0.043, +29 ID switches; MOT17 HOTA −0.013, +12).</p>
+  <div class="callout neg">
+    <span class="k">Honest negative</span>
+    <p>The residual was trained on clean ground-truth trajectories but is fed the
+    tracker's own <em>noisy</em> estimates at inference — a train/serve distribution
+    shift — and its correction nudges the association gate just enough to create
+    switches. A more accurate one-step predictor produced a less accurate tracker. The
+    gate cares more about not moving than about being right.</p>
+  </div>
+
+  <hr>
+
+  <h2><span class="rq">RQ3 — Calibrated uncertainty</span>The loose gate is a feature, not a bug</h2>
+  <p>The Kalman filter carries a full covariance; the principled move is to fold that
+  uncertainty into the association cost and, while you're at it, calibrate the filter's
+  noise to real motion. I measured the calibration first. Stepping the filter along real
+  MOT17 ground truth, the innovation χ² comes out at <strong>0.15</strong> where a
+  well-calibrated filter would give <strong>4.0</strong> — it is ~25× <em>under-confident</em>,
+  and its 95% gate captures 100% of innovations and never rejects anything.</p>
+  <figure>
+    <img src="/assets/kalman_calibration.png" alt="Kalman filter innovation chi-square reliability curve on MOT17">
+    <figcaption>the filter is drastically under-confident — the gate almost never rejects</figcaption>
+  </figure>
+  <p>So I fixed it. Tightening the filter to be properly calibrated
+  (<code>kf_noise_scale = 0.19</code>) was <strong>catastrophic under detector noise</strong>:
+  HOTA −0.205 and <strong>ID switches 40 → 400+</strong>. A gate tuned to clean motion
+  rejects noisy-but-correct detections, and tracks fragment.</p>
+  <div class="callout neg">
+    <span class="k">Honest negative</span>
+    <p>The apparent under-confidence is doing real work. In tracking-by-detection the
+    inputs are noisy in ways the motion model never sees, so a <em>loose</em> gate that
+    forgives that noise is more robust than a "correct" tight one. Folding uncertainty
+    in as a soft cost was null; <em>calibrating</em> was actively harmful. This unifies
+    with an earlier ablation where disabling the gate entirely barely changed clean-data
+    results — the gate was never the thing doing the work.</p>
+  </div>
+
+  <hr>
+
+  <h2>Why the negatives are the point</h2>
+  <p>Three enhancements the literature treats as obvious upgrades: one helps less and
+  more narrowly than folklore says (appearance — and refuses to hurt where folklore
+  says it must), one helps prediction but <em>hurts</em> tracking (learned motion), and
+  one is null-to-harmful (calibrated uncertainty). None of that is visible if you report
+  a single number for a single configuration. It's only visible with a frozen baseline,
+  seed variance, paired significance, and the discipline to publish the result whichever
+  way it falls.</p>
+  <p>That harness — the from-scratch metrics, the config hashing, the paired tests —
+  became a small product in its own right: a one-command
+  <a href="/benchmark">honest MOT benchmark</a> that runs a family of trackers and emits
+  a single reproducible report (a leaderboard with paired significance and an ID-switch
+  error taxonomy), on synthetic data or on
+  <a href="/benchmark/dancetrack">real DanceTrack</a>. The tracker also runs on your own
+  video, installs from <code>pip</code>, and has a stable public API — but the identity of
+  the project is the measurement, not the wrapper.</p>
+
+  <div class="callout">
+    <span class="k">The one-line takeaway</span>
+    <p>Whether a "standard trick" helps depends less on the trick than on how it's wired
+    into the decision. Let a signal <em>rank</em> feasible matches and it's robust; let it
+    <em>veto</em> them, or trust it beyond its training distribution, and your better
+    component makes a worse system.</p>
+  </div>
+
+  <div class="endcta">
+    <a class="btn primary" href="/demo">▶ Watch the RQ1 result live</a>
+    <a class="btn ghost" href="https://github.com/hulagerushikesh/visiontrack" target="_blank" rel="noopener">Read the code &amp; mini-paper</a>
+  </div>
+</main>
+
+<footer>
+  <div class="foot-in">
+    <span>VisionTrack · MIT</span>
+    <a href="https://github.com/hulagerushikesh/visiontrack" target="_blank" rel="noopener">github.com/hulagerushikesh/visiontrack</a>
+    <span class="spacer"></span>
+    <a href="/">home</a>
+    <a href="/demo">demo</a>
+    <a href="/benchmark">benchmark</a>
+  </div>
+</footer>
+
+</body>
+</html>

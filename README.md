@@ -205,6 +205,13 @@ flip on a moving object *is* a switch.
 - **Build it locally:** `make demo` → open [`viz/webdemo/index.html`](viz/webdemo/index.html) in any browser (no server, no dataset, no toolchain — inference is pre-baked from the NumPy tracker on a synthetic scene).
 - On the selected scene, appearance cuts ID switches **37 → 29 (−22%)** and lifts IDF1 — the study result, watchable frame by frame.
 
+## Write-up
+
+A narrative walk-through of the study — why appearance *refuses* to hurt (even on
+DanceTrack), how a better motion predictor made a *worse* tracker, and why the
+filter's loose gate is a feature: **[visiontrack.hulage.in/writeup](https://visiontrack.hulage.in/writeup)**.
+The honest negatives, explained in plain prose rather than tables.
+
 ## Study guide
 
 New to the concepts? Two self-paced, interactive learning files (single self-contained
