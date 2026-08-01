@@ -137,7 +137,12 @@ owner's PyPI account — the repo is release-ready.*
 ---
 
 ## Quick wins (any time)
-- Open-Graph / meta tags so `visiontrack.hulage.in` previews nicely when shared.
+- **Open-Graph / social meta tags ✅ *done*** — every page (`/`, `/demo`,
+  `/benchmark`, `/benchmark/dancetrack`) carries Open-Graph + Twitter-card meta
+  with per-page titles/descriptions, a canonical URL, and a shared 1200×630
+  preview card (`assets/og-image.png`, drawn from scratch by `make og-image` —
+  license-clean, deterministic), so `visiontrack.hulage.in` previews nicely when
+  shared on Slack/LinkedIn/Twitter/etc.
 - A "reproduce in Colab" badge.
 
 ## Status
