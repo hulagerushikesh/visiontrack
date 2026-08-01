@@ -121,3 +121,41 @@ def test_yolox_decode_from_fake_session():
 def test_yolox_conf_threshold_filters():
     det = YoloxDetector("unused.onnx", conf_threshold=0.99, session=_FakeYoloxSession())
     assert det.detect(np.zeros((416, 416, 3), dtype=np.uint8)) == []
+
+
+class _FakeRawYoloxSession:
+    """A *raw* (non-decode-baked) YOLOX export: one anchor with per-cell offsets.
+
+    Mirrors the official Megvii release ONNX, which emits ``(1, N, 5+nc)`` where
+    ``N`` is the sum of grid cells over strides 8/16/32 and the box columns are
+    offsets/log-scale, not pixel coords.
+    """
+
+    def __init__(self, input_size=416):
+        strides = (8, 16, 32)
+        n = sum((input_size // s) ** 2 for s in strides)
+        self._out = np.zeros((1, n, 85), dtype=np.float32)
+        # Put a detection in the stride-8 block at grid cell (x=10, y=5):
+        # row = y*g + x with g = 416//8 = 52 -> 5*52 + 10 = 270. Zero offsets.
+        self._out[0, 270, :4] = [0.0, 0.0, 0.0, 0.0]
+        self._out[0, 270, 4] = 0.9
+        self._out[0, 270, 5] = 0.95
+
+    def get_inputs(self):
+        class _I:
+            name = "images"
+        return [_I()]
+
+    def run(self, _outputs, _feed):
+        return [self._out]
+
+
+def test_yolox_grid_decode_from_raw_export():
+    det = YoloxDetector("unused.onnx", input_size=416, session=_FakeRawYoloxSession())
+    out = det.detect(np.zeros((416, 416, 3), dtype=np.uint8))  # scale = 1
+    assert len(out) == 1
+    d = out[0]
+    assert d.class_id == 0
+    # cell (x=10, y=5), stride 8, zero offsets -> centre ((10)*8, (5)*8)=(80,40),
+    # w=h=exp(0)*8=8 -> xyxy (76, 36, 84, 44).
+    assert np.allclose(d.xyxy, [76, 36, 84, 44], atol=1.0)

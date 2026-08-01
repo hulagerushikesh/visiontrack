@@ -27,18 +27,50 @@ over a real (tiny) mp4 — no model needed for CI.
 ## Getting a YOLOX model
 
 The detector ([`detection/yolox_onnx.py`](../src/visiontrack/detection/yolox_onnx.py))
-expects a YOLOX ONNX export (`(1, N, 5+nc)` output, decode baked in). YOLOX is the
-detector the ByteTrack / OC-SORT papers use, so it keeps the tracking lineage
-consistent. Two ways to obtain `yolox_nano.onnx` (or `yolox_tiny.onnx`):
+consumes a YOLOX ONNX export with `(1, N, 5+nc)` output. YOLOX is the detector the
+ByteTrack / OC-SORT papers use, so it keeps the tracking lineage consistent. It
+handles **both** export flavours automatically:
 
-1. **Download a pre-exported ONNX** from the official
-   [Megvii-BaseDetection/YOLOX](https://github.com/Megvii-BaseDetection/YOLOX)
-   release assets / model zoo, into `models/`.
-2. **Export from weights** with the YOLOX repo:
-   `python tools/export_onnx.py -n yolox-nano -c yolox_nano.pth --output-name yolox_nano.onnx --decode_in_inference`
+- **Raw grid output** — the *default* export, and what the official
+  [Megvii-BaseDetection/YOLOX](https://github.com/Megvii-BaseDetection/YOLOX)
+  release ONNX files ship: box columns are per-cell offsets + log-scale, decoded
+  with the standard grid/stride math inside the detector.
+- **Decode baked in** (`--decode_in_inference`) — box columns already in pixel
+  space; used directly.
 
-Models are gitignored (like the re-ID weights) — VisionTrack stays weight-clean.
-`--input-size` must match the export (nano/tiny use 416; s/m/l use 640).
+So you can just grab a pre-exported ONNX and go — no re-export needed:
+
+```bash
+mkdir -p models
+curl -L -o models/yolox_nano.onnx \
+  https://github.com/Megvii-BaseDetection/YOLOX/releases/download/0.1.1rc0/yolox_nano.onnx
+```
+
+(Or export from weights: `python tools/export_onnx.py -n yolox-nano -c yolox_nano.pth
+--output-name yolox_nano.onnx`.) Models are gitignored (like the re-ID weights) —
+VisionTrack stays weight-clean. `--input-size` must match the export (nano/tiny use
+416; s/m/l use 640).
+
+## Reproduce the annotated demo
+
+[`scripts/render_video_demo.py`](../scripts/render_video_demo.py) runs the whole
+pipeline over any clip and keeps the common street classes (person + vehicles) by
+default, with tracker gates relaxed for a COCO YOLOX-nano (whose scores run lower
+than a MOT-tuned detector):
+
+```bash
+# 1. model (above) + 2. any license-clean clip, e.g. a public-domain street video
+curl -L -o clip.webm \
+  'https://upload.wikimedia.org/wikipedia/commons/a/a9/Bangkok_Traffic_During_Enduring_Partners_26_%281009429%29.webm'
+# 3. render (optionally trim/downscale the source first with ffmpeg)
+python scripts/render_video_demo.py clip.webm tracked.mp4 --model models/yolox_nano.onnx --max-frames 360
+```
+
+The sample above is *Bangkok Traffic During Enduring Partners 26* by SSgt James
+Bunn, U.S. Army National Guard — **public domain** (a U.S. federal work), so the
+annotated result is freely redistributable. Nothing here is committed as imagery:
+the model, source, and output all stay local/gitignored, keeping the repo
+imagery-clean; the script + tests are what live in git.
 
 ## Notes
 
