@@ -2,7 +2,7 @@
 # Override the interpreter if needed:  make test PY=python3.11
 PY ?= python3
 
-.PHONY: help install test lint reproduce reproduce-synth demo zoo taxonomy gmc profile benchmark benchmark-dancetrack residual figures clean
+.PHONY: help install test lint reproduce reproduce-synth demo og-image zoo taxonomy gmc profile benchmark benchmark-dancetrack residual figures clean
 
 help:
 	@echo "targets:"
@@ -10,6 +10,7 @@ help:
 	@echo "  test             run the test suite"
 	@echo "  lint             ruff check"
 	@echo "  demo             build the self-contained interactive demo (viz/webdemo/index.html)"
+	@echo "  og-image         regenerate the social preview card (assets/og-image.png)"
 	@echo "  reproduce-synth  regenerate synthetic results (NO dataset needed; CI smoke)"
 	@echo "  reproduce        full reproduction (needs the MOT17 cache; see docs/PHASE0.md)"
 
@@ -44,6 +45,11 @@ reproduce: reproduce-synth
 # Build the pre-baked interactive demo (synthetic scene; no dataset needed).
 demo:
 	$(PY) viz/webdemo/build_demo_data.py
+
+# Regenerate the Open-Graph / social preview card (assets/og-image.png) that
+# renders when visiontrack.hulage.in is shared. License-clean, deterministic.
+og-image:
+	$(PY) scripts/make_og_image.py
 
 # Tracker zoo: significance-tested comparison of the lineage presets
 # (single-stage SORT, DeepSORT, ByteTrack, ByteTrack+ReID, GIoU) on a hard
