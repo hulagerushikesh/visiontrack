@@ -4,6 +4,7 @@
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Live demo](https://img.shields.io/badge/demo-visiontrack.hulage.in-2f7ae5.svg)](https://visiontrack.hulage.in)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hulagerushikesh/visiontrack/blob/main/notebooks/reproduce.ipynb)
 
 **A from-scratch multi-object tracker, used as a controlled study of *when* the field's standard tricks actually help.**
 
@@ -148,6 +149,10 @@ Full public API: [docs/API.md](docs/API.md) · packaging/release: [docs/RELEASE.
 **Benchmark a set of trackers** into one report (leaderboard + paired significance + ID-switch error taxonomy) — `make benchmark`, or see the live report at **[visiontrack.hulage.in/benchmark](https://visiontrack.hulage.in/benchmark)**.
 
 ## Reproduce
+
+**No install? Run the synthetic study in your browser:**
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hulagerushikesh/visiontrack/blob/main/notebooks/reproduce.ipynb)
+— clones, installs the harness extra, and reproduces the seed-varied, significance-tested synthetic tables (a couple of minutes, CPU-only). Notebook: [`notebooks/reproduce.ipynb`](notebooks/reproduce.ipynb).
 
 ```bash
 make install                 # editable install with all extras
