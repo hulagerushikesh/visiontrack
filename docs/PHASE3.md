@@ -402,6 +402,37 @@ python -m experiments.dancetrack_appearance --cache-dir data/cache/dancetrack_yo
   --embedder onnx --detections-label "real YOLOX" --out-fig assets/appearance_dancetrack_yolox.png
 ```
 
+#### The whole lineage under real detections (and what changes)
+
+Running the full tracker zoo on the same real-detector caches
+(`experiments/tracker_zoo.py --dataset dancetrack --cache-dir data/cache/dancetrack_yolox`,
+12 seqs, paired Wilcoxon vs `bytetrack`) cross-validates the study a third way —
+and surfaces a shift in *which* trick matters once detections are real:
+
+| variant | MOTA Δ (p) | HOTA Δ (p) | IDSW Δ (p) |
+|---|---|---|---|
+| sort (single-stage) | **−0.041 (0.01\*)** | −0.017 (0.06) | −8.8 (0.02\*) |
+| deepsort (single + reID) | **−0.040 (0.01\*)** | −0.012 (0.20) | −10.7 (0.00\*) |
+| bytetrack_reid | +0.001 (0.16) | +0.003 (0.11) | −1.8 (0.22) |
+| bytetrack_giou | −0.002 (0.32) | −0.001 (0.83) | −0.1 (1.00) |
+| oc_sort | **−0.040 (0.01\*)** | −0.016 (0.05) | −4.0 (0.23) |
+
+- **The dominant win shifts to two-stage recovery.** Every single-stage variant
+  (sort, deepsort, oc_sort) is **significantly worse than two-stage ByteTrack on
+  MOTA (−0.04, p=0.01)**. Real detectors emit many *low-confidence* boxes, and
+  ByteTrack's low-score second association stage is exactly what recovers them —
+  so with real detections the biggest significant lever is **recovery, not
+  appearance**. (Under oracle-perturbed GT, where recall is near-perfect,
+  appearance was the star instead.)
+- **Appearance is consistent, and consistently non-significant here.**
+  `bytetrack_reid` still nudges HOTA up (+0.003) but n.s. — the same detector-gated
+  shrinkage as the appearance study above, via a different code path.
+- **OC-SORT still hurts** — worse than `bytetrack` (MOTA −0.040\*) and, against its
+  fair single-stage `sort` baseline, adds switches (ΔIDSW **+4.8, p=0.05**),
+  reproducing the earlier oracle-DanceTrack negative under real detections too.
+
+![tracker zoo on real-detector DanceTrack](../assets/zoo_dancetrack_yolox.png)
+
 ## Notes / limitations
 
 - Colour histogram (global or spatial) is deliberately weak; the `OnnxReID`
