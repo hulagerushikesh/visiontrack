@@ -5,8 +5,11 @@ this runs in CI. Covers GT parsing, pedestrian marking (so the MOT17 evaluator
 scores the boxes), perturbed-GT detections, determinism, and frame_filename.
 """
 import numpy as np
+import pytest
 
+from visiontrack.detection.base import Detection
 from visiontrack.detection.dancetrack_loader import (
+    DanceTrackDetectorSequence,
     DanceTrackSequence,
     discover_dancetrack,
     frame_filename,
@@ -68,6 +71,37 @@ def test_perturbation_is_deterministic(tmp_path):
     a = DanceTrackSequence(d, seed=3).frame(4).det_xyxy
     b = DanceTrackSequence(d, seed=3).frame(4).det_xyxy
     np.testing.assert_array_equal(a, b)
+
+
+class _StubDetector:
+    """Returns two person boxes + one non-person (to test class filtering)."""
+
+    def detect(self, frame_rgb):
+        return [
+            Detection(xyxy=np.array([10.0, 10, 50, 90]), score=0.8, class_id=0),
+            Detection(xyxy=np.array([60.0, 20, 90, 120]), score=0.6, class_id=0),
+            Detection(xyxy=np.array([0.0, 0, 5, 5]), score=0.9, class_id=2),  # car
+        ]
+
+
+def test_detector_sequence_uses_real_detections(tmp_path):
+    imageio = pytest.importorskip("imageio.v2")
+    d = _make_seq(tmp_path, n_frames=2, n_obj=3)
+    imageio.imwrite(d / "img1" / "00000001.jpg",
+                    np.zeros((1080, 1920, 3), dtype=np.uint8))  # only frame 1 exists
+
+    seq = DanceTrackDetectorSequence(d, _StubDetector())
+    fd = seq.frame(1)
+    # detections come from the detector (not perturbed GT); the car (class 2) is
+    # filtered out by the default person-only class_ids.
+    assert fd.det_xyxy.shape[0] == 2
+    assert sorted(np.round(fd.det_scores, 1)) == [0.6, 0.8]
+    assert fd.gt_xyxy.shape[0] == 3  # GT still loaded for evaluation
+
+    # a frame with no image on disk -> no detections, GT intact (honest miss)
+    fd2 = seq.frame(2)
+    assert fd2.det_xyxy.shape[0] == 0
+    assert fd2.gt_xyxy.shape[0] == 3
 
 
 def test_discover_and_frame_filename(tmp_path):

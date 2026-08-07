@@ -59,6 +59,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--weights", default="0.0,0.15,0.3,0.6")
     parser.add_argument("--metrics", default="HOTA,IDF1,AssA,MOTA,IDSW")
     parser.add_argument("--out-fig", default=None)
+    parser.add_argument("--detections-label", default="oracle-perturbed",
+                        help="how detections are labelled in output (e.g. 'real YOLOX')")
     args = parser.parse_args(argv)
 
     readers = _readers(Path(args.cache_dir), args.embedder)
@@ -72,7 +74,7 @@ def main(argv: list[str] | None = None) -> int:
     metrics = args.metrics.split(",")
     seqs = [r.name for r in readers]
     print(f"RQ1 DanceTrack | embedder={args.embedder} | {len(readers)} sequences "
-          f"(oracle-perturbed detections)\n")
+          f"({args.detections_label} detections)\n")
 
     base = _per_seq(readers, 0.0)
     header = f"{'w_app':>6} | " + " | ".join(f"{m:>16}" for m in metrics)
@@ -99,12 +101,13 @@ def main(argv: list[str] | None = None) -> int:
           "MOT17 — Δ HOTA/IDF1 near zero or negative, ΔIDSW up (hurts).")
 
     if args.out_fig:
-        _save_figure(overalls, weights, args.out_fig, args.embedder)
+        _save_figure(overalls, weights, args.out_fig, args.embedder,
+                     args.detections_label)
         print(f"wrote figure -> {args.out_fig}")
     return 0
 
 
-def _save_figure(overalls, weights, path, embedder):
+def _save_figure(overalls, weights, path, embedder, detections_label="oracle-perturbed"):
     import matplotlib
 
     matplotlib.use("Agg")
@@ -128,7 +131,7 @@ def _save_figure(overalls, weights, path, embedder):
     ax2.plot(weights, idsw, "^--", color="#e8833a", label="IDSW")
     ax2.set_ylabel("ID switches", color="#e8833a")
     ax2.tick_params(axis="y", colors="#e8833a")
-    ax1.set_title(f"RQ1 on DanceTrack ({embedder}, oracle-perturbed dets)")
+    ax1.set_title(f"RQ1 on DanceTrack ({embedder}, {detections_label} dets)")
     fig.tight_layout()
     fig.savefig(path)
     plt.close(fig)

@@ -74,7 +74,14 @@ tuning). Bonus: the same DanceTrack run reproduced RQ1 (appearance cuts IDSW
 **Horizon 1 complete.**
 
 ### H1.x — Optional, resource-heavier
-- Real **YOLOX** detector on DanceTrack (removes the oracle-perturbed-GT caveat).
+- Real **YOLOX** detector on DanceTrack ✅ *done* — removes the oracle-perturbed-GT
+  caveat. Real YOLOX-nano detections (`DanceTrackDetectorSequence`) over 12 val
+  seqs + OSNet re-ID on the real crops. **Finding:** appearance *still* never hurts
+  (every metric moves the beneficial way at `w_app=0.6`), so the RQ1 conclusion
+  holds without the oracle crutch — but the benefit shrinks and loses significance
+  (ΔIDSW −15.3\* oracle → −1.8 n.s. real), because the weak nano detector's crops
+  degrade the re-ID signal (the same lever as the MOT17 DPM null). Detection, not
+  tracking, is the bottleneck (motion-only HOTA 0.36→0.18). Details → [`PHASE3.md`](PHASE3.md).
 - **SportsMOT** as a second maneuver dataset for RQ2.
 
 ---

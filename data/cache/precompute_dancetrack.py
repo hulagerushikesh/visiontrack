@@ -32,10 +32,14 @@ def main(argv: list[str] | None = None) -> int:
         sys.path.insert(0, str(src))
 
     from visiontrack.datasets.cache import save_sequence_cache
-    from visiontrack.detection.dancetrack_loader import DanceTrackSequence, discover_dancetrack
+    from visiontrack.detection.dancetrack_loader import (
+        DanceTrackDetectorSequence,
+        DanceTrackSequence,
+        discover_dancetrack,
+    )
     from visiontrack.detection.noise import NoiseConfig
 
-    parser = argparse.ArgumentParser(description="Precompute DanceTrack cache (perturbed-GT)")
+    parser = argparse.ArgumentParser(description="Precompute DanceTrack cache")
     parser.add_argument("--data-root", required=True, help="DanceTrack root (contains val/)")
     parser.add_argument("--split", default="val")
     parser.add_argument("--out", default="data/cache/dancetrack")
@@ -44,24 +48,47 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--drop-prob", type=float, default=0.15)
     parser.add_argument("--fp-rate", type=float, default=1.0)
     parser.add_argument("--limit", type=int, default=0, help="cap #sequences (0 = all)")
+    # Real-detector mode: run an actual YOLOX ONNX over the frames instead of
+    # perturbing the GT — removes the oracle-perturbed caveat from the RQ1 test.
+    parser.add_argument("--detector-model", default=None,
+                        help="path to a YOLOX ONNX; if set, use REAL detections "
+                             "(not perturbed GT). Suggest --out data/cache/dancetrack_yolox")
+    parser.add_argument("--input-size", type=int, default=416)
+    parser.add_argument("--conf", type=float, default=0.1,
+                        help="detector confidence gate (low, to feed ByteTrack's low band)")
+    parser.add_argument("--seqs", default=None,
+                        help="comma-separated sequence names to include (default: all)")
     args = parser.parse_args(argv)
 
     seq_dirs = discover_dancetrack(args.data_root, args.split)
     if not seq_dirs:
         print(f"No DanceTrack sequences under {args.data_root}/{args.split}")
         return 1
+    if args.seqs:
+        wanted = {s.strip() for s in args.seqs.split(",")}
+        seq_dirs = [d for d in seq_dirs if d.name in wanted]
     if args.limit:
         seq_dirs = seq_dirs[: args.limit]
+
+    detector = None
+    if args.detector_model:
+        from visiontrack.detection.yolox_onnx import YoloxDetector
+        detector = YoloxDetector(args.detector_model, input_size=args.input_size,
+                                 conf_threshold=args.conf, class_filter={0})
 
     cfg = NoiseConfig(jitter_std=args.jitter_std, drop_prob=args.drop_prob, fp_rate=args.fp_rate)
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    mode = f"REAL detector ({Path(args.detector_model).name})" if detector else \
+        f"perturbed-GT, seed={args.seed}"
     total = 0
-    print(f"Caching {len(seq_dirs)} DanceTrack sequence(s) (perturbed-GT, seed={args.seed}) "
-          f"-> {out_dir}")
+    print(f"Caching {len(seq_dirs)} DanceTrack sequence(s) ({mode}) -> {out_dir}")
     for seq_dir in seq_dirs:
-        seq = DanceTrackSequence(seq_dir, noise_cfg=cfg, seed=args.seed)
+        if detector is not None:
+            seq = DanceTrackDetectorSequence(seq_dir, detector)
+        else:
+            seq = DanceTrackSequence(seq_dir, noise_cfg=cfg, seed=args.seed)
         out_path = out_dir / f"{seq.name}.npz"
         save_sequence_cache(seq, out_path)
         size = out_path.stat().st_size
