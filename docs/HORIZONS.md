@@ -81,7 +81,11 @@ tuning). Bonus: the same DanceTrack run reproduced RQ1 (appearance cuts IDSW
   holds without the oracle crutch — but the benefit shrinks and loses significance
   (ΔIDSW −15.3\* oracle → −1.8 n.s. real), because the weak nano detector's crops
   degrade the re-ID signal (the same lever as the MOT17 DPM null). Detection, not
-  tracking, is the bottleneck (motion-only HOTA 0.36→0.18). Details → [`PHASE3.md`](PHASE3.md).
+  tracking, is the bottleneck (motion-only HOTA 0.36→0.18). Running the **whole
+  zoo** on the same real caches cross-validates it a third way: the dominant
+  *significant* win shifts to ByteTrack's **two-stage low-score recovery**
+  (single-stage sort/deepsort/oc_sort all −0.04 MOTA, p=0.01), OC-SORT still hurts,
+  and appearance stays beneficial-but-n.s. Details → [`PHASE3.md`](PHASE3.md).
 - **SportsMOT** as a second maneuver dataset for RQ2.
 
 ---
