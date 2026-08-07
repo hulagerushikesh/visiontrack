@@ -4,8 +4,8 @@ Everything below is importable straight from the top-level package —
 `from visiontrack import …` — and is what `__all__` guarantees is stable.
 
 ```bash
-pip install visiontrack            # core: NumPy only
-pip install 'visiontrack[video]'   # + run on real video files
+pip install visiontrack-mot            # core: NumPy only
+pip install 'visiontrack-mot[video]'   # + run on real video files
 ```
 
 ## Core tracking

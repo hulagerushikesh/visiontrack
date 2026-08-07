@@ -127,8 +127,8 @@ Real-time on CPU (single-threaded): **2334 FPS** at 4 objects down to **214 FPS*
 ## Install & use
 
 ```bash
-pip install visiontrack            # core: NumPy only
-pip install 'visiontrack[video]'   # + run on your own video files
+pip install visiontrack-mot            # core: NumPy only
+pip install 'visiontrack-mot[video]'   # + run on your own video files
 ```
 
 ```python

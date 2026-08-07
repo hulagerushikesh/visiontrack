@@ -4,7 +4,7 @@ Point VisionTrack at any video file and get an annotated one back, with
 per-object coloured boxes and stable ids drawn on every frame.
 
 ```bash
-pip install 'visiontrack[video]'          # imageio + ffmpeg, lazily imported
+pip install 'visiontrack-mot[video]'          # imageio + ffmpeg, lazily imported
 visiontrack track input.mp4 out.mp4 --model models/yolox_nano.onnx
 ```
 

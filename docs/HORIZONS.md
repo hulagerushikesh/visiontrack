@@ -100,7 +100,7 @@ Details → [`VIDEO.md`](VIDEO.md).
 - **Real-time webcam** loop — *queued* (thin capture loop over the same pipeline).
 
 ### H2.3 — Package & document ✅ *done*
-`pip install visiontrack` (+ `[video]` extra). Stable top-level public API
+`pip install visiontrack-mot` (+ `[video]` extra). Stable top-level public API
 (`__all__`: `ByteTracker`, `TrackerConfig`, `preset`, `track_video`,
 `track_webcam`, `MotAccumulator`, …) guarded by a test; `visiontrack` console
 entry point. Full metadata + verified `python -m build` (sdist+wheel) + a

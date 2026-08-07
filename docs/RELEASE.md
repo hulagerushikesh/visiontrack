@@ -6,11 +6,13 @@ optional extras, and a build that produces a valid sdist + wheel
 
 ## One-time setup
 
-1. **Check the name is free** on PyPI (`pip index versions visiontrack`, or the
-   web). If taken, rename `project.name` in `pyproject.toml` (e.g.
-   `visiontrack-mot`) — the import package stays `visiontrack`.
-2. **Configure Trusted Publishing** (no API token needed): on the PyPI project's
-   *Publishing* settings, add a trusted publisher for
+1. **Name** — the plain `visiontrack` is already taken on PyPI by an unrelated
+   project, so the distribution is published as **`visiontrack-mot`**
+   (`project.name` in `pyproject.toml`; the import package stays `visiontrack`).
+   Nothing to do here unless you want a different available name.
+2. **Configure Trusted Publishing** (no API token needed): create the PyPI
+   project **`visiontrack-mot`** (it's created on first publish, or reserve it),
+   then in its *Publishing* settings add a trusted publisher for
    repo `hulagerushikesh/visiontrack`, workflow `release.yml`, environment `pypi`.
    (Do the same on TestPyPI first if you want a dry run.)
 
@@ -28,7 +30,7 @@ git push origin main --tags
 
 Pushing the `v*` tag triggers [`.github/workflows/release.yml`](../.github/workflows/release.yml),
 which builds the distributions, runs `twine check`, and publishes to PyPI via
-OIDC. Watch the Actions tab; on success `pip install visiontrack` works.
+OIDC. Watch the Actions tab; on success `pip install visiontrack-mot` works.
 
 ## Manual fallback
 
