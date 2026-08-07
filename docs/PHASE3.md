@@ -349,6 +349,59 @@ python -m experiments.dancetrack_appearance --embedder onnx --weights 0.0,0.15,0
   --out-fig assets/appearance_dancetrack.png
 ```
 
+### Removing the oracle caveat: real YOLOX detections on DanceTrack
+
+The scope bullet above predicted that a *real* detector — localising dancers worse
+than oracle-perturbed GT — would weaken appearance's benefit. We tested it:
+`DanceTrackDetectorSequence` runs a real **YOLOX-nano** ONNX over the dancer frames
+(person class, conf ≥ 0.1 to feed ByteTrack's low band) instead of perturbing GT,
+and OSNet re-ID embeds the *real* detector crops. Same 12 val sequences.
+
+First, the detector is the bottleneck. YOLOX-nano recovers ~84% of GT dancers
+(3.2 vs 3.8 boxes/frame) with mis-framed crops on fast motion, so absolute quality
+collapses vs oracle — motion-only **HOTA 0.359 → 0.179, MOTA 0.766 → 0.415, AssA
+0.214 → 0.095, IDSW baseline 217 → 99** (fewer detected objects ⇒ fewer tracks ⇒
+fewer total switches). This restates the H2.2 finding: *detection*, not the
+tracker, is the real-time and quality bottleneck.
+
+Δ vs the `w_app=0` motion-only baseline (real detections); `*` = p<0.05:
+
+| w_app | HOTA | IDF1 | AssA | IDSW |
+|------:|------|------|------|------|
+| 0.15 | −0.001 | −0.002 | −0.001 | −0.9 |
+| 0.30 | +0.001 | −0.002 | +0.001 | −1.8 |
+| 0.60 | **+0.003** | +0.001 | **+0.003** | −1.8 |
+
+![appearance on DanceTrack, real YOLOX](../assets/appearance_dancetrack_yolox.png)
+
+- **The hypothesis stays refuted — appearance still never hurts.** Even with weak,
+  imperfect real detections, every metric at `w_app=0.6` moves the *beneficial*
+  way (HOTA/AssA up, IDF1 up, IDSW down); appearance does not flip to harmful. The
+  core RQ1 conclusion — a **gated ranking appearance cost is robustly
+  beneficial-or-neutral** — holds *without* the oracle crutch.
+- **But the benefit shrinks and loses significance** (ΔIDSW −15.3\* oracle →
+  −1.8 n.s. real), exactly as the scope bullet predicted. This is the same lever
+  as the MOT17 **DPM null**: a weak detector's low recall and mis-framed crops
+  degrade the re-ID signal. So *whether appearance reaches significance is
+  detector-gated*; its *direction* (help-or-neutral) is not.
+- **Scope.** YOLOX-nano is a deliberately weak detector (0.9M params, 416px); a
+  stronger one (yolox-x, or ByteTrack's private detector) would yield cleaner
+  crops and likely restore significance — the finding is that crop quality gates
+  the *magnitude*, consistent across MOT17 and DanceTrack. Single detector, 12/25
+  sequences. Detections + embeddings are cached under `data/cache/dancetrack_yolox`
+  (gitignored); the model stays weight-clean.
+
+```bash
+# real-detector variant (needs models/yolox_nano.onnx — see docs/VIDEO.md)
+python data/cache/precompute_dancetrack.py --data-root ~/Downloads/dancetrack --split val \
+  --detector-model models/yolox_nano.onnx --out data/cache/dancetrack_yolox
+python data/cache/precompute_embeddings.py --data-root ~/Downloads/dancetrack --split val \
+  --cache-dir data/cache/dancetrack_yolox --glob 'dancetrack*.npz' \
+  --embedder onnx --model-path models/osnet_x0_25_msmt17.onnx
+python -m experiments.dancetrack_appearance --cache-dir data/cache/dancetrack_yolox \
+  --embedder onnx --detections-label "real YOLOX" --out-fig assets/appearance_dancetrack_yolox.png
+```
+
 ## Notes / limitations
 
 - Colour histogram (global or spatial) is deliberately weak; the `OnnxReID`

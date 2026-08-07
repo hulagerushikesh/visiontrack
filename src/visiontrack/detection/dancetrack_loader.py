@@ -28,7 +28,12 @@ from .base import Detection
 from .mot_loader import PEDESTRIAN_CLASS, FrameData, SeqInfo, _read_mot_txt, _xywh_to_xyxy
 from .noise import NoiseConfig, perturb_detections
 
-__all__ = ["DanceTrackSequence", "discover_dancetrack", "frame_filename"]
+__all__ = [
+    "DanceTrackSequence",
+    "DanceTrackDetectorSequence",
+    "discover_dancetrack",
+    "frame_filename",
+]
 
 
 def frame_filename(img_dir: Path, frame_idx: int) -> Path | None:
@@ -118,6 +123,49 @@ class DanceTrackSequence:
     def __iter__(self):
         for idx in range(1, self.info.length + 1):
             yield self.frame(idx)
+
+
+class DanceTrackDetectorSequence(DanceTrackSequence):
+    """DanceTrack with **real detector** boxes (e.g. YOLOX) instead of perturbed GT.
+
+    This removes the oracle-perturbed-GT caveat from the RQ1 DanceTrack test:
+    detections come from an actual object detector run on the dancer frames, so
+    detection quality is *part of the measurement* (as on MOT17), not held
+    artificially perfect. Ground truth is loaded identically (for evaluation).
+
+    ``detector`` is any object exposing ``detect(frame_rgb) -> list[Detection]``
+    (e.g. :class:`~visiontrack.detection.yolox_onnx.YoloxDetector`); ``class_ids``
+    keeps only those detection class ids (default ``{0}`` = COCO person), or
+    ``None`` to trust the detector's own filtering. Frames are read lazily with
+    ``imageio`` (the ``[video]`` extra).
+    """
+
+    def __init__(self, seq_dir: str | Path, detector, *,
+                 class_ids: frozenset[int] | None = frozenset({0})) -> None:
+        super().__init__(seq_dir)  # loads seqinfo + GT
+        self.detector = detector
+        self.class_ids = class_ids
+
+    def frame(self, idx: int) -> FrameData:
+        gt_xyxy, gt_ids, gt_classes, gt_conf, gt_vis = self._gt_arrays(idx)
+        dets = []
+        img_path = frame_filename(self.dir / "img1", idx)
+        if img_path is not None:
+            import imageio.v2 as imageio
+            frame_rgb = np.asarray(imageio.imread(img_path))[:, :, :3]
+            dets = [d for d in self.detector.detect(frame_rgb)
+                    if self.class_ids is None or d.class_id in self.class_ids]
+        if dets:
+            det_xyxy = np.stack([d.xyxy for d in dets], axis=0).astype(np.float64)
+            det_scores = np.array([d.score for d in dets], dtype=np.float64)
+        else:
+            det_xyxy = np.empty((0, 4), dtype=np.float64)
+            det_scores = np.empty((0,), dtype=np.float64)
+        return FrameData(
+            frame=idx, det_xyxy=det_xyxy, det_scores=det_scores,
+            gt_xyxy=gt_xyxy, gt_ids=gt_ids, gt_classes=gt_classes,
+            gt_conf=gt_conf, gt_vis=gt_vis,
+        )
 
 
 def discover_dancetrack(root: str | Path, split: str = "val") -> list[Path]:
