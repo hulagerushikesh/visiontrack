@@ -2,7 +2,7 @@
 # Override the interpreter if needed:  make test PY=python3.11
 PY ?= python3
 
-.PHONY: help install test lint reproduce reproduce-synth demo og-image zoo taxonomy gmc profile benchmark benchmark-dancetrack residual figures clean
+.PHONY: help install test lint reproduce reproduce-synth demo og-image zoo taxonomy gmc profile benchmark benchmark-dancetrack benchmark-dancetrack-yolox residual figures clean
 
 help:
 	@echo "targets:"
@@ -83,6 +83,13 @@ benchmark-dancetrack:
 	$(PY) -m experiments.benchmark --dataset dancetrack \
 		--out-html web/benchmark-dancetrack.html \
 		--out-md docs/results_benchmark_dancetrack.md
+
+# …and on REAL YOLOX detections (needs data/cache/dancetrack_yolox — see docs/PHASE3.md).
+benchmark-dancetrack-yolox:
+	$(PY) -m experiments.benchmark --dataset dancetrack \
+		--cache-dir data/cache/dancetrack_yolox --dataset-label "dancetrack (real YOLOX-nano)" \
+		--out-html web/benchmark-dancetrack-yolox.html \
+		--out-md docs/results_benchmark_dancetrack_yolox.md
 
 # RQ2: train the from-scratch motion residual and run the tracking ablation
 # (needs the MOT17 + DanceTrack GT caches).

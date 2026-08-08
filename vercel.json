@@ -3,6 +3,7 @@
     { "src": "web/index.html", "use": "@vercel/static" },
     { "src": "web/benchmark.html", "use": "@vercel/static" },
     { "src": "web/benchmark-dancetrack.html", "use": "@vercel/static" },
+    { "src": "web/benchmark-dancetrack-yolox.html", "use": "@vercel/static" },
     { "src": "web/writeup.html", "use": "@vercel/static" },
     { "src": "viz/webdemo/index.html", "use": "@vercel/static" },
     { "src": "assets/**", "use": "@vercel/static" }
@@ -10,6 +11,7 @@
   "routes": [
     { "src": "/", "dest": "/web/index.html" },
     { "src": "/benchmark/?", "dest": "/web/benchmark.html" },
+    { "src": "/benchmark/dancetrack-yolox/?", "dest": "/web/benchmark-dancetrack-yolox.html" },
     { "src": "/benchmark/dancetrack/?", "dest": "/web/benchmark-dancetrack.html" },
     { "src": "/writeup/?", "dest": "/web/writeup.html" },
     { "src": "/demo/?", "dest": "/viz/webdemo/index.html" },

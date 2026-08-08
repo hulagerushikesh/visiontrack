@@ -113,11 +113,14 @@ def run_benchmark(
     seeds: list | None = None,
     cache_dir: str = "data/cache/dancetrack",
     embedder: str = "onnx",
+    dataset_label: str | None = None,
 ) -> BenchmarkReport:
     """Run the trackers, score them, and assemble a :class:`BenchmarkReport`.
 
     ``dataset`` is ``"synthetic"`` (no data needed) or ``"dancetrack"`` (reads the
-    detection + Re-ID caches under ``cache_dir``).
+    detection + Re-ID caches under ``cache_dir``). ``dataset_label`` overrides only
+    the *displayed* dataset name (title/report) — e.g. ``"dancetrack (real YOLOX)"``
+    — while ``dataset`` still selects the data path.
     """
     names = tracker_names or list(PRESET_NAMES)
     if baseline not in names:
@@ -168,13 +171,14 @@ def run_benchmark(
         taxonomy.append({"condition": key, "pct_switch": p_sw, "pct_base": p_bg,
                          "lift": (p_sw / p_bg) if p_bg > 0 else float("nan")})
 
+    label = dataset_label or dataset
     meta = {
-        "dataset": dataset, "baseline": baseline, "trackers": names,
+        "dataset": label, "baseline": baseline, "trackers": names,
         "sequences": units, "seeds": seeds,
         "runs_per_tracker": len(df[df.variant == baseline]),
         "config_hash": config_hash, "idsw_classified": len(switches),
     }
-    return BenchmarkReport(dataset, baseline, _METRICS, leaderboard, taxonomy, meta)
+    return BenchmarkReport(label, baseline, _METRICS, leaderboard, taxonomy, meta)
 
 
 # -- rendering ---------------------------------------------------------------
@@ -225,14 +229,17 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--baseline", default="bytetrack")
     parser.add_argument("--cache-dir", default="data/cache/dancetrack")
     parser.add_argument("--embedder", default="onnx")
+    parser.add_argument("--dataset-label", default=None,
+                        help="displayed dataset name (e.g. 'dancetrack (real YOLOX)')")
     parser.add_argument("--out-md", default=None)
     parser.add_argument("--out-html", default=None)
     args = parser.parse_args(argv)
 
     names = args.trackers.split(",") if args.trackers else None
-    print(f"benchmarking {args.dataset} …")
+    print(f"benchmarking {args.dataset_label or args.dataset} …")
     rep = run_benchmark(args.dataset, names, args.baseline,
-                        cache_dir=args.cache_dir, embedder=args.embedder)
+                        cache_dir=args.cache_dir, embedder=args.embedder,
+                        dataset_label=args.dataset_label)
     print("\n" + rep.to_markdown())
     if args.out_md:
         Path(args.out_md).write_text(rep.to_markdown() + "\n")
