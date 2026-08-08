@@ -81,10 +81,30 @@ def render_html(rep) -> str:
                      ("config", m["config_hash"])]
     )
 
+    ds = html.escape(rep.dataset)
+    og_title = f"Honest MOT benchmark ({ds}) · VisionTrack"
+    og_desc = (f"A reproducible tracker leaderboard with paired significance and an "
+               f"ID-switch error taxonomy, in one report — {ds}.")
+    og_img = "https://visiontrack.hulage.in/assets/og-image.png"
+    social = (
+        f'<meta name="description" content="{og_desc}">'
+        f'<meta name="theme-color" content="#0b0e14">'
+        f'<meta property="og:type" content="website">'
+        f'<meta property="og:site_name" content="VisionTrack">'
+        f'<meta property="og:title" content="{og_title}">'
+        f'<meta property="og:description" content="{og_desc}">'
+        f'<meta property="og:image" content="{og_img}">'
+        f'<meta property="og:image:width" content="1200">'
+        f'<meta property="og:image:height" content="630">'
+        f'<meta name="twitter:card" content="summary_large_image">'
+        f'<meta name="twitter:title" content="{og_title}">'
+        f'<meta name="twitter:description" content="{og_desc}">'
+        f'<meta name="twitter:image" content="{og_img}">'
+    )
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<title>MOT benchmark — {html.escape(rep.dataset)}</title><style>{_CSS}</style></head><body>
+<title>MOT benchmark — {ds}</title>{social}<style>{_CSS}</style></head><body>
 <div class="wrap">
 <p class="eyebrow">VisionTrack · honest MOT benchmark</p>
 <h1>Tracker comparison — {html.escape(rep.dataset)}</h1>
