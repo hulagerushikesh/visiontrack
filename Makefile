@@ -2,7 +2,7 @@
 # Override the interpreter if needed:  make test PY=python3.11
 PY ?= python3
 
-.PHONY: help install test lint reproduce reproduce-synth demo og-image zoo taxonomy gmc profile benchmark benchmark-dancetrack benchmark-dancetrack-yolox residual figures clean
+.PHONY: help install test lint reproduce reproduce-synth demo og-image docs docs-serve zoo taxonomy gmc profile benchmark benchmark-dancetrack benchmark-dancetrack-yolox residual figures clean
 
 help:
 	@echo "targets:"
@@ -50,6 +50,15 @@ demo:
 # renders when visiontrack.hulage.in is shared. License-clean, deterministic.
 og-image:
 	$(PY) scripts/make_og_image.py
+
+# Build the browsable documentation site (mkdocs-material) from docs/ into site/.
+# Install the tooling first:  pip install -e ".[docs-site]"
+docs:
+	$(PY) -m mkdocs build
+
+# Live-reload preview at http://127.0.0.1:8000 while editing docs/.
+docs-serve:
+	$(PY) -m mkdocs serve
 
 # Tracker zoo: significance-tested comparison of the lineage presets
 # (single-stage SORT, DeepSORT, ByteTrack, ByteTrack+ReID, GIoU) on a hard
