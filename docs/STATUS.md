@@ -69,7 +69,7 @@ Last updated: 2026-08-08 (HEAD `01307e0`).
 ### Ready to build (self-contained)
 - [ ] **Real-time webcam GUI** (H2.2) — live preview window over `track_webcam`
       *(code-able; can't verify headlessly here — no camera/display)*
-- [ ] **mkdocs documentation site** — turn `docs/` into a browsable site
+- [x] **mkdocs documentation site** — `docs/` is a browsable Material site (`make docs`)
 - [ ] **Landing page redesign** — stronger hero/typography *(optional)*
 - [ ] Put the real-footage YOLOX video on the site — `/video` route
       *(deferred by you; clip is public-domain so it's hostable)*
