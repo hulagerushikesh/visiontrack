@@ -1,0 +1,99 @@
+site_name: VisionTrack
+site_description: A from-scratch multi-object tracker used as a controlled study of when the field's standard tricks actually help.
+site_url: https://visiontrack.hulage.in/docs/
+repo_url: https://github.com/hulagerushikesh/visiontrack
+repo_name: hulagerushikesh/visiontrack
+copyright: MIT-licensed · built from scratch on NumPy
+docs_dir: docs
+site_dir: site
+
+# docs/ doubles as GitHub-rendered markdown, so many pages link out to ../src,
+# ../assets, etc. Those resolve on GitHub but not inside the built site — keep
+# them as warnings, not build-breakers, and don't nag about the few internal
+# docs (PROJECT.md, EXECUTION_PLAN.md, *.html) that are intentionally off-nav.
+validation:
+  nav:
+    omitted_files: info
+    not_found: warn
+  links:
+    not_found: warn
+    absolute_links: info
+    unrecognized_links: info
+
+theme:
+  name: material
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - content.code.copy
+    - toc.follow
+    - search.suggest
+    - search.highlight
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+nav:
+  - Home: index.md
+  - The study:
+      - Overview (v2 paper): PROJECT_v2.md
+      - Phase 0 — Real data + cached detections: PHASE0.md
+      - Phase 1 — Statistical-rigor harness: PHASE1.md
+      - Phase 2 — Factored association cost: PHASE2.md
+      - "RQ1 — Appearance (centerpiece)": PHASE3.md
+      - RQ2 — Learned motion residual: PHASE4.md
+      - RQ3 — Calibrated uncertainty: PHASE5.md
+      - RQ4 — Global motion compensation: GMC_RQ4.md
+      - OC-SORT mechanics: OC_SORT.md
+      - ID-switch error taxonomy: ERROR_TAXONOMY.md
+  - Results:
+      - Benchmark — synthetic: results_benchmark_synth.md
+      - Benchmark — DanceTrack: results_benchmark_dancetrack.md
+      - Benchmark — DanceTrack (real YOLOX): results_benchmark_dancetrack_yolox.md
+      - Tracker zoo — synthetic: results_tracker_zoo.md
+      - Tracker zoo — DanceTrack: results_tracker_zoo_dancetrack.md
+      - Error taxonomy — DanceTrack: results_error_taxonomy_dancetrack.md
+      - GMC (RQ4): results_gmc_rq4.md
+      - Synthetic baseline: results_synth.md
+  - Use it:
+      - Public API: API.md
+      - Run on your own video: VIDEO.md
+      - Release to PyPI: RELEASE.md
+      - Deploy the site: DEPLOY.md
+  - Roadmap:
+      - Status checklist: STATUS.md
+      - Horizons: HORIZONS.md
+      - C++/CUDA sibling plan: CPP_CUDA_TRACKER_PLAN.md

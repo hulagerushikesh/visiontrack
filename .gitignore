@@ -42,3 +42,6 @@ docs/results_*.md
 # committed (own dataset licenses; keep the repo weight-free like the imagery).
 models/
 *.onnx
+
+# mkdocs build output
+/site/

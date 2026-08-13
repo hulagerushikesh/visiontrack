@@ -40,6 +40,8 @@ video = ["onnxruntime>=1.15", "imageio>=2.31", "imageio-ffmpeg>=0.4", "pillow>=9
 appearance = ["matplotlib>=3.6", "pillow>=9.0"]
 # Statistical-rigor harness under experiments/ (not needed by the core package).
 experiments = ["pandas>=1.5", "pyarrow>=10", "scipy>=1.9", "pyyaml>=6", "matplotlib>=3.6"]
+# Build the browsable documentation site (mkdocs) from docs/.  `make docs`.
+docs-site = ["mkdocs-material>=9.5"]
 dev = ["pytest>=7.0", "scipy>=1.9", "matplotlib>=3.6", "pillow>=9.0", "pandas>=1.5", "pyarrow>=10", "pyyaml>=6"]
 
 [project.scripts]
