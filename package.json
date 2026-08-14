@@ -3,6 +3,6 @@
   "private": true,
   "description": "Vercel build hook: renders the mkdocs-material docs into vercel_build/docs (served at /docs).",
   "scripts": {
-    "build": "python3 -m pip install --quiet --disable-pip-version-check 'mkdocs-material>=9.5' && python3 -m mkdocs build -d vercel_build/docs"
+    "build": "python3 -m pip install --quiet --disable-pip-version-check --target .pydeps 'mkdocs-material>=9.5' && PYTHONPATH=.pydeps python3 -m mkdocs build -d vercel_build/docs"
   }
 }
