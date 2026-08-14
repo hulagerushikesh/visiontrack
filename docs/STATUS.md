@@ -52,7 +52,7 @@ Last updated: 2026-08-08 (HEAD `01307e0`).
 - [x] Open-Graph / social meta + 1200×630 preview card
 - [x] Narrative write-up page — `/writeup`
 - [x] Study guide + CV roadmap (in repo)
-- [x] Live routes: `/`, `/demo`, `/writeup`, `/benchmark`, `/benchmark/dancetrack`, `/benchmark/dancetrack-yolox`
+- [x] Live routes: `/`, `/demo`, `/writeup`, `/benchmark`, `/benchmark/dancetrack`, `/benchmark/dancetrack-yolox`, `/docs`
 
 ### Quality / infra
 - [x] 335 tests passing (1 slow, opt-in) · ruff clean · CI on py3.10/3.11/3.12
@@ -69,7 +69,8 @@ Last updated: 2026-08-08 (HEAD `01307e0`).
 ### Ready to build (self-contained)
 - [ ] **Real-time webcam GUI** (H2.2) — live preview window over `track_webcam`
       *(code-able; can't verify headlessly here — no camera/display)*
-- [x] **mkdocs documentation site** — `docs/` is a browsable Material site (`make docs`)
+- [x] **mkdocs documentation site** — `docs/` is a browsable Material site (`make docs`),
+      built on Vercel and **live at visiontrack.hulage.in/docs**
 - [ ] **Landing page redesign** — stronger hero/typography *(optional)*
 - [ ] Put the real-footage YOLOX video on the site — `/video` route
       *(deferred by you; clip is public-domain so it's hostable)*
