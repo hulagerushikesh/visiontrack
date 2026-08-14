@@ -49,3 +49,4 @@ models/
 # Vercel docs build output
 /vercel_build/
 node_modules/
+.pydeps/
