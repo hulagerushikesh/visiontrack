@@ -45,3 +45,7 @@ models/
 
 # mkdocs build output
 /site/
+
+# Vercel docs build output
+/vercel_build/
+node_modules/

@@ -6,6 +6,9 @@ repo_name: hulagerushikesh/visiontrack
 copyright: MIT-licensed · built from scratch on NumPy
 docs_dir: docs
 site_dir: site
+# Emit flat foo.html files (not foo/index.html) so the site mounts cleanly at a
+# subpath (/docs) on plain static hosting without directory-index routing.
+use_directory_urls: false
 
 # docs/ doubles as GitHub-rendered markdown, so many pages link out to ../src,
 # ../assets, etc. Those resolve on GitHub but not inside the built site — keep
