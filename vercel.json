@@ -5,6 +5,7 @@
     { "src": "web/benchmark-dancetrack.html", "use": "@vercel/static" },
     { "src": "web/benchmark-dancetrack-yolox.html", "use": "@vercel/static" },
     { "src": "web/writeup.html", "use": "@vercel/static" },
+    { "src": "web/video.html", "use": "@vercel/static" },
     { "src": "viz/webdemo/index.html", "use": "@vercel/static" },
     { "src": "assets/**", "use": "@vercel/static" },
     { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "vercel_build" } }
@@ -15,6 +16,7 @@
     { "src": "/benchmark/dancetrack-yolox/?", "dest": "/web/benchmark-dancetrack-yolox.html" },
     { "src": "/benchmark/dancetrack/?", "dest": "/web/benchmark-dancetrack.html" },
     { "src": "/writeup/?", "dest": "/web/writeup.html" },
+    { "src": "/video/?", "dest": "/web/video.html" },
     { "src": "/demo/?", "dest": "/viz/webdemo/index.html" },
     { "src": "/docs/?", "dest": "/docs/index.html" },
     { "src": "/docs/(.+)", "dest": "/docs/$1" },
