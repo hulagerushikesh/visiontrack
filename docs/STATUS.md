@@ -56,7 +56,7 @@ Last updated: 2026-08-08 (HEAD `01307e0`).
 - [x] Live routes: `/`, `/demo`, `/writeup`, `/benchmark`, `/benchmark/dancetrack`, `/benchmark/dancetrack-yolox`, `/docs`
 
 ### Quality / infra
-- [x] 341 tests passing (1 slow, opt-in) · ruff clean · CI on py3.10/3.11/3.12
+- [x] 342 tests passing (1 slow, opt-in) · ruff clean · CI on py3.10/3.11/3.12
 - [x] Weight-clean + imagery-clean repo · fully reproducible (config hash + seeds)
 
 ### User-only actions (cleared)

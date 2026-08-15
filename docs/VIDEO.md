@@ -80,11 +80,13 @@ optional live preview window:
 ```bash
 visiontrack webcam --model models/yolox_nano.onnx --mirror
 #   press q or Esc to quit; prints achieved FPS on exit
+visiontrack webcam --model models/yolox_nano.onnx --record session.mp4   # save it
 ```
 
 The preview window uses OpenCV, imported lazily so it is **never a hard
 dependency** — install it only if you want the window (`pip install
-opencv-python`), or run headless with `--no-window`.
+opencv-python`), or run headless with `--no-window`. `--record PATH` also encodes
+the annotated session to an MP4 (at `--record-fps`, default 30).
 
 ```python
 from visiontrack.video import track_webcam
