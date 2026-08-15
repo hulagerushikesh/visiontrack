@@ -136,6 +136,8 @@ def track_webcam(
     device: str = "<video0>",
     reader=None,
     mirror: bool = False,
+    record: str | None = None,
+    record_fps: float = 30.0,
     max_frames: int | None = None,
 ) -> VideoSummary:
     """Track a live camera stream in real time, invoking ``on_frame`` per frame.
@@ -152,20 +154,27 @@ def track_webcam(
     (``"<video0>"`` on Linux/macOS) — that branch needs the ``[video]`` extra and
     a real camera, so only it is untested; the shared per-frame core is covered.
 
-    ``mirror`` horizontally flips each frame (natural selfie view). The returned
-    :class:`VideoSummary` reports the achieved average throughput in ``fps``.
+    ``mirror`` horizontally flips each frame (natural selfie view). If ``record``
+    is a path, the annotated frames are also encoded to that MP4 at ``record_fps``
+    (needs the ``[video]`` extra). The returned :class:`VideoSummary` reports the
+    achieved average throughput in ``fps``; ``output_path`` is ``record`` when a
+    recording was written, else ``"<webcam>"``.
     """
     import time
 
     own_reader = reader is None
-    if own_reader:
+    writer = None
+    if own_reader or record is not None:
         try:
             import imageio.v2 as imageio
         except ImportError as exc:
             raise ImportError(
                 "track_webcam needs the [video] extra: pip install 'visiontrack[video]'"
             ) from exc
-        reader = imageio.get_reader(device)  # pragma: no cover - hardware-dependent
+        if own_reader:
+            reader = imageio.get_reader(device)  # pragma: no cover - hardware-dependent
+        if record is not None:
+            writer = imageio.get_writer(record, fps=record_fps, macro_block_size=None)
 
     tracker = ByteTracker(config or TrackerConfig())
     seen_ids: set[int] = set()
@@ -183,6 +192,8 @@ def track_webcam(
             for o in obs:
                 seen_ids.add(o.track_id)
             annotated = draw_observations(frame, obs)
+            if writer is not None:
+                writer.append_data(annotated)
             if on_frame is not None:
                 on_frame(annotated, obs)
             n += 1
@@ -191,8 +202,10 @@ def track_webcam(
     finally:
         if own_reader:
             reader.close()  # pragma: no cover - hardware-dependent
+        if writer is not None:
+            writer.close()
 
     elapsed = time.perf_counter() - start
     fps = n / elapsed if elapsed > 0 else 0.0
     return VideoSummary(frames=n, unique_tracks=len(seen_ids), fps=fps,
-                        output_path="<webcam>")
+                        output_path=record if record is not None else "<webcam>")

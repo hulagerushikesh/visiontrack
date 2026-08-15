@@ -295,10 +295,12 @@ def cmd_webcam(args: argparse.Namespace) -> int:
         summary = track_webcam(
             detector, TrackerConfig(), on_frame=on_frame,
             class_filter=class_filter, device=args.device,
-            mirror=args.mirror, max_frames=args.max_frames,
+            mirror=args.mirror, record=args.record, record_fps=args.record_fps,
+            max_frames=args.max_frames,
         )
+        dest = f" -> {summary.output_path}" if args.record else ""
         print(f"done: {summary.frames} frames @ {summary.fps:.1f} fps, "
-              f"{summary.unique_tracks} unique tracks")
+              f"{summary.unique_tracks} unique tracks{dest}")
     except _WebcamQuit:
         print("webcam stopped by user")
     finally:
@@ -378,6 +380,10 @@ def build_parser() -> argparse.ArgumentParser:
     p_cam.add_argument("--mirror", action="store_true", help="flip horizontally (selfie view)")
     p_cam.add_argument("--no-window", action="store_true",
                        help="process headlessly without a preview window")
+    p_cam.add_argument("--record", default=None, metavar="PATH",
+                       help="also save the annotated session to this .mp4")
+    p_cam.add_argument("--record-fps", type=float, default=30.0,
+                       help="frame rate for the recorded mp4 (default: 30)")
     p_cam.add_argument("--max-frames", type=int, default=None, help="stop after N frames")
     p_cam.set_defaults(func=cmd_webcam)
 

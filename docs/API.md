@@ -52,10 +52,12 @@ summary = track_video("in.mp4", "out.mp4", det)   # -> VideoSummary
   max_frames=None, progress=False) -> VideoSummary`** — detector-agnostic
   (any `detect(frame_rgb) -> list[Detection]`).
 - **`track_webcam(detector, config=None, *, on_frame=None, class_filter=None,
-  device="<video0>", reader=None, mirror=False, max_frames=None) -> VideoSummary`**
-  — live-stream variant. `on_frame(annotated_rgb, observations)` is the per-frame
-  sink; `reader` injects any iterable of RGB frames (defaults to the camera), so
-  the loop runs headlessly; `mirror` flips for a selfie view. CLI: `visiontrack webcam`.
+  device="<video0>", reader=None, mirror=False, record=None, record_fps=30.0,
+  max_frames=None) -> VideoSummary`** — live-stream variant.
+  `on_frame(annotated_rgb, observations)` is the per-frame sink; `reader` injects
+  any iterable of RGB frames (defaults to the camera), so the loop runs headlessly;
+  `mirror` flips for a selfie view; `record` also encodes the annotated session to
+  an MP4. CLI: `visiontrack webcam`.
 - **`VideoSummary`** — `frames, unique_tracks, fps, output_path`.
 
 ## Evaluation

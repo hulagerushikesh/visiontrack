@@ -9,6 +9,7 @@ design, since they can't run in CI.
 from __future__ import annotations
 
 import numpy as np
+import pytest
 
 from visiontrack.detection.base import Detection
 from visiontrack.video import track_webcam
@@ -107,6 +108,21 @@ def test_track_webcam_respects_class_filter():
     track_webcam(_TwoClassDetector(), on_frame=sink,
                  reader=_frames(6), class_filter={0})
     assert max(boxes_per_frame) <= 1
+
+
+def test_track_webcam_record_writes_annotated_mp4(tmp_path):
+    # Recording reuses the same imageio writer as track_video; skip if [video] absent.
+    pytest.importorskip("imageio")
+    out = tmp_path / "session.mp4"
+    summary = track_webcam(_StubDetector(), reader=_frames(20),
+                           record=str(out), record_fps=10.0)
+    assert summary.frames == 20
+    assert summary.output_path == str(out)
+    assert out.exists() and out.stat().st_size > 0
+    import imageio.v2 as iio
+    r = iio.get_reader(str(out))
+    assert r.count_frames() >= 16          # codecs may pad/trim a few frames
+    r.close()
 
 
 def test_build_webcam_sink_headless_is_a_noop():
