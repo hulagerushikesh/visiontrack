@@ -10,7 +10,6 @@ Several of the answers are honest negatives — which is the point.
 
 [Live demo :material-open-in-new:](https://visiontrack.hulage.in){ .md-button .md-button--primary }
 [Benchmark :material-open-in-new:](https://visiontrack.hulage.in/benchmark){ .md-button }
-[GitHub :material-github:](https://github.com/hulagerushikesh/visiontrack){ .md-button }
 
 ```bash
 pip install visiontrack-mot
