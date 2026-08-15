@@ -1,8 +1,6 @@
 site_name: VisionTrack
 site_description: A from-scratch multi-object tracker used as a controlled study of when the field's standard tricks actually help.
 site_url: https://visiontrack.hulage.in/docs/
-repo_url: https://github.com/hulagerushikesh/visiontrack
-repo_name: hulagerushikesh/visiontrack
 copyright: MIT-licensed · built from scratch on NumPy
 docs_dir: docs
 site_dir: site
@@ -25,8 +23,6 @@ validation:
 
 theme:
   name: material
-  icon:
-    repo: fontawesome/brands/github
   features:
     - navigation.instant
     - navigation.tracking
