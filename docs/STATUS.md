@@ -53,7 +53,7 @@ Last updated: 2026-08-08 (HEAD `01307e0`).
 - [x] Open-Graph / social meta + 1200×630 preview card
 - [x] Narrative write-up page — `/writeup`
 - [x] Study guide + CV roadmap (in repo)
-- [x] Live routes: `/`, `/demo`, `/writeup`, `/benchmark`, `/benchmark/dancetrack`, `/benchmark/dancetrack-yolox`, `/docs`
+- [x] Live routes: `/`, `/demo`, `/writeup`, `/video`, `/benchmark`, `/benchmark/dancetrack`, `/benchmark/dancetrack-yolox`, `/docs`
 
 ### Quality / infra
 - [x] 342 tests passing (1 slow, opt-in) · ruff clean · CI on py3.10/3.11/3.12
@@ -75,8 +75,8 @@ Last updated: 2026-08-08 (HEAD `01307e0`).
 - [x] **mkdocs documentation site** — `docs/` is a browsable Material site (`make docs`),
       built on Vercel and **live at visiontrack.hulage.in/docs**
 - [ ] **Landing page redesign** — stronger hero/typography *(optional)*
-- [ ] Put the real-footage YOLOX video on the site — `/video` route
-      *(deferred by you; clip is public-domain so it's hostable)*
+- [x] Put the real-footage YOLOX video on the site — **live at `/video`**
+      (public-domain Bangkok-traffic clip; 300 frames, 107 tracks, ~1.8 MB mp4)
 
 ### Research extensions (heavier)
 - [ ] **SportsMOT** — second non-linear-motion dataset for RQ2 *(large download)*
@@ -100,6 +100,6 @@ Last updated: 2026-08-08 (HEAD `01307e0`).
 ## Suggested priority order
 1. Real-detector strengthening is done — the study is now maximally honest.
 2. Webcam CLI done — the "usable tool" story is complete (file + live camera).
-3. **`/video` route** — surface the real-footage demo already produced.
+3. `/video` route done — the real-footage demo is live on the site.
 4. **SportsMOT** — the last sizeable research extension.
 5. **C++/CUDA sibling** — a systems/GPU piece when the toolchain is set up.

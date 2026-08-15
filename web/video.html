@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>VisionTrack — real-footage tracking demo</title>
+<meta name="description" content="The from-scratch NumPy tracker running on real street footage: YOLOX detections associated by an 8-state Kalman filter, Hungarian matching, and ByteTrack, with stable per-object ids.">
+<link rel="canonical" href="https://visiontrack.hulage.in/video">
+<meta name="theme-color" content="#0b0e14">
+<meta property="og:type" content="video.other">
+<meta property="og:site_name" content="VisionTrack">
+<meta property="og:url" content="https://visiontrack.hulage.in/video">
+<meta property="og:title" content="VisionTrack — real-footage tracking demo">
+<meta property="og:description" content="The from-scratch NumPy tracker on real street footage — YOLOX detections, an 8-state Kalman filter, Hungarian matching, and ByteTrack, drawing stable per-object ids across a crowded scene.">
+<meta property="og:image" content="https://visiontrack.hulage.in/assets/street_tracking_poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="VisionTrack — real-footage tracking demo">
+<meta name="twitter:description" content="The from-scratch NumPy tracker on real street footage, with stable per-object ids across a crowded scene.">
+<meta name="twitter:image" content="https://visiontrack.hulage.in/assets/street_tracking_poster.jpg">
+<style>
+  :root {
+    --bg: #f4f7fb; --surface: #ffffff; --surface-2: #f0f3f8; --border: #dbe2ec;
+    --ink: #0e141b; --ink-2: #33404f; --muted: #5c6773; --faint: #8a94a1;
+    --accent: #2f7ae5; --accent-soft: #e7f0fd; --good: #1f9d63;
+    --screen: #0c0f14; --screen-edge: #232a34;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --shadow: 0 1px 2px rgba(13,20,30,.05), 0 10px 34px rgba(13,20,30,.07);
+    --maxw: 960px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b0e14; --surface: #141922; --surface-2: #1a2029; --border: #26303c;
+      --ink: #e7ebf1; --ink-2: #b7c0cd; --muted: #8792a1; --faint: #616d7c;
+      --accent: #5aa2ff; --accent-soft: #16283f; --good: #37c07e;
+      --screen: #06080c; --screen-edge: #232a34;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 40px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f4f7fb; --surface: #ffffff; --surface-2: #f0f3f8; --border: #dbe2ec;
+    --ink: #0e141b; --ink-2: #33404f; --muted: #5c6773; --faint: #8a94a1;
+    --accent: #2f7ae5; --accent-soft: #e7f0fd; --good: #1f9d63;
+    --screen: #0c0f14; --screen-edge: #232a34;
+    --shadow: 0 1px 2px rgba(13,20,30,.05), 0 10px 34px rgba(13,20,30,.07);
+  }
+  :root[data-theme="dark"] {
+    --bg: #0b0e14; --surface: #141922; --surface-2: #1a2029; --border: #26303c;
+    --ink: #e7ebf1; --ink-2: #b7c0cd; --muted: #8792a1; --faint: #616d7c;
+    --accent: #5aa2ff; --accent-soft: #16283f; --good: #37c07e;
+    --screen: #06080c; --screen-edge: #232a34;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 40px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans);
+    line-height: 1.6; font-size: 16px; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  nav { border-bottom: 1px solid var(--border); }
+  .nav-in { max-width: var(--maxw); margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+  .brand { font-family: var(--mono); font-weight: 700; letter-spacing: .02em; font-size: 15px; display: flex; align-items: center; gap: 9px; }
+  .brand a { text-decoration: none; }
+  .brand .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .nav-in .spacer { flex: 1; }
+  .nav-in a.navlink { font-family: var(--mono); font-size: 13px; color: var(--muted); text-decoration: none; padding: 6px 12px; border: 1px solid var(--border); border-radius: 8px; }
+  .nav-in a.navlink:hover { color: var(--ink); border-color: var(--accent); }
+
+  .hero { padding: 60px 0 8px; }
+  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin: 0 0 14px; }
+  h1 { font-size: clamp(28px, 4.6vw, 42px); line-height: 1.1; letter-spacing: -.025em; margin: 0 0 18px; font-weight: 800; text-wrap: balance; max-width: 20ch; }
+  .lede { font-size: 18px; color: var(--ink-2); max-width: 62ch; margin: 0 0 8px; }
+  .lede b { color: var(--ink); }
+
+  .screen { margin: 34px 0 8px; background: var(--screen); border: 1px solid var(--screen-edge);
+    border-radius: 16px; padding: 14px; box-shadow: var(--shadow); }
+  .screen-bar { display: flex; gap: 6px; padding: 4px 6px 12px; }
+  .screen-bar i { width: 11px; height: 11px; border-radius: 50%; background: #2b333f; display: block; }
+  .screen video { width: 100%; display: block; border-radius: 8px; background: #04060a; }
+  .screen-cap { font-family: var(--mono); font-size: 12px; color: var(--faint); text-align: center; margin: 12px 0 2px; }
+
+  .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 30px 0 8px; }
+  @media (max-width: 720px) { .facts { grid-template-columns: repeat(2, 1fr); } }
+  .fact { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+  .fact .n { font-family: var(--mono); font-weight: 800; font-size: 20px; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .fact .l { color: var(--muted); font-size: 13px; margin-top: 4px; }
+
+  .section-label { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); margin: 52px 0 14px; }
+  .prose { color: var(--ink-2); max-width: 66ch; }
+  .prose p { margin: 0 0 14px; }
+  .prose b { color: var(--ink); }
+  pre { background: var(--screen); color: #dfe6f0; border: 1px solid var(--screen-edge); border-radius: 12px;
+    padding: 16px 18px; overflow-x: auto; font-family: var(--mono); font-size: 13px; line-height: 1.55; }
+  pre .c { color: #7d8aa0; }
+  .note { font-size: 13.5px; color: var(--muted); border-left: 2px solid var(--border); padding: 2px 0 2px 14px; margin: 18px 0; }
+  .note a { color: var(--accent); }
+
+  footer { margin-top: 60px; border-top: 1px solid var(--border); }
+  .foot-in { max-width: var(--maxw); margin: 0 auto; padding: 26px 24px 60px; font-family: var(--mono); font-size: 12.5px; color: var(--muted); display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+  .foot-in a { color: var(--muted); text-decoration: none; }
+  .foot-in a:hover { color: var(--accent); }
+  .foot-in .spacer { flex: 1; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <span class="brand"><span class="dot"></span> <a href="/">VisionTrack</a></span>
+    <span class="spacer"></span>
+    <a class="navlink" href="/demo">interactive demo →</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <section class="hero">
+    <p class="eyebrow">H2.1 · the tracker on real footage</p>
+    <h1>Same tracker, real streets.</h1>
+    <p class="lede">The demo you can play with is synthetic. This is the identical pipeline —
+    <b>YOLOX</b> detections associated by the from-scratch <b>8-state Kalman filter</b>,
+    <b>Hungarian</b> matching, and <b>ByteTrack</b> — run over a real, crowded intersection.
+    No tracking library: the association, gating, and lifecycle are all NumPy.</p>
+
+    <div class="screen">
+      <div class="screen-bar"><i></i><i></i><i></i></div>
+      <video controls autoplay muted loop playsinline preload="metadata"
+             poster="/assets/street_tracking_poster.jpg">
+        <source src="/assets/street_tracking.mp4" type="video/mp4">
+        Your browser can't play this video —
+        <a href="/assets/street_tracking.mp4">download the MP4</a> instead.
+      </video>
+      <p class="screen-cap">YOLOX-nano detections → NumPy ByteTracker → stable per-object ids · 480p, 12s</p>
+    </div>
+
+    <div class="facts">
+      <div class="fact"><div class="n">300</div><div class="l">frames tracked (25 fps)</div></div>
+      <div class="fact"><div class="n">107</div><div class="l">unique track ids over the clip</div></div>
+      <div class="fact"><div class="n">6</div><div class="l">street classes (person + vehicles)</div></div>
+      <div class="fact"><div class="n">0</div><div class="l">tracking libraries used</div></div>
+    </div>
+  </section>
+
+  <p class="section-label">How it was made</p>
+  <div class="prose">
+    <p>Every frame is detected by a COCO <b>YOLOX-nano</b> ONNX model, filtered to the common
+    street classes, then handed to the from-scratch tracker. Because a COCO detector scores
+    lower than a MOT-tuned one, the spawn/confirm gates are relaxed a touch — otherwise the
+    exact same code path as the benchmark study. The whole thing is one command:</p>
+<pre><span class="c"># 1. a YOLOX-nano ONNX model (see the docs) + 2. any licence-clean clip</span>
+python scripts/render_video_demo.py clip.mp4 tracked.mp4 \
+    --model models/yolox_nano.onnx --max-frames 300</pre>
+    <p class="note">Source: <b>“Bangkok Traffic During Enduring Partners 26”</b> by SSgt James Bunn,
+    U.S. Army National Guard — <b>public domain</b> (a U.S. federal work), so the annotated
+    result is freely redistributable. The model and raw footage stay out of the repo
+    (weight- and imagery-clean); the script and tests are what live in git. Full recipe in the
+    <a href="/docs/VIDEO.html">documentation</a>.</p>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-in">
+    <span>VisionTrack · MIT</span>
+    <span class="spacer"></span>
+    <a href="/">home</a>
+    <a href="/writeup">write-up</a>
+    <a href="/demo">demo</a>
+    <a href="/benchmark">benchmark</a>
+    <a href="/docs/">docs</a>
+  </div>
+</footer>
+
+</body>
+</html>
