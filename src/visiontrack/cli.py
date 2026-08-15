@@ -241,6 +241,71 @@ def cmd_track(args: argparse.Namespace) -> int:
     return 0
 
 
+class _WebcamQuit(Exception):
+    """Raised by the preview sink when the user asks to stop (q / Esc)."""
+
+
+def _build_webcam_sink(args):
+    """Return ``(on_frame, close)`` for the live preview, honouring ``--no-window``.
+
+    The window uses OpenCV, imported lazily so it never becomes a hard dependency:
+    headless runs (``--no-window``) and the test suite never touch it.
+    """
+    if args.no_window:
+        return (lambda frame, obs: None), (lambda: None)
+
+    try:
+        import cv2
+    except ImportError:
+        print(
+            "live preview needs OpenCV: pip install opencv-python "
+            "(or re-run with --no-window)",
+            file=sys.stderr,
+        )
+        raise SystemExit(2) from None
+
+    import numpy as np
+
+    win = "VisionTrack — webcam (q/Esc to quit)"
+    cv2.namedWindow(win, cv2.WINDOW_NORMAL)
+
+    def on_frame(frame_rgb, obs):
+        cv2.imshow(win, np.ascontiguousarray(frame_rgb[:, :, ::-1]))  # RGB->BGR
+        if (cv2.waitKey(1) & 0xFF) in (27, ord("q")):
+            raise _WebcamQuit
+
+    return on_frame, cv2.destroyAllWindows
+
+
+def cmd_webcam(args: argparse.Namespace) -> int:
+    """Track a live camera stream in real time with a YOLOX detector + preview."""
+    from .detection.yolox_onnx import YoloxDetector
+    from .tracking.config import TrackerConfig
+    from .video import track_webcam
+
+    class_filter = None if args.all_classes else {0}  # default: person only
+    detector = YoloxDetector(
+        args.model, input_size=args.input_size,
+        conf_threshold=args.conf, class_filter=class_filter,
+    )
+    on_frame, close = _build_webcam_sink(args)
+    print(f"webcam: device={args.device}  model={args.model}"
+          + ("" if args.no_window else "  (press q or Esc to quit)"))
+    try:
+        summary = track_webcam(
+            detector, TrackerConfig(), on_frame=on_frame,
+            class_filter=class_filter, device=args.device,
+            mirror=args.mirror, max_frames=args.max_frames,
+        )
+        print(f"done: {summary.frames} frames @ {summary.fps:.1f} fps, "
+              f"{summary.unique_tracks} unique tracks")
+    except _WebcamQuit:
+        print("webcam stopped by user")
+    finally:
+        close()
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="visiontrack", description="Online multi-object tracking demo & evaluation"
@@ -302,6 +367,19 @@ def build_parser() -> argparse.ArgumentParser:
                          help="track all COCO classes (default: person only)")
     p_track.add_argument("--max-frames", type=int, default=None, help="stop after N frames")
     p_track.set_defaults(func=cmd_track)
+
+    p_cam = sub.add_parser("webcam", help="track a live camera in real time (needs [video])")
+    p_cam.add_argument("--model", required=True, help="YOLOX .onnx model path")
+    p_cam.add_argument("--device", default="<video0>", help="imageio camera spec (def: <video0>)")
+    p_cam.add_argument("--input-size", type=int, default=416, help="YOLOX square input side")
+    p_cam.add_argument("--conf", type=float, default=0.25, help="detector confidence threshold")
+    p_cam.add_argument("--all-classes", action="store_true",
+                       help="track all COCO classes (default: person only)")
+    p_cam.add_argument("--mirror", action="store_true", help="flip horizontally (selfie view)")
+    p_cam.add_argument("--no-window", action="store_true",
+                       help="process headlessly without a preview window")
+    p_cam.add_argument("--max-frames", type=int, default=None, help="stop after N frames")
+    p_cam.set_defaults(func=cmd_webcam)
 
     return parser
 

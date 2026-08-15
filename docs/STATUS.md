@@ -32,8 +32,9 @@ Last updated: 2026-08-08 (HEAD `01307e0`).
 - [x] H1.3b — RQ4 GMC
 - [x] H1.x — real YOLOX detector on DanceTrack (+ full-lineage zoo cross-check)
 
-### Horizon 2 — make it usable  *(complete except webcam GUI)*
+### Horizon 2 — make it usable  *(complete)*
 - [x] H2.1 — run on arbitrary video (YOLOX + `track_video` CLI)
+- [x] H2.2 — run on a live camera (`visiontrack webcam` — real-time preview + FPS)
 - [x] H2.1 — real-footage annotated demo (+ YOLOX raw-grid decode fix)
 - [x] H2.2 — throughput/FPS profiling
 - [x] H2.3 — pip-installable + stable public API + release automation
@@ -55,7 +56,7 @@ Last updated: 2026-08-08 (HEAD `01307e0`).
 - [x] Live routes: `/`, `/demo`, `/writeup`, `/benchmark`, `/benchmark/dancetrack`, `/benchmark/dancetrack-yolox`, `/docs`
 
 ### Quality / infra
-- [x] 335 tests passing (1 slow, opt-in) · ruff clean · CI on py3.10/3.11/3.12
+- [x] 341 tests passing (1 slow, opt-in) · ruff clean · CI on py3.10/3.11/3.12
 - [x] Weight-clean + imagery-clean repo · fully reproducible (config hash + seeds)
 
 ### User-only actions (cleared)
@@ -67,8 +68,10 @@ Last updated: 2026-08-08 (HEAD `01307e0`).
 ## 🔲 Planned / next
 
 ### Ready to build (self-contained)
-- [ ] **Real-time webcam GUI** (H2.2) — live preview window over `track_webcam`
-      *(code-able; can't verify headlessly here — no camera/display)*
+- [x] **Real-time webcam CLI** (H2.2) — `visiontrack webcam` runs the tracker on a
+      live camera with an optional OpenCV preview, mirror, and real FPS readout.
+      Frame source is injectable, so the whole detect→track→draw loop is tested
+      headlessly; only the literal camera + preview window need real hardware.
 - [x] **mkdocs documentation site** — `docs/` is a browsable Material site (`make docs`),
       built on Vercel and **live at visiontrack.hulage.in/docs**
 - [ ] **Landing page redesign** — stronger hero/typography *(optional)*
@@ -96,8 +99,7 @@ Last updated: 2026-08-08 (HEAD `01307e0`).
 
 ## Suggested priority order
 1. Real-detector strengthening is done — the study is now maximally honest.
-2. **Webcam GUI** — completes the "usable tool" story.
+2. Webcam CLI done — the "usable tool" story is complete (file + live camera).
 3. **`/video` route** — surface the real-footage demo already produced.
-4. **mkdocs site** — polish once content is stable.
-5. **SportsMOT** — the last sizeable research extension.
-6. **C++/CUDA sibling** — a systems/GPU piece when the toolchain is set up.
+4. **SportsMOT** — the last sizeable research extension.
+5. **C++/CUDA sibling** — a systems/GPU piece when the toolchain is set up.
