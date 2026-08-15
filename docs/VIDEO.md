@@ -72,6 +72,35 @@ annotated result is freely redistributable. Nothing here is committed as imagery
 the model, source, and output all stay local/gitignored, keeping the repo
 imagery-clean; the script + tests are what live in git.
 
+## H2.2 — Run the tracker on a live camera
+
+The same detect→track→draw pipeline runs in real time on a webcam, with an
+optional live preview window:
+
+```bash
+visiontrack webcam --model models/yolox_nano.onnx --mirror
+#   press q or Esc to quit; prints achieved FPS on exit
+```
+
+The preview window uses OpenCV, imported lazily so it is **never a hard
+dependency** — install it only if you want the window (`pip install
+opencv-python`), or run headless with `--no-window`.
+
+```python
+from visiontrack.video import track_webcam
+from visiontrack.detection.yolox_onnx import YoloxDetector
+
+det = YoloxDetector("models/yolox_nano.onnx", class_filter={0})
+# on_frame gets (annotated_rgb, observations); reader injects any frame source.
+summary = track_webcam(det, on_frame=my_sink, mirror=True)
+print(summary.fps)   # measured real-time throughput
+```
+
+The frame source is decoupled from the hardware: pass any iterable of RGB frames
+as `reader=` and the whole loop runs headlessly — which is exactly how the tests
+exercise it, with no camera and no window. Only opening a real camera and drawing
+the OpenCV window need physical hardware.
+
 ## Notes
 
 - Default tracks **person** only (COCO class 0); pass `--all-classes` for all.
