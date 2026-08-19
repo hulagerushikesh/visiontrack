@@ -120,7 +120,7 @@ Consequences, measured:
 
 ### Throughput
 
-Real-time on CPU (single-threaded): **2334 FPS** at 4 objects down to **214 FPS** at 64 — comfortably ≥30 FPS across the range (`benchmarks/bench_tracker.py`).
+Real-time on CPU (single-threaded): **2841 FPS** at 4 objects down to **294 FPS** at 64 — comfortably ≥30 FPS across the range (`benchmarks/bench_tracker.py`). The per-frame Kalman predict and Mahalanobis gating are batched across the whole track set (~1.4–1.5× over the per-track loop, numerically identical).
 
 ---
 

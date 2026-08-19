@@ -79,6 +79,26 @@ class ByteTracker:
 
         self._residual = MotionResidual.from_path(self.cfg.motion_residual_path)
 
+    def _predict_all(self) -> None:
+        """Advance every track's Kalman state one step in a single batched call.
+
+        Equivalent to calling ``track.predict()`` on each track (the filter maths
+        is bit-identical whether a state is advanced alone or stacked with
+        others), but replaces the per-track Python loop over ``kf.predict`` with
+        one ``(N, 8)`` / ``(N, 8, 8)`` batched predict — the per-frame hot path.
+        """
+        tracks = self.tracks
+        if not tracks:
+            return
+        means = np.stack([t.mean for t in tracks])
+        covs = np.stack([t.covariance for t in tracks])
+        means, covs = self.kf.predict(means, covs)
+        for i, t in enumerate(tracks):
+            t.mean = means[i]
+            t.covariance = covs[i]
+            t.age += 1
+            t.time_since_update += 1
+
     def _apply_residual(self, track: Track) -> None:
         """Correct a track's just-predicted centre with the learned residual (RQ2).
 
@@ -117,8 +137,8 @@ class ByteTracker:
         self._frame += 1
 
         do_gmc = self.cfg.use_gmc and camera_shift is not None
+        self._predict_all()
         for track in self.tracks:
-            track.predict()
             self._apply_residual(track)
             if do_gmc:
                 self._apply_camera_shift(track, camera_shift)
@@ -232,9 +252,9 @@ class ByteTracker:
         want_gate = gate and self.cfg.use_mahalanobis_gating
         if want_gate or weights.uncertainty_on:
             det_xyah = xyxy_to_xyah(det_boxes)
-            gating_d2 = np.stack(
-                [self.kf.gating_distance(t.mean, t.covariance, det_xyah) for t in tracks]
-            )
+            track_means = np.stack([t.mean for t in tracks])
+            track_covs = np.stack([t.covariance for t in tracks])
+            gating_d2 = self.kf.gating_distance_batch(track_means, track_covs, det_xyah)
             if want_gate:
                 gate_thresh = self._gate
 

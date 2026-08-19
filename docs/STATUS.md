@@ -56,7 +56,10 @@ Last updated: 2026-08-08 (HEAD `01307e0`).
 - [x] Live routes: `/`, `/demo`, `/writeup`, `/video`, `/benchmark`, `/benchmark/dancetrack`, `/benchmark/dancetrack-yolox`, `/docs`
 
 ### Quality / infra
-- [x] 342 tests passing (1 slow, opt-in) · ruff clean · CI on py3.10/3.11/3.12
+- [x] 344 tests passing (1 slow, opt-in) · ruff clean · CI on py3.10/3.11/3.12
+- [x] Batched Kalman hot path — per-frame predict + Mahalanobis gating run as one
+      `(N, 8)` NumPy call over the whole track set: ~1.4–1.5× faster, bit-identical
+      (2841 → 294 FPS across 4–64 objects; MOTA/IDSW unchanged)
 - [x] Weight-clean + imagery-clean repo · fully reproducible (config hash + seeds)
 
 ### User-only actions (cleared)

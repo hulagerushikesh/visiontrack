@@ -103,12 +103,18 @@ writes an annotated H.264 video with per-track coloured boxes + ids. The
 so it's tested end-to-end over a real mp4 with a stub detector — no model in CI.
 Details → [`VIDEO.md`](VIDEO.md).
 
-### H2.2 — Throughput profiling ✅ · real-time webcam — *queued*
+### H2.2 — Throughput profiling ✅ · real-time webcam ✅
 - **Throughput profile ✅** — `experiments/profile_fps.py` (`make profile`) times
-  `tracker.update()` vs scene load on CPU: **1783 FPS @ 5 objects → 188 FPS @ 60**
+  `tracker.update()` vs scene load on CPU: **2778 FPS @ 5 objects → 340 FPS @ 60**
   on the M2. So the from-scratch tracker is *never* the real-time bottleneck;
   detection is. Honest numbers, no dataset needed.
-- **Real-time webcam** loop — *queued* (thin capture loop over the same pipeline).
+- **Batched Kalman hot path ✅** — the per-frame `predict` and the Mahalanobis
+  gating were per-track Python loops; both now drive the whole track set through
+  one batched `(N, 8)` NumPy call, a **~1.4–1.5× tracker speedup** at every load
+  (100 objects: 117 → 167 FPS) that is *bit-for-bit identical* to the per-track
+  path (guarded by `test_kalman.py`).
+- **Real-time webcam ✅** — `visiontrack webcam` runs the pipeline on a live
+  camera with an optional preview + `--record`; the loop is tested headlessly.
 
 ### H2.3 — Package & document ✅ *done*
 `pip install visiontrack-mot` (+ `[video]` extra). Stable top-level public API

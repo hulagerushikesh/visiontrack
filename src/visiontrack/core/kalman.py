@@ -243,3 +243,26 @@ class KalmanBoxTracker:
         d = measurements - proj_mean                      # (M, 4)
         z = np.linalg.solve(chol, d.T)                    # (4, M)
         return np.sum(z * z, axis=0)                      # (M,)
+
+    def gating_distance_batch(
+        self,
+        means: np.ndarray,
+        covariances: np.ndarray,
+        measurements: np.ndarray,
+    ) -> np.ndarray:
+        """Batched Mahalanobis gating for a whole track set at once.
+
+        ``means`` is ``(T, 8)``, ``covariances`` ``(T, 8, 8)`` and
+        ``measurements`` ``(M, 4)`` in ``xyah``; returns the ``(T, M)`` matrix of
+        squared distances. This is numerically identical to stacking
+        :meth:`gating_distance` over the T tracks — the Cholesky and triangular
+        solve are per-track — but runs in a handful of NumPy calls instead of a
+        Python loop, which is the tracker's per-frame hot path.
+        """
+        proj_mean, proj_cov = self.project(means, covariances)      # (T,4), (T,4,4)
+        meas = np.asarray(measurements, dtype=np.float64).reshape(-1, self.ndim)
+        chol = np.linalg.cholesky(proj_cov)                         # (T,4,4)
+        d = meas[None, :, :] - proj_mean[:, None, :]                # (T,M,4)
+        rhs = np.transpose(d, (0, 2, 1))                            # (T,4,M)
+        z = np.linalg.solve(chol, rhs)                              # (T,4,M)
+        return np.sum(z * z, axis=1)                                # (T,M)

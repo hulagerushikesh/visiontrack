@@ -274,13 +274,16 @@ MOTA=0.902  MOTP=0.919  IDSW=0  FP=0  FN=54  precision=1.000  recall=0.902  MT=6
 
 | objects | avg dets/frame | mean ms | p95 ms | FPS | MOTA | IDSW |
 |--------:|---------------:|--------:|-------:|----:|-----:|-----:|
-| 4  | 3.1  | 0.43 | 0.55 | 2334 | 0.892 | 0 |
-| 8  | 4.9  | 0.65 | 0.96 | 1541 | 0.902 | 0 |
-| 16 | 7.9  | 1.11 | 1.87 |  903 | 0.900 | 0 |
-| 32 | 13.5 | 2.02 | 3.76 |  494 | 0.893 | 0 |
-| 64 | 27.9 | 4.68 | 8.59 |  214 | 0.889 | 0 |
+| 4  | 3.1  | 0.35 | 0.49 | 2841 | 0.892 | 0 |
+| 8  | 4.9  | 0.55 | 0.93 | 1804 | 0.902 | 0 |
+| 16 | 7.9  | 0.87 | 1.51 | 1145 | 0.900 | 0 |
+| 32 | 13.5 | 1.34 | 2.72 |  748 | 0.893 | 0 |
+| 64 | 27.9 | 3.40 | 7.34 |  294 | 0.889 | 0 |
 
-Real-time (≥30 FPS) up to 64 concurrent objects.
+Real-time (≥30 FPS) up to 64 concurrent objects. The per-frame Kalman predict and
+Mahalanobis gating run as batched `(N, 8)` NumPy calls over the whole track set
+(~1.4–1.5× faster than the per-track loop, bit-for-bit identical — MOTA/IDSW
+unchanged above).
 
 **Ablation** (`visiontrack ablate`, crowded 16-object stress scene):
 

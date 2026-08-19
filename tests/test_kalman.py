@@ -80,3 +80,38 @@ def test_gating_distance_orders_by_proximity(kf):
     # The far measurement is outside the 95% chi-square gate.
     assert d2[2] > chi2_gating_threshold(4)
     assert d2[0] < chi2_gating_threshold(4)
+
+
+def test_gating_distance_batch_matches_per_track_stack(kf):
+    # The tracker's hot path swaps a per-track loop over gating_distance for one
+    # batched call; it must be numerically identical, not merely close.
+    rng = np.random.default_rng(1)
+    means, covs = [], []
+    for _ in range(6):
+        m, c = kf.initiate(rng.uniform([50, 50, 0.4, 40], [400, 400, 1.2, 200]))
+        m, c = kf.predict(m, c)
+        means.append(m)
+        covs.append(c)
+    measurements = rng.uniform([50, 50, 0.4, 40], [400, 400, 1.2, 200], size=(9, 4))
+
+    per_track = np.stack([kf.gating_distance(m, c, measurements)
+                          for m, c in zip(means, covs, strict=False)])
+    batched = kf.gating_distance_batch(np.stack(means), np.stack(covs), measurements)
+    assert batched.shape == (6, 9)
+    np.testing.assert_array_equal(batched, per_track)  # exact, bit-for-bit
+
+
+def test_predict_batch_matches_single(kf):
+    # Batched predict (used by the tracker for the whole set) equals advancing
+    # each track on its own — the guarantee that makes the optimization safe.
+    rng = np.random.default_rng(2)
+    states = [kf.initiate(rng.uniform([50, 50, 0.4, 40], [400, 400, 1.2, 200]))
+              for _ in range(5)]
+    means = np.stack([m for m, _ in states])
+    covs = np.stack([c for _, c in states])
+
+    bm, bc = kf.predict(means, covs)
+    for i, (m, c) in enumerate(states):
+        sm, sc = kf.predict(m, c)
+        np.testing.assert_array_equal(bm[i], sm)
+        np.testing.assert_array_equal(bc[i], sc)
