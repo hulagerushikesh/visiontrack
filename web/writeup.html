@@ -21,118 +21,28 @@
 <meta name="twitter:title" content="What I learned building a multi-object tracker from scratch">
 <meta name="twitter:description" content="A from-scratch NumPy tracker used as a controlled, significance-tested study of when the field's standard tricks actually help — with honest negatives.">
 <meta name="twitter:image" content="https://visiontrack.hulage.in/assets/og-image.png">
-<style>
-  :root {
-    --bg: #f4f7fb; --surface: #ffffff; --surface-2: #f0f3f8; --border: #dbe2ec;
-    --ink: #0e141b; --ink-2: #33404f; --muted: #5c6773; --faint: #8a94a1;
-    --accent: #2f7ae5; --accent-soft: #e7f0fd; --good: #1f9d63; --warn: #c2410c;
-    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
-    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    --shadow: 0 1px 2px rgba(13,20,30,.05), 0 10px 34px rgba(13,20,30,.07);
-    --maxw: 720px;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #0b0e14; --surface: #141922; --surface-2: #1a2029; --border: #26303c;
-      --ink: #e7ebf1; --ink-2: #b7c0cd; --muted: #8792a1; --faint: #616d7c;
-      --accent: #5aa2ff; --accent-soft: #16283f; --good: #37c07e; --warn: #f0864a;
-      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 40px rgba(0,0,0,.4);
-    }
-  }
-  :root[data-theme="light"] {
-    --bg: #f4f7fb; --surface: #ffffff; --surface-2: #f0f3f8; --border: #dbe2ec;
-    --ink: #0e141b; --ink-2: #33404f; --muted: #5c6773; --faint: #8a94a1;
-    --accent: #2f7ae5; --accent-soft: #e7f0fd; --good: #1f9d63; --warn: #c2410c;
-  }
-  :root[data-theme="dark"] {
-    --bg: #0b0e14; --surface: #141922; --surface-2: #1a2029; --border: #26303c;
-    --ink: #e7ebf1; --ink-2: #b7c0cd; --muted: #8792a1; --faint: #616d7c;
-    --accent: #5aa2ff; --accent-soft: #16283f; --good: #37c07e; --warn: #f0864a;
-  }
-
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans);
-    line-height: 1.7; font-size: 17px; -webkit-font-smoothing: antialiased; }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-
-  nav { border-bottom: 1px solid var(--border); }
-  .nav-in { max-width: var(--maxw); margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
-  .brand { font-family: var(--mono); font-weight: 700; letter-spacing: .02em; font-size: 15px; display: flex; align-items: center; gap: 9px; color: var(--ink); }
-  .brand a { color: inherit; }
-  .brand .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-  .nav-in .spacer { flex: 1; }
-  .nav-in a.ghlink { font-family: var(--mono); font-size: 13px; color: var(--muted); padding: 6px 12px; border: 1px solid var(--border); border-radius: 8px; }
-  .nav-in a.ghlink:hover { color: var(--ink); border-color: var(--accent); text-decoration: none; }
-
-  main { max-width: var(--maxw); margin: 0 auto; padding: 0 24px 96px; }
-  .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin: 56px 0 16px; }
-  h1 { font-size: clamp(30px, 5vw, 44px); line-height: 1.1; letter-spacing: -.025em; margin: 0 0 20px; font-weight: 800; text-wrap: balance; }
-  .byline { font-family: var(--mono); font-size: 13px; color: var(--faint); margin: 0 0 8px; display: flex; gap: 12px; flex-wrap: wrap; }
-  .standfirst { font-size: 20px; color: var(--ink-2); margin: 8px 0 40px; line-height: 1.55; }
-  .standfirst b { color: var(--ink); }
-
-  h2 { font-size: 25px; letter-spacing: -.02em; margin: 52px 0 6px; font-weight: 750; text-wrap: balance; }
-  h2 .rq { font-family: var(--mono); font-size: 13px; color: var(--accent); display: block; letter-spacing: .1em; margin-bottom: 2px; }
-  h3 { font-size: 18px; margin: 32px 0 4px; letter-spacing: -.01em; }
-  p { margin: 16px 0; }
-  strong { color: var(--ink); }
-  em { color: var(--ink-2); }
-  code { font-family: var(--mono); font-size: .86em; background: var(--surface-2); border: 1px solid var(--border);
-    border-radius: 5px; padding: 1px 6px; color: var(--ink-2); }
-
-  blockquote { margin: 26px 0; padding: 4px 22px; border-left: 3px solid var(--accent);
-    color: var(--ink-2); font-size: 19px; font-style: italic; }
-
-  .callout { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--good);
-    border-radius: 10px; padding: 16px 20px; margin: 26px 0; box-shadow: var(--shadow); font-size: 16px; }
-  .callout.neg { border-left-color: var(--warn); }
-  .callout .k { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); display: block; margin-bottom: 4px; }
-  .callout p { margin: 0; }
-
-  figure { margin: 30px 0; }
-  figure img { width: 100%; display: block; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); }
-  figcaption { font-size: 13.5px; color: var(--muted); text-align: center; margin-top: 10px; font-family: var(--mono); }
-
-  .scroll { overflow-x: auto; margin: 24px 0; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); box-shadow: var(--shadow); }
-  table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
-  th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
-  th { font-family: var(--mono); font-size: 12px; letter-spacing: .04em; color: var(--muted); font-weight: 600; background: var(--surface-2); }
-  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--mono); }
-  tr:last-child td { border-bottom: none; }
-  .good { color: var(--good); }
-  .warn { color: var(--warn); }
-
-  hr { border: none; border-top: 1px solid var(--border); margin: 52px 0; }
-
-  .endcta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
-  .btn { display: inline-flex; align-items: center; gap: 9px; font-weight: 650; font-size: 15px;
-    padding: 12px 20px; border-radius: 10px; border: 1px solid transparent; }
-  .btn:hover { text-decoration: none; }
-  .btn.primary { background: var(--accent); color: #fff; }
-  .btn.primary:hover { filter: brightness(1.07); }
-  .btn.ghost { background: var(--surface); color: var(--ink); border-color: var(--border); }
-  .btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
-
-  footer { border-top: 1px solid var(--border); }
-  .foot-in { max-width: var(--maxw); margin: 0 auto; padding: 26px 24px 60px; font-family: var(--mono); font-size: 12.5px; color: var(--muted); display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
-  .foot-in a { color: var(--muted); }
-  .foot-in .spacer { flex: 1; }
-
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-</style>
+<link rel="stylesheet" href="/assets/site.css">
+<script defer src="/assets/site.js"></script>
 </head>
 <body>
 
-<nav>
+<nav class="site-nav">
   <div class="nav-in">
-    <span class="brand"><span class="dot"></span> <a href="/">VisionTrack</a></span>
+    <a class="brand" href="/"><span class="dot"></span>VisionTrack</a>
+    <span class="nav-tag">write-up</span>
     <span class="spacer"></span>
+    <div class="nav-links">
+      <a href="/demo">demo</a>
+      <a href="/writeup">write-up</a>
+      <a href="/video" data-secondary>video</a>
+      <a href="/benchmark">benchmark</a>
+      <a href="/docs/" data-secondary>docs</a>
+    </div>
+    <button class="theme-btn" type="button">◑ dark</button>
   </div>
 </nav>
 
-<main>
+<main class="article">
   <p class="eyebrow">Write-up · a controlled study</p>
   <h1>A better trick that makes a worse tracker</h1>
   <p class="byline"><span>VisionTrack</span><span>·</span><span>from-scratch multi-object tracking</span></p>
@@ -311,6 +221,7 @@
 
   <div class="endcta">
     <a class="btn primary" href="/demo">▶ Watch the RQ1 result live</a>
+    <a class="btn ghost" href="/benchmark">See the benchmark →</a>
   </div>
 </main>
 
