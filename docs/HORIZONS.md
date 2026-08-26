@@ -86,7 +86,12 @@ tuning). Bonus: the same DanceTrack run reproduced RQ1 (appearance cuts IDSW
   *significant* win shifts to ByteTrack's **two-stage low-score recovery**
   (single-stage sort/deepsort/oc_sort all −0.04 MOTA, p=0.01), OC-SORT still hurts,
   and appearance stays beneficial-but-n.s. Details → [`PHASE3.md`](PHASE3.md).
-- **SportsMOT** as a second maneuver dataset for RQ2.
+- **SportsMOT** as a second maneuver dataset for RQ2 — *code path shipped, awaiting
+  the download.* SportsMOT decouples the two hard things DanceTrack conflates:
+  fast non-linear motion **with** distinguishable appearance, so it is the clean
+  RQ2 test. The generic MOT loader reads it verbatim; `precompute_sportsmot.py` +
+  `--dataset sportsmot` (benchmark & taxonomy) are wired and tested
+  (`tests/test_sportsmot.py`). Recipe → [`SPORTSMOT.md`](SPORTSMOT.md).
 
 ---
 

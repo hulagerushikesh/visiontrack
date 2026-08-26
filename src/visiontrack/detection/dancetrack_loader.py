@@ -33,6 +33,10 @@ __all__ = [
     "DanceTrackDetectorSequence",
     "discover_dancetrack",
     "frame_filename",
+    # generic MOT-format aliases (see bottom of module)
+    "MotSequence",
+    "MotDetectorSequence",
+    "discover_mot_sequences",
 ]
 
 
@@ -174,3 +178,13 @@ def discover_dancetrack(root: str | Path, split: str = "val") -> list[Path]:
     if not base.exists():
         base = Path(root)  # allow pointing straight at a split dir
     return sorted(p for p in base.iterdir() if (p / "seqinfo.ini").exists())
+
+
+# --- generic MOT-Challenge aliases ------------------------------------------
+# Nothing in the classes above is DanceTrack-specific: they read the standard
+# MOT-Challenge layout (``seqinfo.ini`` + ``gt/gt.txt`` + ``img1/``). SportsMOT
+# and any other MOT-format tracking set use them verbatim, so these aliases let
+# callers name the generic behaviour instead of borrowing the DanceTrack name.
+MotSequence = DanceTrackSequence
+MotDetectorSequence = DanceTrackDetectorSequence
+discover_mot_sequences = discover_dancetrack
