@@ -168,6 +168,7 @@ h1 {
 .screen-bar i { width: 11px; height: 11px; border-radius: 50%; background: #2b333f; display: block; }
 .screen-bar .rd { margin-left: auto; font-family: var(--mono); font-size: var(--fs-micro); color: #5b6675; letter-spacing: .08em; }
 .screen img, .screen video { width: 100%; display: block; border-radius: 8px; background: #04060a; }
+.hero-canvas { width: 100%; display: block; border-radius: 8px; background: #04060a; aspect-ratio: 1280 / 720; }
 .screen-cap { font-family: var(--mono); font-size: var(--fs-meta); color: var(--faint); text-align: center; margin: 12px 0 2px; }
 
 /* ---- explore cards ------------------------------------------------------ */

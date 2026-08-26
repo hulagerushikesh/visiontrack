@@ -24,6 +24,7 @@
 <meta name="twitter:image" content="https://visiontrack.hulage.in/assets/og-image.png">
 <link rel="stylesheet" href="/assets/site.css">
 <script defer src="/assets/site.js"></script>
+<script defer src="/assets/hero.js"></script>
 </head>
 <body>
 
@@ -67,9 +68,11 @@
     </div>
 
     <div class="screen">
-      <div class="screen-bar"><i></i><i></i><i></i><span class="rd">SYNTHETIC · MOTION+APPEARANCE</span></div>
-      <img src="/assets/tracking.gif" alt="VisionTrack tracking a synthetic scene — stable per-object IDs">
-      <p class="screen-cap">the tracker on a synthetic scene — boxes in, stable per-object IDs out</p>
+      <div class="screen-bar"><i></i><i></i><i></i><span class="rd">LIVE · KALMAN + BYTETRACK</span></div>
+      <canvas id="hero-cv" class="hero-canvas" width="1280" height="720"
+              role="img" aria-label="A live tracking scene: objects drifting inside coloured bounding boxes that keep a stable numbered track id, with fading motion trails and periodic detection pulses."></canvas>
+      <noscript><img src="/assets/tracking.gif" alt="VisionTrack tracking a synthetic scene — stable per-object IDs"></noscript>
+      <p class="screen-cap">stable per-object ids held through crossings — detections snap in, the tracker keeps identity</p>
     </div>
   </section>
 
