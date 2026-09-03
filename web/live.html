@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>VisionTrack — live in-browser tracker</title>
+<meta name="description" content="The from-scratch NumPy tracker, ported to JavaScript and run live in your browser: point your webcam (or a sample street clip) at it and watch an 8-state Kalman filter, Hungarian matching, and ByteTrack hold stable per-object ids in real time. Nothing leaves your device.">
+<link rel="canonical" href="https://visiontrack.hulage.in/live">
+<meta name="theme-color" content="#0b0e14">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VisionTrack">
+<meta property="og:url" content="https://visiontrack.hulage.in/live">
+<meta property="og:title" content="Live in-browser tracker · VisionTrack">
+<meta property="og:description" content="Run the from-scratch tracker live on your own webcam — Kalman + Hungarian + ByteTrack, in JavaScript, entirely on-device. Only the detector is a learned model; the tracking is all our own code.">
+<meta property="og:image" content="https://visiontrack.hulage.in/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Live in-browser tracker · VisionTrack">
+<meta name="twitter:description" content="Point your webcam at the from-scratch tracker and watch it hold stable per-object ids in real time — on-device, no upload.">
+<meta name="twitter:image" content="https://visiontrack.hulage.in/assets/og-image.png">
+<link rel="stylesheet" href="/assets/site.css">
+<script defer src="/assets/site.js"></script>
+<!-- The one imported learned model: a COCO object detector (TensorFlow.js). Everything
+     downstream — Kalman, Hungarian, ByteTrack, lifecycle — is our own code in tracker.js. -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js"></script>
+<script defer src="/assets/tracker.js"></script>
+<script defer src="/assets/live.js"></script>
+<style>
+  /* page-specific components; tokens, nav, footer, .btn come from site.css */
+  .stage { margin: 30px 0 8px; }
+  .viewport {
+    position: relative; width: 100%; aspect-ratio: 16 / 9; background: var(--screen);
+    border: 1px solid var(--screen-edge); border-radius: var(--radius); overflow: hidden;
+  }
+  #live-cv { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
+    display: block; background: var(--screen); }
+  #src-video { position: absolute; width: 2px; height: 2px; opacity: 0; pointer-events: none; left: -9999px; }
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin: 16px 0 6px; }
+  #start-btn.on { background: var(--warn); }
+  .seg { display: inline-flex; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 4px; gap: 4px; }
+  .seg button { font-family: var(--sans); font-size: 13.5px; font-weight: 550; color: var(--muted);
+    background: transparent; border: 0; padding: 8px 15px; border-radius: 7px; cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+  .seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .chk { display: inline-flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--muted);
+    font-family: var(--mono); cursor: pointer; }
+  .chk input { accent-color: var(--accent); }
+  #status { font-family: var(--mono); font-size: 13px; color: var(--muted); margin: 4px 0 0;
+    min-height: 1.4em; }
+  #status[data-tone="ok"] { color: var(--good); }
+  #status[data-tone="wait"] { color: var(--accent); }
+  #status[data-tone="err"] { color: var(--warn); }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 20px 0 8px; }
+  @media (max-width: 640px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+  .stat { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 15px; }
+  .stat .v { font-family: var(--mono); font-weight: 800; font-size: 24px; color: var(--ink);
+    font-variant-numeric: tabular-nums; line-height: 1; }
+  .stat .k { color: var(--muted); font-size: 12px; margin-top: 6px; font-family: var(--mono);
+    letter-spacing: .04em; }
+  .privacy { font-size: 13.5px; color: var(--muted); border-left: 2px solid var(--good);
+    padding: 3px 0 3px 14px; margin: 22px 0; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-in">
+    <a class="brand" href="/"><span class="dot"></span>VisionTrack</a>
+    <span class="nav-tag">NumPy · MOT</span>
+    <span class="spacer"></span>
+    <div class="nav-links">
+      <a href="/live">live</a>
+      <a href="/demo">demo</a>
+      <a href="/writeup">write-up</a>
+      <a href="/video" data-secondary>video</a>
+      <a href="/benchmark">benchmark</a>
+      <a href="/docs/" data-secondary>docs</a>
+    </div>
+    <button class="theme-btn" type="button">◑ dark</button>
+  </div>
+</nav>
+
+<div class="wrap">
+  <section class="hero" style="padding-bottom:0">
+    <p class="eyebrow">Live · the tracker running in your browser</p>
+    <h1>Point a camera at it.</h1>
+    <p class="lede">The same from-scratch tracker — an 8-state <b>Kalman filter</b>, an O(n³)
+    <b>Hungarian</b> solver, and <b>ByteTrack</b> two-stage association — ported to JavaScript and
+    run <b>live, on-device</b>. A COCO detector proposes boxes each frame; our own code does all the
+    association, gating, and lifecycle, holding a stable id per object. Only the detector is a
+    learned model — the tracking is the point, and it's all here.</p>
+
+    <div class="stage">
+      <div class="screen">
+        <div class="screen-bar"><i></i><i></i><i></i><span class="rd">LIVE · KALMAN + BYTETRACK</span></div>
+        <div class="viewport">
+          <video id="src-video" playsinline muted></video>
+          <canvas id="live-cv" width="960" height="540"
+                  role="img" aria-label="Live camera feed with coloured bounding boxes, each carrying a stable numbered track id."></canvas>
+        </div>
+
+        <div class="controls">
+          <button id="start-btn" class="btn primary" type="button" disabled>Start</button>
+          <div class="seg" id="src-seg" role="group" aria-label="video source">
+            <button data-src="webcam" aria-pressed="true">Webcam</button>
+            <button data-src="sample" aria-pressed="false">Sample clip</button>
+          </div>
+          <label class="chk"><input id="det-toggle" type="checkbox" checked> show raw detections</label>
+        </div>
+        <p id="status">initialising…</p>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><div class="v" id="m-fps">—</div><div class="k">fps (detect + track)</div></div>
+        <div class="stat"><div class="v" id="m-tracks">0</div><div class="k">active tracks</div></div>
+        <div class="stat"><div class="v" id="m-ids">0</div><div class="k">ids created</div></div>
+        <div class="stat"><div class="v" id="m-dets">0</div><div class="k">detections / frame</div></div>
+      </div>
+    </div>
+
+    <p class="privacy"><b>Nothing leaves your device.</b> The camera frames are decoded, detected,
+    and tracked entirely in this browser tab — there is no server and no upload. Prefer not to grant
+    the camera? Switch the source to the <b>sample clip</b> (public-domain street footage) and the
+    identical pipeline runs on that instead.</p>
+  </section>
+
+  <p class="section-label">How it works</p>
+  <div class="article">
+    <p>Each frame follows the exact tracking-by-detection flow the study benchmarks, just moved into
+    the browser:</p>
+    <ol>
+      <li><b>Detect</b> — a COCO-SSD model (TensorFlow.js, WebGL) returns candidate boxes with
+        scores. This is the only learned, imported component.</li>
+      <li><b>Predict</b> — every existing track advances one step through its 8-state constant-velocity
+        <b>Kalman filter</b> (position + aspect + height, and their velocities).</li>
+      <li><b>Associate</b> — <b>ByteTrack</b>'s two rounds: high-score detections are matched to tracks
+        by IoU via the <b>Hungarian</b> solver, then leftover tracks get a second chance against the
+        low-score band — the trick that recovers objects through momentary occlusion.</li>
+      <li><b>Manage</b> — a tentative → confirmed → deleted lifecycle spawns new ids only after a few
+        consistent hits and retires tracks that go unseen, so the id you see is a committed one.</li>
+    </ol>
+    <p>Steps 2–4 are the from-scratch tracker, re-implemented line-for-line from the Python core in
+    <a href="/writeup">the write-up</a> — no tracking library on either side. Frame rate depends on
+    your device's GPU; the detector, not the tracker, is the bottleneck (the same finding as the
+    <a href="/video">real-footage</a> and profiling results).</p>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-in">
+    <span>VisionTrack · MIT</span>
+    <span class="spacer"></span>
+    <a href="/live">live</a>
+    <a href="/writeup">write-up</a>
+    <a href="/demo">demo</a>
+    <a href="/video">video</a>
+    <a href="/benchmark">benchmark</a>
+    <a href="/docs/">docs</a>
+  </div>
+</footer>
+
+</body>
+</html>
