@@ -82,7 +82,11 @@ Last updated: 2026-08-08 (HEAD `01307e0`).
       (public-domain Bangkok-traffic clip; 300 frames, 107 tracks, ~1.8 MB mp4)
 
 ### Research extensions (heavier)
-- [ ] **SportsMOT** — second non-linear-motion dataset for RQ2 *(large download)*
+- [~] **SportsMOT** — second non-linear-motion dataset for RQ2. **Code path
+      done + tested** (generic MOT loader, `precompute_sportsmot.py`,
+      `--dataset sportsmot` in benchmark + taxonomy, `tests/test_sportsmot.py`);
+      only the *(large download)* + `precompute` run remain to get numbers.
+      Recipe → [`SPORTSMOT.md`](SPORTSMOT.md).
 - [ ] Stronger detector on DanceTrack (yolox-x) — test if it restores appearance significance
 
 ### Product direction (far)
