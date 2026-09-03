@@ -1,39 +1,58 @@
-"""Render a BenchmarkReport to a self-contained, theme-aware HTML page."""
+"""Render a BenchmarkReport to an HTML page that matches the hand-authored site.
+
+The report pages are part of the deployed site (served at /benchmark…), so they
+share the one site stylesheet (``/assets/site.css``) and behaviour
+(``/assets/site.js``) instead of inlining their own CSS — that is the whole point
+of the shared-stylesheet refactor. For a portable, dependency-free artefact use
+``--out-md`` (markdown) instead.
+"""
 from __future__ import annotations
 
 import html
 
-_CSS = """
-:root{--bg:#f4f7fb;--surface:#fff;--surface2:#f0f3f8;--border:#dbe2ec;--ink:#0e141b;
---ink2:#33404f;--muted:#5c6773;--accent:#2f7ae5;--good:#1f9d63;--warn:#d5722a;
---mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;--sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-@media(prefers-color-scheme:dark){:root{--bg:#0b0e14;--surface:#141922;--surface2:#1a2029;
---border:#26303c;--ink:#e7ebf1;--ink2:#b7c0cd;--muted:#8792a1;--accent:#5aa2ff;--good:#37c07e;--warn:#e8833a}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
-line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
-.wrap{max-width:900px;margin:0 auto;padding:40px 22px 90px}
-.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
-h1{font-size:27px;letter-spacing:-.02em;margin:0 0 14px}
-h2{font-size:18px;letter-spacing:-.01em;margin:38px 0 6px}
-.meta{font-family:var(--mono);font-size:12.5px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;margin:0 0 6px}
-.meta span{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:3px 9px}
-.note{color:var(--muted);font-size:13.5px;margin:8px 0 0}
-.scroll{overflow-x:auto;border:1px solid var(--border);border-radius:12px;margin-top:12px;background:var(--surface)}
-table{border-collapse:collapse;width:100%;font-size:13.5px}
-th,td{padding:9px 13px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--border)}
-th:first-child,td:first-child{text-align:left;font-family:var(--mono);font-size:12.5px}
-thead th{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--surface2)}
-tbody tr:last-child td{border-bottom:none}
-tr.base td:first-child{color:var(--accent);font-weight:700}
-.best{background:color-mix(in srgb,var(--good) 14%,transparent);font-weight:700}
-.sig{color:var(--good);font-weight:700}.neg{color:var(--warn)}
-.bar{position:relative;background:var(--surface2);border:1px solid var(--border);border-radius:6px;height:22px;min-width:120px}
-.bar>i{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--accent);opacity:.85}
-.bar.hot>i{background:var(--warn)}
-.lift{font-family:var(--mono);font-weight:700}
-footer{margin-top:44px;border-top:1px solid var(--border);padding-top:16px;font-family:var(--mono);font-size:12px;color:var(--muted)}
-footer a{color:var(--accent);text-decoration:none}
-"""
+# Shared shell: the telemetry-bar nav used verbatim across every page.
+_NAV = """<nav class="site-nav">
+  <div class="nav-in">
+    <a class="brand" href="/"><span class="dot"></span>VisionTrack</a>
+    <span class="nav-tag">honest MOT benchmark</span>
+    <span class="spacer"></span>
+    <div class="nav-links">
+      <a href="/demo">demo</a>
+      <a href="/writeup">write-up</a>
+      <a href="/video" data-secondary>video</a>
+      <a href="/benchmark">benchmark</a>
+      <a href="/docs/" data-secondary>docs</a>
+    </div>
+    <button class="theme-btn" type="button">◑ dark</button>
+  </div>
+</nav>"""
+
+_DATASET_TABS = """<div class="dataset-tabs">
+    <a href="/benchmark">synthetic</a>
+    <a href="/benchmark/dancetrack">DanceTrack</a>
+    <a href="/benchmark/dancetrack-yolox">DanceTrack · YOLOX</a>
+  </div>"""
+
+_FOOTER = """<footer>
+  <div class="foot-in">
+    <span>VisionTrack · MIT</span>
+    <span class="spacer"></span>
+    <a href="/">home</a>
+    <a href="/writeup">write-up</a>
+    <a href="/demo">demo</a>
+    <a href="/docs/">docs</a>
+  </div>
+</footer>"""
+
+
+def _route(dataset: str) -> str:
+    """Map a displayed dataset name to its served route."""
+    d = dataset.lower()
+    if "yolox" in d:
+        return "/benchmark/dancetrack-yolox"
+    if "dancetrack" in d:
+        return "/benchmark/dancetrack"
+    return "/benchmark"
 
 
 def _fmt_cell(mean, std, delta, p, is_base, is_best):
@@ -74,7 +93,7 @@ def render_html(rep) -> str:
         )
 
     meta_chips = "".join(
-        f"<span>{html.escape(k)}: {html.escape(str(v))}</span>"
+        f"<span>{html.escape(k)}: <b>{html.escape(str(v))}</b></span>"
         for k, v in [("dataset", m["dataset"]), ("baseline", m["baseline"]),
                      ("runs/tracker", m["runs_per_tracker"]),
                      ("sequences", len(m["sequences"])), ("seeds", len(m["seeds"])),
@@ -82,15 +101,19 @@ def render_html(rep) -> str:
     )
 
     ds = html.escape(rep.dataset)
+    route = _route(rep.dataset)
+    canonical = f"https://visiontrack.hulage.in{route}"
     og_title = f"Honest MOT benchmark ({ds}) · VisionTrack"
     og_desc = (f"A reproducible tracker leaderboard with paired significance and an "
                f"ID-switch error taxonomy, in one report — {ds}.")
     og_img = "https://visiontrack.hulage.in/assets/og-image.png"
     social = (
+        f'<link rel="canonical" href="{canonical}">'
         f'<meta name="description" content="{og_desc}">'
         f'<meta name="theme-color" content="#0b0e14">'
         f'<meta property="og:type" content="website">'
         f'<meta property="og:site_name" content="VisionTrack">'
+        f'<meta property="og:url" content="{canonical}">'
         f'<meta property="og:title" content="{og_title}">'
         f'<meta property="og:description" content="{og_desc}">'
         f'<meta property="og:image" content="{og_img}">'
@@ -104,10 +127,14 @@ def render_html(rep) -> str:
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<title>MOT benchmark — {ds}</title>{social}<style>{_CSS}</style></head><body>
-<div class="wrap">
+<title>MOT benchmark — {ds} · VisionTrack</title>{social}
+<link rel="stylesheet" href="/assets/site.css">
+<script defer src="/assets/site.js"></script></head><body>
+{_NAV}
+<main class="wrap benchmark-page">
 <p class="eyebrow">VisionTrack · honest MOT benchmark</p>
 <h1>Tracker comparison — {html.escape(rep.dataset)}</h1>
+{_DATASET_TABS}
 <div class="meta">{meta_chips}</div>
 <p class="note">Every tracker sees identical detections and seeds, so Δ vs the
 baseline is a paired comparison (Wilcoxon <span class="sig">*</span> = p&lt;0.05).
@@ -121,6 +148,7 @@ switches are over-represented there — the failure mode to attack.</p>
 <div class="scroll"><table><thead><tr><th>condition</th><th>% of switches</th>
 <th>base rate</th><th>lift</th><th>over-representation</th></tr></thead>
 <tbody>{''.join(tax)}</tbody></table></div>
-<footer>Reproduce: <code>python -m experiments.benchmark</code> ·
-<a href="https://github.com/hulagerushikesh/visiontrack">github.com/hulagerushikesh/visiontrack</a></footer>
-</div></body></html>"""
+<p class="note" style="margin-top:22px">Reproduce: <code>python -m experiments.benchmark</code></p>
+</main>
+{_FOOTER}
+</body></html>"""
