@@ -138,13 +138,16 @@ for frame_detections in stream:            # list[Detection]
     observations = tracker.update(frame_detections)
 ```
 
-Track a real video from the command line (needs a YOLOX ONNX model, see [docs/VIDEO.md](docs/VIDEO.md)):
+Track a real video — or a live camera — from the command line (needs a YOLOX ONNX model, see [docs/VIDEO.md](docs/VIDEO.md)):
 
 ```bash
 visiontrack track input.mp4 out.mp4 --model models/yolox_nano.onnx
+visiontrack webcam --model models/yolox_nano.onnx        # live camera, real time
 ```
 
-Full public API: [docs/API.md](docs/API.md) · packaging/release: [docs/RELEASE.md](docs/RELEASE.md).
+CLI subcommands: `demo`, `eval`, `ablate`, `track`, `webcam`. Full public API: [docs/API.md](docs/API.md) · packaging/release: [docs/RELEASE.md](docs/RELEASE.md).
+
+**No install at all** — run the tracker live in your browser at **[visiontrack.hulage.in/live](https://visiontrack.hulage.in/live)**: the same from-scratch association (Kalman + Hungarian + ByteTrack), ported to JavaScript and running on-device over your webcam or a sample clip.
 
 **Benchmark a set of trackers** into one report (leaderboard + paired significance + ID-switch error taxonomy) — `make benchmark`, or see the live report at **[visiontrack.hulage.in/benchmark](https://visiontrack.hulage.in/benchmark)**.
 
@@ -175,20 +178,22 @@ Every run is pinned by a config hash; bootstrap resampling and synthetic scenes 
 ## Engineering
 
 - **Zero ML-framework dependency in the core** — just NumPy. Heavy/optional deps (`scipy`, `pandas`, `matplotlib`, `pillow`, `onnxruntime`, `torch`) are isolated in extras (`[experiments]`, `[appearance]`, `[onnx]`) and lazily imported; nothing in `core/` imports them.
-- **253 tests**: unit, property (Hungarian vs SciPy), convergence (Kalman), metric cross-checks (HOTA/IDF1 vs `trackeval`), and end-to-end integration with a MOTA floor.
+- **344 tests**: unit, property (Hungarian vs SciPy), convergence (Kalman), metric cross-checks (HOTA/IDF1 vs `trackeval`), video/webcam pipelines, the benchmarking tool, and end-to-end integration with a MOTA floor.
 - **CI** on Python 3.10/3.11/3.12 + ruff.
 
 ```
 src/visiontrack/
-  core/        geometry · kalman · assignment          ← from-scratch math
-  detection/   base · synthetic · onnx_yolo · mot_loader · noise
-  appearance/  embedder (colour-hist) · reid_onnx · gallery   (RQ1)
-  tracking/    tracker · track (FSM) · cost (ablation surface) · config
-  eval/        mot (CLEAR-MOT) · hota (HOTA/IDF1) · stats · calibration (RQ3)
+  core/        geometry · kalman · assignment                       ← from-scratch math
+  detection/   base · synthetic · noise · mot_loader · dancetrack_loader · yolox_onnx · cached
+  appearance/  embedder (colour-hist) · reid_onnx · gallery         (RQ1)
+  tracking/    tracker · track (FSM) · cost (ablation surface) · config · presets (the zoo)
+    motion/    oc (OC-SORT) · gmc (camera-motion, RQ4) · residual (learned motion, RQ2)
+  eval/        mot (CLEAR-MOT) · hota (HOTA/IDF1) · mot17 · stats · calibration (RQ3)
   datasets/    splits (frozen) · cache (detections + embeddings)
-experiments/   run_matrix · analyze · appearance_study · uncertainty_study · configs/
-data/cache/    precompute · precompute_embeddings
-scripts/       xcheck_mot17_trackeval.py
+  cli · video · viz/draw                                            ← CLI, video pipeline, drawing
+experiments/   run_matrix · benchmark · error_taxonomy · tracker_zoo · profile_fps · *_study · configs/
+data/cache/    precompute · precompute_embeddings · precompute_dancetrack · precompute_gmc
+scripts/       xcheck_mot17_trackeval.py · render_video_demo.py · make_og_image.py
 ```
 
 ---
@@ -209,6 +214,8 @@ flip on a moving object *is* a switch.
 - **Try it live:** **[visiontrack.hulage.in/demo](https://visiontrack.hulage.in/demo)** — no install, runs in the browser (deployed from `viz/webdemo/` via Vercel; project home at [visiontrack.hulage.in](https://visiontrack.hulage.in)).
 - **Build it locally:** `make demo` → open [`viz/webdemo/index.html`](viz/webdemo/index.html) in any browser (no server, no dataset, no toolchain — inference is pre-baked from the NumPy tracker on a synthetic scene).
 - On the selected scene, appearance cuts ID switches **37 → 29 (−22%)** and lifts IDF1 — the study result, watchable frame by frame.
+
+Two more live surfaces, no install: **[/live](https://visiontrack.hulage.in/live)** runs the tracker on your own webcam in the browser (the association ported to JavaScript, on-device), and **[/video](https://visiontrack.hulage.in/video)** shows the identical Python pipeline on real, crowded street footage.
 
 ## Write-up
 
