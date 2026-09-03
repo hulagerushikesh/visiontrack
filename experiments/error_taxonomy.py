@@ -144,26 +144,25 @@ def _synthetic_frames(preset_name: str, sequences, seeds, scene):
     return frames
 
 
-def _dancetrack_frames(preset_name: str, cache_dir: str, embedder: str):
-    from visiontrack.datasets.cache import CachedSequence
+def _dancetrack_frames(preset_name: str, cache_dir: str, embedder: str,
+                       glob: str = "dancetrack*.npz"):
+    """Ground-truth + tracked frames over a dir of caches (DanceTrack/SportsMOT)."""
+    from experiments._caches import discover_cache_readers
     from visiontrack.eval.mot17 import run_sequence
     frames = []
-    for det in sorted(Path(cache_dir).glob("dancetrack*.npz")):
-        if det.name.endswith(".emb.npz"):
-            continue
-        emb = det.with_name(det.stem + f".{embedder}.emb.npz")
-        reader = CachedSequence(det, emb_path=emb) if emb.exists() else CachedSequence(det)
+    for reader in discover_cache_readers(cache_dir, embedder, glob):
         cfg = preset(preset_name)
-        seq_frames = run_sequence(reader, cfg, 1, len(reader))
-        frames.extend(seq_frames)
+        frames.extend(run_sequence(reader, cfg, 1, len(reader)))
     return frames
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="ID-switch error taxonomy")
-    parser.add_argument("--dataset", default="synthetic", choices=["synthetic", "dancetrack"])
+    parser.add_argument("--dataset", default="synthetic",
+                        choices=["synthetic", "dancetrack", "sportsmot"])
     parser.add_argument("--preset", default="bytetrack")
-    parser.add_argument("--cache-dir", default="data/cache/dancetrack")
+    parser.add_argument("--cache-dir", default=None,
+                        help="sequence-cache dir (default: data/cache/<dataset>)")
     parser.add_argument("--embedder", default="onnx")
     parser.add_argument("--out-md", default=None)
     args = parser.parse_args(argv)
@@ -176,7 +175,9 @@ def main(argv: list[str] | None = None) -> int:
              "occlusion_iou": 0.30, "false_positive_rate": 0.5},
         )
     else:
-        frames = _dancetrack_frames(args.preset, args.cache_dir, args.embedder)
+        cache_dir = args.cache_dir or f"data/cache/{args.dataset}"
+        glob = "dancetrack*.npz" if args.dataset == "dancetrack" else "*.npz"
+        frames = _dancetrack_frames(args.preset, cache_dir, args.embedder, glob)
 
     switches, background, idsw = _run_frames(frames, args.preset)
     report = taxonomy_report(switches, background, idsw)

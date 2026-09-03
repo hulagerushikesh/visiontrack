@@ -75,25 +75,22 @@ class BenchmarkReport:
         return _render_html(self)
 
 
-def _dancetrack_df(names: list, cache_dir: str, embedder: str):
-    """Run each tracker over the DanceTrack caches → a tidy leaderboard frame."""
+def _cached_df(names: list, cache_dir: str, embedder: str, glob: str):
+    """Run each tracker over a dir of sequence caches → a tidy leaderboard frame.
+
+    Dataset-agnostic (DanceTrack, SportsMOT, …); ``glob`` selects the caches.
+    """
     from dataclasses import replace
 
     import pandas as pd
 
-    from visiontrack.datasets.cache import CachedSequence
+    from experiments._caches import discover_cache_readers
     from visiontrack.eval.mot17 import evaluate_frames, run_sequence
     from visiontrack.tracking.config import TrackerConfig
 
-    readers = []
-    for det in sorted(Path(cache_dir).glob("dancetrack*.npz")):
-        if det.name.endswith(".emb.npz"):
-            continue
-        emb = det.with_name(det.stem + f".{embedder}.emb.npz")
-        readers.append(CachedSequence(det, emb_path=emb) if emb.exists()
-                       else CachedSequence(det))
+    readers = discover_cache_readers(cache_dir, embedder, glob)
     if not readers:
-        raise FileNotFoundError(f"no DanceTrack caches in {cache_dir}")
+        raise FileNotFoundError(f"no sequence caches ({glob}) in {cache_dir}")
 
     rows = []
     for name in names:
@@ -111,20 +108,23 @@ def run_benchmark(
     baseline: str = "bytetrack",
     sequences: list | None = None,
     seeds: list | None = None,
-    cache_dir: str = "data/cache/dancetrack",
+    cache_dir: str | None = None,
     embedder: str = "onnx",
     dataset_label: str | None = None,
 ) -> BenchmarkReport:
     """Run the trackers, score them, and assemble a :class:`BenchmarkReport`.
 
-    ``dataset`` is ``"synthetic"`` (no data needed) or ``"dancetrack"`` (reads the
-    detection + Re-ID caches under ``cache_dir``). ``dataset_label`` overrides only
-    the *displayed* dataset name (title/report) — e.g. ``"dancetrack (real YOLOX)"``
-    — while ``dataset`` still selects the data path.
+    ``dataset`` is ``"synthetic"`` (no data needed) or a real MOT-format set —
+    ``"dancetrack"`` or ``"sportsmot"`` — read from the detection + Re-ID caches
+    under ``cache_dir`` (defaults to ``data/cache/<dataset>``). ``dataset_label``
+    overrides only the *displayed* dataset name (title/report) — e.g.
+    ``"dancetrack (real YOLOX)"`` — while ``dataset`` still selects the data path.
     """
     names = tracker_names or list(PRESET_NAMES)
     if baseline not in names:
         names = [baseline, *names]
+    if cache_dir is None:
+        cache_dir = f"data/cache/{dataset}"
 
     # -- source the per-(tracker, unit) metrics frame -------------------
     if dataset == "synthetic":
@@ -140,13 +140,17 @@ def run_benchmark(
         config_hash = exp.config_hash()
         units = sequences
         taxo_frames = _synthetic_frames(baseline, sequences, seeds, _ZOO_SCENE)
-    elif dataset == "dancetrack":
-        df, seq_names = _dancetrack_df(names, cache_dir, embedder)
-        config_hash = "dancetrack"
+    elif dataset in ("dancetrack", "sportsmot"):
+        # DanceTrack caches are named by their "dancetrack…" sequence prefix;
+        # SportsMOT uses a dedicated dir, so take every cache in it.
+        glob = "dancetrack*.npz" if dataset == "dancetrack" else "*.npz"
+        df, seq_names = _cached_df(names, cache_dir, embedder, glob)
+        config_hash = dataset
         units, seeds = seq_names, [0]
-        taxo_frames = _dancetrack_frames(baseline, cache_dir, embedder)
+        taxo_frames = _dancetrack_frames(baseline, cache_dir, embedder, glob)
     else:
-        raise ValueError(f"unsupported dataset {dataset!r} (synthetic | dancetrack)")
+        raise ValueError(
+            f"unsupported dataset {dataset!r} (synthetic | dancetrack | sportsmot)")
 
     # -- leaderboard: summary + paired comparison vs baseline ------------
     leaderboard = []
@@ -223,11 +227,12 @@ def _render_html(rep: BenchmarkReport) -> str:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run the MOT benchmarking tool")
     parser.add_argument("--dataset", default="synthetic",
-                        choices=["synthetic", "dancetrack"])
+                        choices=["synthetic", "dancetrack", "sportsmot"])
     parser.add_argument("--trackers", default=None,
                         help="comma-separated preset names (default: all)")
     parser.add_argument("--baseline", default="bytetrack")
-    parser.add_argument("--cache-dir", default="data/cache/dancetrack")
+    parser.add_argument("--cache-dir", default=None,
+                        help="sequence-cache dir (default: data/cache/<dataset>)")
     parser.add_argument("--embedder", default="onnx")
     parser.add_argument("--dataset-label", default=None,
                         help="displayed dataset name (e.g. 'dancetrack (real YOLOX)')")
