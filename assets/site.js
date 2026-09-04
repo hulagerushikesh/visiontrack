@@ -51,6 +51,33 @@
       var href = (a.getAttribute("href") || "").replace(/\/+$/, "") || "/";
       if (href === path) a.setAttribute("aria-current", "page");
     });
+
+    reveal();
+  }
+
+  // Restrained scroll-reveal: fade groups up as they enter. Opt-in via the
+  // js-reveal class so no-JS / reduced-motion users see everything immediately.
+  function reveal() {
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce || !("IntersectionObserver" in window)) return;
+    root.classList.add("js-reveal");
+    var sel = ".sec-intro, .uses > *, .cards > *, .facts > *, .understory," +
+              " .lane > .steps > li, .glossary > *, .stats > *";
+    var targets = Array.prototype.slice.call(document.querySelectorAll(sel));
+    if (!targets.length) return;
+    targets.forEach(function (el) {
+      el.classList.add("rv");
+      // stagger within a group of siblings for an orchestrated feel
+      var i = 0, p = el.previousElementSibling;
+      while (p) { if (p.classList && p.classList.contains("rv")) i++; p = p.previousElementSibling; }
+      el.style.transitionDelay = Math.min(i, 6) * 55 + "ms";
+    });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+    targets.forEach(function (el) { io.observe(el); });
   }
 
   if (document.readyState === "loading") {
