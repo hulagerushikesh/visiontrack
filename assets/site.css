@@ -95,9 +95,15 @@ a { color: inherit; }
 }
 @media (max-width: 640px) { .nav-tag { display: none; } }
 .nav-in .spacer { flex: 1; }
-.nav-links { display: flex; gap: 2px; align-items: center; }
+.brand, .theme-btn { flex: none; }              /* pinned — never pushed off-edge */
+.nav-links {
+  display: flex; gap: 2px; align-items: center;
+  flex: 0 1 auto; min-width: 0;                 /* may shrink below content width… */
+  overflow-x: auto; scrollbar-width: none;      /* …and scroll internally instead of overflowing */
+}
+.nav-links::-webkit-scrollbar { display: none; }
 .nav-links a {
-  font-family: var(--mono); font-size: var(--fs-small); color: var(--muted);
+  font-family: var(--mono); font-size: var(--fs-small); color: var(--muted); white-space: nowrap;
   text-decoration: none; padding: 6px 10px; border-radius: 7px; letter-spacing: .01em;
 }
 .nav-links a:hover { color: var(--ink); background: var(--surface-2); }
@@ -312,7 +318,81 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-fam
 .benchmark-page h2 code { font-family: var(--mono); font-size: .82em; background: var(--surface-2); border: 1px solid var(--border); border-radius: 5px; padding: 1px 6px; color: var(--ink-2); }
 .benchmark-page .note code { font-family: var(--mono); background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px; padding: 0 5px; }
 
+/* ==========================================================================
+   Landing: product layer (hero, use-cases, demoted research "understory")
+   Product-forward voice on top of the instrument system — bigger hero,
+   application-domain cards, then the study framed as the layer underneath.
+   ========================================================================== */
+
+/* bigger, more confident marketing hero on the landing page only */
+.hero.product { padding-bottom: var(--sp-3); }
+.hero.product h1 {
+  font-size: clamp(34px, 6vw, 58px); line-height: 1.02; letter-spacing: -.035em;
+  max-width: 15ch;
+}
+.hero.product .lede { font-size: clamp(17px, 2.2vw, 21px); max-width: 60ch; }
+
+/* trust line under the CTAs — plain, quiet, product-credibility */
+.trust {
+  display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center;
+  margin: 20px 0 2px; font-family: var(--mono); font-size: var(--fs-meta); color: var(--muted);
+}
+.trust b { color: var(--ink); font-weight: 650; }
+.trust .sep { width: 4px; height: 4px; border-radius: 50%; background: var(--faint); }
+@media (max-width: 560px) { .trust .sep { display: none; } }
+
+/* section intro block (label + one framing line) */
+.sec-intro { margin: var(--sp-6) 0 var(--sp-3); }
+.sec-intro .section-label { margin: 0 0 8px; }
+.sec-intro h2 {
+  font-size: var(--fs-h2); letter-spacing: -.02em; margin: 0 0 6px; font-weight: 750;
+  text-wrap: balance;
+}
+.sec-intro p { margin: 0; color: var(--muted); max-width: 62ch; font-size: 15.5px; }
+
+/* use-case cards: application domains the tracking core serves */
+.uses { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: var(--sp-3); }
+@media (max-width: 480px) { .uses { grid-template-columns: 1fr; } }
+.use {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+  padding: 20px; box-shadow: var(--shadow); position: relative; overflow: hidden;
+  transition: transform .14s, border-color .14s;
+}
+.use:hover { transform: translateY(-2px); border-color: var(--accent); }
+.use .ic {
+  width: 38px; height: 38px; border-radius: 10px; background: var(--accent-soft);
+  color: var(--accent); display: grid; place-items: center; margin-bottom: 14px;
+}
+.use .ic svg { width: 20px; height: 20px; }
+.use h3 { margin: 0 0 6px; font-size: var(--fs-h3); letter-spacing: -.01em; }
+.use p { margin: 0 0 12px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.use .metric {
+  font-family: var(--mono); font-size: var(--fs-meta); color: var(--ink-2);
+  border-top: 1px solid var(--border); padding-top: 11px; margin-top: auto;
+  display: flex; align-items: center; gap: 7px;
+}
+.use .metric b { color: var(--accent); font-weight: 700; }
+
+/* honest status note under the use-cases */
+.status-note {
+  font-size: 13.5px; color: var(--muted); font-family: var(--mono);
+  background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px 15px; margin: var(--sp-3) 0 0; line-height: 1.55;
+}
+.status-note b { color: var(--ink); }
+
+/* the "understory": research/study framing, demoted below the product story */
+.understory { margin-top: var(--sp-7); padding-top: var(--sp-5); border-top: 1px solid var(--border); }
+.understory .eyebrow { color: var(--muted); }
+.understory .eyebrow::before { background: var(--muted); }
+.understory h2 {
+  font-size: var(--fs-h2); letter-spacing: -.02em; margin: 0 0 10px; font-weight: 750;
+  text-wrap: balance; max-width: 24ch;
+}
+.understory .lede { font-size: var(--fs-lede); }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { transition: none !important; }
+  .use:hover, .card:hover, .btn.primary:hover { transform: none; }
 }
