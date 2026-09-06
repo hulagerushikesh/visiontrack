@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>VisionTrack — learn how it works</title>
+<meta name="description" content="Two ways into VisionTrack: a builder track (install, a code snippet, the CLI, and the from-scratch architecture) and a plain-English track that explains what multi-object tracking is, why it's hard, and where it's useful — no jargon.">
+<link rel="canonical" href="https://visiontrack.hulage.in/teaching">
+<meta name="theme-color" content="#0b0e14">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="VisionTrack">
+<meta property="og:url" content="https://visiontrack.hulage.in/teaching">
+<meta property="og:title" content="Learn VisionTrack — for builders and for everyone">
+<meta property="og:description" content="Understand what we built at your own depth: install-and-code for developers, plain English for everyone else.">
+<meta property="og:image" content="https://visiontrack.hulage.in/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Learn VisionTrack — for builders and for everyone">
+<meta name="twitter:description" content="A developer track and a plain-English track for the same from-scratch multi-object tracker.">
+<meta name="twitter:image" content="https://visiontrack.hulage.in/assets/og-image.png">
+<link rel="stylesheet" href="/assets/site.css">
+<script defer src="/assets/site.js"></script>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="nav-in">
+    <a class="brand" href="/"><span class="dot"></span>VisionTrack</a>
+    <span class="nav-tag">NumPy · MOT</span>
+    <span class="spacer"></span>
+    <div class="nav-links">
+      <a href="/live">live</a>
+      <a href="/teaching" aria-current="page">learn</a>
+      <a href="/demo">demo</a>
+      <a href="/writeup">write-up</a>
+      <a href="/video" data-secondary>video</a>
+      <a href="/benchmark">benchmark</a>
+      <a href="/docs/" data-secondary>docs</a>
+    </div>
+    <button class="theme-btn" type="button">◑ dark</button>
+  </div>
+</nav>
+
+<div class="wrap">
+  <section class="hero" style="padding-bottom:0">
+    <p class="eyebrow">Learn · VisionTrack</p>
+    <h1>Understand what we built — at your depth.</h1>
+    <p class="lede">Two ways in, same system. A <b>builder track</b> — install it, read a dozen lines
+    of code, run it on your own video, and see the from-scratch architecture. And an
+    <b>everyone track</b> — what object tracking actually is, why it's a hard problem, and where it
+    quietly earns its keep, in plain English with no code.</p>
+
+    <div class="switch" role="group" aria-label="choose your track">
+      <a href="#dev" data-current="true">⌨&nbsp; For developers</a>
+      <a href="#everyone">🌱&nbsp; For everyone</a>
+    </div>
+  </section>
+
+  <!-- ================= DEVELOPER LANE ================= -->
+  <section class="lane" id="dev">
+    <div class="lane-head">
+      <span class="lane-badge">For developers</span>
+      <h2>From <code>pip install</code> to your own video.</h2>
+    </div>
+    <p class="lede">VisionTrack is a real, installable tracker — <b>not a wrapper</b>. The whole
+    association core (an 8-state Kalman filter, an O(n³) Hungarian solver, ByteTrack two-stage
+    matching, and a tentative→confirmed→deleted lifecycle) is written from scratch on NumPy, with
+    <b>zero tracking libraries</b>. The metrics harness (CLEAR-MOT / IDF1 / HOTA) is from scratch too,
+    cross-checked against <code>trackeval</code> to 1e-3, with paired significance tests and config
+    hashing — so results are reproducible, not vibes.</p>
+
+    <p class="section-label">Quickstart</p>
+    <ol class="steps">
+      <li>
+        <h3>Install</h3>
+        <p>The core is NumPy-only. <code>pip install visiontrack-mot</code> — add the
+        <code>[video]</code> extra to run on real mp4s.</p>
+      </li>
+      <li>
+        <h3>Feed it detections, get stable ids back</h3>
+        <p>Bring any detector (its boxes are all VisionTrack needs); it returns one confirmed,
+        numbered track per object, held across frames. See the snippet below.</p>
+      </li>
+      <li>
+        <h3>Run it on a real video or a live camera</h3>
+        <p><code>visiontrack track in.mp4 out.mp4 --model yolox_nano.onnx</code> annotates a file;
+        <code>visiontrack webcam</code> runs the same pipeline on a live camera.</p>
+      </li>
+      <li>
+        <h3>Reproduce the study</h3>
+        <p><code>visiontrack demo</code> prints metrics on a synthetic scene; <code>make benchmark</code>
+        runs the significance-tested leaderboard. Or open the browser demos — no install at all.</p>
+      </li>
+    </ol>
+
+    <p class="section-label">The core loop, in full</p>
+    <pre><span class="c"># pip install visiontrack-mot</span>
+import numpy as np
+from visiontrack import ByteTracker, TrackerConfig, Detection
+
+tracker = ByteTracker(TrackerConfig())
+
+<span class="c"># your detector yields (boxes, scores, class_ids) per frame</span>
+for boxes, scores, class_ids in detection_stream:
+    dets = [
+        Detection(xyxy=b, score=s, class_id=c)
+        for b, s, c in zip(boxes, scores, class_ids)
+    ]
+    for obs in tracker.update(dets):          <span class="c"># -> list[TrackObservation]</span>
+        <span class="c"># obs.track_id stays fixed for the same object across frames</span>
+        print(obs.frame, obs.track_id, obs.xyxy, obs.score)</pre>
+    <p class="note">That's the whole public contract: build <code>Detection</code>s, call
+    <code>update()</code> once per frame, read <code>track_id</code> off each
+    <code>TrackObservation</code>. Full reference in <a href="/docs/">the docs</a> and
+    <a href="/writeup">the write-up</a>.</p>
+
+    <p class="section-label">What runs inside <code>update()</code></p>
+    <ol class="steps">
+      <li><h3>Predict</h3><p>Every existing track advances one step through its 8-state constant-velocity
+        <b>Kalman filter</b> (position + aspect + height, and their velocities).</p></li>
+      <li><h3>Associate — high scores first</h3><p><b>ByteTrack</b> round one: confident detections are
+        matched to predicted tracks by IoU via the <b>Hungarian</b> solver, inside a χ² gate.</p></li>
+      <li><h3>Associate — recover the rest</h3><p>Round two gives unmatched tracks a second chance against
+        the <b>low-score</b> detections — the trick that carries objects through a brief occlusion.</p></li>
+      <li><h3>Manage lifecycle</h3><p>A tentative→confirmed→deleted state machine spawns an id only after a
+        few consistent hits and retires tracks gone too long — so an id you see is a committed one.</p></li>
+    </ol>
+
+    <div class="cta-row lane-foot">
+      <a class="btn primary" href="/live">▶ Try it live</a>
+      <a class="btn ghost" href="/benchmark">See the benchmark</a>
+      <a class="btn ghost" href="/writeup">Read the write-up</a>
+    </div>
+  </section>
+
+  <!-- ================= EVERYONE LANE ================= -->
+  <section class="lane everyone" id="everyone">
+    <div class="lane-head">
+      <span class="lane-badge">For everyone</span>
+      <h2>What is object tracking — and why is it hard?</h2>
+    </div>
+
+    <div class="plain">
+      <p>Imagine watching a security camera over a busy shop. A computer can already look at a
+      <b>single frame</b> and point at things: "that's a person, that's a person, that's a cart." That
+      part is called <b>detection</b>. But it has no memory — in the very next frame it points again
+      and has <b>no idea</b> it's the same people.</p>
+
+      <p><b>Tracking</b> is the memory. It gives each person an invisible name tag — <b>#3, #4, #5</b> —
+      and keeps that tag stuck to the same person as they walk around, turn, and pass behind a shelf.
+      Get that right and suddenly you can answer real questions: <b>how many different people came in</b>
+      (not how many times the camera blinked), how long each one stayed, which way traffic flowed.</p>
+
+      <div class="analogy">
+        <span class="k">The party analogy</span>
+        <b>Detection</b> is glancing at a crowded party and noting "there are twelve people here."
+        <b>Tracking</b> is recognising that the person by the door is the <b>same</b> person who was at
+        the snack table a minute ago — so you don't count them as two guests. VisionTrack is the part
+        that keeps everyone's name straight, even when they cross paths or briefly step out of view.
+      </div>
+
+      <p>Why is it hard? People and cars <b>look alike</b>, they <b>cross over</b> each other, and they
+      <b>disappear</b> behind things and reappear. A good tracker has to <b>guess where each one is
+      heading</b>, match the new sightings to the right tag, and not panic when someone vanishes for a
+      moment. VisionTrack does this with a bit of physics (predicting motion) and careful matching —
+      all built from the ground up, and all running <b>on your own device</b>, with nothing uploaded.</p>
+    </div>
+
+    <p class="section-label">In three steps</p>
+    <ol class="steps">
+      <li><h3>Spot</h3><p>Each moment, find everything of interest in the picture.</p></li>
+      <li><h3>Guess</h3><p>Predict where each already-known thing probably moved to.</p></li>
+      <li><h3>Match &amp; remember</h3><p>Line up the new spots with the guesses, keep every name tag
+        attached, and hand out a new tag only for someone genuinely new.</p></li>
+    </ol>
+
+    <p class="section-label">A few words you'll hear</p>
+    <dl class="glossary">
+      <div>
+        <dt>Detection <span class="plainword">— "what's in this frame?"</span></dt>
+        <dd>Finding objects in one still image, with no memory of before or after.</dd>
+      </div>
+      <div>
+        <dt>Track / ID <span class="plainword">— "the name tag"</span></dt>
+        <dd>One object's identity, kept the same across every frame it appears in.</dd>
+      </div>
+      <div>
+        <dt>ID switch <span class="plainword">— "the mix-up"</span></dt>
+        <dd>When the tracker accidentally swaps two objects' tags. Fewer is better.</dd>
+      </div>
+      <div>
+        <dt>Occlusion <span class="plainword">— "hidden for a moment"</span></dt>
+        <dd>When something passes behind another object and briefly can't be seen.</dd>
+      </div>
+      <div>
+        <dt>On-device <span class="plainword">— "stays on your computer"</span></dt>
+        <dd>The video is processed right where you are; nothing is sent to a server.</dd>
+      </div>
+    </dl>
+
+    <p class="plain">Want to just <b>see</b> it? Open the live tracker, point your webcam at the room,
+    and watch the coloured boxes keep their numbers as you move.</p>
+
+    <div class="cta-row lane-foot">
+      <a class="btn primary" href="/live">▶ See it with your camera</a>
+      <a class="btn ghost" href="/video">Watch it on a real street</a>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="foot-in">
+    <span>VisionTrack · MIT</span>
+    <span class="spacer"></span>
+    <a href="/live">live</a>
+    <a href="/teaching">learn</a>
+    <a href="/writeup">write-up</a>
+    <a href="/demo">demo</a>
+    <a href="/video">video</a>
+    <a href="/benchmark">benchmark</a>
+    <a href="/docs/">docs</a>
+  </div>
+</footer>
+
+<script>
+/* Reflect which lane you're viewing on the segmented switch — pure enhancement,
+   both lanes are always in the DOM and reachable by anchor if JS is off. */
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll('.switch a'));
+  var lanes = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+  function mark(i) {
+    links.forEach(function (a, j) { a.setAttribute('data-current', j === i ? 'true' : 'false'); });
+  }
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) mark(lanes.indexOf(e.target));
+      });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    lanes.forEach(function (l) { if (l) io.observe(l); });
+  }
+  links.forEach(function (a, i) { a.addEventListener('click', function () { mark(i); }); });
+})();
+</script>
+
+</body>
+</html>

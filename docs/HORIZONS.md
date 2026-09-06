@@ -176,3 +176,10 @@ owner's PyPI account — the repo is release-ready.*
 - **Horizon 2 complete** (H2.1 video, H2.2 profiling, H2.3 package + API + release).
 - **Horizon 3 started** — the honest MOT benchmarking tool is built &amp; live at
   `/benchmark`. All three horizons now have a shipped deliverable.
+- **v0.2.0 released (2026-09-04)** — `pip install visiontrack-mot` 0.2.0 live on PyPI.
+  Adds the **`/live` in-browser tracker** (the from-scratch association ported to
+  JavaScript, on-device over webcam / sample clip), the **SportsMOT code path**, and a
+  **site UI redesign** (shared stylesheet + live landing hero). GitHub Release per tag.
+- **Remaining work is gated, not open:** SportsMOT & yolox-x need a large dataset/model
+  download; the C++/CUDA sibling needs a local toolchain (`brew install eigen`, pybind11);
+  **H3.2 (teaching) and H3.3 (vertical app) are deliberately on hold.**
