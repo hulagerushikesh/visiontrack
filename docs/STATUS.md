@@ -1,7 +1,8 @@
 # VisionTrack — Status & Roadmap Checklist
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
-Last updated: 2026-08-08 (HEAD `01307e0`).
+Last updated: 2026-09-04 — **v0.2.0 released** (`/live` in-browser tracker + SportsMOT
+code path + site redesign, published to PyPI).
 
 ---
 
@@ -38,7 +39,8 @@ Last updated: 2026-08-08 (HEAD `01307e0`).
 - [x] H2.1 — real-footage annotated demo (+ YOLOX raw-grid decode fix)
 - [x] H2.2 — throughput/FPS profiling
 - [x] H2.3 — pip-installable + stable public API + release automation
-- [x] **Published to PyPI** — `pip install visiontrack-mot` (0.1.0, live)
+- [x] **Published to PyPI** — `pip install visiontrack-mot` (**0.2.0** live; 0.1.0 first cut)
+      via tag-triggered Trusted-Publishing Action; GitHub Release page per tag
 
 ### Horizon 3 — product
 - [x] H3.1 — honest MOT benchmarking tool (leaderboard + significance + taxonomy)
@@ -48,12 +50,18 @@ Last updated: 2026-08-08 (HEAD `01307e0`).
 - [x] Mini-paper README
 - [x] `make reproduce` (real-data) + `make reproduce-synth` (no data)
 - [x] Interactive web demo — `/demo`
+- [x] **Live in-browser tracker — `/live`** — the from-scratch association (8-state
+      Kalman + O(n³) Hungarian + ByteTrack + lifecycle) ported to JavaScript
+      (`assets/tracker.js`), run on-device over webcam or a sample clip via a COCO-SSD
+      detector. No video committed; nothing leaves the browser. Node-tested logic.
 - [x] "Open in Colab" reproduce notebook
 - [x] Deployed to Vercel — **visiontrack.hulage.in**
 - [x] Open-Graph / social meta + 1200×630 preview card
 - [x] Narrative write-up page — `/writeup`
 - [x] Study guide + CV roadmap (in repo)
-- [x] Live routes: `/`, `/demo`, `/writeup`, `/video`, `/benchmark`, `/benchmark/dancetrack`, `/benchmark/dancetrack-yolox`, `/docs`
+- [x] Live routes: `/`, `/live`, `/demo`, `/writeup`, `/video`, `/benchmark`, `/benchmark/dancetrack`, `/benchmark/dancetrack-yolox`, `/docs`
+- [x] **Site UI redesign** — one shared stylesheet across every page, unified type/
+      spacing/light-dark theming, live tracking hero on the landing page
 
 ### Quality / infra
 - [x] 344 tests passing (1 slow, opt-in) · ruff clean · CI on py3.10/3.11/3.12
@@ -77,7 +85,8 @@ Last updated: 2026-08-08 (HEAD `01307e0`).
       headlessly; only the literal camera + preview window need real hardware.
 - [x] **mkdocs documentation site** — `docs/` is a browsable Material site (`make docs`),
       built on Vercel and **live at visiontrack.hulage.in/docs**
-- [ ] **Landing page redesign** — stronger hero/typography *(optional)*
+- [x] **Landing page redesign** — stronger hero/typography — shared-CSS redesign +
+      live tracking hero shipped in v0.2.0
 - [x] Put the real-footage YOLOX video on the site — **live at `/video`**
       (public-domain Bangkok-traffic clip; 300 frames, 107 tracks, ~1.8 MB mp4)
 
@@ -86,7 +95,8 @@ Last updated: 2026-08-08 (HEAD `01307e0`).
       done + tested** (generic MOT loader, `precompute_sportsmot.py`,
       `--dataset sportsmot` in benchmark + taxonomy, `tests/test_sportsmot.py`);
       only the *(large download)* + `precompute` run remain to get numbers.
-      Recipe → [`SPORTSMOT.md`](SPORTSMOT.md).
+      Code path **shipped in v0.2.0**. Recipe → [`SPORTSMOT.md`](SPORTSMOT.md).
+      **← next research number, blocked only on the dataset download (owner action).**
 - [ ] Stronger detector on DanceTrack (yolox-x) — test if it restores appearance significance
 
 ### Product direction (far)

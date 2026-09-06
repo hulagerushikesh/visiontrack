@@ -35,6 +35,7 @@
     <span class="spacer"></span>
     <div class="nav-links">
       <a href="/live">live</a>
+      <a href="/teaching">learn</a>
       <a href="/demo">demo</a>
       <a href="/writeup">write-up</a>
       <a href="/video" data-secondary>video</a>
@@ -46,26 +47,24 @@
 </nav>
 
 <div class="wrap">
-  <section class="hero">
-    <p class="eyebrow">From-scratch multi-object tracking · a controlled study</p>
-    <h1>When do the field's standard tricks actually help tracking?</h1>
-    <p class="lede">An online tracking-by-detection system — an 8-state <b>Kalman filter</b>, an
-    O(n³) <b>Hungarian</b> solver, and <b>ByteTrack</b> association — built from first principles on
-    NumPy, then used as a <b>reproducible, significance-tested study</b> of when appearance re-ID,
-    learned motion, and calibrated uncertainty pay off on real data (MOT17, DanceTrack). Several
-    answers are honest negatives — which is the point.</p>
+  <section class="hero product">
+    <p class="eyebrow">Open-source multi-object tracking · runs on-device</p>
+    <h1>Every object. Every frame. One stable ID.</h1>
+    <p class="lede">VisionTrack follows every person, vehicle, or object across a video and holds a
+    <b>persistent identity</b> for each — through crossings, occlusion, and clutter. A
+    <b>Kalman + Hungarian + ByteTrack</b> core, built from scratch on NumPy, that runs on your own
+    machine, on a file, or <b>live in your browser</b>. No cloud, no upload.</p>
 
     <div class="cta-row">
-      <a class="btn primary" href="/demo">▶ Open the interactive demo</a>
-      <a class="btn ghost" href="/writeup">Read the mini-paper</a>
+      <a class="btn primary" href="/live">▶ Try it live in your browser</a>
+      <a class="btn ghost" href="/video">Watch it on real footage</a>
     </div>
 
-    <div class="meta" style="margin-top:22px">
-      <span><b>8-state</b> Kalman filter</span>
-      <span><b>O(n³)</b> Hungarian</span>
-      <span><b>ByteTrack</b> association</span>
-      <span><b>0</b> tracking libs</span>
-      <span><b>344</b> tests</span>
+    <div class="trust">
+      <span><b>pip install visiontrack-mot</b></span><i class="sep"></i>
+      <span><b>on-device</b>, nothing uploaded</span><i class="sep"></i>
+      <span><b>0</b> tracking libraries</span><i class="sep"></i>
+      <span><b>344</b> tests · MIT</span>
     </div>
 
     <div class="screen">
@@ -76,6 +75,44 @@
       <p class="screen-cap">stable per-object ids held through crossings — detections snap in, the tracker keeps identity</p>
     </div>
   </section>
+
+  <div class="sec-intro">
+    <p class="section-label">Where it's used</p>
+    <h2>Turn a camera into counts, paths, and identities.</h2>
+    <p>Persistent per-object identity is the primitive behind footfall, flow, and performance
+    analytics. VisionTrack supplies that tracking layer; swap in whatever detector your domain
+    needs — the identity logic stays the same.</p>
+  </div>
+  <div class="uses">
+    <div class="use">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span>
+      <h3>Retail &amp; spaces</h3>
+      <p>Footfall, dwell time, and queue length from one ceiling camera — count unique visitors, not frames.</p>
+      <span class="metric"><b>unique</b> visitors, not re-counts</span>
+    </div>
+    <div class="use">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2.5"/><path d="M12 8v6m0 0l-3 5m3-5l3 5M6 11h12"/></svg></span>
+      <h3>Sports &amp; performance</h3>
+      <p>Per-player trajectories, speed, and spacing across a clip — every athlete keeps their own id through contact.</p>
+      <span class="metric"><b>per-player</b> paths &amp; speed</span>
+    </div>
+    <div class="use">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M9 7h6M9 11h6"/><circle cx="9" cy="17" r="1"/><circle cx="15" cy="17" r="1"/></svg></span>
+      <h3>Traffic &amp; mobility</h3>
+      <p>Vehicle counts, turning movements, and flow at an intersection — each vehicle tracked through the frame once.</p>
+      <span class="metric"><b>flow</b> &amp; turning counts</span>
+    </div>
+    <div class="use">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
+      <h3>Safety &amp; operations</h3>
+      <p>Zone-intrusion and asset presence over time — a consistent id per object is what makes "who entered, and when" answerable.</p>
+      <span class="metric"><b>zone</b> &amp; dwell events</span>
+    </div>
+  </div>
+  <p class="status-note"><b>Where it stands today.</b> The tracking core is production-honest and
+  benchmarked — the domain apps above are the direction, not a shipped product yet. What's live now:
+  the <a href="/live">in-browser tracker</a>, a <a href="/video">real-footage</a> run, the
+  <a href="/demo">interactive demo</a>, and <code>pip install visiontrack-mot</code>.</p>
 
   <p class="section-label">Explore</p>
   <div class="cards">
@@ -111,12 +148,27 @@
     </a>
   </div>
 
-  <p class="section-label">A few results</p>
-  <div class="facts">
-    <div class="fact"><div class="n">188 → 163</div><div class="l"><b>RQ1</b> — deep re-ID cuts MOT17 ID switches <span>−13%</span> (significant, pooled)</div></div>
-    <div class="fact"><div class="n">refuted</div><div class="l"><b>RQ1</b> — "appearance hurts on DanceTrack" hypothesis, tested and disproven</div></div>
-    <div class="fact"><div class="n">344</div><div class="l">tests passing · NumPy-only core · HOTA cross-checked vs trackeval</div></div>
-  </div>
+  <section class="understory">
+    <p class="eyebrow">Under the hood · a controlled research study</p>
+    <h2>Not a wrapper — the tracker, built from first principles.</h2>
+    <p class="lede">The core isn't a library call. It's an 8-state <b>Kalman filter</b>, an O(n³)
+    <b>Hungarian</b> solver, and <b>ByteTrack</b> two-stage association, written from scratch on
+    NumPy — then used as a <b>reproducible, significance-tested study</b> of when appearance re-ID,
+    learned motion, and calibrated uncertainty actually help on real data (MOT17, DanceTrack).
+    Several answers are honest negatives, which is the point.</p>
+
+    <div class="cta-row" style="margin-bottom:8px">
+      <a class="btn ghost" href="/writeup">Read the mini-paper</a>
+      <a class="btn ghost" href="/benchmark">See the benchmark</a>
+    </div>
+
+    <p class="section-label">A few results</p>
+    <div class="facts">
+      <div class="fact"><div class="n">188 → 163</div><div class="l"><b>RQ1</b> — deep re-ID cuts MOT17 ID switches <span>−13%</span> (significant, pooled)</div></div>
+      <div class="fact"><div class="n">refuted</div><div class="l"><b>RQ1</b> — "appearance hurts on DanceTrack" hypothesis, tested and disproven</div></div>
+      <div class="fact"><div class="n">344</div><div class="l">tests passing · NumPy-only core · HOTA cross-checked vs trackeval</div></div>
+    </div>
+  </section>
 </div>
 
 <footer>
@@ -125,6 +177,7 @@
     <span class="spacer"></span>
     <a href="/writeup">write-up</a>
     <a href="/live">live</a>
+    <a href="/teaching">learn</a>
     <a href="/demo">demo</a>
     <a href="/video">video</a>
     <a href="/benchmark">benchmark</a>
