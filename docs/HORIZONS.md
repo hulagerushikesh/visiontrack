@@ -180,6 +180,12 @@ owner's PyPI account — the repo is release-ready.*
   Adds the **`/live` in-browser tracker** (the from-scratch association ported to
   JavaScript, on-device over webcam / sample clip), the **SportsMOT code path**, and a
   **site UI redesign** (shared stylesheet + live landing hero). GitHub Release per tag.
+- **Site now leads with the product** — a product-first landing (hero, application
+  use-cases, the study demoted to an "under the hood" section) and a two-audience
+  **`/teaching`** page (a builder lane and a plain-English lane). 348 tests, clean lint.
 - **Remaining work is gated, not open:** SportsMOT & yolox-x need a large dataset/model
-  download; the C++/CUDA sibling needs a local toolchain (`brew install eigen`, pybind11);
-  **H3.2 (teaching) and H3.3 (vertical app) are deliberately on hold.**
+  download (code paths complete and tested — see [`STATUS.md`](STATUS.md) for exactly
+  what to fetch); the C++/CUDA sibling needs a local toolchain (`brew install eigen`,
+  pybind11) and is parked. Everything else pre-product is finished.
+- **Next: Horizon 3 product direction** — H3.2 (teaching product) and H3.3 (vertical
+  app); `/teaching` and the landing use-cases are the seeds for both.
