@@ -87,3 +87,22 @@ def test_run_benchmark_dispatches_sportsmot(tmp_path):
     assert rep.dataset == "sportsmot"
     assert rep.meta["config_hash"] == "sportsmot"
     assert "v_a_0001" in rep.meta["sequences"]
+
+
+def test_sportsmot_report_routes_to_its_own_page():
+    """The served route for a SportsMOT report, including the YOLOX ordering trap.
+
+    ``_route`` matches on substrings, and a real-detector label reads
+    "sportsmot (real YOLOX)" — which also contains "yolox". SportsMOT must be
+    tested first or that report would be served at the DanceTrack URL.
+    """
+    from experiments._benchmark_html import _DATASET_TABS, _route
+
+    assert _route("sportsmot") == "/benchmark/sportsmot"
+    assert _route("SportsMOT (real YOLOX)") == "/benchmark/sportsmot"
+    # the other datasets keep their routes
+    assert _route("dancetrack (real YOLOX)") == "/benchmark/dancetrack-yolox"
+    assert _route("dancetrack") == "/benchmark/dancetrack"
+    assert _route("synthetic") == "/benchmark"
+    # and the page offers a tab to get there
+    assert '<a href="/benchmark/sportsmot">SportsMOT</a>' in _DATASET_TABS
