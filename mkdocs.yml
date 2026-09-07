@@ -78,15 +78,7 @@ nav:
       - RQ4 — Global motion compensation: GMC_RQ4.md
       - OC-SORT mechanics: OC_SORT.md
       - ID-switch error taxonomy: ERROR_TAXONOMY.md
-  - Results:
-      - Benchmark — synthetic: results_benchmark_synth.md
-      - Benchmark — DanceTrack: results_benchmark_dancetrack.md
-      - Benchmark — DanceTrack (real YOLOX): results_benchmark_dancetrack_yolox.md
-      - Tracker zoo — synthetic: results_tracker_zoo.md
-      - Tracker zoo — DanceTrack: results_tracker_zoo_dancetrack.md
-      - Error taxonomy — DanceTrack: results_error_taxonomy_dancetrack.md
-      - GMC (RQ4): results_gmc_rq4.md
-      - Synthetic baseline: results_synth.md
+  - Results & benchmarks: BENCHMARKS.md
   - Use it:
       - Public API: API.md
       - Run on your own video: VIDEO.md

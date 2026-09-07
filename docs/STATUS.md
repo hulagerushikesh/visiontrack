@@ -104,7 +104,7 @@ SportsMOT code path + site redesign, published to PyPI).
       With appearance informative, re-ID turns significant on all four metrics
       (−7.13 IDSW, p<0.05) — but a *smaller* ID-switch win than DanceTrack's
       −15.3, and motion carries a 1.31× switch lift on a 6.6% base rate.
-      Results → [`results_benchmark_sportsmot.md`](results_benchmark_sportsmot.md).
+      Results → [`/benchmark/sportsmot`](https://visiontrack.hulage.in/benchmark/sportsmot).
 - [ ] SportsMOT **real-detector** pass (`--detector-model`) — the oracle protocol
       isolates association; this adds detector quality to the measurement.
 - [ ] Stronger detector on DanceTrack (yolox-x) — test if it restores appearance significance
