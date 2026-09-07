@@ -86,12 +86,22 @@ tuning). Bonus: the same DanceTrack run reproduced RQ1 (appearance cuts IDSW
   *significant* win shifts to ByteTrack's **two-stage low-score recovery**
   (single-stage sort/deepsort/oc_sort all −0.04 MOTA, p=0.01), OC-SORT still hurts,
   and appearance stays beneficial-but-n.s. Details → [`PHASE3.md`](PHASE3.md).
-- **SportsMOT** as a second maneuver dataset for RQ2 — *code path shipped, awaiting
-  the download.* SportsMOT decouples the two hard things DanceTrack conflates:
-  fast non-linear motion **with** distinguishable appearance, so it is the clean
-  RQ2 test. The generic MOT loader reads it verbatim; `precompute_sportsmot.py` +
-  `--dataset sportsmot` (benchmark & taxonomy) are wired and tested
-  (`tests/test_sportsmot.py`). Recipe → [`SPORTSMOT.md`](SPORTSMOT.md).
+- **SportsMOT** as a second maneuver dataset for RQ2 — **oracle numbers landed**
+  ([/benchmark/sportsmot](https://visiontrack.hulage.in/benchmark/sportsmot), 45 val
+  sequences / 26,970 frames). SportsMOT decouples the two hard things DanceTrack
+  conflates: fast non-linear motion **with** distinguishable appearance, so it is the
+  clean RQ2 test. The result: with appearance *informative*, the re-ID channel becomes
+  significant on **all four** metrics (`bytetrack_reid` +0.002 MOTA, +0.006 IDF1,
+  +0.003 HOTA, −7.13 IDSW, all p<0.05) where on DanceTrack only IDSW moved. But the
+  *size* of the ID-switch win is **smaller** than on DanceTrack (−7.1 vs −15.3, both
+  off a ~217 baseline) — appearance buys broader-but-shallower gains here, not the
+  rescue a "dancers are the confound" reading would predict. Note the power caveat:
+  45 paired units vs DanceTrack's 12 makes significance easier to reach, so the
+  *breadth* of the stars is partly an n effect; the effect *sizes* are the honest
+  comparison. The taxonomy is the sharper signal — **motion** carries a 1.31× lift on
+  a **6.6%** base rate, against DanceTrack's 3.86× on a statistically thin 0.9%.
+  Motion is the common failure mode here, which is exactly why the dataset was added.
+  Real-detector pass still to run. Recipe → [`SPORTSMOT.md`](SPORTSMOT.md).
 
 ---
 
@@ -182,10 +192,12 @@ owner's PyPI account — the repo is release-ready.*
   **site UI redesign** (shared stylesheet + live landing hero). GitHub Release per tag.
 - **Site now leads with the product** — a product-first landing (hero, application
   use-cases, the study demoted to an "under the hood" section) and a two-audience
-  **`/teaching`** page (a builder lane and a plain-English lane). 348 tests, clean lint.
-- **Remaining work is gated, not open:** SportsMOT & yolox-x need a large dataset/model
-  download (code paths complete and tested — see [`STATUS.md`](STATUS.md) for exactly
-  what to fetch); the C++/CUDA sibling needs a local toolchain (`brew install eigen`,
-  pybind11) and is parked. Everything else pre-product is finished.
+  **`/teaching`** page (a builder lane and a plain-English lane). 349 tests, clean lint.
+- **SportsMOT is no longer gated** — the dataset is downloaded and verified (every
+  sequence's frame count checked against its `seqinfo.ini`), caches and OSNet
+  embeddings are built, and the oracle leaderboard is live at `/benchmark/sportsmot`.
+  What remains there is the real-detector pass. **yolox-x on DanceTrack** now has its
+  weights but still needs the re-detection run; the C++/CUDA sibling needs a local
+  toolchain (eigen + pybind11, both now installed) and is parked pending a plan.
 - **Next: Horizon 3 product direction** — H3.2 (teaching product) and H3.3 (vertical
   app); `/teaching` and the landing use-cases are the seeds for both.

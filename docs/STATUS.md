@@ -1,8 +1,9 @@
 # VisionTrack — Status & Roadmap Checklist
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
-Last updated: 2026-09-04 — **v0.2.0 released** (`/live` in-browser tracker + SportsMOT
-code path + site redesign, published to PyPI).
+Last updated: 2026-09-07 — **SportsMOT oracle numbers landed** (45 val sequences,
+`/benchmark/sportsmot` live). Previously: v0.2.0 (`/live` in-browser tracker +
+SportsMOT code path + site redesign, published to PyPI).
 
 ---
 
@@ -59,7 +60,7 @@ code path + site redesign, published to PyPI).
 - [x] Open-Graph / social meta + 1200×630 preview card
 - [x] Narrative write-up page — `/writeup`
 - [x] Study guide + CV roadmap (in repo)
-- [x] Live routes: `/`, `/live`, `/teaching`, `/demo`, `/writeup`, `/video`, `/benchmark`, `/benchmark/dancetrack`, `/benchmark/dancetrack-yolox`, `/docs`
+- [x] Live routes: `/`, `/live`, `/teaching`, `/demo`, `/writeup`, `/video`, `/benchmark`, `/benchmark/dancetrack`, `/benchmark/dancetrack-yolox`, `/benchmark/sportsmot`, `/docs`
 - [x] **Site UI redesign** — one shared stylesheet across every page, unified type/
       spacing/light-dark theming, live tracking hero on the landing page
 - [x] **Two-audience teaching page — `/teaching`** — a developer lane (install, the
@@ -69,7 +70,7 @@ code path + site redesign, published to PyPI).
       use-cases, the controlled study demoted to an "under the hood" section
 
 ### Quality / infra
-- [x] 348 tests passing (1 slow, opt-in) · ruff clean · CI on py3.10/3.11/3.12
+- [x] 349 tests passing (1 slow, opt-in) · ruff clean · CI on py3.10/3.11/3.12
 - [x] Batched Kalman hot path — per-frame predict + Mahalanobis gating run as one
       `(N, 8)` NumPy call over the whole track set: ~1.4–1.5× faster, bit-identical
       (2841 → 294 FPS across 4–64 objects; MOTA/IDSW unchanged)
@@ -96,12 +97,16 @@ code path + site redesign, published to PyPI).
       (public-domain Bangkok-traffic clip; 300 frames, 107 tracks, ~1.8 MB mp4)
 
 ### Research extensions (heavier)
-- [~] **SportsMOT** — second non-linear-motion dataset for RQ2. **Code path
-      done + tested** (generic MOT loader, `precompute_sportsmot.py`,
-      `--dataset sportsmot` in benchmark + taxonomy, `tests/test_sportsmot.py`);
-      only the *(large download)* + `precompute` run remain to get numbers.
-      Code path **shipped in v0.2.0**. Recipe → [`SPORTSMOT.md`](SPORTSMOT.md).
-      **← next research number, blocked only on the dataset download (owner action).**
+- [x] **SportsMOT (oracle protocol)** — second non-linear-motion dataset for RQ2.
+      Dataset downloaded and verified (45 val sequences / 26,970 frames, each
+      sequence's frame count checked against its `seqinfo.ini`), caches + OSNet
+      embeddings built, leaderboard live at **`/benchmark/sportsmot`**.
+      With appearance informative, re-ID turns significant on all four metrics
+      (−7.13 IDSW, p<0.05) — but a *smaller* ID-switch win than DanceTrack's
+      −15.3, and motion carries a 1.31× switch lift on a 6.6% base rate.
+      Results → [`results_benchmark_sportsmot.md`](results_benchmark_sportsmot.md).
+- [ ] SportsMOT **real-detector** pass (`--detector-model`) — the oracle protocol
+      isolates association; this adds detector quality to the measurement.
 - [ ] Stronger detector on DanceTrack (yolox-x) — test if it restores appearance significance
 
 ### Product direction (far)
@@ -127,20 +132,24 @@ code path + site redesign, published to PyPI).
 
 Everything that can be finished without a large download is **done**: the research
 questions (RQ1–RQ4), both usability horizons, the benchmarking tool, the site
-(`/live`, `/teaching`, product-first landing), the PyPI release, 348 passing tests,
+(`/live`, `/teaching`, product-first landing), the PyPI release, 349 passing tests,
 clean lint, and a clean local install.
 
-The two remaining research items are **gated on data this repo deliberately does not
-carry** (weight-clean / imagery-clean by design) — they are not partially built, the
-code paths are complete and tested:
+**SportsMOT is done under the oracle protocol** — the dataset is on disk and verified,
+and `/benchmark/sportsmot` is live. What is left there is the real-detector pass, which
+is compute, not a blocker.
 
-| Item | What is missing | What unblocks it |
+The remaining research item is **gated on compute, no longer on downloads** — the data
+and weights this repo deliberately does not carry (weight-clean / imagery-clean by
+design) have now been fetched locally:
+
+| Item | State | What it needs |
 |---|---|---|
-| **SportsMOT numbers** (RQ2) | the dataset (~GBs of frames) | download SportsMOT `val/`, then `precompute_sportsmot.py` → `--dataset sportsmot`. Recipe: [`SPORTSMOT.md`](SPORTSMOT.md) |
-| **yolox-x on DanceTrack** (RQ1) | the yolox-x ONNX weights **and** the DanceTrack raw frames (only the `.npz` caches are on disk; re-detection needs `img1/*.jpg`) | fetch both, then re-run `precompute_dancetrack.py --detector-model models/yolox_x.onnx` |
+| **SportsMOT real detector** (RQ2) | dataset + oracle caches on disk | a `precompute_sportsmot.py --detector-model` pass over 26,970 frames, then a second leaderboard labelled `sportsmot (real YOLOX)` |
+| **yolox-x on DanceTrack** (RQ1) | weights **and** raw frames both on disk now | re-run `precompute_dancetrack.py --detector-model models/yolox_x.onnx` (hours; a 7-sequence subset gives a directional read first) |
 
-Deliberately parked: the **C++/CUDA sibling** (separate repo; needs
-`brew install eigen` + `pip install pybind11`).
+Deliberately parked: the **C++/CUDA sibling** (separate repo; eigen + pybind11 now
+installed locally, held pending a plan).
 
 Next after this: **Horizon 3 product direction** (H3.2 teaching product / H3.3
 vertical app) — the site already seeds both with `/teaching` and the use-case section.
