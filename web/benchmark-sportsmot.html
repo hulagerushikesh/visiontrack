@@ -1,0 +1,56 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>MOT benchmark — sportsmot · VisionTrack</title><link rel="canonical" href="https://visiontrack.hulage.in/benchmark/sportsmot"><meta name="description" content="A reproducible tracker leaderboard with paired significance and an ID-switch error taxonomy, in one report — sportsmot."><meta name="theme-color" content="#0b0e14"><meta property="og:type" content="website"><meta property="og:site_name" content="VisionTrack"><meta property="og:url" content="https://visiontrack.hulage.in/benchmark/sportsmot"><meta property="og:title" content="Honest MOT benchmark (sportsmot) · VisionTrack"><meta property="og:description" content="A reproducible tracker leaderboard with paired significance and an ID-switch error taxonomy, in one report — sportsmot."><meta property="og:image" content="https://visiontrack.hulage.in/assets/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Honest MOT benchmark (sportsmot) · VisionTrack"><meta name="twitter:description" content="A reproducible tracker leaderboard with paired significance and an ID-switch error taxonomy, in one report — sportsmot."><meta name="twitter:image" content="https://visiontrack.hulage.in/assets/og-image.png">
+<link rel="stylesheet" href="/assets/site.css">
+<script defer src="/assets/site.js"></script></head><body>
+<nav class="site-nav">
+  <div class="nav-in">
+    <a class="brand" href="/"><span class="dot"></span>VisionTrack</a>
+    <span class="nav-tag">honest MOT benchmark</span>
+    <span class="spacer"></span>
+    <div class="nav-links">
+      <a href="/demo">demo</a>
+      <a href="/writeup">write-up</a>
+      <a href="/video" data-secondary>video</a>
+      <a href="/benchmark">benchmark</a>
+      <a href="/docs/" data-secondary>docs</a>
+    </div>
+    <button class="theme-btn" type="button">◑ dark</button>
+  </div>
+</nav>
+<main class="wrap benchmark-page">
+<p class="eyebrow">VisionTrack · honest MOT benchmark</p>
+<h1>Tracker comparison — sportsmot</h1>
+<div class="dataset-tabs">
+    <a href="/benchmark">synthetic</a>
+    <a href="/benchmark/dancetrack">DanceTrack</a>
+    <a href="/benchmark/dancetrack-yolox">DanceTrack · YOLOX</a>
+    <a href="/benchmark/sportsmot">SportsMOT</a>
+  </div>
+<div class="meta"><span>dataset: <b>sportsmot</b></span><span>baseline: <b>bytetrack</b></span><span>runs/tracker: <b>45</b></span><span>sequences: <b>45</b></span><span>seeds: <b>1</b></span><span>config: <b>sportsmot</b></span></div>
+<p class="note">Every tracker sees identical detections and seeds, so Δ vs the
+baseline is a paired comparison (Wilcoxon <span class="sig">*</span> = p&lt;0.05).
+🏆-highlighted cell = best tracker for that metric.</p>
+<h2>Leaderboard</h2>
+<div class="scroll"><table><thead><tr><th>tracker</th><th>MOTA</th><th>IDF1</th><th>HOTA</th><th>IDSW</th></tr></thead><tbody><tr><td>sort</td><td>0.548 <span class='sig'>(+0.000<span class='sig'>*</span>)</span></td><td>0.322 <span class='sig'>(+0.001)</span></td><td>0.264 <span class='sig'>(+0.001<span class='sig'>*</span>)</span></td><td>216.333 <span class='neg'>(-0.622)</span></td></tr><tr><td>deepsort</td><td class='best'>0.550 <span class='sig'>(+0.002<span class='sig'>*</span>)</span></td><td class='best'>0.329 <span class='sig'>(+0.007<span class='sig'>*</span>)</span></td><td class='best'>0.267 <span class='sig'>(+0.004<span class='sig'>*</span>)</span></td><td class='best'>209.467 <span class='neg'>(-7.489<span class='sig'>*</span>)</span></td></tr><tr class='base'><td>bytetrack</td><td>0.548±0.211</td><td>0.321±0.120</td><td>0.264±0.100</td><td>216.956±119.132</td></tr><tr><td>bytetrack_reid</td><td>0.550 <span class='sig'>(+0.002<span class='sig'>*</span>)</span></td><td>0.327 <span class='sig'>(+0.006<span class='sig'>*</span>)</span></td><td>0.267 <span class='sig'>(+0.003<span class='sig'>*</span>)</span></td><td>209.822 <span class='neg'>(-7.133<span class='sig'>*</span>)</span></td></tr><tr><td>bytetrack_giou</td><td>0.534 <span class='neg'>(-0.014<span class='sig'>*</span>)</span></td><td>0.302 <span class='neg'>(-0.019<span class='sig'>*</span>)</span></td><td>0.250 <span class='neg'>(-0.014<span class='sig'>*</span>)</span></td><td>216.867 <span class='neg'>(-0.089)</span></td></tr><tr><td>oc_sort</td><td>0.543 <span class='neg'>(-0.005<span class='sig'>*</span>)</span></td><td>0.310 <span class='neg'>(-0.012<span class='sig'>*</span>)</span></td><td>0.258 <span class='neg'>(-0.006<span class='sig'>*</span>)</span></td><td>241.511 <span class='sig'>(+24.556<span class='sig'>*</span>)</span></td></tr></tbody></table></div>
+<h2>Why <code>bytetrack</code> swaps identities</h2>
+<p class="note">10379 ID switches classified by local scene
+condition. <b>Lift</b> = P(condition | switch) / P(condition | any GT); &gt;1 means
+switches are over-represented there — the failure mode to attack.</p>
+<div class="scroll"><table><thead><tr><th>condition</th><th>% of switches</th>
+<th>base rate</th><th>lift</th><th>over-representation</th></tr></thead>
+<tbody><tr><td>occlusion</td><td>40%</td><td>35%</td><td class='lift'>1.15×</td><td><div class='bar'><i style='width:88%'></i></div></td></tr><tr><td>crowding</td><td>16%</td><td>13%</td><td class='lift'>1.19×</td><td><div class='bar'><i style='width:91%'></i></div></td></tr><tr><td>motion</td><td>9%</td><td>7%</td><td class='lift'>1.31×</td><td><div class='bar'><i style='width:100%'></i></div></td></tr></tbody></table></div>
+<p class="note" style="margin-top:22px">Reproduce: <code>python -m experiments.benchmark</code></p>
+</main>
+<footer>
+  <div class="foot-in">
+    <span>VisionTrack · MIT</span>
+    <span class="spacer"></span>
+    <a href="/">home</a>
+    <a href="/writeup">write-up</a>
+    <a href="/demo">demo</a>
+    <a href="/docs/">docs</a>
+  </div>
+</footer>
+</body></html>
