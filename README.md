@@ -178,7 +178,7 @@ Every run is pinned by a config hash; bootstrap resampling and synthetic scenes 
 ## Engineering
 
 - **Zero ML-framework dependency in the core** — just NumPy. Heavy/optional deps (`scipy`, `pandas`, `matplotlib`, `pillow`, `onnxruntime`, `torch`) are isolated in extras (`[experiments]`, `[appearance]`, `[onnx]`) and lazily imported; nothing in `core/` imports them.
-- **344 tests**: unit, property (Hungarian vs SciPy), convergence (Kalman), metric cross-checks (HOTA/IDF1 vs `trackeval`), video/webcam pipelines, the benchmarking tool, and end-to-end integration with a MOTA floor.
+- **348 tests**: unit, property (Hungarian vs SciPy), convergence (Kalman), metric cross-checks (HOTA/IDF1 vs `trackeval`), video/webcam pipelines, the benchmarking tool, and end-to-end integration with a MOTA floor.
 - **CI** on Python 3.10/3.11/3.12 + ruff.
 
 ```
@@ -216,6 +216,8 @@ flip on a moving object *is* a switch.
 - On the selected scene, appearance cuts ID switches **37 → 29 (−22%)** and lifts IDF1 — the study result, watchable frame by frame.
 
 Two more live surfaces, no install: **[/live](https://visiontrack.hulage.in/live)** runs the tracker on your own webcam in the browser (the association ported to JavaScript, on-device), and **[/video](https://visiontrack.hulage.in/video)** shows the identical Python pipeline on real, crowded street footage.
+
+New to multi-object tracking, or want to point someone non-technical at this? **[/teaching](https://visiontrack.hulage.in/teaching)** explains the project at two depths on one page: a builder track (install, the public API, what runs inside `update()`) and a plain-English track (what tracking is, why it's hard, a glossary) with no code.
 
 ## Write-up
 
