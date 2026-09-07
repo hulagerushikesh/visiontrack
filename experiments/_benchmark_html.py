@@ -31,6 +31,7 @@ _DATASET_TABS = """<div class="dataset-tabs">
     <a href="/benchmark">synthetic</a>
     <a href="/benchmark/dancetrack">DanceTrack</a>
     <a href="/benchmark/dancetrack-yolox">DanceTrack · YOLOX</a>
+    <a href="/benchmark/sportsmot">SportsMOT</a>
   </div>"""
 
 _FOOTER = """<footer>
@@ -48,6 +49,10 @@ _FOOTER = """<footer>
 def _route(dataset: str) -> str:
     """Map a displayed dataset name to its served route."""
     d = dataset.lower()
+    # SportsMOT first: a "sportsmot (real YOLOX)" label also matches "yolox",
+    # which would otherwise route it to the DanceTrack page.
+    if "sportsmot" in d:
+        return "/benchmark/sportsmot"
     if "yolox" in d:
         return "/benchmark/dancetrack-yolox"
     if "dancetrack" in d:

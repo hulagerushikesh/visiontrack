@@ -178,7 +178,7 @@ Every run is pinned by a config hash; bootstrap resampling and synthetic scenes 
 ## Engineering
 
 - **Zero ML-framework dependency in the core** — just NumPy. Heavy/optional deps (`scipy`, `pandas`, `matplotlib`, `pillow`, `onnxruntime`, `torch`) are isolated in extras (`[experiments]`, `[appearance]`, `[onnx]`) and lazily imported; nothing in `core/` imports them.
-- **348 tests**: unit, property (Hungarian vs SciPy), convergence (Kalman), metric cross-checks (HOTA/IDF1 vs `trackeval`), video/webcam pipelines, the benchmarking tool, and end-to-end integration with a MOTA floor.
+- **349 tests**: unit, property (Hungarian vs SciPy), convergence (Kalman), metric cross-checks (HOTA/IDF1 vs `trackeval`), video/webcam pipelines, the benchmarking tool, and end-to-end integration with a MOTA floor.
 - **CI** on Python 3.10/3.11/3.12 + ruff.
 
 ```
