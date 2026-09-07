@@ -68,3 +68,6 @@ ignore = ["E741"]
 [tool.ruff.lint.per-file-ignores]
 # The benchmark HTML renderer is a CSS/HTML template string — long lines are content.
 "experiments/_benchmark_html.py" = ["E501"]
+# The Colab notebook's cells are shell invocations (`!python -m ...`); the long
+# lines are complete commands a reader copies verbatim, so they must not wrap.
+"notebooks/*.ipynb" = ["E501"]

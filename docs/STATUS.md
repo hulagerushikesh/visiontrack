@@ -59,12 +59,17 @@ code path + site redesign, published to PyPI).
 - [x] Open-Graph / social meta + 1200×630 preview card
 - [x] Narrative write-up page — `/writeup`
 - [x] Study guide + CV roadmap (in repo)
-- [x] Live routes: `/`, `/live`, `/demo`, `/writeup`, `/video`, `/benchmark`, `/benchmark/dancetrack`, `/benchmark/dancetrack-yolox`, `/docs`
+- [x] Live routes: `/`, `/live`, `/teaching`, `/demo`, `/writeup`, `/video`, `/benchmark`, `/benchmark/dancetrack`, `/benchmark/dancetrack-yolox`, `/docs`
 - [x] **Site UI redesign** — one shared stylesheet across every page, unified type/
       spacing/light-dark theming, live tracking hero on the landing page
+- [x] **Two-audience teaching page — `/teaching`** — a developer lane (install, the
+      real public API, what runs inside `update()`) and a plain-English lane
+      (what tracking is, why it's hard, glossary) on one page
+- [x] **Product-first landing** — hero leads with the product, application-domain
+      use-cases, the controlled study demoted to an "under the hood" section
 
 ### Quality / infra
-- [x] 344 tests passing (1 slow, opt-in) · ruff clean · CI on py3.10/3.11/3.12
+- [x] 348 tests passing (1 slow, opt-in) · ruff clean · CI on py3.10/3.11/3.12
 - [x] Batched Kalman hot path — per-frame predict + Mahalanobis gating run as one
       `(N, 8)` NumPy call over the whole track set: ~1.4–1.5× faster, bit-identical
       (2841 → 294 FPS across 4–64 objects; MOTA/IDSW unchanged)
@@ -109,14 +114,33 @@ code path + site redesign, published to PyPI).
       Phase 3 CUDA needs a cloud GPU (or a Metal path).
 
 ### Housekeeping
-- [ ] Clean up the dual `visiontrack` (stale editable) + `visiontrack-mot` (wheel)
-      install in the base env — `pip uninstall visiontrack && pip install -e .`
+- [x] Cleaned up the dual `visiontrack` + `visiontrack-mot` install in the base env.
+      Both stale 0.1.0 distributions were shadowing the repo, so `import visiontrack`
+      resolved to a **0.1.0 wheel in site-packages** rather than the source. Now a
+      single editable `visiontrack-mot 0.2.0` resolving to `src/visiontrack/`.
+- [x] `ruff check .` is clean again (newer ruff lints notebooks; the Colab cells'
+      long lines are whole shell commands, so `notebooks/*.ipynb` ignores E501).
 
 ---
 
-## Suggested priority order
-1. Real-detector strengthening is done — the study is now maximally honest.
-2. Webcam CLI done — the "usable tool" story is complete (file + live camera).
-3. `/video` route done — the real-footage demo is live on the site.
-4. **SportsMOT** — the last sizeable research extension.
-5. **C++/CUDA sibling** — a systems/GPU piece when the toolchain is set up.
+## What is actually left
+
+Everything that can be finished without a large download is **done**: the research
+questions (RQ1–RQ4), both usability horizons, the benchmarking tool, the site
+(`/live`, `/teaching`, product-first landing), the PyPI release, 348 passing tests,
+clean lint, and a clean local install.
+
+The two remaining research items are **gated on data this repo deliberately does not
+carry** (weight-clean / imagery-clean by design) — they are not partially built, the
+code paths are complete and tested:
+
+| Item | What is missing | What unblocks it |
+|---|---|---|
+| **SportsMOT numbers** (RQ2) | the dataset (~GBs of frames) | download SportsMOT `val/`, then `precompute_sportsmot.py` → `--dataset sportsmot`. Recipe: [`SPORTSMOT.md`](SPORTSMOT.md) |
+| **yolox-x on DanceTrack** (RQ1) | the yolox-x ONNX weights **and** the DanceTrack raw frames (only the `.npz` caches are on disk; re-detection needs `img1/*.jpg`) | fetch both, then re-run `precompute_dancetrack.py --detector-model models/yolox_x.onnx` |
+
+Deliberately parked: the **C++/CUDA sibling** (separate repo; needs
+`brew install eigen` + `pip install pybind11`).
+
+Next after this: **Horizon 3 product direction** (H3.2 teaching product / H3.3
+vertical app) — the site already seeds both with `/teaching` and the use-case section.
