@@ -58,7 +58,7 @@ is a contribution, not a failure.
 
     Every leaderboard and error-taxonomy table the harness emits, checked into the repo.
 
-    [:octicons-arrow-right-24: Benchmarks](results_benchmark_synth.md)
+    [:octicons-arrow-right-24: Benchmarks](BENCHMARKS.md)
 
 -   :material-api: **Public API**
 
