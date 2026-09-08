@@ -1,9 +1,11 @@
 # VisionTrack — Status & Roadmap Checklist
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
-Last updated: 2026-09-07 — **SportsMOT oracle numbers landed** (45 val sequences,
-`/benchmark/sportsmot` live). Previously: v0.2.0 (`/live` in-browser tracker +
-SportsMOT code path + site redesign, published to PyPI).
+Last updated: 2026-09-08 — the two remaining research extensions are now marked
+**compute-blocked with measured numbers**, not merely "planned". Previously:
+2026-09-07, SportsMOT oracle numbers landed (45 val sequences, `/benchmark/sportsmot`
+live); v0.2.0 (`/live` in-browser tracker + SportsMOT code path + site redesign,
+published to PyPI).
 
 ---
 
@@ -107,7 +109,26 @@ SportsMOT code path + site redesign, published to PyPI).
       Results → [`/benchmark/sportsmot`](https://visiontrack.hulage.in/benchmark/sportsmot).
 - [ ] SportsMOT **real-detector** pass (`--detector-model`) — the oracle protocol
       isolates association; this adds detector quality to the measurement.
-- [ ] Stronger detector on DanceTrack (yolox-x) — test if it restores appearance significance
+      **Blocked on compute, not on code or data.** At the yolox-x rate measured
+      below, the 45-sequence val split (26,970 frames) is ~11.7 h of sustained
+      multi-core inference — not viable on this laptop. Needs a rented GPU box, or
+      a pre-registered subset small enough to finish in one supervised sitting.
+- [ ] Stronger detector on DanceTrack (yolox-x) — test if it restores appearance
+      significance. **Attempted 2026-09-07, abandoned — see below.** Two findings
+      worth keeping even though no numbers shipped:
+      1. **Cost.** `yolox_x.onnx` measured **1.40–1.62 s/frame** at 640×640 on this
+         machine (~350–390% CPU). A 7-sequence subset (8,920 frames) is ~3.9 h of
+         pure compute; the run was killed at 3/7 after ~14.5 h of wall clock,
+         because the machine slept and thermally throttled overnight.
+      2. **Confound.** `yolox_x.onnx` has a fixed 640×640 input, while the shipped
+         nano cache was built at 416. Model capacity and input resolution therefore
+         change together, so any accuracy delta could not be attributed to the
+         detector alone. A clean version of this experiment needs the nano
+         re-run at 640, doubling an already-infeasible budget.
+      Verdict: **not worth the compute** as specified. The claim it was meant to
+      test — that a stronger detector restores appearance significance — is already
+      answered more cheaply by SportsMOT, where appearance is informative *by
+      construction* rather than by upgrading the detector.
 
 ### Product direction (far)
 - [ ] H3.2 — teaching product (course / mini-textbook)
