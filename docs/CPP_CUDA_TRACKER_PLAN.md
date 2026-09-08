@@ -71,3 +71,168 @@ and treat CUDA as an explicit cloud-GPU stretch or swap it for a Metal path.
 The headline won't be "beats SOTA" — it'll be "an honest, parity-verified
 ByteTrack at N× the throughput of the reference, with the speedup attributed to
 specific optimizations." That attribution *is* the portfolio value.
+
+---
+
+# Phase 1 — execution plan
+
+Phase 1 is the **C++ reference port**: same algorithm, same numbers, no
+optimization. It exists to buy the right to optimize in Phase 2 — once a
+parity harness exists, every later speedup is provably behaviour-preserving.
+Optimizing first and checking later is how you ship a fast tracker that is
+quietly wrong.
+
+## Does it need a separate repo? Yes — and the coupling is now clean
+
+Separate repo, `visiontrack-cpp`. Two reasons, one of which only became true
+with v0.2.0:
+
+1. **Identity.** VisionTrack's whole claim is a from-scratch tracker whose core
+   is readable NumPy. A C++/CUDA core inside `src/visiontrack/` destroys that
+   claim — a reader can no longer tell which implementation produced a number,
+   and the repo acquires a compiler toolchain, a CMake build, platform wheels
+   and a cross-compilation CI matrix that the reference implementation does not
+   need.
+2. **The oracle is now installable.** `visiontrack-mot` is on PyPI. The sibling
+   repo can therefore depend on the reference the same way any third party
+   would — `pip install visiontrack-mot==0.2.0` — instead of reaching across a
+   sibling directory. The correctness oracle becomes a *pinned, versioned
+   dependency*, which is exactly what an oracle should be. Before v0.2.0 this
+   would have required a path dependency and the split would have been messier.
+
+So the dependency runs one way and never back:
+
+```
+visiontrack (this repo)          visiontrack-cpp (sibling)
+  NumPy reference        <-----    pip install visiontrack-mot==0.2.0
+  eval/ + HOTA harness   <-----    imported as the scoring oracle
+  data/cache/*.npz       <-----    read via $VISIONTRACK_CACHE (never copied)
+```
+
+**This repo changes not at all.** No submodule, no optional extra, no build
+flag. If the sibling project is abandoned, nothing here rots.
+
+The caches are the one shared asset. They are gitignored, large, and
+regenerable, so the sibling reads them by path from an environment variable
+rather than vendoring a copy.
+
+## Toolchain — verified present on this machine
+
+Checked 2026-09-08, nothing left to install:
+
+| need | found |
+|---|---|
+| compiler | Apple clang 17.0.0, target `arm64-apple-darwin24.6.0` |
+| build | CMake 4.0.0 |
+| linear algebra | Eigen at `/opt/homebrew/opt/eigen` |
+| bindings | pybind11 3.1.0 |
+| host | M2, arm64, 8 cores |
+
+Phase 1 is CPU-light — it compiles and runs one sequence at a time. It does not
+repeat the yolox-x mistake of a multi-hour unattended job.
+
+## Port surface — what is in, what is deliberately out
+
+**In (~1,438 LOC of NumPy):**
+
+| module | LOC | what ports |
+|---|---|---|
+| `core/geometry.py` | 177 | `iou_matrix`, `giou_matrix`, box-format conversions, `box_area`, `clip_boxes` |
+| `core/kalman.py` | 268 | 8-state filter: `initiate`, `predict`, `project`, `update`, `gating_distance{,_batch}`, the height-scaled process/measurement noise |
+| `core/assignment.py` | 181 | `_kuhn_munkres` O(n³), `linear_assignment`, `associate` |
+| `tracking/track.py` | 177 | `Track` + the Tentative→Confirmed→Deleted FSM |
+| `tracking/tracker.py` | 359 | `ByteTracker.update`, the two-stage `_match`, `_predict_all`, `_apply_match`, `_spawn` |
+| `tracking/cost.py` | 165 | `build_association_cost` and its four gated terms |
+| `tracking/config.py` | 111 | `TrackerConfig` as a plain struct |
+
+**Out of Phase 1, on purpose:**
+
+- **Appearance embedding.** ONNX/OSNet inference stays in Python. The C++ side
+  accepts a precomputed `(n, d)` feature array, so `appearance_distance` ports
+  as pure arithmetic and no ONNX runtime enters the C++ build. This keeps the
+  binding surface to plain float arrays.
+- **GMC and the learned motion residual.** Both are research extensions whose
+  findings are already published; both are gated off in `TrackerConfig`.
+  Porting them multiplies the parity surface for no throughput gain.
+- **Every optimization.** No SIMD, no LAPJV, no memory-layout work. Phase 1
+  ships the *teaching* O(n³) Hungarian on purpose, because Phase 2's headline
+  is "LAPJV replaced it and the numbers did not move".
+
+## The parity gate
+
+Metric-level agreement is too weak a gate. Association is **discrete**: a
+1e-16 difference in one cost entry can flip one assignment, which changes an ID,
+which cascades through every later frame — and yet MOTA may barely move. A
+tracker can be visibly wrong while scoring within tolerance.
+
+So the gate is trajectory-level, in three tiers:
+
+1. **Unit parity.** Each ported function against its NumPy original on randomized
+   inputs, including degenerate ones (empty matrices, zero-area boxes,
+   single-row/column cost matrices, tall vs wide). `atol=1e-12` for geometry,
+   `1e-9` for the Kalman path.
+2. **Trajectory parity (the real gate).** Run both trackers over
+   **MOT17-09** and require the emitted `(frame, track_id, box)` stream to be
+   **identical** — same IDs, same order, boxes within `1e-9`. All three detector
+   variants (`DPM`, `FRCNN`, `SDP`) are cached, giving three independent cost
+   landscapes for the price of one harness.
+3. **Metric parity.** Only as a backstop: reuse this repo's `eval/` so HOTA,
+   IDF1 and CLEAR-MOT are computed by the *same* code for both trackers.
+
+### The tie-break trap — the single biggest parity risk
+
+When two assignments have equal cost, the Hungarian solver's *implementation*
+picks the winner, not the mathematics. Both implementations minimize the same
+sum; they can legitimately return different optima. Two places in
+`assignment.py` must be replicated exactly rather than merely correctly:
+
+- **The transpose.** `linear_assignment` transposes when `rows > cols` and swaps
+  the result back. That changes which equal-cost optimum is returned, so the
+  C++ port must transpose on the same condition, not on its own convention.
+- **Iteration order inside `_kuhn_munkres`.** Column and row scan order decides
+  ties. It must match index-for-index.
+
+If tier 2 fails, the diagnosis is a frame-indexed diff of the first divergent
+assignment — not a loosened tolerance. Loosening the tolerance here would
+convert a real bug into a passing test, which is the specific failure this gate
+exists to prevent.
+
+## Deliverables
+
+```
+visiontrack-cpp/
+  CMakeLists.txt
+  core/       header-only: geometry.hpp, kalman.hpp (Eigen), assignment.hpp,
+              track.hpp, tracker.hpp, cost.hpp, config.hpp
+  bind/       pybind11 module -> import visiontrack_cpp
+  tests/      unit parity + trajectory parity vs visiontrack-mot
+  bench/      FPS vs #tracks (Phase 2 fills this in)
+  README.md   the parity report
+```
+
+Phase 1 is done when: `import visiontrack_cpp` works from Python, and the
+trajectory-parity suite passes on all three MOT17-09 variants.
+
+## Milestones
+
+Each is independently verifiable, so the work can stop cleanly at any point.
+
+| # | milestone | gate |
+|---|---|---|
+| 1 | Repo scaffold, CMake + pybind11, a trivial bound function | `import visiontrack_cpp` succeeds |
+| 2 | Geometry ported | unit parity vs `core/geometry.py` |
+| 3 | Kalman ported (Eigen) | unit parity incl. `gating_distance_batch` |
+| 4 | Hungarian ported | unit parity **and** identical output on tied-cost matrices |
+| 5 | Track FSM + `ByteTracker.update` | trajectory parity on one MOT17-09 variant |
+| 6 | Parity harness + report | trajectory parity on all three variants |
+
+Milestone 4 is the risky one and should be attacked with adversarial tied-cost
+matrices from the start, not discovered at milestone 5 as a mystery ID swap.
+
+## Honest expectations
+
+Phase 1 produces **no speedup** and is not supposed to. A naive C++ port of
+vectorized NumPy is often *slower*, because NumPy's inner loops are already
+compiled BLAS-adjacent code while a first-draft C++ port is scalar. The
+deliverable is the parity harness; the speed story starts in Phase 2 and is only
+credible because Phase 1 built the thing that can prove it.
