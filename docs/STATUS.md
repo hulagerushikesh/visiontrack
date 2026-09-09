@@ -134,7 +134,7 @@ published to PyPI).
 - [ ] H3.2 — teaching product (course / mini-textbook)
 - [ ] H3.3 — vertical app (retail footfall / sports / traffic)
 
-### Sibling project (Phases 1, 2, 4 done)
+### Sibling project (all four phases resolved)
 - [x] **C++/CUDA optimized ByteTrack — Phase 1** — the port and the parity gate.
       Both trackers emit identical `(frame, track_id, box, score)` streams over
       all three MOT17-09 detector variants: 7,545 observations, zero divergences,
@@ -148,10 +148,36 @@ published to PyPI).
       refuses to report a ratio it has not first proved is between two identical
       computations — 100,765 observations compared bit-for-bit, 0 differences —
       and the one figure. **55–74×** on real sequences, **71–91×** synthetic.
-- [ ] **Publish to PyPI** — needs the account token; the only remaining step.
-- [ ] **Linux / Windows wheels** — needs CI (cibuildwheel).
-- [ ] **Phase 3 — GPU.** Blocked on hardware, not on code: this is an M2 with no
-      NVIDIA device. Needs a cloud GPU, or a Metal path instead of CUDA.
+- [x] **Cross-platform parity.** CI builds 12 wheels — CPython 3.10–3.13 on
+      macOS arm64, Linux x86_64 and Windows x86_64 — and gates each on the full
+      suite: **190 passed, 0 failed on every one**, against NumPy 2.2.6, 2.4.6
+      and 2.5.3. Three compilers, two architectures, and **two different LAPACK
+      implementations** (Accelerate and OpenBLAS). The Kalman gain is solved
+      rather than inverted, so agreeing to the last bit with both is stronger
+      evidence than either alone.
+- [x] **Linux / Windows wheels** — done, via `cibuildwheel` + trusted
+      publishing in `.github/workflows/release.yml`.
+- [x] **Phase 3 — GPU: closed by measurement**, not blocked. Apple GPUs have no
+      float64, so the plan's Metal alternative does not exist for a codebase
+      that computes in double. And even granting a float64 GPU, Amdahl caps the
+      win at 1.82× on synthetic scenes while dispatch overhead exceeds the
+      *entire* gating computation on real ones — MOT17-09's median frame spends
+      0.85 µs there. `PHASE3.md`, reproducible via `bench/gpu_feasibility.py`.
+- [ ] **Publish to PyPI** — the one step still open, and **not** for want of a
+      token. Uploads return HTTP 429 from an account-level rate limit on
+      new-project creation; the artifacts are built and gated. A support ticket
+      is filed, and trusted publishing may route around it. Nothing else in the
+      project depends on this.
+
+An aside worth keeping: adding CI surfaced four defects, all in the release
+harness rather than the tracker — a `continue-on-error` that rewrote a failed
+step's conclusion to success, MSVC misreporting `__cplusplus`, an optional test
+dependency able to kill the parity gate, and a BLAS allowlist that rejected
+NumPy's own official wheels. The one scare that looked like a real divergence
+(three Kalman `update` tests failing by 1–2 ULP on Linux) turned out to be pip
+compiling NumPy from source on a too-old base image, i.e. the oracle being
+rebuilt underneath the comparison. `ci/check_oracle.py` now refuses to measure
+parity against a NumPy it did not download.
 
 ### Housekeeping
 - [x] Cleaned up the dual `visiontrack` + `visiontrack-mot` install in the base env.
@@ -183,10 +209,16 @@ design) have now been fetched locally:
 | **SportsMOT real detector** (RQ2) | dataset + oracle caches on disk | a `precompute_sportsmot.py --detector-model` pass over 26,970 frames, then a second leaderboard labelled `sportsmot (real YOLOX)` |
 | **yolox-x on DanceTrack** (RQ1) | weights **and** raw frames both on disk now | re-run `precompute_dancetrack.py --detector-model models/yolox_x.onnx` (hours; a 7-sequence subset gives a directional read first) |
 
-The **C++/CUDA sibling** is no longer parked: Phases 1, 2 and 4 are complete in
-its own repo, with the parity gate passing and the benchmark published. What is
-left there is the PyPI upload (needs a token) and Phase 3, which is blocked on
-hardware rather than on code.
+The **C++/CUDA sibling** is finished as an engineering project. All four phases
+are resolved in its own repo: 1, 2 and 4 complete, and 3 closed by measurement
+rather than left blocked — Apple GPUs have no float64, and the Amdahl ceiling
+plus dispatch overhead say a GPU would not have paid even with one. Parity now
+holds across three platforms, three compilers and two LAPACK backends, with 12
+CI-gated wheels.
+
+The single open item is the **PyPI upload**, which is blocked by an
+account-level HTTP 429 on new-project creation rather than by a missing token.
+A support ticket is filed. Nothing else waits on it.
 
 Next after this: **Horizon 3 product direction** (H3.2 teaching product / H3.3
 vertical app) — the site already seeds both with `/teaching` and the use-case section.
