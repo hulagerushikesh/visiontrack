@@ -134,10 +134,24 @@ published to PyPI).
 - [ ] H3.2 — teaching product (course / mini-textbook)
 - [ ] H3.3 — vertical app (retail footfall / sports / traffic)
 
-### Sibling project (parked)
-- [ ] **C++/CUDA optimized ByteTrack — Phase 1** — separate repo; needs
-      `brew install eigen` + `pip install pybind11`. Phases 1–2 local (NEON);
-      Phase 3 CUDA needs a cloud GPU (or a Metal path).
+### Sibling project (Phases 1, 2, 4 done)
+- [x] **C++/CUDA optimized ByteTrack — Phase 1** — the port and the parity gate.
+      Both trackers emit identical `(frame, track_id, box, score)` streams over
+      all three MOT17-09 detector variants: 7,545 observations, zero divergences,
+      tier-3 metric agreement exactly 0.0.
+- [x] **Phase 2 — CPU optimization.** Five optimizations implemented and
+      measured; the finding is that the parity rule ("same operations, same
+      order, same rounding") forecloses most of the standard playbook, and the
+      remaining headroom is small. `PHASE2.md` has the catalogue.
+- [x] **Phase 4 — package + benchmark.** `visiontrack-cpp` 0.1.0 built (sdist +
+      wheel, `twine check` clean, clean-venv install verified); a benchmark that
+      refuses to report a ratio it has not first proved is between two identical
+      computations — 100,765 observations compared bit-for-bit, 0 differences —
+      and the one figure. **55–74×** on real sequences, **71–91×** synthetic.
+- [ ] **Publish to PyPI** — needs the account token; the only remaining step.
+- [ ] **Linux / Windows wheels** — needs CI (cibuildwheel).
+- [ ] **Phase 3 — GPU.** Blocked on hardware, not on code: this is an M2 with no
+      NVIDIA device. Needs a cloud GPU, or a Metal path instead of CUDA.
 
 ### Housekeeping
 - [x] Cleaned up the dual `visiontrack` + `visiontrack-mot` install in the base env.
@@ -169,8 +183,10 @@ design) have now been fetched locally:
 | **SportsMOT real detector** (RQ2) | dataset + oracle caches on disk | a `precompute_sportsmot.py --detector-model` pass over 26,970 frames, then a second leaderboard labelled `sportsmot (real YOLOX)` |
 | **yolox-x on DanceTrack** (RQ1) | weights **and** raw frames both on disk now | re-run `precompute_dancetrack.py --detector-model models/yolox_x.onnx` (hours; a 7-sequence subset gives a directional read first) |
 
-Deliberately parked: the **C++/CUDA sibling** (separate repo; eigen + pybind11 now
-installed locally, held pending a plan).
+The **C++/CUDA sibling** is no longer parked: Phases 1, 2 and 4 are complete in
+its own repo, with the parity gate passing and the benchmark published. What is
+left there is the PyPI upload (needs a token) and Phase 3, which is blocked on
+hardware rather than on code.
 
 Next after this: **Horizon 3 product direction** (H3.2 teaching product / H3.3
 vertical app) — the site already seeds both with `/teaching` and the use-case section.
