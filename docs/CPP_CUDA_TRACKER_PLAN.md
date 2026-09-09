@@ -236,3 +236,72 @@ vectorized NumPy is often *slower*, because NumPy's inner loops are already
 compiled BLAS-adjacent code while a first-draft C++ port is scalar. The
 deliverable is the parity harness; the speed story starts in Phase 2 and is only
 credible because Phase 1 built the thing that can prove it.
+
+---
+
+## Phase 1 — outcome (2026-09-09)
+
+Phase 1 is complete. All six milestones are done and the repo is at
+[`hulagerushikesh/visiontrack-cpp`](https://github.com/hulagerushikesh/visiontrack-cpp).
+This section records what the plan above got right and what it got wrong, since
+a plan whose predictions are never checked is just a wish list.
+
+### The gate passes
+
+Both trackers produce **identical** `(frame, track_id, box, score)` streams over
+the full 525 frames of MOT17-09, on all three detector variants — 7,545
+observations, zero divergences. Boxes are compared bit-for-bit; the plan allowed
+`1e-9`, but the port reaches equality, and a tolerance looser than the drift it
+measures would absorb exactly what the gate exists to catch.
+
+Tier 3 agrees too: HOTA, IDF1 and CLEAR-MOT computed for both trackers by this
+repo's own `eval/` differ by **0.0**.
+
+`parity/run_parity.py` in the sibling repo reproduces all of it and exits
+non-zero on any divergence.
+
+### What the plan got right
+
+- **The tie-break trap was the real risk.** Four behaviours in the Hungarian
+  port turned out to be load-bearing, all verified by deliberately breaking them:
+  the `rows > cols` transpose condition, both strictly-less tie comparisons, and
+  the slack expression order. The last nearly escaped — regrouping
+  `cost - u - v` as `cost - (u + v)` changed the *values* in 82 of 2,400 random
+  matrices and the *answer* in none, so it read as cosmetic, until a targeted
+  search over mixed magnitudes with ULP-level ties found it flips the assignment
+  ~5 times in 6,000.
+- **Trajectory parity was the right gate.** Metric parity alone would have
+  passed a wrong tracker; it is reported last and trusted least.
+
+### What the plan got wrong
+
+**Floating-point contraction was the biggest unlisted risk.** clang defaults to
+`-ffp-contract=fast` at `-O2`/`-O3`, fusing `a + b*c` into one FMA that rounds
+*once* where NumPy rounds twice. It broke parity on exactly the height-scaled
+Kalman process-noise terms. `-ffp-contract=off` is now load-bearing. The mirror
+case also exists and cannot be fixed: `appearance_distance` ends in a matmul
+where **Accelerate** is the one fusing, and the port cannot follow.
+
+**"No speedup, possibly slower" was wrong** — measured, 36–53× on real sequences
+and 68–84× from 5 to 400 simultaneous objects. The premise was that "NumPy's
+inner loops are already compiled BLAS-adjacent code". Profiling shows that is
+not true of this tracker's hot path:
+
+- `_kuhn_munkres` is a hand-written O(n³) triple loop in **pure Python**, and the
+  largest single entry in the profile. No vectorization anywhere in it.
+- The per-track calls run on 4- and 8-element arrays — `xyah_to_xyxy` ~8,850
+  times per 60 frames, `kalman.update` ~2,950 — where NumPy's fixed per-call cost
+  dwarfs the arithmetic.
+
+Two easier explanations were tested and rejected: `Detection` construction (at
+most 3% of a frame) and NumPy per-call overhead on small matrices (which would
+predict the advantage collapsing as the problem grows; it stays flat).
+
+### Consequence for Phase 2
+
+The intended headline — *"LAPJV replaced the O(n³) Hungarian and the numbers did
+not move"* — needs revising. Much of what LAPJV was expected to win was
+interpreter overhead the C++ port has already removed, so the remaining
+algorithmic gain should be expected to be **smaller** than assumed. It now has a
+fair baseline and a gate that fails on a single flipped association, which is
+what Phase 1 was actually for.
