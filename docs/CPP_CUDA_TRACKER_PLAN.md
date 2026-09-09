@@ -63,6 +63,12 @@ The dev machine is a **MacBook M2 — no NVIDIA GPU, no CUDA**. So:
   Performance Shaders, which *is* local, if the goal is "use the GPU I have"
   rather than "CUDA specifically".
 
+  > **Correction (2026-09-09).** The Metal alternative does not exist for this
+  > codebase. **Apple GPUs have no float64** — Metal has `float` and `half` and
+  > no `double` — and the tracker computes in double throughout, including the
+  > covariance Cholesky. Phase 3's outcome section below has the detail; the
+  > recommendation immediately following was wrong on this point.
+
 **Recommendation:** start with Phases 1–2 (locally verifiable, most of the win),
 and treat CUDA as an explicit cloud-GPU stretch or swap it for a Metal path.
 
@@ -308,11 +314,12 @@ what Phase 1 was actually for.
 
 ---
 
-## Phases 2 and 4 — outcome (2026-09-09)
+## Phases 2, 3 and 4 — outcome (2026-09-09)
 
 Phase 2 (CPU optimization) and Phase 4 (package + benchmark) are both done.
-Phase 3 (GPU) is not started and cannot be, on this machine — see *The hardware
-caveat* above, which the plan got exactly right.
+Phase 3 (GPU) is **closed by measurement**, which is a different thing from
+blocked: no kernel was written because the arithmetic said one would not pay.
+See *Phase 3 — the crossover never arrives* below.
 
 ### Phase 2 — the headroom was the finding
 
@@ -380,11 +387,52 @@ venv, passes the full suite and the trajectory gate with zero divergences —
 matching the 3.5.0 result exactly. Two versions is two data points, not a
 guarantee, which is why the dependency is pinned rather than floating.
 
+### Phase 3 — the crossover never arrives
+
+The plan treated Phase 3 as a hardware problem: no NVIDIA device on an M2, so
+rent a GPU or use Metal. Both halves of that turned out to be beside the point,
+and answering it cost one script rather than a kernel.
+
+**The plan named the wrong kernels.** It proposed offloading batched `predict`
+and the IoU/cost matrix. Phase 2's profile measured `predict` at **0.4%** of a
+400-track frame, which caps the reward at 1.004× however fast the kernel is.
+The only stage worth targeting is Kalman gating — 45% at N=400 — which Phase 2
+had already localised to `N·M` independent 4×4 solves. Those being independent
+matters twice: it makes them the only genuinely GPU-shaped work in the tracker,
+and, since nothing reduces across problems, the only part a GPU could in
+principle compute *bit-exactly* under the parity rule.
+
+**Apple GPUs have no float64.** So the Metal escape hatch does not exist here —
+see the correction in *The hardware caveat* above. In float32 this is not an
+error to bound and document: gating distances are compared against a
+chi-squared threshold, so reduced precision can flip a match decision and
+change which tracks exist, rather than perturbing their coordinates.
+
+**And the arithmetic closes it even for a machine with float64.** MOT17-09's
+median frame spends **0.85 µs** in gating. Measured GPU dispatch on this
+machine is 128–317 µs through torch MPS; even granting a deliberately generous
+10 µs for bare Metal, that is 12× the entire computation before any of it
+happens. The real-sequence row only turns favourable below ~850 ns, which no
+GPU round trip reaches. Where dispatch *does* amortise — synthetic scenes of
+400 tracks and up — Amdahl caps the win at **1.82×**.
+
+So: where dispatch is cheap enough, the ceiling is 1.33–1.82×; where such a
+ceiling would be worth chasing, dispatch already cost more than the whole
+computation. No scene in this tracker's operating range has both at once. The
+regime where a GPU genuinely wins is thousands of simultaneous tracks, and
+MOT17-09's median frame has nine.
+
+`visiontrack-cpp/PHASE3.md` has the full working, reproducible via
+`bench/gpu_feasibility.py`, which takes `--dispatch-ns` so the conclusion can be
+tested against a faster path than torch instead of resting on torch's overhead.
+
 ### Scoring the plan
 
 | the plan said | outcome |
 |---|---|
-| Phase 3 needs a cloud GPU; cannot be developed on the M2 | ✅ correct, and unchanged |
+| Phase 3 needs a cloud GPU; cannot be developed on the M2 | ✅ correct on the fact, ⚠️ irrelevant in the end — a cloud GPU would have bought at most 1.82×, and lost on real sequences |
+| "an Apple-GPU alternative is Metal Performance Shaders, which *is* local" | ❌ wrong: Apple GPUs have no float64, and this tracker computes in double |
+| Phase 3 should GPU batched `predict` and the IoU/cost matrix | ❌ `predict` is 0.4% of a frame; the only GPU-shaped stage is gating, which the plan did not mention |
 | Phase 2 SIMD/LAPJV/layout work would compound into a real speedup | ❌ the parity rule forbids most of it; the headroom is small |
 | "LAPJV replaced the Hungarian and the numbers did not move" | ✅ true, for a reason the plan did not anticipate |
 | the headline would be "N× throughput with the speedup attributed to specific optimizations" | ⚠️ the N× is real and attributed — but to *removing the interpreter*, not to any Phase 2 optimization |
