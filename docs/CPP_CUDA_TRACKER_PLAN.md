@@ -305,3 +305,87 @@ interpreter overhead the C++ port has already removed, so the remaining
 algorithmic gain should be expected to be **smaller** than assumed. It now has a
 fair baseline and a gate that fails on a single flipped association, which is
 what Phase 1 was actually for.
+
+---
+
+## Phases 2 and 4 — outcome (2026-09-09)
+
+Phase 2 (CPU optimization) and Phase 4 (package + benchmark) are both done.
+Phase 3 (GPU) is not started and cannot be, on this machine — see *The hardware
+caveat* above, which the plan got exactly right.
+
+### Phase 2 — the headroom was the finding
+
+The plan expected SIMD IoU, batched Kalman predict, LAPJV and memory-layout
+work to compound into a meaningful speedup over the Phase 1 port. Five
+optimizations were implemented and measured. Almost none of them paid.
+
+The reason is a rule the plan did not contain, and which turned out to govern
+everything: **an optimization is legal here only if every floating-point
+operation still happens in the same order, on the same values, with the same
+rounding.** That is what "identical to the oracle" means once you write it out.
+Its corollary forecloses most of the standard playbook — SIMD *across*
+independent problems is legal, SIMD *within* a reduction is not, because
+vectorizing a sum reassociates it.
+
+The one attempt that survived was hoisting two per-row allocations out of the
+Hungarian solver: one allocation instead of *n*, touching no arithmetic. The
+measured effect was below the noise floor, and an analytic bound (0.25 µs per
+allocation → 0.13% of a frame) is the only honest way to state it.
+
+LAPJV is the instructive failure. The plan's intended headline was *"LAPJV
+replaced the O(n³) Hungarian and the numbers did not move"*. It was implemented
+correctly — including a bug worth recording: the textbook column reduction is
+valid for square problems and invalid for rectangular ones, because the
+rectangular dual requires `v_j ≤ 0`; 714 of 1,826 test matrices came back
+suboptimal, every failure rectangular. Once fixed, it produced **no measurable
+speedup**, and the mechanism is that all nine solver disagreements on real data
+fell on pairs the gate discards anyway. Predicted wrong by me, then measured.
+
+`PHASE2.md` in the sibling repo has the full catalogue. A list of optimizations
+that did not work, with the measurements showing why, is the more useful
+artifact.
+
+### Phase 4 — the deliverables, and what measuring properly cost
+
+All three deliverables exist: `bench/compare.py` (reproducible benchmark on
+identical detections), `bench/speedup.svg` (the one figure), and a packaged
+`visiontrack-cpp` 0.1.0 — sdist and wheel, `twine check` clean, verified by
+installing into a clean venv. The PyPI upload itself needs the account token
+and is the one step left.
+
+The benchmark's design decision is that it will not report a ratio it has not
+verified: same detections into both trackers, full output streams compared
+bit-for-bit, and only then a timing. No flag skips it. **100,765 observations,
+0 differences**, then **55–74×** on the real MOT17-09 variants and **71–91×**
+synthetic.
+
+Building it turned up something the plan could not have predicted, and which is
+the most transferable result of the whole exercise: **the parity harness had
+been under-reporting the port by ~21%.** It runs both trackers in one loop,
+frame by frame — which the gate requires, since the two must see identical state
+at identical times. But NumPy's allocations evict the C++ tracker's working set
+between calls. That costs the port ~2 µs on a 9.5 µs frame and costs NumPy 0.3%
+of a 700 µs frame. The bias is asymmetric and lands entirely on the smaller
+number.
+
+So an instrument built to prove *agreement* was quietly biased when asked about
+*speed*, in the direction that understated the result. Three candidate causes
+were measured before the right one was accepted; timer placement, the obvious
+suspect, accounted for 1%.
+
+Phase 4 also established that parity is not an artifact of one machine's Eigen:
+a build against a pinned Eigen 3.4.0, installed from the sdist into a clean
+venv, passes the full suite and the trajectory gate with zero divergences —
+matching the 3.5.0 result exactly. Two versions is two data points, not a
+guarantee, which is why the dependency is pinned rather than floating.
+
+### Scoring the plan
+
+| the plan said | outcome |
+|---|---|
+| Phase 3 needs a cloud GPU; cannot be developed on the M2 | ✅ correct, and unchanged |
+| Phase 2 SIMD/LAPJV/layout work would compound into a real speedup | ❌ the parity rule forbids most of it; the headroom is small |
+| "LAPJV replaced the Hungarian and the numbers did not move" | ✅ true, for a reason the plan did not anticipate |
+| the headline would be "N× throughput with the speedup attributed to specific optimizations" | ⚠️ the N× is real and attributed — but to *removing the interpreter*, not to any Phase 2 optimization |
+| "that attribution is the portfolio value" | ✅ still the right call, and the negative results carry more of it than the positive ones |
