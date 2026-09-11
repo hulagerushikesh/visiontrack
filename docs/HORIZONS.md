@@ -158,8 +158,11 @@ owner's PyPI account — the repo is release-ready.*
    ([/benchmark/dancetrack](https://visiontrack.hulage.in/benchmark/dancetrack)) —
    the real-data report reproduces the study's findings (deep re-ID cuts IDSW
    −15\*, OC-SORT hurts +19\*, fast-motion 3.9× lift) through one tool.
-2. **Teaching product** — an interactive MOT course/mini-textbook on this
-   codebase + the existing study guide and roadmap (already ~60% of a curriculum).
+2. **Teaching product — Milestone 1 in progress.** The existing study guide,
+   computer-vision roadmap, and C++ systems guide now share one public module
+   library on `/teaching`; the staged delivery plan is in
+   [`LEARNING_PRODUCT_PLAN.md`](LEARNING_PRODUCT_PLAN.md). Next: guided
+   progression, source-linked exercises, and a dataset-free parity capstone.
 3. **Vertical app** (retail footfall / sports / traffic) — highest ceiling, but a
    full product far from current scope; competes on detector + infra, not tracking.
 

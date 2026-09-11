@@ -469,6 +469,46 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-fam
 .switch a:hover { color: var(--ink); background: var(--surface-2); }
 .switch a[data-current="true"] { background: var(--accent); color: #fff; }
 
+/* learning library: three concrete routes, presented as an instrument panel */
+.module-library { margin-top: var(--sp-6); }
+.module-library .sec-intro { margin-bottom: var(--sp-3); }
+.learning-modules {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-3);
+}
+.learning-module {
+  min-height: 270px; display: flex; flex-direction: column; position: relative;
+  padding: 22px; overflow: hidden; text-decoration: none; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow);
+  transition: transform .16s ease, border-color .16s, box-shadow .16s;
+}
+.learning-module::before {
+  content: ""; position: absolute; inset: 0 0 auto; height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+.learning-module:hover {
+  transform: translateY(-3px); border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+  box-shadow: var(--shadow-lg);
+}
+.module-index, .module-meta, .module-go { font-family: var(--mono); }
+.module-index {
+  color: var(--accent); font-size: var(--fs-micro); letter-spacing: .12em;
+  font-weight: 700; margin-bottom: 20px;
+}
+.learning-module h3 {
+  font-family: var(--display); font-size: var(--fs-h3); letter-spacing: -.01em;
+  margin: 0 0 8px;
+}
+.learning-module p { color: var(--muted); font-size: 14px; line-height: 1.55; margin: 0 0 18px; }
+.module-meta {
+  color: var(--faint); font-size: var(--fs-meta); padding-top: 13px;
+  margin-top: auto; border-top: 1px solid var(--border);
+}
+.module-go { color: var(--accent); font-size: var(--fs-meta); margin-top: 13px; }
+@media (max-width: 760px) {
+  .learning-modules { grid-template-columns: 1fr; }
+  .learning-module { min-height: 0; }
+}
+
 /* a lane = one audience's whole section */
 .lane { margin-top: var(--sp-6); scroll-margin-top: 76px; }
 .lane-head { display: flex; align-items: center; gap: 13px; margin: 0 0 6px; }
@@ -540,5 +580,6 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-fam
   html { scroll-behavior: auto; }
   * { transition: none !important; }
   .use:hover, .card:hover, .btn.primary:hover { transform: none; }
+  .learning-module:hover { transform: none; }
   .js-reveal .rv { opacity: 1; transform: none; }
 }
