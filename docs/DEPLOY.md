@@ -13,8 +13,8 @@ subdomain of `hulage.in`.
 |-------|--------|-------------|
 | `/` | Landing hub | `web/index.html` |
 | `/demo` | Interactive tracker demo | `viz/webdemo/index.html` |
-| `/study` | VisionTrack study guide | `docs/LEARNING_PATH.html` |
-| `/roadmap` | CV junior→research roadmap | `docs/CV_ROADMAP.html` |
+| `/study` | VisionTrack study guide | `learning/LEARNING_PATH.html` |
+| `/roadmap` | CV junior→research roadmap | `learning/CV_ROADMAP.html` |
 
 Both the build and routing are defined in [`vercel.json`](../vercel.json). It uses
 an explicit `builds` list (`@vercel/static` for exactly the five static entries

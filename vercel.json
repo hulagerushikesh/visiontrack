@@ -9,6 +9,7 @@
     { "src": "web/video.html", "use": "@vercel/static" },
     { "src": "web/live.html", "use": "@vercel/static" },
     { "src": "web/teaching.html", "use": "@vercel/static" },
+    { "src": "learning/*.html", "use": "@vercel/static" },
     { "src": "viz/webdemo/index.html", "use": "@vercel/static" },
     { "src": "assets/**", "use": "@vercel/static" },
     { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "vercel_build" } }
@@ -23,6 +24,8 @@
     { "src": "/video/?", "dest": "/web/video.html" },
     { "src": "/live/?", "dest": "/web/live.html" },
     { "src": "/teaching/?", "dest": "/web/teaching.html" },
+    { "src": "/study/?", "dest": "/learning/LEARNING_PATH.html" },
+    { "src": "/roadmap/?", "dest": "/learning/CV_ROADMAP.html" },
     { "src": "/demo/?", "dest": "/viz/webdemo/index.html" },
     { "src": "/docs/?", "dest": "/docs/index.html" },
     { "src": "/docs/(.+)", "dest": "/docs/$1" },
