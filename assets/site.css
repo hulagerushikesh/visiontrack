@@ -503,6 +503,9 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-fam
   color: var(--faint); font-size: var(--fs-meta); padding-top: 13px;
   margin-top: auto; border-top: 1px solid var(--border);
 }
+.module-meta b { color: var(--ink-2); font-weight: 600; }
+.module-outcome { color: var(--ink-2); font-size: 13.5px; line-height: 1.5; margin-top: 8px; }
+.module-outcome b { color: var(--good); font-weight: 650; }
 .module-go { color: var(--accent); font-size: var(--fs-meta); margin-top: 13px; }
 @media (max-width: 760px) {
   .learning-modules { grid-template-columns: 1fr; }
