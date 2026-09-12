@@ -99,6 +99,12 @@
   .stage-count { font-family: var(--mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .stage-count.done { color: var(--good); }
   .stage-sub { color: var(--muted); font-size: 14.5px; margin: 2px 0 14px; max-width: 68ch; }
+  .stage-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 18px; }
+  .stage-nav a { color: var(--accent); font-family: var(--mono); font-size: 12px;
+    text-decoration: none; border: 1px solid var(--border); background: var(--surface);
+    border-radius: 8px; padding: 8px 11px; max-width: 48%; }
+  .stage-nav a:hover { border-color: var(--accent); }
+  .stage-nav .next { margin-left: auto; text-align: right; }
 
   details.topic { background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
     margin: 9px 0; box-shadow: var(--shadow); overflow: hidden; }
@@ -699,6 +705,31 @@
         if (!b.checked) delete state[b.dataset.id];
         save(); refresh();
       });
+    });
+
+    // Derive previous/next links from the ordered stages. The roadmap remains
+    // navigable without a second hand-maintained table of contents.
+    var stages = Array.prototype.slice.call(document.querySelectorAll('section.stage[data-stage]'));
+    stages.forEach(function (stage, i) {
+      var idx = stage.querySelector('.idx');
+      stage.id = stage.id || 'stage-' + (idx ? idx.textContent.trim() : i);
+      var nav = document.createElement('nav');
+      nav.className = 'stage-nav';
+      nav.setAttribute('aria-label', 'stage progression');
+      if (i > 0) {
+        var prev = document.createElement('a');
+        prev.href = '#' + stages[i - 1].id;
+        prev.textContent = '← ' + stages[i - 1].querySelector('h3').textContent;
+        nav.appendChild(prev);
+      }
+      if (i + 1 < stages.length) {
+        var next = document.createElement('a');
+        next.className = 'next';
+        next.href = '#stage-' + (stages[i + 1].querySelector('.idx') ? stages[i + 1].querySelector('.idx').textContent.trim() : i + 1);
+        next.textContent = stages[i + 1].querySelector('h3').textContent + ' →';
+        nav.appendChild(next);
+      }
+      stage.appendChild(nav);
     });
     document.getElementById('expandAll').addEventListener('click', function () {
       document.querySelectorAll('details.topic').forEach(function (d) { d.open = true; });

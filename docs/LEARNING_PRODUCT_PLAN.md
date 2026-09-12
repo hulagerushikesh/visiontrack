@@ -25,13 +25,13 @@ implementation.
 - [x] Keep `/study` and `/roadmap` stable after the file moves.
 - [x] Add a module library to `/teaching` with a clear audience and outcome for
       each path.
-- [ ] Add automated link checks for the three learning paths.
+- [x] Add automated link checks for the three learning paths.
 
 ### Milestone 2 — guided progression
 
-- [ ] Give every module a short prerequisite, estimated effort, and completion
+- [x] Give every module a short prerequisite, estimated effort, and completion
       outcome.
-- [ ] Add explicit “previous / next” navigation between learning stages.
+- [x] Add explicit “previous / next” navigation between learning stages.
 - [ ] Update stale lessons whose “next work” has already shipped.
 - [ ] Link concepts to exact source files in the NumPy and C++ repositories.
 
