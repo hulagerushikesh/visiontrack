@@ -14,7 +14,7 @@ why a tracking change helps or hurts.
 - [x] Add dataset-free exercises for geometry, Kalman filtering, assignment,
       and track lifecycle.
 - [x] Add a NumPy-versus-C++ parity capstone.
-- [ ] Complete mobile, keyboard, contrast, and reduced-motion QA.
+- [x] Complete mobile, keyboard, contrast, and reduced-motion QA.
 
 The detailed curriculum plan is in
 [`LEARNING_PRODUCT_PLAN.md`](LEARNING_PRODUCT_PLAN.md).

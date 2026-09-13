@@ -45,8 +45,8 @@ implementation.
 
 ### Milestone 4 — release-quality course
 
-- [ ] Test the complete path on mobile and desktop.
-- [ ] Run an accessibility pass for keyboard navigation, focus order, contrast,
+- [x] Test the complete path on mobile and desktop.
+- [x] Run an accessibility pass for keyboard navigation, focus order, contrast,
       and reduced motion.
 - [ ] Add learning-product analytics only if a privacy-preserving requirement is
       explicitly chosen.
