@@ -53,3 +53,18 @@ def test_learning_index_links_to_both_local_modules() -> None:
     index = (ROOT / "learning" / "README.md").read_text()
     assert "[VisionTrack study guide](LEARNING_PATH.html)" in index
     assert "[Computer-vision roadmap](CV_ROADMAP.html)" in index
+
+
+def test_study_guide_links_core_concepts_to_both_implementations() -> None:
+    hrefs = _hrefs(ROOT / "learning" / "LEARNING_PATH.html")
+    expected = {
+        "https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/core/geometry.py",
+        "https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/core/kalman.py",
+        "https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/core/assignment.py",
+        "https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/tracker.py",
+        "https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/geometry.hpp",
+        "https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/kalman.hpp",
+        "https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/assignment.hpp",
+        "https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/tracker.hpp",
+    }
+    assert expected <= hrefs

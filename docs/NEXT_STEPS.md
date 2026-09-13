@@ -10,7 +10,7 @@ why a tracking change helps or hurts.
 - [x] Add prerequisites, effort estimates, and completion outcomes.
 - [x] Add previous/next stage navigation and automated route checks.
 - [x] Refresh lessons that still describe shipped work as future work.
-- [ ] Link core concepts directly to their real source files.
+- [x] Link core concepts directly to their real source files.
 - [ ] Add dataset-free exercises for geometry, Kalman filtering, assignment,
       and track lifecycle.
 - [ ] Add a NumPy-versus-C++ parity capstone.
