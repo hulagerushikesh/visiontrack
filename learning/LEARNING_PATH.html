@@ -146,7 +146,8 @@
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .chip { font-family: var(--mono); font-size: 12px; color: var(--ink-2);
     background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px;
-    padding: 3px 8px; }
+    padding: 3px 8px; text-decoration: none; transition: color .12s, border-color .12s; }
+  .chip:hover, .chip:focus-visible { color: var(--accent); border-color: var(--accent); }
   .chip b { color: var(--accent); font-weight: 600; }
 
   ul.learn { margin: 0; padding-left: 18px; color: var(--ink-2); }
@@ -255,7 +256,7 @@
             <li><b>Update</b> — correct matched tracks with their detection; start tracks for unmatched detections; age-out tracks that keep missing.</li>
           </ul>
         </div>
-        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>tracking/</b>tracker.py</span><span class="chip"><b>README.md</b> (the mini-paper)</span><span class="chip"><b>viz/webdemo/</b>index.html</span></div></div>
+        <div><p class="block-label">In your code</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/tracker.py"><b>NumPy · tracking/</b>tracker.py</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/tracker.hpp"><b>C++ · core/</b>tracker.hpp</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/README.md"><b>README.md</b> (the mini-paper)</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/viz/webdemo/index.html"><b>viz/webdemo/</b>index.html</a></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
             <label class="ms"><input type="checkbox" data-id="s0-demo"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Open the live demo and watch a colour flip = one ID switch</span></label>
@@ -292,7 +293,7 @@
             <li><b>GIoU's extra term</b> — penalises the empty space in the smallest enclosing box.</li>
           </ul>
         </div>
-        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>core/</b>geometry.py</span><span class="chip"><b>tracking/</b>cost.py (motion_distance)</span></div></div>
+        <div><p class="block-label">In your code</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/core/geometry.py"><b>NumPy · core/</b>geometry.py</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/geometry.hpp"><b>C++ · core/</b>geometry.hpp</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/cost.py"><b>NumPy · tracking/</b>cost.py</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/cost.hpp"><b>C++ · core/</b>cost.hpp</a></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
             <label class="ms"><input type="checkbox" data-id="s1-iou"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Hand-compute IoU for two overlapping boxes, then check against <code>geometry.py</code></span></label>
@@ -327,7 +328,7 @@
             <li><b>Covariance intuition</b> — the diagonal is per-variable variance; off-diagonals encode "if I'm wrong about x, I'm probably wrong about vx too".</li>
           </ul>
         </div>
-        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>core/</b>kalman.py</span></div></div>
+        <div><p class="block-label">In your code</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/core/kalman.py"><b>NumPy · core/</b>kalman.py</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/kalman.hpp"><b>C++ · core/</b>kalman.hpp</a></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
             <label class="ms"><input type="checkbox" data-id="s2-state"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Name all 8 state variables and why velocities are included</span></label>
@@ -352,7 +353,7 @@
             <li><b>Joseph-form update</b> — a rewrite of the covariance update that stays numerically stable (symmetric, positive-definite) instead of drifting — worth knowing why the "obvious" formula is avoided.</li>
           </ul>
         </div>
-        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>core/</b>kalman.py (predict / update)</span></div></div>
+        <div><p class="block-label">In your code</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/core/kalman.py"><b>NumPy · core/</b>kalman.py (predict / update)</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/kalman.hpp"><b>C++ · core/</b>kalman.hpp (predict / update)</a></div></div>
         <div class="callout"><b>Interview-grade:</b> being able to derive predict/update and explain the Joseph form from memory is exactly the "senior CV depth" signal this project was built to show.</div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
@@ -378,7 +379,7 @@
             <li><b>Gate as feasibility, not ranking</b> — remember this; it becomes the key fix in Stage 7/9.</li>
           </ul>
         </div>
-        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>core/</b>kalman.py (gating_distance)</span><span class="chip"><b>tracking/</b>cost.py (gate)</span></div></div>
+        <div><p class="block-label">In your code</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/core/kalman.py"><b>NumPy · core/</b>kalman.py (gating_distance)</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/kalman.hpp"><b>C++ · core/</b>kalman.hpp (gating_distance)</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/cost.py"><b>NumPy · tracking/</b>cost.py (gate)</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/cost.hpp"><b>C++ · core/</b>cost.hpp (gate)</a></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
             <label class="ms"><input type="checkbox" data-id="s2-maha"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain Mahalanobis vs Euclidean with the "confident direction" example</span></label>
@@ -415,7 +416,7 @@
             <li><b>Alternatives</b> — greedy and auction algorithms exist; know the trade-off (speed vs optimality).</li>
           </ul>
         </div>
-        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>core/</b>assignment.py</span><span class="chip"><b>tests/</b> (cross-checked vs scipy.linear_sum_assignment)</span></div></div>
+        <div><p class="block-label">In your code</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/core/assignment.py"><b>NumPy · core/</b>assignment.py</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/assignment.hpp"><b>C++ · core/</b>assignment.hpp</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/tests/test_assignment.py"><b>NumPy · tests/</b>test_assignment.py</a></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
             <label class="ms"><input type="checkbox" data-id="s3-greedy"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Construct a 2×2 cost matrix where greedy matching is worse than optimal</span></label>
@@ -451,7 +452,7 @@
             <li><b>The factored cost surface</b> — <code>cost.py</code> assembles <code>w_iou·motion ⊕ w_app·appearance ⊕ w_unc·uncertainty</code>, all under the gate. Setting the extra weights to 0 recovers pure ByteTrack (bit-identical) — that's the ablation surface the whole study rides on.</li>
           </ul>
         </div>
-        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>tracking/</b>tracker.py</span><span class="chip"><b>tracking/</b>cost.py</span></div></div>
+        <div><p class="block-label">In your code</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/tracker.py"><b>NumPy · tracking/</b>tracker.py</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/tracker.hpp"><b>C++ · core/</b>tracker.hpp</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/cost.py"><b>NumPy · tracking/</b>cost.py</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/cost.hpp"><b>C++ · core/</b>cost.hpp</a></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
             <label class="ms"><input type="checkbox" data-id="s4-two"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why keeping low-score detections cuts ID switches</span></label>
@@ -470,7 +471,7 @@
       </summary>
       <div class="body">
         <div><p class="block-label">What & why</p><p class="why">A new detection could be a real object or a false positive. So tracks start <b>Tentative</b>, become <b>Confirmed</b> only after matching for N consecutive frames, and get <b>Deleted</b> after missing for M frames. This finite-state machine is what keeps the ID set clean — too eager and you get flicker-ghosts, too cautious and you drop real objects.</p></div>
-        <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>tracking/</b>track.py (FSM)</span><span class="chip"><b>tracking/</b>config.py (n_init, max_age)</span></div></div>
+        <div><p class="block-label">In your code</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/track.py"><b>NumPy · tracking/</b>track.py (FSM)</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/track.hpp"><b>C++ · core/</b>track.hpp (FSM)</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/config.py"><b>NumPy · tracking/</b>config.py</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/config.hpp"><b>C++ · core/</b>config.hpp</a></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
             <label class="ms"><input type="checkbox" data-id="s4-fsm"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Draw the 3-state diagram with its transition conditions</span></label>

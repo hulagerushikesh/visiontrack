@@ -33,7 +33,7 @@ implementation.
       outcome.
 - [x] Add explicit “previous / next” navigation between learning stages.
 - [x] Update stale lessons whose “next work” has already shipped.
-- [ ] Link concepts to exact source files in the NumPy and C++ repositories.
+- [x] Link concepts to exact source files in the NumPy and C++ repositories.
 
 ### Milestone 3 — exercises and verification
 
