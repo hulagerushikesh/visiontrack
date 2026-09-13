@@ -734,7 +734,7 @@
         <span class="mini"></span>
       </summary>
       <div class="body">
-        <div><p class="block-label">What & why</p><p class="why"><b>MOT17</b> = pedestrians with diverse appearance and <b>public detections</b> (DPM/FRCNN/SDP) so trackers compare without a detector confound. <b>DanceTrack</b> = near-identical outfits + non-linear motion (RQ1's hard case); it ships <em>no</em> detections, so this repo uses oracle-perturbed GT. Both use the same MOT text format (a shared parser). <b>Licensing matters</b>: MOT17 is CC BY-NC-SA (non-commercial, incompatible with the repo's MIT), so real frames are gitignored and were purged from history; DanceTrack is CC-BY (permissive).</p></div>
+        <div><p class="block-label">What & why</p><p class="why"><b>MOT17</b> = pedestrians with diverse appearance and <b>public detections</b> (DPM/FRCNN/SDP) so trackers compare without a detector confound. <b>DanceTrack</b> = near-identical outfits + non-linear motion; this repo evaluates both oracle-perturbed GT and a real YOLOX-nano pass, exposing how crop quality changes the value of appearance. <b>SportsMOT</b> adds fast motion with more distinguishable appearance, separating factors DanceTrack combines. All three use the MOT text format through shared loaders. <b>Licensing matters</b>: dataset frames and non-commercial re-ID weights remain outside the MIT repository, while regenerable caches stay local.</p></div>
         <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>detection/</b>mot_loader.py</span><span class="chip"><b>detection/</b>dancetrack_loader.py</span><span class="chip"><b>datasets/</b>splits.py, cache.py</span></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
@@ -780,7 +780,7 @@
         <span class="mini"></span>
       </summary>
       <div class="body">
-        <div><p class="block-label">What & why</p><p class="why"><code>make reproduce</code> regenerates every table and figure from the caches; a synthetic smoke subset runs in <b>CI</b> as a regression gate. The <b>interactive demo</b> (<code>viz/webdemo/</code>) pre-bakes the tracker over a synthetic scene so anyone can watch appearance cut ID switches in the browser — now deployed to GitHub Pages. The <b>README</b> is written as a mini-paper (abstract → RQs → method → results → honest limitations). Learning to <em>communicate</em> the work this way is as much the skill as building it.</p></div>
+        <div><p class="block-label">What & why</p><p class="why"><code>make reproduce</code> regenerates every table and figure from the caches; a synthetic smoke subset runs in <b>CI</b> as a regression gate. The <b>interactive demo</b> (<code>viz/webdemo/</code>) pre-bakes the tracker over a synthetic scene so anyone can watch appearance cut ID switches in the browser — deployed with the rest of the site on Vercel. The <b>README</b> is written as a mini-paper (abstract → RQs → method → results → honest limitations). Learning to <em>communicate</em> the work this way is as much the skill as building it.</p></div>
         <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>Makefile</b></span><span class="chip"><b>.github/workflows/</b>ci.yml, pages.yml</span><span class="chip"><b>viz/webdemo/</b>build_demo_data.py</span><span class="chip"><b>README.md</b></span></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
@@ -797,22 +797,22 @@
   <section class="stage" data-stage>
     <div class="stage-head">
       <span class="idx">12</span>
-      <h3>Where to take it next — redesign &amp; advance</h3>
+      <h3>What shipped — and where to advance next</h3>
       <span class="stage-count"></span>
     </div>
-    <p class="stage-sub">Once the above is solid, these are the real directions to make it more advanced. Each is a genuine research/engineering arc, roughly easiest → hardest.</p>
+    <p class="stage-sub">Several directions originally proposed here have now shipped. Study their measured outcomes first, then use the remaining frontier to form the next falsifiable question.</p>
 
     <details class="topic">
       <summary>
         <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span class="topic-title"><span class="t">Modern motion trackers: OC-SORT &amp; BoT-SORT</span><span class="k">The current strong baselines beyond vanilla ByteTrack</span></span>
+        <span class="topic-title"><span class="t">Modern motion trackers: the implemented result</span><span class="k">OC-SORT mechanics shipped; the fair DanceTrack test was an honest negative</span></span>
         <span class="mini"></span>
       </summary>
       <div class="body">
-        <div><p class="block-label">Direction</p><p class="why">Implement <b>OC-SORT</b> (observation-centric re-update that fixes Kalman error accumulation during occlusion) and <b>BoT-SORT</b> (camera-motion compensation + a better appearance fusion). Both slot directly onto your existing cost surface and give a concrete "we improved the baseline" story with your own significance testing.</p></div>
+        <div><p class="block-label">Result</p><p class="why"><b>OC-SORT</b> was implemented from scratch with observation-centric re-update and velocity-direction consistency. On the fair DanceTrack comparison it increased ID switches: a straight-line virtual trajectory is a poor correction for non-linear dance motion. The BoT-SORT-shaped pieces were tested separately: gated appearance helps or stays neutral, while global camera-motion compensation helps only when the camera actually moves.</p></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s12-ocsort"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Read OC-SORT + BoT-SORT; note which slots into <code>cost.py</code> vs <code>kalman.py</code></span></label>
+            <label class="ms"><input type="checkbox" data-id="s12-ocsort"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Read <code>docs/OC_SORT.md</code>; explain why a correct mechanism can still hurt in the measured regime</span></label>
           </div>
         </div>
         <div><p class="block-label">Go deeper</p><p class="resource"><span class="r"><b>Cao et al. 2023</b> — "OC-SORT". <b>Aharon et al. 2022</b> — "BoT-SORT".</span></p></div>
@@ -826,11 +826,11 @@
         <span class="mini"></span>
       </summary>
       <div class="body">
-        <div><p class="block-label">Direction</p><p class="why">Two natural extensions already scoped in your docs: (1) run a real <b>YOLOX</b> ONNX detector on DanceTrack instead of oracle-perturbed GT — removes the "clean crops favour appearance" caveat on the marquee RQ1 result; (2) add <b>SportsMOT</b> as a second maneuver dataset to properly stress RQ2's motion residual. Both are pure additions to the loader/cache layer you already have.</p></div>
+        <div><p class="block-label">Result</p><p class="why">Both additions shipped. Real <b>YOLOX-nano</b> detections on DanceTrack kept appearance beneficial but made the effect smaller and non-significant because weak crops damage re-ID. <b>SportsMOT</b> added a second fast-motion regime with informative appearance; under the oracle protocol, re-ID improves all four reported metrics. The remaining SportsMOT real-detector pass is compute-heavy, not missing design work.</p></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s12-yolox"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Sketch how a real YOLOX pass would change the DanceTrack RQ1 conclusion</span></label>
-            <label class="ms"><input type="checkbox" data-id="s12-sports"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Identify what a SportsMOT loader would reuse vs add</span></label>
+            <label class="ms"><input type="checkbox" data-id="s12-yolox"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Compare the oracle and real-YOLOX DanceTrack reports; identify crop quality as the changed variable</span></label>
+            <label class="ms"><input type="checkbox" data-id="s12-sports"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Compare SportsMOT and DanceTrack effect sizes without confusing sample size with effect size</span></label>
           </div>
         </div>
       </div>
