@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+@theme inline {
+  --color-background: var(--background); --color-foreground: var(--foreground); --color-card: var(--card); --color-primary: var(--primary); --color-primary-foreground: var(--primary-foreground); --color-secondary: var(--secondary); --color-muted-foreground: var(--muted-foreground); --color-border: var(--border);
+  --font-sans: "Manrope", "Avenir Next", system-ui, sans-serif; --font-mono: "SFMono-Regular", Consolas, monospace;
+}
+:root{--background:#f5f7f4;--foreground:#101512;--card:#fff;--primary:#087a58;--primary-foreground:#fff;--secondary:#e9eeea;--muted-foreground:#66706a;--border:#dce2dd;color-scheme:light}
+.dark{--background:#070b0b;--foreground:#edf6f0;--card:#0d1312;--primary:#7cf7c4;--primary-foreground:#07100d;--secondary:#141b19;--muted-foreground:#8e9c96;--border:#202a27;color-scheme:dark}
+*{border-color:var(--border)}html{scroll-behavior:smooth}body{margin:0;background:var(--background);font-family:var(--font-sans);text-rendering:optimizeLegibility}::selection{background:color-mix(in srgb,var(--primary) 30%,transparent)}
+.orb{position:absolute;width:34rem;height:34rem;border-radius:999px;filter:blur(110px);pointer-events:none}.grid-lines{background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:32px 32px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}

@@ -21,6 +21,14 @@ The detailed curriculum plan is in
 
 ## Next focus — H3.3 product direction
 
+- [x] Establish the React + TypeScript + Tailwind + shadcn/ui + Motion shell.
+- [x] Migrate the landing, teaching, and real-footage routes first.
+- [x] Keep the live tracker, study, roadmap, demo, and benchmark reports on
+      their verified standalone implementations during the incremental migration.
+- [ ] Migrate the long-form research write-up into reusable article components.
+- [ ] Design a data-driven benchmark explorer before replacing generated reports.
+- [ ] Port the interactive tracker shell without changing tracker behavior or
+      browser privacy guarantees.
 - [ ] Choose one initial vertical: retail footfall, sports, or traffic.
 - [ ] Write a one-page problem statement with user, input, output, and success
       measure before building an application.

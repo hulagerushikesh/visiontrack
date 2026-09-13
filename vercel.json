@@ -1,34 +1,32 @@
 {
   "builds": [
-    { "src": "web/index.html", "use": "@vercel/static" },
     { "src": "web/benchmark.html", "use": "@vercel/static" },
     { "src": "web/benchmark-dancetrack.html", "use": "@vercel/static" },
     { "src": "web/benchmark-dancetrack-yolox.html", "use": "@vercel/static" },
     { "src": "web/benchmark-sportsmot.html", "use": "@vercel/static" },
     { "src": "web/writeup.html", "use": "@vercel/static" },
-    { "src": "web/video.html", "use": "@vercel/static" },
     { "src": "web/live.html", "use": "@vercel/static" },
-    { "src": "web/teaching.html", "use": "@vercel/static" },
     { "src": "learning/*.html", "use": "@vercel/static" },
     { "src": "viz/webdemo/index.html", "use": "@vercel/static" },
     { "src": "assets/**", "use": "@vercel/static" },
     { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "vercel_build" } }
   ],
   "routes": [
-    { "src": "/", "dest": "/web/index.html" },
+    { "src": "/", "dest": "/app/index.html" },
     { "src": "/benchmark/?", "dest": "/web/benchmark.html" },
     { "src": "/benchmark/dancetrack-yolox/?", "dest": "/web/benchmark-dancetrack-yolox.html" },
     { "src": "/benchmark/dancetrack/?", "dest": "/web/benchmark-dancetrack.html" },
     { "src": "/benchmark/sportsmot/?", "dest": "/web/benchmark-sportsmot.html" },
     { "src": "/writeup/?", "dest": "/web/writeup.html" },
-    { "src": "/video/?", "dest": "/web/video.html" },
+    { "src": "/video/?", "dest": "/app/index.html" },
     { "src": "/live/?", "dest": "/web/live.html" },
-    { "src": "/teaching/?", "dest": "/web/teaching.html" },
+    { "src": "/teaching/?", "dest": "/app/index.html" },
     { "src": "/study/?", "dest": "/learning/LEARNING_PATH.html" },
     { "src": "/roadmap/?", "dest": "/learning/CV_ROADMAP.html" },
     { "src": "/demo/?", "dest": "/viz/webdemo/index.html" },
     { "src": "/docs/?", "dest": "/docs/index.html" },
     { "src": "/docs/(.+)", "dest": "/docs/$1" },
-    { "src": "/assets/(.*)", "dest": "/assets/$1" }
+    { "src": "/assets/(.*)", "dest": "/assets/$1" },
+    { "src": "/(.+\\.(?:js|css|svg|png|jpg|jpeg|gif|mp4|woff2))", "dest": "/app/$1" }
   ]
 }
