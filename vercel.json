@@ -27,6 +27,9 @@
     { "src": "/docs/?", "dest": "/docs/index.html" },
     { "src": "/docs/(.+)", "dest": "/docs/$1" },
     { "src": "/assets/(.*)", "dest": "/assets/$1" },
+    { "src": "/favicon.ico", "dest": "/app/favicon.ico" },
+    { "src": "/apple-touch-icon.png", "dest": "/app/apple-touch-icon.png" },
+    { "src": "/site.webmanifest", "dest": "/app/site.webmanifest" },
     { "src": "/(.+\\.(?:js|css|svg|png|jpg|jpeg|gif|mp4|woff2))", "dest": "/app/$1" }
   ]
 }

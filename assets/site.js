@@ -7,7 +7,7 @@
   // Keep the favicon and install metadata consistent on standalone legacy pages.
   if (!document.querySelector('link[rel="icon"]')) {
     var icon = document.createElement("link");
-    icon.rel = "icon"; icon.type = "image/svg+xml"; icon.href = "/assets/visiontrack-mark.svg";
+    icon.rel = "icon"; icon.href = "/assets/favicon.ico?v=2";
     document.head.appendChild(icon);
   }
 
