@@ -4,6 +4,13 @@
   var root = document.documentElement;
   var KEY = "vt-theme";
 
+  // Keep the favicon and install metadata consistent on standalone legacy pages.
+  if (!document.querySelector('link[rel="icon"]')) {
+    var icon = document.createElement("link");
+    icon.rel = "icon"; icon.type = "image/svg+xml"; icon.href = "/assets/visiontrack-mark.svg";
+    document.head.appendChild(icon);
+  }
+
   function systemDark() {
     return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
   }

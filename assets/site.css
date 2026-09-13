@@ -2,7 +2,7 @@
    VisionTrack — shared site stylesheet
    One source of truth for tokens, type scale, spacing, elevation, and every
    shared component across the 7 hand-authored pages. Design voice: a lab
-   instrument / systems paper — cool slate, hairline rules, monospace readouts,
+   instrument / systems paper — graphite + signal green, hairline rules, monospace readouts,
    dense tabular data. Keep the token names stable; pages depend on them.
    ========================================================================== */
 
@@ -10,14 +10,14 @@
 
 /* ---- tokens: light (bare :root = the un-stamped default) ---------------- */
 :root {
-  --bg: #f5f8fc; --surface: #ffffff; --surface-2: #eef3fb; --border: #dbe4f0;
-  --ink: #0c131d; --ink-2: #33414f; --muted: #56636f; --faint: #8793a1;
-  --accent: #2f6fe0; --accent-soft: #e6effd;                 /* the box */
-  --accent-2: #d9840a; --accent-2-soft: #fbeed6;             /* the id */
-  --good: #1f9d63; --warn: #c2410c;
-  --screen: #0a0e16; --screen-edge: #26303f; --screen-grid: rgba(255,255,255,.05);
+  --bg: #f5f7f4; --surface: #ffffff; --surface-2: #e9eeea; --border: #dce2dd;
+  --ink: #101512; --ink-2: #35413b; --muted: #66706a; --faint: #87918c;
+  --accent: #087a58; --accent-soft: #ddf3ea;                 /* the box */
+  --accent-2: #247ba0; --accent-2-soft: #e0eef3;             /* the id */
+  --good: #087a58; --warn: #c2410c;
+  --screen: #050808; --screen-edge: #26312e; --screen-grid: rgba(255,255,255,.05);
   --glass: rgba(255,255,255,.66); --glass-edge: rgba(255,255,255,.7);
-  --glow-1: rgba(47,111,224,.18); --glow-2: rgba(217,132,10,.12);
+  --glow-1: rgba(8,122,88,.18); --glow-2: rgba(36,123,160,.10);
 
   --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -39,37 +39,37 @@
 /* ---- tokens: dark ------------------------------------------------------- */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #070b13; --surface: #101725; --surface-2: #161f30; --border: #24324a;
-    --ink: #eaf1fa; --ink-2: #b9c6d8; --muted: #8496ac; --faint: #5d6b80;
-    --accent: #5a9bff; --accent-soft: #12233f;
-    --accent-2: #ffb454; --accent-2-soft: #33260f;
-    --good: #37c07e; --warn: #ff8a4c;
-    --screen: #05070d; --screen-edge: #223049; --screen-grid: rgba(120,170,255,.06);
+    --bg: #070b0b; --surface: #0d1312; --surface-2: #141b19; --border: #202a27;
+    --ink: #edf6f0; --ink-2: #becbc5; --muted: #8e9c96; --faint: #62716b;
+    --accent: #7cf7c4; --accent-soft: #123328;
+    --accent-2: #5bc0eb; --accent-2-soft: #102d38;
+    --good: #7cf7c4; --warn: #ff8a4c;
+    --screen: #050808; --screen-edge: #25332e; --screen-grid: rgba(124,247,196,.06);
     --glass: rgba(18,26,42,.6); --glass-edge: rgba(120,150,200,.14);
-    --glow-1: rgba(90,155,255,.28); --glow-2: rgba(255,180,84,.16);
+    --glow-1: rgba(124,247,196,.20); --glow-2: rgba(91,192,235,.12);
     --shadow: 0 1px 0 rgba(0,0,0,.5), 0 12px 38px rgba(0,0,0,.46);
     --shadow-lg: 0 2px 6px rgba(0,0,0,.5), 0 30px 70px -14px rgba(0,0,0,.6);
   }
 }
 :root[data-theme="light"] {
-  --bg: #f5f8fc; --surface: #ffffff; --surface-2: #eef3fb; --border: #dbe4f0;
-  --ink: #0c131d; --ink-2: #33414f; --muted: #56636f; --faint: #8793a1;
-  --accent: #2f6fe0; --accent-soft: #e6effd; --accent-2: #d9840a; --accent-2-soft: #fbeed6;
-  --good: #1f9d63; --warn: #c2410c;
-  --screen: #0a0e16; --screen-edge: #26303f; --screen-grid: rgba(255,255,255,.05);
+  --bg: #f5f7f4; --surface: #ffffff; --surface-2: #e9eeea; --border: #dce2dd;
+  --ink: #101512; --ink-2: #35413b; --muted: #66706a; --faint: #87918c;
+  --accent: #087a58; --accent-soft: #ddf3ea; --accent-2: #247ba0; --accent-2-soft: #e0eef3;
+  --good: #087a58; --warn: #c2410c;
+  --screen: #050808; --screen-edge: #26312e; --screen-grid: rgba(255,255,255,.05);
   --glass: rgba(255,255,255,.66); --glass-edge: rgba(255,255,255,.7);
-  --glow-1: rgba(47,111,224,.18); --glow-2: rgba(217,132,10,.12);
+  --glow-1: rgba(8,122,88,.18); --glow-2: rgba(36,123,160,.10);
   --shadow: 0 1px 0 rgba(13,20,30,.03), 0 8px 30px rgba(13,20,30,.07);
   --shadow-lg: 0 2px 4px rgba(13,20,30,.04), 0 24px 60px -12px rgba(13,20,30,.14);
 }
 :root[data-theme="dark"] {
-  --bg: #070b13; --surface: #101725; --surface-2: #161f30; --border: #24324a;
-  --ink: #eaf1fa; --ink-2: #b9c6d8; --muted: #8496ac; --faint: #5d6b80;
-  --accent: #5a9bff; --accent-soft: #12233f; --accent-2: #ffb454; --accent-2-soft: #33260f;
-  --good: #37c07e; --warn: #ff8a4c;
-  --screen: #05070d; --screen-edge: #223049; --screen-grid: rgba(120,170,255,.06);
+  --bg: #070b0b; --surface: #0d1312; --surface-2: #141b19; --border: #202a27;
+  --ink: #edf6f0; --ink-2: #becbc5; --muted: #8e9c96; --faint: #62716b;
+  --accent: #7cf7c4; --accent-soft: #123328; --accent-2: #5bc0eb; --accent-2-soft: #102d38;
+  --good: #7cf7c4; --warn: #ff8a4c;
+  --screen: #050808; --screen-edge: #25332e; --screen-grid: rgba(124,247,196,.06);
   --glass: rgba(18,26,42,.6); --glass-edge: rgba(120,150,200,.14);
-  --glow-1: rgba(90,155,255,.28); --glow-2: rgba(255,180,84,.16);
+  --glow-1: rgba(124,247,196,.20); --glow-2: rgba(91,192,235,.12);
   --shadow: 0 1px 0 rgba(0,0,0,.5), 0 12px 38px rgba(0,0,0,.46);
   --shadow-lg: 0 2px 6px rgba(0,0,0,.5), 0 30px 70px -14px rgba(0,0,0,.6);
 }
