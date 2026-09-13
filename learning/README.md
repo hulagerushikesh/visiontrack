@@ -10,6 +10,9 @@ project.
    findings. Progress is saved locally in the browser.
 2. [Computer-vision roadmap](CV_ROADMAP.html) — a junior-to-research progression
    covering foundations, tracking, production, and research practice.
+3. [Dataset-free exercises](EXERCISES.md) — runnable checks for geometry,
+   Kalman filtering, global assignment, and track lifecycle using the real
+   implementation and no external data.
 
 For a shorter, two-audience introduction, see the deployed teaching page or
 `web/teaching.html`. Research outcomes and implementation runbooks remain in
