@@ -32,7 +32,7 @@ implementation.
 - [x] Give every module a short prerequisite, estimated effort, and completion
       outcome.
 - [x] Add explicit “previous / next” navigation between learning stages.
-- [ ] Update stale lessons whose “next work” has already shipped.
+- [x] Update stale lessons whose “next work” has already shipped.
 - [ ] Link concepts to exact source files in the NumPy and C++ repositories.
 
 ### Milestone 3 — exercises and verification

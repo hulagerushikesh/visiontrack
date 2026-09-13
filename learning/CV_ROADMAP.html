@@ -394,7 +394,7 @@
           <li><b>Anchors &amp; NMS</b> — proposal generation and duplicate removal.</li>
           <li><b>mAP</b> — precision/recall curves, IoU thresholds, AP averaging.</li>
         </ul></div>
-        <div class="callout vt"><b>Direct link:</b> VisionTrack consumes detections as input. Running a real YOLOX detector on DanceTrack is one of your project's own "next steps" — this stage is the prerequisite for it.</div>
+        <div class="callout vt"><b>Direct link:</b> VisionTrack consumes detections as input. The project now includes a real YOLOX-nano DanceTrack pass; comparing its weaker crops with the oracle protocol shows exactly how detector quality limits downstream appearance matching.</div>
         <div><p class="block-label">Milestones</p><div class="milestones">
           <label class="ms"><input type="checkbox" data-id="r07-yolo"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt"><b>Build:</b> train/fine-tune a YOLO model on a custom dataset; visualize predictions</span></label>
           <label class="ms"><input type="checkbox" data-id="r07-map"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Compute mAP by hand for a tiny example; explain the IoU threshold's effect</span></label>
