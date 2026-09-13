@@ -79,3 +79,11 @@ def test_study_guide_links_all_dataset_free_exercises() -> None:
         f"{base}#3-global-assignment",
         f"{base}#4-track-lifecycle",
     } <= hrefs
+
+
+def test_study_guide_links_parity_capstone() -> None:
+    hrefs = _hrefs(ROOT / "learning" / "LEARNING_PATH.html")
+    assert (
+        "https://github.com/hulagerushikesh/visiontrack/blob/main/learning/PARITY_CAPSTONE.md"
+        in hrefs
+    )
