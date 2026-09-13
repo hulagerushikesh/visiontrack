@@ -294,6 +294,7 @@
           </ul>
         </div>
         <div><p class="block-label">In your code</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/core/geometry.py"><b>NumPy · core/</b>geometry.py</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/geometry.hpp"><b>C++ · core/</b>geometry.hpp</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/cost.py"><b>NumPy · tracking/</b>cost.py</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/cost.hpp"><b>C++ · core/</b>cost.hpp</a></div></div>
+        <div><p class="block-label">Practice</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/learning/EXERCISES.md#1-geometry-overlap"><b>Exercise 1 ·</b> geometry overlap</a></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
             <label class="ms"><input type="checkbox" data-id="s1-iou"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Hand-compute IoU for two overlapping boxes, then check against <code>geometry.py</code></span></label>
@@ -354,6 +355,7 @@
           </ul>
         </div>
         <div><p class="block-label">In your code</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/core/kalman.py"><b>NumPy · core/</b>kalman.py (predict / update)</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/kalman.hpp"><b>C++ · core/</b>kalman.hpp (predict / update)</a></div></div>
+        <div><p class="block-label">Practice</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/learning/EXERCISES.md#2-kalman-predict-and-update"><b>Exercise 2 ·</b> predict and update</a></div></div>
         <div class="callout"><b>Interview-grade:</b> being able to derive predict/update and explain the Joseph form from memory is exactly the "senior CV depth" signal this project was built to show.</div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
@@ -417,6 +419,7 @@
           </ul>
         </div>
         <div><p class="block-label">In your code</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/core/assignment.py"><b>NumPy · core/</b>assignment.py</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/assignment.hpp"><b>C++ · core/</b>assignment.hpp</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/tests/test_assignment.py"><b>NumPy · tests/</b>test_assignment.py</a></div></div>
+        <div><p class="block-label">Practice</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/learning/EXERCISES.md#3-global-assignment"><b>Exercise 3 ·</b> beat greedy matching</a></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
             <label class="ms"><input type="checkbox" data-id="s3-greedy"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Construct a 2×2 cost matrix where greedy matching is worse than optimal</span></label>
@@ -472,6 +475,7 @@
       <div class="body">
         <div><p class="block-label">What & why</p><p class="why">A new detection could be a real object or a false positive. So tracks start <b>Tentative</b>, become <b>Confirmed</b> only after matching for N consecutive frames, and get <b>Deleted</b> after missing for M frames. This finite-state machine is what keeps the ID set clean — too eager and you get flicker-ghosts, too cautious and you drop real objects.</p></div>
         <div><p class="block-label">In your code</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/track.py"><b>NumPy · tracking/</b>track.py (FSM)</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/track.hpp"><b>C++ · core/</b>track.hpp (FSM)</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/config.py"><b>NumPy · tracking/</b>config.py</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/config.hpp"><b>C++ · core/</b>config.hpp</a></div></div>
+        <div><p class="block-label">Practice</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/learning/EXERCISES.md#4-track-lifecycle"><b>Exercise 4 ·</b> lifecycle transitions</a></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
             <label class="ms"><input type="checkbox" data-id="s4-fsm"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Draw the 3-state diagram with its transition conditions</span></label>

@@ -68,3 +68,14 @@ def test_study_guide_links_core_concepts_to_both_implementations() -> None:
         "https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/tracker.hpp",
     }
     assert expected <= hrefs
+
+
+def test_study_guide_links_all_dataset_free_exercises() -> None:
+    hrefs = _hrefs(ROOT / "learning" / "LEARNING_PATH.html")
+    base = "https://github.com/hulagerushikesh/visiontrack/blob/main/learning/EXERCISES.md"
+    assert {
+        f"{base}#1-geometry-overlap",
+        f"{base}#2-kalman-predict-and-update",
+        f"{base}#3-global-assignment",
+        f"{base}#4-track-lifecycle",
+    } <= hrefs
