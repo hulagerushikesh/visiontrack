@@ -13,7 +13,7 @@ why a tracking change helps or hurts.
 - [x] Link core concepts directly to their real source files.
 - [x] Add dataset-free exercises for geometry, Kalman filtering, assignment,
       and track lifecycle.
-- [ ] Add a NumPy-versus-C++ parity capstone.
+- [x] Add a NumPy-versus-C++ parity capstone.
 - [ ] Complete mobile, keyboard, contrast, and reduced-motion QA.
 
 The detailed curriculum plan is in

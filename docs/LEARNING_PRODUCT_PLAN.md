@@ -40,8 +40,8 @@ implementation.
 - [x] Add small exercises for geometry, Kalman filtering, assignment, and track
       lifecycle.
 - [x] Provide runnable checks or expected outputs without requiring MOT datasets.
-- [ ] Add a final parity exercise that compares the NumPy and C++ trackers.
-- [ ] Keep progress local to the learner's browser; no account is required.
+- [x] Add a final parity exercise that compares the NumPy and C++ trackers.
+- [x] Keep progress local to the learner's browser; no account is required.
 
 ### Milestone 4 — release-quality course
 

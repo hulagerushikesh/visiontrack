@@ -13,6 +13,9 @@ project.
 3. [Dataset-free exercises](EXERCISES.md) — runnable checks for geometry,
    Kalman filtering, global assignment, and track lifecycle using the real
    implementation and no external data.
+4. [NumPy-versus-C++ parity capstone](PARITY_CAPSTONE.md) — prove that the
+   optimized sibling preserves the reference contract from primitives through
+   complete synthetic trajectories.
 
 For a shorter, two-audience introduction, see the deployed teaching page or
 `web/teaching.html`. Research outcomes and implementation runbooks remain in
