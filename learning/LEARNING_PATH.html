@@ -4,15 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
+<title>VisionTrack — Study Guide</title>
 </head>
 <body>
-<title>VisionTrack — Study Guide</title>
 <style>
   :root {
     --bg: #f4f7fb; --surface: #ffffff; --surface-2: #f0f3f8; --border: #dbe2ec;
-    --ink: #0e141b; --ink-2: #33404f; --muted: #5c6773; --faint: #8a94a1;
-    --accent: #2f7ae5; --accent-soft: #e7f0fd; --good: #1f9d63; --good-soft: #e3f5eb;
-    --amber: #c07a12;
+    --ink: #0e141b; --ink-2: #33404f; --muted: #5c6773; --faint: #687483;
+    --accent: #1769c2; --accent-soft: #e7f0fd; --good: #147548; --good-soft: #e3f5eb;
+    --amber: #875300;
     --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
     --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --shadow: 0 1px 2px rgba(13,20,30,.04), 0 6px 22px rgba(13,20,30,.05);
@@ -21,7 +21,7 @@
   @media (prefers-color-scheme: dark) {
     :root {
       --bg: #0c0f15; --surface: #141922; --surface-2: #1a2029; --border: #26303c;
-      --ink: #e7ebf1; --ink-2: #b7c0cd; --muted: #8792a1; --faint: #616d7c;
+      --ink: #e7ebf1; --ink-2: #b7c0cd; --muted: #a0aabb; --faint: #95a1b1;
       --accent: #5aa2ff; --accent-soft: #16283f; --good: #37c07e; --good-soft: #12281d;
       --amber: #e0a94a;
       --shadow: 0 1px 2px rgba(0,0,0,.35), 0 8px 30px rgba(0,0,0,.35);
@@ -29,13 +29,13 @@
   }
   :root[data-theme="light"] {
     --bg: #f4f7fb; --surface: #ffffff; --surface-2: #f0f3f8; --border: #dbe2ec;
-    --ink: #0e141b; --ink-2: #33404f; --muted: #5c6773; --faint: #8a94a1;
-    --accent: #2f7ae5; --accent-soft: #e7f0fd; --good: #1f9d63; --good-soft: #e3f5eb;
-    --amber: #c07a12; --shadow: 0 1px 2px rgba(13,20,30,.04), 0 6px 22px rgba(13,20,30,.05);
+    --ink: #0e141b; --ink-2: #33404f; --muted: #5c6773; --faint: #687483;
+    --accent: #1769c2; --accent-soft: #e7f0fd; --good: #147548; --good-soft: #e3f5eb;
+    --amber: #875300; --shadow: 0 1px 2px rgba(13,20,30,.04), 0 6px 22px rgba(13,20,30,.05);
   }
   :root[data-theme="dark"] {
     --bg: #0c0f15; --surface: #141922; --surface-2: #1a2029; --border: #26303c;
-    --ink: #e7ebf1; --ink-2: #b7c0cd; --muted: #8792a1; --faint: #616d7c;
+    --ink: #e7ebf1; --ink-2: #b7c0cd; --muted: #a0aabb; --faint: #95a1b1;
     --accent: #5aa2ff; --accent-soft: #16283f; --good: #37c07e; --good-soft: #12281d;
     --amber: #e0a94a; --shadow: 0 1px 2px rgba(0,0,0,.35), 0 8px 30px rgba(0,0,0,.35);
   }
@@ -47,6 +47,10 @@
     font-family: var(--sans); line-height: 1.6;
     font-size: 16px; -webkit-font-smoothing: antialiased;
   }
+  .skip-link { position: fixed; left: 12px; top: 8px; z-index: 100; padding: 9px 12px;
+    color: var(--ink); background: var(--surface); border: 2px solid var(--accent);
+    border-radius: 7px; transform: translateY(-150%); }
+  .skip-link:focus { transform: translateY(0); }
   .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 22px 120px; }
 
   /* ---------- header / readout ---------- */
@@ -81,7 +85,7 @@
   .controls button {
     font-family: var(--mono); font-size: 11px; letter-spacing: .04em; text-transform: uppercase;
     color: var(--muted); background: var(--surface); border: 1px solid var(--border);
-    padding: 5px 10px; border-radius: 7px; cursor: pointer; transition: .15s;
+    padding: 5px 10px; min-height: 44px; border-radius: 7px; cursor: pointer; transition: .15s;
   }
   .controls button:hover { color: var(--ink); border-color: var(--accent); }
   .controls button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -109,8 +113,8 @@
   .stage-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 18px; }
   .stage-nav a { color: var(--accent); font-family: var(--mono); font-size: 12px;
     text-decoration: none; border: 1px solid var(--border); background: var(--surface);
-    border-radius: 8px; padding: 8px 11px; max-width: 48%; }
-  .stage-nav a:hover { border-color: var(--accent); }
+    border-radius: 8px; padding: 8px 11px; min-height: 44px; max-width: 48%; }
+  .stage-nav a:hover, .stage-nav a:focus-visible { border-color: var(--accent); outline: 2px solid var(--accent); outline-offset: 2px; }
   .stage-nav .next { margin-left: auto; text-align: right; }
 
   /* ---------- topic cards ---------- */
@@ -188,22 +192,35 @@
     font-family: var(--mono); font-size: 12px; color: var(--muted); }
   footer.foot b { color: var(--ink-2); }
 
-  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; scroll-behavior: auto !important; transition: none !important; } }
   @media (max-width: 560px) {
+    .wrap { padding-left: 14px; padding-right: 14px; }
+    .top-inner { padding: 10px 14px; }
+    .top h1 { font-size: 17px; }
+    .readout { gap: 8px; }
+    .bar { flex-basis: 100%; min-width: 0; }
+    .controls { width: 100%; }
+    .controls button { flex: 1; padding-left: 5px; padding-right: 5px; }
+    .stage-head { align-items: center; flex-wrap: wrap; gap: 8px; }
     .stage-head h3 { font-size: 19px; }
     .topic-title .k { display: none; }
+    summary { padding: 13px 12px; gap: 8px; }
     .body { padding-left: 13px; padding-right: 13px; }
+    .stage-nav { flex-direction: column; }
+    .stage-nav a { max-width: 100%; width: 100%; }
   }
 </style>
+
+<a class="skip-link" href="#main-content">Skip to learning content</a>
 
 <header class="top">
   <div class="top-inner">
     <p class="eyebrow"><span class="dot"></span> VisionTrack · self-paced study guide</p>
     <h1>From-scratch multi-object tracking — the concepts, in order</h1>
     <div class="readout">
-      <div class="bar" aria-hidden="true"><i id="barfill"></i></div>
+      <div class="bar" id="progressbar" role="progressbar" aria-label="Learning progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="barfill"></i></div>
       <span class="pct" id="pct">0%</span>
-      <span class="count-note" id="countnote">0 / 0 milestones</span>
+      <span class="count-note" id="countnote" role="status" aria-live="polite">0 / 0 milestones</span>
       <span class="controls">
         <button id="expandAll" type="button">Expand all</button>
         <button id="collapseAll" type="button">Collapse</button>
@@ -213,7 +230,7 @@
   </div>
 </header>
 
-<div class="wrap">
+<div class="wrap" id="main-content" tabindex="-1">
 
   <section class="intro">
     <p class="lede">This is a map of everything inside <strong>VisionTrack</strong>, arranged as a
@@ -243,7 +260,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">What is tracking-by-detection?</span><span class="k">Detector finds boxes each frame; the tracker gives them stable IDs over time</span></span>
         <span class="mini"></span>
       </summary>
@@ -259,10 +276,10 @@
         <div><p class="block-label">In your code</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/tracker.py"><b>NumPy · tracking/</b>tracker.py</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/tracker.hpp"><b>C++ · core/</b>tracker.hpp</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/README.md"><b>README.md</b> (the mini-paper)</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/viz/webdemo/index.html"><b>viz/webdemo/</b>index.html</a></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s0-demo"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Open the live demo and watch a colour flip = one ID switch</span></label>
-            <label class="ms"><input type="checkbox" data-id="s0-readme"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Read the README abstract + RQ statements; write the 3 questions in your own words</span></label>
-            <label class="ms"><input type="checkbox" data-id="s0-cli"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Run <code>visiontrack demo</code> and <code>visiontrack eval</code> locally</span></label>
-            <label class="ms"><input type="checkbox" data-id="s0-trace"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Trace the predict→associate→update loop for one frame in <code>tracker.py</code></span></label>
+            <label class="ms"><input type="checkbox" data-id="s0-demo"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Open the live demo and watch a colour flip = one ID switch</span></label>
+            <label class="ms"><input type="checkbox" data-id="s0-readme"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Read the README abstract + RQ statements; write the 3 questions in your own words</span></label>
+            <label class="ms"><input type="checkbox" data-id="s0-cli"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Run <code>visiontrack demo</code> and <code>visiontrack eval</code> locally</span></label>
+            <label class="ms"><input type="checkbox" data-id="s0-trace"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Trace the predict→associate→update loop for one frame in <code>tracker.py</code></span></label>
           </div>
         </div>
       </div>
@@ -280,7 +297,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">Bounding boxes, IoU &amp; GIoU</span><span class="k">Box parametrizations and the overlap metric that drives motion association</span></span>
         <span class="mini"></span>
       </summary>
@@ -297,9 +314,9 @@
         <div><p class="block-label">Practice</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/learning/EXERCISES.md#1-geometry-overlap"><b>Exercise 1 ·</b> geometry overlap</a></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s1-iou"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Hand-compute IoU for two overlapping boxes, then check against <code>geometry.py</code></span></label>
-            <label class="ms"><input type="checkbox" data-id="s1-giou"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why GIoU ≠ IoU for two disjoint boxes</span></label>
-            <label class="ms"><input type="checkbox" data-id="s1-param"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Convert a box between <code>xyxy</code>, <code>xywh</code>, and <code>xyah</code> by hand</span></label>
+            <label class="ms"><input type="checkbox" data-id="s1-iou"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Hand-compute IoU for two overlapping boxes, then check against <code>geometry.py</code></span></label>
+            <label class="ms"><input type="checkbox" data-id="s1-giou"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why GIoU ≠ IoU for two disjoint boxes</span></label>
+            <label class="ms"><input type="checkbox" data-id="s1-param"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Convert a box between <code>xyxy</code>, <code>xywh</code>, and <code>xyah</code> by hand</span></label>
           </div>
         </div>
       </div>
@@ -317,7 +334,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">Belief as a Gaussian: mean &amp; covariance</span><span class="k">A track's state isn't a point — it's a distribution with uncertainty</span></span>
         <span class="mini"></span>
       </summary>
@@ -332,8 +349,8 @@
         <div><p class="block-label">In your code</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/core/kalman.py"><b>NumPy · core/</b>kalman.py</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/kalman.hpp"><b>C++ · core/</b>kalman.hpp</a></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s2-state"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Name all 8 state variables and why velocities are included</span></label>
-            <label class="ms"><input type="checkbox" data-id="s2-cov"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain what a covariance matrix encodes in one sentence</span></label>
+            <label class="ms"><input type="checkbox" data-id="s2-state"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Name all 8 state variables and why velocities are included</span></label>
+            <label class="ms"><input type="checkbox" data-id="s2-cov"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain what a covariance matrix encodes in one sentence</span></label>
           </div>
         </div>
       </div>
@@ -341,7 +358,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">Predict &amp; update — the two-step cycle</span><span class="k">Motion pushes the belief forward; a measurement pulls it back</span></span>
         <span class="mini"></span>
       </summary>
@@ -359,9 +376,9 @@
         <div class="callout"><b>Interview-grade:</b> being able to derive predict/update and explain the Joseph form from memory is exactly the "senior CV depth" signal this project was built to show.</div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s2-predict"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Write out the predict equations (mean + covariance) by hand</span></label>
-            <label class="ms"><input type="checkbox" data-id="s2-gain"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain the Kalman gain as a trust ratio between Q and R</span></label>
-            <label class="ms"><input type="checkbox" data-id="s2-joseph"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Say why the Joseph form is used instead of the naive covariance update</span></label>
+            <label class="ms"><input type="checkbox" data-id="s2-predict"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Write out the predict equations (mean + covariance) by hand</span></label>
+            <label class="ms"><input type="checkbox" data-id="s2-gain"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain the Kalman gain as a trust ratio between Q and R</span></label>
+            <label class="ms"><input type="checkbox" data-id="s2-joseph"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Say why the Joseph form is used instead of the naive covariance update</span></label>
           </div>
         </div>
       </div>
@@ -369,7 +386,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">Mahalanobis distance &amp; gating</span><span class="k">Uncertainty-aware distance that rejects impossible matches before assignment</span></span>
         <span class="mini"></span>
       </summary>
@@ -384,8 +401,8 @@
         <div><p class="block-label">In your code</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/core/kalman.py"><b>NumPy · core/</b>kalman.py (gating_distance)</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/kalman.hpp"><b>C++ · core/</b>kalman.hpp (gating_distance)</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/cost.py"><b>NumPy · tracking/</b>cost.py (gate)</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/cost.hpp"><b>C++ · core/</b>cost.hpp (gate)</a></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s2-maha"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain Mahalanobis vs Euclidean with the "confident direction" example</span></label>
-            <label class="ms"><input type="checkbox" data-id="s2-gate"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain what the χ² gate threshold rejects and why</span></label>
+            <label class="ms"><input type="checkbox" data-id="s2-maha"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain Mahalanobis vs Euclidean with the "confident direction" example</span></label>
+            <label class="ms"><input type="checkbox" data-id="s2-gate"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain what the χ² gate threshold rejects and why</span></label>
           </div>
         </div>
         <div><p class="block-label">Go deeper</p><p class="resource"><span class="r"><b>Welch &amp; Bishop</b> — "An Introduction to the Kalman Filter" (the classic gentle tutorial).</span><span class="r"><b>Roger Labbe</b> — "Kalman and Bayesian Filters in Python" (free interactive book).</span><span class="r"><b>Bewley et al. 2016</b> — "SORT" (the minimal Kalman+Hungarian tracker this descends from).</span></p></div>
@@ -404,7 +421,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">The Hungarian algorithm</span><span class="k">Exact minimum-cost bipartite matching in O(n³)</span></span>
         <span class="mini"></span>
       </summary>
@@ -422,9 +439,9 @@
         <div><p class="block-label">Practice</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/learning/EXERCISES.md#3-global-assignment"><b>Exercise 3 ·</b> beat greedy matching</a></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s3-greedy"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Construct a 2×2 cost matrix where greedy matching is worse than optimal</span></label>
-            <label class="ms"><input type="checkbox" data-id="s3-dual"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain (roughly) how dual potentials certify optimality</span></label>
-            <label class="ms"><input type="checkbox" data-id="s3-rect"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Trace how unmatched tracks/detections fall out of the solver</span></label>
+            <label class="ms"><input type="checkbox" data-id="s3-greedy"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Construct a 2×2 cost matrix where greedy matching is worse than optimal</span></label>
+            <label class="ms"><input type="checkbox" data-id="s3-dual"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain (roughly) how dual potentials certify optimality</span></label>
+            <label class="ms"><input type="checkbox" data-id="s3-rect"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Trace how unmatched tracks/detections fall out of the solver</span></label>
           </div>
         </div>
         <div><p class="block-label">Go deeper</p><p class="resource"><span class="r"><b>Kuhn 1955</b> — "The Hungarian Method for the Assignment Problem" (the original).</span></p></div>
@@ -443,7 +460,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">ByteTrack two-stage association</span><span class="k">Match high-confidence detections first, then recover tracks with the leftover low-confidence ones</span></span>
         <span class="mini"></span>
       </summary>
@@ -458,8 +475,8 @@
         <div><p class="block-label">In your code</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/tracker.py"><b>NumPy · tracking/</b>tracker.py</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/tracker.hpp"><b>C++ · core/</b>tracker.hpp</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/cost.py"><b>NumPy · tracking/</b>cost.py</a><a class="chip" href="https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/core/cost.hpp"><b>C++ · core/</b>cost.hpp</a></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s4-two"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why keeping low-score detections cuts ID switches</span></label>
-            <label class="ms"><input type="checkbox" data-id="s4-cost"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Find where the 3 cost weights combine in <code>cost.py</code></span></label>
+            <label class="ms"><input type="checkbox" data-id="s4-two"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why keeping low-score detections cuts ID switches</span></label>
+            <label class="ms"><input type="checkbox" data-id="s4-cost"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Find where the 3 cost weights combine in <code>cost.py</code></span></label>
           </div>
         </div>
         <div><p class="block-label">Go deeper</p><p class="resource"><span class="r"><b>Zhang et al. 2022</b> — "ByteTrack: Multi-Object Tracking by Associating Every Detection Box".</span></p></div>
@@ -468,7 +485,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">Track lifecycle — the state machine</span><span class="k">Tentative → Confirmed → Deleted, so a one-frame blip doesn't spawn a permanent ghost</span></span>
         <span class="mini"></span>
       </summary>
@@ -478,8 +495,8 @@
         <div><p class="block-label">Practice</p><div class="chips"><a class="chip" href="https://github.com/hulagerushikesh/visiontrack/blob/main/learning/EXERCISES.md#4-track-lifecycle"><b>Exercise 4 ·</b> lifecycle transitions</a></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s4-fsm"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Draw the 3-state diagram with its transition conditions</span></label>
-            <label class="ms"><input type="checkbox" data-id="s4-tune"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Predict what happens if <code>max_age</code> is set too high vs too low</span></label>
+            <label class="ms"><input type="checkbox" data-id="s4-fsm"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Draw the 3-state diagram with its transition conditions</span></label>
+            <label class="ms"><input type="checkbox" data-id="s4-tune"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Predict what happens if <code>max_age</code> is set too high vs too low</span></label>
           </div>
         </div>
       </div>
@@ -497,7 +514,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">CLEAR-MOT: MOTA, MOTP, IDSW</span><span class="k">The classic detection-weighted metrics — and their blind spot</span></span>
         <span class="mini"></span>
       </summary>
@@ -506,8 +523,8 @@
         <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>eval/</b>mot.py</span></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s5-mota"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Write the MOTA formula and say which error type dominates it</span></label>
-            <label class="ms"><input type="checkbox" data-id="s5-idsw"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Define an ID switch precisely (what counts, what doesn't)</span></label>
+            <label class="ms"><input type="checkbox" data-id="s5-mota"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Write the MOTA formula and say which error type dominates it</span></label>
+            <label class="ms"><input type="checkbox" data-id="s5-idsw"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Define an ID switch precisely (what counts, what doesn't)</span></label>
           </div>
         </div>
       </div>
@@ -515,7 +532,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">HOTA &amp; IDF1 — measuring identity</span><span class="k">Association-aware metrics; why HOTA is the modern standard</span></span>
         <span class="mini"></span>
       </summary>
@@ -524,8 +541,8 @@
         <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>eval/</b>hota.py</span><span class="chip"><b>scripts/</b>xcheck_mot17_trackeval.py</span></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s5-hota"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain HOTA's DetA × AssA split and why it beats MOTA for this study</span></label>
-            <label class="ms"><input type="checkbox" data-id="s5-xcheck"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Understand why cross-checking against trackeval matters for credibility</span></label>
+            <label class="ms"><input type="checkbox" data-id="s5-hota"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain HOTA's DetA × AssA split and why it beats MOTA for this study</span></label>
+            <label class="ms"><input type="checkbox" data-id="s5-xcheck"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Understand why cross-checking against trackeval matters for credibility</span></label>
           </div>
         </div>
         <div><p class="block-label">Go deeper</p><p class="resource"><span class="r"><b>Luiten et al. 2021</b> — "HOTA: A Higher Order Metric for Evaluating Multi-Object Tracking".</span><span class="r"><b>Ristani et al. 2016</b> — IDF1 (from the DukeMTMC paper).</span></p></div>
@@ -544,7 +561,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">Seeds, paired tests &amp; effect size</span><span class="k">Is a +0.004 HOTA real, or noise? Significance testing answers it</span></span>
         <span class="mini"></span>
       </summary>
@@ -561,9 +578,9 @@
         <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>eval/</b>stats.py</span><span class="chip"><b>experiments/</b>analyze.py</span></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s6-paired"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why a paired test has more power than an unpaired one here</span></label>
-            <label class="ms"><input type="checkbox" data-id="s6-p"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">State what a p-value does and does not mean</span></label>
-            <label class="ms"><input type="checkbox" data-id="s6-sanity"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Understand the baseline-vs-baseline p≈1 sanity check</span></label>
+            <label class="ms"><input type="checkbox" data-id="s6-paired"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why a paired test has more power than an unpaired one here</span></label>
+            <label class="ms"><input type="checkbox" data-id="s6-p"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">State what a p-value does and does not mean</span></label>
+            <label class="ms"><input type="checkbox" data-id="s6-sanity"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Understand the baseline-vs-baseline p≈1 sanity check</span></label>
           </div>
         </div>
       </div>
@@ -571,7 +588,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">Reproducibility — config hashing</span><span class="k">A run is fully specified by the SHA-256 of its config</span></span>
         <span class="mini"></span>
       </summary>
@@ -580,7 +597,7 @@
         <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>experiments/</b>config.py</span><span class="chip"><b>experiments/</b>run_matrix.py</span></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s6-hash"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain what the config hash buys you (traceability + caching)</span></label>
+            <label class="ms"><input type="checkbox" data-id="s6-hash"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain what the config hash buys you (traceability + caching)</span></label>
           </div>
         </div>
       </div>
@@ -598,7 +615,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">Embeddings, cosine cost &amp; the EMA gallery</span><span class="k">Turn a crop into a vector; match by appearance similarity; remember it over time</span></span>
         <span class="mini"></span>
       </summary>
@@ -614,8 +631,8 @@
         <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>appearance/</b>embedder.py</span><span class="chip"><b>appearance/</b>reid_onnx.py (OSNet)</span><span class="chip"><b>appearance/</b>gallery.py</span></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s7-emb"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain what a re-ID embedding is and why cosine distance</span></label>
-            <label class="ms"><input type="checkbox" data-id="s7-ema"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain the EMA gallery and its stability/adaptivity trade-off</span></label>
+            <label class="ms"><input type="checkbox" data-id="s7-emb"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain what a re-ID embedding is and why cosine distance</span></label>
+            <label class="ms"><input type="checkbox" data-id="s7-ema"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain the EMA gallery and its stability/adaptivity trade-off</span></label>
           </div>
         </div>
         <div><p class="block-label">Go deeper</p><p class="resource"><span class="r"><b>Wojke et al. 2017</b> — "DeepSORT" (appearance + Kalman).</span><span class="r"><b>Zhou et al. 2019</b> — "OSNet" (the re-ID network you're running).</span></p></div>
@@ -624,7 +641,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">The key insight: rank, don't veto</span><span class="k">Why appearance is robustly helpful-or-neutral — and never hurts here</span></span>
         <span class="mini"></span>
       </summary>
@@ -642,9 +659,9 @@
         <div class="callout"><b>This is the result to be able to tell as a story.</b> The unifying claim — <em>a gated ranking appearance cost is robustly beneficial-or-neutral across MOT17, synthetic, and DanceTrack</em> — is the portfolio headline.</div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s7-gate"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain "rank not veto" and why it makes appearance non-harmful</span></label>
-            <label class="ms"><input type="checkbox" data-id="s7-refute"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Retell the refuted DanceTrack hypothesis and why it was wrong</span></label>
-            <label class="ms"><input type="checkbox" data-id="s7-gradient"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain the detector-quality gradient (why DPM kills appearance)</span></label>
+            <label class="ms"><input type="checkbox" data-id="s7-gate"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain "rank not veto" and why it makes appearance non-harmful</span></label>
+            <label class="ms"><input type="checkbox" data-id="s7-refute"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Retell the refuted DanceTrack hypothesis and why it was wrong</span></label>
+            <label class="ms"><input type="checkbox" data-id="s7-gradient"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain the detector-quality gradient (why DPM kills appearance)</span></label>
           </div>
         </div>
       </div>
@@ -662,7 +679,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">A from-scratch MLP &amp; the open-loop/closed-loop gap</span><span class="k">Hand-written backprop; why a better predictor can be a worse tracker</span></span>
         <span class="mini"></span>
       </summary>
@@ -679,9 +696,9 @@
         <div class="callout neg"><b>Honest negative.</b> Reporting a well-measured negative result is a contribution, not a failure — it's a core part of what makes this a study rather than a demo.</div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s8-mlp"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Walk through the MLP forward pass + one backprop step in <code>residual.py</code></span></label>
-            <label class="ms"><input type="checkbox" data-id="s8-shift"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain the train-on-GT / serve-on-noisy distribution shift</span></label>
-            <label class="ms"><input type="checkbox" data-id="s8-gap"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why open-loop gains didn't survive closed-loop</span></label>
+            <label class="ms"><input type="checkbox" data-id="s8-mlp"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Walk through the MLP forward pass + one backprop step in <code>residual.py</code></span></label>
+            <label class="ms"><input type="checkbox" data-id="s8-shift"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain the train-on-GT / serve-on-noisy distribution shift</span></label>
+            <label class="ms"><input type="checkbox" data-id="s8-gap"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why open-loop gains didn't survive closed-loop</span></label>
           </div>
         </div>
       </div>
@@ -699,7 +716,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">Reliability, calibration &amp; why tightening hurts</span><span class="k">Are gated innovations really χ²? What happens if you force them to be</span></span>
         <span class="mini"></span>
       </summary>
@@ -715,8 +732,8 @@
         <div class="callout neg"><b>Honest negative #2.</b> Together with RQ2, this is the project's intellectual honesty on display — two tricks the literature assumes help, measured and found not to.</div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s9-chi"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why gated innovations should be χ² and what "under-confident" means</span></label>
-            <label class="ms"><input type="checkbox" data-id="s9-loose"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why a loose gate is a feature under detector noise</span></label>
+            <label class="ms"><input type="checkbox" data-id="s9-chi"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why gated innovations should be χ² and what "under-confident" means</span></label>
+            <label class="ms"><input type="checkbox" data-id="s9-loose"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why a loose gate is a feature under detector noise</span></label>
           </div>
         </div>
       </div>
@@ -734,7 +751,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">MOT17, DanceTrack, the MOT format &amp; licensing</span><span class="k">Real data, public detections, and why one dataset's frames can't ship</span></span>
         <span class="mini"></span>
       </summary>
@@ -743,8 +760,8 @@
         <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>detection/</b>mot_loader.py</span><span class="chip"><b>detection/</b>dancetrack_loader.py</span><span class="chip"><b>datasets/</b>splits.py, cache.py</span></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s10-public"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why public detections make tracker comparisons fair</span></label>
-            <label class="ms"><input type="checkbox" data-id="s10-lic"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why MOT17 frames are gitignored but DanceTrack figures are fine</span></label>
+            <label class="ms"><input type="checkbox" data-id="s10-public"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why public detections make tracker comparisons fair</span></label>
+            <label class="ms"><input type="checkbox" data-id="s10-lic"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain why MOT17 frames are gitignored but DanceTrack figures are fine</span></label>
           </div>
         </div>
       </div>
@@ -752,7 +769,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">Compute-once caching &amp; the from-scratch discipline</span><span class="k">Why the core stays NumPy-only and heavy deps stay lazy</span></span>
         <span class="mini"></span>
       </summary>
@@ -761,8 +778,8 @@
         <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>data/cache/</b>precompute_embeddings.py</span><span class="chip"><b>detection/</b>cached.py</span><span class="chip"><b>pyproject.toml</b> (extras)</span></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s10-cache"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain the compute-once cache and what it makes tractable</span></label>
-            <label class="ms"><input type="checkbox" data-id="s10-lazy"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Find one lazy import and explain why it isn't top-level</span></label>
+            <label class="ms"><input type="checkbox" data-id="s10-cache"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Explain the compute-once cache and what it makes tractable</span></label>
+            <label class="ms"><input type="checkbox" data-id="s10-lazy"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Find one lazy import and explain why it isn't top-level</span></label>
           </div>
         </div>
       </div>
@@ -780,7 +797,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">make reproduce, CI, the demo &amp; the mini-paper</span><span class="k">The reviewer-facing surface and how it's kept honest</span></span>
         <span class="mini"></span>
       </summary>
@@ -789,9 +806,9 @@
         <div><p class="block-label">In your code</p><div class="chips"><span class="chip"><b>Makefile</b></span><span class="chip"><b>.github/workflows/</b>ci.yml, pages.yml</span><span class="chip"><b>viz/webdemo/</b>build_demo_data.py</span><span class="chip"><b>README.md</b></span></div></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s11-repro"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Run <code>make reproduce-synth</code> and read what it regenerates</span></label>
-            <label class="ms"><input type="checkbox" data-id="s11-demo"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Read <code>build_demo_data.py</code> — see how inference is pre-baked into HTML</span></label>
-            <label class="ms"><input type="checkbox" data-id="s11-paper"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Re-read the README as a paper: can you defend each claim?</span></label>
+            <label class="ms"><input type="checkbox" data-id="s11-repro"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Run <code>make reproduce-synth</code> and read what it regenerates</span></label>
+            <label class="ms"><input type="checkbox" data-id="s11-demo"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Read <code>build_demo_data.py</code> — see how inference is pre-baked into HTML</span></label>
+            <label class="ms"><input type="checkbox" data-id="s11-paper"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Re-read the README as a paper: can you defend each claim?</span></label>
           </div>
         </div>
       </div>
@@ -810,7 +827,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">Modern motion trackers: the implemented result</span><span class="k">OC-SORT mechanics shipped; the fair DanceTrack test was an honest negative</span></span>
         <span class="mini"></span>
       </summary>
@@ -818,7 +835,7 @@
         <div><p class="block-label">Result</p><p class="why"><b>OC-SORT</b> was implemented from scratch with observation-centric re-update and velocity-direction consistency. On the fair DanceTrack comparison it increased ID switches: a straight-line virtual trajectory is a poor correction for non-linear dance motion. The BoT-SORT-shaped pieces were tested separately: gated appearance helps or stays neutral, while global camera-motion compensation helps only when the camera actually moves.</p></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s12-ocsort"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Read <code>docs/OC_SORT.md</code>; explain why a correct mechanism can still hurt in the measured regime</span></label>
+            <label class="ms"><input type="checkbox" data-id="s12-ocsort"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Read <code>docs/OC_SORT.md</code>; explain why a correct mechanism can still hurt in the measured regime</span></label>
           </div>
         </div>
         <div><p class="block-label">Go deeper</p><p class="resource"><span class="r"><b>Cao et al. 2023</b> — "OC-SORT". <b>Aharon et al. 2022</b> — "BoT-SORT".</span></p></div>
@@ -827,7 +844,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">Real detector + more datasets</span><span class="k">Close the biggest scope caveats in the current study</span></span>
         <span class="mini"></span>
       </summary>
@@ -835,8 +852,8 @@
         <div><p class="block-label">Result</p><p class="why">Both additions shipped. Real <b>YOLOX-nano</b> detections on DanceTrack kept appearance beneficial but made the effect smaller and non-significant because weak crops damage re-ID. <b>SportsMOT</b> added a second fast-motion regime with informative appearance; under the oracle protocol, re-ID improves all four reported metrics. The remaining SportsMOT real-detector pass is compute-heavy, not missing design work.</p></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s12-yolox"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Compare the oracle and real-YOLOX DanceTrack reports; identify crop quality as the changed variable</span></label>
-            <label class="ms"><input type="checkbox" data-id="s12-sports"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Compare SportsMOT and DanceTrack effect sizes without confusing sample size with effect size</span></label>
+            <label class="ms"><input type="checkbox" data-id="s12-yolox"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Compare the oracle and real-YOLOX DanceTrack reports; identify crop quality as the changed variable</span></label>
+            <label class="ms"><input type="checkbox" data-id="s12-sports"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Compare SportsMOT and DanceTrack effect sizes without confusing sample size with effect size</span></label>
           </div>
         </div>
       </div>
@@ -844,7 +861,7 @@
 
     <details class="topic">
       <summary>
-        <svg class="chev" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="chev" aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="topic-title"><span class="t">Learned &amp; end-to-end tracking</span><span class="k">The research frontier: transformers and graph-based association</span></span>
         <span class="mini"></span>
       </summary>
@@ -852,8 +869,8 @@
         <div><p class="block-label">Direction</p><p class="why">The frontier moves association from hand-designed costs to <b>learned</b> ones: <b>GNN</b> association (nodes = detections/tracks, edges = match scores), and <b>end-to-end transformer</b> trackers (MOTR / TrackFormer) that jointly detect and track with attention. Ambitious, but your clean cost-surface + rigorous-eval harness is the ideal platform to measure whether they actually beat a well-tuned classical tracker — which is exactly the honest-measurement thesis, one level up.</p></div>
         <div><p class="block-label">Milestones</p>
           <div class="milestones">
-            <label class="ms"><input type="checkbox" data-id="s12-e2e"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Read one end-to-end tracker (MOTR or TrackFormer); note what it replaces</span></label>
-            <label class="ms"><input type="checkbox" data-id="s12-gnn"><span class="box"><svg viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Sketch how a learned-cost head could plug into your existing gate</span></label>
+            <label class="ms"><input type="checkbox" data-id="s12-e2e"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Read one end-to-end tracker (MOTR or TrackFormer); note what it replaces</span></label>
+            <label class="ms"><input type="checkbox" data-id="s12-gnn"><span class="box"><svg aria-hidden="true" focusable="false" viewBox="0 0 16 16"><path d="M3 8l3.5 3.5L13 4.5"/></svg></span><span class="ms-txt">Sketch how a learned-cost head could plug into your existing gate</span></label>
           </div>
         </div>
         <div><p class="block-label">Go deeper</p><p class="resource"><span class="r"><b>Zeng et al. 2022</b> — "MOTR". <b>Meinhardt et al. 2022</b> — "TrackFormer". <b>Brasó &amp; Leal-Taixé 2020</b> — "MPNTrack" (GNN association).</span></p></div>
@@ -884,6 +901,7 @@
       var total = boxes.length, done = 0;
       boxes.forEach(function (b) { if (b.checked) done++; });
       document.getElementById('barfill').style.width = pct(done, total) + '%';
+      document.getElementById('progressbar').setAttribute('aria-valuenow', pct(done, total));
       document.getElementById('pct').textContent = pct(done, total) + '%';
       document.getElementById('countnote').textContent = done + ' / ' + total + ' milestones';
 
