@@ -1,8 +1,9 @@
 # Deploying the site (Vercel + custom subdomain)
 
-The public site is a **static bundle** — a landing hub plus three self-contained
-HTML pages (interactive demo, study guide, CV roadmap). There is no build step,
-server, or dataset at serve time. It is hosted on **Vercel** at a custom
+The public site is a **static bundle** — a Vite-built React shell for the
+product-facing routes plus self-contained HTML experiences for the tracker,
+study guide, roadmap, demo, and benchmark reports. It needs no application
+server or dataset at serve time. It is hosted on **Vercel** at a custom
 subdomain of `hulage.in`.
 
 **Live URL:** https://visiontrack.hulage.in
@@ -11,14 +12,17 @@ subdomain of `hulage.in`.
 
 | Route | Serves | Source file |
 |-------|--------|-------------|
-| `/` | Landing hub | `web/index.html` |
+| `/` | React landing hub | `src/App.tsx` |
+| `/teaching` | React learning hub | `src/App.tsx` |
+| `/video` | React real-footage page | `src/App.tsx` |
+| `/live` | Live browser tracker | `web/live.html` |
 | `/demo` | Interactive tracker demo | `viz/webdemo/index.html` |
 | `/study` | VisionTrack study guide | `learning/LEARNING_PATH.html` |
 | `/roadmap` | CV junior→research roadmap | `learning/CV_ROADMAP.html` |
 
 Both the build and routing are defined in [`vercel.json`](../vercel.json). It uses
-an explicit `builds` list (`@vercel/static` for exactly the five static entries
-above) plus `routes` for the clean URLs. Declaring `builds` **disables Vercel's
+an explicit `builds` list for the legacy static entries plus a static build that
+produces the React app and MkDocs output. Declaring `builds` **disables Vercel's
 zero-config auto-detection** — without it, Vercel sees `pyproject.toml` and wrongly
 tries the Python builder (`No python entrypoint found`). With it, only the static
 files are deployed; the Python project is ignored.
@@ -29,8 +33,8 @@ files are deployed; the Python project is ignored.
 2. **Add New → Project** → import `hulagerushikesh/visiontrack`.
 3. On the import screen:
    - **Framework Preset:** `Other`
-   - **Build Command:** leave empty
-   - **Output Directory:** leave empty (serves the repo root)
+   - **Build Command:** leave empty (the explicit Vercel builder runs `npm run build`)
+   - **Output Directory:** leave empty (routing is defined in `vercel.json`)
    - **Root Directory:** `.`
 4. **Deploy.** The project goes live on a `*.vercel.app` URL first.
 
