@@ -21,6 +21,13 @@ The detailed curriculum plan is in
 
 ## Next focus — H3.3 product direction
 
+The product and research direction is defined in
+[`PRODUCT_RESEARCH_STRATEGY.md`](PRODUCT_RESEARCH_STRATEGY.md). The immediate
+goal is a local-first **VisionTrack Reliability Lab**, followed by research into
+selective, bounded anonymous identity continuity. A vertical will be selected
+only after user interviews and representative failure data identify the
+strongest problem.
+
 - [x] Establish the React + TypeScript + Tailwind + shadcn/ui + Motion shell.
 - [x] Migrate the landing, teaching, and real-footage routes first.
 - [x] Keep the live tracker, study, roadmap, demo, and benchmark reports on
@@ -29,7 +36,12 @@ The detailed curriculum plan is in
 - [ ] Design a data-driven benchmark explorer before replacing generated reports.
 - [ ] Port the interactive tracker shell without changing tracker behavior or
       browser privacy guarantees.
-- [ ] Choose one initial vertical: retail footfall, sports, or traffic.
+- [ ] Interview 5–10 tracking practitioners and collect representative failure
+      clips that can legally be evaluated.
+- [ ] Validate the Reliability Lab problem with at least three prospective
+      design partners.
+- [ ] Choose one initial vertical only after that validation: retail footfall,
+      sports, traffic, warehouse, or another evidence-backed domain.
 - [ ] Write a one-page problem statement with user, input, output, and success
       measure before building an application.
 - [ ] Identify which product value comes from tracking and which depends on the
