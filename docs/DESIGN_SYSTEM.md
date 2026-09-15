@@ -1,21 +1,28 @@
 # VisionTrack design system
 
-VisionTrack should feel like a precise tracking instrument: quiet graphite
-surfaces, signal-green identity marks, hairline boundaries, and compact
-monospace telemetry. The product UI can be spacious; research tables can stay
-dense. Both should clearly belong to the same system.
+VisionTrack should feel like a precise, approachable research instrument: a
+light-first canvas, clear indigo hierarchy, cyan/emerald data signals, hairline
+boundaries, and compact monospace telemetry. Dark surfaces are reserved for
+video, code, and live tracking stages where contrast carries meaning. The
+product UI can be spacious; research tables can stay dense. Both should clearly
+belong to the same system.
 
 ## Identity
 
 - The tracking-reticle mark is the primary logo and favicon.
 - `VisionTrack` is always written as one word with capital V and T.
-- Signal green represents a confirmed, actively tracked identity.
-- Cyan may distinguish a second identity or comparison series; orange/red are
+- Indigo is the primary action and navigation color.
+- Emerald represents a confirmed, actively tracked identity.
+- Cyan distinguishes a second identity or comparison series; orange/red are
   reserved for warnings and negative findings.
 
 ## Interface rules
 
-- Use near-black graphite rather than pure black for app surfaces.
+- Use warm white and pale slate for ordinary app surfaces; avoid site-wide dark
+  mode. Use near-black graphite only for video, code, or telemetry stages.
+- Gradients communicate hierarchy or data transition. Keep them within the
+  indigo → cyan → emerald brand spectrum and never place body copy over a noisy
+  gradient.
 - Use rounded containers for product navigation and cards; use restrained
   radii and hairline rules for tables and research figures.
 - Motion explains entry, hierarchy, or state. It must not delay access to
