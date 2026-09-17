@@ -34,20 +34,12 @@ theme:
     - search.suggest
     - search.highlight
   palette:
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: blue
-      accent: blue
-      toggle:
-        icon: material/weather-night
-        name: Switch to dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: blue
-      accent: blue
-      toggle:
-        icon: material/weather-sunny
-        name: Switch to light mode
+    scheme: default
+    primary: indigo
+    accent: indigo
+
+extra_css:
+  - stylesheets/visiontrack.css
 
 markdown_extensions:
   - admonition
@@ -66,6 +58,7 @@ markdown_extensions:
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 nav:
+  - "← VisionTrack home": https://visiontrack.hulage.in/
   - Home: index.md
   - The study:
       - Overview (v2 paper): PROJECT_v2.md

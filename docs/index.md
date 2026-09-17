@@ -1,4 +1,42 @@
-# VisionTrack
+# VisionTrack documentation
+
+<div class="docs-hero" markdown>
+
+## Build, understand, and verify reliable tracking
+
+VisionTrack is a from-scratch multi-object tracker and a controlled research
+platform for understanding *when* tracking techniques help—and where they fail.
+
+[Try the live tracker :material-play:](https://visiontrack.hulage.in/live){ .md-button .md-button--primary }
+[Back to the product :material-arrow-left:](https://visiontrack.hulage.in/){ .md-button }
+
+</div>
+
+## Choose a starting point
+
+<div class="grid cards" markdown>
+
+-   :material-rocket-launch: **I want to use it**
+
+    Install the package, understand the public contract, and track your own video.
+
+    [:octicons-arrow-right-24: Start with the API](API.md)
+
+-   :material-flask: **I want the research**
+
+    Read the four questions, controlled experiments, and honest negative results.
+
+    [:octicons-arrow-right-24: Read the study](PROJECT_v2.md)
+
+-   :material-chart-box: **I want the evidence**
+
+    Explore benchmarks, metrics, significance tests, and failure categories.
+
+    [:octicons-arrow-right-24: Inspect results](BENCHMARKS.md)
+
+</div>
+
+## The project in one minute
 
 **A from-scratch multi-object tracker, used as a controlled study of *when* the field's standard tricks actually help.**
 
@@ -8,7 +46,6 @@ sits a reproducible experiment harness that measures, on **real MOT17** with see
 significance tests, whether appearance and uncertainty-aware association actually improve tracking.
 Several of the answers are honest negatives — which is the point.
 
-[Live demo :material-open-in-new:](https://visiontrack.hulage.in){ .md-button .md-button--primary }
 [Benchmark :material-open-in-new:](https://visiontrack.hulage.in/benchmark){ .md-button }
 
 ```bash

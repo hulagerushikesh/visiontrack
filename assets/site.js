@@ -1,8 +1,8 @@
-/* VisionTrack — shared site behaviour: theme toggle + active nav link.
+/* VisionTrack — shared standalone-page shell and active navigation.
    Kept tiny and dependency-free; loaded with `defer` on every page. */
 (function () {
   var root = document.documentElement;
-  var KEY = "vt-theme";
+  root.setAttribute("data-theme", "light");
 
   // Keep the favicon and install metadata consistent on standalone legacy pages.
   if (!document.querySelector('link[rel="icon"]')) {
@@ -11,52 +11,41 @@
     document.head.appendChild(icon);
   }
 
-  function systemDark() {
-    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-  }
-  function current() {
-    return root.getAttribute("data-theme") || (systemDark() ? "dark" : "light");
-  }
-  function apply(theme) {
-    root.setAttribute("data-theme", theme);
-    try { localStorage.setItem(KEY, theme); } catch (e) {}
-    var btn = document.querySelector(".theme-btn");
-    if (btn) {
-      var dark = theme === "dark";
-      btn.textContent = dark ? "◑ dark" : "◐ light";
-      btn.setAttribute("aria-label", "Switch to " + (dark ? "light" : "dark") + " theme");
-    }
-  }
-
-  // explicit ?theme=dark|light overrides everything (deep-link / QA), no persist
-  var forced = null;
-  try {
-    var p = new URLSearchParams(location.search).get("theme");
-    if (p === "dark" || p === "light") { forced = p; root.setAttribute("data-theme", p); }
-  } catch (e) {}
-
-  // otherwise restore saved preference (before paint where possible)
-  if (!forced) {
-    try {
-      var saved = localStorage.getItem(KEY);
-      if (saved === "dark" || saved === "light") root.setAttribute("data-theme", saved);
-    } catch (e) {}
-  }
-
   function init() {
-    // sync the toggle label to whatever is active
+    // Replace the pre-rendered legacy navigation with the shared product IA.
+    var links = document.querySelector(".nav-links");
+    if (links) {
+      links.innerHTML = [
+        ["Live tracker", "/live"],
+        ["Learn", "/teaching"],
+        ["Research", "/writeup"],
+        ["Results", "/benchmark"],
+        ["Docs", "/docs/"]
+      ].map(function (item) {
+        return '<a href="' + item[1] + '">' + item[0] + '</a>';
+      }).join("");
+    }
     var btn = document.querySelector(".theme-btn");
-    if (btn) {
-      apply(current());
-      btn.addEventListener("click", function () {
-        apply(current() === "dark" ? "light" : "dark");
+    if (btn) btn.remove();
+    var brand = document.querySelector(".brand");
+    if (brand) brand.innerHTML = '<img src="/assets/visiontrack-mark.svg" alt=""><span>VisionTrack</span>';
+    var tag = document.querySelector(".nav-tag");
+    if (tag) {
+      tag.textContent = "Open research";
+      tag.setAttribute("role", "link");
+      tag.setAttribute("tabindex", "0");
+      tag.addEventListener("click", function () { location.href = "/writeup"; });
+      tag.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " ") location.href = "/writeup";
       });
     }
     // mark the current section in the nav
     var path = location.pathname.replace(/\/+$/, "") || "/";
     document.querySelectorAll(".nav-links a, .dataset-tabs a").forEach(function (a) {
       var href = (a.getAttribute("href") || "").replace(/\/+$/, "") || "/";
-      if (href === path) a.setAttribute("aria-current", "page");
+      if (href === path || (href === "/benchmark" && path.indexOf("/benchmark/") === 0)) {
+        a.setAttribute("aria-current", "page");
+      }
     });
 
     reveal();
