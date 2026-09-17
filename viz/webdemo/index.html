@@ -1,10 +1,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="light">
 <title>VisionTrack — when does appearance help?</title>
 <meta name="description" content="An interactive demo of the from-scratch tracker: watch a synthetic scene tracked motion-only vs motion+appearance, with a live ID-switch count — the RQ1 result made tangible.">
 <link rel="canonical" href="https://visiontrack.hulage.in/demo">
-<meta name="theme-color" content="#0e1116">
+<meta name="theme-color" content="#f8fafc">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="VisionTrack">
 <meta property="og:url" content="https://visiontrack.hulage.in/demo">
@@ -25,7 +25,11 @@
   * { box-sizing: border-box; }
   body { margin: 0; }
   .wrap {
-    font-family: var(--sans); color: var(--ink); background: var(--bg);
+    font-family: var(--sans); color: var(--ink);
+    background:
+      radial-gradient(circle at 12% 8%, rgba(79, 70, 229, .11), transparent 30rem),
+      radial-gradient(circle at 88% 18%, rgba(6, 182, 212, .10), transparent 28rem),
+      var(--bg);
     min-height: 100%; padding: clamp(16px, 4vw, 40px);
     display: flex; flex-direction: column; align-items: center; gap: 22px;
   }

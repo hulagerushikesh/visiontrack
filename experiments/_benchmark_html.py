@@ -131,7 +131,7 @@ def render_html(rep) -> str:
     )
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="light">
 <title>MOT benchmark — {ds} · VisionTrack</title>{social}
 <link rel="stylesheet" href="/assets/site.css">
 <script defer src="/assets/site.js"></script></head><body>

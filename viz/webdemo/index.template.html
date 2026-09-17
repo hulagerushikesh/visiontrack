@@ -1,10 +1,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="light">
 <title>VisionTrack — when does appearance help?</title>
 <meta name="description" content="An interactive demo of the from-scratch tracker: watch a synthetic scene tracked motion-only vs motion+appearance, with a live ID-switch count — the RQ1 result made tangible.">
 <link rel="canonical" href="https://visiontrack.hulage.in/demo">
-<meta name="theme-color" content="#0e1116">
+<meta name="theme-color" content="#f8fafc">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="VisionTrack">
 <meta property="og:url" content="https://visiontrack.hulage.in/demo">
@@ -18,35 +18,18 @@
 <meta name="twitter:title" content="Interactive demo: when does appearance help? · VisionTrack">
 <meta name="twitter:description" content="Watch the same synthetic scene tracked motion-only vs motion + appearance, with the live ID-switch count side by side.">
 <meta name="twitter:image" content="https://visiontrack.hulage.in/assets/og-image.png">
+<link rel="stylesheet" href="/assets/site.css">
+<script defer src="/assets/site.js"></script>
 <style>
-  :root {
-    --bg: #f4f6f9; --surface: #ffffff; --border: #d9dee6; --ink: #10151c;
-    --muted: #5a6472; --accent: #2f7ae5; --warn: #d5722a; --good: #2a9d6a;
-    --screen: #0c0f14; --screen-grid: rgba(255,255,255,.05); --screen-edge: #232a34;
-    --radius: 12px; --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #0e1116; --surface: #171b22; --border: #2a313c; --ink: #e6eaf0;
-      --muted: #8b95a5; --accent: #4c9aff; --warn: #e8833a; --good: #37b679;
-      --screen: #0a0d12; --screen-edge: #232a34;
-    }
-  }
-  :root[data-theme="light"] {
-    --bg: #f4f6f9; --surface: #ffffff; --border: #d9dee6; --ink: #10151c;
-    --muted: #5a6472; --accent: #2f7ae5; --warn: #d5722a; --good: #2a9d6a;
-    --screen: #0c0f14; --screen-edge: #232a34;
-  }
-  :root[data-theme="dark"] {
-    --bg: #0e1116; --surface: #171b22; --border: #2a313c; --ink: #e6eaf0;
-    --muted: #8b95a5; --accent: #4c9aff; --warn: #e8833a; --good: #37b679;
-    --screen: #0a0d12; --screen-edge: #232a34;
-  }
+  /* demo-specific components only — tokens, nav, footer come from site.css */
   * { box-sizing: border-box; }
   body { margin: 0; }
   .wrap {
-    font-family: var(--sans); color: var(--ink); background: var(--bg);
+    font-family: var(--sans); color: var(--ink);
+    background:
+      radial-gradient(circle at 12% 8%, rgba(79, 70, 229, .11), transparent 30rem),
+      radial-gradient(circle at 88% 18%, rgba(6, 182, 212, .10), transparent 28rem),
+      var(--bg);
     min-height: 100%; padding: clamp(16px, 4vw, 40px);
     display: flex; flex-direction: column; align-items: center; gap: 22px;
   }
@@ -94,17 +77,17 @@
     width: 100%; max-width: 900px; display: grid;
     grid-template-columns: 1.3fr 1fr 1fr 1fr; gap: 12px;
   }
-  .card {
+  .mcard {
     background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
     padding: 14px 16px;
   }
-  .card .k { font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
+  .mcard .k { font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
              text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
-  .card .v { font-family: var(--mono); font-size: 26px; font-weight: 600;
+  .mcard .v { font-family: var(--mono); font-size: 26px; font-weight: 600;
              font-variant-numeric: tabular-nums; line-height: 1; }
-  .card.switches .v { color: var(--warn); transition: transform .12s; }
-  .card.switches.flash .v { transform: scale(1.18); }
-  .card .sub { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 6px; }
+  .mcard.switches .v { color: var(--warn); transition: transform .12s; }
+  .mcard.switches.flash .v { transform: scale(1.18); }
+  .mcard .sub { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 6px; }
   .legend { display: flex; flex-wrap: wrap; gap: 16px 22px; max-width: 900px; width: 100%;
             font-size: 13px; color: var(--muted); }
   .legend span { display: inline-flex; align-items: center; gap: 7px; }
@@ -115,6 +98,15 @@
   a { color: var(--accent); }
   @media (max-width: 640px) { .metrics { grid-template-columns: 1fr 1fr; } }
 </style>
+
+<nav class="site-nav">
+  <div class="nav-in">
+    <a class="brand" href="/">VisionTrack</a>
+    <span class="nav-tag">RQ1 · live demo</span>
+    <span class="spacer"></span>
+    <div class="nav-links"></div>
+  </div>
+</nav>
 
 <div class="wrap">
   <header class="masthead">
@@ -156,6 +148,17 @@
     even on look-alike dancers; it never has to hurt.
   </p>
 </div>
+
+<footer>
+  <div class="foot-in">
+    <span>VisionTrack · MIT</span>
+    <span class="spacer"></span>
+    <a href="/">home</a>
+    <a href="/writeup">research</a>
+    <a href="/benchmark">results</a>
+    <a href="/docs/">docs</a>
+  </div>
+</footer>
 
 <script>
 const DEMO_DATA = /*__DEMO_DATA__*/null;
@@ -281,7 +284,7 @@ const DEMO_DATA = /*__DEMO_DATA__*/null;
     ];
     for (const c of cards) {
       const d = document.createElement("div");
-      d.className = "card" + (c.cls ? " " + c.cls : "");
+      d.className = "mcard" + (c.cls ? " " + c.cls : "");
       d.innerHTML = `<p class="k">${c.k}</p><div class="v"${c.id ? ` id="${c.id}"` : ""}>${c.v}</div><p class="sub">${c.sub}</p>`;
       el.appendChild(d);
     }
@@ -290,7 +293,7 @@ const DEMO_DATA = /*__DEMO_DATA__*/null;
   function updateSwitchCard(val, flash) {
     const v = document.getElementById("swVal"); if (!v) return;
     v.textContent = val;
-    const card = v.closest(".card");
+    const card = v.closest(".mcard");
     if (flash) { card.classList.add("flash"); setTimeout(() => card.classList.remove("flash"), 130); }
   }
 
