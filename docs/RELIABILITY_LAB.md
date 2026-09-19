@@ -163,7 +163,7 @@ The explorer needs structured events rather than prose embedded in HTML.
 | `event_type` | string | `id_switch`, `fragmentation`, `miss`, or `false_positive` |
 | `track_ids` | array[int] | Related predicted tracks |
 | `ground_truth_ids` | array[int] | Empty when GT is unavailable |
-| `context` | object | Occlusion, crowding, motion, confidence, and gate evidence |
+| `context` | object | Evidence hashes, correspondence boxes, and previous/current track IDs |
 | `evidence_frames` | object | Bounded before/after frame range for inspection |
 
 Without ground truth, the Lab may show ambiguous association decisions but must
@@ -182,11 +182,11 @@ The comparison contains:
 
 The system must distinguish “neutral” from “not enough evidence.”
 
-Until ground-truth records are bundle-backed, `comparison.json` contains only
-descriptive run diagnostics: observation count, unique run-local tracks, active
-frames, and deltas from the declared baseline. These values are not accuracy
-metrics and cannot select a winner. HOTA, IDF1, MOTA, identity switches, and
-fragmentation remain explicitly marked `insufficient_evidence`.
+When verified ground truth and metrics are absent, `comparison.json` contains
+only descriptive run diagnostics and marks quality claims as
+`insufficient_evidence`. When they are present, the summary links measured
+metrics and failure-event counts to their exact artifacts. Neither path selects
+a winner automatically.
 
 ## Immutable local bundle
 
@@ -372,7 +372,7 @@ The shared CLEAR-MOT accumulator now also reports standard fragmentation
 transitions as `Frag`, keeping this definition in the canonical evaluator rather
 than creating a Lab-only calculation.
 
-## Next implementation increment
+## Seventh implementation increment — complete
 
 The next code change should make failures inspectable at frame level:
 
@@ -390,6 +390,35 @@ The next code change should make failures inspectable at frame level:
 
 Multi-sequence statistics, video/frame rendering, human acceptance decisions,
 and the React explorer remain later increments.
+
+Implemented across `visiontrack.eval.mot` and `visiontrack.lab`. The canonical
+CLEAR-MOT accumulator now emits identity switches, fragmentations, misses, and
+false positives from the same correspondence used to calculate the published
+metrics. The Lab converts those results into content-addressed `FailureEvent`
+records with bounded evidence windows, persists immutable `failures.jsonl`
+files, verifies their run/metric/input lineage, and reports per-variant counts
+without changing the explicit human-decision boundary. Ignored MOT distractors
+are filtered by the shared preprocessing path and therefore cannot become Lab
+failures accidentally.
+
+## Next implementation increment
+
+The next code change should make the verified bundle understandable without
+introducing application state or a backend:
+
+- Build a deterministic, read-only report model from `comparison.json`,
+  `metrics.json`, and `failures.jsonl`
+- Generate a local report entry point beneath the existing `report/` directory
+- Show source/run fingerprints, paired metrics, deltas, and failure counts with
+  links from a failure row to its bounded frame range
+- Keep raw video optional and clearly label evidence that cannot be rendered
+- Refuse incomplete, corrupt, or mismatched artifacts rather than displaying
+  partially trusted results
+- Add dataset-free snapshot and accessibility-oriented structure tests
+
+The first report remains static and local. Interactive filtering, video/frame
+rendering, human acceptance recording, and the React explorer follow only after
+this presentation boundary is deterministic and tested.
 
 ## Acceptance criteria
 

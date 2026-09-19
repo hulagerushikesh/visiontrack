@@ -8,9 +8,9 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
-from .contracts import TrackObservationRecord, sha256_json
+from .contracts import FailureEvent, TrackObservationRecord, sha256_json
 from .runner import load_experiment_bundle, resolve_variant_config
-from .storage import read_track_jsonl, write_comparison_summary
+from .storage import read_failure_jsonl, read_track_jsonl, write_comparison_summary
 
 _RUN_FIELDS = {
     "schema_version",
@@ -41,6 +41,7 @@ _METRIC_FIELDS = {
     "preprocessing",
     "values",
 }
+_FAILURE_TYPES = ("id_switch", "fragmentation", "miss", "false_positive")
 
 
 def _read_run_metadata(path: Path) -> dict[str, Any]:
@@ -110,7 +111,7 @@ def load_variant_result(
     return metadata, tracks
 
 
-def _load_variant_metrics(
+def load_variant_metrics(
     path: Path,
     *,
     experiment_id: str,
@@ -159,6 +160,43 @@ def _load_variant_metrics(
     ):
         raise ValueError("metric artifact values must contain only finite numbers")
     return artifact
+
+
+def _load_variant_failures(
+    path: Path,
+    *,
+    run_metadata: dict[str, Any],
+    metric_artifact: dict[str, Any],
+    ground_truth_sha256: str,
+    frame_range: dict[str, int],
+    frame_count: int,
+) -> tuple[tuple[FailureEvent, ...], str] | None:
+    if not path.exists():
+        return None
+    try:
+        payload = path.read_bytes()
+    except OSError as exc:
+        raise ValueError(f"cannot read failure artifact: {path}") from exc
+    events = tuple(read_failure_jsonl(path, frame_count=frame_count))
+    start, end = frame_range["start"], frame_range["end"]
+    expected_context = {
+        "metric_id": metric_artifact["metric_id"],
+        "detection_sha256": run_metadata["detection_sha256"],
+        "ground_truth_sha256": ground_truth_sha256,
+        "track_sha256": run_metadata["track_sha256"],
+        "iou_threshold": metric_artifact["iou_threshold"],
+    }
+    for event in events:
+        if event.run_id != run_metadata["run_id"]:
+            raise ValueError("failure event run_id does not match verified run evidence")
+        if not start <= event.frame_index < end:
+            raise ValueError("failure event falls outside experiment frame_range")
+        for field, value in expected_context.items():
+            if event.context.get(field) != value:
+                raise ValueError(
+                    f"failure event context {field} does not match verified evidence"
+                )
+    return events, hashlib.sha256(payload).hexdigest()
 
 
 def _diagnostics(tracks: tuple[TrackObservationRecord, ...], frame_total: int) -> dict[str, Any]:
@@ -219,7 +257,7 @@ def create_comparison_summary(bundle: str | Path) -> dict[str, Any]:
     metric_artifacts: dict[str, dict[str, Any]] = {}
     if source.ground_truth_sha256 is not None:
         loaded = {
-            variant["name"]: _load_variant_metrics(
+            variant["name"]: load_variant_metrics(
                 bundle_path / "runs" / variant["name"] / "metrics.json",
                 experiment_id=experiment.experiment_id,
                 source_id=source.source_id,
@@ -256,6 +294,46 @@ def create_comparison_summary(bundle: str | Path) -> dict[str, Any]:
     ground_truth_status = "absent"
     if source.ground_truth_sha256 is not None:
         ground_truth_status = "available_measured" if metric_values else "available_unmeasured"
+
+    loaded_failures: dict[str, tuple[tuple[FailureEvent, ...], str] | None] = {}
+    for variant in experiment.variants:
+        name = variant["name"]
+        failure_path = bundle_path / "runs" / name / "failures.jsonl"
+        if failure_path.exists() and name not in metric_artifacts:
+            raise ValueError("failure artifacts require verified metrics for every variant")
+        loaded_failures[name] = (
+            _load_variant_failures(
+                failure_path,
+                run_metadata=run_metadata[name],
+                metric_artifact=metric_artifacts[name],
+                ground_truth_sha256=source.ground_truth_sha256,
+                frame_range=experiment.frame_range,
+                frame_count=source.frame_count,
+            )
+            if name in metric_artifacts
+            else None
+        )
+    failure_presence = [value is not None for value in loaded_failures.values()]
+    if any(failure_presence) and not all(failure_presence):
+        raise ValueError("failure artifacts must exist for every declared variant")
+    failure_counts: dict[str, dict[str, int]] = {}
+    failure_sets: dict[str, dict[str, Any]] = {}
+    for name, loaded in loaded_failures.items():
+        if loaded is None:
+            continue
+        events, failure_sha256 = loaded
+        failure_counts[name] = {
+            event_type: sum(event.event_type == event_type for event in events)
+            for event_type in _FAILURE_TYPES
+        }
+        failure_sets[name] = {
+            "failure_sha256": failure_sha256,
+            "event_count": len(events),
+            "run_id": run_metadata[name]["run_id"],
+            "metric_id": metric_artifacts[name]["metric_id"],
+            "track_sha256": run_metadata[name]["track_sha256"],
+            "ground_truth_sha256": source.ground_truth_sha256,
+        }
     computed_claims = {
         "HOTA": "HOTA",
         "IDF1": "IDF1",
@@ -286,6 +364,8 @@ def create_comparison_summary(bundle: str | Path) -> dict[str, Any]:
         "deltas_vs_baseline": deltas,
         "metrics": metric_values,
         "metric_deltas_vs_baseline": metric_deltas,
+        "failure_counts": failure_counts,
+        "failure_sets": failure_sets,
         "evidence": {
             "detection_sha256": source.detection_sha256,
             "ground_truth_status": ground_truth_status,

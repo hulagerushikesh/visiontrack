@@ -48,12 +48,32 @@ def test_fragmentation_counts_tracked_to_untracked_transitions():
     acc = MotAccumulator()
     gt_ids = np.array([1])
     gt_boxes = np.array([_box(100, 100)])
+    assert acc.update(gt_ids, gt_boxes, np.array([7]), gt_boxes.copy()) == []
+    first_gap = acc.update(gt_ids, gt_boxes, np.empty(0, dtype=int), np.empty((0, 4)))
     acc.update(gt_ids, gt_boxes, np.array([7]), gt_boxes.copy())
-    acc.update(gt_ids, gt_boxes, np.empty(0, dtype=int), np.empty((0, 4)))
-    acc.update(gt_ids, gt_boxes, np.array([7]), gt_boxes.copy())
-    acc.update(gt_ids, gt_boxes, np.empty(0, dtype=int), np.empty((0, 4)))
+    second_gap = acc.update(gt_ids, gt_boxes, np.empty(0, dtype=int), np.empty((0, 4)))
     assert acc.result().fragmentations == 2
     assert acc.result().as_dict()["Frag"] == 2
+    assert [event.event_type for event in first_gap] == ["fragmentation", "miss"]
+    assert [event.event_type for event in second_gap] == ["fragmentation", "miss"]
+
+
+def test_frame_failures_report_switch_miss_and_false_positive():
+    acc = MotAccumulator()
+    box = np.array([_box(100, 100)])
+    acc.update(np.array([1]), box, np.array([7]), box.copy())
+    switched = acc.update(np.array([1]), box, np.array([9]), box.copy())
+    assert [(event.event_type, event.previous_hyp_id, event.hyp_id) for event in switched] == [
+        ("id_switch", 7, 9)
+    ]
+    failures = acc.update(
+        np.array([1]), box, np.array([99]), np.array([_box(500, 500)])
+    )
+    assert [event.event_type for event in failures] == [
+        "fragmentation",
+        "miss",
+        "false_positive",
+    ]
 
 
 def test_identity_switch_detected():

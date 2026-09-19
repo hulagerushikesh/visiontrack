@@ -27,7 +27,20 @@ import numpy as np
 from ..core.assignment import linear_assignment
 from ..core.geometry import iou_matrix
 
-__all__ = ["MotMetrics", "MotAccumulator", "evaluate_sequence"]
+__all__ = ["MotFailure", "MotMetrics", "MotAccumulator", "evaluate_sequence"]
+
+
+@dataclass(frozen=True, slots=True)
+class MotFailure:
+    """One frame-level failure emitted by the canonical CLEAR-MOT matching."""
+
+    event_type: str
+    frame_index: int
+    gt_id: int | None
+    hyp_id: int | None
+    previous_hyp_id: int | None
+    gt_box: tuple[float, float, float, float] | None
+    hyp_box: tuple[float, float, float, float] | None
 
 
 @dataclass(slots=True)
@@ -110,8 +123,8 @@ class MotAccumulator:
         gt_boxes: np.ndarray,
         hyp_ids: np.ndarray,
         hyp_boxes: np.ndarray,
-    ) -> None:
-        """Register one frame of ground truth and hypotheses (``xyxy`` boxes)."""
+    ) -> list[MotFailure]:
+        """Register one frame and return failures from the same correspondence."""
         gt_ids = np.asarray(gt_ids, dtype=np.int64).reshape(-1)
         hyp_ids = np.asarray(hyp_ids, dtype=np.int64).reshape(-1)
         gt_boxes = np.asarray(gt_boxes, dtype=np.float64).reshape(-1, 4)
@@ -126,6 +139,7 @@ class MotAccumulator:
         matched_gt: set[int] = set()
         matched_hyp: set[int] = set()
         frame_matches: list[tuple[int, int, float]] = []  # (gt_row, hyp_col, iou)
+        failures: list[MotFailure] = []
 
         ious = iou_matrix(gt_boxes, hyp_boxes) if n_gt and n_hyp else np.zeros((n_gt, n_hyp))
 
@@ -170,6 +184,17 @@ class MotAccumulator:
             prev = self._last_hyp.get(g)
             if prev is not None and prev != h:
                 self._idsw += 1
+                failures.append(
+                    MotFailure(
+                        event_type="id_switch",
+                        frame_index=self._frames - 1,
+                        gt_id=g,
+                        hyp_id=h,
+                        previous_hyp_id=prev,
+                        gt_box=tuple(float(value) for value in gt_boxes[gi]),
+                        hyp_box=tuple(float(value) for value in hyp_boxes[hj]),
+                    )
+                )
                 if self._on_switch is not None:
                     self._on_switch(
                         self._frames - 1, g, prev, h, gi, gt_ids, gt_boxes
@@ -183,7 +208,44 @@ class MotAccumulator:
             is_matched = gi in matched_gt
             if self._gt_was_matched.get(identity, False) and not is_matched:
                 self._fragments += 1
+                failures.append(
+                    MotFailure(
+                        event_type="fragmentation",
+                        frame_index=self._frames - 1,
+                        gt_id=identity,
+                        hyp_id=None,
+                        previous_hyp_id=self._last_hyp.get(identity),
+                        gt_box=tuple(float(value) for value in gt_boxes[gi]),
+                        hyp_box=None,
+                    )
+                )
+            if not is_matched:
+                failures.append(
+                    MotFailure(
+                        event_type="miss",
+                        frame_index=self._frames - 1,
+                        gt_id=identity,
+                        hyp_id=None,
+                        previous_hyp_id=self._last_hyp.get(identity),
+                        gt_box=tuple(float(value) for value in gt_boxes[gi]),
+                        hyp_box=None,
+                    )
+                )
             self._gt_was_matched[identity] = is_matched
+        for hj, hyp_id in enumerate(hyp_ids):
+            if hj not in matched_hyp:
+                failures.append(
+                    MotFailure(
+                        event_type="false_positive",
+                        frame_index=self._frames - 1,
+                        gt_id=None,
+                        hyp_id=int(hyp_id),
+                        previous_hyp_id=None,
+                        gt_box=None,
+                        hyp_box=tuple(float(value) for value in hyp_boxes[hj]),
+                    )
+                )
+        return failures
 
     def result(self) -> MotMetrics:
         tp, fp, fn = self._tp, self._fp, self._fn
