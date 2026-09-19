@@ -49,8 +49,10 @@ The first local workflow and its versioned records are defined in
       MOT-format importer before calculating tracking-quality metrics.
 - [x] Compute verified per-variant tracking metrics from bundle-backed ground
       truth and update comparisons without introducing automatic selection.
-- [ ] Extract structured, evidence-linked failure events from verified GT and
+- [x] Extract structured, evidence-linked failure events from verified GT and
       tracker outputs for frame-level diagnosis.
+- [ ] Build a deterministic, read-only local Reliability Lab report from the
+      verified comparison and failure artifacts before adding an interactive UI.
 - [ ] Migrate the long-form research write-up into reusable article components.
 - [ ] Design a data-driven benchmark explorer before replacing generated reports.
 - [ ] Port the interactive tracker shell without changing tracker behavior or

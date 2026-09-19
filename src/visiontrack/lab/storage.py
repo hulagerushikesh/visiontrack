@@ -7,12 +7,13 @@ import shutil
 import tempfile
 from collections.abc import Callable, Iterable
 from pathlib import Path
-from typing import TypeVar
+from typing import Any, TypeVar
 
 from .contracts import (
     ContractRecord,
     DetectionRecord,
     ExperimentManifest,
+    FailureEvent,
     GroundTruthRecord,
     SourceManifest,
     TrackObservationRecord,
@@ -34,12 +35,12 @@ def _json_document(record: ContractRecord) -> bytes:
 def _serialize_jsonl(
     records: Iterable[_R],
     *,
-    key: Callable[[_R], tuple[int, int]],
+    key: Callable[[_R], tuple[Any, ...]],
     label: str,
     frame_count: int | None,
 ) -> bytes:
     ordered = sorted(records, key=key)
-    previous: tuple[int, int] | None = None
+    previous: tuple[Any, ...] | None = None
     lines: list[str] = []
     for record in ordered:
         record_key = key(record)
@@ -92,6 +93,18 @@ def serialize_ground_truth_jsonl(
     )
 
 
+def serialize_failure_jsonl(
+    records: Iterable[FailureEvent], *, frame_count: int | None = None
+) -> bytes:
+    """Return canonical failure JSONL in deterministic frame/type/ID order."""
+    return _serialize_jsonl(
+        records,
+        key=lambda record: (record.frame_index, record.event_type, record.event_id),
+        label="failure event",
+        frame_count=frame_count,
+    )
+
+
 def detection_payload_sha256(
     records: Iterable[DetectionRecord], *, frame_count: int | None = None
 ) -> str:
@@ -104,6 +117,13 @@ def ground_truth_payload_sha256(
 ) -> str:
     """Hash the exact canonical ground-truth payload stored in a Lab bundle."""
     return _sha256(serialize_ground_truth_jsonl(records, frame_count=frame_count))
+
+
+def failure_payload_sha256(
+    records: Iterable[FailureEvent], *, frame_count: int | None = None
+) -> str:
+    """Hash the exact canonical failure payload stored in a Lab run."""
+    return _sha256(serialize_failure_jsonl(records, frame_count=frame_count))
 
 
 def _write_immutable(path: Path, payload: bytes) -> str:
@@ -151,16 +171,27 @@ def write_ground_truth_jsonl(
     return _write_immutable(Path(path), payload)
 
 
+def write_failure_jsonl(
+    path: str | Path,
+    records: Iterable[FailureEvent],
+    *,
+    frame_count: int | None = None,
+) -> str:
+    """Write immutable canonical failures and return their SHA-256."""
+    payload = serialize_failure_jsonl(records, frame_count=frame_count)
+    return _write_immutable(Path(path), payload)
+
+
 def _read_jsonl(
     path: str | Path,
     *,
     record_type: type[_R],
-    key: Callable[[_R], tuple[int, int]],
+    key: Callable[[_R], tuple[Any, ...]],
     label: str,
     frame_count: int | None,
 ) -> list[_R]:
     records: list[_R] = []
-    previous: tuple[int, int] | None = None
+    previous: tuple[Any, ...] | None = None
     text = Path(path).read_text(encoding="utf-8")
     for line_number, line in enumerate(text.splitlines(), start=1):
         if not line.strip():
@@ -219,6 +250,19 @@ def read_ground_truth_jsonl(
         record_type=GroundTruthRecord,
         key=lambda record: (record.frame_index, record.object_id),
         label="ground-truth",
+        frame_count=frame_count,
+    )
+
+
+def read_failure_jsonl(
+    path: str | Path, *, frame_count: int | None = None
+) -> list[FailureEvent]:
+    """Read and validate canonically ordered failure-event JSONL."""
+    return _read_jsonl(
+        path,
+        record_type=FailureEvent,
+        key=lambda record: (record.frame_index, record.event_type, record.event_id),
+        label="failure event",
         frame_count=frame_count,
     )
 

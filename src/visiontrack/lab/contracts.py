@@ -257,6 +257,70 @@ class GroundTruthRecord(ContractRecord):
 
 
 @dataclass(frozen=True, slots=True)
+class FailureEvent(ContractRecord):
+    """One content-addressed frame-level tracking failure."""
+
+    event_id: str
+    run_id: str
+    frame_index: int
+    event_type: str
+    track_ids: tuple[int, ...]
+    ground_truth_ids: tuple[int, ...]
+    context: dict[str, Any]
+    evidence_frames: dict[str, int]
+    schema_version: int = SCHEMA_VERSION
+
+    def __post_init__(self) -> None:
+        if self.schema_version != SCHEMA_VERSION:
+            raise ValueError(f"unsupported schema_version: {self.schema_version}")
+        _validate_hash(self.event_id, "event_id")
+        _validate_hash(self.run_id, "run_id")
+        if not isinstance(self.frame_index, int) or self.frame_index < 0:
+            raise ValueError("frame_index must be a non-negative integer")
+        if self.event_type not in {"id_switch", "fragmentation", "miss", "false_positive"}:
+            raise ValueError("unsupported failure event_type")
+        object.__setattr__(self, "track_ids", tuple(self.track_ids))
+        object.__setattr__(self, "ground_truth_ids", tuple(self.ground_truth_ids))
+        if any(not isinstance(value, int) or value <= 0 for value in self.track_ids):
+            raise ValueError("track_ids must contain positive integers")
+        if any(not isinstance(value, int) or value <= 0 for value in self.ground_truth_ids):
+            raise ValueError("ground_truth_ids must contain positive integers")
+        if len(set(self.track_ids)) != len(self.track_ids):
+            raise ValueError("track_ids must be unique")
+        if len(set(self.ground_truth_ids)) != len(self.ground_truth_ids):
+            raise ValueError("ground_truth_ids must be unique")
+        if not isinstance(self.context, dict):
+            raise ValueError("context must be an object")
+        if set(self.evidence_frames) != {"start", "end"}:
+            raise ValueError("evidence_frames must contain only start and end")
+        start, end = self.evidence_frames["start"], self.evidence_frames["end"]
+        if not isinstance(start, int) or not isinstance(end, int):
+            raise ValueError("evidence frame bounds must be integers")
+        if start < 0 or not start <= self.frame_index < end:
+            raise ValueError("evidence_frames must contain frame_index")
+        if self.event_id != self.derive_event_id():
+            raise ValueError("event_id does not match failure content")
+
+    def derive_event_id(self) -> str:
+        data = self.to_dict()
+        data.pop("event_id")
+        return sha256_json(data)
+
+    @classmethod
+    def create(cls, **values: Any) -> FailureEvent:
+        content = {
+            **values,
+            "track_ids": list(values["track_ids"]),
+            "ground_truth_ids": list(values["ground_truth_ids"]),
+            "schema_version": SCHEMA_VERSION,
+        }
+        return cls(
+            event_id=sha256_json(content),
+            **values,
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class ExperimentManifest(ContractRecord):
     """Immutable specification for one paired Reliability Lab comparison."""
 

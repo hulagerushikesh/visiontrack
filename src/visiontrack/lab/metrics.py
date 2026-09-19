@@ -19,7 +19,7 @@ def _boxes(records) -> np.ndarray:
     return np.asarray([record.xyxy for record in records], dtype=np.float64)
 
 
-def _evaluation_frames(
+def evaluation_frames(
     ground_truth: tuple[GroundTruthRecord, ...],
     tracks: tuple[TrackObservationRecord, ...],
     *,
@@ -82,7 +82,7 @@ def calculate_bundle_metrics(bundle: str | Path) -> dict[str, dict[str, Any]]:
             frame_count=source.frame_count,
         )
         values = evaluate_frames(
-            _evaluation_frames(ground_truth, tracks, start=start, end=end)
+            evaluation_frames(ground_truth, tracks, start=start, end=end)
         )
         content: dict[str, Any] = {
             "schema_version": 1,
