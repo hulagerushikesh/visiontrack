@@ -217,7 +217,7 @@ invariants, verify content-derived identifiers, and adapt the existing
 `Detection` and `TrackObservation` public types without changing tracker
 behavior.
 
-## Next implementation increment
+## Second implementation increment — complete
 
 The next code change should add only:
 
@@ -232,6 +232,28 @@ The next code change should add only:
 It should still avoid UI work, raw-video copying, a database, or execution of
 tracker variants. Those will be connected only after the storage boundary is
 portable and safe.
+
+Implemented in `src/visiontrack/lab/storage.py`. Detection and track JSONL are
+canonically ordered, duplicate and out-of-range records are rejected, exact
+detection bytes are verified against the source hash, and bundle scaffolds are
+created atomically. Repeating a write with identical content is safe; conflicting
+content is never overwritten.
+
+## Next implementation increment
+
+The next code change should connect this safe storage boundary to computation:
+
+- Load and verify one bundle detection stream once
+- Resolve declared baseline and variant overrides into existing `TrackerConfig`
+  values without changing tracker behavior
+- Replay the same in-memory detections and frame range through every variant
+- Persist deterministic track observations beneath each variant's `runs/`
+- Prove with tests that variants receive identical inputs and that a rerun never
+  mutates accepted input evidence
+
+It should not yet calculate benchmark claims, classify failure events, or add
+the React explorer. Those become separate increments after repeatable paired
+execution exists.
 
 ## Acceptance criteria
 
