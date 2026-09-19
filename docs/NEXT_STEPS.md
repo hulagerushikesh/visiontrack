@@ -39,8 +39,10 @@ The first local workflow and its versioned records are defined in
       bundle layout, and v1 source/detection/experiment/output/failure schemas.
 - [x] Implement typed Python records, canonical serialization, validation, and
       adapters for the first four v1 schemas.
-- [ ] Add deterministic JSONL readers/writers and an immutable local bundle
+- [x] Add deterministic JSONL readers/writers and an immutable local bundle
       scaffold for the four implemented v1 records.
+- [ ] Add a deterministic local comparison runner that replays one verified
+      detection stream through baseline and variant tracker configurations.
 - [ ] Migrate the long-form research write-up into reusable article components.
 - [ ] Design a data-driven benchmark explorer before replacing generated reports.
 - [ ] Port the interactive tracker shell without changing tracker behavior or
