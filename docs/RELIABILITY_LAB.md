@@ -197,7 +197,7 @@ portable report must still work without that video.
 6. Never overwrite an existing experiment directory with different content.
 7. Record missing optional evidence explicitly rather than substituting zero.
 
-## First implementation increment
+## First implementation increment — complete
 
 The next code change should implement only:
 
@@ -211,6 +211,28 @@ It should not yet implement the React explorer, file upload, video playback,
 anonymous identity continuity, or a persistent database. Those depend on this
 contract and will follow as separate reviewed increments.
 
+Implemented in `src/visiontrack/lab/contracts.py`. The records reject unknown
+fields and schema versions, serialize to canonical JSON, validate their v1
+invariants, verify content-derived identifiers, and adapt the existing
+`Detection` and `TrackObservation` public types without changing tracker
+behavior.
+
+## Next implementation increment
+
+The next code change should add only:
+
+- Deterministically ordered JSON Lines readers and writers for detections and
+  track observations
+- Hash verification for a saved source manifest and its detection payload
+- Creation of an immutable local bundle scaffold that refuses conflicting
+  content at an existing experiment ID
+- Focused tests for ordering, corruption, duplicate records, and overwrite
+  protection
+
+It should still avoid UI work, raw-video copying, a database, or execution of
+tracker variants. Those will be connected only after the storage boundary is
+portable and safe.
+
 ## Acceptance criteria
 
 This design increment is complete when:
@@ -221,4 +243,3 @@ This design increment is complete when:
   changes.
 - Privacy and identity boundaries are explicit.
 - The next implementation step is small enough to test without UI or datasets.
-
