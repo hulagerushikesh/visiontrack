@@ -8,8 +8,10 @@ from .contracts import (
     canonical_json,
     sha256_json,
 )
+from .runner import load_experiment_bundle, resolve_variant_config, run_comparison
 from .storage import (
     create_experiment_bundle,
+    create_variant_run,
     detection_payload_sha256,
     read_detection_jsonl,
     read_track_jsonl,
@@ -28,6 +30,7 @@ __all__ = [
     "canonical_json",
     "sha256_json",
     "create_experiment_bundle",
+    "create_variant_run",
     "detection_payload_sha256",
     "read_detection_jsonl",
     "read_track_jsonl",
@@ -36,4 +39,7 @@ __all__ = [
     "verify_detection_payload",
     "write_detection_jsonl",
     "write_track_jsonl",
+    "load_experiment_bundle",
+    "resolve_variant_config",
+    "run_comparison",
 ]
