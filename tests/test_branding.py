@@ -72,3 +72,15 @@ def test_home_preview_is_explicitly_simulated() -> None:
     assert "SIMULATED · PIPELINE PREVIEW" in app
     assert "Illustrative data" in app
     assert "Open real tracker" in app
+
+
+def test_reliability_lab_contract_is_linked_and_bounded() -> None:
+    config = (ROOT / "mkdocs.yml").read_text()
+    plan = (ROOT / "docs" / "NEXT_STEPS.md").read_text()
+    contract = (ROOT / "docs" / "RELIABILITY_LAB.md").read_text()
+    assert "RELIABILITY_LAB.md" in config
+    assert "RELIABILITY_LAB.md" in plan
+    assert "schema_version: 1" in contract
+    assert "does not introduce a server" in contract
+    assert "It is not a person identifier" in contract
+    assert "It should not yet implement the React explorer" in contract

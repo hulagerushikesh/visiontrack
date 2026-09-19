@@ -28,10 +28,17 @@ selective, bounded anonymous identity continuity. A vertical will be selected
 only after user interviews and representative failure data identify the
 strongest problem.
 
+The first local workflow and its versioned records are defined in
+[`RELIABILITY_LAB.md`](RELIABILITY_LAB.md).
+
 - [x] Establish the React + TypeScript + Tailwind + shadcn/ui + Motion shell.
 - [x] Migrate the landing, teaching, and real-footage routes first.
 - [x] Keep the live tracker, study, roadmap, demo, and benchmark reports on
       their verified standalone implementations during the incremental migration.
+- [x] Define the first Reliability Lab workflow, privacy boundary, immutable
+      bundle layout, and v1 source/detection/experiment/output/failure schemas.
+- [ ] Implement typed Python records, canonical serialization, validation, and
+      adapters for the first four v1 schemas.
 - [ ] Migrate the long-form research write-up into reusable article components.
 - [ ] Design a data-driven benchmark explorer before replacing generated reports.
 - [ ] Port the interactive tracker shell without changing tracker behavior or

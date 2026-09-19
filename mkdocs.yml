@@ -79,5 +79,6 @@ nav:
       - Deploy the site: DEPLOY.md
   - Roadmap:
       - Status checklist: STATUS.md
+      - Reliability Lab — first slice: RELIABILITY_LAB.md
       - Horizons: HORIZONS.md
       - C++/CUDA sibling plan: CPP_CUDA_TRACKER_PLAN.md
