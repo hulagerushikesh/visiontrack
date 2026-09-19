@@ -26,6 +26,21 @@ _RUN_FIELDS = {
     "run_id",
 }
 _GROUND_TRUTH_METRICS = ("HOTA", "IDF1", "MOTA", "identity_switches", "fragmentation")
+_METRIC_FIELDS = {
+    "schema_version",
+    "metric_id",
+    "experiment_id",
+    "source_id",
+    "run_id",
+    "variant",
+    "detection_sha256",
+    "ground_truth_sha256",
+    "track_sha256",
+    "frame_range",
+    "iou_threshold",
+    "preprocessing",
+    "values",
+}
 
 
 def _read_run_metadata(path: Path) -> dict[str, Any]:
@@ -52,7 +67,7 @@ def _read_run_metadata(path: Path) -> dict[str, Any]:
     return metadata
 
 
-def _load_variant_result(
+def load_variant_result(
     bundle: Path,
     variant: dict[str, Any],
     *,
@@ -95,6 +110,57 @@ def _load_variant_result(
     return metadata, tracks
 
 
+def _load_variant_metrics(
+    path: Path,
+    *,
+    experiment_id: str,
+    source_id: str,
+    variant: str,
+    run_metadata: dict[str, Any],
+    ground_truth_sha256: str,
+    frame_range: dict[str, int],
+) -> dict[str, Any] | None:
+    if not path.exists():
+        return None
+    try:
+        artifact = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"cannot read metric artifact: {path}") from exc
+    if not isinstance(artifact, dict) or set(artifact) != _METRIC_FIELDS:
+        raise ValueError("metric artifact fields do not match schema v1")
+    if artifact["schema_version"] != 1:
+        raise ValueError(f"unsupported metric schema_version: {artifact['schema_version']}")
+    metric_id = artifact["metric_id"]
+    content = dict(artifact)
+    content.pop("metric_id")
+    if metric_id != sha256_json(content):
+        raise ValueError("metric_id does not match metric artifact content")
+    expected = {
+        "experiment_id": experiment_id,
+        "source_id": source_id,
+        "run_id": run_metadata["run_id"],
+        "variant": variant,
+        "detection_sha256": run_metadata["detection_sha256"],
+        "ground_truth_sha256": ground_truth_sha256,
+        "track_sha256": run_metadata["track_sha256"],
+        "frame_range": frame_range,
+    }
+    for field, value in expected.items():
+        if artifact[field] != value:
+            raise ValueError(f"metric artifact {field} does not match verified evidence")
+    values = artifact["values"]
+    if not isinstance(values, dict) or not values:
+        raise ValueError("metric artifact values must be a non-empty object")
+    if any(
+        not isinstance(value, (int, float))
+        or isinstance(value, bool)
+        or not math.isfinite(float(value))
+        for value in values.values()
+    ):
+        raise ValueError("metric artifact values must contain only finite numbers")
+    return artifact
+
+
 def _diagnostics(tracks: tuple[TrackObservationRecord, ...], frame_total: int) -> dict[str, Any]:
     track_ids = {track.track_id for track in tracks}
     active_frames = {track.frame_index for track in tracks}
@@ -128,9 +194,10 @@ def create_comparison_summary(bundle: str | Path) -> dict[str, Any]:
     frame_total = experiment.frame_range["end"] - experiment.frame_range["start"]
 
     run_ids: dict[str, str] = {}
+    run_metadata: dict[str, dict[str, Any]] = {}
     diagnostics: dict[str, dict[str, Any]] = {}
     for variant in experiment.variants:
-        metadata, tracks = _load_variant_result(
+        metadata, tracks = load_variant_result(
             bundle_path,
             variant,
             experiment_id=experiment.experiment_id,
@@ -141,6 +208,7 @@ def create_comparison_summary(bundle: str | Path) -> dict[str, Any]:
         )
         name = variant["name"]
         run_ids[name] = metadata["run_id"]
+        run_metadata[name] = metadata
         diagnostics[name] = _diagnostics(tracks, frame_total)
 
     baseline_diagnostics = diagnostics[experiment.baseline]
@@ -148,9 +216,54 @@ def create_comparison_summary(bundle: str | Path) -> dict[str, Any]:
         name: _deltas(values, baseline_diagnostics)
         for name, values in diagnostics.items()
     }
-    ground_truth_status = (
-        "available_unmeasured" if source.ground_truth_sha256 is not None else "absent"
-    )
+    metric_artifacts: dict[str, dict[str, Any]] = {}
+    if source.ground_truth_sha256 is not None:
+        loaded = {
+            variant["name"]: _load_variant_metrics(
+                bundle_path / "runs" / variant["name"] / "metrics.json",
+                experiment_id=experiment.experiment_id,
+                source_id=source.source_id,
+                variant=variant["name"],
+                run_metadata=run_metadata[variant["name"]],
+                ground_truth_sha256=source.ground_truth_sha256,
+                frame_range=experiment.frame_range,
+            )
+            for variant in experiment.variants
+        }
+        present = [artifact is not None for artifact in loaded.values()]
+        if any(present) and not all(present):
+            raise ValueError("metric artifacts must exist for every declared variant")
+        metric_artifacts = {
+            name: artifact for name, artifact in loaded.items() if artifact is not None
+        }
+
+    metric_values = {
+        name: artifact["values"] for name, artifact in metric_artifacts.items()
+    }
+    metric_deltas: dict[str, dict[str, int | float]] = {}
+    if metric_values:
+        baseline_metrics = metric_values[experiment.baseline]
+        baseline_keys = set(baseline_metrics)
+        if any(set(values) != baseline_keys for values in metric_values.values()):
+            raise ValueError("metric artifacts do not contain the same metric keys")
+        metric_deltas = {
+            name: {
+                metric: values[metric] - baseline_metrics[metric]
+                for metric in baseline_metrics
+            }
+            for name, values in metric_values.items()
+        }
+    ground_truth_status = "absent"
+    if source.ground_truth_sha256 is not None:
+        ground_truth_status = "available_measured" if metric_values else "available_unmeasured"
+    computed_claims = {
+        "HOTA": "HOTA",
+        "IDF1": "IDF1",
+        "MOTA": "MOTA",
+        "identity_switches": "IDSW",
+        "fragmentation": "Frag",
+    }
+    computed_keys = set(next(iter(metric_values.values()))) if metric_values else set()
     unavailable = [
         {
             "metric": metric,
@@ -160,6 +273,7 @@ def create_comparison_summary(bundle: str | Path) -> dict[str, Any]:
             else "metric_integration_not_implemented",
         }
         for metric in _GROUND_TRUTH_METRICS
+        if computed_claims[metric] not in computed_keys
     ]
     content: dict[str, Any] = {
         "schema_version": 1,
@@ -170,6 +284,8 @@ def create_comparison_summary(bundle: str | Path) -> dict[str, Any]:
         "run_ids": run_ids,
         "diagnostics": diagnostics,
         "deltas_vs_baseline": deltas,
+        "metrics": metric_values,
+        "metric_deltas_vs_baseline": metric_deltas,
         "evidence": {
             "detection_sha256": source.detection_sha256,
             "ground_truth_status": ground_truth_status,
@@ -179,7 +295,9 @@ def create_comparison_summary(bundle: str | Path) -> dict[str, Any]:
         "decision": {
             "status": "not_selected",
             "accepted_variant": None,
-            "reason": "diagnostic_counts_are_not_tracking_quality_metrics",
+            "reason": "requires_human_acceptance_decision"
+            if metric_values
+            else "diagnostic_counts_are_not_tracking_quality_metrics",
         },
     }
     content["comparison_id"] = sha256_json(content)
