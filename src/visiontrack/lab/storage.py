@@ -294,3 +294,13 @@ def create_variant_run(
     finally:
         if staging.exists():
             shutil.rmtree(staging)
+
+
+def write_comparison_summary(bundle: str | Path, summary: dict) -> Path:
+    """Persist one immutable canonical comparison summary."""
+    bundle_path = Path(bundle)
+    if not bundle_path.is_dir():
+        raise ValueError(f"experiment bundle does not exist: {bundle_path}")
+    path = bundle_path / "comparison.json"
+    _write_immutable(path, (canonical_json(summary) + "\n").encode("utf-8"))
+    return path

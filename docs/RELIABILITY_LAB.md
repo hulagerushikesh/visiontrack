@@ -161,6 +161,12 @@ The comparison contains:
 
 The system must distinguish “neutral” from “not enough evidence.”
 
+Until ground-truth records are bundle-backed, `comparison.json` contains only
+descriptive run diagnostics: observation count, unique run-local tracks, active
+frames, and deltas from the declared baseline. These values are not accuracy
+metrics and cannot select a winner. HOTA, IDF1, MOTA, identity switches, and
+fragmentation remain explicitly marked `insufficient_evidence`.
+
 ## Immutable local bundle
 
 ```text
@@ -266,7 +272,7 @@ Appearance features, learned motion residuals, and camera shifts are rejected
 until those external inputs have their own bundle-backed contracts. This avoids
 silently treating an unavailable signal as a valid ablation.
 
-## Next implementation increment
+## Fourth implementation increment — complete
 
 The next code change should create an evidence-aware comparison summary:
 
@@ -280,6 +286,31 @@ The next code change should create an evidence-aware comparison summary:
 
 Ground-truth import, measured failure events, acceptance decisions, and the
 React explorer should remain later, separate increments.
+
+Implemented in `src/visiontrack/lab/comparison.py`. It revalidates every run's
+identity, resolved configuration, detection hash, track hash, frame range, and
+observation count before producing an immutable, content-addressed
+`comparison.json`. It reports descriptive diagnostics and paired deltas but
+leaves `accepted_variant` null. Ground-truth-dependent claims are recorded as
+`insufficient_evidence`, with a machine-readable reason.
+
+## Next implementation increment
+
+The next code change should establish ground truth as verified evidence:
+
+- Define a strict portable ground-truth record with frame, object identity,
+  pixel-space box, class, visibility, and ignore state
+- Add deterministic JSONL storage and include its exact SHA-256 in the source
+  manifest
+- Import the supported MOTChallenge text fields with explicit one-based to
+  zero-based frame conversion
+- Reject duplicate identities per frame, invalid visibility, malformed boxes,
+  unsupported coordinate assumptions, and hash mismatches
+- Add a small dataset-free importer fixture and round-trip tests
+
+It should not yet calculate HOTA/IDF1/MOTA or failure events. Metric integration
+will follow only after the ground-truth evidence contract is independently
+verified.
 
 ## Acceptance criteria
 

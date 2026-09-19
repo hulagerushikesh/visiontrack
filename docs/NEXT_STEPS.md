@@ -43,8 +43,10 @@ The first local workflow and its versioned records are defined in
       scaffold for the four implemented v1 records.
 - [x] Add a deterministic local comparison runner that replays one verified
       detection stream through baseline and variant tracker configurations.
-- [ ] Add an evidence-aware comparison summary with dataset-independent run
+- [x] Add an evidence-aware comparison summary with dataset-independent run
       diagnostics and explicit `insufficient_evidence` results for GT metrics.
+- [ ] Define and implement the portable ground-truth record plus a strict
+      MOT-format importer before calculating tracking-quality metrics.
 - [ ] Migrate the long-form research write-up into reusable article components.
 - [ ] Design a data-driven benchmark explorer before replacing generated reports.
 - [ ] Port the interactive tracker shell without changing tracker behavior or

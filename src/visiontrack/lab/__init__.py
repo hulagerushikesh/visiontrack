@@ -1,5 +1,6 @@
 """Versioned, local-first contracts for the VisionTrack Reliability Lab."""
 
+from .comparison import create_comparison_summary
 from .contracts import (
     DetectionRecord,
     ExperimentManifest,
@@ -18,6 +19,7 @@ from .storage import (
     serialize_detection_jsonl,
     serialize_track_jsonl,
     verify_detection_payload,
+    write_comparison_summary,
     write_detection_jsonl,
     write_track_jsonl,
 )
@@ -29,6 +31,7 @@ __all__ = [
     "TrackObservationRecord",
     "canonical_json",
     "sha256_json",
+    "create_comparison_summary",
     "create_experiment_bundle",
     "create_variant_run",
     "detection_payload_sha256",
@@ -39,6 +42,7 @@ __all__ = [
     "verify_detection_payload",
     "write_detection_jsonl",
     "write_track_jsonl",
+    "write_comparison_summary",
     "load_experiment_bundle",
     "resolve_variant_config",
     "run_comparison",
