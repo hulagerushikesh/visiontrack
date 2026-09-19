@@ -4,8 +4,8 @@
   "description": "From-scratch multi-object tracking, research, and learning.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#070b0b",
-  "theme_color": "#070b0b",
+  "background_color": "#f8fafc",
+  "theme_color": "#4f46e5",
   "icons": [
     { "src": "/visiontrack-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
     { "src": "/visiontrack-mark.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
