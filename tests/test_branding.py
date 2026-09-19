@@ -20,7 +20,7 @@ def test_react_entry_declares_brand_assets() -> None:
 def test_standalone_learning_pages_declare_favicon() -> None:
     for name in ("LEARNING_PATH.html", "CV_ROADMAP.html"):
         page = (ROOT / "learning" / name).read_text()
-        assert 'href="/assets/visiontrack-mark.svg"' in page
+        assert 'href="/assets/visiontrack-mark.svg?v=3"' in page
 
 
 def test_learning_and_demo_pages_use_the_shared_light_shell() -> None:
@@ -53,6 +53,7 @@ def test_standalone_shell_uses_shared_product_navigation() -> None:
         assert route in script
     assert 'root.setAttribute("data-theme", "light")' in script
     assert "btn.remove()" in script
+    assert 'visiontrack-mark.svg?v=3' in script
 
 
 def test_docs_have_a_product_exit_and_custom_reading_theme() -> None:
@@ -67,6 +68,7 @@ def test_docs_have_a_product_exit_and_custom_reading_theme() -> None:
 
 def test_home_preview_is_explicitly_simulated() -> None:
     app = (ROOT / "src" / "App.tsx").read_text()
+    assert 'src="/visiontrack-mark.svg?v=3"' in app
     assert "SIMULATED · PIPELINE PREVIEW" in app
     assert "Illustrative data" in app
     assert "Open real tracker" in app
