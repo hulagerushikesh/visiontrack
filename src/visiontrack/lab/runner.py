@@ -24,8 +24,10 @@ from .contracts import (
 from .storage import (
     create_variant_run,
     read_detection_jsonl,
+    read_ground_truth_jsonl,
     serialize_track_jsonl,
     verify_detection_payload,
+    verify_ground_truth_payload,
 )
 
 _VARIANT_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
@@ -60,6 +62,14 @@ def load_experiment_bundle(
         raise ValueError(f"cannot read detection payload: {detection_path}") from exc
     verify_detection_payload(source, payload)
     records = tuple(read_detection_jsonl(detection_path, frame_count=source.frame_count))
+    if source.ground_truth_sha256 is not None:
+        ground_truth_path = bundle_path / "inputs" / "ground_truth.jsonl"
+        try:
+            ground_truth_payload = ground_truth_path.read_bytes()
+        except OSError as exc:
+            raise ValueError(f"cannot read ground-truth payload: {ground_truth_path}") from exc
+        verify_ground_truth_payload(source, ground_truth_payload)
+        read_ground_truth_jsonl(ground_truth_path, frame_count=source.frame_count)
     return experiment, source, records
 
 

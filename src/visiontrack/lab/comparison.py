@@ -149,7 +149,7 @@ def create_comparison_summary(bundle: str | Path) -> dict[str, Any]:
         for name, values in diagnostics.items()
     }
     ground_truth_status = (
-        "not_bundle_backed" if source.ground_truth_sha256 is not None else "absent"
+        "available_unmeasured" if source.ground_truth_sha256 is not None else "absent"
     )
     unavailable = [
         {
@@ -157,7 +157,7 @@ def create_comparison_summary(bundle: str | Path) -> dict[str, Any]:
             "status": "insufficient_evidence",
             "reason": "ground_truth_absent"
             if source.ground_truth_sha256 is None
-            else "ground_truth_records_unavailable",
+            else "metric_integration_not_implemented",
         }
         for metric in _GROUND_TRUTH_METRICS
     ]
