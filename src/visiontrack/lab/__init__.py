@@ -10,6 +10,7 @@ from .contracts import (
     canonical_json,
     sha256_json,
 )
+from .metrics import calculate_bundle_metrics
 from .mot import import_mot_ground_truth
 from .runner import load_experiment_bundle, resolve_variant_config, run_comparison
 from .storage import (
@@ -29,6 +30,7 @@ from .storage import (
     write_detection_jsonl,
     write_ground_truth_jsonl,
     write_track_jsonl,
+    write_variant_metrics,
 )
 
 __all__ = [
@@ -45,6 +47,7 @@ __all__ = [
     "detection_payload_sha256",
     "ground_truth_payload_sha256",
     "import_mot_ground_truth",
+    "calculate_bundle_metrics",
     "read_detection_jsonl",
     "read_ground_truth_jsonl",
     "read_track_jsonl",
@@ -56,6 +59,7 @@ __all__ = [
     "write_detection_jsonl",
     "write_ground_truth_jsonl",
     "write_track_jsonl",
+    "write_variant_metrics",
     "write_comparison_summary",
     "load_experiment_bundle",
     "resolve_variant_config",

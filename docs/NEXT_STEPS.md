@@ -47,8 +47,10 @@ The first local workflow and its versioned records are defined in
       diagnostics and explicit `insufficient_evidence` results for GT metrics.
 - [x] Define and implement the portable ground-truth record plus a strict
       MOT-format importer before calculating tracking-quality metrics.
-- [ ] Compute verified per-variant tracking metrics from bundle-backed ground
+- [x] Compute verified per-variant tracking metrics from bundle-backed ground
       truth and update comparisons without introducing automatic selection.
+- [ ] Extract structured, evidence-linked failure events from verified GT and
+      tracker outputs for frame-level diagnosis.
 - [ ] Migrate the long-form research write-up into reusable article components.
 - [ ] Design a data-driven benchmark explorer before replacing generated reports.
 - [ ] Port the interactive tracker shell without changing tracker behavior or

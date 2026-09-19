@@ -44,6 +44,18 @@ def test_miss_counted():
     assert m.false_negatives == 1
 
 
+def test_fragmentation_counts_tracked_to_untracked_transitions():
+    acc = MotAccumulator()
+    gt_ids = np.array([1])
+    gt_boxes = np.array([_box(100, 100)])
+    acc.update(gt_ids, gt_boxes, np.array([7]), gt_boxes.copy())
+    acc.update(gt_ids, gt_boxes, np.empty(0, dtype=int), np.empty((0, 4)))
+    acc.update(gt_ids, gt_boxes, np.array([7]), gt_boxes.copy())
+    acc.update(gt_ids, gt_boxes, np.empty(0, dtype=int), np.empty((0, 4)))
+    assert acc.result().fragmentations == 2
+    assert acc.result().as_dict()["Frag"] == 2
+
+
 def test_identity_switch_detected():
     acc = MotAccumulator(iou_threshold=0.5)
     gt_ids = np.array([1])

@@ -372,3 +372,15 @@ def write_comparison_summary(bundle: str | Path, summary: dict) -> Path:
     path = bundle_path / "comparison.json"
     _write_immutable(path, (canonical_json(summary) + "\n").encode("utf-8"))
     return path
+
+
+def write_variant_metrics(bundle: str | Path, variant: str, metrics: dict) -> Path:
+    """Persist one immutable canonical metric artifact for a completed run."""
+    if not _RUN_NAME.fullmatch(variant) or variant in {".", ".."}:
+        raise ValueError("variant name must be a safe 1-64 character path component")
+    run_path = Path(bundle) / "runs" / variant
+    if not run_path.is_dir():
+        raise ValueError(f"variant run directory does not exist: {run_path}")
+    path = run_path / "metrics.json"
+    _write_immutable(path, (canonical_json(metrics) + "\n").encode("utf-8"))
+    return path

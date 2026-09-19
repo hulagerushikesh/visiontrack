@@ -340,7 +340,7 @@ against the source manifest before a bundle is accepted. The strict importer
 converts MOT's one-based frames to zero-based indices while retaining the
 original frame number and all ignore/distractor rows.
 
-## Next implementation increment
+## Sixth implementation increment — complete
 
 The next code change should calculate quality metrics from only verified bundle
 evidence:
@@ -359,6 +359,37 @@ evidence:
 
 Failure-event extraction, statistical claims across multiple sequences, human
 acceptance decisions, and the React explorer remain separate later increments.
+
+Implemented in `src/visiontrack/lab/metrics.py` using the existing
+`visiontrack.eval.mot17.preprocess_frame` and `evaluate_frames` pipeline. Each
+variant receives an immutable, content-addressed `metrics.json` linked to its
+run, detection, track, and ground-truth hashes. Comparisons accept metric
+artifacts only when every declared variant is present and verified, replace
+only genuinely computed `insufficient_evidence` entries, and continue to leave
+the accepted variant unset.
+
+The shared CLEAR-MOT accumulator now also reports standard fragmentation
+transitions as `Frag`, keeping this definition in the canonical evaluator rather
+than creating a Lab-only calculation.
+
+## Next implementation increment
+
+The next code change should make failures inspectable at frame level:
+
+- Extract identity switches, fragmentations, misses, and false positives from
+  the same preprocessed frame pairs used for metrics
+- Assign deterministic event IDs and include bounded before/after evidence
+  frame ranges
+- Link every event set to its run ID, metric ID, track hash, and ground-truth
+  hash
+- Persist immutable `failures.jsonl` per variant
+- Add verified failure counts to `comparison.json` without using those counts
+  to select a winner
+- Test crossings, ignored distractors, occlusion gaps, corruption, ordering,
+  and rerun behavior with dataset-free fixtures
+
+Multi-sequence statistics, video/frame rendering, human acceptance decisions,
+and the React explorer remain later increments.
 
 ## Acceptance criteria
 

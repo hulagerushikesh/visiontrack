@@ -40,6 +40,7 @@ class MotMetrics:
     false_positives: int
     false_negatives: int
     id_switches: int
+    fragmentations: int
     mota: float
     motp: float
     precision: float
@@ -58,6 +59,7 @@ class MotMetrics:
             "FP": self.false_positives,
             "FN": self.false_negatives,
             "IDSW": self.id_switches,
+            "Frag": self.fragmentations,
             "MOTA": round(self.mota, 4),
             "MOTP": round(self.motp, 4),
             "precision": round(self.precision, 4),
@@ -90,6 +92,7 @@ class MotAccumulator:
         self._fp = 0
         self._fn = 0
         self._idsw = 0
+        self._fragments = 0
         self._iou_sum = 0.0
         self._frames = 0
         self._num_gt = 0
@@ -99,6 +102,7 @@ class MotAccumulator:
         # Per-GT life stats for MT/ML.
         self._gt_total: dict[int, int] = defaultdict(int)
         self._gt_matched: dict[int, int] = defaultdict(int)
+        self._gt_was_matched: dict[int, bool] = {}
 
     def update(
         self,
@@ -174,6 +178,12 @@ class MotAccumulator:
 
         self._fp += n_hyp - len(matched_hyp)
         self._fn += n_gt - len(matched_gt)
+        for gi, gt_id in enumerate(gt_ids):
+            identity = int(gt_id)
+            is_matched = gi in matched_gt
+            if self._gt_was_matched.get(identity, False) and not is_matched:
+                self._fragments += 1
+            self._gt_was_matched[identity] = is_matched
 
     def result(self) -> MotMetrics:
         tp, fp, fn = self._tp, self._fp, self._fn
@@ -200,6 +210,7 @@ class MotAccumulator:
             false_positives=fp,
             false_negatives=fn,
             id_switches=self._idsw,
+            fragmentations=self._fragments,
             mota=mota,
             motp=motp,
             precision=precision,
