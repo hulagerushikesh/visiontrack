@@ -41,8 +41,10 @@ The first local workflow and its versioned records are defined in
       adapters for the first four v1 schemas.
 - [x] Add deterministic JSONL readers/writers and an immutable local bundle
       scaffold for the four implemented v1 records.
-- [ ] Add a deterministic local comparison runner that replays one verified
+- [x] Add a deterministic local comparison runner that replays one verified
       detection stream through baseline and variant tracker configurations.
+- [ ] Add an evidence-aware comparison summary with dataset-independent run
+      diagnostics and explicit `insufficient_evidence` results for GT metrics.
 - [ ] Migrate the long-form research write-up into reusable article components.
 - [ ] Design a data-driven benchmark explorer before replacing generated reports.
 - [ ] Port the interactive tracker shell without changing tracker behavior or

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+import re
 import shutil
 import tempfile
 from collections.abc import Callable, Iterable
@@ -14,9 +15,11 @@ from .contracts import (
     ExperimentManifest,
     SourceManifest,
     TrackObservationRecord,
+    canonical_json,
 )
 
 _R = TypeVar("_R", bound=ContractRecord)
+_RUN_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
 
 
 def _sha256(payload: bytes) -> str:
@@ -240,6 +243,49 @@ def create_experiment_bundle(
             target.write_bytes(payload)
         (staging / "runs").mkdir()
         (staging / "report").mkdir()
+        try:
+            staging.rename(destination)
+        except FileExistsError:
+            _verify_existing_bundle(destination, expected)
+        return destination
+    finally:
+        if staging.exists():
+            shutil.rmtree(staging)
+
+
+def create_variant_run(
+    bundle: str | Path,
+    variant: str,
+    metadata: dict,
+    tracks: Iterable[TrackObservationRecord],
+    *,
+    frame_count: int,
+) -> Path:
+    """Atomically persist one immutable variant result inside a Lab bundle."""
+    if not _RUN_NAME.fullmatch(variant) or variant in {".", ".."}:
+        raise ValueError("variant name must be a safe 1-64 character path component")
+
+    track_payload = serialize_track_jsonl(tracks, frame_count=frame_count)
+    track_sha256 = _sha256(track_payload)
+    if metadata.get("track_sha256") != track_sha256:
+        raise ValueError("run metadata track_sha256 does not match track observations")
+    expected = {
+        "run.json": (canonical_json(metadata) + "\n").encode("utf-8"),
+        "tracks.jsonl": track_payload,
+    }
+
+    runs = Path(bundle) / "runs"
+    if not runs.is_dir():
+        raise ValueError(f"bundle runs directory does not exist: {runs}")
+    destination = runs / variant
+    if destination.exists():
+        _verify_existing_bundle(destination, expected)
+        return destination
+
+    staging = Path(tempfile.mkdtemp(prefix=f".{variant}.", dir=runs))
+    try:
+        for relative, payload in expected.items():
+            (staging / relative).write_bytes(payload)
         try:
             staging.rename(destination)
         except FileExistsError:

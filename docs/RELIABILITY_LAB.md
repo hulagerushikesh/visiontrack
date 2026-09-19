@@ -239,7 +239,7 @@ detection bytes are verified against the source hash, and bundle scaffolds are
 created atomically. Repeating a write with identical content is safe; conflicting
 content is never overwritten.
 
-## Next implementation increment
+## Third implementation increment — complete
 
 The next code change should connect this safe storage boundary to computation:
 
@@ -254,6 +254,32 @@ The next code change should connect this safe storage boundary to computation:
 It should not yet calculate benchmark claims, classify failure events, or add
 the React explorer. Those become separate increments after repeatable paired
 execution exists.
+
+Implemented in `src/visiontrack/lab/runner.py`. The runner verifies and loads
+the detection evidence once, resolves each declared variant onto the existing
+tracker presets and `TrackerConfig`, creates fresh tracker state per variant,
+replays the identical in-memory frame sequence, and atomically persists a
+content-addressed `run.json` and `tracks.jsonl` for each result. Empty frames in
+the declared range are replayed, and experiment inputs remain untouched.
+
+Appearance features, learned motion residuals, and camera shifts are rejected
+until those external inputs have their own bundle-backed contracts. This avoids
+silently treating an unavailable signal as a valid ablation.
+
+## Next implementation increment
+
+The next code change should create an evidence-aware comparison summary:
+
+- Record dataset-independent diagnostics such as observation count, unique
+  run-local tracks, active frames, and paired deltas
+- Mark HOTA, IDF1, MOTA, identity switches, and fragmentation as
+  `insufficient_evidence` when ground truth is absent
+- Persist one deterministic, immutable `comparison.json`
+- Never select a winner automatically from track-count diagnostics
+- Add corruption, rerun, and no-ground-truth honesty tests
+
+Ground-truth import, measured failure events, acceptance decisions, and the
+React explorer should remain later, separate increments.
 
 ## Acceptance criteria
 
