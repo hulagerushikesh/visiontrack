@@ -28,7 +28,7 @@
     var btn = document.querySelector(".theme-btn");
     if (btn) btn.remove();
     var brand = document.querySelector(".brand");
-    if (brand) brand.innerHTML = '<img src="/assets/visiontrack-mark.svg" alt=""><span>VisionTrack</span>';
+    if (brand) brand.innerHTML = '<img src="/assets/visiontrack-mark.svg?v=3" alt=""><span>VisionTrack</span>';
     var tag = document.querySelector(".nav-tag");
     if (tag) {
       tag.textContent = "Open research";
