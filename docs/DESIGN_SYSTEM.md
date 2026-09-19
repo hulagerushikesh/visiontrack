@@ -9,7 +9,9 @@ belong to the same system.
 
 ## Identity
 
-- The tracking-reticle mark is the primary logo and favicon.
+- The trajectory mark is the primary logo and favicon: earlier observations
+  flow into one confirmed object, expressing identity continuity rather than a
+  generic camera.
 - `VisionTrack` is always written as one word with capital V and T.
 - Indigo is the primary action and navigation color.
 - Emerald represents a confirmed, actively tracked identity.
@@ -35,5 +37,5 @@ belong to the same system.
 
 React owns `/`, `/teaching`, and `/video`. Standalone experiences keep their
 current structure until their behavior and progress-storage contracts have
-equivalent React tests. Shared legacy tokens intentionally mirror the React
-graphite/green palette during that transition.
+equivalent React tests. Shared standalone tokens intentionally mirror the
+React light-first indigo/cyan system during that transition.

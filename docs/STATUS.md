@@ -1,8 +1,9 @@
 # VisionTrack — Status & Roadmap Checklist
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
-Last updated: 2026-09-08 — the two remaining research extensions are now marked
-**compute-blocked with measured numbers**, not merely "planned". Previously:
+Last updated: 2026-09-19 — the learning product, unified light-first UI, and
+published C++ sibling are reflected here; the two remaining research extensions
+remain **compute-blocked with measured numbers**, not merely "planned". Previously:
 2026-09-07, SportsMOT oracle numbers landed (45 val sequences, `/benchmark/sportsmot`
 live); v0.2.0 (`/live` in-browser tracker + SportsMOT code path + site redesign,
 published to PyPI).
@@ -63,8 +64,8 @@ published to PyPI).
 - [x] Narrative write-up page — `/writeup`
 - [x] Study guide + CV roadmap (in repo)
 - [x] Live routes: `/`, `/live`, `/teaching`, `/demo`, `/writeup`, `/video`, `/benchmark`, `/benchmark/dancetrack`, `/benchmark/dancetrack-yolox`, `/benchmark/sportsmot`, `/docs`
-- [x] **Site UI redesign** — one shared stylesheet across every page, unified type/
-      spacing/light-dark theming, live tracking hero on the landing page
+- [x] **Site UI redesign** — one shared visual system across every page, unified
+      type/spacing and light-first theming, with dark reserved for tracking stages
 - [x] **Two-audience teaching page — `/teaching`** — a developer lane (install, the
       real public API, what runs inside `update()`) and a plain-English lane
       (what tracking is, why it's hard, glossary) on one page
@@ -72,7 +73,7 @@ published to PyPI).
       use-cases, the controlled study demoted to an "under the hood" section
 
 ### Quality / infra
-- [x] 349 tests passing (1 slow, opt-in) · ruff clean · CI on py3.10/3.11/3.12
+- [x] 369 tests passing (1 slow, opt-in) · ruff clean · CI on py3.10/3.11/3.12
 - [x] Batched Kalman hot path — per-frame predict + Mahalanobis gating run as one
       `(N, 8)` NumPy call over the whole track set: ~1.4–1.5× faster, bit-identical
       (2841 → 294 FPS across 4–64 objects; MOTA/IDSW unchanged)
@@ -130,9 +131,11 @@ published to PyPI).
       answered more cheaply by SportsMOT, where appearance is informative *by
       construction* rather than by upgrading the detector.
 
-### Product direction (far)
-- [ ] H3.2 — teaching product (course / mini-textbook)
-- [ ] H3.3 — vertical app (retail footfall / sports / traffic)
+### Product direction
+- [x] H3.2 — learning product and guided curriculum
+- [ ] H3.3 — local-first Reliability Lab alpha
+- [ ] Selective anonymous identity-continuity research under bounded memory
+- [ ] Choose a vertical only after practitioner interviews and design-partner validation
 
 ### Sibling project (all four phases resolved)
 - [x] **C++/CUDA optimized ByteTrack — Phase 1** — the port and the parity gate.
@@ -163,11 +166,9 @@ published to PyPI).
       win at 1.82× on synthetic scenes while dispatch overhead exceeds the
       *entire* gating computation on real ones — MOT17-09's median frame spends
       0.85 µs there. `PHASE3.md`, reproducible via `bench/gpu_feasibility.py`.
-- [ ] **Publish to PyPI** — the one step still open, and **not** for want of a
-      token. Uploads return HTTP 429 from an account-level rate limit on
-      new-project creation; the artifacts are built and gated. A support ticket
-      is filed, and trusted publishing may route around it. Nothing else in the
-      project depends on this.
+- [x] **Published to PyPI** — `visiontrack-cpp 0.1.0` released on 2026-09-13
+      after Linux, macOS, Windows, CPython 3.10–3.13, wheel, sdist, oracle, and
+      parity gates passed.
 
 An aside worth keeping: adding CI surfaced four defects, all in the release
 harness rather than the tracker — a `continue-on-error` that rewrote a failed
@@ -216,9 +217,9 @@ plus dispatch overhead say a GPU would not have paid even with one. Parity now
 holds across three platforms, three compilers and two LAPACK backends, with 12
 CI-gated wheels.
 
-The single open item is the **PyPI upload**, which is blocked by an
-account-level HTTP 429 on new-project creation rather than by a missing token.
-A support ticket is filed. Nothing else waits on it.
+The C++ package is live on PyPI. Its next work is maintenance evidence and a
+release compatibility matrix, not independent tracker research.
 
-Next after this: **Horizon 3 product direction** (H3.2 teaching product / H3.3
-vertical app) — the site already seeds both with `/teaching` and the use-case section.
+Next after this: **Horizon 3 product direction** — build the local-first
+Reliability Lab workflow, validate it with practitioners, and begin selective
+anonymous identity-continuity research in Python before any new C++ port.
