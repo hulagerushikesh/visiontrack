@@ -222,6 +222,41 @@ class DetectionRecord(ContractRecord):
 
 
 @dataclass(frozen=True, slots=True)
+class GroundTruthRecord(ContractRecord):
+    """One portable annotated object, including ignored/distractor rows."""
+
+    frame_index: int
+    source_frame: int | None
+    object_id: int
+    xyxy: tuple[float, float, float, float]
+    class_id: int
+    visibility: float | None
+    ignored: bool
+    schema_version: int = SCHEMA_VERSION
+
+    def __post_init__(self) -> None:
+        if self.schema_version != SCHEMA_VERSION:
+            raise ValueError(f"unsupported schema_version: {self.schema_version}")
+        if not isinstance(self.frame_index, int) or self.frame_index < 0:
+            raise ValueError("frame_index must be a non-negative integer")
+        if self.source_frame is not None and (
+            not isinstance(self.source_frame, int) or self.source_frame < 0
+        ):
+            raise ValueError("source_frame must be a non-negative integer when present")
+        if not isinstance(self.object_id, int) or self.object_id <= 0:
+            raise ValueError("object_id must be a positive integer")
+        object.__setattr__(self, "xyxy", _box(self.xyxy))
+        if not isinstance(self.class_id, int):
+            raise ValueError("class_id must be an integer")
+        if self.visibility is not None and (
+            not math.isfinite(self.visibility) or not 0 <= self.visibility <= 1
+        ):
+            raise ValueError("visibility must be finite and in [0, 1] when present")
+        if not isinstance(self.ignored, bool):
+            raise ValueError("ignored must be a boolean")
+
+
+@dataclass(frozen=True, slots=True)
 class ExperimentManifest(ContractRecord):
     """Immutable specification for one paired Reliability Lab comparison."""
 

@@ -92,6 +92,27 @@ contract. Existing compressed NumPy caches may remain the internal fast path.
 Embeddings do not belong inline in JSON. They remain optional array data keyed
 by `feature_ref`, allowing the baseline to stay detector- and model-agnostic.
 
+### 2a. Ground-truth record
+
+Ground truth is stored as `ground_truth.jsonl` and fingerprinted by
+`ground_truth_sha256` in the source manifest. Ignore and distractor annotations
+are preserved so evaluation policy can be applied later rather than discarded
+during import.
+
+| Field | Type | Rule |
+|---|---|---|
+| `frame_index` | integer | Zero-based, non-negative |
+| `source_frame` | integer/null | Original dataset frame number |
+| `object_id` | integer | Positive and unique within one frame |
+| `xyxy` | array[4] | Finite pixel-space box with valid corners |
+| `class_id` | integer | Original dataset class identifier |
+| `visibility` | number/null | Finite and in `[0, 1]` when known |
+| `ignored` | boolean | Preserves the dataset's consider/ignore flag |
+
+The MOTChallenge importer accepts exactly the documented nine columns. It
+converts only one-based frame numbering; spatial coordinates retain the same
+convention already used by VisionTrack's MOT loader.
+
 ### 3. Experiment manifest
 
 Defines one paired comparison before execution.
@@ -294,7 +315,7 @@ observation count before producing an immutable, content-addressed
 leaves `accepted_variant` null. Ground-truth-dependent claims are recorded as
 `insufficient_evidence`, with a machine-readable reason.
 
-## Next implementation increment
+## Fifth implementation increment — complete
 
 The next code change should establish ground truth as verified evidence:
 
@@ -311,6 +332,33 @@ The next code change should establish ground truth as verified evidence:
 It should not yet calculate HOTA/IDF1/MOTA or failure events. Metric integration
 will follow only after the ground-truth evidence contract is independently
 verified.
+
+Implemented across `src/visiontrack/lab/contracts.py`, `storage.py`, and
+`mot.py`. Ground-truth records preserve object identity, class, visibility, and
+ignore state; serialize in deterministic frame/object order; and are verified
+against the source manifest before a bundle is accepted. The strict importer
+converts MOT's one-based frames to zero-based indices while retaining the
+original frame number and all ignore/distractor rows.
+
+## Next implementation increment
+
+The next code change should calculate quality metrics from only verified bundle
+evidence:
+
+- Group ground truth and track observations over the exact experiment frame
+  range, including empty frames
+- Apply the repository's existing MOT ignore/distractor policy rather than
+  inventing a Lab-specific evaluator
+- Calculate supported HOTA, IDF1, MOTA, MOTP, identity-switch, and
+  fragmentation results for each variant
+- Persist immutable `metrics.json` artifacts linked to run, track, and
+  ground-truth hashes
+- Update `comparison.json` to replace `insufficient_evidence` only for metrics
+  that were actually computed from verified evidence
+- Continue to leave `accepted_variant` null
+
+Failure-event extraction, statistical claims across multiple sequences, human
+acceptance decisions, and the React explorer remain separate later increments.
 
 ## Acceptance criteria
 

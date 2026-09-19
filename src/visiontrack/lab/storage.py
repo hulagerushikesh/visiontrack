@@ -13,6 +13,7 @@ from .contracts import (
     ContractRecord,
     DetectionRecord,
     ExperimentManifest,
+    GroundTruthRecord,
     SourceManifest,
     TrackObservationRecord,
     canonical_json,
@@ -79,11 +80,30 @@ def serialize_track_jsonl(
     )
 
 
+def serialize_ground_truth_jsonl(
+    records: Iterable[GroundTruthRecord], *, frame_count: int | None = None
+) -> bytes:
+    """Return canonical ground-truth JSONL ordered by frame and object ID."""
+    return _serialize_jsonl(
+        records,
+        key=lambda record: (record.frame_index, record.object_id),
+        label="ground-truth",
+        frame_count=frame_count,
+    )
+
+
 def detection_payload_sha256(
     records: Iterable[DetectionRecord], *, frame_count: int | None = None
 ) -> str:
     """Hash the exact canonical detection payload stored in a Lab bundle."""
     return _sha256(serialize_detection_jsonl(records, frame_count=frame_count))
+
+
+def ground_truth_payload_sha256(
+    records: Iterable[GroundTruthRecord], *, frame_count: int | None = None
+) -> str:
+    """Hash the exact canonical ground-truth payload stored in a Lab bundle."""
+    return _sha256(serialize_ground_truth_jsonl(records, frame_count=frame_count))
 
 
 def _write_immutable(path: Path, payload: bytes) -> str:
@@ -117,6 +137,17 @@ def write_track_jsonl(
 ) -> str:
     """Write immutable canonical observations and return their SHA-256."""
     payload = serialize_track_jsonl(records, frame_count=frame_count)
+    return _write_immutable(Path(path), payload)
+
+
+def write_ground_truth_jsonl(
+    path: str | Path,
+    records: Iterable[GroundTruthRecord],
+    *,
+    frame_count: int | None = None,
+) -> str:
+    """Write immutable canonical ground truth and return its SHA-256."""
+    payload = serialize_ground_truth_jsonl(records, frame_count=frame_count)
     return _write_immutable(Path(path), payload)
 
 
@@ -179,6 +210,19 @@ def read_track_jsonl(
     )
 
 
+def read_ground_truth_jsonl(
+    path: str | Path, *, frame_count: int | None = None
+) -> list[GroundTruthRecord]:
+    """Read and validate canonically ordered ground-truth JSONL."""
+    return _read_jsonl(
+        path,
+        record_type=GroundTruthRecord,
+        key=lambda record: (record.frame_index, record.object_id),
+        label="ground-truth",
+        frame_count=frame_count,
+    )
+
+
 def verify_detection_payload(source: SourceManifest, payload: bytes) -> None:
     """Raise when exact detection bytes do not match their source manifest."""
     actual = _sha256(payload)
@@ -186,6 +230,18 @@ def verify_detection_payload(source: SourceManifest, payload: bytes) -> None:
         raise ValueError(
             "detection payload SHA-256 does not match source manifest: "
             f"expected {source.detection_sha256}, got {actual}"
+        )
+
+
+def verify_ground_truth_payload(source: SourceManifest, payload: bytes) -> None:
+    """Raise when exact ground-truth bytes do not match their source manifest."""
+    if source.ground_truth_sha256 is None:
+        raise ValueError("source manifest declares no ground-truth payload")
+    actual = _sha256(payload)
+    if actual != source.ground_truth_sha256:
+        raise ValueError(
+            "ground-truth payload SHA-256 does not match source manifest: "
+            f"expected {source.ground_truth_sha256}, got {actual}"
         )
 
 
@@ -207,6 +263,7 @@ def create_experiment_bundle(
     experiment: ExperimentManifest,
     source: SourceManifest,
     detections: Iterable[DetectionRecord],
+    ground_truth: Iterable[GroundTruthRecord] | None = None,
 ) -> Path:
     """Atomically create the immutable input scaffold for one experiment.
 
@@ -227,6 +284,17 @@ def create_experiment_bundle(
         "source.json": _json_document(source),
         "inputs/detections.jsonl": detection_payload,
     }
+    if source.ground_truth_sha256 is None:
+        if ground_truth is not None:
+            raise ValueError("ground truth was provided but the source manifest declares none")
+    else:
+        if ground_truth is None:
+            raise ValueError("source manifest declares ground truth but no records were provided")
+        ground_truth_payload = serialize_ground_truth_jsonl(
+            ground_truth, frame_count=source.frame_count
+        )
+        verify_ground_truth_payload(source, ground_truth_payload)
+        expected["inputs/ground_truth.jsonl"] = ground_truth_payload
 
     root_path = Path(root)
     root_path.mkdir(parents=True, exist_ok=True)
