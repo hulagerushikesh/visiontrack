@@ -433,7 +433,7 @@ states when it has truncated that presentation. The canonical
 `failures.jsonl` artifacts remain complete. Raw video and frames are not copied
 or embedded, and variant acceptance remains unset.
 
-## Next implementation increment
+## Ninth implementation increment — complete
 
 The next code change should establish the first product-facing Reliability Lab
 screen without changing the verified Python pipeline:
@@ -452,6 +452,36 @@ Local directory/file import, video rendering, event filtering, and acceptance
 recording remain later increments. This first React slice proves the report
 contract can drive a clear product screen without adding a backend or creating
 a second source of truth.
+
+Implemented at `/lab` in the existing React application. The screen defines a
+typed schema-v1 report boundary with runtime checks, renders a clearly labelled
+deterministic fixture, and presents paired metrics, failure counts, selected
+failure rows, provenance, and limitations through the shared light product
+shell. Loading, unsupported-schema, missing-evidence, and empty-failure states
+are explicit. Variant selection is visibly disabled and track IDs remain
+labelled as run-local rather than person identities.
+
+The route is available from both React and standalone navigation, works at the
+mobile breakpoint, respects reduced-motion preferences, and introduces no
+network fetch, local-file access, backend, or second metric calculation.
+
+## Next implementation increment
+
+The next code change should let a user inspect their own generated report while
+preserving the same local-first boundary:
+
+- Add an explicit `report.json` file picker on `/lab`
+- Parse the selected file entirely in browser memory; never upload it
+- Strengthen runtime validation for nested experiment, source, variant,
+  failure, decision, and limitation fields
+- Show the selected filename and report fingerprint so the active evidence is
+  unambiguous
+- Provide a deliberate “return to sample” action
+- Test valid import, malformed JSON, unsupported schema, incomplete evidence,
+  and repeat selection
+
+Directory access, raw bundle import, video/frame rendering, failure filtering,
+and acceptance recording remain separate later increments.
 
 ## Acceptance criteria
 

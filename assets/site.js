@@ -18,6 +18,7 @@
       links.innerHTML = [
         ["Live tracker", "/live"],
         ["Learn", "/teaching"],
+        ["Lab", "/lab"],
         ["Research", "/writeup"],
         ["Results", "/benchmark"],
         ["Docs", "/docs/"]

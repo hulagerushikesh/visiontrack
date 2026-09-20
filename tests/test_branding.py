@@ -45,6 +45,7 @@ def test_standalone_shell_uses_shared_product_navigation() -> None:
     for label, route in (
         ("Live tracker", "/live"),
         ("Learn", "/teaching"),
+        ("Lab", "/lab"),
         ("Research", "/writeup"),
         ("Results", "/benchmark"),
         ("Docs", "/docs/"),
