@@ -39,6 +39,17 @@ export interface ReportVariant {
 
 export type FailureType = "id_switch" | "fragmentation" | "miss" | "false_positive"
 
+export type MediaEvidenceStatus = "not_declared" | "declared_empty" | "available"
+
+export interface ReportMediaEvidence {
+  status: MediaEvidenceStatus
+  evidence_id: string | null
+  artifact_count: number
+  privacy: Array<"source_pixels" | "redacted" | "synthetic">
+  views: Array<"full_frame" | "crop">
+  frame_indices: number[]
+}
+
 export interface ReportFailure {
   variant: string
   event_id: string
@@ -49,6 +60,7 @@ export interface ReportFailure {
   ground_truth_ids: number[]
   context: Record<string, unknown>
   evidence_frames: { start: number; end: number }
+  media_evidence?: ReportMediaEvidence
   schema_version: 1
 }
 
@@ -63,6 +75,12 @@ export interface ReliabilityReport {
   failure_event_total: number
   failure_event_displayed: number
   failure_events_truncated: boolean
+  media_evidence?: {
+    event_manifests: number
+    image_artifacts: number
+    privacy_counts: Record<"source_pixels" | "redacted" | "synthetic", number>
+    images_embedded: false
+  }
   decision: { status: string; accepted_variant: string | null; reason: string }
   limitations: string[]
 }
@@ -74,6 +92,10 @@ export type ReportLoadResult =
 
 const failureTypes: FailureType[] = ["id_switch", "fragmentation", "miss", "false_positive"]
 const videoStatuses: ReportSource["video_status"][] = ["hash_only_not_bundled", "not_declared"]
+const mediaStatuses: MediaEvidenceStatus[] = ["not_declared", "declared_empty", "available"]
+const privacyClasses = ["source_pixels", "redacted", "synthetic"] as const
+const mediaViews = ["full_frame", "crop"] as const
+const privacyCountShape = { source_pixels: 0, redacted: 0, synthetic: 0 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value)
@@ -98,6 +120,33 @@ const hasSameKeys = (left: Record<string, unknown>, right: Record<string, unknow
 const isIdArray = (value: unknown): value is number[] =>
   Array.isArray(value) && value.every(isPositiveInteger) && new Set(value).size === value.length
 const missing = (message: string): ReportLoadResult => ({ kind: "missing", message })
+const isUniqueIntegerArray = (value: unknown): value is number[] =>
+  Array.isArray(value) && value.every(isNonNegativeInteger) && new Set(value).size === value.length
+
+function isMediaEvidence(value: unknown, frameStart: number, frameEnd: number): value is ReportMediaEvidence {
+  if (!isRecord(value) || !mediaStatuses.includes(value.status as MediaEvidenceStatus)) return false
+  if (
+    !(value.evidence_id === null || isHash(value.evidence_id)) ||
+    !isNonNegativeInteger(value.artifact_count) || !Array.isArray(value.privacy) ||
+    !value.privacy.every((item) => privacyClasses.includes(item as typeof privacyClasses[number])) ||
+    new Set(value.privacy).size !== value.privacy.length || !Array.isArray(value.views) ||
+    !value.views.every((item) => mediaViews.includes(item as typeof mediaViews[number])) ||
+    new Set(value.views).size !== value.views.length || !isUniqueIntegerArray(value.frame_indices) ||
+    value.frame_indices.some((item) => item < frameStart || item >= frameEnd)
+  ) return false
+  if (value.status === "not_declared") {
+    return value.evidence_id === null && value.artifact_count === 0 &&
+      value.privacy.length === 0 && value.views.length === 0 && value.frame_indices.length === 0
+  }
+  if (!isHash(value.evidence_id)) return false
+  if (value.status === "declared_empty") {
+    return value.artifact_count === 0 && value.privacy.length === 0 &&
+      value.views.length === 0 && value.frame_indices.length === 0
+  }
+  return value.artifact_count > 0 && value.privacy.length > 0 && value.views.length > 0 &&
+    value.frame_indices.length > 0 && value.artifact_count >= value.privacy.length &&
+    value.artifact_count >= value.views.length && value.artifact_count >= value.frame_indices.length
+}
 
 export function parseReportModel(value: unknown): ReportLoadResult {
   if (!isRecord(value)) return missing("The selected file is not a JSON object.")
@@ -190,6 +239,13 @@ export function parseReportModel(value: unknown): ReportLoadResult {
       failure.evidence_frames.end > source.frame_count || failure.frame_index < failure.evidence_frames.start ||
       failure.frame_index >= failure.evidence_frames.end || failure.schema_version !== 1
     ) return missing("One or more failure events have invalid lineage or frame bounds.")
+    if (failure.media_evidence !== undefined && !isMediaEvidence(
+      failure.media_evidence,
+      failure.evidence_frames.start,
+      failure.evidence_frames.end,
+    )) {
+      return missing("One or more failure events have invalid media-evidence metadata.")
+    }
   }
 
   if (
@@ -199,6 +255,31 @@ export function parseReportModel(value: unknown): ReportLoadResult {
     typeof value.failure_events_truncated !== "boolean" ||
     value.failure_events_truncated !== (value.failure_event_total > value.failure_event_displayed)
   ) return missing("Failure event totals do not match the verified variant evidence.")
+
+  if (value.media_evidence !== undefined) {
+    const media = value.media_evidence
+    let displayedManifests = 0
+    let displayedArtifacts = 0
+    const displayedPrivacyMinimums = { ...privacyCountShape }
+    for (const failure of failures) {
+      const eventMedia = failure.media_evidence as ReportMediaEvidence | undefined
+      if (!eventMedia) continue
+      if (eventMedia.status !== "not_declared") displayedManifests += 1
+      displayedArtifacts += eventMedia.artifact_count
+      for (const privacy of eventMedia.privacy) displayedPrivacyMinimums[privacy] += 1
+    }
+    if (
+      !isRecord(media) || !isNonNegativeInteger(media.event_manifests) ||
+      !isNonNegativeInteger(media.image_artifacts) || !isRecord(media.privacy_counts) ||
+      !hasSameKeys(media.privacy_counts, privacyCountShape) ||
+      !privacyClasses.every((item) => isNonNegativeInteger(media.privacy_counts[item])) ||
+      media.images_embedded !== false || media.event_manifests > value.failure_event_total ||
+      media.event_manifests < displayedManifests || media.image_artifacts < displayedArtifacts ||
+      privacyClasses.some((item) => Number(media.privacy_counts[item]) < displayedPrivacyMinimums[item]) ||
+      privacyClasses.reduce((count, item) => count + Number(media.privacy_counts[item]), 0) !== media.image_artifacts ||
+      failures.some((failure) => failure.media_evidence === undefined)
+    ) return missing("The report media-evidence summary is invalid.")
+  }
 
   const decision = value.decision
   if (

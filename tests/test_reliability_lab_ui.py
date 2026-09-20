@@ -95,3 +95,27 @@ def test_failure_explorer_exposes_accessible_read_only_detail() -> None:
     assert "Event fingerprint" in component
     assert "Run fingerprint" in component
     assert "does not infer a persistent person identity" in component
+
+
+def test_lab_surfaces_media_availability_and_privacy_as_text_only() -> None:
+    component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+    fixture = (ROOT / "src/features/reliability-lab/fixture.ts").read_text()
+
+    assert "Image evidence" in component
+    assert "verified local" in component
+    assert "Privacy:" in component
+    assert "Image bytes are not embedded, loaded, or displayed." in component
+    assert 'status: "available"' in fixture
+    assert 'privacy: ["synthetic"]' in fixture
+    assert "<img" not in component
+    assert "createObjectURL" not in component
+
+
+def test_lab_import_strictly_validates_optional_media_metadata() -> None:
+    types = (ROOT / "src/features/reliability-lab/types.ts").read_text()
+
+    assert "function isMediaEvidence" in types
+    assert "One or more failure events have invalid media-evidence metadata." in types
+    assert "The report media-evidence summary is invalid." in types
+    assert 'images_embedded: false' in types
+    assert "failure.media_evidence === undefined" in types

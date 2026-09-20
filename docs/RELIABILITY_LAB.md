@@ -593,7 +593,7 @@ Evidence is stored only after an explicit API call beneath
 and UI paths create nothing there. Repeated identical writes are safe,
 conflicting writes are refused, and all tests use generated synthetic PNG bytes.
 
-## Next implementation increment
+## Thirteenth implementation increment — complete
 
 The next code change should surface optional media availability in the
 deterministic report model without rendering or copying image bytes:
@@ -603,6 +603,42 @@ deterministic report model without rendering or copying image bytes:
 - Add privacy classification and availability metadata to `report.json`
 - Keep the standalone and React reports text-only in this increment
 - Reject corrupt or orphaned evidence instead of silently omitting it
+
+Browser directory access, image rendering, raw video playback, and acceptance
+recording remain separate later increments.
+
+Implemented in deterministic report generation by discovering evidence only
+under the verified variant and failure-event lineage. Every stored manifest and
+PNG artifact is re-read and revalidated before report creation; orphaned event
+directories, unexpected entries, changed bytes, invalid PNG structure, and
+lineage mismatches fail the report rather than disappearing from its evidence.
+
+Each failure now carries a metadata-only media status (`not_declared`,
+`declared_empty`, or `available`), content fingerprint, artifact count, frame
+indices, views, and privacy classes. The report summary counts verified
+manifests, images, and artifact privacy classifications across the complete
+failure set before presentation truncation.
+
+The standalone and React reports display only this availability and privacy
+metadata. They do not copy image bytes into `report.json`, emit image elements,
+create browser object URLs, or otherwise display source pixels. Existing
+schema-v1 reports without the additive metadata remain readable, while reports
+that declare the new summary must provide valid per-event metadata.
+
+## Next implementation increment
+
+The next code change should provide an explicit, privacy-aware producer for the
+optional evidence format before any UI attempts to display it:
+
+- Accept caller-provided local PNG frames for one verified failure event
+- Default to a bounded crop and require an explicit choice for full-frame
+  source pixels
+- Record `synthetic`, `redacted`, or `source_pixels` from the operation that
+  produced the bytes rather than trusting a later UI label
+- Refuse out-of-range frames, oversized output, ambiguous crop bounds, and
+  overwrite conflicts
+- Add deterministic synthetic tests; do not add video decoding, uploads, or
+  browser rendering in the same increment
 
 Browser directory access, image rendering, raw video playback, and acceptance
 recording remain separate later increments.

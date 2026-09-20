@@ -1,4 +1,5 @@
 """Deterministic, read-only HTML reports for verified Reliability Lab bundles."""
+
 # ruff: noqa: E501
 from __future__ import annotations
 
@@ -10,9 +11,59 @@ from typing import Any
 from .comparison import create_comparison_summary
 from .contracts import canonical_json, sha256_json
 from .runner import load_experiment_bundle
-from .storage import read_failure_jsonl, write_report_artifacts
+from .storage import read_evidence_manifest, read_failure_jsonl, write_report_artifacts
 
 MAX_REPORT_EVENTS = 500
+_PRIVACY_CLASSES = ("source_pixels", "redacted", "synthetic")
+
+
+def _missing_media() -> dict[str, Any]:
+    return {
+        "status": "not_declared",
+        "evidence_id": None,
+        "artifact_count": 0,
+        "privacy": [],
+        "views": [],
+        "frame_indices": [],
+    }
+
+
+def _event_media(
+    bundle: Path, variant: str, source: Any, events: list[Any]
+) -> tuple[dict[str, dict[str, Any]], dict[str, int]]:
+    """Verify optional media for every event and return metadata-only summaries."""
+    result = {event.event_id: _missing_media() for event in events}
+    privacy_counts = {privacy: 0 for privacy in _PRIVACY_CLASSES}
+    evidence_root = bundle / "runs" / variant / "evidence"
+    if evidence_root.is_symlink():
+        raise ValueError(f"evidence root for {variant} must be a local directory")
+    if not evidence_root.exists():
+        return result, privacy_counts
+    if not evidence_root.is_dir():
+        raise ValueError(f"evidence root for {variant} must be a local directory")
+    events_by_id = {event.event_id: event for event in events}
+    for event_directory in sorted(evidence_root.iterdir(), key=lambda path: path.name):
+        if event_directory.is_symlink() or not event_directory.is_dir():
+            raise ValueError(f"invalid evidence entry for {variant}: {event_directory.name}")
+        event = events_by_id.get(event_directory.name)
+        if event is None:
+            raise ValueError(f"orphaned evidence event for {variant}: {event_directory.name}")
+        manifest = read_evidence_manifest(
+            event_directory / "manifest.json",
+            source=source,
+            failure=event,
+        )
+        for artifact in manifest.artifacts:
+            privacy_counts[artifact.privacy] += 1
+        result[event.event_id] = {
+            "status": "available" if manifest.artifacts else "declared_empty",
+            "evidence_id": manifest.evidence_id,
+            "artifact_count": len(manifest.artifacts),
+            "privacy": sorted({artifact.privacy for artifact in manifest.artifacts}),
+            "views": sorted({artifact.view for artifact in manifest.artifacts}),
+            "frame_indices": sorted({artifact.frame_index for artifact in manifest.artifacts}),
+        }
+    return result, privacy_counts
 
 
 def build_report_model(bundle: str | Path) -> dict[str, Any]:
@@ -34,6 +85,7 @@ def build_report_model(bundle: str | Path) -> dict[str, Any]:
 
     variants: list[dict[str, Any]] = []
     failures: list[dict[str, Any]] = []
+    privacy_counts = {privacy: 0 for privacy in _PRIVACY_CLASSES}
     for variant in experiment.variants:
         name = variant["name"]
         variants.append(
@@ -58,7 +110,13 @@ def build_report_model(bundle: str | Path) -> dict[str, Any]:
         actual_failure_sha256 = hashlib.sha256(failure_path.read_bytes()).hexdigest()
         if actual_failure_sha256 != summary["failure_sets"][name]["failure_sha256"]:
             raise ValueError("failure artifact changed after comparison verification")
-        failures.extend({"variant": name, **event.to_dict()} for event in events)
+        media, variant_privacy_counts = _event_media(bundle_path, name, source, events)
+        for privacy, count in variant_privacy_counts.items():
+            privacy_counts[privacy] += count
+        failures.extend(
+            {"variant": name, **event.to_dict(), "media_evidence": media[event.event_id]}
+            for event in events
+        )
 
     failures.sort(
         key=lambda event: (
@@ -69,6 +127,14 @@ def build_report_model(bundle: str | Path) -> dict[str, Any]:
         )
     )
     failure_total = len(failures)
+    media_summary = {
+        "event_manifests": sum(
+            failure["media_evidence"]["status"] != "not_declared" for failure in failures
+        ),
+        "image_artifacts": sum(failure["media_evidence"]["artifact_count"] for failure in failures),
+        "privacy_counts": privacy_counts,
+        "images_embedded": False,
+    }
     failures = failures[:MAX_REPORT_EVENTS]
     content: dict[str, Any] = {
         "schema_version": 1,
@@ -102,6 +168,7 @@ def build_report_model(bundle: str | Path) -> dict[str, Any]:
         "failure_event_total": failure_total,
         "failure_event_displayed": len(failures),
         "failure_events_truncated": failure_total > len(failures),
+        "media_evidence": media_summary,
         "decision": summary["decision"],
         "limitations": [
             "Track IDs are run-local and are not persistent person identities.",
@@ -150,8 +217,8 @@ def render_report_html(model: dict[str, Any]) -> str:
         f'<th scope="row">{escape(metric)}</th>'
         + "".join(
             "<td>"
-            f'<strong>{escape(_number(variant["metrics"].get(metric)))}</strong>'
-            f'<span>{escape(_number(variant["metric_deltas"].get(metric), signed=True))}</span>'
+            f"<strong>{escape(_number(variant['metrics'].get(metric)))}</strong>"
+            f"<span>{escape(_number(variant['metric_deltas'].get(metric), signed=True))}</span>"
             "</td>"
             for variant in variants
         )
@@ -165,8 +232,7 @@ def render_report_html(model: dict[str, Any]) -> str:
         "<tr>"
         f'<th scope="row">{escape(event_type.replace("_", " ").title())}</th>'
         + "".join(
-            f'<td>{variant["failure_counts"].get(event_type, 0)}</td>'
-            for variant in variants
+            f"<td>{variant['failure_counts'].get(event_type, 0)}</td>" for variant in variants
         )
         + "</tr>"
         for event_type in failure_types
@@ -176,48 +242,52 @@ def render_report_html(model: dict[str, Any]) -> str:
         event_rows = "".join(
             "<tr>"
             f'<td><span class="event-tag">{escape(event["event_type"].replace("_", " "))}</span></td>'
-            f'<td>{escape(event["variant"])}</td>'
-            f'<td>{event["frame_index"]}</td>'
-            f'<td>{escape(_identity_list(event["track_ids"]))}</td>'
-            f'<td>{escape(_identity_list(event["ground_truth_ids"]))}</td>'
+            f"<td>{escape(event['variant'])}</td>"
+            f"<td>{event['frame_index']}</td>"
+            f"<td>{escape(_identity_list(event['track_ids']))}</td>"
+            f"<td>{escape(_identity_list(event['ground_truth_ids']))}</td>"
             f'<td><a href="#evidence-{event["event_id"]}">Frames '
-            f'{event["evidence_frames"]["start"]}–{event["evidence_frames"]["end"] - 1}</a></td>'
+            f"{event['evidence_frames']['start']}–{event['evidence_frames']['end'] - 1}</a></td>"
+            f"<td>{escape(event['media_evidence']['status'].replace('_', ' ').title())}</td>"
             "</tr>"
             for event in model["failures"]
         )
         evidence_cards = "".join(
             f'<details id="evidence-{event["event_id"]}" class="evidence-card">'
-            f'<summary>Frame {event["frame_index"]} · '
-            f'{escape(event["event_type"].replace("_", " ").title())} · '
-            f'{escape(event["variant"])}</summary>'
+            f"<summary>Frame {event['frame_index']} · "
+            f"{escape(event['event_type'].replace('_', ' ').title())} · "
+            f"{escape(event['variant'])}</summary>"
             '<div class="evidence-grid">'
-            f'<p><span>Evidence range</span>{event["evidence_frames"]["start"]}–'
-            f'{event["evidence_frames"]["end"] - 1}</p>'
-            f'<p><span>Track IDs</span>{escape(_identity_list(event["track_ids"]))}</p>'
-            f'<p><span>Ground-truth IDs</span>{escape(_identity_list(event["ground_truth_ids"]))}</p>'
-            f'<p><span>Event fingerprint</span><code>{event["event_id"]}</code></p>'
+            f"<p><span>Evidence range</span>{event['evidence_frames']['start']}–"
+            f"{event['evidence_frames']['end'] - 1}</p>"
+            f"<p><span>Track IDs</span>{escape(_identity_list(event['track_ids']))}</p>"
+            f"<p><span>Ground-truth IDs</span>{escape(_identity_list(event['ground_truth_ids']))}</p>"
+            f"<p><span>Event fingerprint</span><code>{event['event_id']}</code></p>"
+            f"<p><span>Image evidence</span>{escape(event['media_evidence']['status'].replace('_', ' ').title())}</p>"
+            f"<p><span>Local images</span>{event['media_evidence']['artifact_count']}</p>"
+            f"<p><span>Privacy classes</span>{escape(', '.join(event['media_evidence']['privacy']) or '—')}</p>"
             '</div><p class="muted">Frame media is not embedded. Use this bounded range '
             "to inspect the original local source.</p></details>"
             for event in model["failures"]
         )
     else:
-        event_rows = '<tr><td colspan="6">No measured failure events in this experiment.</td></tr>'
+        event_rows = '<tr><td colspan="7">No measured failure events in this experiment.</td></tr>'
         evidence_cards = '<p class="empty">No failure evidence ranges to inspect.</p>'
 
     truncation = ""
     if model["failure_events_truncated"]:
         truncation = (
             '<p class="notice" role="status">Showing the first '
-            f'{model["failure_event_displayed"]} of {model["failure_event_total"]} '
+            f"{model['failure_event_displayed']} of {model['failure_event_total']} "
             "deterministically ordered events. The immutable JSONL files remain complete.</p>"
         )
 
     variant_cards = "".join(
         '<article class="variant-card">'
         f'<p class="eyebrow">{"Baseline" if variant["baseline"] else "Variant"}</p>'
-        f'<h3>{escape(variant["name"])}</h3>'
-        f'<p>{variant["diagnostics"]["observation_count"]} observations · '
-        f'{variant["diagnostics"]["unique_track_count"]} run-local tracks</p>'
+        f"<h3>{escape(variant['name'])}</h3>"
+        f"<p>{variant['diagnostics']['observation_count']} observations · "
+        f"{variant['diagnostics']['unique_track_count']} run-local tracks</p>"
         f'<code title="Full run ID: {variant["run_id"]}">{variant["run_id"]}</code>'
         "</article>"
         for variant in variants
@@ -255,10 +325,10 @@ def render_report_html(model: dict[str, Any]) -> str:
     <section aria-labelledby="variants-heading"><p class="eyebrow">Runs</p><h2 id="variants-heading">Verified variants</h2><div class="grid">{variant_cards}</div></section>
     <section aria-labelledby="metrics-heading"><p class="eyebrow">Paired measurement</p><h2 id="metrics-heading">Tracking metrics</h2><div class="table-wrap"><table><caption>Value and delta relative to {escape(experiment["baseline"])}</caption><thead><tr><th scope="col">Metric</th>{metric_headers}</tr></thead><tbody>{metric_rows}</tbody></table></div></section>
     <section aria-labelledby="counts-heading"><p class="eyebrow">Failure taxonomy</p><h2 id="counts-heading">Measured failure counts</h2><div class="table-wrap"><table><caption>Events emitted by the same correspondence used for metrics</caption><thead><tr><th scope="col">Failure</th>{failure_headers}</tr></thead><tbody>{failure_count_rows}</tbody></table></div></section>
-    <section aria-labelledby="events-heading"><p class="eyebrow">Frame-level evidence</p><h2 id="events-heading">Failure events</h2>{truncation}<div class="table-wrap"><table><caption>{model["failure_event_displayed"]} displayed events</caption><thead><tr><th scope="col">Type</th><th scope="col">Variant</th><th scope="col">Frame</th><th scope="col">Tracks</th><th scope="col">Ground truth</th><th scope="col">Evidence</th></tr></thead><tbody>{event_rows}</tbody></table></div></section>
+    <section aria-labelledby="events-heading"><p class="eyebrow">Frame-level evidence</p><h2 id="events-heading">Failure events</h2>{truncation}<div class="table-wrap"><table><caption>{model["failure_event_displayed"]} displayed events · {model["media_evidence"]["image_artifacts"]} verified local images (not embedded)</caption><thead><tr><th scope="col">Type</th><th scope="col">Variant</th><th scope="col">Frame</th><th scope="col">Tracks</th><th scope="col">Ground truth</th><th scope="col">Evidence</th><th scope="col">Media</th></tr></thead><tbody>{event_rows}</tbody></table></div></section>
     <section aria-labelledby="evidence-heading"><p class="eyebrow">Inspection ranges</p><h2 id="evidence-heading">Bounded local evidence</h2><div class="evidence-list">{evidence_cards}</div></section>
     <section aria-labelledby="provenance-heading"><p class="eyebrow">Provenance</p><h2 id="provenance-heading">Content fingerprints</h2><div class="card"><dl class="provenance"><dt>Report</dt><dd>{model["report_id"]}</dd><dt>Comparison</dt><dd>{model["comparison_id"]}</dd><dt>Experiment</dt><dd>{experiment["experiment_id"]}</dd><dt>Source</dt><dd>{source["source_id"]}</dd><dt>Detections</dt><dd>{source["detection_sha256"]}</dd><dt>Ground truth</dt><dd>{source["ground_truth_sha256"]}</dd><dt>Video</dt><dd>{escape(_short(source["video_sha256"]))}</dd></dl></div></section>
-    <section aria-labelledby="limits-heading"><p class="eyebrow">Boundaries</p><h2 id="limits-heading">What this report does not claim</h2><ul>{''.join(f'<li>{escape(item)}</li>' for item in model["limitations"])}</ul></section>
+    <section aria-labelledby="limits-heading"><p class="eyebrow">Boundaries</p><h2 id="limits-heading">What this report does not claim</h2><ul>{"".join(f"<li>{escape(item)}</li>" for item in model["limitations"])}</ul></section>
     <footer>Generated deterministically by VisionTrack {escape(experiment["visiontrack_version"])} · read-only local artifact</footer>
   </main>
 </body>
@@ -272,6 +342,4 @@ def generate_local_report(bundle: str | Path) -> Path:
     model = build_report_model(bundle)
     report_json = (canonical_json(model) + "\n").encode("utf-8")
     report_html = render_report_html(model).encode("utf-8")
-    return write_report_artifacts(
-        bundle, report_json=report_json, index_html=report_html
-    )
+    return write_report_artifacts(bundle, report_json=report_json, index_html=report_html)
