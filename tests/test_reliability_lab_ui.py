@@ -69,3 +69,29 @@ def test_lab_import_validates_nested_evidence() -> None:
     assert "Failure event totals do not match the verified variant evidence." in types
     assert "The human decision boundary is missing or invalid." in types
     assert "The report must state at least one non-empty limitation." in types
+
+
+def test_failure_explorer_filters_only_displayed_report_events() -> None:
+    component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+
+    assert "function FailureExplorer" in component
+    assert 'id="failure-variant"' in component
+    assert 'id="failure-type"' in component
+    assert 'id="failure-frame"' in component
+    assert "report.failures.filter" in component
+    assert "matching displayed" in component
+    assert "never recalculate metrics or change the source artifacts" in component
+    assert "Reset filters" in component
+
+
+def test_failure_explorer_exposes_accessible_read_only_detail() -> None:
+    component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+
+    assert 'aria-live="polite"' in component
+    assert 'aria-controls="failure-event-detail"' in component
+    assert 'aria-pressed={selectedEventId === failure.event_id}' in component
+    assert 'id="failure-event-detail"' in component
+    assert "Recorded context" in component
+    assert "Event fingerprint" in component
+    assert "Run fingerprint" in component
+    assert "does not infer a persistent person identity" in component

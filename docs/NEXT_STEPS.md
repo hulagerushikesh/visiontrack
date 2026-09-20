@@ -57,6 +57,8 @@ The first local workflow and its versioned records are defined in
       model before introducing local-file import or interactive decisions.
 - [x] Add private, client-side `report.json` import with strict validation and
       retain the deterministic fixture as an explicit sample mode.
+- [x] Add ephemeral client-side failure filters and read-only event details
+      without recalculating or mutating verified report evidence.
 - [ ] Migrate the long-form research write-up into reusable article components.
 - [ ] Design a data-driven benchmark explorer before replacing generated reports.
 - [ ] Port the interactive tracker shell without changing tracker behavior or
