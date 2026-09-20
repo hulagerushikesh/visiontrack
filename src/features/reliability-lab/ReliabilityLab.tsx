@@ -24,6 +24,7 @@ import {
   parseReportModel,
   type FailureType,
   type ReliabilityReport,
+  type ReportMediaEvidence,
   type ReportLoadResult,
 } from "./types"
 
@@ -35,6 +36,23 @@ const failureLabels: Record<FailureType, string> = {
 }
 
 const failureOrder = Object.keys(failureLabels) as FailureType[]
+
+const mediaLabels: Record<ReportMediaEvidence["status"], string> = {
+  not_declared: "Not declared",
+  declared_empty: "Declared empty",
+  available: "Available",
+}
+
+function mediaEvidence(failure: ReliabilityReport["failures"][number]): ReportMediaEvidence {
+  return failure.media_evidence ?? {
+    status: "not_declared",
+    evidence_id: null,
+    artifact_count: 0,
+    privacy: [],
+    views: [],
+    frame_indices: [],
+  }
+}
 
 type ReportOrigin =
   | { kind: "sample" }
@@ -206,8 +224,8 @@ function FailureExplorer({ report }: { report: ReliabilityReport }) {
             <div className="overflow-x-auto rounded-3xl border border-border bg-white">
               <table className="w-full min-w-[860px] border-collapse text-left">
                 <caption className="px-6 py-5 text-left text-sm text-muted-foreground">Read-only failure events from the active report</caption>
-                <thead className="border-y border-border bg-slate-50/80 text-xs uppercase tracking-[.12em] text-muted-foreground"><tr><th scope="col" className="px-6 py-4">Type</th><th scope="col" className="px-6 py-4">Variant</th><th scope="col" className="px-6 py-4">Frame</th><th scope="col" className="px-6 py-4">Tracks</th><th scope="col" className="px-6 py-4">Ground truth</th><th scope="col" className="px-6 py-4">Evidence range</th><th scope="col" className="px-6 py-4"><span className="sr-only">Inspect</span></th></tr></thead>
-                <tbody>{filteredFailures.map((failure) => <tr className="border-b border-border last:border-0" key={failure.event_id}><td className="px-6 py-4"><span className="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold capitalize text-indigo-700">{failure.event_type.replace("_", " ")}</span></td><td className="px-6 py-4 text-sm">{failure.variant}</td><td className="px-6 py-4 font-mono text-sm">{failure.frame_index}</td><td className="px-6 py-4 text-sm">{failure.track_ids.join(", ") || "—"}</td><td className="px-6 py-4 text-sm">{failure.ground_truth_ids.join(", ") || "—"}</td><td className="px-6 py-4 text-sm">{failure.evidence_frames.start}–{failure.evidence_frames.end - 1}</td><td className="px-6 py-4 text-right"><Button type="button" size="sm" variant={selectedEventId === failure.event_id ? "default" : "outline"} aria-pressed={selectedEventId === failure.event_id} aria-controls="failure-event-detail" onClick={() => setSelectedEventId(failure.event_id)}>Inspect</Button></td></tr>)}</tbody>
+                <thead className="border-y border-border bg-slate-50/80 text-xs uppercase tracking-[.12em] text-muted-foreground"><tr><th scope="col" className="px-6 py-4">Type</th><th scope="col" className="px-6 py-4">Variant</th><th scope="col" className="px-6 py-4">Frame</th><th scope="col" className="px-6 py-4">Tracks</th><th scope="col" className="px-6 py-4">Ground truth</th><th scope="col" className="px-6 py-4">Evidence range</th><th scope="col" className="px-6 py-4">Media</th><th scope="col" className="px-6 py-4"><span className="sr-only">Inspect</span></th></tr></thead>
+                <tbody>{filteredFailures.map((failure) => { const media = mediaEvidence(failure); return <tr className="border-b border-border last:border-0" key={failure.event_id}><td className="px-6 py-4"><span className="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold capitalize text-indigo-700">{failure.event_type.replace("_", " ")}</span></td><td className="px-6 py-4 text-sm">{failure.variant}</td><td className="px-6 py-4 font-mono text-sm">{failure.frame_index}</td><td className="px-6 py-4 text-sm">{failure.track_ids.join(", ") || "—"}</td><td className="px-6 py-4 text-sm">{failure.ground_truth_ids.join(", ") || "—"}</td><td className="px-6 py-4 text-sm">{failure.evidence_frames.start}–{failure.evidence_frames.end - 1}</td><td className="px-6 py-4 text-sm"><span className={media.status === "available" ? "rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700" : "rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600"}>{mediaLabels[media.status]}</span></td><td className="px-6 py-4 text-right"><Button type="button" size="sm" variant={selectedEventId === failure.event_id ? "default" : "outline"} aria-pressed={selectedEventId === failure.event_id} aria-controls="failure-event-detail" onClick={() => setSelectedEventId(failure.event_id)}>Inspect</Button></td></tr> })}</tbody>
               </table>
             </div>
           )}
@@ -224,6 +242,15 @@ function FailureExplorer({ report }: { report: ReliabilityReport }) {
                 <div><dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Event fingerprint</dt><dd className="mt-2 font-mono text-sm">{short(selectedEvent.event_id)}</dd></div>
                 <div><dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Run fingerprint</dt><dd className="mt-2 font-mono text-sm">{short(selectedEvent.run_id)}</dd></div>
               </dl>
+              <div className="mt-6 rounded-2xl border border-indigo-100 bg-white/80 p-5">
+                <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Image evidence</p>
+                <div className="mt-3 flex flex-wrap gap-x-8 gap-y-2 text-sm">
+                  <p><strong>{mediaLabels[mediaEvidence(selectedEvent).status]}</strong></p>
+                  <p>{mediaEvidence(selectedEvent).artifact_count} verified local {mediaEvidence(selectedEvent).artifact_count === 1 ? "image" : "images"}</p>
+                  <p>Privacy: {mediaEvidence(selectedEvent).privacy.join(", ") || "not applicable"}</p>
+                </div>
+                <p className="mt-3 text-xs leading-5 text-muted-foreground">Only verified availability and privacy metadata is shown. Image bytes are not embedded, loaded, or displayed.</p>
+              </div>
               <div className="mt-6 rounded-2xl border border-indigo-100 bg-white/80 p-5"><p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Recorded context</p><pre className="mt-3 overflow-x-auto whitespace-pre-wrap break-words font-mono text-xs leading-6 text-slate-700">{JSON.stringify(selectedEvent.context, null, 2)}</pre></div>
               <p className="mt-5 text-xs leading-5 text-muted-foreground">Track IDs shown here are local to this run. This panel displays report evidence and does not infer a persistent person identity.</p>
             </aside>
@@ -250,7 +277,7 @@ function LabReport({ report, origin }: { report: ReliabilityReport; origin: Repo
           {[
             ["Source", report.source.name, Database],
             ["Frame range", `${report.experiment.frame_range.start}–${report.experiment.frame_range.end - 1} · ${frameCount} frames`, ScanSearch],
-            ["Evidence", `${report.variants.length} variants · ${report.failure_event_total} failures`, FileCheck2],
+            ["Evidence", `${report.variants.length} variants · ${report.failure_event_total} failures · ${report.media_evidence?.image_artifacts ?? 0} local images`, FileCheck2],
             ["Decision", "No variant selected", LockKeyhole],
           ].map(([label, value, Icon]) => <div className="rounded-3xl border border-white bg-white/90 p-6 shadow-[0_18px_55px_-38px_rgba(30,41,59,.45)] ring-1 ring-slate-200/70" key={String(label)}><Icon className="size-5 text-primary" /><p className="mt-8 font-mono text-[10px] font-semibold uppercase tracking-[.16em] text-muted-foreground">{String(label)}</p><p className="mt-2 font-semibold">{String(value)}</p></div>)}
         </section>

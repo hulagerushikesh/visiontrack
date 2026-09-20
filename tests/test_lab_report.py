@@ -1,13 +1,19 @@
 """The local Lab report presents only fully verified bundle evidence."""
+
 from __future__ import annotations
 
+import hashlib
 import json
+import struct
+import zlib
 from pathlib import Path
 
 import pytest
 
 from visiontrack.lab import (
     DetectionRecord,
+    EvidenceImageArtifact,
+    EvidenceManifest,
     ExperimentManifest,
     GroundTruthRecord,
     SourceManifest,
@@ -20,12 +26,59 @@ from visiontrack.lab import (
     detection_payload_sha256,
     generate_local_report,
     ground_truth_payload_sha256,
+    read_failure_jsonl,
     run_comparison,
     sha256_json,
+    write_evidence_manifest,
     write_report_artifact,
 )
 
 NOW = "2026-09-20T08:00:00Z"
+
+
+def _png_chunk(kind: bytes, data: bytes) -> bytes:
+    return struct.pack(">I", len(data)) + kind + data + struct.pack(">I", zlib.crc32(kind + data))
+
+
+def _png_bytes(width: int = 2, height: int = 2) -> bytes:
+    signature = b"\x89PNG\r\n\x1a\n"
+    ihdr = struct.pack(">IIBBBBB", width, height, 8, 6, 0, 0, 0)
+    row = b"\x00" + (b"\x20\x40\x60\xff" * width)
+    return (
+        signature
+        + _png_chunk(b"IHDR", ihdr)
+        + _png_chunk(b"IDAT", zlib.compress(row * height))
+        + _png_chunk(b"IEND", b"")
+    )
+
+
+def add_synthetic_evidence(bundle: Path) -> tuple[EvidenceManifest, EvidenceImageArtifact]:
+    source = SourceManifest.from_json((bundle / "source.json").read_text(encoding="utf-8"))
+    failure = read_failure_jsonl(
+        bundle / "runs/baseline/failures.jsonl", frame_count=source.frame_count
+    )[0]
+    payload = _png_bytes()
+    artifact = EvidenceImageArtifact(
+        relative_path=f"frame-{failure.frame_index:06d}-crop.png",
+        frame_index=failure.frame_index,
+        image_sha256=hashlib.sha256(payload).hexdigest(),
+        byte_length=len(payload),
+        media_type="image/png",
+        width=2,
+        height=2,
+        view="crop",
+        privacy="synthetic",
+    )
+    manifest = EvidenceManifest.create(
+        source_id=source.source_id,
+        run_id=failure.run_id,
+        event_id=failure.event_id,
+        event_frame_index=failure.frame_index,
+        evidence_frames=failure.evidence_frames,
+        artifacts=(artifact,),
+    )
+    write_evidence_manifest(bundle, "baseline", manifest, {artifact.relative_path: payload})
+    return manifest, artifact
 
 
 def make_report_bundle(
@@ -75,9 +128,7 @@ def make_report_bundle(
         environment={"python": "3.12"},
         created_at=NOW,
     )
-    bundle = create_experiment_bundle(
-        tmp_path, experiment, source, detections, ground_truth
-    )
+    bundle = create_experiment_bundle(tmp_path, experiment, source, detections, ground_truth)
     run_comparison(bundle)
     calculate_bundle_metrics(bundle)
     if include_failures:
@@ -102,7 +153,67 @@ def test_report_model_is_content_addressed_and_bounded(tmp_path: Path) -> None:
     assert model["failure_event_total"] == 1
     assert model["failures"][0]["event_type"] == "miss"
     assert model["failures"][0]["evidence_frames"] == {"start": 0, "end": 3}
+    assert model["failures"][0]["media_evidence"] == {
+        "status": "not_declared",
+        "evidence_id": None,
+        "artifact_count": 0,
+        "privacy": [],
+        "views": [],
+        "frame_indices": [],
+    }
+    assert model["media_evidence"] == {
+        "event_manifests": 0,
+        "image_artifacts": 0,
+        "privacy_counts": {"source_pixels": 0, "redacted": 0, "synthetic": 0},
+        "images_embedded": False,
+    }
     assert model["decision"]["accepted_variant"] is None
+
+
+def test_report_surfaces_verified_media_metadata_without_embedding_images(tmp_path: Path) -> None:
+    bundle = make_report_bundle(tmp_path)
+    manifest, artifact = add_synthetic_evidence(bundle)
+
+    path = generate_local_report(bundle)
+    report_json = (bundle / "report/report.json").read_text(encoding="utf-8")
+    model = json.loads(report_json)
+    html = path.read_text(encoding="utf-8")
+
+    assert model["failures"][0]["media_evidence"] == {
+        "status": "available",
+        "evidence_id": manifest.evidence_id,
+        "artifact_count": 1,
+        "privacy": ["synthetic"],
+        "views": ["crop"],
+        "frame_indices": [artifact.frame_index],
+    }
+    assert model["media_evidence"] == {
+        "event_manifests": 1,
+        "image_artifacts": 1,
+        "privacy_counts": {"source_pixels": 0, "redacted": 0, "synthetic": 1},
+        "images_embedded": False,
+    }
+    assert "Available" in html
+    assert "synthetic" in html
+    assert "verified local images (not embedded)" in html
+    assert "<img" not in html
+    assert "relative_path" not in report_json
+
+
+def test_report_rejects_orphaned_and_corrupt_media_evidence(tmp_path: Path) -> None:
+    orphaned = make_report_bundle(tmp_path / "orphaned")
+    (orphaned / "runs/baseline/evidence/orphan").mkdir(parents=True)
+    with pytest.raises(ValueError, match="orphaned evidence"):
+        build_report_model(orphaned)
+
+    corrupt = make_report_bundle(tmp_path / "corrupt-media")
+    _, artifact = add_synthetic_evidence(corrupt)
+    image_path = corrupt / "runs/baseline/evidence"
+    event_directory = next(image_path.iterdir())
+    with (event_directory / artifact.relative_path).open("ab") as stream:
+        stream.write(b"x")
+    with pytest.raises(ValueError, match="byte_length"):
+        build_report_model(corrupt)
 
 
 def test_report_generation_is_standalone_accessible_and_idempotent(tmp_path: Path) -> None:
@@ -115,9 +226,9 @@ def test_report_generation_is_standalone_accessible_and_idempotent(tmp_path: Pat
 
     assert path == bundle / "report/index.html"
     assert first_json == (canonical_json(model) + "\n").encode()
-    assert "<main id=\"content\">" in html
+    assert '<main id="content">' in html
     assert "Skip to report content" in html
-    assert '<caption>Value and delta relative to baseline</caption>' in html
+    assert "<caption>Value and delta relative to baseline</caption>" in html
     assert '<th scope="col">Ground truth</th>' in html
     assert f'href="#evidence-{model["failures"][0]["event_id"]}"' in html
     assert "Fixture &lt;script&gt;alert(1)&lt;/script&gt;" in html
@@ -134,9 +245,7 @@ def test_report_refuses_unsealed_incomplete_or_corrupt_evidence(tmp_path: Path) 
     with pytest.raises(ValueError, match="comparison.json is required"):
         generate_local_report(unsealed)
 
-    incomplete = make_report_bundle(
-        tmp_path / "incomplete", include_failures=False, seal=True
-    )
+    incomplete = make_report_bundle(tmp_path / "incomplete", include_failures=False, seal=True)
     with pytest.raises(ValueError, match="failure artifacts are required"):
         generate_local_report(incomplete)
 
