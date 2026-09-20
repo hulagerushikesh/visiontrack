@@ -14,6 +14,7 @@ from .contracts import (
 from .failures import calculate_failure_events
 from .metrics import calculate_bundle_metrics
 from .mot import import_mot_ground_truth
+from .report import build_report_model, generate_local_report, render_report_html
 from .runner import load_experiment_bundle, resolve_variant_config, run_comparison
 from .storage import (
     create_experiment_bundle,
@@ -35,6 +36,8 @@ from .storage import (
     write_detection_jsonl,
     write_failure_jsonl,
     write_ground_truth_jsonl,
+    write_report_artifact,
+    write_report_artifacts,
     write_track_jsonl,
     write_variant_metrics,
 )
@@ -57,6 +60,9 @@ __all__ = [
     "import_mot_ground_truth",
     "calculate_bundle_metrics",
     "calculate_failure_events",
+    "build_report_model",
+    "generate_local_report",
+    "render_report_html",
     "read_detection_jsonl",
     "read_failure_jsonl",
     "read_ground_truth_jsonl",
@@ -72,6 +78,8 @@ __all__ = [
     "write_ground_truth_jsonl",
     "write_track_jsonl",
     "write_variant_metrics",
+    "write_report_artifact",
+    "write_report_artifacts",
     "write_comparison_summary",
     "load_experiment_bundle",
     "resolve_variant_config",

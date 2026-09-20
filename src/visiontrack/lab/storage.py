@@ -428,3 +428,43 @@ def write_variant_metrics(bundle: str | Path, variant: str, metrics: dict) -> Pa
     path = run_path / "metrics.json"
     _write_immutable(path, (canonical_json(metrics) + "\n").encode("utf-8"))
     return path
+
+
+def write_report_artifact(
+    bundle: str | Path, name: str, payload: bytes
+) -> Path:
+    """Persist one immutable, allow-listed artifact in a bundle's report directory."""
+    if name not in {"report.json", "index.html"}:
+        raise ValueError("report artifact name must be report.json or index.html")
+    report_path = Path(bundle) / "report"
+    if not report_path.is_dir():
+        raise ValueError(f"bundle report directory does not exist: {report_path}")
+    path = report_path / name
+    _write_immutable(path, payload)
+    return path
+
+
+def write_report_artifacts(
+    bundle: str | Path, *, report_json: bytes, index_html: bytes
+) -> Path:
+    """Persist the two immutable report files after a conflict preflight."""
+    report_path = Path(bundle) / "report"
+    if not report_path.is_dir():
+        raise ValueError(f"bundle report directory does not exist: {report_path}")
+    expected = {"report.json": report_json, "index.html": index_html}
+    conflicts = [
+        name
+        for name, payload in expected.items()
+        if (report_path / name).exists()
+        and (
+            not (report_path / name).is_file()
+            or (report_path / name).read_bytes() != payload
+        )
+    ]
+    if conflicts:
+        raise FileExistsError(
+            f"refusing to overwrite conflicting report files: {', '.join(conflicts)}"
+        )
+    for name, payload in expected.items():
+        _write_immutable(report_path / name, payload)
+    return report_path / "index.html"
