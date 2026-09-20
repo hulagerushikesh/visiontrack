@@ -188,6 +188,25 @@ only descriptive run diagnostics and marks quality claims as
 metrics and failure-event counts to their exact artifacts. Neither path selects
 a winner automatically.
 
+### 7. Optional image-evidence manifest
+
+Image evidence remains absent unless a user deliberately creates it. One
+content-addressed manifest belongs to one stored failure event and links its
+source, run, event ID, event frame, bounded evidence range, and zero or more
+local PNG artifacts.
+
+Each artifact records a safe relative path, frame index, exact byte length and
+SHA-256, `image/png` media type, pixel dimensions, `full_frame` or `crop` view,
+and one explicit privacy classification: `source_pixels`, `redacted`, or
+`synthetic`. Schema v1 intentionally accepts PNG only so its signature, chunk
+envelope, CRCs, and IHDR dimensions can be validated without adding an imaging
+library to the core runtime.
+
+Full-frame artifacts must match the source dimensions; crops may be smaller but
+never larger. Every artifact frame must fall inside the failure's evidence
+range. The manifest itself may contain no artifacts, preserving a portable way
+to say that image evidence was considered but not retained.
+
 ## Immutable local bundle
 
 ```text
@@ -204,6 +223,10 @@ reliability-lab/<experiment_id>/
       tracks.jsonl
       metrics.json
       failures.jsonl
+      evidence/               # absent unless explicitly created
+        <event_id>/
+          manifest.json
+          frame-*.png         # optional, locally retained
   comparison.json
   report/
     index.html
@@ -212,6 +235,20 @@ reliability-lab/<experiment_id>/
 The bundle contains no raw video unless the user explicitly requests a
 diagnostic export. A report may refer to a local video while it exists, but a
 portable report must still work without that video.
+
+### Image privacy boundary
+
+- **Full frames** can expose faces, screens, license plates, locations, and
+  bystanders. Retain them only with appropriate rights and a specific diagnostic
+  need.
+- **Crops** reduce unrelated context but are not anonymous; a crop can still be
+  biometric or otherwise identifying data.
+- **Redacted artifacts** must be labelled `redacted`. The label records intent,
+  not proof that redaction is sufficient for a particular law or deployment.
+- **Synthetic artifacts** contain no source pixels and are preferred for tests,
+  documentation, and reproducible examples.
+- Evidence stays local, is never created by default, and is not embedded in the
+  report or uploaded by this increment.
 
 ## Validation rules for the first implementation
 
@@ -524,7 +561,7 @@ different report resets the explorer through the report fingerprint. No metric
 is recomputed, no filter is persisted, and the detail panel continues to label
 track IDs as run-local rather than persistent person identities.
 
-## Next implementation increment
+## Twelfth implementation increment — complete
 
 Before displaying video or frames, the next code change should define the media
 evidence boundary for local Reliability Lab bundles:
@@ -538,6 +575,37 @@ evidence boundary for local Reliability Lab bundles:
 
 Browser directory access, image rendering in React, raw video playback, and
 acceptance recording remain separate later increments.
+
+Implemented with `EvidenceImageArtifact` and `EvidenceManifest` contracts plus
+an atomic `write_evidence_manifest` storage boundary. Manifests are
+content-addressed, canonically order their optional artifacts, and verify
+source/run/event lineage and evidence-frame bounds against the stored source
+and failure records. Image bytes are checked against their declared size,
+SHA-256, PNG signature and chunk CRCs, and IHDR dimensions before any artifact
+directory is committed.
+
+The matching reader revalidates lineage and every declared payload and rejects
+missing, extra, symlinked, or modified files rather than returning partial
+evidence.
+
+Evidence is stored only after an explicit API call beneath
+`runs/<variant>/evidence/<event_id>/`; normal experiment, comparison, report,
+and UI paths create nothing there. Repeated identical writes are safe,
+conflicting writes are refused, and all tests use generated synthetic PNG bytes.
+
+## Next implementation increment
+
+The next code change should surface optional media availability in the
+deterministic report model without rendering or copying image bytes:
+
+- Discover only stored evidence manifests linked to displayed failure events
+- Revalidate each manifest, artifact hash, and lineage during report generation
+- Add privacy classification and availability metadata to `report.json`
+- Keep the standalone and React reports text-only in this increment
+- Reject corrupt or orphaned evidence instead of silently omitting it
+
+Browser directory access, image rendering, raw video playback, and acceptance
+recording remain separate later increments.
 
 ## Acceptance criteria
 

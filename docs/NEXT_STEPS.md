@@ -59,6 +59,8 @@ The first local workflow and its versioned records are defined in
       retain the deterministic fixture as an explicit sample mode.
 - [x] Add ephemeral client-side failure filters and read-only event details
       without recalculating or mutating verified report evidence.
+- [x] Define immutable, optional local image-evidence manifests with strict
+      lineage, PNG, dimension, and privacy validation before rendering media.
 - [ ] Migrate the long-form research write-up into reusable article components.
 - [ ] Design a data-driven benchmark explorer before replacing generated reports.
 - [ ] Port the interactive tracker shell without changing tracker behavior or
