@@ -465,7 +465,7 @@ The route is available from both React and standalone navigation, works at the
 mobile breakpoint, respects reduced-motion preferences, and introduces no
 network fetch, local-file access, backend, or second metric calculation.
 
-## Next implementation increment
+## Tenth implementation increment — complete
 
 The next code change should let a user inspect their own generated report while
 preserving the same local-first boundary:
@@ -482,6 +482,35 @@ preserving the same local-first boundary:
 
 Directory access, raw bundle import, video/frame rendering, failure filtering,
 and acceptance recording remain separate later increments.
+
+Implemented on `/lab` as an explicit browser file import. The selected
+`report.json` is read directly with the browser File API, parsed only in memory,
+and never uploaded or sent through a network request. The active filename and
+content-addressed report fingerprint stay visible, and the user can deliberately
+return to the checked-in illustrative sample.
+
+Runtime validation now covers the nested experiment and source provenance,
+frame and media bounds, consistent metric sets, variant and baseline lineage,
+failure-set hashes and counts, event/run relationships, presentation totals,
+human-decision boundary, and stated limitations. Malformed JSON, unsupported
+schema versions, and incomplete or inconsistent evidence produce explicit
+error states while leaving the importer available for retry.
+
+## Next implementation increment
+
+The next code change should make large verified failure sets easier to inspect
+without changing evidence or adding a backend:
+
+- Add client-side filters for variant and failure type
+- Add frame search and a deliberate reset action
+- Show the active subset and total event counts without recomputing metrics
+- Add an accessible event-detail panel for context and lineage fields already
+  present in `report.json`
+- Keep filter state ephemeral and keep variant acceptance disabled
+- Test empty results, combined filters, keyboard operation, and reset behavior
+
+Video/frame rendering, directory or raw-bundle import, and acceptance recording
+remain separate later increments.
 
 ## Acceptance criteria
 
