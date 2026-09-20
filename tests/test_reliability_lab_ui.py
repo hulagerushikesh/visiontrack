@@ -44,3 +44,28 @@ def test_lab_ui_keeps_evidence_and_identity_boundaries_visible() -> None:
     assert '<caption className=' in component
     assert 'scope="col"' in component
     assert 'scope="row"' in component
+
+
+def test_lab_import_stays_private_and_can_return_to_sample() -> None:
+    component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+
+    assert 'type="file"' in component
+    assert 'accept="application/json,.json"' in component
+    assert "JSON.parse(await file.text())" in component
+    assert "Processed only in this browser tab. Nothing is uploaded." in component
+    assert "Return to sample" in component
+    assert 'input.value = ""' in component
+    assert "fetch(" not in component
+    assert "FormData" not in component
+
+
+def test_lab_import_validates_nested_evidence() -> None:
+    types = (ROOT / "src/features/reliability-lab/types.ts").read_text()
+
+    assert "Experiment provenance or frame bounds are incomplete." in types
+    assert "Source evidence, hashes, or media bounds are incomplete." in types
+    assert "All variants must report the same metric set." in types
+    assert "failure.run_id !== runIds.get(failure.variant)" in types
+    assert "Failure event totals do not match the verified variant evidence." in types
+    assert "The human decision boundary is missing or invalid." in types
+    assert "The report must state at least one non-empty limitation." in types

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, type ChangeEvent } from "react"
 import { motion, useReducedMotion } from "motion/react"
 import {
   AlertTriangle,
@@ -7,12 +7,15 @@ import {
   CircleOff,
   Database,
   FileCheck2,
+  FileJson2,
   Fingerprint,
   FlaskConical,
   Info,
   LockKeyhole,
   ScanSearch,
   ShieldCheck,
+  Upload,
+  RotateCcw,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { reliabilityReportFixture } from "./fixture"
@@ -31,6 +34,10 @@ const failureLabels: Record<FailureType, string> = {
 }
 
 const failureOrder = Object.keys(failureLabels) as FailureType[]
+
+type ReportOrigin =
+  | { kind: "sample" }
+  | { kind: "file"; filename: string }
 
 function number(value: number, signed = false) {
   const rendered = Number.isInteger(value) ? String(value) : value.toFixed(4).replace(/0+$/, "").replace(/\.$/, "")
@@ -51,6 +58,41 @@ function LoadingState() {
         {[0, 1, 2].map((item) => <div key={item} className="h-36 animate-pulse rounded-3xl bg-white shadow-sm" />)}
       </div>
     </div>
+  )
+}
+
+function ImportControls({
+  origin,
+  reportId,
+  onImport,
+  onSample,
+}: {
+  origin: ReportOrigin
+  reportId?: string
+  onImport: (event: ChangeEvent<HTMLInputElement>) => void
+  onSample: () => void
+}) {
+  return (
+    <section className="rounded-3xl border border-indigo-100 bg-white/90 p-5 shadow-lg shadow-slate-200/50 backdrop-blur sm:p-6" aria-label="Report source">
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex min-w-0 items-start gap-3">
+          <div className="grid size-10 shrink-0 place-items-center rounded-2xl bg-indigo-50 text-primary"><FileJson2 className="size-5" /></div>
+          <div className="min-w-0">
+            <p className="text-sm font-semibold">{origin.kind === "sample" ? "Illustrative sample report" : origin.filename}</p>
+            <p className="mt-1 text-xs leading-5 text-muted-foreground">
+              {reportId ? `Report ${short(reportId)} · ` : ""}Processed only in this browser tab. Nothing is uploaded.
+            </p>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {origin.kind === "file" && <Button type="button" variant="outline" onClick={onSample}><RotateCcw className="size-4" />Return to sample</Button>}
+          <label className="inline-flex h-9 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-xs transition hover:bg-primary/90 focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+            <Upload className="size-4" />Import report.json
+            <input className="sr-only" type="file" accept="application/json,.json" onChange={onImport} />
+          </label>
+        </div>
+      </div>
+    </section>
   )
 }
 
@@ -88,15 +130,15 @@ function MetricTable({ report }: { report: ReliabilityReport }) {
   )
 }
 
-function LabReport({ report }: { report: ReliabilityReport }) {
+function LabReport({ report, origin }: { report: ReliabilityReport; origin: ReportOrigin }) {
   const reduce = useReducedMotion()
   const frameCount = report.experiment.frame_range.end - report.experiment.frame_range.start
   return (
-    <div className="relative pb-28 pt-32 lg:pt-40">
+    <div className="relative pb-28 pt-14 lg:pt-16">
       <div className="orb -left-56 -top-32 bg-indigo-300/30" /><div className="orb -right-64 top-72 bg-emerald-200/30" />
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <motion.section initial={reduce ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .5 }} aria-labelledby="lab-title">
-          <div className="flex flex-wrap items-center gap-3"><span className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1.5 font-mono text-[10px] font-semibold uppercase tracking-[.16em] text-primary"><FlaskConical className="size-3" />Reliability Lab</span><span className="rounded-full bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700">Demonstration fixture · illustrative data</span></div>
+          <div className="flex flex-wrap items-center gap-3"><span className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1.5 font-mono text-[10px] font-semibold uppercase tracking-[.16em] text-primary"><FlaskConical className="size-3" />Reliability Lab</span><span className={origin.kind === "sample" ? "rounded-full bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700" : "rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700"}>{origin.kind === "sample" ? "Demonstration fixture · illustrative data" : "Private local import · verified schema"}</span></div>
           <div className="mt-7 grid gap-8 lg:grid-cols-[1.1fr_.9fr] lg:items-end"><div><h1 id="lab-title" className="max-w-4xl text-balance text-5xl font-semibold leading-[.98] tracking-[-.055em] sm:text-7xl">Evidence before <span className="gradient-text">confidence.</span></h1><p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">Compare tracker configurations on identical detections, inspect measured failures, and trace every claim to immutable evidence.</p></div><div className="rounded-3xl border border-white bg-white/85 p-6 shadow-xl shadow-slate-200/60 backdrop-blur"><div className="flex items-start gap-4"><div className="grid size-11 shrink-0 place-items-center rounded-2xl bg-emerald-50 text-emerald-600"><ShieldCheck className="size-5" /></div><div><p className="font-semibold">Verified, read-only report</p><p className="mt-1 text-sm leading-6 text-muted-foreground">The Python pipeline remains the source of truth. This screen does not edit results or choose a winner.</p></div></div></div></div>
         </motion.section>
 
@@ -113,7 +155,7 @@ function LabReport({ report }: { report: ReliabilityReport }) {
 
         <section className="mt-20" aria-labelledby="failures-title"><div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Failure taxonomy</p><h2 id="failures-title" className="mt-3 text-4xl font-semibold tracking-[-.04em]">Where tracking breaks.</h2></div><p className="max-w-md text-sm leading-6 text-muted-foreground">Counts use the same correspondence as the published metrics—not a second UI-only calculation.</p></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{failureOrder.map((failure) => <article className="rounded-3xl border border-border bg-white p-6" key={failure}><p className="text-sm font-medium text-muted-foreground">{failureLabels[failure]}</p><div className="mt-5 space-y-3">{report.variants.map((variant) => <div className="flex items-center justify-between" key={variant.name}><span className="text-sm">{variant.name}</span><strong className="text-2xl">{variant.failure_counts[failure]}</strong></div>)}</div></article>)}</div></section>
 
-        <section className="mt-20" aria-labelledby="events-title"><div className="mb-8"><p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Frame-level evidence</p><h2 id="events-title" className="mt-3 text-4xl font-semibold tracking-[-.04em]">Inspectable events.</h2></div>{report.failures.length === 0 ? <div className="rounded-3xl border border-emerald-200 bg-emerald-50 p-8 text-center"><CheckCircle2 className="mx-auto size-8 text-emerald-600" /><h3 className="mt-4 text-xl font-semibold">No measured failures</h3><p className="mt-2 text-sm text-emerald-800">The verified artifact contains an empty failure set.</p></div> : <div className="overflow-x-auto rounded-3xl border border-border bg-white"><table className="w-full min-w-[760px] border-collapse text-left"><caption className="px-6 py-5 text-left text-sm text-muted-foreground">Showing {report.failure_event_displayed} of {report.failure_event_total} events from the fixture</caption><thead className="border-y border-border bg-slate-50/80 text-xs uppercase tracking-[.12em] text-muted-foreground"><tr><th scope="col" className="px-6 py-4">Type</th><th scope="col" className="px-6 py-4">Variant</th><th scope="col" className="px-6 py-4">Frame</th><th scope="col" className="px-6 py-4">Tracks</th><th scope="col" className="px-6 py-4">Ground truth</th><th scope="col" className="px-6 py-4">Evidence range</th></tr></thead><tbody>{report.failures.map((failure) => <tr className="border-b border-border last:border-0" key={failure.event_id}><td className="px-6 py-4"><span className="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold capitalize text-indigo-700">{failure.event_type.replace("_", " ")}</span></td><td className="px-6 py-4 text-sm">{failure.variant}</td><td className="px-6 py-4 font-mono text-sm">{failure.frame_index}</td><td className="px-6 py-4 text-sm">{failure.track_ids.join(", ") || "—"}</td><td className="px-6 py-4 text-sm">{failure.ground_truth_ids.join(", ") || "—"}</td><td className="px-6 py-4 text-sm">{failure.evidence_frames.start}–{failure.evidence_frames.end - 1}</td></tr>)}</tbody></table></div>}</section>
+        <section className="mt-20" aria-labelledby="events-title"><div className="mb-8"><p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Frame-level evidence</p><h2 id="events-title" className="mt-3 text-4xl font-semibold tracking-[-.04em]">Inspectable events.</h2></div>{report.failures.length === 0 ? <div className="rounded-3xl border border-emerald-200 bg-emerald-50 p-8 text-center"><CheckCircle2 className="mx-auto size-8 text-emerald-600" /><h3 className="mt-4 text-xl font-semibold">No measured failures</h3><p className="mt-2 text-sm text-emerald-800">The verified artifact contains an empty failure set.</p></div> : <div className="overflow-x-auto rounded-3xl border border-border bg-white"><table className="w-full min-w-[760px] border-collapse text-left"><caption className="px-6 py-5 text-left text-sm text-muted-foreground">Showing {report.failure_event_displayed} of {report.failure_event_total} events from the active report</caption><thead className="border-y border-border bg-slate-50/80 text-xs uppercase tracking-[.12em] text-muted-foreground"><tr><th scope="col" className="px-6 py-4">Type</th><th scope="col" className="px-6 py-4">Variant</th><th scope="col" className="px-6 py-4">Frame</th><th scope="col" className="px-6 py-4">Tracks</th><th scope="col" className="px-6 py-4">Ground truth</th><th scope="col" className="px-6 py-4">Evidence range</th></tr></thead><tbody>{report.failures.map((failure) => <tr className="border-b border-border last:border-0" key={failure.event_id}><td className="px-6 py-4"><span className="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold capitalize text-indigo-700">{failure.event_type.replace("_", " ")}</span></td><td className="px-6 py-4 text-sm">{failure.variant}</td><td className="px-6 py-4 font-mono text-sm">{failure.frame_index}</td><td className="px-6 py-4 text-sm">{failure.track_ids.join(", ") || "—"}</td><td className="px-6 py-4 text-sm">{failure.ground_truth_ids.join(", ") || "—"}</td><td className="px-6 py-4 text-sm">{failure.evidence_frames.start}–{failure.evidence_frames.end - 1}</td></tr>)}</tbody></table></div>}</section>
 
         <section className="mt-20 grid gap-5 lg:grid-cols-[1.1fr_.9fr]" aria-label="Evidence provenance and limitations"><div className="rounded-[1.75rem] bg-slate-950 p-7 text-white sm:p-9"><Fingerprint className="size-6 text-cyan-300" /><h2 className="mt-7 text-3xl font-semibold tracking-tight">Traceable provenance</h2><dl className="mt-7 grid gap-5 text-sm"><div><dt className="text-white/45">Report</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.report_id)}</dd></div><div><dt className="text-white/45">Experiment</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.experiment.experiment_id)}</dd></div><div><dt className="text-white/45">Detections</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.source.detection_sha256)}</dd></div><div><dt className="text-white/45">Ground truth</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.source.ground_truth_sha256)}</dd></div></dl></div><div className="rounded-[1.75rem] border border-indigo-100 bg-indigo-50/70 p-7 sm:p-9"><Info className="size-6 text-indigo-600" /><h2 className="mt-7 text-3xl font-semibold tracking-tight">Boundaries stay visible</h2><ul className="mt-6 space-y-4">{report.limitations.map((limitation) => <li className="flex gap-3 text-sm leading-6 text-slate-700" key={limitation}><CheckCircle2 className="mt-1 size-4 shrink-0 text-indigo-500" />{limitation}</li>)}</ul><Button disabled className="mt-8 w-full">Variant selection is not enabled</Button><p className="mt-3 text-center text-xs text-muted-foreground">A future step will record an explicit, auditable human decision.</p></div></section>
       </div>
@@ -123,12 +165,40 @@ function LabReport({ report }: { report: ReliabilityReport }) {
 
 export default function ReliabilityLab() {
   const [state, setState] = useState<ReportLoadResult | { kind: "loading" }>({ kind: "loading" })
+  const [origin, setOrigin] = useState<ReportOrigin>({ kind: "sample" })
   useEffect(() => {
     let active = true
     queueMicrotask(() => { if (active) setState(parseReportModel(reliabilityReportFixture)) })
     return () => { active = false }
   }, [])
   if (state.kind === "loading") return <LoadingState />
-  if (state.kind !== "ready") return <ReportError state={state} />
-  return <LabReport report={state.report} />
+
+  const loadSample = () => {
+    setOrigin({ kind: "sample" })
+    setState(parseReportModel(reliabilityReportFixture))
+  }
+  const importReport = async (event: ChangeEvent<HTMLInputElement>) => {
+    const input = event.currentTarget
+    const file = input.files?.[0]
+    if (!file) return
+    setOrigin({ kind: "file", filename: file.name })
+    setState({ kind: "loading" })
+    try {
+      const report = JSON.parse(await file.text()) as unknown
+      setState(parseReportModel(report))
+    } catch {
+      setState({ kind: "missing", message: "The selected file is not valid JSON." })
+    } finally {
+      input.value = ""
+    }
+  }
+
+  return (
+    <div>
+      <div className="relative z-10 mx-auto max-w-7xl px-5 pt-28 lg:px-8">
+        <ImportControls origin={origin} reportId={state.kind === "ready" ? state.report.report_id : undefined} onImport={importReport} onSample={loadSample} />
+      </div>
+      {state.kind === "ready" ? <LabReport report={state.report} origin={origin} /> : <ReportError state={state} />}
+    </div>
+  )
 }

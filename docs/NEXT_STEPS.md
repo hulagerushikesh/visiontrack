@@ -55,7 +55,7 @@ The first local workflow and its versioned records are defined in
       verified comparison and failure artifacts before adding an interactive UI.
 - [x] Add a read-only React Reliability Lab route backed by the versioned report
       model before introducing local-file import or interactive decisions.
-- [ ] Add private, client-side `report.json` import with strict validation and
+- [x] Add private, client-side `report.json` import with strict validation and
       retain the deterministic fixture as an explicit sample mode.
 - [ ] Migrate the long-form research write-up into reusable article components.
 - [ ] Design a data-driven benchmark explorer before replacing generated reports.
