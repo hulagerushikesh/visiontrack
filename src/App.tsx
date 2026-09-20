@@ -2,9 +2,10 @@ import { useEffect, useState, type ReactNode } from "react"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { Activity, ArrowRight, BarChart3, BookOpen, Boxes, Camera, CheckCircle2, ChevronRight, Code2, FlaskConical, Github, GraduationCap, Layers3, Menu, Play, Sparkles, Target, X, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import ReliabilityLab from "@/features/reliability-lab/ReliabilityLab"
 import { cn } from "@/lib/utils"
 
-const nav=[['Live tracker','/live'],['Learn','/teaching'],['Research','/writeup'],['Results','/benchmark'],['Docs','/docs/']]
+const nav=[['Live tracker','/live'],['Learn','/teaching'],['Lab','/lab'],['Research','/writeup'],['Results','/benchmark'],['Docs','/docs/']]
 
 function Shell({children}:{children:ReactNode}){
   const [menu,setMenu]=useState(false)
@@ -19,7 +20,7 @@ function Shell({children}:{children:ReactNode}){
       <AnimatePresence>{menu&&<motion.nav initial={{height:0,opacity:0,y:-8}} animate={{height:'auto',opacity:1,y:0}} exit={{height:0,opacity:0,y:-8}} className="mx-auto mt-2 max-w-7xl overflow-hidden rounded-2xl border border-white/80 bg-white/95 shadow-xl backdrop-blur-xl md:hidden"><div className="grid gap-1 p-3">{nav.map(([label,href])=><a key={href} href={href} className="rounded-xl px-4 py-3 text-sm font-medium hover:bg-secondary">{label}</a>)}</div></motion.nav>}</AnimatePresence>
     </header>
     <main>{children}</main>
-    <footer className="border-t border-border bg-white"><div className="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-10 text-sm text-muted-foreground sm:flex-row sm:items-center lg:px-8"><span className="font-semibold text-foreground">VisionTrack</span><span>Open, explainable multi-object tracking.</span><span className="sm:ml-auto">MIT · 369 tests</span><a href="https://github.com/hulagerushikesh/visiontrack" aria-label="GitHub" className="transition hover:text-primary"><Github className="size-4"/></a></div></footer>
+    <footer className="border-t border-border bg-white"><div className="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-10 text-sm text-muted-foreground sm:flex-row sm:items-center lg:px-8"><span className="font-semibold text-foreground">VisionTrack</span><span>Open, explainable multi-object tracking.</span><span className="sm:ml-auto">MIT · 453 tests</span><a href="https://github.com/hulagerushikesh/visiontrack" aria-label="GitHub" className="transition hover:text-primary"><Github className="size-4"/></a></div></footer>
   </div>
 }
 
@@ -66,5 +67,5 @@ function Teaching(){return <div className="mx-auto max-w-7xl px-5 pb-28 pt-32 lg
 function Video(){return <div className="mx-auto max-w-7xl px-5 pb-28 pt-32 lg:px-8 lg:pt-40"><Reveal><Eyebrow>Real footage · 300 frames</Eyebrow><div className="grid gap-8 lg:grid-cols-2 lg:items-end"><h1 className="text-5xl font-semibold tracking-[-.05em] sm:text-7xl">Same tracker.<br/><span className="text-muted-foreground">Real streets.</span></h1><p className="max-w-xl text-lg leading-8 text-muted-foreground">YOLOX detections meet the same from-scratch Kalman, Hungarian, and ByteTrack pipeline—107 identities across a crowded Bangkok intersection.</p></div></Reveal><Reveal className="mt-14"><div className="overflow-hidden rounded-[1.75rem] border border-border bg-black shadow-2xl"><video controls autoPlay muted loop playsInline preload="metadata" poster="/street_tracking_poster.jpg" className="aspect-video w-full"><source src="/street_tracking.mp4" type="video/mp4"/></video></div></Reveal><div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">{[['300','frames'],['107','unique IDs'],['6','street classes'],['0','tracking libraries']].map(([n,l],i)=><Reveal key={l} delay={i*.05}><div className="rounded-2xl border border-border bg-card p-5"><p className="text-3xl font-semibold">{n}</p><p className="mt-1 text-sm text-muted-foreground">{l}</p></div></Reveal>)}</div></div>}
 
 function NotFound(){return <div className="grid min-h-[80vh] place-items-center px-5 pt-16 text-center"><div><Boxes className="mx-auto size-10 text-primary"/><h1 className="mt-5 text-4xl font-semibold">Route not found</h1><Button asChild className="mt-7"><a href="/">Return home</a></Button></div></div>}
-function App(){const path=location.pathname.replace(/\/$/,'')||'/';const page=path==='/'?<Home/>:path==='/teaching'?<Teaching/>:path==='/video'?<Video/>:<NotFound/>;return <Shell><AnimatePresence mode="wait"><motion.div key={path} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:.2}}>{page}</motion.div></AnimatePresence></Shell>}
+function App(){const path=location.pathname.replace(/\/$/,'')||'/';const page=path==='/'?<Home/>:path==='/teaching'?<Teaching/>:path==='/video'?<Video/>:path==='/lab'?<ReliabilityLab/>:<NotFound/>;return <Shell><AnimatePresence mode="wait"><motion.div key={path} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:.2}}>{page}</motion.div></AnimatePresence></Shell>}
 export default App

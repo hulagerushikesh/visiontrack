@@ -21,6 +21,7 @@
     { "src": "/video/?", "dest": "/app/index.html" },
     { "src": "/live/?", "dest": "/web/live.html" },
     { "src": "/teaching/?", "dest": "/app/index.html" },
+    { "src": "/lab/?", "dest": "/app/index.html" },
     { "src": "/study/?", "dest": "/learning/LEARNING_PATH.html" },
     { "src": "/roadmap/?", "dest": "/learning/CV_ROADMAP.html" },
     { "src": "/demo/?", "dest": "/viz/webdemo/index.html" },
