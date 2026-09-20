@@ -2,16 +2,21 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 import shutil
+import struct
 import tempfile
-from collections.abc import Callable, Iterable
+import zlib
+from collections.abc import Callable, Iterable, Mapping
 from pathlib import Path
 from typing import Any, TypeVar
 
 from .contracts import (
     ContractRecord,
     DetectionRecord,
+    EvidenceImageArtifact,
+    EvidenceManifest,
     ExperimentManifest,
     FailureEvent,
     GroundTruthRecord,
@@ -287,6 +292,162 @@ def verify_ground_truth_payload(source: SourceManifest, payload: bytes) -> None:
             "ground-truth payload SHA-256 does not match source manifest: "
             f"expected {source.ground_truth_sha256}, got {actual}"
         )
+
+
+def _png_dimensions(payload: bytes) -> tuple[int, int]:
+    """Validate a PNG chunk envelope and return its IHDR dimensions."""
+    if not payload.startswith(b"\x89PNG\r\n\x1a\n"):
+        raise ValueError("evidence payload is not a PNG file")
+    offset = 8
+    dimensions: tuple[int, int] | None = None
+    seen_idat = False
+    seen_iend = False
+    chunk_index = 0
+    while offset < len(payload):
+        if offset + 12 > len(payload):
+            raise ValueError("evidence PNG has a truncated chunk")
+        length = struct.unpack(">I", payload[offset : offset + 4])[0]
+        chunk_type = payload[offset + 4 : offset + 8]
+        data_start = offset + 8
+        data_end = data_start + length
+        crc_end = data_end + 4
+        if crc_end > len(payload):
+            raise ValueError("evidence PNG has a truncated chunk payload")
+        expected_crc = struct.unpack(">I", payload[data_end:crc_end])[0]
+        actual_crc = zlib.crc32(chunk_type + payload[data_start:data_end]) & 0xFFFFFFFF
+        if expected_crc != actual_crc:
+            raise ValueError("evidence PNG chunk CRC is invalid")
+        if chunk_index == 0 and (chunk_type != b"IHDR" or length != 13):
+            raise ValueError("evidence PNG must start with a valid IHDR chunk")
+        if chunk_type == b"IHDR":
+            if dimensions is not None or length != 13:
+                raise ValueError("evidence PNG has an invalid IHDR chunk")
+            width, height = struct.unpack(">II", payload[data_start : data_start + 8])
+            if width <= 0 or height <= 0:
+                raise ValueError("evidence PNG dimensions must be positive")
+            dimensions = (width, height)
+        elif chunk_type == b"IDAT":
+            seen_idat = True
+        elif chunk_type == b"IEND":
+            if length != 0:
+                raise ValueError("evidence PNG has an invalid IEND chunk")
+            seen_iend = True
+            if crc_end != len(payload):
+                raise ValueError("evidence PNG contains bytes after IEND")
+        offset = crc_end
+        chunk_index += 1
+    if dimensions is None or not seen_idat or not seen_iend:
+        raise ValueError("evidence PNG is missing required chunks")
+    return dimensions
+
+
+def verify_evidence_image_payload(
+    artifact: EvidenceImageArtifact, payload: bytes
+) -> None:
+    """Verify exact local image bytes against their declared artifact record."""
+    if not isinstance(payload, bytes):
+        raise ValueError("evidence payload must be bytes")
+    if len(payload) != artifact.byte_length:
+        raise ValueError("evidence payload byte_length does not match artifact")
+    if _sha256(payload) != artifact.image_sha256:
+        raise ValueError("evidence payload SHA-256 does not match artifact")
+    if artifact.media_type != "image/png":
+        raise ValueError("schema v1 evidence payload must use image/png")
+    if _png_dimensions(payload) != (artifact.width, artifact.height):
+        raise ValueError("evidence PNG dimensions do not match artifact")
+
+
+def write_evidence_manifest(
+    bundle: str | Path,
+    variant: str,
+    manifest: EvidenceManifest,
+    artifacts: Mapping[str, bytes],
+) -> Path:
+    """Atomically persist optional, verified image evidence for one failure event."""
+    if not _RUN_NAME.fullmatch(variant) or variant in {".", ".."}:
+        raise ValueError("variant name must be a safe 1-64 character path component")
+    bundle_path = Path(bundle)
+    run_path = bundle_path / "runs" / variant
+    source_path = bundle_path / "source.json"
+    run_metadata_path = run_path / "run.json"
+    failure_path = run_path / "failures.jsonl"
+    if not source_path.is_file() or not run_metadata_path.is_file() or not failure_path.is_file():
+        raise ValueError("source, run, and failure artifacts are required before image evidence")
+    source = SourceManifest.from_json(source_path.read_text(encoding="utf-8"))
+    try:
+        run_metadata = json.loads(run_metadata_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise ValueError("run metadata is not valid JSON") from exc
+    if not isinstance(run_metadata, dict):
+        raise ValueError("run metadata must be a JSON object")
+    if run_metadata.get("source_id") != source.source_id:
+        raise ValueError("run source_id does not match source manifest")
+    if run_metadata.get("run_id") != manifest.run_id:
+        raise ValueError("evidence run_id does not match variant run metadata")
+    failures = read_failure_jsonl(failure_path, frame_count=source.frame_count)
+    matching = [failure for failure in failures if failure.event_id == manifest.event_id]
+    if len(matching) != 1:
+        raise ValueError("evidence event_id must match exactly one stored failure event")
+    manifest.verify_lineage(source, matching[0])
+
+    declared_paths = {artifact.relative_path for artifact in manifest.artifacts}
+    if set(artifacts) != declared_paths:
+        raise ValueError("provided evidence artifact paths do not match the manifest")
+    expected: dict[str, bytes] = {"manifest.json": _json_document(manifest)}
+    for artifact in manifest.artifacts:
+        payload = artifacts[artifact.relative_path]
+        verify_evidence_image_payload(artifact, payload)
+        expected[artifact.relative_path] = payload
+
+    evidence_root = run_path / "evidence"
+    evidence_root.mkdir(exist_ok=True)
+    destination = evidence_root / manifest.event_id
+    if destination.exists():
+        _verify_existing_bundle(destination, expected)
+        return destination / "manifest.json"
+    staging = Path(tempfile.mkdtemp(prefix=f".{manifest.event_id}.", dir=evidence_root))
+    try:
+        for relative, payload in expected.items():
+            target = staging / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(payload)
+        try:
+            staging.rename(destination)
+        except FileExistsError:
+            _verify_existing_bundle(destination, expected)
+        return destination / "manifest.json"
+    finally:
+        if staging.exists():
+            shutil.rmtree(staging)
+
+
+def read_evidence_manifest(
+    path: str | Path,
+    *,
+    source: SourceManifest,
+    failure: FailureEvent,
+) -> EvidenceManifest:
+    """Read and fully verify one stored image-evidence directory."""
+    manifest_path = Path(path)
+    if manifest_path.name != "manifest.json" or not manifest_path.is_file():
+        raise ValueError("evidence path must name an existing manifest.json file")
+    if manifest_path.is_symlink():
+        raise ValueError("evidence manifest must not be a symbolic link")
+    manifest = EvidenceManifest.from_json(manifest_path.read_text(encoding="utf-8"))
+    manifest.verify_lineage(source, failure)
+    root = manifest_path.parent
+    expected = {"manifest.json", *(artifact.relative_path for artifact in manifest.artifacts)}
+    actual: set[str] = set()
+    for candidate in root.rglob("*"):
+        if candidate.is_symlink():
+            raise ValueError("evidence directory must not contain symbolic links")
+        if candidate.is_file():
+            actual.add(candidate.relative_to(root).as_posix())
+    if actual != expected:
+        raise ValueError("stored evidence files do not match the manifest")
+    for artifact in manifest.artifacts:
+        verify_evidence_image_payload(artifact, (root / artifact.relative_path).read_bytes())
+    return manifest
 
 
 def _verify_existing_bundle(path: Path, expected: dict[str, bytes]) -> None:

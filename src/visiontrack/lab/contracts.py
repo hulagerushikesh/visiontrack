@@ -12,6 +12,7 @@ import math
 import re
 from dataclasses import asdict, dataclass, fields
 from datetime import datetime, timezone
+from pathlib import PurePosixPath
 from typing import Any, ClassVar, TypeVar
 
 from ..detection.base import Detection
@@ -317,6 +318,154 @@ class FailureEvent(ContractRecord):
         return cls(
             event_id=sha256_json(content),
             **values,
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class EvidenceImageArtifact(ContractRecord):
+    """One optional, local PNG artifact referenced by evidence metadata."""
+
+    relative_path: str
+    frame_index: int
+    image_sha256: str
+    byte_length: int
+    media_type: str
+    width: int
+    height: int
+    view: str
+    privacy: str
+    schema_version: int = SCHEMA_VERSION
+
+    def __post_init__(self) -> None:
+        if self.schema_version != SCHEMA_VERSION:
+            raise ValueError(f"unsupported schema_version: {self.schema_version}")
+        if not isinstance(self.relative_path, str) or not self.relative_path:
+            raise ValueError("relative_path must not be empty")
+        path = PurePosixPath(self.relative_path)
+        if (
+            path.is_absolute()
+            or path.as_posix() != self.relative_path
+            or any(part in {"", ".", ".."} for part in path.parts)
+            or "\\" in self.relative_path
+        ):
+            raise ValueError("relative_path must be a safe POSIX relative path")
+        if self.media_type != "image/png" or path.suffix.lower() != ".png":
+            raise ValueError("schema v1 evidence artifacts must be image/png files")
+        if not isinstance(self.frame_index, int) or self.frame_index < 0:
+            raise ValueError("frame_index must be a non-negative integer")
+        _validate_hash(self.image_sha256, "image_sha256")
+        if not isinstance(self.byte_length, int) or self.byte_length <= 0:
+            raise ValueError("byte_length must be a positive integer")
+        if not isinstance(self.width, int) or not isinstance(self.height, int):
+            raise ValueError("width and height must be integers")
+        if self.width <= 0 or self.height <= 0:
+            raise ValueError("width and height must be positive")
+        if self.view not in {"full_frame", "crop"}:
+            raise ValueError("view must be full_frame or crop")
+        if self.privacy not in {"source_pixels", "redacted", "synthetic"}:
+            raise ValueError("privacy must be source_pixels, redacted, or synthetic")
+
+
+@dataclass(frozen=True, slots=True)
+class EvidenceManifest(ContractRecord):
+    """Content-addressed optional image evidence for one failure event."""
+
+    evidence_id: str
+    source_id: str
+    run_id: str
+    event_id: str
+    event_frame_index: int
+    evidence_frames: dict[str, int]
+    artifacts: tuple[EvidenceImageArtifact, ...]
+    schema_version: int = SCHEMA_VERSION
+
+    def __post_init__(self) -> None:
+        if self.schema_version != SCHEMA_VERSION:
+            raise ValueError(f"unsupported schema_version: {self.schema_version}")
+        _validate_hash(self.evidence_id, "evidence_id")
+        _validate_hash(self.source_id, "source_id")
+        _validate_hash(self.run_id, "run_id")
+        _validate_hash(self.event_id, "event_id")
+        if not isinstance(self.event_frame_index, int) or self.event_frame_index < 0:
+            raise ValueError("event_frame_index must be a non-negative integer")
+        if set(self.evidence_frames) != {"start", "end"}:
+            raise ValueError("evidence_frames must contain only start and end")
+        start, end = self.evidence_frames["start"], self.evidence_frames["end"]
+        if not isinstance(start, int) or not isinstance(end, int):
+            raise ValueError("evidence frame bounds must be integers")
+        if start < 0 or not start <= self.event_frame_index < end:
+            raise ValueError("evidence_frames must contain event_frame_index")
+        try:
+            artifacts = tuple(
+                item
+                if isinstance(item, EvidenceImageArtifact)
+                else EvidenceImageArtifact.from_dict(item)
+                for item in self.artifacts
+            )
+        except (TypeError, ValueError) as exc:
+            raise ValueError(f"invalid evidence artifact: {exc}") from exc
+        artifacts = tuple(
+            sorted(artifacts, key=lambda item: (item.frame_index, item.view, item.relative_path))
+        )
+        object.__setattr__(self, "artifacts", artifacts)
+        paths = [item.relative_path for item in artifacts]
+        frame_views = [(item.frame_index, item.view) for item in artifacts]
+        if len(paths) != len(set(paths)):
+            raise ValueError("evidence artifact relative_path values must be unique")
+        if len(frame_views) != len(set(frame_views)):
+            raise ValueError("each evidence frame/view pair must be unique")
+        if any(not start <= item.frame_index < end for item in artifacts):
+            raise ValueError("evidence artifact frame_index must fall within evidence_frames")
+        if self.evidence_id != self.derive_evidence_id():
+            raise ValueError("evidence_id does not match manifest content")
+
+    def derive_evidence_id(self) -> str:
+        data = self.to_dict()
+        data.pop("evidence_id")
+        return sha256_json(data)
+
+    def verify_lineage(self, source: SourceManifest, failure: FailureEvent) -> None:
+        """Verify this manifest against its source and failure records."""
+        if self.source_id != source.source_id:
+            raise ValueError("evidence source_id does not match source manifest")
+        if self.run_id != failure.run_id:
+            raise ValueError("evidence run_id does not match failure event")
+        if self.event_id != failure.event_id:
+            raise ValueError("evidence event_id does not match failure event")
+        if self.event_frame_index != failure.frame_index:
+            raise ValueError("evidence event_frame_index does not match failure event")
+        if self.evidence_frames != failure.evidence_frames:
+            raise ValueError("evidence frame range does not match failure event")
+        if self.evidence_frames["end"] > source.frame_count:
+            raise ValueError("evidence frame range exceeds source frame_count")
+        for artifact in self.artifacts:
+            if artifact.width > source.width or artifact.height > source.height:
+                raise ValueError("evidence artifact dimensions exceed the source dimensions")
+            if artifact.view == "full_frame" and (
+                artifact.width != source.width or artifact.height != source.height
+            ):
+                raise ValueError("full-frame evidence must match source dimensions")
+
+    @classmethod
+    def create(cls, **values: Any) -> EvidenceManifest:
+        artifacts = tuple(
+            item
+            if isinstance(item, EvidenceImageArtifact)
+            else EvidenceImageArtifact.from_dict(item)
+            for item in values.get("artifacts", ())
+        )
+        artifacts = tuple(
+            sorted(artifacts, key=lambda item: (item.frame_index, item.view, item.relative_path))
+        )
+        content = {
+            **values,
+            "artifacts": [item.to_dict() for item in artifacts],
+            "schema_version": SCHEMA_VERSION,
+        }
+        return cls(
+            evidence_id=sha256_json(content),
+            artifacts=artifacts,
+            **{key: value for key, value in values.items() if key != "artifacts"},
         )
 
 
