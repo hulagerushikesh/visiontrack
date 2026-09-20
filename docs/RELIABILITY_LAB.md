@@ -496,7 +496,7 @@ human-decision boundary, and stated limitations. Malformed JSON, unsupported
 schema versions, and incomplete or inconsistent evidence produce explicit
 error states while leaving the importer available for retry.
 
-## Next implementation increment
+## Eleventh implementation increment — complete
 
 The next code change should make large verified failure sets easier to inspect
 without changing evidence or adding a backend:
@@ -511,6 +511,33 @@ without changing evidence or adding a backend:
 
 Video/frame rendering, directory or raw-bundle import, and acceptance recording
 remain separate later increments.
+
+Implemented as an ephemeral explorer over only the failure events carried by
+the active, validated report. A user can combine variant and failure-type
+filters with an exact frame lookup, see both the matching displayed subset and
+the verified total, reset deliberately, and inspect the selected event's
+context, run fingerprint, event fingerprint, and evidence-frame range.
+
+The controls are native keyboard-operable form elements, filter changes clear
+stale selection, empty results remain explicit, and importing or returning to a
+different report resets the explorer through the report fingerprint. No metric
+is recomputed, no filter is persisted, and the detail panel continues to label
+track IDs as run-local rather than persistent person identities.
+
+## Next implementation increment
+
+Before displaying video or frames, the next code change should define the media
+evidence boundary for local Reliability Lab bundles:
+
+- Define a versioned, content-addressed evidence-manifest record linking an
+  event ID and frame index to an optional local image artifact
+- Validate artifact hashes, media type, dimensions, and source/run lineage
+- Generate no media by default and preserve the current report-only workflow
+- Document explicit privacy guidance for full frames, crops, and redaction
+- Add deterministic contract and storage tests using synthetic image bytes
+
+Browser directory access, image rendering in React, raw video playback, and
+acceptance recording remain separate later increments.
 
 ## Acceptance criteria
 
