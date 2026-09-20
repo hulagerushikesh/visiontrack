@@ -198,9 +198,12 @@ local PNG artifacts.
 Each artifact records a safe relative path, frame index, exact byte length and
 SHA-256, `image/png` media type, pixel dimensions, `full_frame` or `crop` view,
 and one explicit privacy classification: `source_pixels`, `redacted`, or
-`synthetic`. Schema v1 intentionally accepts PNG only so its signature, chunk
-envelope, CRCs, and IHDR dimensions can be validated without adding an imaging
-library to the core runtime.
+`synthetic`. Producer-created artifacts additionally record the SHA-256 of the
+caller-supplied source frame and the exact crop/full-frame and redaction
+operation. Older manually created manifests remain readable without these
+additive production fields. Schema v1 intentionally accepts PNG only so its
+signature, chunk envelope, CRCs, and IHDR dimensions can be validated without
+adding an imaging library to the core runtime.
 
 Full-frame artifacts must match the source dimensions; crops may be smaller but
 never larger. Every artifact frame must fall inside the failure's evidence
@@ -625,7 +628,7 @@ create browser object URLs, or otherwise display source pixels. Existing
 schema-v1 reports without the additive metadata remain readable, while reports
 that declare the new summary must provide valid per-event metadata.
 
-## Next implementation increment
+## Fourteenth implementation increment — complete
 
 The next code change should provide an explicit, privacy-aware producer for the
 optional evidence format before any UI attempts to display it:
@@ -639,6 +642,61 @@ optional evidence format before any UI attempts to display it:
   overwrite conflicts
 - Add deterministic synthetic tests; do not add video decoding, uploads, or
   browser rendering in the same increment
+
+Browser directory access, image rendering, raw video playback, and acceptance
+recording remain separate later increments.
+
+Implemented as the opt-in `produce_failure_evidence` Python API, available with
+the `visiontrack-mot[lab]` extra. The caller supplies a mapping of verified
+failure-range frame indices to local full-frame PNG bytes. Nothing scans a
+directory, decodes video, accesses a camera, or uploads data implicitly.
+
+The default view is a crop. A caller may provide an integer `crop_bounds`
+rectangle, or the producer derives one deterministically from the failure's
+stored ground-truth and track boxes with bounded padding. Missing or malformed
+boxes require explicit bounds rather than guessing. Every input PNG is checked
+for size, structure, CRCs, source dimensions, frame range, and single-frame
+decodability before the producer writes anything.
+
+Privacy is derived by the producer operation: synthetic source manifests yield
+`synthetic`; applying the built-in whole-image pixelation yields `redacted`;
+otherwise non-synthetic pixels remain `source_pixels`. Unredacted full-frame
+source pixels require `allow_full_frame_source_pixels=True`. Each artifact
+records the input-frame hash and exact production operation, so the stored
+privacy metadata is tied to immutable provenance instead of being editable UI
+copy.
+
+Artifacts are capped by frame count, input bytes, source pixels, output pixels,
+and output bytes. Identical repeated production is idempotent, while a second
+operation that would change an existing event directory is refused by the
+immutable evidence writer.
+
+Example:
+
+```python
+from visiontrack.lab import produce_failure_evidence
+
+manifest_path = produce_failure_evidence(
+    bundle,
+    "baseline",
+    event_id,
+    {42: frame_png},
+    crop_bounds=(120, 80, 420, 520),
+)
+```
+
+## Next implementation increment
+
+The next code change should expose this producer through a deliberate local CLI
+workflow without broadening its privacy boundary:
+
+- Select one bundle, variant, failure event, and explicit `FRAME=PNG_PATH`
+  inputs
+- Preview the resolved crop, privacy class, and output limits before writing
+- Require a confirmation flag for unredacted full-frame source pixels
+- Return the content-addressed manifest path and a concise artifact summary
+- Keep video decoding, directory scanning, browser rendering, and uploads out
+  of the command
 
 Browser directory access, image rendering, raw video playback, and acceptance
 recording remain separate later increments.

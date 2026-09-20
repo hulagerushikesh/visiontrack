@@ -4,6 +4,7 @@ The tracker and experiment harness remain the computation layer.  These records
 are the small, explicit persistence boundary around them: canonical JSON,
 content hashes, validation, and adapters from the existing public tracker types.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -334,6 +335,8 @@ class EvidenceImageArtifact(ContractRecord):
     height: int
     view: str
     privacy: str
+    source_image_sha256: str | None = None
+    production: dict[str, Any] | None = None
     schema_version: int = SCHEMA_VERSION
 
     def __post_init__(self) -> None:
@@ -364,6 +367,51 @@ class EvidenceImageArtifact(ContractRecord):
             raise ValueError("view must be full_frame or crop")
         if self.privacy not in {"source_pixels", "redacted", "synthetic"}:
             raise ValueError("privacy must be source_pixels, redacted, or synthetic")
+        if (self.source_image_sha256 is None) != (self.production is None):
+            raise ValueError(
+                "source_image_sha256 and production must either both be present or both be absent"
+            )
+        _validate_hash(
+            self.source_image_sha256,
+            "source_image_sha256",
+            optional=True,
+        )
+        if self.production is not None:
+            if set(self.production) != {"kind", "crop_bounds", "redaction"}:
+                raise ValueError("production must contain only kind, crop_bounds, and redaction")
+            kind = self.production["kind"]
+            crop_bounds = self.production["crop_bounds"]
+            redaction = self.production["redaction"]
+            if kind not in {"crop", "full_frame"} or kind != self.view:
+                raise ValueError("production kind must match the artifact view")
+            if kind == "crop":
+                if (
+                    not isinstance(crop_bounds, list)
+                    or len(crop_bounds) != 4
+                    or any(
+                        not isinstance(value, int) or isinstance(value, bool)
+                        for value in crop_bounds
+                    )
+                ):
+                    raise ValueError("crop production requires four integer crop_bounds")
+                left, top, right, bottom = crop_bounds
+                if left < 0 or top < 0 or right <= left or bottom <= top:
+                    raise ValueError("crop_bounds must define a positive bounded rectangle")
+                if (right - left, bottom - top) != (self.width, self.height):
+                    raise ValueError("crop_bounds dimensions must match the artifact")
+            elif crop_bounds is not None:
+                raise ValueError("full-frame production must not declare crop_bounds")
+            if redaction not in {None, "pixelate_max_8x8"}:
+                raise ValueError("unsupported evidence redaction operation")
+            if (self.privacy == "redacted") != (redaction is not None):
+                raise ValueError("redacted privacy must match the production operation")
+
+    def to_dict(self) -> dict[str, Any]:
+        data = ContractRecord.to_dict(self)
+        if self.production is None:
+            data.pop("source_image_sha256")
+            data.pop("production")
+        return data
 
 
 @dataclass(frozen=True, slots=True)
@@ -424,6 +472,11 @@ class EvidenceManifest(ContractRecord):
         data.pop("evidence_id")
         return sha256_json(data)
 
+    def to_dict(self) -> dict[str, Any]:
+        data = ContractRecord.to_dict(self)
+        data["artifacts"] = [artifact.to_dict() for artifact in self.artifacts]
+        return data
+
     def verify_lineage(self, source: SourceManifest, failure: FailureEvent) -> None:
         """Verify this manifest against its source and failure records."""
         if self.source_id != source.source_id:
@@ -445,6 +498,10 @@ class EvidenceManifest(ContractRecord):
                 artifact.width != source.width or artifact.height != source.height
             ):
                 raise ValueError("full-frame evidence must match source dimensions")
+            if artifact.production is not None and artifact.view == "crop":
+                _, _, right, bottom = artifact.production["crop_bounds"]
+                if right > source.width or bottom > source.height:
+                    raise ValueError("evidence crop_bounds exceed the source dimensions")
 
     @classmethod
     def create(cls, **values: Any) -> EvidenceManifest:
@@ -539,13 +596,15 @@ class ExperimentManifest(ContractRecord):
         timestamp = created_at or _utc_now()
         variants = tuple(dict(v) for v in values["variants"])
         metrics = tuple(values["metrics"])
-        config_sha256 = sha256_json({
-            "source_id": values["source_id"],
-            "baseline": values["baseline"],
-            "variants": list(variants),
-            "metrics": list(metrics),
-            "frame_range": values["frame_range"],
-        })
+        config_sha256 = sha256_json(
+            {
+                "source_id": values["source_id"],
+                "baseline": values["baseline"],
+                "variants": list(variants),
+                "metrics": list(metrics),
+                "frame_range": values["frame_range"],
+            }
+        )
         content = {
             **values,
             "variants": list(variants),

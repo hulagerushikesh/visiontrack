@@ -1,4 +1,5 @@
 """Reliability Lab image evidence stays optional, local, and content-addressed."""
+
 from __future__ import annotations
 
 import hashlib
@@ -14,6 +15,7 @@ from visiontrack.lab import (
     EvidenceManifest,
     FailureEvent,
     SourceManifest,
+    produce_failure_evidence,
     read_evidence_manifest,
     verify_evidence_image_payload,
     write_evidence_manifest,
@@ -63,9 +65,9 @@ def image_artifact(
     )
 
 
-def source_manifest() -> SourceManifest:
+def source_manifest(*, kind: str = "synthetic") -> SourceManifest:
     return SourceManifest.create(
-        kind="synthetic",
+        kind=kind,
         name="evidence-fixture",
         detection_sha256="a" * 64,
         ground_truth_sha256="b" * 64,
@@ -80,14 +82,14 @@ def source_manifest() -> SourceManifest:
     )
 
 
-def failure_event() -> FailureEvent:
+def failure_event(*, context: dict | None = None) -> FailureEvent:
     return FailureEvent.create(
         run_id=RUN_ID,
         frame_index=1,
         event_type="miss",
         track_ids=(),
         ground_truth_ids=(7,),
-        context={"metric_id": "c" * 64},
+        context=context or {"metric_id": "c" * 64},
         evidence_frames={"start": 0, "end": 3},
     )
 
@@ -105,9 +107,14 @@ def evidence_manifest(*artifacts: EvidenceImageArtifact) -> EvidenceManifest:
     )
 
 
-def make_bundle(tmp_path: Path) -> tuple[Path, SourceManifest, FailureEvent]:
-    source = source_manifest()
-    failure = failure_event()
+def make_bundle(
+    tmp_path: Path,
+    *,
+    source_kind: str = "synthetic",
+    failure_context: dict | None = None,
+) -> tuple[Path, SourceManifest, FailureEvent]:
+    source = source_manifest(kind=source_kind)
+    failure = failure_event(context=failure_context)
     bundle = tmp_path / "bundle"
     run = bundle / "runs" / "baseline"
     run.mkdir(parents=True)
@@ -152,6 +159,22 @@ def test_evidence_artifact_rejects_unsafe_or_ambiguous_metadata(change, message)
     values = image_artifact(payload).to_dict()
     values.update(change)
     with pytest.raises(ValueError, match=message):
+        EvidenceImageArtifact.from_dict(values)
+
+
+def test_evidence_artifact_validates_additive_production_provenance() -> None:
+    payload = png_bytes()
+    values = image_artifact(payload).to_dict()
+    values["source_image_sha256"] = "a" * 64
+    with pytest.raises(ValueError, match="both be present"):
+        EvidenceImageArtifact.from_dict(values)
+
+    values["production"] = {
+        "kind": "full_frame",
+        "crop_bounds": None,
+        "redaction": "pixelate_max_8x8",
+    }
+    with pytest.raises(ValueError, match="redacted privacy"):
         EvidenceImageArtifact.from_dict(values)
 
 
@@ -230,9 +253,7 @@ def test_evidence_storage_is_atomic_idempotent_and_local_to_failure(tmp_path: Pa
     assert path.read_text().endswith("\n")
     assert (expected / artifact.relative_path).read_bytes() == payload
     assert (
-        write_evidence_manifest(
-            bundle, "baseline", manifest, {artifact.relative_path: payload}
-        )
+        write_evidence_manifest(bundle, "baseline", manifest, {artifact.relative_path: payload})
         == path
     )
     assert read_evidence_manifest(path, source=source, failure=failure) == manifest
@@ -271,3 +292,157 @@ def test_evidence_storage_refuses_missing_conflicting_or_mismatched_inputs(tmp_p
     path.write_text("{}\n", encoding="utf-8")
     with pytest.raises(FileExistsError, match="manifest.json"):
         write_evidence_manifest(bundle, "baseline", manifest, {artifact.relative_path: payload})
+
+
+def test_evidence_producer_defaults_to_a_bounded_synthetic_crop(tmp_path: Path) -> None:
+    bundle, source, failure = make_bundle(tmp_path)
+    source_payload = png_bytes()
+
+    path = produce_failure_evidence(
+        bundle,
+        "baseline",
+        failure.event_id,
+        {failure.frame_index: source_payload},
+        crop_bounds=(1, 0, 4, 3),
+    )
+    manifest = read_evidence_manifest(path, source=source, failure=failure)
+    artifact = manifest.artifacts[0]
+
+    assert artifact.view == "crop"
+    assert artifact.privacy == "synthetic"
+    assert (artifact.width, artifact.height) == (3, 3)
+    assert artifact.source_image_sha256 == hashlib.sha256(source_payload).hexdigest()
+    assert artifact.production == {
+        "kind": "crop",
+        "crop_bounds": [1, 0, 4, 3],
+        "redaction": None,
+    }
+    assert artifact.relative_path == "frame-000001-crop.png"
+    assert (
+        produce_failure_evidence(
+            bundle,
+            "baseline",
+            failure.event_id,
+            {failure.frame_index: source_payload},
+            crop_bounds=(1, 0, 4, 3),
+        )
+        == path
+    )
+
+
+def test_evidence_producer_derives_default_crop_from_failure_boxes(tmp_path: Path) -> None:
+    bundle, source, failure = make_bundle(
+        tmp_path,
+        failure_context={
+            "metric_id": "c" * 64,
+            "ground_truth_box": [1, 1, 3, 3],
+            "track_box": [2, 0, 4, 2],
+        },
+    )
+    path = produce_failure_evidence(
+        bundle,
+        "baseline",
+        failure.event_id,
+        {failure.frame_index: png_bytes()},
+    )
+    artifact = read_evidence_manifest(path, source=source, failure=failure).artifacts[0]
+
+    assert artifact.view == "crop"
+    assert artifact.production["crop_bounds"] == [0, 0, 4, 3]
+
+
+def test_evidence_producer_derives_privacy_from_its_operation(tmp_path: Path) -> None:
+    source_payload = png_bytes()
+    redacted_bundle, redacted_source, redacted_failure = make_bundle(
+        tmp_path / "redacted", source_kind="mot"
+    )
+    with pytest.raises(ValueError, match="explicit opt-in"):
+        produce_failure_evidence(
+            redacted_bundle,
+            "baseline",
+            redacted_failure.event_id,
+            {redacted_failure.frame_index: source_payload},
+            view="full_frame",
+        )
+
+    redacted_path = produce_failure_evidence(
+        redacted_bundle,
+        "baseline",
+        redacted_failure.event_id,
+        {redacted_failure.frame_index: source_payload},
+        view="full_frame",
+        redact=True,
+    )
+    redacted = read_evidence_manifest(
+        redacted_path, source=redacted_source, failure=redacted_failure
+    ).artifacts[0]
+    assert redacted.privacy == "redacted"
+    assert redacted.production["redaction"] == "pixelate_max_8x8"
+    assert redacted.image_sha256 != redacted.source_image_sha256
+
+    source_bundle, source, source_failure = make_bundle(
+        tmp_path / "source-pixels", source_kind="mot"
+    )
+    source_path = produce_failure_evidence(
+        source_bundle,
+        "baseline",
+        source_failure.event_id,
+        {source_failure.frame_index: source_payload},
+        view="full_frame",
+        allow_full_frame_source_pixels=True,
+    )
+    source_artifact = read_evidence_manifest(
+        source_path, source=source, failure=source_failure
+    ).artifacts[0]
+    assert source_artifact.privacy == "source_pixels"
+    assert source_artifact.production["redaction"] is None
+
+
+def test_evidence_producer_rejects_ambiguous_unsafe_and_conflicting_output(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    source_payload = png_bytes()
+    ambiguous, _, failure = make_bundle(tmp_path / "ambiguous")
+    with pytest.raises(ValueError, match="crop_bounds are required"):
+        produce_failure_evidence(
+            ambiguous,
+            "baseline",
+            failure.event_id,
+            {failure.frame_index: source_payload},
+        )
+    with pytest.raises(ValueError, match="outside the failure evidence range"):
+        produce_failure_evidence(
+            ambiguous,
+            "baseline",
+            failure.event_id,
+            {3: source_payload},
+            crop_bounds=(0, 0, 2, 2),
+        )
+
+    conflict, _, conflict_failure = make_bundle(tmp_path / "conflict")
+    produce_failure_evidence(
+        conflict,
+        "baseline",
+        conflict_failure.event_id,
+        {conflict_failure.frame_index: source_payload},
+        crop_bounds=(0, 0, 2, 2),
+    )
+    with pytest.raises(FileExistsError, match="conflicting content"):
+        produce_failure_evidence(
+            conflict,
+            "baseline",
+            conflict_failure.event_id,
+            {conflict_failure.frame_index: source_payload},
+            crop_bounds=(1, 0, 4, 3),
+        )
+
+    limited, _, limited_failure = make_bundle(tmp_path / "limited")
+    monkeypatch.setattr("visiontrack.lab.evidence.MAX_EVIDENCE_IMAGE_PIXELS", 4)
+    with pytest.raises(ValueError, match="output pixel limit"):
+        produce_failure_evidence(
+            limited,
+            "baseline",
+            limited_failure.event_id,
+            {limited_failure.frame_index: source_payload},
+            crop_bounds=(0, 0, 3, 3),
+        )
