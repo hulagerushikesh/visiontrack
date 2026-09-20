@@ -401,7 +401,7 @@ without changing the explicit human-decision boundary. Ignored MOT distractors
 are filtered by the shared preprocessing path and therefore cannot become Lab
 failures accidentally.
 
-## Next implementation increment
+## Eighth implementation increment — complete
 
 The next code change should make the verified bundle understandable without
 introducing application state or a backend:
@@ -419,6 +419,39 @@ introducing application state or a backend:
 The first report remains static and local. Interactive filtering, video/frame
 rendering, human acceptance recording, and the React explorer follow only after
 this presentation boundary is deterministic and tested.
+
+Implemented in `src/visiontrack/lab/report.py`. Report generation first
+revalidates the sealed comparison and every upstream run, metric, and failure
+artifact. It then creates a content-addressed `report.json` view model and a
+standalone `report/index.html` with experiment provenance, paired metrics and
+deltas, failure counts, frame-level failure rows, bounded inspection ranges,
+and explicit privacy and identity limitations. Both outputs are immutable and
+contain no external scripts, fonts, images, or network dependencies.
+
+The HTML displays at most 500 deterministically ordered failure events and
+states when it has truncated that presentation. The canonical
+`failures.jsonl` artifacts remain complete. Raw video and frames are not copied
+or embedded, and variant acceptance remains unset.
+
+## Next implementation increment
+
+The next code change should establish the first product-facing Reliability Lab
+screen without changing the verified Python pipeline:
+
+- Define TypeScript types for the versioned `report.json` model
+- Add a read-only React route using the existing Tailwind/shadcn design system
+- Present the overview, paired metrics, failure taxonomy, provenance, and
+  limitations from a checked-in deterministic fixture
+- Include loading, unsupported-schema, missing-evidence, and empty-failure
+  states
+- Preserve keyboard access, semantic tables, mobile layout, and reduced-motion
+  behavior
+- Keep decisions disabled and clearly explain that track IDs are not person IDs
+
+Local directory/file import, video rendering, event filtering, and acceptance
+recording remain later increments. This first React slice proves the report
+contract can drive a clear product screen without adding a backend or creating
+a second source of truth.
 
 ## Acceptance criteria
 

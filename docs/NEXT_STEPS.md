@@ -51,8 +51,10 @@ The first local workflow and its versioned records are defined in
       truth and update comparisons without introducing automatic selection.
 - [x] Extract structured, evidence-linked failure events from verified GT and
       tracker outputs for frame-level diagnosis.
-- [ ] Build a deterministic, read-only local Reliability Lab report from the
+- [x] Build a deterministic, read-only local Reliability Lab report from the
       verified comparison and failure artifacts before adding an interactive UI.
+- [ ] Add a read-only React Reliability Lab route backed by the versioned report
+      model before introducing local-file import or interactive decisions.
 - [ ] Migrate the long-form research write-up into reusable article components.
 - [ ] Design a data-driven benchmark explorer before replacing generated reports.
 - [ ] Port the interactive tracker shell without changing tracker behavior or
