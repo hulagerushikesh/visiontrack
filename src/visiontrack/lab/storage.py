@@ -14,6 +14,7 @@ from typing import Any, TypeVar
 
 from .contracts import (
     ContractRecord,
+    DecisionRecord,
     DetectionRecord,
     EvidenceImageArtifact,
     EvidenceManifest,
@@ -576,6 +577,18 @@ def write_comparison_summary(bundle: str | Path, summary: dict) -> Path:
         raise ValueError(f"experiment bundle does not exist: {bundle_path}")
     path = bundle_path / "comparison.json"
     _write_immutable(path, (canonical_json(summary) + "\n").encode("utf-8"))
+    return path
+
+
+def _write_decision_record(bundle: str | Path, decision: DecisionRecord) -> Path:
+    """Persist one immutable, content-addressed human decision."""
+    if not isinstance(decision, DecisionRecord):
+        raise ValueError("decision must be a DecisionRecord")
+    bundle_path = Path(bundle)
+    if not bundle_path.is_dir():
+        raise ValueError(f"experiment bundle does not exist: {bundle_path}")
+    path = bundle_path / "decision.json"
+    _write_immutable(path, _json_document(decision))
     return path
 
 
