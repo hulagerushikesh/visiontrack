@@ -805,7 +805,7 @@ replacing the audit trail. Reading repeats the complete upstream verification
 and rejects modified decisions, reports, comparisons, runs, or evidence.
 Metrics never choose or suggest the recorded outcome.
 
-## Next implementation increment
+## Eighteenth implementation increment — complete
 
 Expose the decision boundary through a preview-first local CLI before adding
 browser controls:
@@ -820,6 +820,54 @@ browser controls:
   refuse conflicting second decisions
 
 React decision controls, collaborative review, remote storage, and raw video
+playback remain later increments.
+
+Implemented as `visiontrack lab-decision`. The command requires an explicit
+status, rationale, reviewer-provided author label, and UTC timestamp. An
+accepted decision must name one variant from the fully revalidated report; a
+`rejected_all` decision cannot name a variant.
+
+By default the command is read-only. It prints the complete proposed decision,
+its content fingerprint, and the exact experiment, source, comparison, and
+report fingerprints it binds. The preview and write paths share the
+`plan_human_decision` API, so both enforce the same canonical contract. Only an
+explicit `--write` creates the root-level `decision.json`; identical repeats
+remain idempotent and conflicting second decisions are refused.
+
+```bash
+visiontrack lab-decision "$BUNDLE" \
+  --status accepted \
+  --variant baseline \
+  --rationale "Meets the registered criteria." \
+  --author local-reviewer \
+  --decided-at 2026-09-21T08:30:00Z
+
+# Repeat only after reviewing the preview:
+visiontrack lab-decision "$BUNDLE" \
+  --status accepted \
+  --variant baseline \
+  --rationale "Meets the registered criteria." \
+  --author local-reviewer \
+  --decided-at 2026-09-21T08:30:00Z \
+  --write
+```
+
+## Next implementation increment
+
+Make an existing decision inspectable in the React Reliability Lab without
+allowing the browser to create or mutate it:
+
+- Let the user explicitly select one local `decision.json`
+- Verify its schema, content fingerprint, and complete lineage against the
+  active validated report in browser memory
+- Display accepted/rejected status, rationale, author, timestamp, and decision
+  fingerprint in a clearly read-only audit panel
+- Keep decision creation in the preview-first CLI and do not scan directories,
+  upload files, or infer a choice from metrics
+- Cover missing, malformed, unsupported, mismatched, and valid decisions in
+  frontend tests
+
+Browser decision creation, collaborative review, remote storage, and raw video
 playback remain later increments.
 
 ## Acceptance criteria

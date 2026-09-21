@@ -144,11 +144,16 @@ Track a real video — or a live camera — from the command line (needs a YOLOX
 visiontrack track input.mp4 out.mp4 --model models/yolox_nano.onnx
 visiontrack webcam --model models/yolox_nano.onnx        # live camera, real time
 visiontrack lab-evidence BUNDLE VARIANT EVENT_ID --frame 42=frame.png --crop 120,80,420,520
+visiontrack lab-decision BUNDLE --status accepted --variant baseline \
+  --rationale "Meets the registered criteria." --author local-reviewer \
+  --decided-at 2026-09-21T08:30:00Z
 ```
 
 `lab-evidence` previews only by default; add `--write` after checking its crop,
-privacy class, and limits. CLI subcommands: `demo`, `eval`, `ablate`, `track`,
-`webcam`, `lab-evidence`. Full public API: [docs/API.md](docs/API.md) ·
+privacy class, and limits. `lab-decision` likewise previews the exact choice and
+verified lineage before `--write` creates `decision.json`. CLI subcommands:
+`demo`, `eval`, `ablate`, `track`, `webcam`, `lab-evidence`, `lab-decision`.
+Full public API: [docs/API.md](docs/API.md) ·
 packaging/release: [docs/RELEASE.md](docs/RELEASE.md).
 
 **No install at all** — run the tracker live in your browser at **[visiontrack.hulage.in/live](https://visiontrack.hulage.in/live)**: the same from-scratch association (Kalman + Hungarian + ByteTrack), ported to JavaScript and running on-device over your webcam or a sample clip.

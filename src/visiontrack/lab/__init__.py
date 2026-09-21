@@ -14,7 +14,7 @@ from .contracts import (
     canonical_json,
     sha256_json,
 )
-from .decision import read_human_decision, record_human_decision
+from .decision import plan_human_decision, read_human_decision, record_human_decision
 from .evidence import EvidenceProductionPlan, plan_failure_evidence, produce_failure_evidence
 from .failures import calculate_failure_events
 from .metrics import calculate_bundle_metrics
@@ -71,6 +71,7 @@ __all__ = [
     "ground_truth_payload_sha256",
     "import_mot_ground_truth",
     "plan_failure_evidence",
+    "plan_human_decision",
     "produce_failure_evidence",
     "read_human_decision",
     "record_human_decision",

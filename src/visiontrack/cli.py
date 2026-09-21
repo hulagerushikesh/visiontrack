@@ -13,6 +13,8 @@ Subcommands
     and Mahalanobis gating) to quantify each component's contribution.
 ``lab-evidence``
     Preview or produce bounded, privacy-classified local failure evidence.
+``lab-decision``
+    Preview or immutably record one explicit Reliability Lab decision.
 
 The demo, default evaluation, and ablation commands use the built-in synthetic
 generator, so ``visiontrack demo`` works without model or video downloads.
@@ -441,6 +443,57 @@ def cmd_lab_evidence(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_lab_decision(args: argparse.Namespace) -> int:
+    """Preview or explicitly write one human decision over verified evidence."""
+    from .lab import plan_human_decision, record_human_decision
+
+    try:
+        decision = plan_human_decision(
+            args.bundle,
+            status=args.status,
+            accepted_variant=args.variant,
+            rationale=args.rationale,
+            author=args.author,
+            decided_at=args.decided_at,
+        )
+    except (OSError, ValueError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+
+    print("Human decision preview")
+    print(f"  bundle: {args.bundle}")
+    print(f"  status: {decision.status}")
+    print(f"  accepted variant: {decision.accepted_variant or 'none (all rejected)'}")
+    print(f"  rationale: {decision.rationale}")
+    print(f"  author: {decision.author}")
+    print(f"  decided at: {decision.decided_at}")
+    print(f"  experiment: {decision.experiment_id}")
+    print(f"  source: {decision.source_id}")
+    print(f"  comparison: {decision.comparison_id}")
+    print(f"  report: {decision.report_id}")
+    print(f"  decision: {decision.decision_id}")
+    if not args.write:
+        print("Preview only; nothing was written. Add --write to record this decision.")
+        return 0
+
+    try:
+        path = record_human_decision(
+            args.bundle,
+            status=args.status,
+            accepted_variant=args.variant,
+            rationale=args.rationale,
+            author=args.author,
+            decided_at=args.decided_at,
+        )
+    except (FileExistsError, OSError, ValueError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    print("Recorded immutable human decision")
+    print(f"  decision: {decision.decision_id}")
+    print(f"  path: {path}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="visiontrack", description="Online multi-object tracking demo & evaluation"
@@ -572,6 +625,35 @@ def build_parser() -> argparse.ArgumentParser:
         help="write the previewed evidence; without this flag no PNG is read or written",
     )
     p_evidence.set_defaults(func=cmd_lab_evidence)
+
+    p_decision = sub.add_parser(
+        "lab-decision",
+        help="preview or record one explicit Reliability Lab decision",
+    )
+    p_decision.add_argument("bundle", help="Reliability Lab bundle directory")
+    p_decision.add_argument(
+        "--status",
+        required=True,
+        choices=["accepted", "rejected_all"],
+        help="accept one verified variant or explicitly reject all variants",
+    )
+    p_decision.add_argument(
+        "--variant",
+        help="verified variant to accept; required only when status is accepted",
+    )
+    p_decision.add_argument("--rationale", required=True, help="non-empty decision rationale")
+    p_decision.add_argument("--author", required=True, help="reviewer-provided author label")
+    p_decision.add_argument(
+        "--decided-at",
+        required=True,
+        help="explicit UTC timestamp, for example 2026-09-21T08:30:00Z",
+    )
+    p_decision.add_argument(
+        "--write",
+        action="store_true",
+        help="write the previewed immutable decision; without this flag nothing is written",
+    )
+    p_decision.set_defaults(func=cmd_lab_decision)
 
     return parser
 
