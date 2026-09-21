@@ -730,7 +730,7 @@ visiontrack lab-evidence "$BUNDLE" baseline "$EVENT_ID" \
   --frame 42=frame-42.png --crop 120,80,420,520 --write
 ```
 
-## Next implementation increment
+## Sixteenth implementation increment — complete
 
 The next code change should let the React Reliability Lab inspect locally
 selected evidence without weakening the validated boundary:
@@ -746,6 +746,43 @@ selected evidence without weakening the validated boundary:
   the same increment
 
 Acceptance recording and raw video playback remain separate later increments.
+
+Implemented in the React Reliability Lab event detail. For an event whose
+validated report metadata declares available media, the user explicitly
+selects exactly one `manifest.json` and the PNG files named by it. The browser
+does not open a directory, discover adjacent files, or send a network request.
+
+Before exposing any pixels, the client validates the exact schema-v1 manifest,
+recomputes its canonical content fingerprint, checks source/run/event/frame
+lineage against the active validated report, and requires its artifact count,
+frame indices, views, and privacy classes to match report metadata. It then
+matches the selected filenames exactly and verifies each byte length, SHA-256,
+PNG signature, IHDR dimensions, source bounds, and full-frame dimensions in
+browser memory.
+
+Successful verification still displays metadata only. Every image has a
+deliberate reveal control; unredacted `source_pixels` receive a distinct warning
+and action label. Object URLs are created only by that action and revoked when
+the evidence selection, event, report, or route changes. No raw video,
+automatic bundle import, remote storage, or decision state was added.
+
+## Next implementation increment
+
+Before enabling variant selection in React, define the auditable human-decision
+boundary in Python:
+
+- Define a versioned decision record tied to one verified comparison and its
+  exact report fingerprint
+- Require an explicit accepted variant or explicit rejection of all variants,
+  a non-empty rationale, author label, and UTC timestamp
+- Persist the record immutably beside the existing bundle artifacts; never
+  infer a winner from metrics
+- Revalidate comparison, report, and variant lineage when reading the decision
+- Add deterministic contract/storage tests before displaying or editing a
+  decision in React
+
+UI decision controls, collaborative review, remote storage, and raw video
+playback remain later increments.
 
 ## Acceptance criteria
 
