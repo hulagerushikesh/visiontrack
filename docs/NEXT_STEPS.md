@@ -65,6 +65,8 @@ The first local workflow and its versioned records are defined in
       metadata in deterministic reports without embedding image bytes.
 - [x] Add an explicit privacy-aware producer for bounded local PNG evidence,
       including input provenance and deterministic crop/redaction operations.
+- [x] Expose evidence production through a preview-first local CLI with
+      explicit frame paths and separate full-frame source-pixel confirmation.
 - [ ] Migrate the long-form research write-up into reusable article components.
 - [ ] Design a data-driven benchmark explorer before replacing generated reports.
 - [ ] Port the interactive tracker shell without changing tracker behavior or

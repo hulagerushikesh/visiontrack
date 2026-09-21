@@ -11,16 +11,20 @@ Subcommands
 ``ablate``
     Compare tracker variants (e.g. with/without the ByteTrack recovery stage
     and Mahalanobis gating) to quantify each component's contribution.
+``lab-evidence``
+    Preview or produce bounded, privacy-classified local failure evidence.
 
-Everything runs on the built-in synthetic generator, so ``visiontrack demo``
-works out of the box with no model or video downloads.
+The demo, default evaluation, and ablation commands use the built-in synthetic
+generator, so ``visiontrack demo`` works without model or video downloads.
 """
+
 from __future__ import annotations
 
 import argparse
 import json
 import sys
 from dataclasses import replace
+from pathlib import Path
 
 from .detection.synthetic import SyntheticScene, SyntheticSceneConfig
 from .eval.mot import MotAccumulator
@@ -28,9 +32,7 @@ from .tracking.config import TrackerConfig
 from .tracking.tracker import ByteTracker
 
 
-def _run_sequence(
-    scene: SyntheticScene, cfg: TrackerConfig, collect_history: bool = False
-):
+def _run_sequence(scene: SyntheticScene, cfg: TrackerConfig, collect_history: bool = False):
     """Run the tracker across a scene; return (metrics, per-frame renders)."""
     tracker = ByteTracker(cfg)
     acc = MotAccumulator(iou_threshold=0.5)
@@ -83,17 +85,13 @@ def cmd_demo(args) -> int:
     if args.plot:
         from .viz.draw import save_trajectory_plot
 
-        save_trajectory_plot(
-            args.plot, trajectories, scene.cfg.width, scene.cfg.height
-        )
+        save_trajectory_plot(args.plot, trajectories, scene.cfg.width, scene.cfg.height)
         print(f"Wrote trajectory plot -> {args.plot}")
 
     if args.gif:
         from .viz.draw import animate_scene
 
-        animate_scene(
-            args.gif, renders, scene.cfg.width, scene.cfg.height, fps=args.fps
-        )
+        animate_scene(args.gif, renders, scene.cfg.width, scene.cfg.height, fps=args.fps)
         print(f"Wrote animation -> {args.gif}")
     return 0
 
@@ -118,8 +116,6 @@ def _mot17_readers(args):
     Uses cached ``.npz`` files when present (so the raw frames can be gone),
     otherwise reads the raw dataset live from ``--data-root``.
     """
-    from pathlib import Path
-
     from .datasets.cache import CachedSequence
     from .datasets.splits import load_split
     from .detection.mot_loader import MOT17Sequence, discover_sequences
@@ -165,10 +161,7 @@ def _cmd_eval_mot17(args) -> int:
         print(f"\n{'sequence':<18} " + " ".join(f"{k:>7}" for k in headline))
         print("-" * (19 + 8 * len(headline)))
         for r in reports:
-            print(
-                f"{r.name:<18} "
-                + " ".join(f"{r.metrics.get(k, 0):>7.3f}" for k in headline)
-            )
+            print(f"{r.name:<18} " + " ".join(f"{r.metrics.get(k, 0):>7.3f}" for k in headline))
         print("-" * (19 + 8 * len(headline)))
     print(f"{'OVERALL':<18} " + " ".join(f"{overall.get(k, 0):>7.3f}" for k in headline))
 
@@ -227,17 +220,25 @@ def cmd_track(args: argparse.Namespace) -> int:
 
     class_filter = None if args.all_classes else {0}  # default: person only
     detector = YoloxDetector(
-        args.model, input_size=args.input_size,
-        conf_threshold=args.conf, class_filter=class_filter,
+        args.model,
+        input_size=args.input_size,
+        conf_threshold=args.conf,
+        class_filter=class_filter,
     )
     print(f"tracking {args.input} -> {args.output}  (model={args.model})")
     summary = track_video(
-        args.input, args.output, detector,
-        TrackerConfig(), class_filter=class_filter,
-        max_frames=args.max_frames, progress=True,
+        args.input,
+        args.output,
+        detector,
+        TrackerConfig(),
+        class_filter=class_filter,
+        max_frames=args.max_frames,
+        progress=True,
     )
-    print(f"done: {summary.frames} frames, {summary.unique_tracks} unique tracks "
-          f"@ {summary.fps:.1f} fps -> {summary.output_path}")
+    print(
+        f"done: {summary.frames} frames, {summary.unique_tracks} unique tracks "
+        f"@ {summary.fps:.1f} fps -> {summary.output_path}"
+    )
     return 0
 
 
@@ -258,8 +259,7 @@ def _build_webcam_sink(args):
         import cv2
     except ImportError:
         print(
-            "live preview needs OpenCV: pip install opencv-python "
-            "(or re-run with --no-window)",
+            "live preview needs OpenCV: pip install opencv-python (or re-run with --no-window)",
             file=sys.stderr,
         )
         raise SystemExit(2) from None
@@ -285,26 +285,159 @@ def cmd_webcam(args: argparse.Namespace) -> int:
 
     class_filter = None if args.all_classes else {0}  # default: person only
     detector = YoloxDetector(
-        args.model, input_size=args.input_size,
-        conf_threshold=args.conf, class_filter=class_filter,
+        args.model,
+        input_size=args.input_size,
+        conf_threshold=args.conf,
+        class_filter=class_filter,
     )
     on_frame, close = _build_webcam_sink(args)
-    print(f"webcam: device={args.device}  model={args.model}"
-          + ("" if args.no_window else "  (press q or Esc to quit)"))
+    print(
+        f"webcam: device={args.device}  model={args.model}"
+        + ("" if args.no_window else "  (press q or Esc to quit)")
+    )
     try:
         summary = track_webcam(
-            detector, TrackerConfig(), on_frame=on_frame,
-            class_filter=class_filter, device=args.device,
-            mirror=args.mirror, record=args.record, record_fps=args.record_fps,
+            detector,
+            TrackerConfig(),
+            on_frame=on_frame,
+            class_filter=class_filter,
+            device=args.device,
+            mirror=args.mirror,
+            record=args.record,
+            record_fps=args.record_fps,
             max_frames=args.max_frames,
         )
         dest = f" -> {summary.output_path}" if args.record else ""
-        print(f"done: {summary.frames} frames @ {summary.fps:.1f} fps, "
-              f"{summary.unique_tracks} unique tracks{dest}")
+        print(
+            f"done: {summary.frames} frames @ {summary.fps:.1f} fps, "
+            f"{summary.unique_tracks} unique tracks{dest}"
+        )
     except _WebcamQuit:
         print("webcam stopped by user")
     finally:
         close()
+    return 0
+
+
+def _parse_frame_path(value: str) -> tuple[int, Path]:
+    frame, separator, path = value.partition("=")
+    if not separator or not frame or not path:
+        raise argparse.ArgumentTypeError("frame input must use FRAME=PNG_PATH")
+    try:
+        frame_index = int(frame)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("FRAME must be a non-negative integer") from exc
+    if frame_index < 0:
+        raise argparse.ArgumentTypeError("FRAME must be a non-negative integer")
+    return frame_index, Path(path)
+
+
+def _parse_crop(value: str) -> tuple[int, int, int, int]:
+    try:
+        bounds = tuple(int(item) for item in value.split(","))
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("crop must use LEFT,TOP,RIGHT,BOTTOM integers") from exc
+    if len(bounds) != 4:
+        raise argparse.ArgumentTypeError("crop must use LEFT,TOP,RIGHT,BOTTOM integers")
+    return bounds  # type: ignore[return-value]
+
+
+def cmd_lab_evidence(args: argparse.Namespace) -> int:
+    """Preview or explicitly write local PNG evidence for one failure event."""
+    from .lab import EvidenceManifest, plan_failure_evidence, produce_failure_evidence
+    from .lab.evidence import (
+        MAX_EVIDENCE_FRAMES,
+        MAX_EVIDENCE_IMAGE_BYTES,
+        MAX_EVIDENCE_IMAGE_PIXELS,
+        MAX_SOURCE_IMAGE_BYTES,
+    )
+
+    frame_paths: dict[int, Path] = {}
+    for frame_index, path in args.frame:
+        if frame_index in frame_paths:
+            print(f"error: duplicate frame input: {frame_index}", file=sys.stderr)
+            return 2
+        frame_paths[frame_index] = path
+    try:
+        plan = plan_failure_evidence(
+            args.bundle,
+            args.variant,
+            args.event_id,
+            tuple(frame_paths),
+            view=args.view,
+            crop_bounds=args.crop,
+            redact=args.redact,
+        )
+    except (OSError, ValueError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+
+    crop = "none" if plan.crop_bounds is None else ",".join(map(str, plan.crop_bounds))
+    frames = ", ".join(str(index) for index in plan.frame_indices)
+    print("Evidence production preview")
+    print(f"  bundle: {args.bundle}")
+    print(f"  variant: {plan.variant}")
+    print(f"  event: {plan.event_id}")
+    print(f"  frames: {frames}")
+    print(f"  view: {plan.view}")
+    print(f"  crop: {crop}")
+    print(f"  output: {plan.output_size[0]}x{plan.output_size[1]} pixels per frame")
+    print(f"  privacy: {plan.privacy}")
+    print(f"  redaction: {plan.redaction or 'none'}")
+    print(
+        "  limits: "
+        f"{MAX_EVIDENCE_FRAMES} frames, {MAX_SOURCE_IMAGE_BYTES} input bytes/frame, "
+        f"{MAX_EVIDENCE_IMAGE_PIXELS} output pixels/frame, "
+        f"{MAX_EVIDENCE_IMAGE_BYTES} output bytes/frame"
+    )
+    if plan.requires_full_frame_confirmation:
+        state = "confirmed" if args.allow_full_frame_source_pixels else "required"
+        print(f"  full-frame source-pixel confirmation: {state}")
+    if not args.write:
+        print(
+            "Preview only; no PNG inputs were read and nothing was written. "
+            "Add --write to produce evidence."
+        )
+        return 0
+    if plan.requires_full_frame_confirmation and not args.allow_full_frame_source_pixels:
+        print(
+            "error: writing full-frame source pixels requires --allow-full-frame-source-pixels",
+            file=sys.stderr,
+        )
+        return 2
+
+    payloads: dict[int, bytes] = {}
+    for frame_index, path in frame_paths.items():
+        try:
+            if path.is_symlink() or not path.is_file():
+                raise ValueError(f"frame {frame_index} must name a regular local PNG file")
+            if path.stat().st_size > MAX_SOURCE_IMAGE_BYTES:
+                raise ValueError(f"frame {frame_index} exceeds the input byte limit")
+            payloads[frame_index] = path.read_bytes()
+        except OSError as exc:
+            print(f"error: could not read frame {frame_index} from {path}: {exc}", file=sys.stderr)
+            return 2
+        except ValueError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 2
+    try:
+        manifest_path = produce_failure_evidence(
+            args.bundle,
+            args.variant,
+            args.event_id,
+            payloads,
+            view=args.view,
+            crop_bounds=args.crop,
+            redact=args.redact,
+            allow_full_frame_source_pixels=args.allow_full_frame_source_pixels,
+        )
+        manifest = EvidenceManifest.from_json(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, RuntimeError, ValueError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    print(f"Wrote {len(manifest.artifacts)} verified artifact(s)")
+    print(f"  evidence: {manifest.evidence_id}")
+    print(f"  manifest: {manifest_path}")
     return 0
 
 
@@ -347,9 +480,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--split-file", default="mot17_val_half", help="frozen split name in data/splits/"
     )
     p_eval.add_argument("--detector", default="FRCNN", choices=["DPM", "FRCNN", "SDP"])
-    p_eval.add_argument(
-        "--cache-dir", default="data/cache/mot17", help="MOT17 npz cache directory"
-    )
+    p_eval.add_argument("--cache-dir", default="data/cache/mot17", help="MOT17 npz cache directory")
     p_eval.add_argument(
         "--data-root", default=None, help="raw MOT17 root (used only if cache is absent)"
     )
@@ -365,8 +496,9 @@ def build_parser() -> argparse.ArgumentParser:
     p_track.add_argument("--model", required=True, help="YOLOX .onnx model path")
     p_track.add_argument("--input-size", type=int, default=416, help="YOLOX square input side")
     p_track.add_argument("--conf", type=float, default=0.25, help="detector confidence threshold")
-    p_track.add_argument("--all-classes", action="store_true",
-                         help="track all COCO classes (default: person only)")
+    p_track.add_argument(
+        "--all-classes", action="store_true", help="track all COCO classes (default: person only)"
+    )
     p_track.add_argument("--max-frames", type=int, default=None, help="stop after N frames")
     p_track.set_defaults(func=cmd_track)
 
@@ -375,17 +507,71 @@ def build_parser() -> argparse.ArgumentParser:
     p_cam.add_argument("--device", default="<video0>", help="imageio camera spec (def: <video0>)")
     p_cam.add_argument("--input-size", type=int, default=416, help="YOLOX square input side")
     p_cam.add_argument("--conf", type=float, default=0.25, help="detector confidence threshold")
-    p_cam.add_argument("--all-classes", action="store_true",
-                       help="track all COCO classes (default: person only)")
+    p_cam.add_argument(
+        "--all-classes", action="store_true", help="track all COCO classes (default: person only)"
+    )
     p_cam.add_argument("--mirror", action="store_true", help="flip horizontally (selfie view)")
-    p_cam.add_argument("--no-window", action="store_true",
-                       help="process headlessly without a preview window")
-    p_cam.add_argument("--record", default=None, metavar="PATH",
-                       help="also save the annotated session to this .mp4")
-    p_cam.add_argument("--record-fps", type=float, default=30.0,
-                       help="frame rate for the recorded mp4 (default: 30)")
+    p_cam.add_argument(
+        "--no-window", action="store_true", help="process headlessly without a preview window"
+    )
+    p_cam.add_argument(
+        "--record",
+        default=None,
+        metavar="PATH",
+        help="also save the annotated session to this .mp4",
+    )
+    p_cam.add_argument(
+        "--record-fps",
+        type=float,
+        default=30.0,
+        help="frame rate for the recorded mp4 (default: 30)",
+    )
     p_cam.add_argument("--max-frames", type=int, default=None, help="stop after N frames")
     p_cam.set_defaults(func=cmd_webcam)
+
+    p_evidence = sub.add_parser(
+        "lab-evidence",
+        help="preview or produce local PNG evidence for one Reliability Lab failure",
+    )
+    p_evidence.add_argument("bundle", help="Reliability Lab bundle directory")
+    p_evidence.add_argument("variant", help="verified run variant")
+    p_evidence.add_argument("event_id", help="stored failure-event fingerprint")
+    p_evidence.add_argument(
+        "--frame",
+        action="append",
+        type=_parse_frame_path,
+        required=True,
+        metavar="FRAME=PNG_PATH",
+        help="explicit source PNG for one evidence-range frame; repeat as needed",
+    )
+    p_evidence.add_argument(
+        "--view",
+        choices=["crop", "full_frame"],
+        default="crop",
+        help="produce a bounded crop (default) or a full frame",
+    )
+    p_evidence.add_argument(
+        "--crop",
+        type=_parse_crop,
+        metavar="LEFT,TOP,RIGHT,BOTTOM",
+        help="explicit integer crop; otherwise derive it from the failure boxes",
+    )
+    p_evidence.add_argument(
+        "--redact",
+        action="store_true",
+        help="apply deterministic whole-image pixelation before storage",
+    )
+    p_evidence.add_argument(
+        "--allow-full-frame-source-pixels",
+        action="store_true",
+        help="confirm storage of unredacted full-frame non-synthetic pixels",
+    )
+    p_evidence.add_argument(
+        "--write",
+        action="store_true",
+        help="write the previewed evidence; without this flag no PNG is read or written",
+    )
+    p_evidence.set_defaults(func=cmd_lab_evidence)
 
     return parser
 
