@@ -87,3 +87,24 @@ resolved crop, output dimensions, privacy class, and limits without reading the
 PNGs or writing evidence. Add `--write` to execute the previewed operation.
 Unredacted full-frame non-synthetic pixels additionally require
 `--allow-full-frame-source-pixels`. Install the `[lab]` extra for writing.
+
+## Reliability Lab decisions
+
+```python
+from visiontrack.lab import read_human_decision, record_human_decision
+
+path = record_human_decision(
+    bundle,
+    status="accepted",              # or "rejected_all"
+    accepted_variant="baseline",    # None when rejecting all variants
+    rationale="Meets the registered acceptance criteria.",
+    author="local-reviewer",
+    decided_at="2026-09-21T08:30:00Z",
+)
+decision = read_human_decision(bundle)
+```
+
+Both functions revalidate the sealed comparison and canonical local report.
+The decision is content-addressed and immutable; repeating the same write is
+safe, while a conflicting second decision is refused. Metrics never select a
+variant automatically.

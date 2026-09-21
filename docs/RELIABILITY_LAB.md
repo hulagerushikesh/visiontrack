@@ -231,8 +231,10 @@ reliability-lab/<experiment_id>/
           manifest.json
           frame-*.png         # optional, locally retained
   comparison.json
+  decision.json              # absent until an explicit human decision
   report/
     index.html
+    report.json
 ```
 
 The bundle contains no raw video unless the user explicitly requests a
@@ -766,7 +768,7 @@ and action label. Object URLs are created only by that action and revoked when
 the evidence selection, event, report, or route changes. No raw video,
 automatic bundle import, remote storage, or decision state was added.
 
-## Next implementation increment
+## Seventeenth implementation increment — complete
 
 Before enabling variant selection in React, define the auditable human-decision
 boundary in Python:
@@ -782,6 +784,42 @@ boundary in Python:
   decision in React
 
 UI decision controls, collaborative review, remote storage, and raw video
+playback remain later increments.
+
+Implemented as the content-addressed `DecisionRecord` plus the
+`record_human_decision` and `read_human_decision` Python APIs. A decision has
+exactly one of two explicit states: accept one verified variant, or reject all
+variants. Both require a trimmed rationale, a reviewer-provided author label,
+and an explicit UTC timestamp.
+
+Before writing `decision.json`, VisionTrack rebuilds the report model from the
+bundle, verifies the stored canonical `report/report.json` byte-for-byte, and
+checks that the report still preserves the unselected boundary. The chosen
+variant must belong to that report. The decision binds the exact experiment,
+source, comparison, and report fingerprints and derives its own fingerprint
+from the complete record.
+
+The root-level decision file is immutable. Repeating an identical decision is
+idempotent; a different second decision is refused rather than silently
+replacing the audit trail. Reading repeats the complete upstream verification
+and rejects modified decisions, reports, comparisons, runs, or evidence.
+Metrics never choose or suggest the recorded outcome.
+
+## Next implementation increment
+
+Expose the decision boundary through a preview-first local CLI before adding
+browser controls:
+
+- Select one bundle and explicitly choose `accepted` with a verified variant,
+  or `rejected_all`
+- Require rationale, author label, and UTC timestamp as visible inputs
+- Preview the exact report/comparison lineage and resulting decision without
+  writing by default
+- Require `--write` to create the immutable `decision.json`
+- Print the decision fingerprint and final path; preserve idempotence and
+  refuse conflicting second decisions
+
+React decision controls, collaborative review, remote storage, and raw video
 playback remain later increments.
 
 ## Acceptance criteria

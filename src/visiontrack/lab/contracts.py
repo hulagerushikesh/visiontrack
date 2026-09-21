@@ -527,6 +527,89 @@ class EvidenceManifest(ContractRecord):
 
 
 @dataclass(frozen=True, slots=True)
+class DecisionRecord(ContractRecord):
+    """One explicit human decision over an exact verified Lab report."""
+
+    decision_id: str
+    experiment_id: str
+    source_id: str
+    comparison_id: str
+    report_id: str
+    status: str
+    accepted_variant: str | None
+    rationale: str
+    author: str
+    decided_at: str
+    schema_version: int = SCHEMA_VERSION
+
+    def __post_init__(self) -> None:
+        if self.schema_version != SCHEMA_VERSION:
+            raise ValueError(f"unsupported schema_version: {self.schema_version}")
+        for field_name in (
+            "decision_id",
+            "experiment_id",
+            "source_id",
+            "comparison_id",
+            "report_id",
+        ):
+            _validate_hash(getattr(self, field_name), field_name)
+        if self.status not in {"accepted", "rejected_all"}:
+            raise ValueError("status must be accepted or rejected_all")
+        if self.status == "accepted":
+            if not isinstance(self.accepted_variant, str) or not self.accepted_variant.strip():
+                raise ValueError("accepted decisions must name a variant")
+        elif self.accepted_variant is not None:
+            raise ValueError("rejected_all decisions must not name an accepted variant")
+        if (
+            not isinstance(self.rationale, str)
+            or self.rationale != self.rationale.strip()
+            or not 1 <= len(self.rationale) <= 5000
+        ):
+            raise ValueError("rationale must be 1-5000 trimmed characters")
+        if (
+            not isinstance(self.author, str)
+            or self.author != self.author.strip()
+            or not 1 <= len(self.author) <= 200
+        ):
+            raise ValueError("author must be 1-200 trimmed characters")
+        _validate_utc(self.decided_at, "decided_at")
+        if self.decision_id != self.derive_decision_id():
+            raise ValueError("decision_id does not match the record content")
+
+    def derive_decision_id(self) -> str:
+        data = self.to_dict()
+        data.pop("decision_id")
+        return sha256_json(data)
+
+    def verify_lineage(
+        self,
+        *,
+        experiment_id: str,
+        source_id: str,
+        comparison_id: str,
+        report_id: str,
+        variants: set[str],
+    ) -> None:
+        """Verify the decision against one revalidated report context."""
+        expected = {
+            "experiment_id": experiment_id,
+            "source_id": source_id,
+            "comparison_id": comparison_id,
+            "report_id": report_id,
+        }
+        for field_name, value in expected.items():
+            if getattr(self, field_name) != value:
+                raise ValueError(f"decision {field_name} does not match verified evidence")
+        if self.accepted_variant is not None and self.accepted_variant not in variants:
+            raise ValueError("decision accepted_variant is not a verified report variant")
+
+    @classmethod
+    def create(cls, **values: Any) -> DecisionRecord:
+        content = {**values, "schema_version": SCHEMA_VERSION}
+        return cls(decision_id=sha256_json(content), **values)
+
+
+@dataclass(frozen=True, slots=True)
 class ExperimentManifest(ContractRecord):
     """Immutable specification for one paired Reliability Lab comparison."""
 

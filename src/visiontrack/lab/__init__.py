@@ -2,6 +2,7 @@
 
 from .comparison import create_comparison_summary
 from .contracts import (
+    DecisionRecord,
     DetectionRecord,
     EvidenceImageArtifact,
     EvidenceManifest,
@@ -13,6 +14,7 @@ from .contracts import (
     canonical_json,
     sha256_json,
 )
+from .decision import read_human_decision, record_human_decision
 from .evidence import EvidenceProductionPlan, plan_failure_evidence, produce_failure_evidence
 from .failures import calculate_failure_events
 from .metrics import calculate_bundle_metrics
@@ -50,6 +52,7 @@ from .storage import (
 
 __all__ = [
     "DetectionRecord",
+    "DecisionRecord",
     "EvidenceImageArtifact",
     "EvidenceManifest",
     "EvidenceProductionPlan",
@@ -69,6 +72,8 @@ __all__ = [
     "import_mot_ground_truth",
     "plan_failure_evidence",
     "produce_failure_evidence",
+    "read_human_decision",
+    "record_human_decision",
     "calculate_bundle_metrics",
     "calculate_failure_events",
     "build_report_model",

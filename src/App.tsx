@@ -20,7 +20,7 @@ function Shell({children}:{children:ReactNode}){
       <AnimatePresence>{menu&&<motion.nav initial={{height:0,opacity:0,y:-8}} animate={{height:'auto',opacity:1,y:0}} exit={{height:0,opacity:0,y:-8}} className="mx-auto mt-2 max-w-7xl overflow-hidden rounded-2xl border border-white/80 bg-white/95 shadow-xl backdrop-blur-xl md:hidden"><div className="grid gap-1 p-3">{nav.map(([label,href])=><a key={href} href={href} className="rounded-xl px-4 py-3 text-sm font-medium hover:bg-secondary">{label}</a>)}</div></motion.nav>}</AnimatePresence>
     </header>
     <main>{children}</main>
-    <footer className="border-t border-border bg-white"><div className="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-10 text-sm text-muted-foreground sm:flex-row sm:items-center lg:px-8"><span className="font-semibold text-foreground">VisionTrack</span><span>Open, explainable multi-object tracking.</span><span className="sm:ml-auto">MIT · 484 tests</span><a href="https://github.com/hulagerushikesh/visiontrack" aria-label="GitHub" className="transition hover:text-primary"><Github className="size-4"/></a></div></footer>
+    <footer className="border-t border-border bg-white"><div className="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-10 text-sm text-muted-foreground sm:flex-row sm:items-center lg:px-8"><span className="font-semibold text-foreground">VisionTrack</span><span>Open, explainable multi-object tracking.</span><span className="sm:ml-auto">MIT · 494 tests</span><a href="https://github.com/hulagerushikesh/visiontrack" aria-label="GitHub" className="transition hover:text-primary"><Github className="size-4"/></a></div></footer>
   </div>
 }
 
