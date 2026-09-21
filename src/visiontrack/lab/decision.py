@@ -52,6 +52,27 @@ def record_human_decision(
     decided_at: str,
 ) -> Path:
     """Validate and immutably record one explicit decision over a sealed report."""
+    decision = plan_human_decision(
+        bundle,
+        status=status,
+        accepted_variant=accepted_variant,
+        rationale=rationale,
+        author=author,
+        decided_at=decided_at,
+    )
+    return _write_decision_record(Path(bundle), decision)
+
+
+def plan_human_decision(
+    bundle: str | Path,
+    *,
+    status: str,
+    accepted_variant: str | None,
+    rationale: str,
+    author: str,
+    decided_at: str,
+) -> DecisionRecord:
+    """Build a fully verified decision record without writing bundle state."""
     bundle_path = Path(bundle)
     report = _verified_report(bundle_path)
     decision = DecisionRecord.create(
@@ -66,7 +87,7 @@ def record_human_decision(
         decided_at=decided_at,
     )
     _verify_decision(decision, report)
-    return _write_decision_record(bundle_path, decision)
+    return decision
 
 
 def read_human_decision(bundle: str | Path) -> DecisionRecord:

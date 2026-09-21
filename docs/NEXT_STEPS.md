@@ -71,6 +71,8 @@ The first local workflow and its versioned records are defined in
       React Lab without directory scanning, uploads, or automatic pixel access.
 - [x] Define and immutably persist an explicit human decision tied to the exact
       verified comparison and report lineage without automatic selection.
+- [x] Expose human decisions through a preview-first CLI that prints exact
+      lineage and requires `--write` for immutable persistence.
 - [ ] Migrate the long-form research write-up into reusable article components.
 - [ ] Design a data-driven benchmark explorer before replacing generated reports.
 - [ ] Port the interactive tracker shell without changing tracker behavior or

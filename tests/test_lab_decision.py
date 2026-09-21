@@ -8,10 +8,12 @@ from pathlib import Path
 import pytest
 from test_lab_report import make_report_bundle
 
+from visiontrack.cli import main as cli_main
 from visiontrack.lab import (
     DecisionRecord,
     canonical_json,
     generate_local_report,
+    plan_human_decision,
     read_human_decision,
     record_human_decision,
     sha256_json,
@@ -106,6 +108,90 @@ def test_record_and_read_decision_revalidate_complete_lineage(tmp_path: Path) ->
         author="research-reviewer",
         decided_at=NOW,
     ) == path
+
+
+def test_decision_plan_matches_written_record_without_mutating_bundle(tmp_path: Path) -> None:
+    bundle = sealed_report_bundle(tmp_path)
+    values = {
+        "status": "accepted",
+        "accepted_variant": "baseline",
+        "rationale": "The verified evidence meets the registered local criteria.",
+        "author": "research-reviewer",
+        "decided_at": NOW,
+    }
+
+    preview = plan_human_decision(bundle, **values)
+
+    assert preview.accepted_variant == "baseline"
+    assert not (bundle / "decision.json").exists()
+    path = record_human_decision(bundle, **values)
+    assert DecisionRecord.from_json(path.read_text(encoding="utf-8")) == preview
+
+
+def test_lab_decision_cli_previews_then_writes_exact_record(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    bundle = sealed_report_bundle(tmp_path)
+    arguments = [
+        "lab-decision",
+        str(bundle),
+        "--status",
+        "accepted",
+        "--variant",
+        "baseline",
+        "--rationale",
+        "The verified baseline meets the registered acceptance criteria.",
+        "--author",
+        "local-reviewer",
+        "--decided-at",
+        NOW,
+    ]
+
+    assert cli_main(arguments) == 0
+    preview = capsys.readouterr()
+    assert "Human decision preview" in preview.out
+    assert "accepted variant: baseline" in preview.out
+    assert "comparison:" in preview.out
+    assert "report:" in preview.out
+    assert "Preview only; nothing was written." in preview.out
+    assert not (bundle / "decision.json").exists()
+
+    assert cli_main([*arguments, "--write"]) == 0
+    written = capsys.readouterr()
+    decision = read_human_decision(bundle)
+    assert "Recorded immutable human decision" in written.out
+    assert decision.decision_id in written.out
+    assert str(bundle / "decision.json") in written.out
+
+    assert cli_main([*arguments, "--write"]) == 0
+    capsys.readouterr()
+
+
+def test_lab_decision_cli_rejects_ambiguous_or_conflicting_choices(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    bundle = sealed_report_bundle(tmp_path)
+    common = [
+        "lab-decision",
+        str(bundle),
+        "--rationale",
+        "No candidate meets the registered criteria.",
+        "--author",
+        "local-reviewer",
+        "--decided-at",
+        NOW,
+    ]
+
+    assert cli_main([*common, "--status", "accepted"]) == 2
+    assert "must name a variant" in capsys.readouterr().err
+    assert cli_main([*common, "--status", "rejected_all", "--variant", "baseline"]) == 2
+    assert "must not name" in capsys.readouterr().err
+
+    accepted = [*common, "--status", "accepted", "--variant", "baseline", "--write"]
+    assert cli_main(accepted) == 0
+    capsys.readouterr()
+    assert cli_main([*common, "--status", "rejected_all", "--write"]) == 2
+    assert "refusing to overwrite" in capsys.readouterr().err
 
 
 def test_decision_rejects_unknown_variant_and_conflicting_second_choice(tmp_path: Path) -> None:

@@ -80,6 +80,9 @@ visiontrack ablate    # compare component variants
 visiontrack track in.mp4 out.mp4 --model yolox_nano.onnx   # [video] extra
 visiontrack lab-evidence BUNDLE VARIANT EVENT_ID \
   --frame 42=frame.png --crop 120,80,420,520      # preview only
+visiontrack lab-decision BUNDLE --status accepted --variant baseline \
+  --rationale "Meets the registered criteria." --author local-reviewer \
+  --decided-at 2026-09-21T08:30:00Z               # preview only
 ```
 
 `lab-evidence` accepts only explicit `FRAME=PNG_PATH` inputs and prints the
@@ -88,10 +91,27 @@ PNGs or writing evidence. Add `--write` to execute the previewed operation.
 Unredacted full-frame non-synthetic pixels additionally require
 `--allow-full-frame-source-pixels`. Install the `[lab]` extra for writing.
 
+`lab-decision` rebuilds and verifies the sealed report, then prints the exact
+choice, decision fingerprint, and experiment/source/comparison/report lineage
+without mutating the bundle. Use `--status accepted --variant NAME` to accept
+one verified variant, or `--status rejected_all` without `--variant`. Add
+`--write` only after reviewing the preview; the resulting root-level
+`decision.json` is immutable, identical writes are idempotent, and conflicting
+second decisions are refused.
+
 ## Reliability Lab decisions
 
 ```python
-from visiontrack.lab import read_human_decision, record_human_decision
+from visiontrack.lab import plan_human_decision, read_human_decision, record_human_decision
+
+preview = plan_human_decision(
+    bundle,
+    status="accepted",
+    accepted_variant="baseline",
+    rationale="Meets the registered acceptance criteria.",
+    author="local-reviewer",
+    decided_at="2026-09-21T08:30:00Z",
+)
 
 path = record_human_decision(
     bundle,
