@@ -66,6 +66,7 @@ def test_lab_import_validates_nested_evidence() -> None:
     assert "Source evidence, hashes, or media bounds are incomplete." in types
     assert "All variants must report the same metric set." in types
     assert "failure.run_id !== runIds.get(failure.variant)" in types
+    assert "const failures = value.failures" in types
     assert "Failure event totals do not match the verified variant evidence." in types
     assert "The human decision boundary is missing or invalid." in types
     assert "The report must state at least one non-empty limitation." in types
@@ -97,18 +98,17 @@ def test_failure_explorer_exposes_accessible_read_only_detail() -> None:
     assert "does not infer a persistent person identity" in component
 
 
-def test_lab_surfaces_media_availability_and_privacy_as_text_only() -> None:
+def test_lab_surfaces_media_availability_and_privacy_before_local_reveal() -> None:
     component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
     fixture = (ROOT / "src/features/reliability-lab/fixture.ts").read_text()
 
     assert "Image evidence" in component
     assert "verified local" in component
     assert "Privacy:" in component
-    assert "Image bytes are not embedded, loaded, or displayed." in component
+    assert "Report metadata does not contain image bytes." in component
+    assert "No image URL exists until a verified image is deliberately revealed." in component
     assert 'status: "available"' in fixture
     assert 'privacy: ["synthetic"]' in fixture
-    assert "<img" not in component
-    assert "createObjectURL" not in component
 
 
 def test_lab_import_strictly_validates_optional_media_metadata() -> None:
@@ -119,3 +119,30 @@ def test_lab_import_strictly_validates_optional_media_metadata() -> None:
     assert "The report media-evidence summary is invalid." in types
     assert 'images_embedded: false' in types
     assert "failure.media_evidence === undefined" in types
+
+
+def test_lab_evidence_picker_verifies_files_without_upload_or_directory_scan() -> None:
+    component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+    evidence = (ROOT / "src/features/reliability-lab/evidence.ts").read_text()
+
+    assert "Select evidence files" in component
+    assert 'multiple accept="application/json,.json,image/png,.png"' in component
+    assert "webkitdirectory" not in component
+    assert "verifyEvidenceSelection" in component
+    assert "crypto.subtle.digest" in evidence
+    assert "pngDimensions" in evidence
+    assert "The selected PNG filenames do not exactly match the manifest." in evidence
+    assert "The manifest does not match the selected report event and source lineage." in evidence
+    assert "fetch(" not in evidence
+    assert "FormData" not in evidence
+
+
+def test_lab_evidence_reveal_preserves_privacy_and_revokes_object_urls() -> None:
+    component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+
+    assert "Pixels remain concealed" in component
+    assert "Reveal source pixels" in component
+    assert "URL.createObjectURL(file)" in component
+    assert "URL.revokeObjectURL(url)" in component
+    assert "source_pixels" in component
+    assert 'key={`${report.report_id}:${selectedEvent.event_id}`}' in component

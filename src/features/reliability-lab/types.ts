@@ -226,7 +226,8 @@ export function parseReportModel(value: unknown): ReportLoadResult {
   }
 
   if (!Array.isArray(value.failures)) return missing("The failure event list is missing.")
-  for (const failure of value.failures) {
+  const failures = value.failures
+  for (const failure of failures) {
     if (
       !isRecord(failure) || !isNonEmptyString(failure.variant) || !variantNames.has(failure.variant) ||
       !isHash(failure.event_id) || !isHash(failure.run_id) || failure.run_id !== runIds.get(failure.variant) ||

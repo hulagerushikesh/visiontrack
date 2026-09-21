@@ -1,4 +1,4 @@
-import { useEffect, useState, type ChangeEvent } from "react"
+import { useEffect, useRef, useState, type ChangeEvent } from "react"
 import { motion, useReducedMotion } from "motion/react"
 import {
   AlertTriangle,
@@ -6,7 +6,9 @@ import {
   CheckCircle2,
   CircleOff,
   Database,
+  Eye,
   FileCheck2,
+  FileImage,
   FileJson2,
   Fingerprint,
   FlaskConical,
@@ -27,6 +29,7 @@ import {
   type ReportMediaEvidence,
   type ReportLoadResult,
 } from "./types"
+import { verifyEvidenceSelection, type VerifiedEvidence } from "./evidence"
 
 const failureLabels: Record<FailureType, string> = {
   id_switch: "ID switches",
@@ -149,6 +152,113 @@ function MetricTable({ report }: { report: ReliabilityReport }) {
   )
 }
 
+type EvidenceLoadState =
+  | { kind: "idle" }
+  | { kind: "verifying" }
+  | { kind: "error"; message: string }
+  | { kind: "ready"; evidence: VerifiedEvidence }
+
+function EvidenceInspector({
+  report,
+  failure,
+}: {
+  report: ReliabilityReport
+  failure: ReliabilityReport["failures"][number]
+}) {
+  const media = mediaEvidence(failure)
+  const [state, setState] = useState<EvidenceLoadState>({ kind: "idle" })
+  const [revealed, setRevealed] = useState<Record<string, string>>({})
+  const objectUrls = useRef(new Set<string>())
+  const verificationId = useRef(0)
+  const clearObjectUrls = () => {
+    objectUrls.current.forEach((url) => URL.revokeObjectURL(url))
+    objectUrls.current.clear()
+    setRevealed({})
+  }
+  useEffect(() => () => {
+    verificationId.current += 1
+    objectUrls.current.forEach((url) => URL.revokeObjectURL(url))
+    objectUrls.current.clear()
+  }, [])
+
+  if (media.status !== "available") {
+    return <p className="mt-3 text-xs leading-5 text-muted-foreground">There are no local image files to select for this event.</p>
+  }
+
+  const selectEvidence = async (event: ChangeEvent<HTMLInputElement>) => {
+    const input = event.currentTarget
+    const files = Array.from(input.files ?? [])
+    const requestId = ++verificationId.current
+    clearObjectUrls()
+    setState({ kind: "verifying" })
+    try {
+      const evidence = await verifyEvidenceSelection(files, report, failure)
+      if (verificationId.current === requestId) setState({ kind: "ready", evidence })
+    } catch (error) {
+      if (verificationId.current === requestId) {
+        setState({ kind: "error", message: error instanceof Error ? error.message : "Evidence verification failed." })
+      }
+    } finally {
+      input.value = ""
+    }
+  }
+  const reveal = (path: string, file: File) => {
+    if (revealed[path]) return
+    const url = URL.createObjectURL(file)
+    objectUrls.current.add(url)
+    setRevealed((current) => ({ ...current, [path]: url }))
+  }
+
+  return (
+    <div className="mt-5 border-t border-indigo-100 pt-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-sm font-semibold">Inspect verified local images</p>
+          <p className="mt-1 text-xs leading-5 text-muted-foreground">Select this event's manifest.json and every PNG it declares. Files stay in browser memory and are never uploaded.</p>
+        </div>
+        <label className="inline-flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md border border-input bg-white px-4 text-sm font-medium shadow-xs transition hover:bg-accent focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+          <FileImage className="size-4" />Select evidence files
+          <input className="sr-only" type="file" multiple accept="application/json,.json,image/png,.png" onChange={selectEvidence} />
+        </label>
+      </div>
+
+      {state.kind === "verifying" && <p className="mt-4 text-sm text-indigo-700" role="status" aria-live="polite">Verifying manifest lineage, hashes, filenames, and PNG dimensions…</p>}
+      {state.kind === "error" && <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900" role="alert"><strong>Evidence not opened.</strong> {state.message}</div>}
+      {state.kind === "idle" && <p className="mt-4 text-xs leading-5 text-muted-foreground">Metadata remains visible above. No image URL exists until a verified image is deliberately revealed.</p>}
+      {state.kind === "ready" && (
+        <div className="mt-5 space-y-4" aria-live="polite">
+          <div className="flex flex-wrap items-center gap-2 text-xs">
+            <span className="rounded-full bg-emerald-100 px-2.5 py-1 font-semibold text-emerald-800">Verified locally</span>
+            <span className="text-muted-foreground">{state.evidence.manifestFilename} · {short(state.evidence.manifest.evidence_id)}</span>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {state.evidence.artifacts.map(({ artifact, file }) => {
+              const url = revealed[artifact.relative_path]
+              const sensitive = artifact.privacy === "source_pixels"
+              return (
+                <article className="overflow-hidden rounded-2xl border border-indigo-100 bg-white" key={artifact.relative_path}>
+                  {url ? (
+                    <img src={url} alt={`Verified ${artifact.view.replace("_", " ")} evidence at frame ${artifact.frame_index}`} className="aspect-video w-full bg-slate-950 object-contain" />
+                  ) : (
+                    <div className="grid aspect-video place-items-center bg-slate-950 px-5 text-center text-white">
+                      <div><LockKeyhole className="mx-auto size-6 text-indigo-300" /><p className="mt-3 text-sm font-semibold">Pixels remain concealed</p><p className="mt-1 text-xs text-white/55">{sensitive ? "Unredacted source pixels require an explicit reveal." : "Reveal this verified image when you are ready."}</p></div>
+                    </div>
+                  )}
+                  <div className="p-4">
+                    <div className="flex items-start justify-between gap-3"><div><p className="break-all font-mono text-xs font-semibold">{artifact.relative_path}</p><p className="mt-1 text-xs text-muted-foreground">Frame {artifact.frame_index} · {artifact.width}×{artifact.height} · {artifact.view.replace("_", " ")}</p></div><span className={sensitive ? "rounded-full bg-amber-100 px-2 py-1 text-[10px] font-semibold text-amber-800" : "rounded-full bg-emerald-100 px-2 py-1 text-[10px] font-semibold text-emerald-800"}>{artifact.privacy.replace("_", " ")}</span></div>
+                    {!url && <Button type="button" size="sm" variant={sensitive ? "destructive" : "outline"} className="mt-4 w-full" onClick={() => reveal(artifact.relative_path, file)}><Eye className="size-4" />{sensitive ? "Reveal source pixels" : "Reveal verified image"}</Button>}
+                  </div>
+                </article>
+              )
+            })}
+          </div>
+          {state.evidence.artifacts.length === 0 && <p className="rounded-xl bg-slate-50 p-4 text-sm text-muted-foreground">The verified manifest deliberately contains no images.</p>}
+        </div>
+      )}
+    </div>
+  )
+}
+
 function FailureExplorer({ report }: { report: ReliabilityReport }) {
   const [variant, setVariant] = useState("all")
   const [failureType, setFailureType] = useState<FailureType | "all">("all")
@@ -249,7 +359,8 @@ function FailureExplorer({ report }: { report: ReliabilityReport }) {
                   <p>{mediaEvidence(selectedEvent).artifact_count} verified local {mediaEvidence(selectedEvent).artifact_count === 1 ? "image" : "images"}</p>
                   <p>Privacy: {mediaEvidence(selectedEvent).privacy.join(", ") || "not applicable"}</p>
                 </div>
-                <p className="mt-3 text-xs leading-5 text-muted-foreground">Only verified availability and privacy metadata is shown. Image bytes are not embedded, loaded, or displayed.</p>
+                <p className="mt-3 text-xs leading-5 text-muted-foreground">Report metadata does not contain image bytes. Any selected files are independently verified in this browser before display.</p>
+                <EvidenceInspector key={`${report.report_id}:${selectedEvent.event_id}`} report={report} failure={selectedEvent} />
               </div>
               <div className="mt-6 rounded-2xl border border-indigo-100 bg-white/80 p-5"><p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Recorded context</p><pre className="mt-3 overflow-x-auto whitespace-pre-wrap break-words font-mono text-xs leading-6 text-slate-700">{JSON.stringify(selectedEvent.context, null, 2)}</pre></div>
               <p className="mt-5 text-xs leading-5 text-muted-foreground">Track IDs shown here are local to this run. This panel displays report evidence and does not infer a persistent person identity.</p>

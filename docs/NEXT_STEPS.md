@@ -67,6 +67,8 @@ The first local workflow and its versioned records are defined in
       including input provenance and deterministic crop/redaction operations.
 - [x] Expose evidence production through a preview-first local CLI with
       explicit frame paths and separate full-frame source-pixel confirmation.
+- [x] Verify and deliberately reveal explicitly selected local evidence in the
+      React Lab without directory scanning, uploads, or automatic pixel access.
 - [ ] Migrate the long-form research write-up into reusable article components.
 - [ ] Design a data-driven benchmark explorer before replacing generated reports.
 - [ ] Port the interactive tracker shell without changing tracker behavior or
