@@ -10,11 +10,13 @@ from pathlib import Path
 
 import pytest
 
+from visiontrack.cli import main as cli_main
 from visiontrack.lab import (
     EvidenceImageArtifact,
     EvidenceManifest,
     FailureEvent,
     SourceManifest,
+    plan_failure_evidence,
     produce_failure_evidence,
     read_evidence_manifest,
     verify_evidence_image_payload,
@@ -446,3 +448,92 @@ def test_evidence_producer_rejects_ambiguous_unsafe_and_conflicting_output(
             {limited_failure.frame_index: source_payload},
             crop_bounds=(0, 0, 3, 3),
         )
+
+
+def test_evidence_plan_previews_resolved_operation_without_writing(tmp_path: Path) -> None:
+    bundle, _, failure = make_bundle(
+        tmp_path,
+        source_kind="mot",
+        failure_context={
+            "metric_id": "c" * 64,
+            "ground_truth_box": [1, 1, 3, 3],
+            "track_box": None,
+        },
+    )
+
+    plan = plan_failure_evidence(
+        bundle,
+        "baseline",
+        failure.event_id,
+        [failure.frame_index],
+        view="full_frame",
+    )
+
+    assert plan.frame_indices == (failure.frame_index,)
+    assert plan.output_size == (4, 3)
+    assert plan.privacy == "source_pixels"
+    assert plan.requires_full_frame_confirmation is True
+    assert not (bundle / "runs/baseline/evidence").exists()
+
+
+def test_lab_evidence_cli_previews_then_writes_explicit_png(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    bundle, _, failure = make_bundle(tmp_path)
+    png_path = tmp_path / "frame.png"
+    arguments = [
+        "lab-evidence",
+        str(bundle),
+        "baseline",
+        failure.event_id,
+        "--frame",
+        f"{failure.frame_index}={png_path}",
+        "--crop",
+        "1,0,4,3",
+    ]
+
+    assert cli_main(arguments) == 0
+    preview = capsys.readouterr()
+    assert "Evidence production preview" in preview.out
+    assert "privacy: synthetic" in preview.out
+    assert "Preview only; no PNG inputs were read and nothing was written." in preview.out
+    assert not (bundle / "runs/baseline/evidence").exists()
+
+    png_path.write_bytes(png_bytes())
+    assert cli_main([*arguments, "--write"]) == 0
+    written = capsys.readouterr()
+    assert "Wrote 1 verified artifact(s)" in written.out
+    assert "manifest:" in written.out
+    assert (bundle / "runs/baseline/evidence" / failure.event_id / "manifest.json").is_file()
+
+
+def test_lab_evidence_cli_requires_full_frame_confirmation_before_reading(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    bundle, _, failure = make_bundle(tmp_path, source_kind="mot")
+    png_path = tmp_path / "frame.png"
+    png_path.write_bytes(png_bytes())
+    arguments = [
+        "lab-evidence",
+        str(bundle),
+        "baseline",
+        failure.event_id,
+        "--frame",
+        f"{failure.frame_index}={png_path}",
+        "--view",
+        "full_frame",
+    ]
+
+    assert cli_main(arguments) == 0
+    preview = capsys.readouterr()
+    assert "full-frame source-pixel confirmation: required" in preview.out
+
+    assert cli_main([*arguments, "--write"]) == 2
+    blocked = capsys.readouterr()
+    assert "--allow-full-frame-source-pixels" in blocked.err
+    assert not (bundle / "runs/baseline/evidence").exists()
+
+    assert cli_main([*arguments, "--write", "--allow-full-frame-source-pixels"]) == 0
+    confirmed = capsys.readouterr()
+    assert "full-frame source-pixel confirmation: confirmed" in confirmed.out
+    assert "Wrote 1 verified artifact(s)" in confirmed.out

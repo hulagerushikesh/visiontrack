@@ -13,7 +13,7 @@ from .contracts import (
     canonical_json,
     sha256_json,
 )
-from .evidence import produce_failure_evidence
+from .evidence import EvidenceProductionPlan, plan_failure_evidence, produce_failure_evidence
 from .failures import calculate_failure_events
 from .metrics import calculate_bundle_metrics
 from .mot import import_mot_ground_truth
@@ -52,6 +52,7 @@ __all__ = [
     "DetectionRecord",
     "EvidenceImageArtifact",
     "EvidenceManifest",
+    "EvidenceProductionPlan",
     "ExperimentManifest",
     "FailureEvent",
     "GroundTruthRecord",
@@ -66,6 +67,7 @@ __all__ = [
     "failure_payload_sha256",
     "ground_truth_payload_sha256",
     "import_mot_ground_truth",
+    "plan_failure_evidence",
     "produce_failure_evidence",
     "calculate_bundle_metrics",
     "calculate_failure_events",

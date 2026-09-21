@@ -685,7 +685,7 @@ manifest_path = produce_failure_evidence(
 )
 ```
 
-## Next implementation increment
+## Fifteenth implementation increment — complete
 
 The next code change should expose this producer through a deliberate local CLI
 workflow without broadening its privacy boundary:
@@ -700,6 +700,52 @@ workflow without broadening its privacy boundary:
 
 Browser directory access, image rendering, raw video playback, and acceptance
 recording remain separate later increments.
+
+Implemented as the `visiontrack lab-evidence` command. It requires one bundle,
+variant, failure-event fingerprint, and one or more explicit
+`--frame FRAME=PNG_PATH` arguments. It never searches directories or infers a
+frame filename.
+
+The default invocation is preview-only. It validates bundle and event lineage,
+frame bounds, crop geometry, privacy classification, output dimensions, and
+fixed resource limits, then exits without reading any PNG input or writing an
+artifact. `--write` performs the previewed operation. Unredacted full-frame
+non-synthetic pixels remain blocked unless the independent
+`--allow-full-frame-source-pixels` confirmation is also present.
+
+The write path rejects duplicate frame numbers, symbolic links, missing or
+non-regular files, and inputs already over the byte limit before reading them.
+The producer then performs the complete PNG and evidence validation described
+above. Success prints the content-addressed evidence ID, artifact count, and
+manifest path; errors return a non-zero status without a traceback or partial
+evidence directory.
+
+Example preview and deliberate write:
+
+```bash
+visiontrack lab-evidence "$BUNDLE" baseline "$EVENT_ID" \
+  --frame 42=frame-42.png --crop 120,80,420,520
+
+visiontrack lab-evidence "$BUNDLE" baseline "$EVENT_ID" \
+  --frame 42=frame-42.png --crop 120,80,420,520 --write
+```
+
+## Next implementation increment
+
+The next code change should let the React Reliability Lab inspect locally
+selected evidence without weakening the validated boundary:
+
+- Select one manifest and its explicitly declared PNG files; do not scan a
+  directory or upload anything
+- Verify manifest structure, event/report lineage, file names, SHA-256 hashes,
+  PNG dimensions, and privacy metadata in browser memory
+- Show metadata first and require a deliberate reveal action before creating an
+  object URL for `source_pixels`
+- Revoke every object URL when the evidence, report, or route changes
+- Keep raw video playback, automatic bundle import, and remote storage out of
+  the same increment
+
+Acceptance recording and raw video playback remain separate later increments.
 
 ## Acceptance criteria
 

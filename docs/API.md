@@ -78,4 +78,12 @@ visiontrack demo      # synthetic demo (+ optional PNG/GIF)
 visiontrack eval      # metrics on synthetic or MOT17
 visiontrack ablate    # compare component variants
 visiontrack track in.mp4 out.mp4 --model yolox_nano.onnx   # [video] extra
+visiontrack lab-evidence BUNDLE VARIANT EVENT_ID \
+  --frame 42=frame.png --crop 120,80,420,520      # preview only
 ```
+
+`lab-evidence` accepts only explicit `FRAME=PNG_PATH` inputs and prints the
+resolved crop, output dimensions, privacy class, and limits without reading the
+PNGs or writing evidence. Add `--write` to execute the previewed operation.
+Unredacted full-frame non-synthetic pixels additionally require
+`--allow-full-frame-source-pixels`. Install the `[lab]` extra for writing.
