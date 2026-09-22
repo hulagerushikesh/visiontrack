@@ -73,6 +73,8 @@ The first local workflow and its versioned records are defined in
       verified comparison and report lineage without automatic selection.
 - [x] Expose human decisions through a preview-first CLI that prints exact
       lineage and requires `--write` for immutable persistence.
+- [x] Verify and display an explicitly selected local `decision.json` in the
+      React Lab without uploads, mutation, or automatic winner selection.
 - [ ] Migrate the long-form research write-up into reusable article components.
 - [ ] Design a data-driven benchmark explorer before replacing generated reports.
 - [ ] Port the interactive tracker shell without changing tracker behavior or

@@ -852,7 +852,7 @@ visiontrack lab-decision "$BUNDLE" \
   --write
 ```
 
-## Next implementation increment
+## Nineteenth implementation increment — complete
 
 Make an existing decision inspectable in the React Reliability Lab without
 allowing the browser to create or mutate it:
@@ -869,6 +869,38 @@ allowing the browser to create or mutate it:
 
 Browser decision creation, collaborative review, remote storage, and raw video
 playback remain later increments.
+
+Implemented as an explicit `decision.json` picker and read-only audit panel in
+the React Reliability Lab. Selection never opens a directory and never makes a
+network request. The browser requires the exact schema-v1 fields, enforces the
+same accepted-versus-rejected state rules and reviewer metadata bounds as the
+Python contract, recomputes the decision fingerprint, and verifies experiment,
+source, comparison, report, and accepted-variant lineage against the active
+validated report.
+
+Malformed JSON, unsupported or incomplete records, changed fingerprints,
+mismatched lineage, and unknown variants remain closed with a visible error.
+A verified decision displays its outcome, rationale, author, UTC timestamp,
+decision fingerprint, and report fingerprint. Changing reports remounts the
+inspector and clears prior decision state. The UI contains no decision-writing,
+upload, directory-scanning, or automatic-selection path.
+
+## Next implementation increment
+
+Design deliberate decision drafting in React without weakening the immutable
+bundle boundary:
+
+- Reuse the verified report lineage and require one explicit outcome,
+  rationale, author label, and visible UTC timestamp
+- Show a complete preview and content fingerprint before enabling export
+- Export a new `decision.json` download only after explicit confirmation; do
+  not write into a bundle, overwrite a local file, or call a server
+- Detect an already imported decision and keep it read-only instead of offering
+  a replacement
+- Prove in tests that metrics never preselect or recommend an outcome
+
+Collaborative review, remote storage, and raw video playback remain later
+increments.
 
 ## Acceptance criteria
 

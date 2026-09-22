@@ -99,6 +99,12 @@ one verified variant, or `--status rejected_all` without `--variant`. Add
 `decision.json` is immutable, identical writes are idempotent, and conflicting
 second decisions are refused.
 
+The React Reliability Lab can also inspect one explicitly selected local
+`decision.json`. The browser validates its exact schema, recomputes the decision
+fingerprint, and checks experiment/source/comparison/report lineage against the
+active validated report. Files stay in browser memory; the UI cannot create,
+edit, or upload a decision.
+
 ## Reliability Lab decisions
 
 ```python
