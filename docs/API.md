@@ -102,8 +102,15 @@ second decisions are refused.
 The React Reliability Lab can also inspect one explicitly selected local
 `decision.json`. The browser validates its exact schema, recomputes the decision
 fingerprint, and checks experiment/source/comparison/report lineage against the
-active validated report. Files stay in browser memory; the UI cannot create,
-edit, or upload a decision.
+active validated report. Files stay in browser memory; an imported audit record
+remains read-only and is never uploaded.
+
+When the active report was explicitly imported rather than loaded as the
+illustrative sample, the same panel can draft a new record. It starts without
+an outcome or variant, requires rationale, author, and a visible UTC timestamp,
+and displays the exact content fingerprint before enabling an explicit
+`decision.json` download. This is a browser download only: it does not mutate
+the bundle, overwrite an imported decision, or contact a server.
 
 ## Reliability Lab decisions
 

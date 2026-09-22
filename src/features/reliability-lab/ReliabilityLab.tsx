@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ChangeEvent } from "react"
+import { useEffect, useRef, useState, type ChangeEvent, type FormEvent } from "react"
 import { motion, useReducedMotion } from "motion/react"
 import {
   AlertTriangle,
@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   CircleOff,
   Database,
+  Download,
   Eye,
   FileCheck2,
   FileImage,
@@ -31,7 +32,13 @@ import {
   type ReportLoadResult,
 } from "./types"
 import { verifyEvidenceSelection, type VerifiedEvidence } from "./evidence"
-import { verifyDecisionFile, type VerifiedDecision } from "./decision"
+import {
+  createDecisionDraft,
+  serializeDecision,
+  verifyDecisionFile,
+  type LabDecision,
+  type VerifiedDecision,
+} from "./decision"
 
 const failureLabels: Record<FailureType, string> = {
   id_switch: "ID switches",
@@ -160,7 +167,74 @@ type DecisionLoadState =
   | { kind: "error"; message: string }
   | { kind: "ready"; result: VerifiedDecision }
 
-function DecisionInspector({ report }: { report: ReliabilityReport }) {
+type DecisionDraftState =
+  | { kind: "idle" }
+  | { kind: "creating" }
+  | { kind: "error"; message: string }
+  | { kind: "ready"; decision: LabDecision }
+
+function DecisionDraft({ report, enabled }: { report: ReliabilityReport; enabled: boolean }) {
+  const [status, setStatus] = useState<"" | "accepted" | "rejected_all">("")
+  const [variant, setVariant] = useState("")
+  const [rationale, setRationale] = useState("")
+  const [author, setAuthor] = useState("")
+  const [decidedAt, setDecidedAt] = useState("")
+  const [draft, setDraft] = useState<DecisionDraftState>({ kind: "idle" })
+  const invalidate = () => setDraft({ kind: "idle" })
+  const chooseStatus = (value: "accepted" | "rejected_all") => {
+    setStatus(value)
+    if (value === "rejected_all") setVariant("")
+    invalidate()
+  }
+  const preview = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setDraft({ kind: "creating" })
+    try {
+      if (status === "") throw new Error("Choose whether to accept one variant or reject all variants.")
+      const decision = await createDecisionDraft(report, {
+        status,
+        acceptedVariant: status === "accepted" ? variant : null,
+        rationale,
+        author,
+        decidedAt,
+      })
+      setDraft({ kind: "ready", decision })
+    } catch (error) {
+      setDraft({ kind: "error", message: error instanceof Error ? error.message : "Decision preview failed." })
+    }
+  }
+  const download = (decision: LabDecision) => {
+    const url = URL.createObjectURL(new Blob([serializeDecision(decision)], { type: "application/json" }))
+    const link = document.createElement("a")
+    link.href = url
+    link.download = "decision.json"
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+    URL.revokeObjectURL(url)
+  }
+
+  if (!enabled) {
+    return <div className="mt-6 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-5 text-sm text-muted-foreground">Import a verified report.json before drafting a decision. The illustrative sample cannot produce an audit record.</div>
+  }
+  return (
+    <form className="mt-6 rounded-2xl border border-slate-200 bg-slate-50/70 p-5 sm:p-6" onSubmit={preview}>
+      <div className="flex items-start justify-between gap-4"><div><h3 className="font-semibold">Draft a new local decision</h3><p className="mt-1 text-xs leading-5 text-muted-foreground">Nothing is preselected. Preview the complete record before choosing to download it.</p></div><span className="rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-indigo-700">Local only</span></div>
+      <fieldset className="mt-6"><legend className="text-sm font-medium">Outcome</legend><div className="mt-3 grid gap-3 sm:grid-cols-2"><label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-white p-4"><input type="radio" name="decision-status" value="accepted" checked={status === "accepted"} onChange={() => chooseStatus("accepted")} className="mt-1" /><span><strong className="block text-sm">Accept one variant</strong><span className="mt-1 block text-xs text-muted-foreground">Record one evidence-backed human choice.</span></span></label><label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-white p-4"><input type="radio" name="decision-status" value="rejected_all" checked={status === "rejected_all"} onChange={() => chooseStatus("rejected_all")} className="mt-1" /><span><strong className="block text-sm">Reject all variants</strong><span className="mt-1 block text-xs text-muted-foreground">State that no candidate meets the criteria.</span></span></label></div></fieldset>
+      <div className="mt-5 grid gap-5 sm:grid-cols-2">
+        <label className="grid gap-2 text-sm font-medium">Accepted variant<select value={variant} disabled={status !== "accepted"} required={status === "accepted"} onChange={(event) => { setVariant(event.target.value); invalidate() }} className="h-10 rounded-xl border border-input bg-white px-3 text-sm disabled:cursor-not-allowed disabled:bg-slate-100"><option value="">Choose a verified variant</option>{report.variants.map((item) => <option value={item.name} key={item.name}>{item.name}</option>)}</select></label>
+        <label className="grid gap-2 text-sm font-medium">Author<input value={author} required maxLength={200} onChange={(event) => { setAuthor(event.target.value); invalidate() }} placeholder="Reviewer name or local label" className="h-10 rounded-xl border border-input bg-white px-3 text-sm" /></label>
+      </div>
+      <label className="mt-5 grid gap-2 text-sm font-medium">Rationale<textarea value={rationale} required maxLength={5000} rows={4} onChange={(event) => { setRationale(event.target.value); invalidate() }} placeholder="Explain why this outcome follows from the reviewed evidence." className="rounded-xl border border-input bg-white px-3 py-2 text-sm leading-6" /></label>
+      <div className="mt-5 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-end"><label className="grid gap-2 text-sm font-medium">Decision time (UTC)<input value={decidedAt} required onChange={(event) => { setDecidedAt(event.target.value); invalidate() }} placeholder="2026-09-22T10:30:00Z" className="h-10 rounded-xl border border-input bg-white px-3 font-mono text-sm" /></label><Button type="button" variant="outline" onClick={() => { setDecidedAt(new Date().toISOString()); invalidate() }}>Use current UTC</Button></div>
+      <Button type="submit" className="mt-6" disabled={draft.kind === "creating"}>{draft.kind === "creating" ? "Creating preview…" : "Preview exact decision"}</Button>
+      {draft.kind === "error" && <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900" role="alert"><strong>Preview unavailable.</strong> {draft.message}</div>}
+      {draft.kind === "ready" && <div className="mt-6 rounded-2xl border border-indigo-200 bg-white p-5" aria-live="polite"><div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between"><div><p className="text-xs font-semibold uppercase tracking-wide text-indigo-700">Exact decision preview</p><p className="mt-2 text-xl font-semibold">{draft.decision.status === "accepted" ? `${draft.decision.accepted_variant} accepted` : "All variants rejected"}</p></div><Button type="button" onClick={() => download(draft.decision)}><Download className="size-4" />Confirm and download decision.json</Button></div><p className="mt-4 text-sm leading-6 text-slate-700">{draft.decision.rationale}</p><dl className="mt-5 grid gap-4 border-t border-slate-200 pt-5 text-xs sm:grid-cols-2"><div><dt className="text-muted-foreground">Author · UTC</dt><dd className="mt-1">{draft.decision.author} · <span className="font-mono">{draft.decision.decided_at}</span></dd></div><div><dt className="text-muted-foreground">Decision fingerprint</dt><dd className="mt-1 break-all font-mono">{draft.decision.decision_id}</dd></div><div><dt className="text-muted-foreground">Report lineage</dt><dd className="mt-1 break-all font-mono">{draft.decision.report_id}</dd></div><div><dt className="text-muted-foreground">Storage</dt><dd className="mt-1">Browser download only · bundle unchanged</dd></div></dl></div>}
+    </form>
+  )
+}
+
+function DecisionInspector({ report, canDraft }: { report: ReliabilityReport; canDraft: boolean }) {
   const [state, setState] = useState<DecisionLoadState>({ kind: "idle" })
   const verificationId = useRef(0)
   useEffect(() => () => { verificationId.current += 1 }, [])
@@ -189,13 +263,13 @@ function DecisionInspector({ report }: { report: ReliabilityReport }) {
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
           <div className="max-w-2xl">
             <p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Human review</p>
-            <h2 id="decision-title" className="mt-3 text-3xl font-semibold tracking-tight">Inspect an auditable decision.</h2>
-            <p className="mt-3 text-sm leading-6 text-muted-foreground">Select one decision.json created by the local CLI. It is verified against this report entirely in browser memory and is never uploaded or changed.</p>
+            <h2 id="decision-title" className="mt-3 text-3xl font-semibold tracking-tight">Review an auditable decision.</h2>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">Inspect an existing decision.json or deliberately draft a new one. Verification and drafting stay in browser memory; nothing is uploaded or written into the bundle.</p>
           </div>
-          <label className="inline-flex h-10 shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-xs transition hover:bg-primary/90 focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+          {state.kind !== "ready" && <label className="inline-flex h-10 shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-xs transition hover:bg-primary/90 focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
             <FileJson2 className="size-4" />Select decision.json
             <input className="sr-only" type="file" accept="application/json,.json" onChange={selectDecision} />
-          </label>
+          </label>}
         </div>
 
         {state.kind === "idle" && <div className="mt-6 rounded-2xl bg-slate-50 p-5 text-sm text-muted-foreground"><LockKeyhole className="mb-3 size-5 text-slate-500" />No decision is loaded. Metrics above never select a winner.</div>}
@@ -221,6 +295,7 @@ function DecisionInspector({ report }: { report: ReliabilityReport }) {
             </article>
           )
         })()}
+        {(state.kind === "idle" || state.kind === "error") && <DecisionDraft report={report} enabled={canDraft} />}
       </div>
     </section>
   )
@@ -473,9 +548,9 @@ function LabReport({ report, origin }: { report: ReliabilityReport; origin: Repo
 
         <FailureExplorer key={report.report_id} report={report} />
 
-        <DecisionInspector key={`decision:${report.report_id}`} report={report} />
+        <DecisionInspector key={`decision:${report.report_id}`} report={report} canDraft={origin.kind === "file"} />
 
-        <section className="mt-20 grid gap-5 lg:grid-cols-[1.1fr_.9fr]" aria-label="Evidence provenance and limitations"><div className="rounded-[1.75rem] bg-slate-950 p-7 text-white sm:p-9"><Fingerprint className="size-6 text-cyan-300" /><h2 className="mt-7 text-3xl font-semibold tracking-tight">Traceable provenance</h2><dl className="mt-7 grid gap-5 text-sm"><div><dt className="text-white/45">Report</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.report_id)}</dd></div><div><dt className="text-white/45">Experiment</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.experiment.experiment_id)}</dd></div><div><dt className="text-white/45">Detections</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.source.detection_sha256)}</dd></div><div><dt className="text-white/45">Ground truth</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.source.ground_truth_sha256)}</dd></div></dl></div><div className="rounded-[1.75rem] border border-indigo-100 bg-indigo-50/70 p-7 sm:p-9"><Info className="size-6 text-indigo-600" /><h2 className="mt-7 text-3xl font-semibold tracking-tight">Boundaries stay visible</h2><ul className="mt-6 space-y-4">{report.limitations.map((limitation) => <li className="flex gap-3 text-sm leading-6 text-slate-700" key={limitation}><CheckCircle2 className="mt-1 size-4 shrink-0 text-indigo-500" />{limitation}</li>)}</ul><Button disabled className="mt-8 w-full">Browser selection is not enabled</Button><p className="mt-3 text-center text-xs text-muted-foreground">Create auditable decisions with the preview-first local CLI; this page only verifies and displays them.</p></div></section>
+        <section className="mt-20 grid gap-5 lg:grid-cols-[1.1fr_.9fr]" aria-label="Evidence provenance and limitations"><div className="rounded-[1.75rem] bg-slate-950 p-7 text-white sm:p-9"><Fingerprint className="size-6 text-cyan-300" /><h2 className="mt-7 text-3xl font-semibold tracking-tight">Traceable provenance</h2><dl className="mt-7 grid gap-5 text-sm"><div><dt className="text-white/45">Report</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.report_id)}</dd></div><div><dt className="text-white/45">Experiment</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.experiment.experiment_id)}</dd></div><div><dt className="text-white/45">Detections</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.source.detection_sha256)}</dd></div><div><dt className="text-white/45">Ground truth</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.source.ground_truth_sha256)}</dd></div></dl></div><div className="rounded-[1.75rem] border border-indigo-100 bg-indigo-50/70 p-7 sm:p-9"><Info className="size-6 text-indigo-600" /><h2 className="mt-7 text-3xl font-semibold tracking-tight">Boundaries stay visible</h2><ul className="mt-6 space-y-4">{report.limitations.map((limitation) => <li className="flex gap-3 text-sm leading-6 text-slate-700" key={limitation}><CheckCircle2 className="mt-1 size-4 shrink-0 text-indigo-500" />{limitation}</li>)}</ul><Button disabled className="mt-8 w-full">Automatic selection is not enabled</Button><p className="mt-3 text-center text-xs text-muted-foreground">Every outcome requires a deliberate human choice and an auditable rationale.</p></div></section>
       </div>
     </div>
   )
