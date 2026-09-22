@@ -77,6 +77,8 @@ The first local workflow and its versioned records are defined in
       React Lab without uploads, mutation, or automatic winner selection.
 - [x] Add deliberate React decision drafting with an exact preview and explicit
       local `decision.json` download, while leaving bundles untouched.
+- [x] Lock Python and browser decision serialization to shared accepted and
+      rejected-all conformance vectors and enforce them in CI.
 - [ ] Migrate the long-form research write-up into reusable article components.
 - [ ] Design a data-driven benchmark explorer before replacing generated reports.
 - [ ] Port the interactive tracker shell without changing tracker behavior or

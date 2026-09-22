@@ -1,4 +1,11 @@
 import type { ReliabilityReport } from "./types"
+import {
+  createDecisionRecord,
+  serializeDecision,
+  sha256Canonical,
+} from "./decision-contract.mjs"
+
+export { serializeDecision } from "./decision-contract.mjs"
 
 export interface LabDecision {
   decision_id: string
@@ -49,21 +56,6 @@ const hasExactFields = (value: Record<string, unknown>, fields: string[]) => {
 }
 const isUtcTimestamp = (value: unknown): value is string =>
   typeof value === "string" && /(?:Z|\+00(?::?00)?)$/.test(value) && !Number.isNaN(Date.parse(value))
-
-function canonicalJson(value: unknown): string {
-  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`
-  if (isRecord(value)) {
-    return `{${Object.keys(value).sort().map((key) => `${JSON.stringify(key)}:${canonicalJson(value[key])}`).join(",")}}`
-  }
-  const rendered = JSON.stringify(value)
-  if (rendered === undefined) throw new Error("The selected record contains a value that cannot be hashed.")
-  return rendered
-}
-
-async function sha256(value: unknown) {
-  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(canonicalJson(value)))
-  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("")
-}
 
 function parseDecision(value: unknown): LabDecision | null {
   if (!isRecord(value) || !hasExactFields(value, decisionFields)) return null
@@ -118,11 +110,7 @@ export async function createDecisionDraft(
     decided_at: input.decidedAt,
     schema_version: 1 as const,
   }
-  return { decision_id: await sha256(content), ...content }
-}
-
-export function serializeDecision(decision: LabDecision) {
-  return `${canonicalJson(decision)}\n`
+  return createDecisionRecord(content)
 }
 
 function verifyLineage(decision: LabDecision, report: ReliabilityReport) {
@@ -156,7 +144,7 @@ export async function verifyDecisionFile(
   if (!decision) throw new Error("The decision structure or schema version is invalid.")
   const content = { ...parsed as Record<string, unknown> }
   delete content.decision_id
-  if (await sha256(content) !== decision.decision_id) {
+  if (await sha256Canonical(content) !== decision.decision_id) {
     throw new Error("The decision fingerprint does not match its content.")
   }
   verifyLineage(decision, report)

@@ -165,11 +165,12 @@ def test_lab_decision_import_is_explicit_private_and_read_only() -> None:
 
 def test_lab_decision_verifies_schema_fingerprint_and_full_lineage() -> None:
     decision = (ROOT / "src/features/reliability-lab/decision.ts").read_text()
+    contract = (ROOT / "src/features/reliability-lab/decision-contract.mjs").read_text()
 
     assert 'file.name !== "decision.json"' in decision
     assert "hasExactFields(value, decisionFields)" in decision
     assert "The decision structure or schema version is invalid." in decision
-    assert "crypto.subtle.digest" in decision
+    assert "globalThis.crypto.subtle.digest" in contract
     assert "The decision fingerprint does not match its content." in decision
     assert "decision.experiment_id !== report.experiment.experiment_id" in decision
     assert "decision.source_id !== report.source.source_id" in decision
@@ -205,7 +206,7 @@ def test_lab_decision_draft_has_no_automatic_outcome_or_variant() -> None:
 
 def test_lab_decision_draft_requires_preview_before_local_download() -> None:
     component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
-    decision = (ROOT / "src/features/reliability-lab/decision.ts").read_text()
+    contract = (ROOT / "src/features/reliability-lab/decision-contract.mjs").read_text()
 
     assert "createDecisionDraft" in component
     assert "Preview exact decision" in component
@@ -215,7 +216,7 @@ def test_lab_decision_draft_requires_preview_before_local_download() -> None:
     assert "serializeDecision(decision)" in component
     assert "Browser download only · bundle unchanged" in component
     assert "URL.revokeObjectURL(url)" in component
-    assert "export function serializeDecision" in decision
+    assert "export function serializeDecision" in contract
 
 
 def test_lab_decision_draft_matches_immutable_contract_and_blocks_replacement() -> None:

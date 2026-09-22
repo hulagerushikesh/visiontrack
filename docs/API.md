@@ -112,6 +112,13 @@ and displays the exact content fingerprint before enabling an explicit
 `decision.json` download. This is a browser download only: it does not mutate
 the bundle, overwrite an imported decision, or contact a server.
 
+Decision interoperability is checked with shared accepted and rejected-all
+vectors in `tests/fixtures/lab_decision_conformance.json`. Python validates the
+vectors in the normal test suite, while `npm run test:decision-contract` runs
+the exact JavaScript canonicalization and hashing module used by React. Both
+must produce identical fingerprints, Unicode-preserving canonical JSON, and
+newline-terminated file bytes.
+
 ## Reliability Lab decisions
 
 ```python

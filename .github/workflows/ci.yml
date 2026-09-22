@@ -66,3 +66,21 @@ jobs:
         run: pip install ruff
       - name: Ruff check
         run: ruff check src tests experiments data
+
+  web:
+    name: web contract + build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - name: Install web dependencies
+        run: npm ci
+      - name: Verify decision contract
+        run: npm run test:decision-contract
+      - name: Type-check React
+        run: npm run typecheck
+      - name: Build React app
+        run: npm run build:app

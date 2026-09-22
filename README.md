@@ -163,6 +163,10 @@ After importing a real report, the Lab can also draft a decision from blank
 human inputs, preview its complete fingerprinted record, and explicitly
 download it. The browser never writes into the experiment bundle.
 
+Python and browser decision records are locked to shared conformance vectors.
+Run `npm run test:decision-contract` to verify exact fingerprints, canonical
+JSON, Unicode handling, UTC forms, and downloaded file bytes.
+
 **No install at all** — run the tracker live in your browser at **[visiontrack.hulage.in/live](https://visiontrack.hulage.in/live)**: the same from-scratch association (Kalman + Hungarian + ByteTrack), ported to JavaScript and running on-device over your webcam or a sample clip.
 
 **Benchmark a set of trackers** into one report (leaderboard + paired significance + ID-switch error taxonomy) — `make benchmark`, or see the live report at **[visiontrack.hulage.in/benchmark](https://visiontrack.hulage.in/benchmark)**.
