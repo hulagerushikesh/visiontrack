@@ -75,6 +75,8 @@ The first local workflow and its versioned records are defined in
       lineage and requires `--write` for immutable persistence.
 - [x] Verify and display an explicitly selected local `decision.json` in the
       React Lab without uploads, mutation, or automatic winner selection.
+- [x] Add deliberate React decision drafting with an exact preview and explicit
+      local `decision.json` download, while leaving bundles untouched.
 - [ ] Migrate the long-form research write-up into reusable article components.
 - [ ] Design a data-driven benchmark explorer before replacing generated reports.
 - [ ] Port the interactive tracker shell without changing tracker behavior or

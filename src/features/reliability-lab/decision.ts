@@ -19,6 +19,14 @@ export interface VerifiedDecision {
   filename: string
 }
 
+export interface DecisionDraftInput {
+  status: "accepted" | "rejected_all"
+  acceptedVariant: string | null
+  rationale: string
+  author: string
+  decidedAt: string
+}
+
 const maxDecisionBytes = 1024 * 1024
 const hashPattern = /^[a-f0-9]{64}$/
 const decisionFields = [
@@ -39,6 +47,8 @@ const hasExactFields = (value: Record<string, unknown>, fields: string[]) => {
   const expected = [...fields].sort()
   return actual.length === expected.length && actual.every((field, index) => field === expected[index])
 }
+const isUtcTimestamp = (value: unknown): value is string =>
+  typeof value === "string" && /(?:Z|\+00(?::?00)?)$/.test(value) && !Number.isNaN(Date.parse(value))
 
 function canonicalJson(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`
@@ -66,10 +76,53 @@ function parseDecision(value: unknown): LabDecision | null {
     (accepted && !isNonEmptyTrimmedString(value.accepted_variant)) ||
     (rejected && value.accepted_variant !== null) ||
     !isTrimmedString(value.rationale, 5000) || !isTrimmedString(value.author, 200) ||
-    typeof value.decided_at !== "string" || !/(?:Z|\+00(?::?00)?)$/.test(value.decided_at) ||
-    Number.isNaN(Date.parse(value.decided_at))
+    !isUtcTimestamp(value.decided_at)
   ) return null
   return value as unknown as LabDecision
+}
+
+export async function createDecisionDraft(
+  report: ReliabilityReport,
+  input: DecisionDraftInput,
+): Promise<LabDecision> {
+  if (report.decision.status !== "not_selected" || report.decision.accepted_variant !== null) {
+    throw new Error("The active report does not preserve the unselected decision boundary.")
+  }
+  if (input.status !== "accepted" && input.status !== "rejected_all") {
+    throw new Error("Choose whether to accept one variant or reject all variants.")
+  }
+  const acceptedVariant = input.status === "accepted" ? input.acceptedVariant : null
+  if (input.status === "accepted" &&
+    (!isNonEmptyTrimmedString(acceptedVariant) ||
+      !report.variants.some((variant) => variant.name === acceptedVariant))) {
+    throw new Error("Choose one verified variant to accept.")
+  }
+  if (!isTrimmedString(input.rationale, 5000)) {
+    throw new Error("Rationale must be 1–5000 characters with no surrounding whitespace.")
+  }
+  if (!isTrimmedString(input.author, 200)) {
+    throw new Error("Author must be 1–200 characters with no surrounding whitespace.")
+  }
+  if (!isUtcTimestamp(input.decidedAt)) {
+    throw new Error("Decision time must be a valid UTC timestamp.")
+  }
+  const content = {
+    experiment_id: report.experiment.experiment_id,
+    source_id: report.source.source_id,
+    comparison_id: report.comparison_id,
+    report_id: report.report_id,
+    status: input.status,
+    accepted_variant: acceptedVariant,
+    rationale: input.rationale,
+    author: input.author,
+    decided_at: input.decidedAt,
+    schema_version: 1 as const,
+  }
+  return { decision_id: await sha256(content), ...content }
+}
+
+export function serializeDecision(decision: LabDecision) {
+  return `${canonicalJson(decision)}\n`
 }
 
 function verifyLineage(decision: LabDecision, report: ReliabilityReport) {

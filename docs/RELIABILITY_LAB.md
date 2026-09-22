@@ -885,7 +885,7 @@ decision fingerprint, and report fingerprint. Changing reports remounts the
 inspector and clears prior decision state. The UI contains no decision-writing,
 upload, directory-scanning, or automatic-selection path.
 
-## Next implementation increment
+## Twentieth implementation increment — complete
 
 Design deliberate decision drafting in React without weakening the immutable
 bundle boundary:
@@ -898,6 +898,38 @@ bundle boundary:
 - Detect an already imported decision and keep it read-only instead of offering
   a replacement
 - Prove in tests that metrics never preselect or recommend an outcome
+
+Collaborative review, remote storage, and raw video playback remain later
+increments.
+
+Implemented as a blank-by-default decision form beneath the read-only decision
+inspector. Drafting is unavailable for the illustrative fixture and becomes
+available only after a user imports a validated `report.json`. Neither outcome
+nor variant is preselected. Accepted decisions require a deliberate verified
+variant choice; rejected-all decisions remove the variant input. Rationale,
+author, and a visible UTC timestamp remain required human inputs.
+
+Submitting the form creates only a preview. The browser derives the decision
+from the active experiment/source/comparison/report fingerprints, computes the
+same canonical content fingerprint used by Python, and displays the complete
+outcome and audit metadata. Editing any input invalidates that preview. A
+separate confirmation downloads canonical `decision.json`; it does not write
+into the bundle or call a server. Once a verified decision is imported, the
+draft form disappears and the existing record remains read-only.
+
+## Next implementation increment
+
+Add cross-runtime decision conformance fixtures before expanding the review
+workflow:
+
+- Generate fixed accepted and rejected-all records from the Python contract
+- Verify those exact records and fingerprints with the browser implementation
+- Generate the same records from the browser implementation and read them with
+  Python without normalization or field changes
+- Lock canonical serialization, UTC handling, Unicode rationale/author text,
+  and both outcomes to shared fixture vectors
+- Keep collaborative review, signatures, and remote persistence outside this
+  interoperability increment
 
 Collaborative review, remote storage, and raw video playback remain later
 increments.

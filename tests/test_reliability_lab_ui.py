@@ -38,7 +38,7 @@ def test_lab_ui_keeps_evidence_and_identity_boundaries_visible() -> None:
     assert "Demonstration fixture · illustrative data" in component
     assert "The Python pipeline remains the source of truth" in component
     assert "same correspondence as the published metrics" in component
-    assert "Browser selection is not enabled" in component
+    assert "Automatic selection is not enabled" in component
     assert "Track IDs are run-local and are not persistent person identities" in fixture
     assert "satisfies ReliabilityReport" in fixture
     assert '<caption className=' in component
@@ -156,7 +156,7 @@ def test_lab_decision_import_is_explicit_private_and_read_only() -> None:
     assert "Select decision.json" in component
     assert "Verified local decision" in component
     assert "Metrics above never select a winner." in component
-    assert "is never uploaded or changed" in component
+    assert "nothing is uploaded or written into the bundle" in component
     assert "verifyDecisionFile" in component
     assert "fetch(" not in decision
     assert "FormData" not in decision
@@ -189,3 +189,47 @@ def test_lab_decision_ui_has_missing_invalid_and_verified_states() -> None:
     assert "All variants rejected" in component
     assert "accepted" in component
     assert "Read only" in component
+
+
+def test_lab_decision_draft_has_no_automatic_outcome_or_variant() -> None:
+    component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+
+    assert 'useState<"" | "accepted" | "rejected_all">("")' in component
+    assert 'useState("")' in component
+    assert '<option value="">Choose a verified variant</option>' in component
+    assert "Nothing is preselected." in component
+    assert "Metrics above never select a winner." in component
+    assert 'canDraft={origin.kind === "file"}' in component
+    assert "The illustrative sample cannot produce an audit record." in component
+
+
+def test_lab_decision_draft_requires_preview_before_local_download() -> None:
+    component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+    decision = (ROOT / "src/features/reliability-lab/decision.ts").read_text()
+
+    assert "createDecisionDraft" in component
+    assert "Preview exact decision" in component
+    assert "Exact decision preview" in component
+    assert "Confirm and download decision.json" in component
+    assert 'link.download = "decision.json"' in component
+    assert "serializeDecision(decision)" in component
+    assert "Browser download only · bundle unchanged" in component
+    assert "URL.revokeObjectURL(url)" in component
+    assert "export function serializeDecision" in decision
+
+
+def test_lab_decision_draft_matches_immutable_contract_and_blocks_replacement() -> None:
+    component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+    decision = (ROOT / "src/features/reliability-lab/decision.ts").read_text()
+    types = (ROOT / "src/features/reliability-lab/types.ts").read_text()
+
+    assert 'report.decision.status !== "not_selected"' in decision
+    assert "Choose whether to accept one variant or reject all variants." in decision
+    assert "Choose one verified variant to accept." in decision
+    assert "Rationale must be 1–5000 characters" in decision
+    assert "Author must be 1–200 characters" in decision
+    assert "Decision time must be a valid UTC timestamp." in decision
+    assert 'decision.reason !== "requires_human_acceptance_decision"' in types
+    assert '(state.kind === "idle" || state.kind === "error")' in component
+    assert 'state.kind !== "ready" && <label' in component
+    assert 'state.kind === "ready"' in component

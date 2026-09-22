@@ -284,10 +284,9 @@ export function parseReportModel(value: unknown): ReportLoadResult {
 
   const decision = value.decision
   if (
-    !isRecord(decision) || !isNonEmptyString(decision.status) ||
-    !(decision.accepted_variant === null ||
-      (isNonEmptyString(decision.accepted_variant) && variantNames.has(decision.accepted_variant))) ||
-    !isNonEmptyString(decision.reason)
+    !isRecord(decision) || decision.status !== "not_selected" ||
+    decision.accepted_variant !== null ||
+    decision.reason !== "requires_human_acceptance_decision"
   ) return missing("The human decision boundary is missing or invalid.")
   if (!Array.isArray(value.limitations) || value.limitations.length === 0 || !value.limitations.every(isNonEmptyString)) {
     return missing("The report must state at least one non-empty limitation.")

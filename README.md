@@ -159,6 +159,9 @@ packaging/release: [docs/RELEASE.md](docs/RELEASE.md).
 The private, client-side Reliability Lab at `/lab` can inspect an explicitly
 selected `decision.json`. It verifies the decision fingerprint and full report
 lineage in browser memory, then displays the audit record without editing it.
+After importing a real report, the Lab can also draft a decision from blank
+human inputs, preview its complete fingerprinted record, and explicitly
+download it. The browser never writes into the experiment bundle.
 
 **No install at all** — run the tracker live in your browser at **[visiontrack.hulage.in/live](https://visiontrack.hulage.in/live)**: the same from-scratch association (Kalman + Hungarian + ByteTrack), ported to JavaScript and running on-device over your webcam or a sample clip.
 
