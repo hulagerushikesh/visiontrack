@@ -917,7 +917,7 @@ separate confirmation downloads canonical `decision.json`; it does not write
 into the bundle or call a server. Once a verified decision is imported, the
 draft form disappears and the existing record remains read-only.
 
-## Next implementation increment
+## Twenty-first implementation increment — complete
 
 Add cross-runtime decision conformance fixtures before expanding the review
 workflow:
@@ -930,6 +930,39 @@ workflow:
   and both outcomes to shared fixture vectors
 - Keep collaborative review, signatures, and remote persistence outside this
   interoperability increment
+
+Collaborative review, remote storage, and raw video playback remain later
+increments.
+
+Implemented with two shared schema-v1 fixture vectors: an accepted decision
+with Unicode reviewer/rationale text and a `Z` timestamp, and a rejected-all
+decision using the equivalent `+00:00` UTC form. Each vector fixes the complete
+input values, decision fingerprint, canonical JSON, and newline-terminated file
+representation.
+
+Python constructs and reads both records through `DecisionRecord`; the exact
+JavaScript contract module used by React independently constructs, hashes, and
+serializes the same vectors under Node. A dedicated GitHub `web contract +
+build` job now runs this conformance test, TypeScript checking, and the
+production React build alongside the existing Python matrix and Ruff checks.
+This closes the browser/Python decision-file boundary without introducing
+normalization, signatures, or network persistence.
+
+## Next implementation increment
+
+Make the complete local Reliability Lab workflow easy to exercise without a
+private dataset:
+
+- Add a preview-first command that describes a small deterministic synthetic
+  Lab bundle before creating it
+- Require an explicit output directory and refuse to replace existing content
+- On confirmation, produce source, detections, experiment, paired runs,
+  comparison, failures, and report artifacts through the existing verified
+  APIs rather than special fixture-only formats
+- Print the exact `report.json` path and next steps for importing it into
+  `/lab`, drafting a decision, and verifying that decision with the CLI
+- Keep real video, image evidence, automatic selection, and remote storage out
+  of this onboarding increment
 
 Collaborative review, remote storage, and raw video playback remain later
 increments.

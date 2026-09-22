@@ -9,6 +9,7 @@
     "build:app": "vite build",
     "build:docs": "python3 -m pip install --quiet --disable-pip-version-check --target .pydeps 'mkdocs-material>=9.5' && PYTHONPATH=.pydeps python3 -m mkdocs build -d vercel_build/docs",
     "build": "npm run build:app && npm run build:docs",
+    "test:decision-contract": "node scripts/test-decision-contract.mjs",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview"
   },

@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "vectors": [
+    {
+      "name": "accepted_unicode_z",
+      "values": {
+        "experiment_id": "1111111111111111111111111111111111111111111111111111111111111111",
+        "source_id": "2222222222222222222222222222222222222222222222222222222222222222",
+        "comparison_id": "3333333333333333333333333333333333333333333333333333333333333333",
+        "report_id": "4444444444444444444444444444444444444444444444444444444444444444",
+        "status": "accepted",
+        "accepted_variant": "appearance-v2",
+        "rationale": "Reviewed café entrance failures — पहचान continuity improved.",
+        "author": "Riya Δ",
+        "decided_at": "2026-09-22T10:30:00Z"
+      },
+      "decision_id": "0fd5dfadcb3db55a74b872533c41896b04648d9d25a3665e77557b2747fee476",
+      "canonical_json": "{\"accepted_variant\":\"appearance-v2\",\"author\":\"Riya Δ\",\"comparison_id\":\"3333333333333333333333333333333333333333333333333333333333333333\",\"decided_at\":\"2026-09-22T10:30:00Z\",\"decision_id\":\"0fd5dfadcb3db55a74b872533c41896b04648d9d25a3665e77557b2747fee476\",\"experiment_id\":\"1111111111111111111111111111111111111111111111111111111111111111\",\"rationale\":\"Reviewed café entrance failures — पहचान continuity improved.\",\"report_id\":\"4444444444444444444444444444444444444444444444444444444444444444\",\"schema_version\":1,\"source_id\":\"2222222222222222222222222222222222222222222222222222222222222222\",\"status\":\"accepted\"}"
+    },
+    {
+      "name": "rejected_all_offset_utc",
+      "values": {
+        "experiment_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "source_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "comparison_id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "report_id": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "status": "rejected_all",
+        "accepted_variant": null,
+        "rationale": "No variant meets the registered ID-switch limit; retain the baseline only as evidence.",
+        "author": "reviewer/local",
+        "decided_at": "2026-09-22T10:30:00+00:00"
+      },
+      "decision_id": "390db5c260b105399d7930d63ed25c4ecb8e178a9abba1aac9cacada92c5042f",
+      "canonical_json": "{\"accepted_variant\":null,\"author\":\"reviewer/local\",\"comparison_id\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"decided_at\":\"2026-09-22T10:30:00+00:00\",\"decision_id\":\"390db5c260b105399d7930d63ed25c4ecb8e178a9abba1aac9cacada92c5042f\",\"experiment_id\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"rationale\":\"No variant meets the registered ID-switch limit; retain the baseline only as evidence.\",\"report_id\":\"dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd\",\"schema_version\":1,\"source_id\":\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\"status\":\"rejected_all\"}"
+    }
+  ]
+}
