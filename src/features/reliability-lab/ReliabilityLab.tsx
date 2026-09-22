@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from "motion/react"
 import {
   AlertTriangle,
   ArrowUpRight,
+  BadgeCheck,
   CheckCircle2,
   CircleOff,
   Database,
@@ -30,6 +31,7 @@ import {
   type ReportLoadResult,
 } from "./types"
 import { verifyEvidenceSelection, type VerifiedEvidence } from "./evidence"
+import { verifyDecisionFile, type VerifiedDecision } from "./decision"
 
 const failureLabels: Record<FailureType, string> = {
   id_switch: "ID switches",
@@ -149,6 +151,78 @@ function MetricTable({ report }: { report: ReliabilityReport }) {
         <tbody>{metrics.map((metric) => <tr className="border-b border-border last:border-0" key={metric}><th scope="row" className="px-6 py-4 font-mono text-sm">{metric}</th>{report.variants.map((variant) => <td className="px-6 py-4" key={variant.name}><span className="font-semibold">{number(variant.metrics[metric])}</span><span className="ml-2 text-xs text-muted-foreground">{number(variant.metric_deltas[metric], true)} Δ</span></td>)}</tr>)}</tbody>
       </table>
     </div>
+  )
+}
+
+type DecisionLoadState =
+  | { kind: "idle" }
+  | { kind: "verifying" }
+  | { kind: "error"; message: string }
+  | { kind: "ready"; result: VerifiedDecision }
+
+function DecisionInspector({ report }: { report: ReliabilityReport }) {
+  const [state, setState] = useState<DecisionLoadState>({ kind: "idle" })
+  const verificationId = useRef(0)
+  useEffect(() => () => { verificationId.current += 1 }, [])
+
+  const selectDecision = async (event: ChangeEvent<HTMLInputElement>) => {
+    const input = event.currentTarget
+    const file = input.files?.[0]
+    if (!file) return
+    const requestId = ++verificationId.current
+    setState({ kind: "verifying" })
+    try {
+      const result = await verifyDecisionFile(file, report)
+      if (verificationId.current === requestId) setState({ kind: "ready", result })
+    } catch (error) {
+      if (verificationId.current === requestId) {
+        setState({ kind: "error", message: error instanceof Error ? error.message : "Decision verification failed." })
+      }
+    } finally {
+      input.value = ""
+    }
+  }
+
+  return (
+    <section className="mt-20" aria-labelledby="decision-title">
+      <div className="rounded-[1.75rem] border border-indigo-100 bg-white p-7 shadow-sm sm:p-9">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+          <div className="max-w-2xl">
+            <p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Human review</p>
+            <h2 id="decision-title" className="mt-3 text-3xl font-semibold tracking-tight">Inspect an auditable decision.</h2>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">Select one decision.json created by the local CLI. It is verified against this report entirely in browser memory and is never uploaded or changed.</p>
+          </div>
+          <label className="inline-flex h-10 shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-xs transition hover:bg-primary/90 focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+            <FileJson2 className="size-4" />Select decision.json
+            <input className="sr-only" type="file" accept="application/json,.json" onChange={selectDecision} />
+          </label>
+        </div>
+
+        {state.kind === "idle" && <div className="mt-6 rounded-2xl bg-slate-50 p-5 text-sm text-muted-foreground"><LockKeyhole className="mb-3 size-5 text-slate-500" />No decision is loaded. Metrics above never select a winner.</div>}
+        {state.kind === "verifying" && <p className="mt-6 text-sm text-indigo-700" role="status" aria-live="polite">Verifying decision schema, fingerprint, and complete report lineage…</p>}
+        {state.kind === "error" && <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900" role="alert"><strong>Decision not opened.</strong> {state.message}</div>}
+        {state.kind === "ready" && (() => {
+          const decision = state.result.decision
+          const accepted = decision.status === "accepted"
+          return (
+            <article className={accepted ? "mt-6 rounded-2xl border border-emerald-200 bg-emerald-50/70 p-6" : "mt-6 rounded-2xl border border-amber-200 bg-amber-50/70 p-6"} aria-live="polite">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div className="flex items-start gap-3"><BadgeCheck className={accepted ? "mt-0.5 size-6 shrink-0 text-emerald-600" : "mt-0.5 size-6 shrink-0 text-amber-600"} /><div><p className="text-sm font-semibold">Verified local decision</p><h3 className="mt-1 text-2xl font-semibold tracking-tight">{accepted ? `${decision.accepted_variant} accepted` : "All variants rejected"}</h3></div></div>
+                <span className="rounded-full bg-white/80 px-3 py-1.5 text-xs font-semibold">Read only</span>
+              </div>
+              <blockquote className="mt-6 border-l-2 border-current/20 pl-4 text-sm leading-7 text-slate-700">{decision.rationale}</blockquote>
+              <dl className="mt-6 grid gap-5 border-t border-current/10 pt-6 text-sm sm:grid-cols-2 lg:grid-cols-4">
+                <div><dt className="text-xs uppercase tracking-wide text-muted-foreground">Author</dt><dd className="mt-1 font-semibold">{decision.author}</dd></div>
+                <div><dt className="text-xs uppercase tracking-wide text-muted-foreground">Decided at</dt><dd className="mt-1 font-mono text-xs">{decision.decided_at}</dd></div>
+                <div><dt className="text-xs uppercase tracking-wide text-muted-foreground">Decision</dt><dd className="mt-1 break-all font-mono text-xs">{short(decision.decision_id)}</dd></div>
+                <div><dt className="text-xs uppercase tracking-wide text-muted-foreground">Report</dt><dd className="mt-1 break-all font-mono text-xs">{short(decision.report_id)}</dd></div>
+              </dl>
+              <p className="mt-5 text-xs text-muted-foreground">{state.result.filename} · experiment, source, comparison, and report lineage verified</p>
+            </article>
+          )
+        })()}
+      </div>
+    </section>
   )
 }
 
@@ -399,7 +473,9 @@ function LabReport({ report, origin }: { report: ReliabilityReport; origin: Repo
 
         <FailureExplorer key={report.report_id} report={report} />
 
-        <section className="mt-20 grid gap-5 lg:grid-cols-[1.1fr_.9fr]" aria-label="Evidence provenance and limitations"><div className="rounded-[1.75rem] bg-slate-950 p-7 text-white sm:p-9"><Fingerprint className="size-6 text-cyan-300" /><h2 className="mt-7 text-3xl font-semibold tracking-tight">Traceable provenance</h2><dl className="mt-7 grid gap-5 text-sm"><div><dt className="text-white/45">Report</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.report_id)}</dd></div><div><dt className="text-white/45">Experiment</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.experiment.experiment_id)}</dd></div><div><dt className="text-white/45">Detections</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.source.detection_sha256)}</dd></div><div><dt className="text-white/45">Ground truth</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.source.ground_truth_sha256)}</dd></div></dl></div><div className="rounded-[1.75rem] border border-indigo-100 bg-indigo-50/70 p-7 sm:p-9"><Info className="size-6 text-indigo-600" /><h2 className="mt-7 text-3xl font-semibold tracking-tight">Boundaries stay visible</h2><ul className="mt-6 space-y-4">{report.limitations.map((limitation) => <li className="flex gap-3 text-sm leading-6 text-slate-700" key={limitation}><CheckCircle2 className="mt-1 size-4 shrink-0 text-indigo-500" />{limitation}</li>)}</ul><Button disabled className="mt-8 w-full">Variant selection is not enabled</Button><p className="mt-3 text-center text-xs text-muted-foreground">A future step will record an explicit, auditable human decision.</p></div></section>
+        <DecisionInspector key={`decision:${report.report_id}`} report={report} />
+
+        <section className="mt-20 grid gap-5 lg:grid-cols-[1.1fr_.9fr]" aria-label="Evidence provenance and limitations"><div className="rounded-[1.75rem] bg-slate-950 p-7 text-white sm:p-9"><Fingerprint className="size-6 text-cyan-300" /><h2 className="mt-7 text-3xl font-semibold tracking-tight">Traceable provenance</h2><dl className="mt-7 grid gap-5 text-sm"><div><dt className="text-white/45">Report</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.report_id)}</dd></div><div><dt className="text-white/45">Experiment</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.experiment.experiment_id)}</dd></div><div><dt className="text-white/45">Detections</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.source.detection_sha256)}</dd></div><div><dt className="text-white/45">Ground truth</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.source.ground_truth_sha256)}</dd></div></dl></div><div className="rounded-[1.75rem] border border-indigo-100 bg-indigo-50/70 p-7 sm:p-9"><Info className="size-6 text-indigo-600" /><h2 className="mt-7 text-3xl font-semibold tracking-tight">Boundaries stay visible</h2><ul className="mt-6 space-y-4">{report.limitations.map((limitation) => <li className="flex gap-3 text-sm leading-6 text-slate-700" key={limitation}><CheckCircle2 className="mt-1 size-4 shrink-0 text-indigo-500" />{limitation}</li>)}</ul><Button disabled className="mt-8 w-full">Browser selection is not enabled</Button><p className="mt-3 text-center text-xs text-muted-foreground">Create auditable decisions with the preview-first local CLI; this page only verifies and displays them.</p></div></section>
       </div>
     </div>
   )

@@ -156,6 +156,10 @@ verified lineage before `--write` creates `decision.json`. CLI subcommands:
 Full public API: [docs/API.md](docs/API.md) ·
 packaging/release: [docs/RELEASE.md](docs/RELEASE.md).
 
+The private, client-side Reliability Lab at `/lab` can inspect an explicitly
+selected `decision.json`. It verifies the decision fingerprint and full report
+lineage in browser memory, then displays the audit record without editing it.
+
 **No install at all** — run the tracker live in your browser at **[visiontrack.hulage.in/live](https://visiontrack.hulage.in/live)**: the same from-scratch association (Kalman + Hungarian + ByteTrack), ported to JavaScript and running on-device over your webcam or a sample clip.
 
 **Benchmark a set of trackers** into one report (leaderboard + paired significance + ID-switch error taxonomy) — `make benchmark`, or see the live report at **[visiontrack.hulage.in/benchmark](https://visiontrack.hulage.in/benchmark)**.

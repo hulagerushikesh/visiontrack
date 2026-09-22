@@ -38,7 +38,7 @@ def test_lab_ui_keeps_evidence_and_identity_boundaries_visible() -> None:
     assert "Demonstration fixture · illustrative data" in component
     assert "The Python pipeline remains the source of truth" in component
     assert "same correspondence as the published metrics" in component
-    assert "Variant selection is not enabled" in component
+    assert "Browser selection is not enabled" in component
     assert "Track IDs are run-local and are not persistent person identities" in fixture
     assert "satisfies ReliabilityReport" in fixture
     assert '<caption className=' in component
@@ -146,3 +146,46 @@ def test_lab_evidence_reveal_preserves_privacy_and_revokes_object_urls() -> None
     assert "URL.revokeObjectURL(url)" in component
     assert "source_pixels" in component
     assert 'key={`${report.report_id}:${selectedEvent.event_id}`}' in component
+
+
+def test_lab_decision_import_is_explicit_private_and_read_only() -> None:
+    component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+    decision = (ROOT / "src/features/reliability-lab/decision.ts").read_text()
+
+    assert "function DecisionInspector" in component
+    assert "Select decision.json" in component
+    assert "Verified local decision" in component
+    assert "Metrics above never select a winner." in component
+    assert "is never uploaded or changed" in component
+    assert "verifyDecisionFile" in component
+    assert "fetch(" not in decision
+    assert "FormData" not in decision
+    assert "showDirectoryPicker" not in decision
+
+
+def test_lab_decision_verifies_schema_fingerprint_and_full_lineage() -> None:
+    decision = (ROOT / "src/features/reliability-lab/decision.ts").read_text()
+
+    assert 'file.name !== "decision.json"' in decision
+    assert "hasExactFields(value, decisionFields)" in decision
+    assert "The decision structure or schema version is invalid." in decision
+    assert "crypto.subtle.digest" in decision
+    assert "The decision fingerprint does not match its content." in decision
+    assert "decision.experiment_id !== report.experiment.experiment_id" in decision
+    assert "decision.source_id !== report.source.source_id" in decision
+    assert "decision.comparison_id !== report.comparison_id" in decision
+    assert "decision.report_id !== report.report_id" in decision
+    assert "The accepted variant is not present in the active report." in decision
+
+
+def test_lab_decision_ui_has_missing_invalid_and_verified_states() -> None:
+    component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+
+    assert 'kind: "idle"' in component
+    assert 'kind: "verifying"' in component
+    assert 'kind: "error"; message: string' in component
+    assert 'kind: "ready"; result: VerifiedDecision' in component
+    assert "Decision not opened." in component
+    assert "All variants rejected" in component
+    assert "accepted" in component
+    assert "Read only" in component
