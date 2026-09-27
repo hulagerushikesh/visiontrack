@@ -12,6 +12,7 @@ def test_product_routes_use_react_shell() -> None:
     assert routes["/teaching/?"] == "/app/index.html"
     assert routes["/video/?"] == "/app/index.html"
     assert routes["/live/?"] == "/app/index.html"
+    assert routes["/writeup/?"] == "/app/index.html"
 
 
 def test_remaining_interactive_routes_stay_standalone() -> None:

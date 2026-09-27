@@ -84,7 +84,7 @@ The first local workflow and its versioned records are defined in
 - [x] Close the browser-draft-to-bundle loop with a preview-first external
       `decision.json` importer that fully revalidates lineage and preserves
       immutable, idempotent storage.
-- [ ] Migrate the long-form research write-up into reusable article components.
+- [x] Migrate the long-form research write-up into reusable article components.
 - [x] Ship the first versioned, strictly validated, read-only benchmark explorer
       slice without replacing the generated reports.
 - [x] Export structured experiment results as canonical schema-v1 benchmark

@@ -1217,16 +1217,27 @@ while the default app chunk remains 419.73 kB. The standalone HTML surface still
 mounts the same adapter as a compatibility fallback, but the public route now
 uses the unified product navigation, footer, typography, and light-first system.
 
+## Completed implementation increment: React research write-up
+
+The long-form `/writeup` research article now runs inside the shared React
+product shell. Reusable section, callout, table, and figure components preserve
+the legacy article's claims, equations, evidence images, and benchmark links.
+The reading experience adds a focused measure, sticky table of contents,
+current-section state, direct anchors, reading progress, responsive tables, and
+route-specific title, description, and canonical metadata. Contract tests lock
+the key numerical findings and evidence assets so future visual edits cannot
+quietly change the research story.
+
 ## Next implementation increment
 
-Migrate the long-form `/writeup` research article into reusable React article
-components without changing the claims, equations, citations, or benchmark
-links. Add a readable table of contents and section progress while retaining a
-focused reading width and direct anchor links. The legacy article remains the
-reference until content parity is proven.
+Unify the remaining public benchmark landing and dataset report pages with the
+React product shell while preserving their generated evidence and stable URLs.
+Start with `/benchmark`, keep the generated report artifacts authoritative, and
+link into the existing structured benchmark explorer rather than duplicating
+its controls.
 
-Long-form article migration, synchronized failure playback, collaborative
-review, remote storage, and raw video playback remain later increments.
+Benchmark report migration, synchronized failure playback, collaborative review,
+remote storage, and raw video playback remain later increments.
 
 ## Acceptance criteria
 

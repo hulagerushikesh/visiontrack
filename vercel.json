@@ -18,7 +18,7 @@
     { "src": "/benchmark/dancetrack-yolox/?", "dest": "/web/benchmark-dancetrack-yolox.html" },
     { "src": "/benchmark/dancetrack/?", "dest": "/web/benchmark-dancetrack.html" },
     { "src": "/benchmark/sportsmot/?", "dest": "/web/benchmark-sportsmot.html" },
-    { "src": "/writeup/?", "dest": "/web/writeup.html" },
+    { "src": "/writeup/?", "dest": "/app/index.html" },
     { "src": "/video/?", "dest": "/app/index.html" },
     { "src": "/live/?", "dest": "/app/index.html" },
     { "src": "/teaching/?", "dest": "/app/index.html" },
