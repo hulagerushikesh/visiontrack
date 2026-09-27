@@ -10,4 +10,5 @@
 .gradient-text{background:linear-gradient(110deg,#4f46e5 8%,#0284c7 52%,#059669 96%);background-clip:text;-webkit-background-clip:text;color:transparent}
 .mesh-card{background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(248,250,252,.84));box-shadow:0 24px 70px -42px rgba(30,41,59,.42)}
 .soft-grid{background-image:linear-gradient(rgba(79,70,229,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(79,70,229,.04) 1px,transparent 1px);background-size:28px 28px}
+.research-article p{margin-top:1.35rem}.research-article strong{font-weight:650;color:#1e293b}.research-article em{color:#334155}.research-article code{border:1px solid #e2e8f0;border-radius:.4rem;background:#f8fafc;padding:.1rem .35rem;font-family:var(--font-mono);font-size:.82em;color:#4338ca}.research-article h3{margin-top:2.75rem}.research-article section+section{margin-top:4rem}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}

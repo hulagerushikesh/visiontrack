@@ -16,6 +16,9 @@ subdomain of `hulage.in`.
 | `/teaching` | React learning hub | `src/App.tsx` |
 | `/video` | React real-footage page | `src/App.tsx` |
 | `/live` | React live browser tracker + existing JS engine | `src/features/live-tracker/LiveTracker.tsx` |
+| `/writeup` | React long-form research article | `src/features/research-writeup/ResearchWriteup.tsx` |
+| `/lab` | React Reliability Lab | `src/features/reliability-lab/ReliabilityLab.tsx` |
+| `/benchmark/explorer` | React structured result explorer | `src/features/benchmark-explorer/BenchmarkExplorer.tsx` |
 | `/demo` | Interactive tracker demo | `viz/webdemo/index.html` |
 | `/study` | VisionTrack study guide | `learning/LEARNING_PATH.html` |
 | `/roadmap` | CV junior→research roadmap | `learning/CV_ROADMAP.html` |
