@@ -1,10 +1,11 @@
-import { useEffect, useState, type ReactNode } from "react"
+import { lazy, Suspense, useEffect, useState, type ReactNode } from "react"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { Activity, ArrowRight, BarChart3, BookOpen, Boxes, Camera, CheckCircle2, ChevronRight, Code2, FlaskConical, Github, GraduationCap, Layers3, Menu, Play, Sparkles, Target, X, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import BenchmarkExplorer from "@/features/benchmark-explorer/BenchmarkExplorer"
-import ReliabilityLab from "@/features/reliability-lab/ReliabilityLab"
 import { cn } from "@/lib/utils"
+
+const BenchmarkExplorer=lazy(()=>import("@/features/benchmark-explorer/BenchmarkExplorer"))
+const ReliabilityLab=lazy(()=>import("@/features/reliability-lab/ReliabilityLab"))
 
 const nav=[['Live tracker','/live'],['Learn','/teaching'],['Lab','/lab'],['Research','/writeup'],['Results','/benchmark/explorer'],['Docs','/docs/']]
 
@@ -68,5 +69,6 @@ function Teaching(){return <div className="mx-auto max-w-7xl px-5 pb-28 pt-32 lg
 function Video(){return <div className="mx-auto max-w-7xl px-5 pb-28 pt-32 lg:px-8 lg:pt-40"><Reveal><Eyebrow>Real footage · 300 frames</Eyebrow><div className="grid gap-8 lg:grid-cols-2 lg:items-end"><h1 className="text-5xl font-semibold tracking-[-.05em] sm:text-7xl">Same tracker.<br/><span className="text-muted-foreground">Real streets.</span></h1><p className="max-w-xl text-lg leading-8 text-muted-foreground">YOLOX detections meet the same from-scratch Kalman, Hungarian, and ByteTrack pipeline—107 identities across a crowded Bangkok intersection.</p></div></Reveal><Reveal className="mt-14"><div className="overflow-hidden rounded-[1.75rem] border border-border bg-black shadow-2xl"><video controls autoPlay muted loop playsInline preload="metadata" poster="/street_tracking_poster.jpg" className="aspect-video w-full"><source src="/street_tracking.mp4" type="video/mp4"/></video></div></Reveal><div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">{[['300','frames'],['107','unique IDs'],['6','street classes'],['0','tracking libraries']].map(([n,l],i)=><Reveal key={l} delay={i*.05}><div className="rounded-2xl border border-border bg-card p-5"><p className="text-3xl font-semibold">{n}</p><p className="mt-1 text-sm text-muted-foreground">{l}</p></div></Reveal>)}</div></div>}
 
 function NotFound(){return <div className="grid min-h-[80vh] place-items-center px-5 pt-16 text-center"><div><Boxes className="mx-auto size-10 text-primary"/><h1 className="mt-5 text-4xl font-semibold">Route not found</h1><Button asChild className="mt-7"><a href="/">Return home</a></Button></div></div>}
-function App(){const path=location.pathname.replace(/\/$/,'')||'/';const page=path==='/'?<Home/>:path==='/teaching'?<Teaching/>:path==='/video'?<Video/>:path==='/lab'?<ReliabilityLab/>:path==='/benchmark/explorer'?<BenchmarkExplorer/>:<NotFound/>;return <Shell><AnimatePresence mode="wait"><motion.div key={path} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:.2}}>{page}</motion.div></AnimatePresence></Shell>}
+function RouteLoading(){return <div className="grid min-h-[72vh] place-items-center px-5 pt-24" role="status" aria-live="polite"><div className="flex items-center gap-3 rounded-2xl border border-indigo-100 bg-white px-5 py-4 text-sm font-medium text-muted-foreground shadow-lg shadow-slate-200/50"><span className="size-2.5 animate-pulse rounded-full bg-primary" aria-hidden="true"/>Loading research workspace…</div></div>}
+function App(){const path=location.pathname.replace(/\/$/,'')||'/';const page=path==='/'?<Home/>:path==='/teaching'?<Teaching/>:path==='/video'?<Video/>:path==='/lab'?<ReliabilityLab/>:path==='/benchmark/explorer'?<BenchmarkExplorer/>:<NotFound/>;return <Shell><Suspense fallback={<RouteLoading/>}><AnimatePresence mode="wait"><motion.div key={path} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} transition={{duration:.2}}>{page}</motion.div></AnimatePresence></Suspense></Shell>}
 export default App
