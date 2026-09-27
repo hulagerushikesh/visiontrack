@@ -1180,7 +1180,7 @@ The production build now emits separate 18.04 kB Benchmark Explorer and
 than suppressing it. Direct local checks confirmed that both routes resolve
 through the loading boundary into their complete prior interfaces.
 
-## Next implementation increment
+## Twenty-ninth implementation increment — complete
 
 Prepare the interactive tracker for the unified product shell without changing
 its behavior:
@@ -1194,8 +1194,36 @@ its behavior:
   ownership
 - Define the smallest React adapter boundary around the existing tracker engine
   instead of rewriting detection or association logic
-- Keep tracking algorithms, detector assets, camera permissions, benchmark
-  claims, and deployment routes unchanged in this first migration increment
+- Keep tracking algorithms, detector assets, camera permissions, and benchmark
+  claims unchanged while routing `/live` through the shared shell
+
+Implemented as a lazy React route around the unchanged `assets/tracker.js`
+engine. A small runtime loader preserves the pinned detector dependencies, and
+the imperative adapter now exposes `mount(root) -> cleanup` so route changes
+stop camera tracks, animation frames, media playback, and listeners instead of
+leaking browser resources.
+
+The visible contract remains explicit start/stop, webcam or sample source,
+detector readiness, raw-detection visibility, four live metrics, camera fallback,
+and sample deep-link autostart. The page now states the actual privacy boundary:
+frames stay in the tab, camera permission is requested only after Start with
+Webcam selected, and IDs are temporary session labels—not persistent identity or
+recognition. A Node contract executes IoU, Hungarian assignment, lifecycle, and
+session reset behavior; Python contracts lock the UI controls, cleanup hooks,
+privacy copy, adapter reuse, and Vercel route.
+
+The production build emits `/live` as a separate 9.73 kB chunk (3.48 kB gzip),
+while the default app chunk remains 419.73 kB. The standalone HTML surface still
+mounts the same adapter as a compatibility fallback, but the public route now
+uses the unified product navigation, footer, typography, and light-first system.
+
+## Next implementation increment
+
+Migrate the long-form `/writeup` research article into reusable React article
+components without changing the claims, equations, citations, or benchmark
+links. Add a readable table of contents and section progress while retaining a
+focused reading width and direct anchor links. The legacy article remains the
+reference until content parity is proven.
 
 Long-form article migration, synchronized failure playback, collaborative
 review, remote storage, and raw video playback remain later increments.

@@ -1,8 +1,8 @@
 # VisionTrack — Status & Roadmap Checklist
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
-Last updated: 2026-09-19 — the learning product, unified light-first UI, and
-published C++ sibling are reflected here; the two remaining research extensions
+Last updated: 2026-09-27 — the learning product, unified light-first UI, React
+live tracker, and published C++ sibling are reflected here; the two remaining research extensions
 remain **compute-blocked with measured numbers**, not merely "planned". Previously:
 2026-09-07, SportsMOT oracle numbers landed (45 val sequences, `/benchmark/sportsmot`
 live); v0.2.0 (`/live` in-browser tracker + SportsMOT code path + site redesign,
@@ -57,7 +57,9 @@ published to PyPI).
 - [x] **Live in-browser tracker — `/live`** — the from-scratch association (8-state
       Kalman + O(n³) Hungarian + ByteTrack + lifecycle) ported to JavaScript
       (`assets/tracker.js`), run on-device over webcam or a sample clip via a COCO-SSD
-      detector. No video committed; nothing leaves the browser. Node-tested logic.
+      detector. The shared React shell owns the accessible controls and privacy
+      explanation; a mountable adapter owns media cleanup. No video is uploaded;
+      track IDs are session labels rather than person identities. Node-tested logic.
 - [x] "Open in Colab" reproduce notebook
 - [x] Deployed to Vercel — **visiontrack.hulage.in**
 - [x] Open-Graph / social meta + 1200×630 preview card
@@ -73,7 +75,7 @@ published to PyPI).
       use-cases, the controlled study demoted to an "under the hood" section
 
 ### Quality / infra
-- [x] 522 tests passing (1 slow, opt-in) · ruff clean · CI on py3.10/3.11/3.12
+- [x] 526 tests passing (1 slow, opt-in) · ruff clean · CI on py3.10/3.11/3.12
 - [x] Batched Kalman hot path — per-frame predict + Mahalanobis gating run as one
       `(N, 8)` NumPy call over the whole track set: ~1.4–1.5× faster, bit-identical
       (2841 → 294 FPS across 4–64 objects; MOTA/IDSW unchanged)

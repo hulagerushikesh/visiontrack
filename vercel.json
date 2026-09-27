@@ -20,7 +20,7 @@
     { "src": "/benchmark/sportsmot/?", "dest": "/web/benchmark-sportsmot.html" },
     { "src": "/writeup/?", "dest": "/web/writeup.html" },
     { "src": "/video/?", "dest": "/app/index.html" },
-    { "src": "/live/?", "dest": "/web/live.html" },
+    { "src": "/live/?", "dest": "/app/index.html" },
     { "src": "/teaching/?", "dest": "/app/index.html" },
     { "src": "/lab/?", "dest": "/app/index.html" },
     { "src": "/study/?", "dest": "/learning/LEARNING_PATH.html" },
