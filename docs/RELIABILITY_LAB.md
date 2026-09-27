@@ -948,7 +948,7 @@ production React build alongside the existing Python matrix and Ruff checks.
 This closes the browser/Python decision-file boundary without introducing
 normalization, signatures, or network persistence.
 
-## Next implementation increment
+## Twenty-second implementation increment — complete
 
 Make the complete local Reliability Lab workflow easy to exercise without a
 private dataset:
@@ -960,12 +960,49 @@ private dataset:
   comparison, failures, and report artifacts through the existing verified
   APIs rather than special fixture-only formats
 - Print the exact `report.json` path and next steps for importing it into
-  `/lab`, drafting a decision, and verifying that decision with the CLI
+  `/lab`, drafting a decision, and previewing or recording a choice with the CLI
 - Keep real video, image evidence, automatic selection, and remote storage out
   of this onboarding increment
 
 Collaborative review, remote storage, and raw video playback remain later
 increments.
+
+Implemented as `visiontrack lab-demo OUTPUT`. The command resolves a fixed
+48-frame, four-object scene at seed 7, a ByteTrack baseline, and the shared
+core's SORT-style single-stage variant. The source manifest, detection stream,
+ground truth, experiment identity, and final paths are therefore known during
+preview. Preview prints these details and performs no filesystem mutation.
+
+Only `--write` creates output. The requested root must not exist and its parent
+must already be a directory. Work happens in a sibling staging directory and
+the output root is claimed only after the normal Lab APIs have created and
+verified source inputs, both tracker runs, tracking metrics, failure events,
+the sealed comparison, and `report/report.json` plus its standalone HTML
+report. The complete bundle is then moved into that exclusively created root.
+Existing output is refused, including a race at final publication; foreign
+content is never replaced, and failed staging work is removed.
+
+The command finishes by printing the exact report path for `/lab` and the
+bundle path used by `lab-decision`. It does not generate video or image
+evidence, select a winner, or use a special onboarding-only artifact format.
+
+## Next implementation increment
+
+Close the browser-draft-to-bundle loop without weakening immutability:
+
+- Add a preview-first command/API that accepts one bundle and one external
+  `decision.json` downloaded from the React Lab
+- Recompute the decision fingerprint and fully revalidate its experiment,
+  source, comparison, report, outcome, and variant lineage
+- Preview the exact source file, decision fingerprint, and destination without
+  writing by default
+- Require `--write` to copy the verified record into the bundle through the
+  existing immutable decision storage boundary
+- Keep an existing identical bundle decision idempotent and refuse any
+  conflicting replacement
+
+Collaborative review, signatures, remote storage, and raw video playback remain
+later increments.
 
 ## Acceptance criteria
 
