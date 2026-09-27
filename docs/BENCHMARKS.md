@@ -34,17 +34,26 @@ markdown yourself.
 
 ## Regenerate them locally
 
-Every report is one command. The markdown lands in `docs/`, the HTML in `web/`:
+Every report is one command. Markdown and HTML are presentation outputs; the
+schema-v1 JSON is the canonical input for the React benchmark explorer:
 
 ```bash
 # synthetic — no dataset download required
-python -m experiments.benchmark --out-md docs/results_benchmark_synth.md
+python -m experiments.benchmark \
+    --out-md docs/results_benchmark_synth.md \
+    --out-json benchmark-report.json
 
 # a real dataset (requires the cached sequences; see SPORTSMOT.md / the README)
 python -m experiments.benchmark --dataset sportsmot \
     --out-md docs/results_benchmark_sportsmot.md \
-    --out-html web/benchmark-sportsmot.html
+    --out-html web/benchmark-sportsmot.html \
+    --out-json benchmark-sportsmot.json
 ```
+
+The JSON exporter adapts the in-memory `BenchmarkReport` directly; it does not
+scrape either rendered format. It retains full means, spreads, paired deltas,
+Wilcoxon p-values, significance flags, limitations, and source/configuration
+provenance in deterministic newline-terminated JSON.
 
 The standalone error taxonomy runs the same way:
 

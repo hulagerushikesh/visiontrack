@@ -12,6 +12,7 @@ trackers on a dataset, and get back a single **reproducible report** that combin
 rendered to both markdown and a self-contained, theme-aware HTML page.
 
     python -m experiments.benchmark --dataset synthetic --out-html report.html
+    python -m experiments.benchmark --dataset synthetic --out-json report.json
     python -m experiments.benchmark --trackers sort,bytetrack,bytetrack_reid
 
 This is the zoo + analyze + error-taxonomy pieces unified behind one entry point —
@@ -40,6 +41,15 @@ from experiments.error_taxonomy import (  # noqa: E402
     _synthetic_frames,
 )
 from experiments.run_matrix import run  # noqa: E402
+from visiontrack import __version__  # noqa: E402
+from visiontrack.benchmark_report import (  # noqa: E402
+    BenchmarkDataset,
+    BenchmarkMetric,
+    BenchmarkProvenance,
+    BenchmarkReportRecord,
+    BenchmarkValue,
+    BenchmarkVariant,
+)
 from visiontrack.eval.stats import compare, summarize  # noqa: E402
 from visiontrack.tracking.presets import PRESET_NAMES, preset_overrides  # noqa: E402
 
@@ -73,6 +83,27 @@ class BenchmarkReport:
 
     def to_html(self) -> str:
         return _render_html(self)
+
+    def to_browser_report(
+        self,
+        *,
+        source_document: str = "experiments/benchmark.py",
+        detector: str | None = None,
+        git_revision: str | None = None,
+        limitations: tuple[str, ...] | None = None,
+    ) -> BenchmarkReportRecord:
+        """Adapt structured results to the explorer contract without parsing output."""
+        return _browser_report(
+            self,
+            source_document=source_document,
+            detector=detector,
+            git_revision=git_revision,
+            limitations=limitations,
+        )
+
+    def to_json(self, **kwargs) -> str:
+        """Return canonical schema-v1 JSON for the benchmark explorer."""
+        return self.to_browser_report(**kwargs).to_json()
 
 
 def _cached_df(names: list, cache_dir: str, embedder: str, glob: str):
@@ -125,12 +156,12 @@ def run_benchmark(
         names = [baseline, *names]
     if cache_dir is None:
         cache_dir = f"data/cache/{dataset}"
+    variants = [VariantSpec(n, preset_overrides(n)) for n in names]
 
     # -- source the per-(tracker, unit) metrics frame -------------------
     if dataset == "synthetic":
         sequences = sequences or [1, 2, 3]
         seeds = seeds or [0, 1, 2, 3, 4]
-        variants = [VariantSpec(n, preset_overrides(n)) for n in names]
         exp = ExperimentConfig(
             name="benchmark_synthetic", dataset="synthetic", sequences=sequences,
             seeds=seeds, baseline=baseline, metrics=_METRICS, scene=_ZOO_SCENE,
@@ -145,8 +176,13 @@ def run_benchmark(
         # SportsMOT uses a dedicated dir, so take every cache in it.
         glob = "dancetrack*.npz" if dataset == "dancetrack" else "*.npz"
         df, seq_names = _cached_df(names, cache_dir, embedder, glob)
-        config_hash = dataset
         units, seeds = seq_names, [0]
+        exp = ExperimentConfig(
+            name=f"benchmark_{dataset}", dataset=dataset, sequences=units,
+            seeds=seeds, baseline=baseline, metrics=_METRICS, variants=variants,
+            detector=embedder, cache_dir=cache_dir,
+        )
+        config_hash = exp.config_hash()
         taxo_frames = _dancetrack_frames(baseline, cache_dir, embedder, glob)
     else:
         raise ValueError(
@@ -224,6 +260,94 @@ def _render_html(rep: BenchmarkReport) -> str:
     return render_html(rep)
 
 
+_METRIC_PRESENTATION = {
+    "MOTA": ("MOTA", "higher", "score"),
+    "IDF1": ("IDF1", "higher", "score"),
+    "HOTA": ("HOTA", "higher", "score"),
+    "IDSW": ("ID switches", "lower", "count"),
+}
+_DEFAULT_LIMITATIONS = (
+    "Results are valid only for the declared dataset, detector, variants, and paired protocol.",
+    "Statistical significance does not by itself establish practical importance or transfer.",
+    "Track IDs are run-local associations and are not persistent person identities.",
+)
+
+
+def _slug(value: str) -> str:
+    cleaned = "".join(
+        char if char in "abcdefghijklmnopqrstuvwxyz0123456789" else "-"
+        for char in value.lower()
+    )
+    return ("-".join(part for part in cleaned.split("-") if part) or "benchmark")[:80]
+
+
+def _browser_report(
+    rep: BenchmarkReport,
+    *,
+    source_document: str,
+    detector: str | None,
+    git_revision: str | None,
+    limitations: tuple[str, ...] | None,
+) -> BenchmarkReportRecord:
+    pair_count = int(rep.meta["runs_per_tracker"])
+    config_hash = str(rep.meta["config_hash"])
+    metrics = tuple(
+        BenchmarkMetric(key=key, label=label, direction=direction, format=number_format)
+        for key in rep.metrics
+        for label, direction, number_format in [_METRIC_PRESENTATION[key]]
+    )
+    variants = []
+    for row in rep.leaderboard:
+        is_baseline = row["name"] == rep.baseline
+        values = {}
+        for metric in rep.metrics:
+            mean, std = row["summary"][metric]
+            delta, p_value = row["compare"][metric]
+            values[metric] = BenchmarkValue(
+                mean=float(mean),
+                std=float(std),
+                delta=0.0 if is_baseline else float(delta),
+                p_value=float(p_value),
+                significant=False if is_baseline else bool(p_value < 0.05),
+            )
+        variants.append(BenchmarkVariant(row["name"], is_baseline, values))
+
+    sequences = rep.meta.get("sequences", [])
+    seeds = rep.meta.get("seeds", [])
+    split = f"{len(sequences)} sequences × {len(seeds)} seeds"
+    detector_name = detector or (
+        "Deterministic synthetic detections"
+        if rep.dataset.lower().startswith("synthetic")
+        else "Precomputed dataset detections"
+    )
+    return BenchmarkReportRecord(
+        report_id=f"benchmark-{_slug(rep.dataset)}-{config_hash}-v1",
+        title=f"Tracker benchmark · {rep.dataset}",
+        summary=(
+            f"{len(variants)} tracking variants replayed over {pair_count} identical paired units."
+        ),
+        dataset=BenchmarkDataset(
+            name=rep.dataset,
+            split=split,
+            protocol="Paired Wilcoxon comparison over sequence × seed units",
+            detector=detector_name,
+            pair_count=pair_count,
+            runs_per_variant=pair_count,
+        ),
+        provenance=BenchmarkProvenance(
+            source_document=source_document,
+            source_kind="structured_experiment_result",
+            config_hash=config_hash,
+            visiontrack_version=__version__,
+            git_revision=git_revision,
+        ),
+        baseline=rep.baseline,
+        metrics=metrics,
+        variants=tuple(variants),
+        limitations=limitations or _DEFAULT_LIMITATIONS,
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run the MOT benchmarking tool")
     parser.add_argument("--dataset", default="synthetic",
@@ -238,6 +362,8 @@ def main(argv: list[str] | None = None) -> int:
                         help="displayed dataset name (e.g. 'dancetrack (real YOLOX)')")
     parser.add_argument("--out-md", default=None)
     parser.add_argument("--out-html", default=None)
+    parser.add_argument("--out-json", default=None,
+                        help="canonical schema-v1 JSON for the benchmark explorer")
     args = parser.parse_args(argv)
 
     names = args.trackers.split(",") if args.trackers else None
@@ -252,6 +378,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.out_html:
         Path(args.out_html).write_text(rep.to_html())
         print(f"wrote {args.out_html}")
+    if args.out_json:
+        Path(args.out_json).write_bytes(rep.to_browser_report().to_bytes())
+        print(f"wrote {args.out_json}")
     return 0
 
 
