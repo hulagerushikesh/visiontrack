@@ -75,6 +75,12 @@ def test_benchmark_explorer_keeps_import_local_read_only_and_protocol_visible() 
     assert "No values from this file were rendered or retained." in component
     assert "Return to bundled sample" in component
     assert "Nothing is uploaded." in component
+    assert "Evidence view controls" in component
+    assert "Metric focus" in component
+    assert "Variant focus" in component
+    assert "Reset evidence view" in component
+    assert "The baseline remains visible in every focused comparison." in component
+    assert "benchmarkView(report,metricFocus,variantFocus)" in component
     assert "fetch(" not in component
     assert "localStorage" not in component
     assert "sessionStorage" not in component

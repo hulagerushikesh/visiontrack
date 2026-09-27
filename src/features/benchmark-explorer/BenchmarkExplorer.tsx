@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { validateBenchmarkReport } from "./contract.mjs"
 import sample from "./sample.json"
 import type { BenchmarkMetric, BenchmarkReport, BenchmarkResult } from "./types"
+import { ALL_BENCHMARK_METRICS, ALL_BENCHMARK_VARIANTS, benchmarkView } from "./view.mjs"
 
 const MAX_REPORT_BYTES = 1_000_000
 const bundledValidation = validateBenchmarkReport(sample)
@@ -40,7 +41,11 @@ function ErrorState({message,filename,onSelect,onSample}:{message:string;filenam
 
 export default function BenchmarkExplorer() {
   const [state,setState]=useState<ReportState>(bundledState)
+  const [metricFocus,setMetricFocus]=useState(ALL_BENCHMARK_METRICS)
+  const [variantFocus,setVariantFocus]=useState(ALL_BENCHMARK_VARIANTS)
   const loadId=useRef(0)
+
+  const resetView=()=>{setMetricFocus(ALL_BENCHMARK_METRICS);setVariantFocus(ALL_BENCHMARK_VARIANTS)}
 
   const selectReport=async(event:ChangeEvent<HTMLInputElement>)=>{
     const input=event.currentTarget
@@ -56,17 +61,19 @@ export default function BenchmarkExplorer() {
       catch{throw new Error("The selected file is not valid JSON.")}
       const validation=validateBenchmarkReport(parsed)
       if(!validation.valid)throw new Error(validation.error)
-      if(loadId.current===requestId)setState({kind:"ready",report:parsed as BenchmarkReport,source:{kind:"file",filename:file.name}})
+      if(loadId.current===requestId){resetView();setState({kind:"ready",report:parsed as BenchmarkReport,source:{kind:"file",filename:file.name}})}
     }catch(error){
       if(loadId.current===requestId)setState({kind:"error",message:error instanceof Error?error.message:"The selected report could not be read.",filename:file.name})
     }finally{
       input.value=""
     }
   }
-  const showSample=()=>{loadId.current+=1;setState(bundledState())}
+  const showSample=()=>{loadId.current+=1;resetView();setState(bundledState())}
 
   if(state.kind==="error")return <ErrorState message={state.message} filename={state.filename} onSelect={selectReport} onSample={showSample}/>
   const {report,source}=state
+  const view=benchmarkView(report,metricFocus,variantFocus) as {metrics:BenchmarkMetric[];variants:BenchmarkReport["variants"]}
+  const viewFiltered=view.metrics.length!==report.metrics.length||view.variants.length!==report.variants.length
   return <div className="mx-auto max-w-7xl px-5 pb-28 pt-32 lg:px-8 lg:pt-40">
     <section className="mb-10 rounded-3xl border border-indigo-100 bg-white/90 p-5 shadow-lg shadow-slate-200/50 backdrop-blur sm:p-6" aria-label="Benchmark report source"><div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between"><div className="flex min-w-0 items-start gap-3"><div className="grid size-10 shrink-0 place-items-center rounded-2xl bg-indigo-50 text-primary"><FileCheck2 className="size-5"/></div><div className="min-w-0"><p className="truncate text-sm font-semibold">{source.kind==="sample"?"Bundled checked-in sample":source.filename}</p><p className="mt-1 text-xs leading-5 text-muted-foreground">Validated schema v{report.schema_version} · Processed only in this browser tab. Nothing is uploaded.</p></div></div><div className="flex flex-wrap gap-2">{source.kind==="file"&&<Button type="button" variant="outline" onClick={showSample}><ArrowRight className="size-4 rotate-180"/>Return to sample</Button>}<FileSelector onSelect={selectReport}/></div></div></section>
     <section className="grid gap-10 lg:grid-cols-[1.1fr_.9fr] lg:items-end">
@@ -79,8 +86,8 @@ export default function BenchmarkExplorer() {
     </section>
 
     <section className="mt-14 overflow-hidden rounded-3xl border border-border bg-white shadow-sm">
-      <div className="border-b border-border px-6 py-6 sm:px-8"><h2 className="text-2xl font-semibold tracking-tight">Variant evidence</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">Means, published spread, paired Δ, and Wilcoxon significance compare each variant with {report.baseline}. Unpublished values remain visibly absent. No winner is selected automatically.</p></div>
-      <div className="overflow-x-auto"><table className="w-full min-w-[980px] border-collapse text-left text-sm"><caption className="sr-only">Tracker metrics and paired significance results</caption><thead><tr className="bg-slate-50 text-xs uppercase tracking-wider text-muted-foreground"><th scope="col" className="px-6 py-4 sm:px-8">Variant</th>{report.metrics.map(metric=><th scope="col" className="px-5 py-4" key={metric.key}>{metric.label}<span className="mt-1 block font-normal normal-case tracking-normal">{metric.direction} is better</span></th>)}</tr></thead><tbody>{report.variants.map(variant=><tr key={variant.name} className="border-t border-border align-top"><th scope="row" className="px-6 py-5 font-mono text-xs sm:px-8">{variant.name}{variant.baseline&&<span className="ml-2 rounded-full bg-indigo-50 px-2 py-1 font-sans text-[10px] font-semibold uppercase text-primary">baseline</span>}</th>{report.metrics.map(metric=>{const result=variant.values[metric.key];const significance=result.p_value===null?(variant.baseline?"reference":result.significant?"p<0.05":"n.s."):`p=${result.p_value.toFixed(2)}`;return <td className="px-5 py-5" key={metric.key}><p className="font-semibold tabular-nums">{formatMean(result,metric)}</p><p className="mt-2 font-mono text-[11px] text-muted-foreground">Δ {formatDelta(result.delta)} · {significance}{result.significant&&<span className="ml-2 rounded bg-emerald-50 px-1.5 py-0.5 font-sans font-semibold text-emerald-700">significant</span>}</p></td>})}</tr>)}</tbody></table></div>
+      <div className="border-b border-border px-6 py-6 sm:px-8"><h2 className="text-2xl font-semibold tracking-tight">Variant evidence</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">Means, published spread, paired Δ, and Wilcoxon significance compare each variant with {report.baseline}. Unpublished values remain visibly absent. No winner is selected automatically.</p><div className="mt-6 grid gap-4 rounded-2xl border border-indigo-100 bg-indigo-50/50 p-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end" aria-label="Evidence view controls"><label className="grid gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Metric focus<select value={metricFocus} onChange={event=>setMetricFocus(event.target.value)} className="h-10 rounded-xl border border-input bg-white px-3 text-sm font-medium normal-case tracking-normal text-foreground"><option value={ALL_BENCHMARK_METRICS}>All metrics</option>{report.metrics.map(metric=><option key={metric.key} value={metric.key}>{metric.label}</option>)}</select></label><label className="grid gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Variant focus<select value={variantFocus} onChange={event=>setVariantFocus(event.target.value)} className="h-10 rounded-xl border border-input bg-white px-3 text-sm font-medium normal-case tracking-normal text-foreground"><option value={ALL_BENCHMARK_VARIANTS}>All variants</option>{report.variants.filter(variant=>!variant.baseline).map(variant=><option key={variant.name} value={variant.name}>{variant.name}</option>)}</select></label><Button type="button" size="sm" variant="outline" disabled={!viewFiltered} onClick={resetView}>Reset evidence view</Button></div><p className="mt-3 text-xs text-muted-foreground" role="status" aria-live="polite">Showing {view.variants.length} of {report.variants.length} variants and {view.metrics.length} of {report.metrics.length} metrics. The baseline remains visible in every focused comparison.</p></div>
+      <div className="overflow-x-auto"><table className="w-full min-w-[980px] border-collapse text-left text-sm"><caption className="sr-only">Tracker metrics and paired significance results for the active evidence view</caption><thead><tr className="bg-slate-50 text-xs uppercase tracking-wider text-muted-foreground"><th scope="col" className="px-6 py-4 sm:px-8">Variant</th>{view.metrics.map(metric=><th scope="col" className="px-5 py-4" key={metric.key}>{metric.label}<span className="mt-1 block font-normal normal-case tracking-normal">{metric.direction} is better</span></th>)}</tr></thead><tbody>{view.variants.map(variant=><tr key={variant.name} className="border-t border-border align-top"><th scope="row" className="px-6 py-5 font-mono text-xs sm:px-8">{variant.name}{variant.baseline&&<span className="ml-2 rounded-full bg-indigo-50 px-2 py-1 font-sans text-[10px] font-semibold uppercase text-primary">baseline</span>}</th>{view.metrics.map(metric=>{const result=variant.values[metric.key];const significance=result.p_value===null?(variant.baseline?"reference":result.significant?"p<0.05":"n.s."):`p=${result.p_value.toFixed(2)}`;return <td className="px-5 py-5" key={metric.key}><p className="font-semibold tabular-nums">{formatMean(result,metric)}</p><p className="mt-2 font-mono text-[11px] text-muted-foreground">Δ {formatDelta(result.delta)} · {significance}{result.significant&&<span className="ml-2 rounded bg-emerald-50 px-1.5 py-0.5 font-sans font-semibold text-emerald-700">significant</span>}</p></td>})}</tr>)}</tbody></table></div>
     </section>
 
     <section className="mt-10 grid gap-6 lg:grid-cols-[1fr_auto] lg:items-start"><div className="rounded-2xl border border-amber-200 bg-amber-50 p-6"><div className="flex items-center gap-2 font-semibold text-amber-900"><AlertTriangle className="size-5"/>Read the limits first</div><ul className="mt-4 grid gap-3 text-sm leading-6 text-amber-950/70">{report.limitations.map(limit=><li className="flex gap-3" key={limit}><span aria-hidden="true">—</span><span>{limit}</span></li>)}</ul></div><Button asChild variant="outline"><a href="/benchmark">Open full generated benchmark <ArrowRight className="size-4"/></a></Button></section>

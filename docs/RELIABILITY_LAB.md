@@ -1124,7 +1124,7 @@ The bundled artifact and Python-exported structured result fixture both remain
 accepted by the shared browser contract. A remote provenance kind remains
 rejected, preserving the deliberately local boundary.
 
-## Next implementation increment
+## Twenty-seventh implementation increment — complete
 
 Make larger reports easier to inspect without changing their evidence:
 
@@ -1135,6 +1135,39 @@ Make larger reports easier to inspect without changing their evidence:
   significance, recommendation, or ranking recalculation
 - Keep charts, playback, persistence, URLs that encode private filenames,
   uploads, and legacy-page replacement outside this increment
+
+Implemented as two ephemeral selectors above the evidence table. Metric focus
+can show one published metric, while variant focus can show one candidate and
+always retains the declared baseline for context. Unknown or stale focus values
+fall back to the complete validated report instead of producing an empty or
+misleading view.
+
+The controls derive a display slice from the immutable report: they do not
+change values, reorder variants, recompute statistics, infer significance, or
+select a winner. A live scope announcement reports visible and total metric and
+variant counts, and one reset restores the full table. Importing another report
+or returning to the bundled sample also resets the view, so private filenames
+and transient focus never enter URLs or browser storage.
+
+The shared browser-runtime test proves that focusing `IDSW` and
+`bytetrack_reid` returns exactly that metric plus the baseline and candidate,
+does not mutate the six-variant sample, and safely restores the full view for
+unknown focus values. The live accessibility pass confirms the same 1-of-4 and
+2-of-6 scope transitions and one-click reset.
+
+## Next implementation increment
+
+Keep the public product shell fast as the research tools grow:
+
+- Lazy-load `/lab` and `/benchmark/explorer` instead of including both feature
+  implementations in the default landing-page bundle
+- Provide one accessible route-loading state inside the existing shared shell
+- Preserve all direct routes, report validation, local-only state, and legacy
+  benchmark rewrites exactly
+- Verify production chunks and ensure the main app no longer triggers the
+  current 500 kB single-chunk advisory
+- Keep feature behavior, schemas, charts, playback, uploads, and persistence
+  unchanged in this infrastructure increment
 
 Long-form article migration, synchronized failure playback, collaborative
 review, remote storage, and raw video playback remain later increments.
