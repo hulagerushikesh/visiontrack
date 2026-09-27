@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "report_id": "benchmark-synthetic-abcdef123456-v1",
+  "title": "Tracker benchmark · synthetic",
+  "summary": "2 tracking variants replayed over 2 identical paired units.",
+  "dataset": {
+    "name": "synthetic",
+    "split": "1 sequences × 2 seeds",
+    "protocol": "Paired Wilcoxon comparison over sequence × seed units",
+    "detector": "Deterministic synthetic detections",
+    "pair_count": 2,
+    "runs_per_variant": 2
+  },
+  "provenance": {
+    "source_document": "experiments/benchmark.py",
+    "source_kind": "structured_experiment_result",
+    "config_hash": "abcdef123456",
+    "visiontrack_version": "0.2.0",
+    "git_revision": null
+  },
+  "baseline": "bytetrack",
+  "metrics": [
+    {"key": "MOTA", "label": "MOTA", "direction": "higher", "format": "score"},
+    {"key": "IDSW", "label": "ID switches", "direction": "lower", "format": "count"}
+  ],
+  "variants": [
+    {
+      "name": "bytetrack",
+      "baseline": true,
+      "values": {
+        "MOTA": {"mean": 0.7, "std": 0.02, "delta": 0.0, "p_value": 1.0, "significant": false},
+        "IDSW": {"mean": 8.0, "std": 1.0, "delta": 0.0, "p_value": 1.0, "significant": false}
+      }
+    },
+    {
+      "name": "candidate",
+      "baseline": false,
+      "values": {
+        "MOTA": {"mean": 0.73, "std": 0.01, "delta": 0.03, "p_value": 0.03125, "significant": true},
+        "IDSW": {"mean": 6.5, "std": 0.5, "delta": -1.5, "p_value": 0.125, "significant": false}
+      }
+    }
+  ],
+  "limitations": [
+    "Results are valid only for the declared dataset, detector, variants, and paired protocol.",
+    "Statistical significance does not by itself establish practical importance or transfer.",
+    "Track IDs are run-local associations and are not persistent person identities."
+  ]
+}

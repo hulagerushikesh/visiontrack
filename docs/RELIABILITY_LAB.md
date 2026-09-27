@@ -1061,7 +1061,7 @@ routes. A Node contract test accepts the checked-in sample and rejects an
 unsupported schema, inconsistent significance, an ambiguous baseline, and an
 unknown recommendation field.
 
-## Next implementation increment
+## Twenty-fifth implementation increment — complete
 
 Make benchmark reports reproducibly exportable before accepting arbitrary
 local files:
@@ -1074,6 +1074,38 @@ local files:
   and limitations exactly
 - Keep browser file import, filtering, charts, failure playback, and legacy-page
   replacement outside this exporter increment
+
+Implemented as a strict Python `BenchmarkReportRecord` boundary and
+`python -m experiments.benchmark --out-json REPORT.json`. The experiment
+harness adapts its in-memory `BenchmarkReport` directly; it never parses the
+Markdown or HTML renderers. The canonical, newline-terminated JSON retains full
+means, standard deviations, paired deltas, Wilcoxon p-values, significance,
+limitations, the exact config hash, VisionTrack version, and optional git
+revision. Presentation rounding remains in the explorer.
+
+The existing checked-in browser sample remains explicitly identified as a
+transcription of a checked-in research artifact. Newly exported reports carry
+the distinct `structured_experiment_result` provenance kind. Synthetic and
+cached real-dataset runs now both use content-derived 12-character experiment
+configuration hashes.
+
+A shared deterministic fixture is produced from a structured
+`BenchmarkReport`, matched byte-for-byte by Python's canonical serializer, and
+accepted by the browser's runtime validator in CI. The same validator continues
+to reject unknown fields, unsupported versions, inconsistent significance, and
+ambiguous baselines.
+
+## Next implementation increment
+
+Allow deliberate, local-only benchmark report inspection:
+
+- Add an explicit JSON file selector to `/benchmark/explorer`
+- Read only the selected file in the browser and validate it before rendering
+- Show a clear invalid-report state without partially rendering evidence
+- Preserve provenance and limitations visibly, and provide an explicit reset
+  to the bundled checked-in sample
+- Keep uploads, persistence, directory scanning, charts, filters, playback,
+  automatic ranking, and legacy-page replacement outside this increment
 
 Long-form article migration, synchronized failure playback, collaborative
 review, remote storage, and raw video playback remain later increments.

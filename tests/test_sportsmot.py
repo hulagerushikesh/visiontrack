@@ -85,7 +85,8 @@ def test_run_benchmark_dispatches_sportsmot(tmp_path):
     rep = run_benchmark("sportsmot", tracker_names=["bytetrack"],
                         cache_dir=str(cache))
     assert rep.dataset == "sportsmot"
-    assert rep.meta["config_hash"] == "sportsmot"
+    assert len(rep.meta["config_hash"]) == 12
+    assert all(char in "0123456789abcdef" for char in rep.meta["config_hash"])
     assert "v_a_0001" in rep.meta["sequences"]
 
 

@@ -29,7 +29,7 @@ export function validateBenchmarkReport(value) {
 
   const provenance = value.provenance
   if (!hasExactFields(provenance, provenanceFields) || !isString(provenance.source_document) ||
-      provenance.source_kind !== "checked_in_research_artifact" ||
+      !["checked_in_research_artifact", "structured_experiment_result"].includes(provenance.source_kind) ||
       !/^[a-f0-9]{12}$/.test(provenance.config_hash) || !isString(provenance.visiontrack_version) ||
       !(provenance.git_revision === null || /^[a-f0-9]{7,40}$/.test(provenance.git_revision))) {
     return fail("The benchmark provenance is incomplete or invalid.")
