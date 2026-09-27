@@ -6,7 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).parents[1]
 
 
-def test_benchmark_explorer_route_uses_react_without_replacing_legacy_reports() -> None:
+def test_benchmark_routes_use_react_without_replacing_generated_reports() -> None:
     app = (ROOT / "src/App.tsx").read_text()
     deployment = json.loads((ROOT / "vercel.json").read_text())
     routes = {route["src"]: route["dest"] for route in deployment["routes"]}
@@ -16,9 +16,11 @@ def test_benchmark_explorer_route_uses_react_without_replacing_legacy_reports() 
     assert 'lazy(()=>import("@/features/benchmark-explorer/BenchmarkExplorer"))' in app
     assert 'import BenchmarkExplorer from' not in app
     assert 'fallback={<RouteLoading/>}' in app
-    assert "['Results','/benchmark/explorer']" in app
+    assert "['Results','/benchmark']" in app
+    assert "path==='/benchmark'?<BenchmarkHub/>" in app
     assert routes["/benchmark/explorer/?"] == "/app/index.html"
-    assert routes["/benchmark/?"] == "/web/benchmark.html"
+    assert routes["/benchmark/?"] == "/app/index.html"
+    assert routes["/benchmark/synthetic/?"] == "/web/benchmark.html"
 
 
 def test_benchmark_sample_is_tied_to_the_checked_in_research_artifact() -> None:
@@ -70,7 +72,7 @@ def test_benchmark_explorer_keeps_import_local_read_only_and_protocol_visible() 
     assert '<caption className="sr-only">' in component
     assert 'scope="col"' in component
     assert 'scope="row"' in component
-    assert 'href="/benchmark"' in component
+    assert 'href="/benchmark/synthetic"' in component
     assert 'type="file"' in component
     assert 'accept="application/json,.json"' in component
     assert "file.text()" in component

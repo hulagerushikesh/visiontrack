@@ -1228,15 +1228,25 @@ route-specific title, description, and canonical metadata. Contract tests lock
 the key numerical findings and evidence assets so future visual edits cannot
 quietly change the research story.
 
+## Completed implementation increment: benchmark front door
+
+`/benchmark` is now a React results hub that explains the evidence boundaries
+before presenting rankings. It separates the interactive schema-v1 explorer
+from four authoritative generated dataset reports and directs each research
+question to the correct detection regime. The generated synthetic report moved
+to the explicit `/benchmark/synthetic` URL; the generator, canonical metadata,
+dataset tabs, explorer link, deployment routing, and documentation all enforce
+that separation so regeneration cannot silently collapse it.
+
 ## Next implementation increment
 
-Unify the remaining public benchmark landing and dataset report pages with the
-React product shell while preserving their generated evidence and stable URLs.
-Start with `/benchmark`, keep the generated report artifacts authoritative, and
-link into the existing structured benchmark explorer rather than duplicating
-its controls.
+Bring the generated benchmark report template into the current light-first
+visual system without copying generated evidence into React. Keep the report
+generator authoritative, preserve all dataset URLs and numerical content, add
+a clear path back to the Results hub and structured explorer, and lock the
+shared report navigation in generator-level tests.
 
-Benchmark report migration, synchronized failure playback, collaborative review,
+Generated report visual migration, synchronized failure playback, collaborative review,
 remote storage, and raw video playback remain later increments.
 
 ## Acceptance criteria
