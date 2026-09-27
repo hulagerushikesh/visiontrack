@@ -28,7 +28,7 @@ _NAV = """<nav class="site-nav">
 </nav>"""
 
 _DATASET_TABS = """<div class="dataset-tabs">
-    <a href="/benchmark">synthetic</a>
+    <a href="/benchmark/synthetic">synthetic</a>
     <a href="/benchmark/dancetrack">DanceTrack</a>
     <a href="/benchmark/dancetrack-yolox">DanceTrack · YOLOX</a>
     <a href="/benchmark/sportsmot">SportsMOT</a>
@@ -57,7 +57,7 @@ def _route(dataset: str) -> str:
         return "/benchmark/dancetrack-yolox"
     if "dancetrack" in d:
         return "/benchmark/dancetrack"
-    return "/benchmark"
+    return "/benchmark/synthetic"
 
 
 def _fmt_cell(mean, std, delta, p, is_base, is_best):

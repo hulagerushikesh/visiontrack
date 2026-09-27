@@ -85,6 +85,10 @@ The first local workflow and its versioned records are defined in
       `decision.json` importer that fully revalidates lineage and preserves
       immutable, idempotent storage.
 - [x] Migrate the long-form research write-up into reusable article components.
+- [x] Add a unified React benchmark front door while keeping generated dataset
+      reports authoritative at stable, dataset-specific URLs.
+- [ ] Bring the generated dataset-report template into the current visual system
+      without turning generated evidence into hand-maintained React content.
 - [x] Ship the first versioned, strictly validated, read-only benchmark explorer
       slice without replacing the generated reports.
 - [x] Export structured experiment results as canonical schema-v1 benchmark

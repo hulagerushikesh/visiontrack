@@ -13,7 +13,7 @@ the ID-switch error taxonomy for that dataset.
 
 | Report | What it measures |
 |---|---|
-| [synthetic](https://visiontrack.hulage.in/benchmark) | controlled scenes with known ground truth — the fastest signal, no download needed |
+| [synthetic](https://visiontrack.hulage.in/benchmark/synthetic) | controlled scenes with known ground truth — the fastest signal, no download needed |
 | [DanceTrack](https://visiontrack.hulage.in/benchmark/dancetrack) | non-linear motion **and** near-identical appearance, perturbed-GT (oracle) protocol |
 | [DanceTrack · real YOLOX](https://visiontrack.hulage.in/benchmark/dancetrack-yolox) | the same dataset with real detections, so detector quality is part of the measurement |
 | [SportsMOT](https://visiontrack.hulage.in/benchmark/sportsmot) | fast non-linear motion with *distinguishable* appearance — the decoupled RQ2 test |

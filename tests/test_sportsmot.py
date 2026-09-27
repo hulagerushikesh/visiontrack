@@ -104,6 +104,7 @@ def test_sportsmot_report_routes_to_its_own_page():
     # the other datasets keep their routes
     assert _route("dancetrack (real YOLOX)") == "/benchmark/dancetrack-yolox"
     assert _route("dancetrack") == "/benchmark/dancetrack"
-    assert _route("synthetic") == "/benchmark"
+    assert _route("synthetic") == "/benchmark/synthetic"
     # and the page offers a tab to get there
     assert '<a href="/benchmark/sportsmot">SportsMOT</a>' in _DATASET_TABS
+    assert '<a href="/benchmark/synthetic">synthetic</a>' in _DATASET_TABS
