@@ -2,6 +2,7 @@ import assert from "node:assert/strict"
 import { readFile } from "node:fs/promises"
 
 import { validateBenchmarkReport } from "../src/features/benchmark-explorer/contract.mjs"
+import { ALL_BENCHMARK_METRICS, ALL_BENCHMARK_VARIANTS, benchmarkView } from "../src/features/benchmark-explorer/view.mjs"
 
 const sampleUrl = new URL("../src/features/benchmark-explorer/sample.json", import.meta.url)
 const sample = JSON.parse(await readFile(sampleUrl, "utf8"))
@@ -16,6 +17,17 @@ assert.equal(sample.variants.find((variant) => variant.name === "bytetrack_reid"
 assert.deepEqual(validateBenchmarkReport(pythonFixture), { valid: true })
 assert.equal(pythonFixture.provenance.source_kind, "structured_experiment_result")
 assert.equal(pythonFixture.variants[1].values.MOTA.p_value, 0.03125)
+
+const fullView = benchmarkView(sample, ALL_BENCHMARK_METRICS, ALL_BENCHMARK_VARIANTS)
+assert.equal(fullView.metrics.length, sample.metrics.length)
+assert.equal(fullView.variants.length, sample.variants.length)
+const focusedView = benchmarkView(sample, "IDSW", "bytetrack_reid")
+assert.deepEqual(focusedView.metrics.map((metric) => metric.key), ["IDSW"])
+assert.deepEqual(focusedView.variants.map((variant) => variant.name), ["bytetrack", "bytetrack_reid"])
+assert.equal(sample.variants.length, 6)
+const unknownFocus = benchmarkView(sample, "UNKNOWN", "missing")
+assert.equal(unknownFocus.metrics.length, sample.metrics.length)
+assert.equal(unknownFocus.variants.length, sample.variants.length)
 
 const clone = () => structuredClone(sample)
 

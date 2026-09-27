@@ -91,8 +91,10 @@ The first local workflow and its versioned records are defined in
       JSON and enforce the same payload contract in Python and the browser.
 - [x] Add deliberate local benchmark JSON selection to the explorer, validate
       before display, and retain the bundled sample as a safe reset path.
-- [ ] Add ephemeral benchmark view controls for metric and variant focus while
+- [x] Add ephemeral benchmark view controls for metric and variant focus while
       keeping the complete validated report immutable and one-click restorable.
+- [ ] Lazy-load the Lab and benchmark explorer routes so research tooling does
+      not inflate the default product-site bundle as these workflows grow.
 - [ ] Port the interactive tracker shell without changing tracker behavior or
       browser privacy guarantees.
 - [ ] Interview 5–10 tracking practitioners and collect representative failure
