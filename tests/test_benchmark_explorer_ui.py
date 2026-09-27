@@ -52,18 +52,29 @@ def test_benchmark_contract_is_strict_and_does_not_encode_a_recommendation() -> 
     assert '"winner"' not in sample
 
 
-def test_benchmark_explorer_is_read_only_and_keeps_protocol_visible() -> None:
+def test_benchmark_explorer_keeps_import_local_read_only_and_protocol_visible() -> None:
     component = (
         ROOT / "src/features/benchmark-explorer/BenchmarkExplorer.tsx"
     ).read_text()
 
     assert "validateBenchmarkReport(sample)" in component
+    assert "validateBenchmarkReport(parsed)" in component
     assert "Validated checked-in artifact" in component
+    assert "Validated local report" in component
+    assert 'report.provenance.source_kind.replaceAll("_"," ")' in component
     assert "No winner is selected automatically." in component
     assert "Read the limits first" in component
     assert '<caption className="sr-only">' in component
     assert 'scope="col"' in component
     assert 'scope="row"' in component
     assert 'href="/benchmark"' in component
-    assert 'type="file"' not in component
+    assert 'type="file"' in component
+    assert 'accept="application/json,.json"' in component
+    assert "file.text()" in component
+    assert "MAX_REPORT_BYTES = 1_000_000" in component
+    assert "No values from this file were rendered or retained." in component
+    assert "Return to bundled sample" in component
+    assert "Nothing is uploaded." in component
     assert "fetch(" not in component
+    assert "localStorage" not in component
+    assert "sessionStorage" not in component

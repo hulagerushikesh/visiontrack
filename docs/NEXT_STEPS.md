@@ -89,8 +89,10 @@ The first local workflow and its versioned records are defined in
       slice without replacing the generated reports.
 - [x] Export structured experiment results as canonical schema-v1 benchmark
       JSON and enforce the same payload contract in Python and the browser.
-- [ ] Add deliberate local benchmark JSON selection to the explorer, validate
+- [x] Add deliberate local benchmark JSON selection to the explorer, validate
       before display, and retain the bundled sample as a safe reset path.
+- [ ] Add ephemeral benchmark view controls for metric and variant focus while
+      keeping the complete validated report immutable and one-click restorable.
 - [ ] Port the interactive tracker shell without changing tracker behavior or
       browser privacy guarantees.
 - [ ] Interview 5–10 tracking practitioners and collect representative failure

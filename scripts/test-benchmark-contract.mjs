@@ -36,4 +36,8 @@ const unknownField = clone()
 unknownField.recommendation = "bytetrack_reid"
 assert.equal(validateBenchmarkReport(unknownField).valid, false)
 
-console.log("Benchmark report contract accepted browser and Python fixtures and rejected 4 invalid variants.")
+const remoteSource = clone()
+remoteSource.provenance.source_kind = "remote_url"
+assert.equal(validateBenchmarkReport(remoteSource).valid, false)
+
+console.log("Benchmark report contract accepted browser and Python fixtures and rejected 5 invalid variants.")
