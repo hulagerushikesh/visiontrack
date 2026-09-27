@@ -85,7 +85,8 @@ The first local workflow and its versioned records are defined in
       `decision.json` importer that fully revalidates lineage and preserves
       immutable, idempotent storage.
 - [ ] Migrate the long-form research write-up into reusable article components.
-- [ ] Design a data-driven benchmark explorer before replacing generated reports.
+- [x] Ship the first versioned, strictly validated, read-only benchmark explorer
+      slice without replacing the generated reports.
 - [ ] Port the interactive tracker shell without changing tracker behavior or
       browser privacy guarantees.
 - [ ] Interview 5–10 tracking practitioners and collect representative failure

@@ -1023,7 +1023,7 @@ idempotent. A conflicting file is refused during preview and remains protected
 by exclusive immutable storage at publication time. The browser still cannot
 write bundle state; the user deliberately bridges that boundary with the CLI.
 
-## Next implementation increment
+## Twenty-fourth implementation increment — complete
 
 Start the data-driven benchmark explorer with a small read-only slice:
 
@@ -1035,6 +1035,43 @@ Start the data-driven benchmark explorer with a small read-only slice:
   inventing rankings or recalculating research claims in the browser
 - Keep file import, playback, filtering, and replacement of legacy benchmark
   pages outside this first explorer increment
+
+Long-form article migration, synchronized failure playback, collaborative
+review, remote storage, and raw video playback remain later increments.
+
+Implemented at `/benchmark/explorer` as a new React route alongside—not in
+place of—the existing generated benchmark pages. Its schema-v1 contract
+strictly validates every top-level and nested field, the single declared
+baseline, shared metric keys, finite values, p-value bounds, significance
+flags, and the baseline's zero-delta/p=1 sanity row before rendering.
+
+The deterministic sample is a structured transcription of
+`docs/results_tracker_zoo.md` and names that source plus its checked-in
+`302b26da084f` config hash. The explorer exposes dataset and detector context,
+the paired protocol, mean ± standard deviation, deltas, Wilcoxon p-values, and
+explicit limitations. It contains no recommendation or winner field, performs
+no browser recalculation, accepts no file input, and links back to the complete
+generated report for material outside this first slice.
+
+The Results navigation and product landing now enter the explorer while
+`/benchmark` and every dataset-specific legacy report keep their existing
+routes. A Node contract test accepts the checked-in sample and rejects an
+unsupported schema, inconsistent significance, an ambiguous baseline, and an
+unknown recommendation field.
+
+## Next implementation increment
+
+Make benchmark reports reproducibly exportable before accepting arbitrary
+local files:
+
+- Add a Python schema-v1 benchmark-report record and canonical serializer
+- Adapt one existing checked-in experiment result into that record without
+  parsing rendered Markdown
+- Cross-check the Python payload against the browser validator in CI
+- Preserve source/config provenance, rounded display values, paired statistics,
+  and limitations exactly
+- Keep browser file import, filtering, charts, failure playback, and legacy-page
+  replacement outside this exporter increment
 
 Long-form article migration, synchronized failure playback, collaborative
 review, remote storage, and raw video playback remain later increments.

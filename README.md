@@ -183,6 +183,13 @@ fixed synthetic comparison without writing, then `--write` creates a complete
 verified bundle and prints the `report.json` path to import at `/lab`. The
 output root must be new and is never reused or overwritten.
 
+The first data-driven results slice is available at
+[`/benchmark/explorer`](https://visiontrack.hulage.in/benchmark/explorer). It
+strictly validates a versioned checked-in report before rendering the dataset,
+protocol, provenance, mean±standard-deviation values, paired deltas, and
+Wilcoxon p-values. It remains read-only, selects no winner, and links to the
+full generated benchmark rather than replacing the existing report pages.
+
 **No install at all** — run the tracker live in your browser at **[visiontrack.hulage.in/live](https://visiontrack.hulage.in/live)**: the same from-scratch association (Kalman + Hungarian + ByteTrack), ported to JavaScript and running on-device over your webcam or a sample clip.
 
 **Benchmark a set of trackers** into one report (leaderboard + paired significance + ID-switch error taxonomy) — `make benchmark`, or see the live report at **[visiontrack.hulage.in/benchmark](https://visiontrack.hulage.in/benchmark)**.
@@ -214,7 +221,7 @@ Every run is pinned by a config hash; bootstrap resampling and synthetic scenes 
 ## Engineering
 
 - **Zero ML-framework dependency in the core** — just NumPy. Heavy/optional deps (`scipy`, `pandas`, `matplotlib`, `pillow`, `onnxruntime`, `torch`) are isolated in extras (`[experiments]`, `[appearance]`, `[onnx]`) and lazily imported; nothing in `core/` imports them.
-- **514 tests**: unit, property (Hungarian vs SciPy), convergence (Kalman), metric cross-checks (HOTA/IDF1 vs `trackeval`), video/webcam pipelines, the benchmarking tool, and end-to-end integration with a MOTA floor.
+- **518 tests**: unit, property (Hungarian vs SciPy), convergence (Kalman), metric cross-checks (HOTA/IDF1 vs `trackeval`), video/webcam pipelines, the benchmarking tool, and end-to-end integration with a MOTA floor.
 - **CI** on Python 3.10/3.11/3.12 + ruff.
 
 ```
