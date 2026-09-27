@@ -7,9 +7,9 @@ export interface BenchmarkMetric {
 
 export interface BenchmarkResult {
   mean: number
-  std: number
+  std: number | null
   delta: number
-  p_value: number
+  p_value: number | null
   significant: boolean
 }
 

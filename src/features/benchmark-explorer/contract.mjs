@@ -65,13 +65,15 @@ export function validateBenchmarkReport(value) {
     for (const key of metricKeys) {
       const result = variant.values[key]
       if (!hasExactFields(result, valueFields) || !isFiniteNumber(result.mean) ||
-          !isFiniteNumber(result.std) || result.std < 0 || !isFiniteNumber(result.delta) ||
-          !isFiniteNumber(result.p_value) || result.p_value < 0 || result.p_value > 1 ||
-          typeof result.significant !== "boolean" || result.significant !== (result.p_value < 0.05)) {
+          !(result.std === null || (isFiniteNumber(result.std) && result.std >= 0)) ||
+          !isFiniteNumber(result.delta) ||
+          !(result.p_value === null || (isFiniteNumber(result.p_value) && result.p_value >= 0 && result.p_value <= 1)) ||
+          typeof result.significant !== "boolean" ||
+          (result.p_value !== null && result.significant !== (result.p_value < 0.05))) {
         return fail(`The ${variant.name} ${key} result is invalid.`)
       }
-      if (variant.baseline && (result.delta !== 0 || result.p_value !== 1 || result.significant)) {
-        return fail("Baseline comparisons must remain a zero-delta, p=1 sanity check.")
+      if (variant.baseline && (result.delta !== 0 || result.significant)) {
+        return fail("Baseline comparisons must remain a zero-delta reference row.")
       }
     }
   }

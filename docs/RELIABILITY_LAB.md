@@ -1043,15 +1043,17 @@ Implemented at `/benchmark/explorer` as a new React route alongside—not in
 place of—the existing generated benchmark pages. Its schema-v1 contract
 strictly validates every top-level and nested field, the single declared
 baseline, shared metric keys, finite values, p-value bounds, significance
-flags, and the baseline's zero-delta/p=1 sanity row before rendering.
+flags, and the baseline's zero-delta reference row before rendering.
 
-The deterministic sample is a structured transcription of
-`docs/results_tracker_zoo.md` and names that source plus its checked-in
-`302b26da084f` config hash. The explorer exposes dataset and detector context,
-the paired protocol, mean ± standard deviation, deltas, Wilcoxon p-values, and
-explicit limitations. It contains no recommendation or winner field, performs
-no browser recalculation, accepts no file input, and links back to the complete
-generated report for material outside this first slice.
+The deterministic sample is a structured transcription of the tracked
+`web/benchmark.html` artifact and names that source plus its checked-in
+`0bf2d757c381` config hash. The explorer exposes dataset and detector context,
+the paired protocol, means, the baseline's published spread, deltas, Wilcoxon
+significance markers, and explicit limitations. Exact p-values and
+non-baseline spreads are visibly absent because the tracked source does not
+publish them. The explorer contains no recommendation or winner field,
+performs no browser recalculation, accepts no file input, and links back to the
+complete generated report for material outside this first slice.
 
 The Results navigation and product landing now enter the explorer while
 `/benchmark` and every dataset-specific legacy report keep their existing
