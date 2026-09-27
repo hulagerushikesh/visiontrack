@@ -83,6 +83,8 @@ visiontrack lab-evidence BUNDLE VARIANT EVENT_ID \
 visiontrack lab-decision BUNDLE --status accepted --variant baseline \
   --rationale "Meets the registered criteria." --author local-reviewer \
   --decided-at 2026-09-21T08:30:00Z               # preview only
+visiontrack lab-decision-import BUNDLE ./Downloads/decision.json  # preview only
+visiontrack lab-decision-import BUNDLE ./Downloads/decision.json --write
 visiontrack lab-demo ./lab-onboarding              # preview only
 visiontrack lab-demo ./lab-onboarding --write      # create complete bundle
 ```
@@ -100,6 +102,14 @@ one verified variant, or `--status rejected_all` without `--variant`. Add
 `--write` only after reviewing the preview; the resulting root-level
 `decision.json` is immutable, identical writes are idempotent, and conflicting
 second decisions are refused.
+
+`lab-decision-import` accepts an explicit canonical `decision.json` downloaded
+from the React Lab. It rejects symlinks, invalid or oversized files,
+non-canonical bytes, changed fingerprints, unknown variants, and any mismatch
+in experiment, source, comparison, or report lineage. Preview mode prints the
+exact source, destination, destination state, decision, and lineage without
+writing. `--write` uses the same immutable storage as `lab-decision`; identical
+existing records are idempotent and conflicting records are refused.
 
 `lab-demo` resolves a fixed 48-frame, four-object synthetic experiment with a
 ByteTrack baseline and SORT-style single-stage variant. Preview mode prints the
@@ -132,7 +142,13 @@ newline-terminated file bytes.
 ## Reliability Lab decisions
 
 ```python
-from visiontrack.lab import plan_human_decision, read_human_decision, record_human_decision
+from visiontrack.lab import (
+    import_human_decision,
+    plan_decision_import,
+    plan_human_decision,
+    read_human_decision,
+    record_human_decision,
+)
 
 preview = plan_human_decision(
     bundle,
@@ -152,6 +168,9 @@ path = record_human_decision(
     decided_at="2026-09-21T08:30:00Z",
 )
 decision = read_human_decision(bundle)
+
+import_preview = plan_decision_import(bundle, "Downloads/decision.json")
+imported_path = import_human_decision(bundle, "Downloads/decision.json")
 ```
 
 ```python

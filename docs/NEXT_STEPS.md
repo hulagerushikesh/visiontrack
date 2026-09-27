@@ -81,6 +81,9 @@ The first local workflow and its versioned records are defined in
       rejected-all conformance vectors and enforce them in CI.
 - [x] Add a preview-first deterministic synthetic Lab command that produces a
       complete verified report bundle without requiring private data.
+- [x] Close the browser-draft-to-bundle loop with a preview-first external
+      `decision.json` importer that fully revalidates lineage and preserves
+      immutable, idempotent storage.
 - [ ] Migrate the long-form research write-up into reusable article components.
 - [ ] Design a data-driven benchmark explorer before replacing generated reports.
 - [ ] Port the interactive tracker shell without changing tracker behavior or

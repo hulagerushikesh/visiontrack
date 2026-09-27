@@ -986,7 +986,7 @@ The command finishes by printing the exact report path for `/lab` and the
 bundle path used by `lab-decision`. It does not generate video or image
 evidence, select a winner, or use a special onboarding-only artifact format.
 
-## Next implementation increment
+## Twenty-third implementation increment — complete
 
 Close the browser-draft-to-bundle loop without weakening immutability:
 
@@ -1003,6 +1003,41 @@ Close the browser-draft-to-bundle loop without weakening immutability:
 
 Collaborative review, signatures, remote storage, and raw video playback remain
 later increments.
+
+Implemented as `visiontrack lab-decision-import BUNDLE DECISION`. The external
+file must be an explicit regular UTF-8 file named `decision.json`, remain under
+the bounded input-size limit, and exactly match the canonical newline-terminated
+bytes produced by the browser. Loading reconstructs `DecisionRecord`, which
+recomputes its content fingerprint.
+
+The importer then rebuilds the report from the bundle, verifies the stored
+canonical report against that evidence, preserves the human-unselected report
+boundary, and checks the decision's experiment, source, comparison, report, and
+accepted-variant lineage. Preview prints the exact source file, destination,
+destination state, human decision, fingerprint, and complete lineage without
+writing.
+
+Only `--write` calls the existing immutable decision storage boundary. An
+identical decision already in the bundle is previewed as such and remains
+idempotent. A conflicting file is refused during preview and remains protected
+by exclusive immutable storage at publication time. The browser still cannot
+write bundle state; the user deliberately bridges that boundary with the CLI.
+
+## Next implementation increment
+
+Start the data-driven benchmark explorer with a small read-only slice:
+
+- Define one versioned browser report contract for the existing benchmark
+  leaderboard and paired-comparison rows
+- Generate a deterministic sample from existing checked-in benchmark results
+- Add a React route that validates the report before rendering it
+- Show provenance, dataset/protocol, variants, metrics, and significance without
+  inventing rankings or recalculating research claims in the browser
+- Keep file import, playback, filtering, and replacement of legacy benchmark
+  pages outside this first explorer increment
+
+Long-form article migration, synchronized failure playback, collaborative
+review, remote storage, and raw video playback remain later increments.
 
 ## Acceptance criteria
 
