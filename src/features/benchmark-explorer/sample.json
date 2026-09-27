@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "report_id": "tracker-zoo-synth-v1",
-  "title": "Tracker zoo · controlled synthetic study",
+  "report_id": "benchmark-synth-v1",
+  "title": "Tracker benchmark · controlled synthetic study",
   "summary": "Six association strategies replayed over identical deterministic scenes, paired by sequence and seed.",
   "dataset": {
     "name": "Synthetic crossing benchmark",
@@ -12,9 +12,9 @@
     "runs_per_variant": 15
   },
   "provenance": {
-    "source_document": "docs/results_tracker_zoo.md",
+    "source_document": "web/benchmark.html",
     "source_kind": "checked_in_research_artifact",
-    "config_hash": "302b26da084f",
+    "config_hash": "0bf2d757c381",
     "visiontrack_version": "0.2.0",
     "git_revision": null
   },
@@ -27,45 +27,46 @@
   ],
   "variants": [
     { "name": "sort", "baseline": false, "values": {
-      "MOTA": { "mean": 0.653, "std": 0.060, "delta": -0.001, "p_value": 0.35, "significant": false },
-      "IDF1": { "mean": 0.778, "std": 0.045, "delta": -0.001, "p_value": 0.35, "significant": false },
-      "HOTA": { "mean": 0.561, "std": 0.041, "delta": -0.001, "p_value": 0.25, "significant": false },
-      "IDSW": { "mean": 9.200, "std": 6.190, "delta": 0.333, "p_value": 0.65, "significant": false }
+      "MOTA": { "mean": 0.653, "std": null, "delta": -0.001, "p_value": null, "significant": false },
+      "IDF1": { "mean": 0.778, "std": null, "delta": -0.001, "p_value": null, "significant": false },
+      "HOTA": { "mean": 0.561, "std": null, "delta": -0.001, "p_value": null, "significant": false },
+      "IDSW": { "mean": 9.200, "std": null, "delta": 0.333, "p_value": null, "significant": false }
     } },
     { "name": "deepsort", "baseline": false, "values": {
-      "MOTA": { "mean": 0.653, "std": 0.059, "delta": -0.002, "p_value": 0.50, "significant": false },
-      "IDF1": { "mean": 0.780, "std": 0.047, "delta": 0.001, "p_value": 0.51, "significant": false },
-      "HOTA": { "mean": 0.562, "std": 0.042, "delta": 0, "p_value": 0.86, "significant": false },
-      "IDSW": { "mean": 9.400, "std": 7.209, "delta": 0.533, "p_value": 0.60, "significant": false }
+      "MOTA": { "mean": 0.653, "std": null, "delta": -0.002, "p_value": null, "significant": false },
+      "IDF1": { "mean": 0.780, "std": null, "delta": 0.001, "p_value": null, "significant": false },
+      "HOTA": { "mean": 0.562, "std": null, "delta": 0, "p_value": null, "significant": false },
+      "IDSW": { "mean": 9.400, "std": null, "delta": 0.533, "p_value": null, "significant": false }
     } },
     { "name": "bytetrack", "baseline": true, "values": {
-      "MOTA": { "mean": 0.655, "std": 0.058, "delta": 0, "p_value": 1, "significant": false },
-      "IDF1": { "mean": 0.779, "std": 0.044, "delta": 0, "p_value": 1, "significant": false },
-      "HOTA": { "mean": 0.562, "std": 0.040, "delta": 0, "p_value": 1, "significant": false },
-      "IDSW": { "mean": 8.867, "std": 5.436, "delta": 0, "p_value": 1, "significant": false }
+      "MOTA": { "mean": 0.655, "std": 0.058, "delta": 0, "p_value": null, "significant": false },
+      "IDF1": { "mean": 0.779, "std": 0.044, "delta": 0, "p_value": null, "significant": false },
+      "HOTA": { "mean": 0.562, "std": 0.040, "delta": 0, "p_value": null, "significant": false },
+      "IDSW": { "mean": 8.867, "std": 5.436, "delta": 0, "p_value": null, "significant": false }
     } },
     { "name": "bytetrack_reid", "baseline": false, "values": {
-      "MOTA": { "mean": 0.654, "std": 0.057, "delta": -0.001, "p_value": 0.47, "significant": false },
-      "IDF1": { "mean": 0.781, "std": 0.043, "delta": 0.002, "p_value": 0.04, "significant": true },
-      "HOTA": { "mean": 0.563, "std": 0.040, "delta": 0.001, "p_value": 0.03, "significant": true },
-      "IDSW": { "mean": 9.733, "std": 7.516, "delta": 0.867, "p_value": 0.34, "significant": false }
+      "MOTA": { "mean": 0.654, "std": null, "delta": -0.001, "p_value": null, "significant": false },
+      "IDF1": { "mean": 0.781, "std": null, "delta": 0.002, "p_value": null, "significant": true },
+      "HOTA": { "mean": 0.563, "std": null, "delta": 0.001, "p_value": null, "significant": true },
+      "IDSW": { "mean": 9.733, "std": null, "delta": 0.867, "p_value": null, "significant": false }
     } },
     { "name": "bytetrack_giou", "baseline": false, "values": {
-      "MOTA": { "mean": 0.646, "std": 0.056, "delta": -0.009, "p_value": 0.03, "significant": true },
-      "IDF1": { "mean": 0.770, "std": 0.043, "delta": -0.009, "p_value": 0.10, "significant": false },
-      "HOTA": { "mean": 0.557, "std": 0.042, "delta": -0.005, "p_value": 0.02, "significant": true },
-      "IDSW": { "mean": 9.467, "std": 6.266, "delta": 0.600, "p_value": 0.46, "significant": false }
+      "MOTA": { "mean": 0.646, "std": null, "delta": -0.009, "p_value": null, "significant": true },
+      "IDF1": { "mean": 0.770, "std": null, "delta": -0.009, "p_value": null, "significant": false },
+      "HOTA": { "mean": 0.557, "std": null, "delta": -0.005, "p_value": null, "significant": true },
+      "IDSW": { "mean": 9.467, "std": null, "delta": 0.600, "p_value": null, "significant": false }
     } },
     { "name": "oc_sort", "baseline": false, "values": {
-      "MOTA": { "mean": 0.595, "std": 0.064, "delta": -0.060, "p_value": 0.00, "significant": true },
-      "IDF1": { "mean": 0.687, "std": 0.069, "delta": -0.092, "p_value": 0.00, "significant": true },
-      "HOTA": { "mean": 0.503, "std": 0.045, "delta": -0.059, "p_value": 0.00, "significant": true },
-      "IDSW": { "mean": 14.000, "std": 9.517, "delta": 5.133, "p_value": 0.13, "significant": false }
+      "MOTA": { "mean": 0.644, "std": null, "delta": -0.011, "p_value": null, "significant": true },
+      "IDF1": { "mean": 0.769, "std": null, "delta": -0.010, "p_value": null, "significant": true },
+      "HOTA": { "mean": 0.556, "std": null, "delta": -0.006, "p_value": null, "significant": true },
+      "IDSW": { "mean": 11.600, "std": null, "delta": 2.733, "p_value": null, "significant": false }
     } }
   ],
   "limitations": [
     "This slice uses deterministic synthetic scenes and does not establish real-world detector performance.",
-    "Displayed values are rounded copies of the checked-in research artifact; the experiment harness remains the source of truth.",
+    "Displayed values are rounded copies of the checked-in generated page; the experiment harness remains the source of truth.",
+    "The generated page publishes exact spread only for the baseline and significance markers rather than exact p-values for other rows.",
     "Significance is paired by sequence and seed and does not imply practical importance outside this protocol."
   ]
 }

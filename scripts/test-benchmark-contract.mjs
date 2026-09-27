@@ -7,10 +7,10 @@ const sampleUrl = new URL("../src/features/benchmark-explorer/sample.json", impo
 const sample = JSON.parse(await readFile(sampleUrl, "utf8"))
 
 assert.deepEqual(validateBenchmarkReport(sample), { valid: true })
-assert.equal(sample.provenance.source_document, "docs/results_tracker_zoo.md")
-assert.equal(sample.provenance.config_hash, "302b26da084f")
+assert.equal(sample.provenance.source_document, "web/benchmark.html")
+assert.equal(sample.provenance.config_hash, "0bf2d757c381")
 assert.equal(sample.variants.length, 6)
-assert.equal(sample.variants.find((variant) => variant.name === "bytetrack_reid").values.IDF1.p_value, 0.04)
+assert.equal(sample.variants.find((variant) => variant.name === "bytetrack_reid").values.IDF1.significant, true)
 
 const clone = () => structuredClone(sample)
 
@@ -19,6 +19,7 @@ unsupported.schema_version = 2
 assert.equal(validateBenchmarkReport(unsupported).valid, false)
 
 const automaticSignificance = clone()
+automaticSignificance.variants[0].values.MOTA.p_value = 0.2
 automaticSignificance.variants[0].values.MOTA.significant = true
 assert.equal(validateBenchmarkReport(automaticSignificance).valid, false)
 

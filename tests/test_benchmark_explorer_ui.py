@@ -22,20 +22,20 @@ def test_benchmark_sample_is_tied_to_the_checked_in_research_artifact() -> None:
     sample = json.loads(
         (ROOT / "src/features/benchmark-explorer/sample.json").read_text()
     )
-    source = (ROOT / "docs/results_tracker_zoo.md").read_text()
+    source = (ROOT / "web/benchmark.html").read_text()
 
     assert sample["schema_version"] == 1
-    assert sample["provenance"]["source_document"] == "docs/results_tracker_zoo.md"
-    assert sample["provenance"]["config_hash"] == "302b26da084f"
-    assert "config hash: `302b26da084f`" in source
+    assert sample["provenance"]["source_document"] == "web/benchmark.html"
+    assert sample["provenance"]["config_hash"] == "0bf2d757c381"
+    assert "config: 0bf2d757c381" in source
     assert [variant["name"] for variant in sample["variants"]] == [
         "sort", "deepsort", "bytetrack", "bytetrack_reid", "bytetrack_giou", "oc_sort"
     ]
     assert sample["variants"][3]["values"]["IDF1"] == {
         "mean": 0.781,
-        "std": 0.043,
+        "std": None,
         "delta": 0.002,
-        "p_value": 0.04,
+        "p_value": None,
         "significant": True,
     }
 
@@ -45,8 +45,8 @@ def test_benchmark_contract_is_strict_and_does_not_encode_a_recommendation() -> 
     sample = (ROOT / "src/features/benchmark-explorer/sample.json").read_text()
 
     assert "hasExactFields" in contract
-    assert "Baseline comparisons must remain a zero-delta, p=1 sanity check." in contract
-    assert 'result.significant !== (result.p_value < 0.05)' in contract
+    assert "Baseline comparisons must remain a zero-delta reference row." in contract
+    assert 'result.p_value !== null && result.significant !== (result.p_value < 0.05)' in contract
     assert "The report must preserve at least one explicit limitation." in contract
     assert '"recommendation"' not in sample
     assert '"winner"' not in sample

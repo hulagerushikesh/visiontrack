@@ -186,8 +186,8 @@ output root must be new and is never reused or overwritten.
 The first data-driven results slice is available at
 [`/benchmark/explorer`](https://visiontrack.hulage.in/benchmark/explorer). It
 strictly validates a versioned checked-in report before rendering the dataset,
-protocol, provenance, mean±standard-deviation values, paired deltas, and
-Wilcoxon p-values. It remains read-only, selects no winner, and links to the
+protocol, provenance, published means/spread, paired deltas, and Wilcoxon
+significance markers. It remains read-only, selects no winner, and links to the
 full generated benchmark rather than replacing the existing report pages.
 
 **No install at all** — run the tracker live in your browser at **[visiontrack.hulage.in/live](https://visiontrack.hulage.in/live)**: the same from-scratch association (Kalman + Hungarian + ByteTrack), ported to JavaScript and running on-device over your webcam or a sample clip.
