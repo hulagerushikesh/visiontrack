@@ -34,7 +34,7 @@ export interface BenchmarkReport {
   }
   provenance: {
     source_document: string
-    source_kind: "checked_in_research_artifact"
+    source_kind: "checked_in_research_artifact" | "structured_experiment_result"
     config_hash: string
     visiontrack_version: string
     git_revision: string | null

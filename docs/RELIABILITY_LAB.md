@@ -1095,7 +1095,7 @@ accepted by the browser's runtime validator in CI. The same validator continues
 to reject unknown fields, unsupported versions, inconsistent significance, and
 ambiguous baselines.
 
-## Next implementation increment
+## Twenty-sixth implementation increment — complete
 
 Allow deliberate, local-only benchmark report inspection:
 
@@ -1106,6 +1106,35 @@ Allow deliberate, local-only benchmark report inspection:
   to the bundled checked-in sample
 - Keep uploads, persistence, directory scanning, charts, filters, playback,
   automatic ranking, and legacy-page replacement outside this increment
+
+Implemented in `/benchmark/explorer` as one explicit `.json` selector. The
+browser reads at most one selected file, enforces a 1 MB size boundary, parses
+it locally, and applies the complete schema-v1 runtime contract before changing
+the displayed report. A valid report identifies its local filename, source
+kind, report ID, config hash, protocol, complete evidence table, and limitations
+without sending a network request.
+
+Invalid JSON, oversized input, and contract violations enter an isolated error
+state: no values from the rejected file are partially rendered or retained.
+The user can select another file or return to the bundled checked-in sample.
+Imported state lives only in the current React component; there is no upload,
+browser storage, directory scan, or server mutation.
+
+The bundled artifact and Python-exported structured result fixture both remain
+accepted by the shared browser contract. A remote provenance kind remains
+rejected, preserving the deliberately local boundary.
+
+## Next implementation increment
+
+Make larger reports easier to inspect without changing their evidence:
+
+- Add ephemeral metric and variant focus controls above the evidence table
+- Always retain the baseline when a subset of variants is selected
+- Show the active display scope and provide a one-click reset to all evidence
+- Keep the underlying validated report immutable and perform no metric,
+  significance, recommendation, or ranking recalculation
+- Keep charts, playback, persistence, URLs that encode private filenames,
+  uploads, and legacy-page replacement outside this increment
 
 Long-form article migration, synchronized failure playback, collaborative
 review, remote storage, and raw video playback remain later increments.
