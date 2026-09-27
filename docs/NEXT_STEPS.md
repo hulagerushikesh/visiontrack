@@ -95,9 +95,9 @@ The first local workflow and its versioned records are defined in
       keeping the complete validated report immutable and one-click restorable.
 - [x] Lazy-load the Lab and benchmark explorer routes so research tooling does
       not inflate the default product-site bundle as these workflows grow.
-- [ ] Lock the existing `/live` tracker behavior and privacy contract before
+- [x] Lock the existing `/live` tracker behavior and privacy contract before
       moving its UI into the shared React product shell.
-- [ ] Port the interactive tracker shell without changing tracker behavior or
+- [x] Port the interactive tracker shell without changing tracker behavior or
       browser privacy guarantees.
 - [ ] Interview 5–10 tracking practitioners and collect representative failure
       clips that can legally be evaluated.

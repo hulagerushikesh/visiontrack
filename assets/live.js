@@ -1,220 +1,283 @@
-/* VisionTrack — live in-browser demo glue.
- *
- * Runs the whole tracking pipeline client-side, no server, no video in git:
- *   webcam (or the committed sample clip) -> COCO-SSD detector (TensorFlow.js,
- *   the ONE learned piece) -> the from-scratch JS tracker in tracker.js
- *   (Kalman + Hungarian + ByteTrack) -> boxes + stable ids drawn on a canvas.
- *
- * The detector is deliberately the only imported model: the association, gating,
- * and lifecycle — the actual subject of this project — are all our own code.
- */
+/* VisionTrack — mountable, entirely client-side live demo runtime. */
 (function () {
   "use strict";
 
-  var $ = function (id) { return document.getElementById(id); };
-  var video = $("src-video"), canvas = $("live-cv"), ctx = canvas.getContext("2d");
-  var startBtn = $("start-btn"), srcSeg = $("src-seg"), detToggle = $("det-toggle");
-  var statusEl = $("status");
-  var fpsEl = $("m-fps"), trkEl = $("m-tracks"), idEl = $("m-ids"), detEl = $("m-dets");
-
-  // COCO classes worth tracking on a street / in a room.
+  var modelPromise = null;
   var CLASSES = { person: 1, bicycle: 1, car: 1, motorcycle: 1, bus: 1, truck: 1 };
 
-  var tracker = new window.VT.ByteTracker({ nInit: 3, maxAge: 30, trackThresh: 0.5, detThresh: 0.2 });
-  var model = null;
-  var running = false, source = "webcam", stream = null;
-  var showDet = true, fps = 0, lastT = 0;
-
-  function setStatus(msg, tone) {
-    statusEl.textContent = msg;
-    statusEl.dataset.tone = tone || "";
-  }
-
-  // ---- model ----
-  function ensureModel() {
-    if (model) return Promise.resolve(model);
-    setStatus("loading detector (COCO-SSD, ~5 MB)…", "wait");
-    return window.cocoSsd.load({ base: "lite_mobilenet_v2" }).then(function (m) {
-      model = m;
-      setStatus("detector ready — press Start.", "ok");
-      startBtn.disabled = false;
-      return m;
-    }).catch(function (e) {
-      setStatus("detector failed to load: " + e.message, "err");
-      throw e;
-    });
-  }
-
-  // ---- sources ----
-  function stopStream() {
-    // Note: no video.load() here — calling it immediately before a new src + play()
-    // races the pending play() and throws AbortError. Clearing the source is enough.
-    if (stream) { stream.getTracks().forEach(function (t) { t.stop(); }); stream = null; }
-    try { video.pause(); } catch (e) { /* ignore */ }
-    video.srcObject = null;
-  }
-
-  // Kick playback, tolerating the "play() interrupted by a new load" race:
-  // AbortError just means a newer load superseded us — retry once when ready.
-  // The success status is driven by the actual `playing` event, not the promise.
-  function playSoon(okMsg) {
-    var onPlaying = function () {
-      video.removeEventListener("playing", onPlaying);
-      tracker.reset(); setStatus(okMsg, "ok");
-    };
-    video.addEventListener("playing", onPlaying);
-    var attempt = function () {
-      video.play().catch(function (e) {
-        if (e && e.name === "AbortError") {
-          video.addEventListener("canplay", function once() {
-            video.removeEventListener("canplay", once); video.play().catch(function () {});
-          }, { once: true });
-        }
+  function getModel() {
+    if (!modelPromise) {
+      modelPromise = window.cocoSsd.load({ base: "lite_mobilenet_v2" }).catch(function (error) {
+        modelPromise = null;
+        throw error;
       });
-    };
-    attempt();
-  }
-
-  function startWebcam() {
-    stopStream();
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      setStatus("this browser has no camera API — using the sample clip.", "err");
-      selectSource("sample"); return;
     }
-    setStatus("requesting camera…", "wait");
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment", width: 960 }, audio: false })
-      .then(function (s) { stream = s; video.srcObject = s; playSoon("tracking your camera — live."); })
-      .catch(function () {
-        setStatus("camera blocked or unavailable — falling back to the sample clip.", "err");
-        selectSource("sample");
-      });
+    return modelPromise;
   }
 
-  function startSample() {
-    stopStream();
-    video.loop = true; video.muted = true; video.playsInline = true;
-    video.src = "/assets/street_tracking.mp4";
-    playSoon("tracking the sample street clip (public-domain footage).");
-  }
-
-  function activateSource() { (source === "webcam" ? startWebcam : startSample)(); }
-
-  function selectSource(next) {
-    source = next;
-    Array.prototype.forEach.call(srcSeg.querySelectorAll("button"), function (b) {
-      b.setAttribute("aria-pressed", String(b.dataset.src === next));
-    });
-    if (running) activateSource();
-  }
-
-  // ---- the loop ----
-  function detectionsFrom(preds) {
-    var out = [];
-    for (var i = 0; i < preds.length; i++) {
-      var p = preds[i];
-      if (!CLASSES[p.class]) continue;
-      var b = p.bbox;  // [x, y, w, h]
-      out.push({ box: [b[0], b[1], b[0] + b[2], b[1] + b[3]], score: p.score, cls: p.class });
+  function mount(root) {
+    var $ = function (id) { return root.querySelector("#" + id); };
+    var video = $("src-video"), canvas = $("live-cv");
+    var startBtn = $("start-btn"), srcSeg = $("src-seg"), detToggle = $("det-toggle");
+    var statusEl = $("status");
+    var fpsEl = $("m-fps"), trkEl = $("m-tracks"), idEl = $("m-ids"), detEl = $("m-dets");
+    var required = [video, canvas, startBtn, srcSeg, detToggle, statusEl, fpsEl, trkEl, idEl, detEl];
+    if (!window.VT || !window.VT.ByteTracker || required.some(function (node) { return !node; })) {
+      throw new Error("The live tracker page is missing its required runtime contract.");
     }
-    return out;
-  }
+    var ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("This browser cannot create the tracker canvas.");
 
-  function loop() {
-    if (!running) return;
-    if (video.readyState < 2) { requestAnimationFrame(loop); return; }
+    var tracker = new window.VT.ByteTracker({ nInit: 3, maxAge: 30, trackThresh: 0.5, detThresh: 0.2 });
+    var model = null;
+    var running = false, source = "webcam", stream = null;
+    var showDet = detToggle.checked, fps = 0, lastT = 0;
+    var destroyed = false, animationFrame = 0;
+    var pendingPlaying = null, pendingCanPlay = null;
 
-    var w = video.videoWidth, h = video.videoHeight;
-    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+    function setStatus(message, tone) {
+      if (destroyed) return;
+      statusEl.textContent = message;
+      statusEl.dataset.tone = tone || "";
+    }
 
-    model.detect(video, 25, 0.2).then(function (preds) {
-      var dets = detectionsFrom(preds);
-      var tracks = tracker.update(dets);
-      draw(dets, tracks);
+    function setRunning(next) {
+      running = next;
+      startBtn.textContent = next ? "Stop tracking" : "Start tracking";
+      startBtn.classList.toggle("on", next);
+      startBtn.dataset.running = String(next);
+    }
 
-      var now = performance.now();
-      if (lastT) { var inst = 1000 / (now - lastT); fps = fps ? fps * 0.85 + inst * 0.15 : inst; }
-      lastT = now;
-      fpsEl.textContent = fps.toFixed(0);
-      trkEl.textContent = String(tracks.length);
-      idEl.textContent = String(tracker.totalIds);
-      detEl.textContent = String(dets.length);
+    function clearPlaybackListeners() {
+      if (pendingPlaying) video.removeEventListener("playing", pendingPlaying);
+      if (pendingCanPlay) video.removeEventListener("canplay", pendingCanPlay);
+      pendingPlaying = null;
+      pendingCanPlay = null;
+    }
 
-      requestAnimationFrame(loop);
-    }).catch(function (e) {
-      setStatus("detector error: " + e.message, "err");
-      running = false; startBtn.textContent = "Start";
-    });
-  }
-
-  // ---- drawing ----
-  function draw(dets, tracks) {
-    var w = canvas.width, h = canvas.height;
-    ctx.drawImage(video, 0, 0, w, h);
-
-    var scale = Math.max(w, h) / 900;      // stroke/text scale with resolution
-    var lw = Math.max(2, 2.4 * scale), font = Math.round(15 * scale);
-
-    // raw detections (dashed, faint) — what the detector proposes each frame
-    if (showDet) {
-      ctx.setLineDash([6 * scale, 5 * scale]);
-      ctx.lineWidth = 1.4 * scale;
-      ctx.strokeStyle = "rgba(255,255,255,.45)";
-      for (var d = 0; d < dets.length; d++) {
-        var db = dets[d].box;
-        ctx.strokeRect(db[0], db[1], db[2] - db[0], db[3] - db[1]);
+    function stopStream() {
+      clearPlaybackListeners();
+      if (stream) {
+        stream.getTracks().forEach(function (track) { track.stop(); });
+        stream = null;
       }
-      ctx.setLineDash([]);
+      try { video.pause(); } catch (error) { /* media may not have started */ }
+      video.srcObject = null;
     }
 
-    ctx.font = "600 " + font + "px ui-monospace, Menlo, monospace";
-    ctx.textBaseline = "middle";
-    for (var i = 0; i < tracks.length; i++) {
-      var t = tracks[i], b = t.box();
-      // Kalman trail
-      var tr = t.trail;
-      ctx.strokeStyle = t.color; ctx.lineWidth = lw;
-      for (var j = 1; j < tr.length; j++) {
-        ctx.globalAlpha = (j / tr.length) * 0.6;
-        ctx.beginPath(); ctx.moveTo(tr[j - 1][0], tr[j - 1][1]); ctx.lineTo(tr[j][0], tr[j][1]); ctx.stroke();
+    function playSoon(successMessage) {
+      clearPlaybackListeners();
+      pendingPlaying = function () {
+        clearPlaybackListeners();
+        if (destroyed || !running) return;
+        tracker.reset();
+        setStatus(successMessage, "ok");
+      };
+      video.addEventListener("playing", pendingPlaying);
+      video.play().catch(function (error) {
+        if (destroyed || !running || !error || error.name !== "AbortError") return;
+        pendingCanPlay = function () {
+          if (pendingCanPlay) video.removeEventListener("canplay", pendingCanPlay);
+          pendingCanPlay = null;
+          if (!destroyed && running) video.play().catch(function () {});
+        };
+        video.addEventListener("canplay", pendingCanPlay, { once: true });
+      });
+    }
+
+    function startWebcam() {
+      stopStream();
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        setStatus("This browser has no camera API — using the sample clip.", "err");
+        selectSource("sample");
+        return;
+      }
+      setStatus("Requesting camera permission…", "wait");
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment", width: 960 }, audio: false })
+        .then(function (nextStream) {
+          if (destroyed || !running || source !== "webcam") {
+            nextStream.getTracks().forEach(function (track) { track.stop(); });
+            return;
+          }
+          stream = nextStream;
+          video.removeAttribute("src");
+          video.srcObject = nextStream;
+          playSoon("Tracking your camera — live and on-device.");
+        })
+        .catch(function () {
+          if (destroyed || !running) return;
+          setStatus("Camera blocked or unavailable — using the sample clip.", "err");
+          selectSource("sample");
+        });
+    }
+
+    function startSample() {
+      stopStream();
+      video.loop = true;
+      video.muted = true;
+      video.playsInline = true;
+      video.src = "/assets/street_tracking.mp4";
+      playSoon("Tracking the sample street clip — no camera permission needed.");
+    }
+
+    function activateSource() { (source === "webcam" ? startWebcam : startSample)(); }
+
+    function selectSource(next) {
+      source = next;
+      Array.prototype.forEach.call(srcSeg.querySelectorAll("button[data-src]"), function (button) {
+        button.setAttribute("aria-pressed", String(button.dataset.src === next));
+      });
+      if (running) activateSource();
+    }
+
+    function detectionsFrom(predictions) {
+      var output = [];
+      for (var i = 0; i < predictions.length; i++) {
+        var prediction = predictions[i];
+        if (!CLASSES[prediction.class]) continue;
+        var box = prediction.bbox;
+        output.push({ box: [box[0], box[1], box[0] + box[2], box[1] + box[3]], score: prediction.score, cls: prediction.class });
+      }
+      return output;
+    }
+
+    function draw(detections, tracks) {
+      var width = canvas.width, height = canvas.height;
+      ctx.drawImage(video, 0, 0, width, height);
+      var scale = Math.max(width, height) / 900;
+      var lineWidth = Math.max(2, 2.4 * scale), font = Math.round(15 * scale);
+      if (showDet) {
+        ctx.setLineDash([6 * scale, 5 * scale]);
+        ctx.lineWidth = 1.4 * scale;
+        ctx.strokeStyle = "rgba(255,255,255,.45)";
+        for (var d = 0; d < detections.length; d++) {
+          var detectionBox = detections[d].box;
+          ctx.strokeRect(detectionBox[0], detectionBox[1], detectionBox[2] - detectionBox[0], detectionBox[3] - detectionBox[1]);
+        }
+        ctx.setLineDash([]);
+      }
+      ctx.font = "600 " + font + "px ui-monospace, Menlo, monospace";
+      ctx.textBaseline = "middle";
+      for (var i = 0; i < tracks.length; i++) {
+        var track = tracks[i], trackBox = track.box(), trail = track.trail;
+        ctx.strokeStyle = track.color;
+        ctx.lineWidth = lineWidth;
+        for (var j = 1; j < trail.length; j++) {
+          ctx.globalAlpha = (j / trail.length) * 0.6;
+          ctx.beginPath();
+          ctx.moveTo(trail[j - 1][0], trail[j - 1][1]);
+          ctx.lineTo(trail[j][0], trail[j][1]);
+          ctx.stroke();
+        }
+        ctx.globalAlpha = 1;
+        ctx.strokeRect(trackBox[0], trackBox[1], trackBox[2] - trackBox[0], trackBox[3] - trackBox[1]);
+        var label = "#" + track.id + " " + track.cls;
+        var textWidth = ctx.measureText(label).width + 12 * scale, chipHeight = font + 10 * scale;
+        ctx.fillStyle = track.color;
+        ctx.fillRect(trackBox[0], trackBox[1] - chipHeight, textWidth, chipHeight);
+        ctx.fillStyle = "#05070b";
+        ctx.fillText(label, trackBox[0] + 6 * scale, trackBox[1] - chipHeight / 2);
       }
       ctx.globalAlpha = 1;
-      // confirmed track box
-      ctx.strokeRect(b[0], b[1], b[2] - b[0], b[3] - b[1]);
-      // id chip
-      var label = "#" + t.id + " " + t.cls;
-      var tw = ctx.measureText(label).width + 12 * scale, ch = (font + 10 * scale);
-      ctx.fillStyle = t.color;
-      ctx.fillRect(b[0], b[1] - ch, tw, ch);
-      ctx.fillStyle = "#05070b";
-      ctx.fillText(label, b[0] + 6 * scale, b[1] - ch / 2);
     }
-    ctx.globalAlpha = 1;
+
+    function loop() {
+      if (destroyed || !running) return;
+      if (video.readyState < 2) {
+        animationFrame = requestAnimationFrame(loop);
+        return;
+      }
+      var width = video.videoWidth, height = video.videoHeight;
+      if (canvas.width !== width || canvas.height !== height) { canvas.width = width; canvas.height = height; }
+      model.detect(video, 25, 0.2).then(function (predictions) {
+        if (destroyed || !running) return;
+        var detections = detectionsFrom(predictions), tracks = tracker.update(detections);
+        draw(detections, tracks);
+        var now = performance.now();
+        if (lastT) {
+          var instant = 1000 / (now - lastT);
+          fps = fps ? fps * 0.85 + instant * 0.15 : instant;
+        }
+        lastT = now;
+        fpsEl.textContent = fps.toFixed(0);
+        trkEl.textContent = String(tracks.length);
+        idEl.textContent = String(tracker.totalIds);
+        detEl.textContent = String(detections.length);
+        animationFrame = requestAnimationFrame(loop);
+      }).catch(function (error) {
+        if (destroyed) return;
+        setStatus("Detector error: " + error.message, "err");
+        setRunning(false);
+        stopStream();
+      });
+    }
+
+    function onStart() {
+      if (!model) return;
+      setRunning(!running);
+      if (running) {
+        activateSource();
+        animationFrame = requestAnimationFrame(loop);
+      } else {
+        if (animationFrame) cancelAnimationFrame(animationFrame);
+        animationFrame = 0;
+        stopStream();
+        setStatus("Stopped. Session IDs remain visible until you start again.", "");
+      }
+    }
+
+    function onSource(event) {
+      var button = event.target.closest("button[data-src]");
+      if (button) selectSource(button.dataset.src);
+    }
+    function onDetectionToggle() { showDet = detToggle.checked; }
+
+    function maybeAutostart() {
+      var query = new URLSearchParams(location.search);
+      if (!query.has("demo") && query.get("src") !== "sample") return;
+      selectSource("sample");
+      setRunning(true);
+      activateSource();
+      animationFrame = requestAnimationFrame(loop);
+    }
+
+    startBtn.disabled = true;
+    setRunning(false);
+    startBtn.addEventListener("click", onStart);
+    srcSeg.addEventListener("click", onSource);
+    detToggle.addEventListener("change", onDetectionToggle);
+    setStatus("Loading detector (COCO-SSD, about 5 MB)…", "wait");
+    getModel().then(function (loadedModel) {
+      if (destroyed) return;
+      model = loadedModel;
+      startBtn.disabled = false;
+      setStatus("Detector ready — choose a source and press Start tracking.", "ok");
+      maybeAutostart();
+    }).catch(function (error) {
+      setStatus("Detector failed to load: " + error.message, "err");
+    });
+
+    return function cleanup() {
+      if (destroyed) return;
+      destroyed = true;
+      running = false;
+      if (animationFrame) cancelAnimationFrame(animationFrame);
+      animationFrame = 0;
+      stopStream();
+      video.removeAttribute("src");
+      try { video.load(); } catch (error) { /* element may already be detached */ }
+      startBtn.removeEventListener("click", onStart);
+      srcSeg.removeEventListener("click", onSource);
+      detToggle.removeEventListener("change", onDetectionToggle);
+      tracker.reset();
+    };
   }
 
-  // ---- wiring ----
-  startBtn.disabled = true;
-  startBtn.addEventListener("click", function () {
-    if (!model) return;
-    running = !running;
-    startBtn.textContent = running ? "Stop" : "Start";
-    startBtn.classList.toggle("on", running);
-    if (running) { activateSource(); requestAnimationFrame(loop); }
-    else { stopStream(); setStatus("stopped.", ""); }
-  });
-  srcSeg.addEventListener("click", function (e) {
-    var b = e.target.closest("button[data-src]"); if (b) selectSource(b.dataset.src);
-  });
-  detToggle.addEventListener("change", function () { showDet = detToggle.checked; });
+  window.VTLive = { mount: mount };
 
-  // Deep-link a running demo: /live?demo=1 auto-starts on the sample clip once the
-  // detector is ready (no camera prompt). Handy for sharing and for embedding.
-  function maybeAutostart() {
-    var q = new URLSearchParams(location.search);
-    if (!q.has("demo") && q.get("src") !== "sample") return;
-    selectSource("sample");
-    running = true; startBtn.textContent = "Stop"; startBtn.classList.add("on");
-    activateSource(); requestAnimationFrame(loop);
+  function mountStandalone() {
+    if (document.body && document.body.hasAttribute("data-live-standalone")) mount(document);
   }
-
-  ensureModel().then(maybeAutostart).catch(function () {});
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mountStandalone, { once: true });
+  else mountStandalone();
 })();

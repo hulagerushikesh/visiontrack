@@ -1,8 +1,8 @@
 # Deploying the site (Vercel + custom subdomain)
 
 The public site is a **static bundle** — a Vite-built React shell for the
-product-facing routes plus self-contained HTML experiences for the tracker,
-study guide, roadmap, demo, and benchmark reports. It needs no application
+product-facing routes (including the live tracker) plus self-contained HTML
+experiences for the study guide, roadmap, demo, and benchmark reports. It needs no application
 server or dataset at serve time. It is hosted on **Vercel** at a custom
 subdomain of `hulage.in`.
 
@@ -15,7 +15,7 @@ subdomain of `hulage.in`.
 | `/` | React landing hub | `src/App.tsx` |
 | `/teaching` | React learning hub | `src/App.tsx` |
 | `/video` | React real-footage page | `src/App.tsx` |
-| `/live` | Live browser tracker | `web/live.html` |
+| `/live` | React live browser tracker + existing JS engine | `src/features/live-tracker/LiveTracker.tsx` |
 | `/demo` | Interactive tracker demo | `viz/webdemo/index.html` |
 | `/study` | VisionTrack study guide | `learning/LEARNING_PATH.html` |
 | `/roadmap` | CV junior→research roadmap | `learning/CV_ROADMAP.html` |

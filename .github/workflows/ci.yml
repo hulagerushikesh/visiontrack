@@ -82,6 +82,8 @@ jobs:
         run: npm run test:decision-contract
       - name: Verify benchmark report contract
         run: npm run test:benchmark-contract
+      - name: Verify live tracker contract
+        run: npm run test:live-contract
       - name: Type-check React
         run: npm run typecheck
       - name: Build React app
