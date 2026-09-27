@@ -13,6 +13,7 @@
   ],
   "routes": [
     { "src": "/", "dest": "/app/index.html" },
+    { "src": "/benchmark/explorer/?", "dest": "/app/index.html" },
     { "src": "/benchmark/?", "dest": "/web/benchmark.html" },
     { "src": "/benchmark/dancetrack-yolox/?", "dest": "/web/benchmark-dancetrack-yolox.html" },
     { "src": "/benchmark/dancetrack/?", "dest": "/web/benchmark-dancetrack.html" },
