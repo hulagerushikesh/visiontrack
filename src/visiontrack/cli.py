@@ -15,6 +15,8 @@ Subcommands
     Preview or produce bounded, privacy-classified local failure evidence.
 ``lab-decision``
     Preview or immutably record one explicit Reliability Lab decision.
+``lab-demo``
+    Preview or create a complete deterministic synthetic Lab bundle.
 
 The demo, default evaluation, and ablation commands use the built-in synthetic
 generator, so ``visiontrack demo`` works without model or video downloads.
@@ -494,6 +496,46 @@ def cmd_lab_decision(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_lab_demo(args: argparse.Namespace) -> int:
+    """Preview or create one complete deterministic synthetic Lab bundle."""
+    from .lab import create_synthetic_lab, plan_synthetic_lab
+
+    try:
+        plan = plan_synthetic_lab(args.output)
+    except (FileExistsError, OSError, ValueError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+
+    print("Synthetic Reliability Lab preview")
+    print(f"  output root: {plan.output_root}")
+    print(f"  bundle: {plan.bundle_path}")
+    print(f"  report: {plan.report_path}")
+    print(f"  experiment: {plan.experiment_id}")
+    print(f"  source: {plan.source_id}")
+    print(
+        f"  scene: {plan.frame_count} frames, {plan.object_count} objects, seed {plan.seed}"
+    )
+    print(
+        f"  records: {plan.detection_count} detections, "
+        f"{plan.ground_truth_count} ground-truth observations"
+    )
+    print(f"  variants: {', '.join(plan.variants)}")
+    if not args.write:
+        print("Preview only; nothing was written. Add --write to create this bundle.")
+        return 0
+
+    try:
+        report_path = create_synthetic_lab(args.output)
+    except (FileExistsError, OSError, ValueError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    print("Created complete synthetic Reliability Lab bundle")
+    print(f"  report: {report_path}")
+    print("Next: import report.json at /lab, review the evidence, and draft a decision.")
+    print("Use visiontrack lab-decision with the bundle path to preview or record a choice.")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="visiontrack", description="Online multi-object tracking demo & evaluation"
@@ -654,6 +696,21 @@ def build_parser() -> argparse.ArgumentParser:
         help="write the previewed immutable decision; without this flag nothing is written",
     )
     p_decision.set_defaults(func=cmd_lab_decision)
+
+    p_lab_demo = sub.add_parser(
+        "lab-demo",
+        help="preview or create a complete deterministic synthetic Lab bundle",
+    )
+    p_lab_demo.add_argument(
+        "output",
+        help="new output root; its parent must exist and the path must not exist",
+    )
+    p_lab_demo.add_argument(
+        "--write",
+        action="store_true",
+        help="create the previewed bundle; without this flag nothing is written",
+    )
+    p_lab_demo.set_defaults(func=cmd_lab_demo)
 
     return parser
 

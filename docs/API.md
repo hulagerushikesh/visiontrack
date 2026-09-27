@@ -83,6 +83,8 @@ visiontrack lab-evidence BUNDLE VARIANT EVENT_ID \
 visiontrack lab-decision BUNDLE --status accepted --variant baseline \
   --rationale "Meets the registered criteria." --author local-reviewer \
   --decided-at 2026-09-21T08:30:00Z               # preview only
+visiontrack lab-demo ./lab-onboarding              # preview only
+visiontrack lab-demo ./lab-onboarding --write      # create complete bundle
 ```
 
 `lab-evidence` accepts only explicit `FRAME=PNG_PATH` inputs and prints the
@@ -98,6 +100,14 @@ one verified variant, or `--status rejected_all` without `--variant`. Add
 `--write` only after reviewing the preview; the resulting root-level
 `decision.json` is immutable, identical writes are idempotent, and conflicting
 second decisions are refused.
+
+`lab-demo` resolves a fixed 48-frame, four-object synthetic experiment with a
+ByteTrack baseline and SORT-style single-stage variant. Preview mode prints the
+source and experiment fingerprints, record counts, final bundle path, and
+`report.json` path without creating the output root. `--write` runs the normal
+verified APIs for input storage, paired execution, metrics, failures,
+comparison sealing, and report generation. Its parent directory must exist;
+the requested output root must not exist and is never replaced.
 
 The React Reliability Lab can also inspect one explicitly selected local
 `decision.json`. The browser validates its exact schema, recomputes the decision
@@ -142,6 +152,13 @@ path = record_human_decision(
     decided_at="2026-09-21T08:30:00Z",
 )
 decision = read_human_decision(bundle)
+```
+
+```python
+from visiontrack.lab import create_synthetic_lab, plan_synthetic_lab
+
+plan = plan_synthetic_lab("lab-onboarding")  # validates and writes nothing
+report_path = create_synthetic_lab("lab-onboarding")
 ```
 
 Both functions revalidate the sealed comparison and canonical local report.

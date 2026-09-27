@@ -147,12 +147,15 @@ visiontrack lab-evidence BUNDLE VARIANT EVENT_ID --frame 42=frame.png --crop 120
 visiontrack lab-decision BUNDLE --status accepted --variant baseline \
   --rationale "Meets the registered criteria." --author local-reviewer \
   --decided-at 2026-09-21T08:30:00Z
+visiontrack lab-demo ./lab-onboarding                  # preview only
+visiontrack lab-demo ./lab-onboarding --write          # create verified bundle
 ```
 
 `lab-evidence` previews only by default; add `--write` after checking its crop,
 privacy class, and limits. `lab-decision` likewise previews the exact choice and
 verified lineage before `--write` creates `decision.json`. CLI subcommands:
-`demo`, `eval`, `ablate`, `track`, `webcam`, `lab-evidence`, `lab-decision`.
+`demo`, `eval`, `ablate`, `track`, `webcam`, `lab-evidence`, `lab-decision`,
+`lab-demo`.
 Full public API: [docs/API.md](docs/API.md) ·
 packaging/release: [docs/RELEASE.md](docs/RELEASE.md).
 
@@ -166,6 +169,11 @@ download it. The browser never writes into the experiment bundle.
 Python and browser decision records are locked to shared conformance vectors.
 Run `npm run test:decision-contract` to verify exact fingerprints, canonical
 JSON, Unicode handling, UTC forms, and downloaded file bytes.
+
+`lab-demo` provides a dataset-free Reliability Lab walkthrough. It previews a
+fixed synthetic comparison without writing, then `--write` creates a complete
+verified bundle and prints the `report.json` path to import at `/lab`. The
+output root must be new and is never reused or overwritten.
 
 **No install at all** — run the tracker live in your browser at **[visiontrack.hulage.in/live](https://visiontrack.hulage.in/live)**: the same from-scratch association (Kalman + Hungarian + ByteTrack), ported to JavaScript and running on-device over your webcam or a sample clip.
 
