@@ -11,6 +11,10 @@ def test_lab_route_is_deployed_and_uses_shared_navigation() -> None:
 
     assert "ReliabilityLab" in app
     assert "path==='/lab'?<ReliabilityLab/>" in app
+    assert 'lazy(()=>import("@/features/reliability-lab/ReliabilityLab"))' in app
+    assert 'import ReliabilityLab from' not in app
+    assert 'role="status"' in app
+    assert 'aria-live="polite"' in app
     assert "['Lab','/lab']" in app
     assert '["Lab", "/lab"]' in standalone_nav
     assert '"src": "/lab/?", "dest": "/app/index.html"' in deployment

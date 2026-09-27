@@ -93,8 +93,10 @@ The first local workflow and its versioned records are defined in
       before display, and retain the bundled sample as a safe reset path.
 - [x] Add ephemeral benchmark view controls for metric and variant focus while
       keeping the complete validated report immutable and one-click restorable.
-- [ ] Lazy-load the Lab and benchmark explorer routes so research tooling does
+- [x] Lazy-load the Lab and benchmark explorer routes so research tooling does
       not inflate the default product-site bundle as these workflows grow.
+- [ ] Lock the existing `/live` tracker behavior and privacy contract before
+      moving its UI into the shared React product shell.
 - [ ] Port the interactive tracker shell without changing tracker behavior or
       browser privacy guarantees.
 - [ ] Interview 5–10 tracking practitioners and collect representative failure

@@ -1155,7 +1155,7 @@ does not mutate the six-variant sample, and safely restores the full view for
 unknown focus values. The live accessibility pass confirms the same 1-of-4 and
 2-of-6 scope transitions and one-click reset.
 
-## Next implementation increment
+## Twenty-eighth implementation increment — complete
 
 Keep the public product shell fast as the research tools grow:
 
@@ -1168,6 +1168,34 @@ Keep the public product shell fast as the research tools grow:
   current 500 kB single-chunk advisory
 - Keep feature behavior, schemas, charts, playback, uploads, and persistence
   unchanged in this infrastructure increment
+
+Implemented with React `lazy` boundaries for the Reliability Lab and Benchmark
+Explorer plus one `Suspense` fallback inside the existing shared shell. Direct
+navigation first exposes an accessible `role=status` loading message while the
+header and footer remain usable, then renders the unchanged feature route.
+
+The production build now emits separate 18.04 kB Benchmark Explorer and
+65.15 kB Reliability Lab chunks. The default app chunk falls from 502.22 kB to
+419.51 kB (152.04 kB to 132.40 kB gzip), removing Vite's 500 kB advisory rather
+than suppressing it. Direct local checks confirmed that both routes resolve
+through the loading boundary into their complete prior interfaces.
+
+## Next implementation increment
+
+Prepare the interactive tracker for the unified product shell without changing
+its behavior:
+
+- Inventory and lock the current `/live` browser contract: explicit start,
+  webcam/sample choice, detector readiness, raw-detection toggle, and stop/error
+  states
+- Record the privacy boundary that frames and tracking stay on-device and that
+  track IDs are session-local rather than persistent person identities
+- Add browser-contract tests around those observable states before moving UI
+  ownership
+- Define the smallest React adapter boundary around the existing tracker engine
+  instead of rewriting detection or association logic
+- Keep tracking algorithms, detector assets, camera permissions, benchmark
+  claims, and deployment routes unchanged in this first migration increment
 
 Long-form article migration, synchronized failure playback, collaborative
 review, remote storage, and raw video playback remain later increments.

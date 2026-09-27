@@ -13,6 +13,9 @@ def test_benchmark_explorer_route_uses_react_without_replacing_legacy_reports() 
 
     assert "BenchmarkExplorer" in app
     assert "path==='/benchmark/explorer'?<BenchmarkExplorer/>" in app
+    assert 'lazy(()=>import("@/features/benchmark-explorer/BenchmarkExplorer"))' in app
+    assert 'import BenchmarkExplorer from' not in app
+    assert 'fallback={<RouteLoading/>}' in app
     assert "['Results','/benchmark/explorer']" in app
     assert routes["/benchmark/explorer/?"] == "/app/index.html"
     assert routes["/benchmark/?"] == "/web/benchmark.html"
