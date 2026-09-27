@@ -15,6 +15,8 @@ Subcommands
     Preview or produce bounded, privacy-classified local failure evidence.
 ``lab-decision``
     Preview or immutably record one explicit Reliability Lab decision.
+``lab-decision-import``
+    Preview or immutably import one browser-downloaded Lab decision.
 ``lab-demo``
     Preview or create a complete deterministic synthetic Lab bundle.
 
@@ -496,6 +498,47 @@ def cmd_lab_decision(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_lab_decision_import(args: argparse.Namespace) -> int:
+    """Preview or import one external decision through immutable bundle storage."""
+    from .lab import import_human_decision, plan_decision_import
+
+    try:
+        plan = plan_decision_import(args.bundle, args.decision)
+    except (FileExistsError, OSError, ValueError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+
+    decision = plan.decision
+    print("External human decision import preview")
+    print(f"  source file: {plan.source_path}")
+    print(f"  destination: {plan.destination_path}")
+    destination_state = "identical decision already stored" if plan.already_stored else "new"
+    print(f"  destination state: {destination_state}")
+    print(f"  status: {decision.status}")
+    print(f"  accepted variant: {decision.accepted_variant or 'none (all rejected)'}")
+    print(f"  rationale: {decision.rationale}")
+    print(f"  author: {decision.author}")
+    print(f"  decided at: {decision.decided_at}")
+    print(f"  experiment: {decision.experiment_id}")
+    print(f"  source: {decision.source_id}")
+    print(f"  comparison: {decision.comparison_id}")
+    print(f"  report: {decision.report_id}")
+    print(f"  decision: {decision.decision_id}")
+    if not args.write:
+        print("Preview only; nothing was written. Add --write to import this decision.")
+        return 0
+
+    try:
+        path = import_human_decision(args.bundle, args.decision)
+    except (FileExistsError, OSError, ValueError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    print("Imported immutable human decision")
+    print(f"  decision: {decision.decision_id}")
+    print(f"  path: {path}")
+    return 0
+
+
 def cmd_lab_demo(args: argparse.Namespace) -> int:
     """Preview or create one complete deterministic synthetic Lab bundle."""
     from .lab import create_synthetic_lab, plan_synthetic_lab
@@ -696,6 +739,22 @@ def build_parser() -> argparse.ArgumentParser:
         help="write the previewed immutable decision; without this flag nothing is written",
     )
     p_decision.set_defaults(func=cmd_lab_decision)
+
+    p_decision_import = sub.add_parser(
+        "lab-decision-import",
+        help="preview or import one browser-downloaded Reliability Lab decision",
+    )
+    p_decision_import.add_argument("bundle", help="Reliability Lab bundle directory")
+    p_decision_import.add_argument(
+        "decision",
+        help="explicit external decision.json downloaded from the React Lab",
+    )
+    p_decision_import.add_argument(
+        "--write",
+        action="store_true",
+        help="import the verified immutable decision; without this flag nothing is written",
+    )
+    p_decision_import.set_defaults(func=cmd_lab_decision_import)
 
     p_lab_demo = sub.add_parser(
         "lab-demo",

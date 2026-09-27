@@ -13,6 +13,8 @@ from visiontrack.lab import (
     DecisionRecord,
     canonical_json,
     generate_local_report,
+    import_human_decision,
+    plan_decision_import,
     plan_human_decision,
     read_human_decision,
     record_human_decision,
@@ -42,6 +44,21 @@ def sealed_report_bundle(tmp_path: Path) -> Path:
     bundle = make_report_bundle(tmp_path)
     generate_local_report(bundle)
     return bundle
+
+
+def downloaded_decision(tmp_path: Path, bundle: Path) -> tuple[Path, DecisionRecord]:
+    decision = plan_human_decision(
+        bundle,
+        status="accepted",
+        accepted_variant="baseline",
+        rationale="The browser-reviewed evidence meets the registered local criteria.",
+        author="browser-reviewer",
+        decided_at=NOW,
+    )
+    download = tmp_path / "download" / "decision.json"
+    download.parent.mkdir()
+    download.write_text(decision.to_json() + "\n", encoding="utf-8")
+    return download, decision
 
 
 def test_decision_record_is_content_addressed_and_supports_both_outcomes() -> None:
@@ -254,3 +271,90 @@ def test_decision_reader_rejects_tampering_and_changed_upstream_evidence(tmp_pat
     report_path.write_text(report_path.read_text(encoding="utf-8") + " ", encoding="utf-8")
     with pytest.raises(ValueError, match="does not match revalidated"):
         read_human_decision(changed_report)
+
+
+def test_external_decision_import_preview_is_read_only_and_write_is_exact(
+    tmp_path: Path,
+) -> None:
+    bundle = sealed_report_bundle(tmp_path / "bundle")
+    download, decision = downloaded_decision(tmp_path, bundle)
+
+    preview = plan_decision_import(bundle, download)
+
+    assert preview.source_path == download
+    assert preview.destination_path == bundle / "decision.json"
+    assert preview.decision == decision
+    assert preview.already_stored is False
+    assert not preview.destination_path.exists()
+
+    path = import_human_decision(bundle, download)
+    assert path.read_bytes() == download.read_bytes()
+    assert read_human_decision(bundle) == decision
+
+    repeated = plan_decision_import(bundle, download)
+    assert repeated.already_stored is True
+    assert import_human_decision(bundle, download) == path
+
+
+def test_lab_decision_import_cli_previews_then_writes(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    bundle = sealed_report_bundle(tmp_path / "bundle")
+    download, decision = downloaded_decision(tmp_path, bundle)
+    arguments = ["lab-decision-import", str(bundle), str(download)]
+
+    assert cli_main(arguments) == 0
+    preview = capsys.readouterr()
+    assert "External human decision import preview" in preview.out
+    assert f"source file: {download}" in preview.out
+    assert f"destination: {bundle / 'decision.json'}" in preview.out
+    assert "destination state: new" in preview.out
+    assert decision.decision_id in preview.out
+    assert "Preview only; nothing was written." in preview.out
+    assert not (bundle / "decision.json").exists()
+
+    assert cli_main([*arguments, "--write"]) == 0
+    written = capsys.readouterr()
+    assert "Imported immutable human decision" in written.out
+    assert read_human_decision(bundle) == decision
+
+    assert cli_main(arguments) == 0
+    assert "identical decision already stored" in capsys.readouterr().out
+
+
+def test_external_decision_import_rejects_noncanonical_and_wrong_lineage(
+    tmp_path: Path,
+) -> None:
+    bundle = sealed_report_bundle(tmp_path / "bundle")
+    download, decision = downloaded_decision(tmp_path, bundle)
+    download.write_text(json.dumps(decision.to_dict(), indent=2), encoding="utf-8")
+    with pytest.raises(ValueError, match="canonical downloaded file bytes"):
+        plan_decision_import(bundle, download)
+
+    values = decision.to_dict()
+    values.pop("decision_id")
+    values["report_id"] = "0" * 64
+    wrong = DecisionRecord.create(**values)
+    download.write_text(wrong.to_json() + "\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="report_id does not match"):
+        plan_decision_import(bundle, download)
+
+
+def test_external_decision_import_refuses_conflicting_bundle_record(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    bundle = sealed_report_bundle(tmp_path / "bundle")
+    download, _ = downloaded_decision(tmp_path, bundle)
+    record_human_decision(
+        bundle,
+        status="rejected_all",
+        accepted_variant=None,
+        rationale="No candidate meets the registered criteria.",
+        author="local-reviewer",
+        decided_at=NOW,
+    )
+
+    with pytest.raises(FileExistsError, match="refusing to overwrite"):
+        plan_decision_import(bundle, download)
+    assert cli_main(["lab-decision-import", str(bundle), str(download), "--write"]) == 2
+    assert "refusing to overwrite" in capsys.readouterr().err

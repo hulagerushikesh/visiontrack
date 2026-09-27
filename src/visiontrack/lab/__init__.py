@@ -14,7 +14,14 @@ from .contracts import (
     canonical_json,
     sha256_json,
 )
-from .decision import plan_human_decision, read_human_decision, record_human_decision
+from .decision import (
+    DecisionImportPlan,
+    import_human_decision,
+    plan_decision_import,
+    plan_human_decision,
+    read_human_decision,
+    record_human_decision,
+)
 from .demo import SyntheticLabPlan, create_synthetic_lab, plan_synthetic_lab
 from .evidence import EvidenceProductionPlan, plan_failure_evidence, produce_failure_evidence
 from .failures import calculate_failure_events
@@ -54,6 +61,7 @@ from .storage import (
 __all__ = [
     "DetectionRecord",
     "DecisionRecord",
+    "DecisionImportPlan",
     "EvidenceImageArtifact",
     "EvidenceManifest",
     "EvidenceProductionPlan",
@@ -73,6 +81,8 @@ __all__ = [
     "failure_payload_sha256",
     "ground_truth_payload_sha256",
     "import_mot_ground_truth",
+    "import_human_decision",
+    "plan_decision_import",
     "plan_failure_evidence",
     "plan_human_decision",
     "plan_synthetic_lab",

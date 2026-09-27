@@ -147,6 +147,8 @@ visiontrack lab-evidence BUNDLE VARIANT EVENT_ID --frame 42=frame.png --crop 120
 visiontrack lab-decision BUNDLE --status accepted --variant baseline \
   --rationale "Meets the registered criteria." --author local-reviewer \
   --decided-at 2026-09-21T08:30:00Z
+visiontrack lab-decision-import BUNDLE ./Downloads/decision.json  # preview only
+visiontrack lab-decision-import BUNDLE ./Downloads/decision.json --write
 visiontrack lab-demo ./lab-onboarding                  # preview only
 visiontrack lab-demo ./lab-onboarding --write          # create verified bundle
 ```
@@ -155,7 +157,7 @@ visiontrack lab-demo ./lab-onboarding --write          # create verified bundle
 privacy class, and limits. `lab-decision` likewise previews the exact choice and
 verified lineage before `--write` creates `decision.json`. CLI subcommands:
 `demo`, `eval`, `ablate`, `track`, `webcam`, `lab-evidence`, `lab-decision`,
-`lab-demo`.
+`lab-decision-import`, `lab-demo`.
 Full public API: [docs/API.md](docs/API.md) ·
 packaging/release: [docs/RELEASE.md](docs/RELEASE.md).
 
@@ -165,6 +167,12 @@ lineage in browser memory, then displays the audit record without editing it.
 After importing a real report, the Lab can also draft a decision from blank
 human inputs, preview its complete fingerprinted record, and explicitly
 download it. The browser never writes into the experiment bundle.
+
+`lab-decision-import` closes that deliberate boundary locally. It verifies the
+canonical downloaded bytes, decision fingerprint, and exact
+experiment/source/comparison/report/variant lineage before showing a read-only
+preview. Only `--write` enters the record through immutable bundle storage;
+identical imports are safe and conflicting decisions are refused.
 
 Python and browser decision records are locked to shared conformance vectors.
 Run `npm run test:decision-contract` to verify exact fingerprints, canonical
@@ -206,7 +214,7 @@ Every run is pinned by a config hash; bootstrap resampling and synthetic scenes 
 ## Engineering
 
 - **Zero ML-framework dependency in the core** — just NumPy. Heavy/optional deps (`scipy`, `pandas`, `matplotlib`, `pillow`, `onnxruntime`, `torch`) are isolated in extras (`[experiments]`, `[appearance]`, `[onnx]`) and lazily imported; nothing in `core/` imports them.
-- **369 tests**: unit, property (Hungarian vs SciPy), convergence (Kalman), metric cross-checks (HOTA/IDF1 vs `trackeval`), video/webcam pipelines, the benchmarking tool, and end-to-end integration with a MOTA floor.
+- **514 tests**: unit, property (Hungarian vs SciPy), convergence (Kalman), metric cross-checks (HOTA/IDF1 vs `trackeval`), video/webcam pipelines, the benchmarking tool, and end-to-end integration with a MOTA floor.
 - **CI** on Python 3.10/3.11/3.12 + ruff.
 
 ```
