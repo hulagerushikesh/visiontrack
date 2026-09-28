@@ -595,6 +595,10 @@ def cmd_lab_playback(args: argparse.Namespace) -> int:
         print(f"error: {exc}", file=sys.stderr)
         return 2
 
+    if args.json:
+        print(playback.to_json())
+        return 0
+
     start, end = playback.frame_range["start"], playback.frame_range["end"]
     offsets = [frame.offset_ms for frame in playback.lanes[0].frames]
     timing = (
@@ -832,6 +836,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--variant",
         required=True,
         help="declared non-baseline variant to compare with the baseline",
+    )
+    p_lab_playback.add_argument(
+        "--json",
+        action="store_true",
+        help="emit only canonical playback JSON to standard output",
     )
     p_lab_playback.set_defaults(func=cmd_lab_playback)
 

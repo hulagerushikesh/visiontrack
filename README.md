@@ -152,6 +152,7 @@ visiontrack lab-decision-import BUNDLE ./Downloads/decision.json --write
 visiontrack lab-demo ./lab-onboarding                  # preview only
 visiontrack lab-demo ./lab-onboarding --write          # create verified bundle
 visiontrack lab-playback BUNDLE EVENT_ID --variant appearance  # metadata only
+visiontrack lab-playback BUNDLE EVENT_ID --variant appearance --json > playback.json
 ```
 
 `lab-evidence` previews only by default; add `--write` after checking its crop,
@@ -191,7 +192,9 @@ output root must be new and is never reused or overwritten.
 
 `lab-playback` is metadata-only. It revalidates the sealed report and selected
 failure window, then prints synchronized lane availability, privacy counts, and
-complete fingerprints without displaying pixels or writing to the bundle.
+complete fingerprints without displaying pixels or writing to the bundle. Add
+`--json` to emit only the canonical playback record to standard output; shell
+redirection is the deliberate way to save it for later browser import.
 
 The first data-driven results slice is available at
 [`/benchmark/explorer`](https://visiontrack.hulage.in/benchmark/explorer). It
@@ -231,7 +234,7 @@ Every run is pinned by a config hash; bootstrap resampling and synthetic scenes 
 ## Engineering
 
 - **Zero ML-framework dependency in the core** — just NumPy. Heavy/optional deps (`scipy`, `pandas`, `matplotlib`, `pillow`, `onnxruntime`, `torch`) are isolated in extras (`[experiments]`, `[appearance]`, `[onnx]`) and lazily imported; nothing in `core/` imports them.
-- **553 tests**: unit, property (Hungarian vs SciPy), convergence (Kalman), metric cross-checks (HOTA/IDF1 vs `trackeval`), video/webcam pipelines, the benchmarking tool, product-surface contracts, and end-to-end integration with a MOTA floor.
+- **554 tests**: unit, property (Hungarian vs SciPy), convergence (Kalman), metric cross-checks (HOTA/IDF1 vs `trackeval`), video/webcam pipelines, the benchmarking tool, product-surface contracts, and end-to-end integration with a MOTA floor.
 - **CI** on Python 3.10/3.11/3.12 + ruff.
 
 ```

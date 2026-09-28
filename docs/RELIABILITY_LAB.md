@@ -1301,13 +1301,23 @@ the same validator intended for the later React boundary and includes negative
 cases for remote paths, partial lanes, timing drift, privacy ambiguity, and
 tampering.
 
+## Completed implementation increment: canonical playback export
+
+`visiontrack lab-playback BUNDLE EVENT_ID --variant NAME --json` emits exactly
+one canonical `FailurePlayback` record to standard output. The ordinary human
+preview remains the default, while JSON mode contains no labels or status text
+that could contaminate a redirected record. Validation failures remain on
+standard error. The command has no write mode, and tests require the sealed
+bundle to remain byte-for-byte unchanged in both output modes.
+
 ## Next implementation increment
 
-Add an explicit `--json` mode to `visiontrack lab-playback` that emits only the
-canonical playback record to standard output. Human-readable preview remains
-the default. The command itself must still write nothing, and errors must stay
-on standard error so a researcher can deliberately redirect a verified record
-for later browser import without mixing it with status text.
+Add deliberate local `playback.json` selection to the React Reliability Lab.
+The browser must validate the selected record with the existing strict
+playback contract, require its report and run lineage to match the active
+report, and display timing, lane availability, privacy classes, and missing
+slots from metadata only. It must keep the record in memory and must not yet
+resolve media paths, read pixels, or decode video.
 
 Playback UI, local pixel selection, collaborative review, remote storage, and
 raw video decoding remain later increments.
