@@ -95,6 +95,8 @@ The first local workflow and its versioned records are defined in
 - [x] Build synchronized playback deterministically from one exact sealed
       report event and explicitly stored full-frame evidence without copying,
       decoding, scanning for undeclared media, or mutating its bundle.
+- [x] Expose synchronized playback as a metadata-only CLI preview with visible
+      lane gaps, privacy counts, complete fingerprints, and no write mode.
 - [x] Ship the first versioned, strictly validated, read-only benchmark explorer
       slice without replacing the generated reports.
 - [x] Export structured experiment results as canonical schema-v1 benchmark

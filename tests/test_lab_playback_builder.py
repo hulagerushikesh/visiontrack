@@ -10,6 +10,7 @@ from pathlib import Path
 
 import pytest
 
+from visiontrack.cli import main as cli_main
 from visiontrack.lab import (
     DetectionRecord,
     EvidenceImageArtifact,
@@ -204,3 +205,53 @@ def test_builder_rejects_stale_or_modified_report(tmp_path: Path) -> None:
 
     with pytest.raises(ValueError, match="does not match"):
         build_failure_playback(bundle, event_id=event_id, variant="patient")
+
+
+def test_lab_playback_cli_previews_counts_and_never_writes(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    bundle = _bundle(tmp_path)
+    event_id = _add_evidence(bundle, "patient")
+    generate_local_report(bundle)
+    before = {
+        path.relative_to(bundle): path.read_bytes()
+        for path in bundle.rglob("*")
+        if path.is_file()
+    }
+
+    result = cli_main(
+        ["lab-playback", str(bundle), event_id, "--variant", "patient"]
+    )
+    output = capsys.readouterr()
+
+    assert result == 0
+    assert "Synchronized failure playback preview" in output.out
+    assert "frame window: 0–2 (3 frames)" in output.out
+    assert "timing: 0–80 ms" in output.out
+    assert "lane baseline: 0 available, 3 missing" in output.out
+    assert "lane patient: 1 available, 2 missing" in output.out
+    assert "0 source_pixels, 0 redacted, 1 synthetic" in output.out
+    assert "no media was decoded or displayed and nothing was written" in output.out
+    after = {
+        path.relative_to(bundle): path.read_bytes()
+        for path in bundle.rglob("*")
+        if path.is_file()
+    }
+    assert after == before
+
+
+def test_lab_playback_cli_reports_invalid_requests_without_traceback(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    bundle = _bundle(tmp_path)
+    generate_local_report(bundle)
+
+    assert (
+        cli_main(
+            ["lab-playback", str(bundle), "f" * 64, "--variant", "patient"]
+        )
+        == 2
+    )
+    output = capsys.readouterr()
+    assert "must match exactly one event" in output.err
+    assert output.out == ""
