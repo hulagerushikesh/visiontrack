@@ -334,12 +334,63 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-fam
 .bar > i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; background: var(--accent); opacity: .85; }
 .bar.hot > i { background: var(--warn); }
 
-/* benchmark report page: tighter title scale than the marketing hero */
-.benchmark-page { padding: 36px 0 80px; }
-.benchmark-page h1 { font-size: clamp(24px, 3.4vw, 31px); line-height: 1.1; margin: 6px 0 14px; }
-.benchmark-page h2 { font-size: var(--fs-h3); letter-spacing: -.01em; margin: 40px 0 6px; font-weight: 650; }
+/* benchmark report: generated evidence in the current product visual system */
+.benchmark-page { padding: 0 0 80px; }
+.report-shell { width: min(calc(100% - 40px), 1180px); margin: 0 auto; }
+.report-hero {
+  position: relative; overflow: hidden; margin-top: -82px; padding: 154px 0 54px;
+  border-bottom: 1px solid #e0e7ff;
+  background: linear-gradient(135deg, rgba(238,242,255,.94), rgba(255,255,255,.98) 54%, rgba(236,254,255,.9));
+}
+.report-hero::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .75;
+  background-image: linear-gradient(rgba(79,70,229,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(79,70,229,.045) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.report-hero::after {
+  content: ""; position: absolute; width: 430px; height: 430px; border-radius: 50%; right: -110px; top: -170px;
+  background: rgba(34,211,238,.15); filter: blur(80px); pointer-events: none;
+}
+.report-hero .report-shell { position: relative; z-index: 1; }
+.report-kicker { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 20px; }
+.report-kicker .eyebrow { margin: 0; font-size: 10px; font-weight: 700; color: var(--good); }
+.report-kicker .eyebrow::before { background: var(--good); }
+.report-kicker > a { color: var(--accent); font-size: 13px; font-weight: 650; text-decoration: none; }
+.benchmark-page h1 { max-width: 900px; font-size: clamp(38px, 6.2vw, 72px); line-height: 1.02; letter-spacing: -.045em; margin: 0; }
+.report-lede { max-width: 720px; margin: 22px 0 0; color: var(--muted); font-size: clamp(16px, 2vw, 19px); line-height: 1.7; }
+.report-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.report-hero .dataset-tabs { margin-top: 38px; }
+.report-content { padding-top: 42px; }
+.report-protocol { border: 1px solid #e0e7ff; border-radius: 22px; background: rgba(255,255,255,.88); padding: 22px; box-shadow: 0 22px 60px -42px rgba(30,41,59,.45); }
+.report-protocol .meta { margin: 0; gap: 9px; }
+.report-protocol .meta span { padding: 7px 11px; border-radius: 9px; background: #f8fafc; }
+.report-protocol .note { margin: 18px 0 0; border-left-color: var(--accent); font-size: 14px; line-height: 1.65; }
+.report-section { margin-top: 50px; }
+.report-section-head { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 18px; }
+.report-section-head > span { display: grid; place-items: center; width: 38px; height: 38px; flex: none; border-radius: 12px; color: #fff; background: linear-gradient(135deg, var(--accent), #2563eb); font-family: var(--mono); font-size: 11px; font-weight: 700; box-shadow: 0 10px 24px -12px var(--accent); }
+.benchmark-page .report-section h2 { font-size: clamp(22px, 3vw, 30px); letter-spacing: -.025em; margin: 0; font-weight: 700; }
+.report-section-head p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
 .benchmark-page h2 code { font-family: var(--mono); font-size: .82em; background: var(--surface-2); border: 1px solid var(--border); border-radius: 5px; padding: 1px 6px; color: var(--ink-2); }
 .benchmark-page .note code { font-family: var(--mono); background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px; padding: 0 5px; }
+.benchmark-page .scroll { margin-top: 0; border-radius: 18px; box-shadow: 0 24px 70px -48px rgba(30,41,59,.55); }
+.benchmark-page table { min-width: 720px; font-size: 14px; }
+.benchmark-page th, .benchmark-page td { padding: 15px 18px; }
+.benchmark-page thead th { background: #f8fafc; }
+.benchmark-page tr.base td { background: rgba(238,242,255,.7); }
+.benchmark-page .best { background: rgba(209,250,229,.7); }
+.report-reproduce { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; margin-top: 50px; border: 1px solid #c7d2fe; border-radius: 22px; padding: 25px; background: linear-gradient(135deg, #eef2ff, #ecfeff); }
+.report-reproduce span { color: var(--accent); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
+.report-reproduce p { margin: 7px 0 0; max-width: 660px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+.report-reproduce code { border: 1px solid #26312e; border-radius: 12px; padding: 13px 16px; background: #07100e; color: #dfe6f0; font-family: var(--mono); font-size: 12px; white-space: nowrap; }
+@media (max-width: 720px) {
+  .report-shell { width: min(calc(100% - 28px), 1180px); }
+  .report-hero { padding-top: 140px; padding-bottom: 40px; }
+  .report-kicker { align-items: flex-start; flex-direction: column; }
+  .report-hero .dataset-tabs { display: flex; margin-top: 30px; overflow-x: auto; flex-wrap: nowrap; width: 100%; }
+  .report-protocol { padding: 18px; }
+  .report-reproduce { grid-template-columns: 1fr; }
+  .report-reproduce code { overflow-x: auto; white-space: normal; }
+}
 
 /* ==========================================================================
    Landing: product layer (hero, use-cases, demoted research "understory")

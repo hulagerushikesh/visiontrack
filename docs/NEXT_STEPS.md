@@ -87,7 +87,7 @@ The first local workflow and its versioned records are defined in
 - [x] Migrate the long-form research write-up into reusable article components.
 - [x] Add a unified React benchmark front door while keeping generated dataset
       reports authoritative at stable, dataset-specific URLs.
-- [ ] Bring the generated dataset-report template into the current visual system
+- [x] Bring the generated dataset-report template into the current visual system
       without turning generated evidence into hand-maintained React content.
 - [x] Ship the first versioned, strictly validated, read-only benchmark explorer
       slice without replacing the generated reports.

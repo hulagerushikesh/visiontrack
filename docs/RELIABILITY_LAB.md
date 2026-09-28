@@ -1238,15 +1238,25 @@ to the explicit `/benchmark/synthetic` URL; the generator, canonical metadata,
 dataset tabs, explorer link, deployment routing, and documentation all enforce
 that separation so regeneration cannot silently collapse it.
 
+## Completed implementation increment: generated report visual system
+
+The Python benchmark renderer now emits the same light-first evidence layout
+for every dataset: shared product navigation, a report hero, explicit generated-
+artifact framing, dataset tabs, a protocol card, numbered leaderboard and
+failure-taxonomy sections, and a reproducibility panel. All four checked-in
+reports use that structure without changing their numerical content. Generator-
+level and page-level contracts prevent later regeneration from restoring the
+old presentation or dropping the Results hub and explorer paths.
+
 ## Next implementation increment
 
-Bring the generated benchmark report template into the current light-first
-visual system without copying generated evidence into React. Keep the report
-generator authoritative, preserve all dataset URLs and numerical content, add
-a clear path back to the Results hub and structured explorer, and lock the
-shared report navigation in generator-level tests.
+Define the smallest synchronized failure-playback contract before building its
+UI. Specify how a verified failure event points to bounded baseline/variant
+frame windows, how missing or redacted frames are represented, and how playback
+stays local and read-only. Do not add video decoding or remote storage until the
+lineage, privacy, and timing model is executable in Python tests.
 
-Generated report visual migration, synchronized failure playback, collaborative review,
+Synchronized failure playback, collaborative review,
 remote storage, and raw video playback remain later increments.
 
 ## Acceptance criteria

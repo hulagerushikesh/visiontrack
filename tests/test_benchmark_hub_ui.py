@@ -47,3 +47,40 @@ def test_generated_synthetic_report_has_its_own_canonical_route() -> None:
     assert 'href="https://visiontrack.hulage.in/benchmark/synthetic"' in report
     assert '<a href="/benchmark/synthetic">synthetic</a>' in report
     assert 'return "/benchmark/synthetic"' in generator
+
+
+def test_all_generated_reports_use_the_shared_evidence_layout() -> None:
+    for name in (
+        "benchmark.html",
+        "benchmark-dancetrack.html",
+        "benchmark-dancetrack-yolox.html",
+        "benchmark-sportsmot.html",
+    ):
+        page = (ROOT / "web" / name).read_text()
+        for contract in (
+            'class="report-hero"',
+            'class="report-protocol"',
+            'class="report-section"',
+            'class="report-reproduce"',
+            'href="/benchmark/explorer"',
+            "The page does not choose a recommended tracker.",
+        ):
+            assert contract in page
+
+
+def test_generator_owns_the_report_layout_and_keeps_evidence_sections() -> None:
+    generator = (ROOT / "experiments/_benchmark_html.py").read_text()
+    stylesheet = (ROOT / "assets/site.css").read_text()
+    for contract in (
+        'class="report-hero"',
+        'class="report-protocol"',
+        'class="report-section"',
+        'class="report-reproduce"',
+        "{meta_chips}",
+        "{''.join(rows)}",
+        "{''.join(tax)}",
+    ):
+        assert contract in generator
+    assert ".report-hero" in stylesheet
+    assert ".report-section" in stylesheet
+    assert ".report-reproduce" in stylesheet

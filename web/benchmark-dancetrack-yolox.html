@@ -44,9 +44,12 @@
   </div>
 </nav>
 
-<main class="wrap benchmark-page">
-  <p class="eyebrow">VisionTrack · honest MOT benchmark</p>
+<main class="benchmark-page">
+  <header class="report-hero"><div class="report-shell">
+  <div class="report-kicker"><p class="eyebrow">Generated evidence · honest MOT benchmark</p><a href="/benchmark">All results →</a></div>
   <h1>Tracker comparison — DanceTrack <span style="color:var(--muted);font-weight:600">(real YOLOX-nano)</span></h1>
+  <p class="report-lede">A complete generated leaderboard with paired significance and an ID-switch failure taxonomy. Values on this page come directly from the declared benchmark artifact.</p>
+  <div class="report-actions"><a class="btn primary" href="/benchmark/explorer">Explore structured results</a><a class="btn ghost" href="/writeup">Read the research</a></div>
 
   <div class="dataset-tabs">
     <a href="/benchmark/synthetic">synthetic</a>
@@ -54,16 +57,19 @@
     <a href="/benchmark/dancetrack-yolox">DanceTrack · YOLOX</a>
     <a href="/benchmark/sportsmot">SportsMOT</a>
   </div>
+  </div></header>
 
-  <div class="meta"><span>dataset: <b>dancetrack (real YOLOX-nano)</b></span><span>baseline: <b>bytetrack</b></span><span>runs/tracker: 12</span><span>sequences: 12</span><span>seeds: 1</span><span>config: dancetrack</span></div>
+  <div class="report-shell report-content">
+  <section class="report-protocol" aria-label="Benchmark protocol"><div class="meta"><span>dataset: <b>dancetrack (real YOLOX-nano)</b></span><span>baseline: <b>bytetrack</b></span><span>runs/tracker: 12</span><span>sequences: 12</span><span>seeds: 1</span><span>config: dancetrack</span></div>
   <p class="note">Every tracker sees identical detections and seeds, so Δ vs the
   baseline is a paired comparison (Wilcoxon <span class="sig">*</span> = p&lt;0.05).
-  🏆-highlighted cell = best tracker for that metric.</p>
+  Highlighted cell = best tracker for that metric. The page does not choose a recommended tracker.</p></section>
 
-  <h2>Leaderboard</h2>
+  <section class="report-section"><div class="report-section-head"><span>01</span><div><h2>Leaderboard</h2><p>Published means, spread for the baseline, paired deltas, and significance.</p></div></div>
   <div class="scroll"><table><thead><tr><th>tracker</th><th>MOTA</th><th>IDF1</th><th>HOTA</th><th>IDSW</th></tr></thead><tbody><tr><td>sort</td><td>0.374 <span class='neg'>(-0.041<span class='sig'>*</span>)</span></td><td>0.191 <span class='neg'>(-0.009)</span></td><td>0.162 <span class='neg'>(-0.017)</span></td><td>89.833 <span class='neg'>(-8.750<span class='sig'>*</span>)</span></td></tr><tr><td>deepsort</td><td>0.375 <span class='neg'>(-0.040<span class='sig'>*</span>)</span></td><td class='best'>0.201 <span class='sig'>(+0.001)</span></td><td>0.167 <span class='neg'>(-0.012)</span></td><td class='best'>87.917 <span class='neg'>(-10.667<span class='sig'>*</span>)</span></td></tr><tr class='base'><td>bytetrack</td><td>0.415±0.256</td><td>0.200±0.104</td><td>0.179±0.095</td><td>98.583±100.234</td></tr><tr><td>bytetrack_reid</td><td class='best'>0.416 <span class='sig'>(+0.001)</span></td><td>0.201 <span class='sig'>(+0.001)</span></td><td class='best'>0.182 <span class='sig'>(+0.003)</span></td><td>96.750 <span class='neg'>(-1.833)</span></td></tr><tr><td>bytetrack_giou</td><td>0.413 <span class='neg'>(-0.002)</span></td><td>0.198 <span class='neg'>(-0.002)</span></td><td>0.179 <span class='neg'>(-0.001)</span></td><td>98.500 <span class='neg'>(-0.083)</span></td></tr><tr><td>oc_sort</td><td>0.375 <span class='neg'>(-0.040<span class='sig'>*</span>)</span></td><td>0.192 <span class='neg'>(-0.008)</span></td><td>0.163 <span class='neg'>(-0.016)</span></td><td>94.583 <span class='neg'>(-4.000)</span></td></tr></tbody></table></div>
 
-  <h2>Why <code>bytetrack</code> swaps identities</h2>
+  </section>
+  <section class="report-section"><div class="report-section-head"><span>02</span><div><h2>Why <code>bytetrack</code> swaps identities</h2><p>Local scene conditions reveal where association failures are over-represented.</p></div></div>
   <p class="note">1253 ID switches classified by local scene
   condition. <b>Lift</b> = P(condition | switch) / P(condition | any GT); &gt;1 means
   switches are over-represented there — the failure mode to attack.</p>
@@ -71,7 +77,9 @@
   <th>base rate</th><th>lift</th><th>over-representation</th></tr></thead>
   <tbody><tr><td>occlusion</td><td>70%</td><td>69%</td><td class='lift'>1.02×</td><td><div class='bar'><i style='width:66%'></i></div></td></tr><tr><td>crowding</td><td>31%</td><td>38%</td><td class='lift'>0.84×</td><td><div class='bar'><i style='width:54%'></i></div></td></tr><tr><td>motion</td><td>1%</td><td>1%</td><td class='lift'>1.54×</td><td><div class='bar hot'><i style='width:100%'></i></div></td></tr></tbody></table></div>
 
-  <p class="note" style="margin-top:22px">Reproduce: <code>python -m experiments.benchmark</code></p>
+  </section>
+  <aside class="report-reproduce"><div><span>Reproduce this evidence</span><p>The command regenerates the leaderboard, taxonomy, HTML, Markdown, and canonical schema-v1 JSON from the same benchmark run.</p></div><code>python -m experiments.benchmark</code></aside>
+  </div>
 </main>
 
 <footer>
