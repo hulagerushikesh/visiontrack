@@ -102,6 +102,9 @@ The first local workflow and its versioned records are defined in
 - [x] Add an explicit playback JSON export that writes only canonical contract
       bytes to standard output, keeps errors on standard error, and never
       mutates the sealed bundle.
+- [x] Add deliberate local playback JSON selection to the React Lab with strict
+      active-report lineage verification and metadata-only timing, lane,
+      privacy, availability, and missing-frame views.
 - [x] Ship the first versioned, strictly validated, read-only benchmark explorer
       slice without replacing the generated reports.
 - [x] Export structured experiment results as canonical schema-v1 benchmark

@@ -1310,17 +1310,31 @@ that could contaminate a redirected record. Validation failures remain on
 standard error. The command has no write mode, and tests require the sealed
 bundle to remain byte-for-byte unchanged in both output modes.
 
+## Completed implementation increment: metadata-only browser playback
+
+The React Reliability Lab now accepts exactly one local `playback.json` after a
+verified `report.json` is active. It rechecks the playback schema and content
+fingerprint, then verifies report, experiment, source, comparison, baseline,
+variant-run, anchor-event, and evidence-window lineage. Only after those checks
+does it retain the record in memory and render synchronized frame timing,
+available and missing slots, privacy classes, and compact fingerprints.
+
+The UI does not resolve the record's media paths, create object URLs, read image
+or video bytes, upload content, or persist the selected record. Closing the
+panel discards the in-memory playback metadata.
+
 ## Next implementation increment
 
-Add deliberate local `playback.json` selection to the React Reliability Lab.
-The browser must validate the selected record with the existing strict
-playback contract, require its report and run lineage to match the active
-report, and display timing, lane availability, privacy classes, and missing
-slots from metadata only. It must keep the record in memory and must not yet
-resolve media paths, read pixels, or decode video.
+Add deliberate local image selection for the available playback slots. The
+browser must accept only explicitly selected PNG files whose safe relative
+filenames, hashes, and declared privacy classes match the verified playback
+record. Missing slots stay missing, source pixels remain concealed until a
+second explicit reveal action, and every object URL must be revoked. No folder
+scan, upload, remote fetch, persistence, raw-video decoding, or automatic media
+resolution is allowed.
 
-Playback UI, local pixel selection, collaborative review, remote storage, and
-raw video decoding remain later increments.
+Collaborative review, remote storage, and raw-video decoding remain later
+increments.
 
 ## Acceptance criteria
 

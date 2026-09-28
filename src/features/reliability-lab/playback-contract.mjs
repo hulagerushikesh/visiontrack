@@ -96,6 +96,43 @@ export async function verifyFailurePlayback(value) {
   return { valid: true }
 }
 
+export function validatePlaybackReportLineage(playback, report) {
+  const structural = validateFailurePlayback(playback)
+  if (!structural.valid) return structural
+  const fail = (error) => ({ valid: false, error })
+  if (!isRecord(report) || !isRecord(report.experiment) || !isRecord(report.source) ||
+      !Array.isArray(report.variants) || !Array.isArray(report.failures)) {
+    return fail("The active report cannot verify this playback lineage.")
+  }
+  if (playback.experiment_id !== report.experiment.experiment_id ||
+      playback.source_id !== report.source.source_id ||
+      playback.comparison_id !== report.comparison_id || playback.report_id !== report.report_id) {
+    return fail("The playback does not match the active report lineage.")
+  }
+  if (playback.baseline !== report.experiment.baseline ||
+      playback.frame_range.end > report.source.frame_count) {
+    return fail("The playback baseline or frame window does not match the active report.")
+  }
+  const baseline = report.variants.find((item) => isRecord(item) && item.name === playback.baseline)
+  const variant = report.variants.find((item) => isRecord(item) && item.name === playback.variant)
+  if (!isRecord(baseline) || baseline.baseline !== true || !isRecord(variant) || variant.baseline !== false ||
+      playback.lanes[0].run_id !== baseline.run_id || playback.lanes[1].run_id !== variant.run_id) {
+    return fail("The playback lanes do not match the active report runs.")
+  }
+  const failures = report.failures.filter(
+    (item) => isRecord(item) && item.event_id === playback.anchor_event_id,
+  )
+  if (failures.length !== 1) return fail("The playback anchor event is not present once in the active report.")
+  const failure = failures[0]
+  const lane = playback.lanes.find((item) => item.variant === failure.variant)
+  if (!lane || lane.run_id !== failure.run_id || failure.frame_index !== playback.event_frame_index ||
+      !isRecord(failure.evidence_frames) || failure.evidence_frames.start !== playback.frame_range.start ||
+      failure.evidence_frames.end !== playback.frame_range.end) {
+    return fail("The playback anchor event does not match the active report evidence window.")
+  }
+  return { valid: true }
+}
+
 export function serializePlayback(value) {
   return `${canonicalJson(value)}\n`
 }

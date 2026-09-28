@@ -39,6 +39,11 @@ import {
   type LabDecision,
   type VerifiedDecision,
 } from "./decision"
+import {
+  verifyPlaybackFile,
+  type PlaybackLane,
+  type VerifiedPlayback,
+} from "./playback"
 
 const failureLabels: Record<FailureType, string> = {
   id_switch: "ID switches",
@@ -408,6 +413,102 @@ function EvidenceInspector({
   )
 }
 
+type PlaybackState =
+  | { kind: "idle" }
+  | { kind: "verifying" }
+  | { kind: "error"; message: string }
+  | { kind: "ready"; result: VerifiedPlayback }
+
+const playbackPrivacy = {
+  source_pixels: "Source pixels",
+  redacted: "Redacted",
+  synthetic: "Synthetic",
+} as const
+
+function PlaybackLaneView({ lane }: { lane: PlaybackLane }) {
+  const available = lane.frames.filter((frame) => frame.status === "available")
+  const privacy = available.reduce<Record<string, number>>((counts, frame) => {
+    if (frame.privacy) counts[frame.privacy] = (counts[frame.privacy] ?? 0) + 1
+    return counts
+  }, {})
+  return (
+    <article className="rounded-3xl border border-border bg-white p-5 sm:p-6">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div><p className="font-semibold">{lane.variant}</p><p className="mt-1 font-mono text-xs text-muted-foreground">Run {short(lane.run_id)}</p></div>
+        <span className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">{available.length}/{lane.frames.length} available</span>
+      </div>
+      <div className="mt-5 overflow-x-auto pb-2" aria-label={`${lane.variant} playback frame availability`}>
+        <div className="grid min-w-max grid-flow-col auto-cols-[4.5rem] gap-2">
+          {lane.frames.map((frame) => {
+            const label = frame.status === "missing" ? "Missing" : playbackPrivacy[frame.privacy!]
+            return <div key={frame.frame_index} className={frame.status === "missing" ? "rounded-xl border border-dashed border-slate-300 bg-slate-50 px-2 py-3 text-center" : "rounded-xl border border-emerald-200 bg-emerald-50 px-2 py-3 text-center"} aria-label={`Frame ${frame.frame_index}: ${label}`}><p className="font-mono text-xs font-semibold">{frame.frame_index}</p><p className={frame.status === "missing" ? "mt-1 text-[10px] text-slate-500" : "mt-1 text-[10px] font-medium text-emerald-700"}>{label}</p></div>
+          })}
+        </div>
+      </div>
+      <div className="mt-4 flex flex-wrap gap-2 text-xs text-muted-foreground">
+        {Object.entries(privacy).map(([label, count]) => <span className="rounded-full bg-slate-100 px-2.5 py-1" key={label}>{playbackPrivacy[label as keyof typeof playbackPrivacy]}: {count}</span>)}
+        <span className="rounded-full bg-slate-100 px-2.5 py-1">Missing: {lane.frames.length - available.length}</span>
+      </div>
+    </article>
+  )
+}
+
+function PlaybackInspector({ report, enabled }: { report: ReliabilityReport; enabled: boolean }) {
+  const [state, setState] = useState<PlaybackState>({ kind: "idle" })
+  const selectPlayback = async (event: ChangeEvent<HTMLInputElement>) => {
+    const input = event.currentTarget
+    const file = input.files?.[0]
+    if (!file) return
+    setState({ kind: "verifying" })
+    try {
+      setState({ kind: "ready", result: await verifyPlaybackFile(file, report) })
+    } catch (error) {
+      setState({ kind: "error", message: error instanceof Error ? error.message : "Playback verification failed." })
+    } finally {
+      input.value = ""
+    }
+  }
+  const playback = state.kind === "ready" ? state.result.playback : null
+  const firstOffset = playback?.lanes[0].frames[0].offset_ms ?? null
+  const lastOffset = playback?.lanes[0].frames.at(-1)?.offset_ms ?? null
+  const timing = firstOffset === null || lastOffset === null ? "Timing unavailable" : `${firstOffset}–${lastOffset} ms`
+
+  return (
+    <section className="mt-20" aria-labelledby="playback-title">
+      <div className="mb-8 max-w-3xl">
+        <p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Synchronized playback metadata</p>
+        <h2 id="playback-title" className="mt-3 text-4xl font-semibold tracking-[-.04em]">See what evidence exists before revealing pixels.</h2>
+        <p className="mt-4 leading-7 text-muted-foreground">Import the canonical playback record generated for this report. The Lab verifies every fingerprint and run relationship, then shows only timing, availability, privacy, and explicit gaps.</p>
+      </div>
+      {!enabled ? (
+        <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-6 text-sm leading-6 text-muted-foreground">Import your verified report.json first. The illustrative sample cannot accept a playback record because it is not backed by your sealed local bundle.</div>
+      ) : (
+        <div className="rounded-[1.75rem] border border-indigo-100 bg-indigo-50/60 p-5 sm:p-7">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div><p className="font-semibold">{state.kind === "ready" ? "Verified local playback" : "Playback not opened"}</p><p className="mt-1 text-sm text-muted-foreground">Metadata stays in this browser tab. Nothing is uploaded, persisted, or written into the bundle.</p></div>
+            {state.kind !== "ready" && <label className="inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-xs transition hover:bg-primary/90 focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"><Upload className="size-4" />Select playback.json<input className="sr-only" type="file" accept="application/json,.json" onChange={selectPlayback} /></label>}
+          </div>
+          <div className="mt-5" role="status" aria-live="polite">
+            {state.kind === "idle" && <p className="rounded-2xl bg-white/80 p-4 text-sm text-muted-foreground">No playback metadata is loaded.</p>}
+            {state.kind === "verifying" && <p className="rounded-2xl bg-white/80 p-4 text-sm text-muted-foreground">Verifying schema, fingerprint, active-report lineage, runs, event, and frame window…</p>}
+            {state.kind === "error" && <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800"><p className="font-semibold">Playback rejected</p><p className="mt-1">{state.message}</p><label className="mt-4 inline-flex cursor-pointer items-center gap-2 font-semibold text-amber-900 underline underline-offset-4">Choose another playback.json<input className="sr-only" type="file" accept="application/json,.json" onChange={selectPlayback} /></label></div>}
+            {playback && <div className="space-y-5">
+              <div className="grid gap-4 rounded-2xl border border-indigo-100 bg-white p-5 sm:grid-cols-2 lg:grid-cols-4">
+                <div><p className="text-xs uppercase tracking-wide text-muted-foreground">Event frame</p><p className="mt-2 font-mono font-semibold">{playback.event_frame_index}</p></div>
+                <div><p className="text-xs uppercase tracking-wide text-muted-foreground">Window</p><p className="mt-2 font-mono font-semibold">{playback.frame_range.start}–{playback.frame_range.end - 1}</p></div>
+                <div><p className="text-xs uppercase tracking-wide text-muted-foreground">Timing</p><p className="mt-2 font-mono font-semibold">{timing}</p></div>
+                <div><p className="text-xs uppercase tracking-wide text-muted-foreground">Playback fingerprint</p><p className="mt-2 font-mono text-sm font-semibold">{short(playback.playback_id)}</p></div>
+              </div>
+              <div className="grid gap-4 lg:grid-cols-2">{playback.lanes.map((lane) => <PlaybackLaneView lane={lane} key={lane.run_id} />)}</div>
+              <div className="flex flex-col gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900 sm:flex-row sm:items-center sm:justify-between"><p><strong>Metadata verified.</strong> No paths were resolved and no image or video bytes were read.</p><Button type="button" variant="outline" onClick={() => setState({ kind: "idle" })}><RotateCcw className="size-4" />Close playback</Button></div>
+            </div>}
+          </div>
+        </div>
+      )}
+    </section>
+  )
+}
+
 function FailureExplorer({ report }: { report: ReliabilityReport }) {
   const [variant, setVariant] = useState("all")
   const [failureType, setFailureType] = useState<FailureType | "all">("all")
@@ -547,6 +648,8 @@ function LabReport({ report, origin }: { report: ReliabilityReport; origin: Repo
         <section className="mt-20" aria-labelledby="failures-title"><div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Failure taxonomy</p><h2 id="failures-title" className="mt-3 text-4xl font-semibold tracking-[-.04em]">Where tracking breaks.</h2></div><p className="max-w-md text-sm leading-6 text-muted-foreground">Counts use the same correspondence as the published metrics—not a second UI-only calculation.</p></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{failureOrder.map((failure) => <article className="rounded-3xl border border-border bg-white p-6" key={failure}><p className="text-sm font-medium text-muted-foreground">{failureLabels[failure]}</p><div className="mt-5 space-y-3">{report.variants.map((variant) => <div className="flex items-center justify-between" key={variant.name}><span className="text-sm">{variant.name}</span><strong className="text-2xl">{variant.failure_counts[failure]}</strong></div>)}</div></article>)}</div></section>
 
         <FailureExplorer key={report.report_id} report={report} />
+
+        <PlaybackInspector key={`playback:${report.report_id}`} report={report} enabled={origin.kind === "file"} />
 
         <DecisionInspector key={`decision:${report.report_id}`} report={report} canDraft={origin.kind === "file"} />
 

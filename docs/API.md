@@ -178,6 +178,12 @@ playback record to standard output and no status text. Failures remain on
 standard error. The command itself still writes nothing; the caller may use
 explicit shell redirection to create a local `playback.json`.
 
+At `/lab`, `playback.json` selection is enabled only for an explicitly imported
+and validated `report.json`. The browser revalidates the playback fingerprint,
+report/experiment/source/comparison lineage, baseline and variant run IDs,
+anchor event, and evidence window. It then displays metadata only; relative
+media paths are not resolved and no image or video bytes are read.
+
 Playback interoperability is locked by
 `tests/fixtures/lab_playback_conformance.json`. Python and the browser verify
 the same known- and unknown-timing records, content fingerprints, canonical

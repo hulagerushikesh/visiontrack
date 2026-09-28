@@ -201,6 +201,41 @@ def test_lab_playback_contract_is_strict_private_and_checked_in_ci() -> None:
     assert "npm run test:playback-contract" in workflow
 
 
+def test_lab_playback_import_verifies_file_and_active_report_lineage() -> None:
+    playback = (ROOT / "src/features/reliability-lab/playback.ts").read_text()
+    contract = (ROOT / "src/features/reliability-lab/playback-contract.mjs").read_text()
+
+    assert "export async function verifyPlaybackFile" in playback
+    assert 'file.name !== "playback.json"' in playback
+    assert "file.size === 0 || file.size > maxPlaybackBytes" in playback
+    assert "validatePlaybackReportLineage(result.playback, report)" in playback
+    assert "playback.experiment_id !== report.experiment.experiment_id" in contract
+    assert "playback.source_id !== report.source.source_id" in contract
+    assert "playback.comparison_id !== report.comparison_id" in contract
+    assert "playback.report_id !== report.report_id" in contract
+    assert "playback.lanes[0].run_id !== baseline.run_id" in contract
+    assert "failure.evidence_frames.start !== playback.frame_range.start" in contract
+
+
+def test_lab_playback_ui_is_explicit_private_and_metadata_only() -> None:
+    component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+    playback = (ROOT / "src/features/reliability-lab/playback.ts").read_text()
+
+    assert "function PlaybackInspector" in component
+    assert "Select playback.json" in component
+    assert "Verified local playback" in component
+    assert "Timing unavailable" in component
+    assert "Source pixels" in component
+    assert "Redacted" in component
+    assert "Synthetic" in component
+    assert "No paths were resolved and no image or video bytes were read." in component
+    assert 'enabled={origin.kind === "file"}' in component
+    assert "Nothing is uploaded, persisted, or written into the bundle." in component
+    assert "fetch(" not in playback
+    assert "localStorage" not in component
+    assert "sessionStorage" not in component
+
+
 def test_lab_decision_ui_has_missing_invalid_and_verified_states() -> None:
     component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
 
