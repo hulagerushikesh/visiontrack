@@ -41,9 +41,14 @@ import {
 } from "./decision"
 import {
   verifyPlaybackFile,
+  type FailurePlayback,
   type PlaybackLane,
   type VerifiedPlayback,
 } from "./playback"
+import {
+  verifyPlaybackLaneFiles,
+  type VerifiedPlaybackLaneMedia,
+} from "./playback-media.mjs"
 
 const failureLabels: Record<FailureType, string> = {
   id_switch: "ID switches",
@@ -453,6 +458,119 @@ function PlaybackLaneView({ lane }: { lane: PlaybackLane }) {
   )
 }
 
+type PlaybackLaneMediaState =
+  | { kind: "idle" }
+  | { kind: "verifying" }
+  | { kind: "error"; message: string }
+  | { kind: "ready"; media: VerifiedPlaybackLaneMedia }
+
+function PlaybackMediaInspector({ playback }: { playback: FailurePlayback }) {
+  const reduce = useReducedMotion()
+  const [frameIndex, setFrameIndex] = useState(playback.event_frame_index)
+  const [playing, setPlaying] = useState(false)
+  const [rate, setRate] = useState(1)
+  const [laneMedia, setLaneMedia] = useState<Record<string, PlaybackLaneMediaState>>({})
+  const [revealed, setRevealed] = useState<Record<string, string>>({})
+  const verificationIds = useRef<Record<string, number>>({})
+  const objectUrls = useRef(new Set<string>())
+  const active = useRef(true)
+  const revokeReveals = () => {
+    objectUrls.current.forEach((url) => URL.revokeObjectURL(url))
+    objectUrls.current.clear()
+    setRevealed({})
+  }
+  useEffect(() => {
+    active.current = true
+    return () => {
+      active.current = false
+      objectUrls.current.forEach((url) => URL.revokeObjectURL(url))
+      objectUrls.current.clear()
+    }
+  }, [])
+  const selectLaneMedia = async (event: ChangeEvent<HTMLInputElement>, lane: PlaybackLane) => {
+    const input = event.currentTarget
+    const files = Array.from(input.files ?? [])
+    const requestId = (verificationIds.current[lane.run_id] ?? 0) + 1
+    verificationIds.current[lane.run_id] = requestId
+    revokeReveals()
+    setLaneMedia((current) => ({ ...current, [lane.run_id]: { kind: "verifying" } }))
+    try {
+      const media = await verifyPlaybackLaneFiles(files, lane)
+      if (active.current && verificationIds.current[lane.run_id] === requestId) {
+        setLaneMedia((current) => ({ ...current, [lane.run_id]: { kind: "ready", media } }))
+      }
+    } catch (error) {
+      if (active.current && verificationIds.current[lane.run_id] === requestId) {
+        setLaneMedia((current) => ({ ...current, [lane.run_id]: { kind: "error", message: error instanceof Error ? error.message : "Playback PNG verification failed." } }))
+      }
+    } finally {
+      input.value = ""
+    }
+  }
+  const reveal = (path: string, file: File) => {
+    if (revealed[path]) return
+    const url = URL.createObjectURL(file)
+    objectUrls.current.add(url)
+    setRevealed((current) => ({ ...current, [path]: url }))
+  }
+  const start = playback.frame_range.start
+  const end = playback.frame_range.end
+  useEffect(() => {
+    if (!playing) return
+    if (reduce || frameIndex >= end - 1) {
+      setPlaying(false)
+      return
+    }
+    const position = frameIndex - start
+    const frames = playback.lanes[0].frames
+    const currentOffset = frames[position]?.offset_ms
+    const nextOffset = frames[position + 1]?.offset_ms
+    const sourceDelay = currentOffset === null || currentOffset === undefined || nextOffset === null || nextOffset === undefined
+      ? 250
+      : nextOffset - currentOffset
+    const delay = Math.max(50, Math.min(2000, sourceDelay / rate))
+    const timer = window.setTimeout(() => setFrameIndex((value) => Math.min(value + 1, end - 1)), delay)
+    return () => window.clearTimeout(timer)
+  }, [end, frameIndex, playback, playing, rate, reduce, start])
+  const restart = () => {
+    setPlaying(false)
+    setFrameIndex(start)
+  }
+
+  return (
+    <div className="rounded-3xl border border-indigo-100 bg-white p-5 sm:p-7" aria-labelledby="playback-media-title">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div><p className="font-mono text-[10px] font-semibold uppercase tracking-[.16em] text-primary">Optional local pixels</p><h3 id="playback-media-title" className="mt-2 text-2xl font-semibold tracking-tight">Verify each lane, then step in sync.</h3><p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">Choose the declared PNGs from each lane’s evidence folder. Filenames, SHA-256 hashes, and PNG bounds are checked before any reveal control appears.</p></div>
+        <span className="shrink-0 rounded-full bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-800">No automatic reveal</span>
+      </div>
+      <div className="mt-6 grid gap-3 lg:grid-cols-2">
+        {playback.lanes.map((lane) => {
+          const state = laneMedia[lane.run_id] ?? { kind: "idle" as const }
+          const expected = lane.frames.filter((frame) => frame.status === "available").length
+          return <div className="rounded-2xl border border-border bg-slate-50/70 p-4" key={lane.run_id}><div className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-sm font-semibold">{lane.variant}</p><p className="mt-1 text-xs text-muted-foreground">{expected} declared {expected === 1 ? "PNG" : "PNGs"}</p></div>{expected > 0 && <label className="inline-flex h-9 cursor-pointer items-center justify-center gap-2 rounded-md border border-input bg-white px-3 text-xs font-medium shadow-xs transition hover:bg-accent focus-within:ring-2 focus-within:ring-ring"><FileImage className="size-4" />Select lane PNGs<input className="sr-only" type="file" multiple accept="image/png,.png" onChange={(event) => selectLaneMedia(event, lane)} /></label>}</div><div className="mt-3 text-xs" role="status" aria-live="polite">{expected === 0 ? <p className="text-muted-foreground">This lane has no available media.</p> : state.kind === "idle" ? <p className="text-muted-foreground">No files selected.</p> : state.kind === "verifying" ? <p className="text-indigo-700">Verifying exact filenames, hashes, and PNG structure…</p> : state.kind === "error" ? <p className="text-amber-800"><strong>Rejected:</strong> {state.message}</p> : <p className="font-semibold text-emerald-700">Verified {state.media.files.size} local {state.media.files.size === 1 ? "image" : "images"}.</p>}</div></div>
+        })}
+      </div>
+
+      <div className="mt-7 flex flex-col gap-4 rounded-2xl bg-slate-950 p-4 text-white sm:flex-row sm:items-center sm:justify-between">
+        <div><p className="text-xs text-white/55">Synchronized frame</p><p className="mt-1 font-mono text-xl font-semibold">{frameIndex}</p></div>
+        <div className="flex flex-1 flex-col gap-3 sm:max-w-2xl"><div className="flex items-center gap-3"><Button type="button" size="sm" variant="outline" disabled={frameIndex <= start} onClick={() => { setPlaying(false); setFrameIndex((value) => value - 1) }}>Previous</Button><input aria-label="Synchronized playback frame" className="w-full accent-indigo-400" type="range" min={start} max={end - 1} value={frameIndex} onChange={(event) => { setPlaying(false); setFrameIndex(Number(event.target.value)) }} /><Button type="button" size="sm" variant="outline" disabled={frameIndex >= end - 1} onClick={() => { setPlaying(false); setFrameIndex((value) => value + 1) }}>Next</Button></div><div className="flex flex-wrap items-center gap-2"><Button type="button" size="sm" variant="outline" disabled={Boolean(reduce) || (!playing && frameIndex >= end - 1)} onClick={() => setPlaying((value) => !value)}>{playing ? "Pause" : "Play"}</Button><Button type="button" size="sm" variant="outline" onClick={restart}>Restart</Button><label className="ml-auto flex items-center gap-2 text-xs text-white/65">Rate<select aria-label="Playback rate" className="h-8 rounded-md border border-white/20 bg-slate-900 px-2 text-xs text-white" value={rate} onChange={(event) => setRate(Number(event.target.value))}><option value={0.5}>0.5×</option><option value={1}>1×</option><option value={2}>2×</option></select></label></div>{reduce && <p className="text-xs text-amber-200" role="status">Automatic playback is disabled by your reduced-motion preference. Manual stepping remains available.</p>}<p className="sr-only" aria-live="polite">{playing ? `Playing synchronized frame ${frameIndex}` : `Paused on synchronized frame ${frameIndex}`}</p></div>
+      </div>
+
+      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+        {playback.lanes.map((lane) => {
+          const frame = lane.frames.find((item) => item.frame_index === frameIndex)!
+          const state = laneMedia[lane.run_id]
+          const file = frame.status === "available" && state?.kind === "ready" ? state.media.files.get(frame.relative_path!) : undefined
+          const url = frame.status === "available" ? revealed[frame.relative_path!] : undefined
+          const sensitive = frame.privacy === "source_pixels"
+          return <article className="overflow-hidden rounded-2xl border border-border bg-white" key={`${lane.run_id}:${frameIndex}`}><div className="flex items-center justify-between border-b border-border px-4 py-3"><p className="font-semibold">{lane.variant}</p><span className={frame.status === "missing" ? "rounded-full bg-slate-100 px-2.5 py-1 text-xs text-slate-600" : sensitive ? "rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800" : "rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-800"}>{frame.status === "missing" ? "Missing" : playbackPrivacy[frame.privacy!]}</span></div>{url ? <img src={url} alt={`Verified ${lane.variant} playback evidence at frame ${frameIndex}`} className="aspect-video w-full bg-slate-950 object-contain" /> : <div className="grid aspect-video place-items-center bg-slate-950 px-6 text-center text-white"><div><LockKeyhole className="mx-auto size-7 text-indigo-300" /><p className="mt-3 font-semibold">{frame.status === "missing" ? "No frame was declared" : file ? "Verified pixels remain concealed" : "Verified file not selected"}</p><p className="mt-1 text-xs text-white/55">{frame.status === "missing" ? "The gap is part of the playback record." : file ? sensitive ? "Unredacted source pixels require an explicit reveal." : "Reveal this verified image when you are ready." : "Select this lane’s exact PNG set above."}</p></div></div>}<div className="p-4"><p className="font-mono text-xs text-muted-foreground">Frame {frameIndex}{frame.offset_ms === null ? " · timing unavailable" : ` · ${frame.offset_ms} ms`}</p>{file && !url && <Button type="button" size="sm" variant={sensitive ? "destructive" : "outline"} className="mt-3 w-full" onClick={() => reveal(frame.relative_path!, file)}><Eye className="size-4" />{sensitive ? "Reveal source pixels" : "Reveal verified image"}</Button>}</div></article>
+        })}
+      </div>
+      <p className="mt-4 text-xs leading-5 text-muted-foreground">Files remain in memory only. Changing a lane selection revokes every revealed object URL; leaving this playback view revokes them again.</p>
+    </div>
+  )
+}
+
 function PlaybackInspector({ report, enabled }: { report: ReliabilityReport; enabled: boolean }) {
   const [state, setState] = useState<PlaybackState>({ kind: "idle" })
   const selectPlayback = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -500,7 +618,8 @@ function PlaybackInspector({ report, enabled }: { report: ReliabilityReport; ena
                 <div><p className="text-xs uppercase tracking-wide text-muted-foreground">Playback fingerprint</p><p className="mt-2 font-mono text-sm font-semibold">{short(playback.playback_id)}</p></div>
               </div>
               <div className="grid gap-4 lg:grid-cols-2">{playback.lanes.map((lane) => <PlaybackLaneView lane={lane} key={lane.run_id} />)}</div>
-              <div className="flex flex-col gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900 sm:flex-row sm:items-center sm:justify-between"><p><strong>Metadata verified.</strong> No paths were resolved and no image or video bytes were read.</p><Button type="button" variant="outline" onClick={() => setState({ kind: "idle" })}><RotateCcw className="size-4" />Close playback</Button></div>
+              <PlaybackMediaInspector playback={playback} />
+              <div className="flex flex-col gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900 sm:flex-row sm:items-center sm:justify-between"><p><strong>Playback contract verified.</strong> Optional PNGs are read only after deliberate local selection and never uploaded.</p><Button type="button" variant="outline" onClick={() => setState({ kind: "idle" })}><RotateCcw className="size-4" />Close playback</Button></div>
             </div>}
           </div>
         </div>

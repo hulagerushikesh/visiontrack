@@ -1323,15 +1323,41 @@ The UI does not resolve the record's media paths, create object URLs, read image
 or video bytes, upload content, or persist the selected record. Closing the
 panel discards the in-memory playback metadata.
 
+## Completed implementation increment: verified local playback images
+
+Available media can now be selected explicitly one lane at a time. Lane scope
+prevents equal basenames in baseline and variant evidence folders from being
+confused. The browser requires the exact declared filename set, verifies every
+SHA-256 digest, rejects non-PNG or oversized image bounds, and keeps the
+verified `File` objects only in memory.
+
+One manual frame cursor moves both lanes together and preserves every declared
+missing slot. Verified pixels remain concealed until an individual reveal;
+`source_pixels` uses a stronger warning than redacted or synthetic evidence.
+Replacing files revokes all revealed object URLs, and leaving the playback view
+revokes them again. There is no folder scan, network fetch, upload, persistence,
+or raw-video decode.
+
+## Completed implementation increment: bounded playback transport
+
+Both lanes now share one deterministic frame cursor with previous, next,
+scrubber, restart, play/pause, and 0.5×/1×/2× controls. Known source timing uses
+the verified frame offsets; unknown timing uses a bounded metadata-only cadence.
+The cursor cannot leave the verified window, preserves visible missing slots,
+and stops at the end.
+
+Every timer is cancelled on pause, rate change, manual navigation, or unmount.
+When the browser prefers reduced motion, timed playback is disabled while the
+manual controls remain available. Transport never reveals a concealed image
+and never changes a research decision.
+
 ## Next implementation increment
 
-Add deliberate local image selection for the available playback slots. The
-browser must accept only explicitly selected PNG files whose safe relative
-filenames, hashes, and declared privacy classes match the verified playback
-record. Missing slots stay missing, source pixels remain concealed until a
-second explicit reveal action, and every object URL must be revoked. No folder
-scan, upload, remote fetch, persistence, raw-video decoding, or automatic media
-resolution is allowed.
+Add one reproducible browser workflow fixture that exercises report import,
+playback import, both lane selections, synchronized transport, privacy reveal,
+and cleanup as a single acceptance path. The fixture must stay synthetic,
+checked in, deterministic, and small; it must not weaken any production file
+validation or add private data to the repository.
 
 Collaborative review, remote storage, and raw-video decoding remain later
 increments.
