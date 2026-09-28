@@ -1351,13 +1351,26 @@ When the browser prefers reduced motion, timed playback is disabled while the
 manual controls remain available. Transport never reveals a concealed image
 and never changes a research decision.
 
+## Completed implementation increment: browser workflow acceptance fixture
+
+A small checked-in synthetic fixture now links one complete report, canonical
+playback content, two one-pixel PNG lane files, explicit missing slots, and one
+`source_pixels` privacy boundary. CI transpiles and executes the production
+TypeScript report parser, reconstructs and verifies the canonical playback,
+revalidates its report lineage, verifies both exact PNG selections, and checks
+known timing plus the terminal frame boundary.
+
+The fixture contains no private or real-world media. It does not bypass file
+validation: its inline PNG bytes are converted to browser-shaped file objects
+and pass through the same SHA-256 and PNG checks used by the UI.
+
 ## Next implementation increment
 
-Add one reproducible browser workflow fixture that exercises report import,
-playback import, both lane selections, synchronized transport, privacy reveal,
-and cleanup as a single acceptance path. The fixture must stay synthetic,
-checked in, deterministic, and small; it must not weaken any production file
-validation or add private data to the repository.
+Close the current VisionTrack slice with a release-readiness audit, then define
+the first explicit synchronization boundary with `visiontrack-cpp`: shared
+golden inputs, canonical track outputs, coordinate and lifecycle semantics, and
+cross-runtime parity tolerances. The handoff should begin as a versioned
+contract and test plan before changing the C++ tracker implementation.
 
 Collaborative review, remote storage, and raw-video decoding remain later
 increments.

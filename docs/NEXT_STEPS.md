@@ -111,6 +111,9 @@ The first local workflow and its versioned records are defined in
 - [x] Add deterministic synchronized play, pause, restart, scrub, and rate
       controls with verified timing, bounded timers, reduced-motion handling,
       and no automatic pixel reveal.
+- [x] Run one checked-in deterministic synthetic browser workflow through the
+      production report parser, playback lineage, both PNG lanes, privacy and
+      missing-slot boundaries, and bounded transport in CI.
 - [x] Ship the first versioned, strictly validated, read-only benchmark explorer
       slice without replacing the generated reports.
 - [x] Export structured experiment results as canonical schema-v1 benchmark

@@ -203,6 +203,9 @@ select each lane's declared PNG set; the browser verifies exact filenames,
 SHA-256 hashes, and PNG bounds before offering per-frame reveal controls. Both
 lanes share bounded manual and timed transport controls; automatic playback
 respects reduced-motion preferences and never reveals concealed pixels.
+CI also executes one checked-in synthetic browser workflow through the real
+report parser, playback validator, both lane verifiers, privacy boundary, and
+transport helpers.
 
 The first data-driven results slice is available at
 [`/benchmark/explorer`](https://visiontrack.hulage.in/benchmark/explorer). It
@@ -242,7 +245,7 @@ Every run is pinned by a config hash; bootstrap resampling and synthetic scenes 
 ## Engineering
 
 - **Zero ML-framework dependency in the core** — just NumPy. Heavy/optional deps (`scipy`, `pandas`, `matplotlib`, `pillow`, `onnxruntime`, `torch`) are isolated in extras (`[experiments]`, `[appearance]`, `[onnx]`) and lazily imported; nothing in `core/` imports them.
-- **559 tests**: unit, property (Hungarian vs SciPy), convergence (Kalman), metric cross-checks (HOTA/IDF1 vs `trackeval`), video/webcam pipelines, the benchmarking tool, product-surface contracts, and end-to-end integration with a MOTA floor.
+- **560 tests**: unit, property (Hungarian vs SciPy), convergence (Kalman), metric cross-checks (HOTA/IDF1 vs `trackeval`), video/webcam pipelines, the benchmarking tool, product-surface contracts, and end-to-end integration with a MOTA floor.
 - **CI** on Python 3.10/3.11/3.12 + ruff.
 
 ```

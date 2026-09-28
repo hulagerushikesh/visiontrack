@@ -49,6 +49,7 @@ import {
   verifyPlaybackLaneFiles,
   type VerifiedPlaybackLaneMedia,
 } from "./playback-media.mjs"
+import { nextPlaybackFrame, playbackStepDelay } from "./playback-transport.mjs"
 
 const failureLabels: Record<FailureType, string> = {
   id_switch: "ID switches",
@@ -521,15 +522,8 @@ function PlaybackMediaInspector({ playback }: { playback: FailurePlayback }) {
       setPlaying(false)
       return
     }
-    const position = frameIndex - start
-    const frames = playback.lanes[0].frames
-    const currentOffset = frames[position]?.offset_ms
-    const nextOffset = frames[position + 1]?.offset_ms
-    const sourceDelay = currentOffset === null || currentOffset === undefined || nextOffset === null || nextOffset === undefined
-      ? 250
-      : nextOffset - currentOffset
-    const delay = Math.max(50, Math.min(2000, sourceDelay / rate))
-    const timer = window.setTimeout(() => setFrameIndex((value) => Math.min(value + 1, end - 1)), delay)
+    const delay = playbackStepDelay(playback, frameIndex, rate)
+    const timer = window.setTimeout(() => setFrameIndex((value) => nextPlaybackFrame(playback.frame_range, value)), delay)
     return () => window.clearTimeout(timer)
   }, [end, frameIndex, playback, playing, rate, reduce, start])
   const restart = () => {

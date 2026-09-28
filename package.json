@@ -11,6 +11,7 @@
     "build": "npm run build:app && npm run build:docs",
     "test:decision-contract": "node scripts/test-decision-contract.mjs",
     "test:playback-contract": "node scripts/test-playback-contract.mjs",
+    "test:playback-workflow": "node scripts/test-playback-workflow.mjs",
     "test:benchmark-contract": "node scripts/test-benchmark-contract.mjs",
     "test:live-contract": "node scripts/test-live-contract.mjs",
     "typecheck": "tsc --noEmit",

@@ -269,18 +269,38 @@ def test_lab_playback_media_steps_in_sync_and_reveals_deliberately() -> None:
 
 def test_lab_playback_transport_is_bounded_accessible_and_motion_safe() -> None:
     component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+    transport = (ROOT / "src/features/reliability-lab/playback-transport.mjs").read_text()
 
     assert "const [playing, setPlaying] = useState(false)" in component
     assert "const [rate, setRate] = useState(1)" in component
     assert "window.setTimeout" in component
     assert "window.clearTimeout(timer)" in component
-    assert "Math.min(value + 1, end - 1)" in component
+    assert "nextPlaybackFrame(playback.frame_range, value)" in component
+    assert "Math.min(Math.max(frameIndex + 1, frameRange.start), frameRange.end - 1)" in transport
     assert 'aria-label="Playback rate"' in component
     assert 'role="status"' in component
     assert "Automatic playback is disabled by your reduced-motion preference" in component
     assert "Manual stepping remains available" in component
     assert "setPlaying(false)" in component
     assert "Reveal source pixels" in component
+
+
+def test_lab_browser_playback_acceptance_fixture_is_synthetic_and_runs_in_ci() -> None:
+    fixture = (ROOT / "tests/fixtures/lab_browser_workflow.json").read_text()
+    script = (ROOT / "scripts/test-playback-workflow.mjs").read_text()
+    package = (ROOT / "package.json").read_text()
+    workflow = (ROOT / ".github/workflows/ci.yml").read_text()
+
+    assert '"kind": "synthetic"' in fixture
+    assert '"privacy": "source_pixels"' in fixture
+    assert '"status": "missing"' in fixture
+    assert "parseReportModel(structuredClone(fixture.report))" in script
+    assert "verifyFailurePlayback(playback)" in script
+    assert "validatePlaybackReportLineage(playback, reportResult.report)" in script
+    assert "verifyPlaybackLaneFiles" in script
+    assert "nextPlaybackFrame" in script
+    assert '"test:playback-workflow"' in package
+    assert "npm run test:playback-workflow" in workflow
 
 
 def test_lab_decision_ui_has_missing_invalid_and_verified_states() -> None:
