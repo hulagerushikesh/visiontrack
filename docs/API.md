@@ -158,6 +158,15 @@ source, comparison, report, anchor-event, baseline, variant, and run IDs. It
 does not read pixels, decode video, open URLs, write files, persist identity,
 or select a winning variant.
 
+`build_failure_playback(bundle, event_id=..., variant=...)` constructs that
+record from an exact sealed local `report/report.json`. It first rebuilds the
+report from verified bundle evidence and rejects stale or modified report
+bytes. The selected report event must belong to the requested baseline/variant
+pair. A counterpart is paired only when its frame, failure type, ground-truth
+IDs, and evidence window match; otherwise that lane remains explicitly
+missing. Only declared, verified full-frame artifacts are referenced. Crops
+remain valid evidence but are not silently promoted to playback frames.
+
 ## Reliability Lab decisions
 
 ```python

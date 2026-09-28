@@ -30,6 +30,7 @@ from .evidence import EvidenceProductionPlan, plan_failure_evidence, produce_fai
 from .failures import calculate_failure_events
 from .metrics import calculate_bundle_metrics
 from .mot import import_mot_ground_truth
+from .playback import build_failure_playback
 from .report import build_report_model, generate_local_report, render_report_html
 from .runner import load_experiment_bundle, resolve_variant_config, run_comparison
 from .storage import (
@@ -98,6 +99,7 @@ __all__ = [
     "calculate_bundle_metrics",
     "calculate_failure_events",
     "build_report_model",
+    "build_failure_playback",
     "generate_local_report",
     "render_report_html",
     "read_detection_jsonl",

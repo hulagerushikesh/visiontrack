@@ -92,6 +92,9 @@ The first local workflow and its versioned records are defined in
 - [x] Define the content-addressed synchronized failure-playback contract with
       paired timing grids, explicit missing/redacted media, and full local
       report/run lineage before adding playback UI or video decoding.
+- [x] Build synchronized playback deterministically from one exact sealed
+      report event and explicitly stored full-frame evidence without copying,
+      decoding, scanning for undeclared media, or mutating its bundle.
 - [x] Ship the first versioned, strictly validated, read-only benchmark explorer
       slice without replacing the generated reports.
 - [x] Export structured experiment results as canonical schema-v1 benchmark

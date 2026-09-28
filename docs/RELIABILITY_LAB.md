@@ -1264,13 +1264,27 @@ privacy class. This makes gaps and redaction visible without reading image
 bytes. The contract rejects remote-style paths, partial lanes, timing drift,
 same-run comparisons, oversized windows, and mismatched lineage.
 
+## Completed implementation increment: deterministic playback builder
+
+`build_failure_playback` now accepts an exact sealed local report event and one
+declared non-baseline variant. It rebuilds the report from verified bundle
+evidence and requires byte-for-byte canonical equality with the stored
+`report.json` before using the event. This prevents stale or edited reports
+from selecting media.
+
+The builder pairs a counterpart only when frame, failure type, ground-truth
+IDs, and evidence range all agree. It reads only the resulting declared
+evidence manifests, selects verified full-frame artifacts, and emits every
+other frame as an explicit missing slot. Crop-only evidence remains evidence
+but is never stretched into playback. Construction is deterministic and
+read-only: tests verify that every bundle file and byte remains unchanged.
+
 ## Next implementation increment
 
-Add a deterministic playback builder that reads one verified report event and
-its explicitly stored local evidence manifests, then produces this contract in
-memory. It must create complete paired lanes with visible missing slots, reject
-ambiguous full-frame artifacts, and remain preview-only: no media copying,
-decoding, directory scanning beyond declared evidence, or UI.
+Expose this builder through a preview-only `visiontrack lab-playback` command.
+The command should print the exact event, variants, timing window, available,
+missing, and privacy counts plus the playback fingerprint. It must not write a
+manifest, copy media, decode video, reveal pixels, or accept remote paths.
 
 Playback UI, collaborative review, remote storage, and raw video decoding
 remain later increments.
