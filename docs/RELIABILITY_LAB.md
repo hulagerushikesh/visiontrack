@@ -1248,16 +1248,32 @@ reports use that structure without changing their numerical content. Generator-
 level and page-level contracts prevent later regeneration from restoring the
 old presentation or dropping the Results hub and explorer paths.
 
+## Completed implementation increment: synchronized playback contract
+
+`FailurePlayback` now binds one verified failure to exactly two run-local lanes:
+the experiment baseline and one non-baseline variant. The record is
+content-addressed and carries complete experiment, source, comparison, report,
+event, and run lineage. Both lanes must cover the same bounded frame indices in
+the same order and use the same timing grid; verification derives the expected
+offsets from source FPS when timing is known.
+
+Each `PlaybackFrame` is explicitly `available` or `missing`. Missing slots may
+not smuggle media metadata. Available slots use safe bundle-relative paths,
+content hashes, and one explicit `source_pixels`, `redacted`, or `synthetic`
+privacy class. This makes gaps and redaction visible without reading image
+bytes. The contract rejects remote-style paths, partial lanes, timing drift,
+same-run comparisons, oversized windows, and mismatched lineage.
+
 ## Next implementation increment
 
-Define the smallest synchronized failure-playback contract before building its
-UI. Specify how a verified failure event points to bounded baseline/variant
-frame windows, how missing or redacted frames are represented, and how playback
-stays local and read-only. Do not add video decoding or remote storage until the
-lineage, privacy, and timing model is executable in Python tests.
+Add a deterministic playback builder that reads one verified report event and
+its explicitly stored local evidence manifests, then produces this contract in
+memory. It must create complete paired lanes with visible missing slots, reject
+ambiguous full-frame artifacts, and remain preview-only: no media copying,
+decoding, directory scanning beyond declared evidence, or UI.
 
-Synchronized failure playback, collaborative review,
-remote storage, and raw video playback remain later increments.
+Playback UI, collaborative review, remote storage, and raw video decoding
+remain later increments.
 
 ## Acceptance criteria
 
