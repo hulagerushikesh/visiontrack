@@ -527,6 +527,250 @@ class EvidenceManifest(ContractRecord):
 
 
 @dataclass(frozen=True, slots=True)
+class PlaybackFrame(ContractRecord):
+    """One read-only local media slot in a synchronized playback lane."""
+
+    frame_index: int
+    offset_ms: int | None
+    status: str
+    relative_path: str | None
+    image_sha256: str | None
+    privacy: str | None
+    schema_version: int = SCHEMA_VERSION
+
+    def __post_init__(self) -> None:
+        if self.schema_version != SCHEMA_VERSION:
+            raise ValueError(f"unsupported schema_version: {self.schema_version}")
+        if not isinstance(self.frame_index, int) or isinstance(self.frame_index, bool):
+            raise ValueError("frame_index must be a non-negative integer")
+        if self.frame_index < 0:
+            raise ValueError("frame_index must be a non-negative integer")
+        if self.offset_ms is not None and (
+            not isinstance(self.offset_ms, int)
+            or isinstance(self.offset_ms, bool)
+            or self.offset_ms < 0
+        ):
+            raise ValueError("offset_ms must be a non-negative integer when present")
+        if self.status not in {"available", "missing"}:
+            raise ValueError("status must be available or missing")
+        if self.status == "missing":
+            if any(
+                value is not None
+                for value in (self.relative_path, self.image_sha256, self.privacy)
+            ):
+                raise ValueError("missing playback frames must not reference media")
+            return
+        if not isinstance(self.relative_path, str) or not self.relative_path:
+            raise ValueError("available playback frames require relative_path")
+        path = PurePosixPath(self.relative_path)
+        if (
+            path.is_absolute()
+            or path.as_posix() != self.relative_path
+            or any(part in {"", ".", ".."} for part in path.parts)
+            or ":" in path.parts[0]
+            or "\\" in self.relative_path
+        ):
+            raise ValueError("relative_path must be a safe POSIX relative path")
+        _validate_hash(self.image_sha256, "image_sha256")
+        if self.privacy not in {"source_pixels", "redacted", "synthetic"}:
+            raise ValueError(
+                "available playback frame privacy must be source_pixels, redacted, or synthetic"
+            )
+
+
+@dataclass(frozen=True, slots=True)
+class PlaybackLane(ContractRecord):
+    """One run-local side of a baseline/variant synchronized playback."""
+
+    variant: str
+    run_id: str
+    frames: tuple[PlaybackFrame, ...]
+    schema_version: int = SCHEMA_VERSION
+
+    def __post_init__(self) -> None:
+        if self.schema_version != SCHEMA_VERSION:
+            raise ValueError(f"unsupported schema_version: {self.schema_version}")
+        if not isinstance(self.variant, str) or not self.variant.strip():
+            raise ValueError("variant must not be empty")
+        _validate_hash(self.run_id, "run_id")
+        try:
+            frames = tuple(
+                item if isinstance(item, PlaybackFrame) else PlaybackFrame.from_dict(item)
+                for item in self.frames
+            )
+        except (TypeError, ValueError) as exc:
+            raise ValueError(f"invalid playback frame: {exc}") from exc
+        object.__setattr__(self, "frames", frames)
+        indices = [frame.frame_index for frame in frames]
+        if not frames or indices != sorted(indices) or len(indices) != len(set(indices)):
+            raise ValueError("playback lane frames must be non-empty, unique, and ordered")
+        offsets = [frame.offset_ms for frame in frames]
+        if any(value is None for value in offsets):
+            if not all(value is None for value in offsets):
+                raise ValueError("playback lane timing must be entirely known or unknown")
+        elif offsets[0] != 0 or any(
+            right <= left for left, right in zip(offsets, offsets[1:], strict=False)
+        ):
+            raise ValueError("known playback timing must start at zero and increase")
+
+    def to_dict(self) -> dict[str, Any]:
+        data = ContractRecord.to_dict(self)
+        data["frames"] = [frame.to_dict() for frame in self.frames]
+        return data
+
+
+@dataclass(frozen=True, slots=True)
+class FailurePlayback(ContractRecord):
+    """Content-addressed, synchronized evidence window for one failure review."""
+
+    playback_id: str
+    experiment_id: str
+    source_id: str
+    comparison_id: str
+    report_id: str
+    anchor_event_id: str
+    event_frame_index: int
+    frame_range: dict[str, int]
+    baseline: str
+    variant: str
+    lanes: tuple[PlaybackLane, PlaybackLane]
+    schema_version: int = SCHEMA_VERSION
+
+    def __post_init__(self) -> None:
+        if self.schema_version != SCHEMA_VERSION:
+            raise ValueError(f"unsupported schema_version: {self.schema_version}")
+        for field_name in (
+            "playback_id",
+            "experiment_id",
+            "source_id",
+            "comparison_id",
+            "report_id",
+            "anchor_event_id",
+        ):
+            _validate_hash(getattr(self, field_name), field_name)
+        if not isinstance(self.event_frame_index, int) or isinstance(
+            self.event_frame_index, bool
+        ):
+            raise ValueError("event_frame_index must be a non-negative integer")
+        if set(self.frame_range) != {"start", "end"}:
+            raise ValueError("frame_range must contain only start and end")
+        start, end = self.frame_range["start"], self.frame_range["end"]
+        if (
+            not isinstance(start, int)
+            or isinstance(start, bool)
+            or not isinstance(end, int)
+            or isinstance(end, bool)
+            or start < 0
+            or not start <= self.event_frame_index < end
+        ):
+            raise ValueError("frame_range must contain event_frame_index")
+        if end - start > 301:
+            raise ValueError("playback frame_range must contain at most 301 frames")
+        if not isinstance(self.baseline, str) or not self.baseline.strip():
+            raise ValueError("baseline must not be empty")
+        if not isinstance(self.variant, str) or not self.variant.strip():
+            raise ValueError("variant must not be empty")
+        if self.baseline == self.variant:
+            raise ValueError("variant must differ from baseline")
+        try:
+            lanes = tuple(
+                item if isinstance(item, PlaybackLane) else PlaybackLane.from_dict(item)
+                for item in self.lanes
+            )
+        except (TypeError, ValueError) as exc:
+            raise ValueError(f"invalid playback lane: {exc}") from exc
+        object.__setattr__(self, "lanes", lanes)
+        if len(lanes) != 2 or [lane.variant for lane in lanes] != [self.baseline, self.variant]:
+            raise ValueError("lanes must contain baseline then variant")
+        if lanes[0].run_id == lanes[1].run_id:
+            raise ValueError("playback lanes must reference distinct runs")
+        expected_indices = list(range(start, end))
+        expected_offsets = [frame.offset_ms for frame in lanes[0].frames]
+        for lane in lanes:
+            if [frame.frame_index for frame in lane.frames] != expected_indices:
+                raise ValueError("every playback lane must cover the complete frame_range")
+            if [frame.offset_ms for frame in lane.frames] != expected_offsets:
+                raise ValueError("playback lanes must use identical timing")
+        if self.playback_id != self.derive_playback_id():
+            raise ValueError("playback_id does not match playback content")
+
+    def derive_playback_id(self) -> str:
+        data = self.to_dict()
+        data.pop("playback_id")
+        return sha256_json(data)
+
+    def to_dict(self) -> dict[str, Any]:
+        data = ContractRecord.to_dict(self)
+        data["lanes"] = [lane.to_dict() for lane in self.lanes]
+        return data
+
+    def verify_lineage(
+        self,
+        *,
+        experiment: ExperimentManifest,
+        source: SourceManifest,
+        comparison_id: str,
+        report_id: str,
+        failure: FailureEvent,
+        run_ids: dict[str, str],
+    ) -> None:
+        """Revalidate playback against the verified local report inputs."""
+        expected = {
+            "experiment_id": experiment.experiment_id,
+            "source_id": source.source_id,
+            "comparison_id": comparison_id,
+            "report_id": report_id,
+            "anchor_event_id": failure.event_id,
+        }
+        for field_name, value in expected.items():
+            if getattr(self, field_name) != value:
+                raise ValueError(f"playback {field_name} does not match verified evidence")
+        if self.baseline != experiment.baseline:
+            raise ValueError("playback baseline does not match experiment")
+        variants = {item["name"] for item in experiment.variants}
+        if self.variant not in variants:
+            raise ValueError("playback variant is not part of the experiment")
+        if self.event_frame_index != failure.frame_index:
+            raise ValueError("playback event frame does not match failure event")
+        if self.frame_range != failure.evidence_frames:
+            raise ValueError("playback frame range does not match failure evidence window")
+        if self.frame_range["end"] > source.frame_count:
+            raise ValueError("playback frame range exceeds source frame_count")
+        expected_offsets = (
+            [
+                round((frame_index - self.frame_range["start"]) * 1000 / source.fps)
+                for frame_index in range(self.frame_range["start"], self.frame_range["end"])
+            ]
+            if source.fps is not None
+            else [None] * (self.frame_range["end"] - self.frame_range["start"])
+        )
+        if [frame.offset_ms for frame in self.lanes[0].frames] != expected_offsets:
+            raise ValueError("playback timing does not match source fps")
+        if failure.run_id not in {lane.run_id for lane in self.lanes}:
+            raise ValueError("playback anchor event does not belong to either lane")
+        for lane in self.lanes:
+            if run_ids.get(lane.variant) != lane.run_id:
+                raise ValueError("playback lane run_id does not match verified comparison")
+
+    @classmethod
+    def create(cls, **values: Any) -> FailurePlayback:
+        lanes = tuple(
+            item if isinstance(item, PlaybackLane) else PlaybackLane.from_dict(item)
+            for item in values["lanes"]
+        )
+        content = {
+            **values,
+            "lanes": [lane.to_dict() for lane in lanes],
+            "schema_version": SCHEMA_VERSION,
+        }
+        return cls(
+            playback_id=sha256_json(content),
+            lanes=lanes,  # type: ignore[arg-type]
+            **{key: value for key, value in values.items() if key != "lanes"},
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class DecisionRecord(ContractRecord):
     """One explicit human decision over an exact verified Lab report."""
 

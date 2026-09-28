@@ -89,6 +89,9 @@ The first local workflow and its versioned records are defined in
       reports authoritative at stable, dataset-specific URLs.
 - [x] Bring the generated dataset-report template into the current visual system
       without turning generated evidence into hand-maintained React content.
+- [x] Define the content-addressed synchronized failure-playback contract with
+      paired timing grids, explicit missing/redacted media, and full local
+      report/run lineage before adding playback UI or video decoding.
 - [x] Ship the first versioned, strictly validated, read-only benchmark explorer
       slice without replacing the generated reports.
 - [x] Export structured experiment results as canonical schema-v1 benchmark

@@ -139,6 +139,25 @@ the exact JavaScript canonicalization and hashing module used by React. Both
 must produce identical fingerprints, Unicode-preserving canonical JSON, and
 newline-terminated file bytes.
 
+### Synchronized failure-playback contract
+
+`PlaybackFrame`, `PlaybackLane`, and `FailurePlayback` define the first
+read-only playback boundary. A playback compares exactly one baseline and one
+variant over the same bounded, complete frame range. Both lanes must use the
+same frame indices and timing offsets; lineage verification derives those
+offsets from the source FPS when it is known.
+
+Every frame is explicitly `available` or `missing`. Missing frames cannot carry
+a path, hash, or privacy label. Available frames reference only a safe local
+POSIX-relative path and a SHA-256 digest, and declare `source_pixels`,
+`redacted`, or `synthetic` privacy. Redaction is therefore visible contract
+data rather than something inferred by the UI.
+
+The playback record is content-addressed and revalidates the experiment,
+source, comparison, report, anchor-event, baseline, variant, and run IDs. It
+does not read pixels, decode video, open URLs, write files, persist identity,
+or select a winning variant.
+
 ## Reliability Lab decisions
 
 ```python
