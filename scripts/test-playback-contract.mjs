@@ -9,6 +9,7 @@ import {
   validatePlaybackReportLineage,
   verifyFailurePlayback,
 } from "../src/features/reliability-lab/playback-contract.mjs"
+import { verifyPlaybackLaneFiles } from "../src/features/reliability-lab/playback-media.mjs"
 
 const fixtureUrl = new URL("../tests/fixtures/lab_playback_conformance.json", import.meta.url)
 const fixture = JSON.parse(await readFile(fixtureUrl, "utf8"))
@@ -67,4 +68,25 @@ for (const [index, report] of invalidLineage.entries()) {
   assert.equal(validatePlaybackReportLineage(valid, report).valid, false, `invalid lineage ${index}`)
 }
 
-console.log(`Playback contract conformance passed for ${fixture.vectors.length} vectors, ${invalid.length} invalid records, and ${invalidLineage.length} invalid lineages.`)
+const png = new Uint8Array(33)
+png.set([137, 80, 78, 71, 13, 10, 26, 10], 0)
+new DataView(png.buffer).setUint32(8, 13)
+png.set([73, 72, 68, 82], 12)
+new DataView(png.buffer).setUint32(16, 2)
+new DataView(png.buffer).setUint32(20, 2)
+const pngHash = await sha256Text(String.fromCharCode(...png))
+const digest = await globalThis.crypto.subtle.digest("SHA-256", png)
+const expectedHash = Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("")
+assert.notEqual(pngHash, expectedHash, "binary hashing must not use text encoding")
+const mediaLane = {
+  variant: "candidate",
+  run_id: "9".repeat(64),
+  frames: [{ status: "available", relative_path: "runs/candidate/evidence/event/frame-000001.png", image_sha256: expectedHash }],
+}
+const file = { name: "frame-000001.png", type: "image/png", size: png.length, arrayBuffer: async () => png.buffer }
+const verifiedMedia = await verifyPlaybackLaneFiles([file], mediaLane)
+assert.equal(verifiedMedia.files.get(mediaLane.frames[0].relative_path), file)
+await assert.rejects(() => verifyPlaybackLaneFiles([{ ...file, name: "wrong.png" }], mediaLane), /exactly match/)
+await assert.rejects(() => verifyPlaybackLaneFiles([{ ...file, arrayBuffer: async () => new Uint8Array(33).buffer }], mediaLane), /SHA-256/)
+
+console.log(`Playback contract conformance passed for ${fixture.vectors.length} vectors, ${invalid.length} invalid records, ${invalidLineage.length} invalid lineages, and verified local PNG selection.`)

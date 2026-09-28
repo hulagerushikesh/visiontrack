@@ -184,6 +184,17 @@ report/experiment/source/comparison lineage, baseline and variant run IDs,
 anchor event, and evidence window. It then displays metadata only; relative
 media paths are not resolved and no image or video bytes are read.
 
+Optional playback media selection is lane-scoped. The user explicitly selects
+all declared PNGs for one lane; the browser requires an exact filename set,
+checks every SHA-256 digest and bounded PNG header, and retains verified `File`
+objects in memory. Both lanes share one manual frame cursor. Every image stays
+concealed until its own reveal action, including redacted and synthetic media,
+and unredacted `source_pixels` is visibly distinguished. Object URLs are
+revoked on replacement and unmount. Manual previous/next, scrubber, restart,
+play/pause, and 0.5×/1×/2× controls move both lanes over the verified window.
+Timed playback uses declared offsets when available, stays bounded, stops all
+timers on pause or unmount, and is disabled when reduced motion is preferred.
+
 Playback interoperability is locked by
 `tests/fixtures/lab_playback_conformance.json`. Python and the browser verify
 the same known- and unknown-timing records, content fingerprints, canonical

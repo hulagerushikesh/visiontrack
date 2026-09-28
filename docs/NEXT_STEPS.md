@@ -105,6 +105,12 @@ The first local workflow and its versioned records are defined in
 - [x] Add deliberate local playback JSON selection to the React Lab with strict
       active-report lineage verification and metadata-only timing, lane,
       privacy, availability, and missing-frame views.
+- [x] Verify explicit lane-scoped playback PNG selections by exact filename,
+      SHA-256, and bounded PNG structure; add synchronized manual stepping,
+      concealed pixels, explicit reveal, and object-URL cleanup.
+- [x] Add deterministic synchronized play, pause, restart, scrub, and rate
+      controls with verified timing, bounded timers, reduced-motion handling,
+      and no automatic pixel reveal.
 - [x] Ship the first versioned, strictly validated, read-only benchmark explorer
       slice without replacing the generated reports.
 - [x] Export structured experiment results as canonical schema-v1 benchmark

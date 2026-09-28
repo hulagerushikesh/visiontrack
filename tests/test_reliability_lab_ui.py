@@ -228,12 +228,59 @@ def test_lab_playback_ui_is_explicit_private_and_metadata_only() -> None:
     assert "Source pixels" in component
     assert "Redacted" in component
     assert "Synthetic" in component
-    assert "No paths were resolved and no image or video bytes were read." in component
+    assert "Optional PNGs are read only after deliberate local selection" in component
     assert 'enabled={origin.kind === "file"}' in component
     assert "Nothing is uploaded, persisted, or written into the bundle." in component
     assert "fetch(" not in playback
     assert "localStorage" not in component
     assert "sessionStorage" not in component
+
+
+def test_lab_playback_media_selection_verifies_exact_local_png_sets() -> None:
+    media = (ROOT / "src/features/reliability-lab/playback-media.mjs").read_text()
+    component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+
+    assert "export async function verifyPlaybackLaneFiles" in media
+    assert "The selected PNG filenames do not exactly match this playback lane." in media
+    assert "failed SHA-256 verification" in media
+    assert "is not a bounded PNG image" in media
+    assert "globalThis.crypto.subtle.digest" in media
+    assert "Select lane PNGs" in component
+    assert 'multiple accept="image/png,.png"' in component
+    assert "webkitdirectory" not in component
+    assert "fetch(" not in media
+    assert "FormData" not in media
+
+
+def test_lab_playback_media_steps_in_sync_and_reveals_deliberately() -> None:
+    component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+
+    assert "function PlaybackMediaInspector" in component
+    assert 'aria-label="Synchronized playback frame"' in component
+    assert "setFrameIndex((value) => value - 1)" in component
+    assert "setFrameIndex((value) => value + 1)" in component
+    assert "Verified pixels remain concealed" in component
+    assert "Reveal source pixels" in component
+    assert "URL.createObjectURL(file)" in component
+    assert "URL.revokeObjectURL(url)" in component
+    assert "Changing a lane selection revokes every revealed object URL" in component
+    assert "No automatic reveal" in component
+
+
+def test_lab_playback_transport_is_bounded_accessible_and_motion_safe() -> None:
+    component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+
+    assert "const [playing, setPlaying] = useState(false)" in component
+    assert "const [rate, setRate] = useState(1)" in component
+    assert "window.setTimeout" in component
+    assert "window.clearTimeout(timer)" in component
+    assert "Math.min(value + 1, end - 1)" in component
+    assert 'aria-label="Playback rate"' in component
+    assert 'role="status"' in component
+    assert "Automatic playback is disabled by your reduced-motion preference" in component
+    assert "Manual stepping remains available" in component
+    assert "setPlaying(false)" in component
+    assert "Reveal source pixels" in component
 
 
 def test_lab_decision_ui_has_missing_invalid_and_verified_states() -> None:
