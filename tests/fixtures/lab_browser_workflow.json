@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "report": {
+    "schema_version": 1,
+    "report_id": "4444444444444444444444444444444444444444444444444444444444444444",
+    "comparison_id": "3333333333333333333333333333333333333333333333333333333333333333",
+    "experiment": {
+      "experiment_id": "1111111111111111111111111111111111111111111111111111111111111111",
+      "created_at": "2026-01-01T00:00:00Z",
+      "baseline": "baseline",
+      "frame_range": {"start": 0, "end": 3},
+      "visiontrack_version": "0.2.0",
+      "git_revision": null
+    },
+    "source": {
+      "source_id": "2222222222222222222222222222222222222222222222222222222222222222",
+      "name": "Synthetic browser workflow",
+      "kind": "synthetic",
+      "frame_count": 3,
+      "width": 1,
+      "height": 1,
+      "fps": 25,
+      "detector": {"name": "fixture"},
+      "detection_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "ground_truth_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "video_sha256": null,
+      "video_status": "not_declared"
+    },
+    "variants": [
+      {
+        "name": "baseline",
+        "baseline": true,
+        "configuration": {"name": "baseline"},
+        "run_id": "6666666666666666666666666666666666666666666666666666666666666666",
+        "diagnostics": {"observations": 1},
+        "diagnostic_deltas": {"observations": 0},
+        "metrics": {"HOTA": 0.5},
+        "metric_deltas": {"HOTA": 0},
+        "failure_counts": {"id_switch": 0, "fragmentation": 0, "miss": 0, "false_positive": 0},
+        "failure_set": {"event_count": 0, "failure_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "run_id": "6666666666666666666666666666666666666666666666666666666666666666", "metric_id": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "track_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "ground_truth_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"}
+      },
+      {
+        "name": "candidate",
+        "baseline": false,
+        "configuration": {"name": "candidate"},
+        "run_id": "7777777777777777777777777777777777777777777777777777777777777777",
+        "diagnostics": {"observations": 1},
+        "diagnostic_deltas": {"observations": 0},
+        "metrics": {"HOTA": 0.5},
+        "metric_deltas": {"HOTA": 0},
+        "failure_counts": {"id_switch": 0, "fragmentation": 0, "miss": 1, "false_positive": 0},
+        "failure_set": {"event_count": 1, "failure_sha256": "abababababababababababababababababababababababababababababababab", "run_id": "7777777777777777777777777777777777777777777777777777777777777777", "metric_id": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd", "track_sha256": "dededededededededededededededededededededededededededededededede", "ground_truth_sha256": "efefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefef"}
+      }
+    ],
+    "failures": [{"variant": "candidate", "event_id": "5555555555555555555555555555555555555555555555555555555555555555", "run_id": "7777777777777777777777777777777777777777777777777777777777777777", "frame_index": 1, "event_type": "miss", "track_ids": [], "ground_truth_ids": [1], "context": {"fixture": true}, "evidence_frames": {"start": 0, "end": 3}, "schema_version": 1}],
+    "failure_event_total": 1,
+    "failure_event_displayed": 1,
+    "failure_events_truncated": false,
+    "decision": {"status": "not_selected", "accepted_variant": null, "reason": "requires_human_acceptance_decision"},
+    "limitations": ["Synthetic acceptance fixture only."]
+  },
+  "playback_content": {
+    "experiment_id": "1111111111111111111111111111111111111111111111111111111111111111",
+    "source_id": "2222222222222222222222222222222222222222222222222222222222222222",
+    "comparison_id": "3333333333333333333333333333333333333333333333333333333333333333",
+    "report_id": "4444444444444444444444444444444444444444444444444444444444444444",
+    "anchor_event_id": "5555555555555555555555555555555555555555555555555555555555555555",
+    "event_frame_index": 1,
+    "frame_range": {"start": 0, "end": 3},
+    "baseline": "baseline",
+    "variant": "candidate",
+    "lanes": [
+      {"variant": "baseline", "run_id": "6666666666666666666666666666666666666666666666666666666666666666", "frames": [{"frame_index": 0, "offset_ms": 0, "status": "available", "relative_path": "runs/baseline/evidence/event/baseline-000000.png", "image_sha256": "608dc81d263bafa29fc1d12f624129c86fcfc585392a35507b67eaf84e6253d6", "privacy": "synthetic", "schema_version": 1}, {"frame_index": 1, "offset_ms": 40, "status": "missing", "relative_path": null, "image_sha256": null, "privacy": null, "schema_version": 1}, {"frame_index": 2, "offset_ms": 80, "status": "missing", "relative_path": null, "image_sha256": null, "privacy": null, "schema_version": 1}], "schema_version": 1},
+      {"variant": "candidate", "run_id": "7777777777777777777777777777777777777777777777777777777777777777", "frames": [{"frame_index": 0, "offset_ms": 0, "status": "missing", "relative_path": null, "image_sha256": null, "privacy": null, "schema_version": 1}, {"frame_index": 1, "offset_ms": 40, "status": "available", "relative_path": "runs/candidate/evidence/event/candidate-000001.png", "image_sha256": "608dc81d263bafa29fc1d12f624129c86fcfc585392a35507b67eaf84e6253d6", "privacy": "source_pixels", "schema_version": 1}, {"frame_index": 2, "offset_ms": 80, "status": "missing", "relative_path": null, "image_sha256": null, "privacy": null, "schema_version": 1}], "schema_version": 1}
+    ],
+    "schema_version": 1
+  },
+  "lane_files": {
+    "baseline": [{"name": "baseline-000000.png", "media_type": "image/png", "base64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Y9Z4xkAAAAASUVORK5CYII="}],
+    "candidate": [{"name": "candidate-000001.png", "media_type": "image/png", "base64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Y9Z4xkAAAAASUVORK5CYII="}]
+  }
+}
