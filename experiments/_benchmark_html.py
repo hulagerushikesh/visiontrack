@@ -136,24 +136,30 @@ def render_html(rep) -> str:
 <link rel="stylesheet" href="/assets/site.css">
 <script defer src="/assets/site.js"></script></head><body>
 {_NAV}
-<main class="wrap benchmark-page">
-<p class="eyebrow">VisionTrack · honest MOT benchmark</p>
+<main class="benchmark-page">
+<header class="report-hero"><div class="report-shell">
+<div class="report-kicker"><p class="eyebrow">Generated evidence · honest MOT benchmark</p><a href="/benchmark">All results →</a></div>
 <h1>Tracker comparison — {html.escape(rep.dataset)}</h1>
+<p class="report-lede">A complete generated leaderboard with paired significance and an ID-switch failure taxonomy. Values on this page come directly from the declared benchmark artifact.</p>
+<div class="report-actions"><a class="btn primary" href="/benchmark/explorer">Explore structured results</a><a class="btn ghost" href="/writeup">Read the research</a></div>
 {_DATASET_TABS}
-<div class="meta">{meta_chips}</div>
+</div></header>
+<div class="report-shell report-content">
+<section class="report-protocol" aria-label="Benchmark protocol"><div class="meta">{meta_chips}</div>
 <p class="note">Every tracker sees identical detections and seeds, so Δ vs the
 baseline is a paired comparison (Wilcoxon <span class="sig">*</span> = p&lt;0.05).
-🏆-highlighted cell = best tracker for that metric.</p>
-<h2>Leaderboard</h2>
-<div class="scroll"><table><thead><tr><th>tracker</th>{head}</tr></thead><tbody>{''.join(rows)}</tbody></table></div>
-<h2>Why <code>{html.escape(rep.baseline)}</code> swaps identities</h2>
+Highlighted cell = best tracker for that metric. The page does not choose a recommended tracker.</p></section>
+<section class="report-section"><div class="report-section-head"><span>01</span><div><h2>Leaderboard</h2><p>Published means, spread for the baseline, paired deltas, and significance.</p></div></div>
+<div class="scroll"><table><thead><tr><th>tracker</th>{head}</tr></thead><tbody>{''.join(rows)}</tbody></table></div></section>
+<section class="report-section"><div class="report-section-head"><span>02</span><div><h2>Why <code>{html.escape(rep.baseline)}</code> swaps identities</h2><p>Local scene conditions reveal where association failures are over-represented.</p></div></div>
 <p class="note">{m['idsw_classified']} ID switches classified by local scene
 condition. <b>Lift</b> = P(condition | switch) / P(condition | any GT); &gt;1 means
 switches are over-represented there — the failure mode to attack.</p>
 <div class="scroll"><table><thead><tr><th>condition</th><th>% of switches</th>
 <th>base rate</th><th>lift</th><th>over-representation</th></tr></thead>
-<tbody>{''.join(tax)}</tbody></table></div>
-<p class="note" style="margin-top:22px">Reproduce: <code>python -m experiments.benchmark</code></p>
+<tbody>{''.join(tax)}</tbody></table></div></section>
+<aside class="report-reproduce"><div><span>Reproduce this evidence</span><p>The command regenerates the leaderboard, taxonomy, HTML, Markdown, and canonical schema-v1 JSON from the same benchmark run.</p></div><code>python -m experiments.benchmark</code></aside>
+</div>
 </main>
 {_FOOTER}
 </body></html>"""
