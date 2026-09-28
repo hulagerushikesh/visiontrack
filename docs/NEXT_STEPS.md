@@ -99,6 +99,9 @@ The first local workflow and its versioned records are defined in
       lane gaps, privacy counts, complete fingerprints, and no write mode.
 - [x] Lock playback fingerprints, canonical bytes, strict structure, timing,
       privacy, and local-path semantics across Python and the browser in CI.
+- [x] Add an explicit playback JSON export that writes only canonical contract
+      bytes to standard output, keeps errors on standard error, and never
+      mutates the sealed bundle.
 - [x] Ship the first versioned, strictly validated, read-only benchmark explorer
       slice without replacing the generated reports.
 - [x] Export structured experiment results as canonical schema-v1 benchmark

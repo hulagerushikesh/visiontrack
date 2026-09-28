@@ -88,6 +88,7 @@ visiontrack lab-decision-import BUNDLE ./Downloads/decision.json --write
 visiontrack lab-demo ./lab-onboarding              # preview only
 visiontrack lab-demo ./lab-onboarding --write      # create complete bundle
 visiontrack lab-playback BUNDLE EVENT_ID --variant appearance
+visiontrack lab-playback BUNDLE EVENT_ID --variant appearance --json > playback.json
 ```
 
 `lab-evidence` accepts only explicit `FRAME=PNG_PATH` inputs and prints the
@@ -172,7 +173,10 @@ remain valid evidence but are not silently promoted to playback frames.
 preview. It prints the frame and timing window, baseline and variant names,
 per-lane available/missing counts, privacy counts, run IDs, report ID, and
 playback fingerprint. The command has no write mode and never prints media
-paths or pixel data.
+paths or pixel data. With `--json`, it instead emits exactly one canonical
+playback record to standard output and no status text. Failures remain on
+standard error. The command itself still writes nothing; the caller may use
+explicit shell redirection to create a local `playback.json`.
 
 Playback interoperability is locked by
 `tests/fixtures/lab_playback_conformance.json`. Python and the browser verify

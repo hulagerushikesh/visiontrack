@@ -240,6 +240,42 @@ def test_lab_playback_cli_previews_counts_and_never_writes(
     assert after == before
 
 
+def test_lab_playback_cli_emits_only_canonical_json_and_never_writes(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    bundle = _bundle(tmp_path)
+    event_id = _add_evidence(bundle, "patient")
+    generate_local_report(bundle)
+    expected = build_failure_playback(bundle, event_id=event_id, variant="patient")
+    before = {
+        path.relative_to(bundle): path.read_bytes()
+        for path in bundle.rglob("*")
+        if path.is_file()
+    }
+
+    result = cli_main(
+        [
+            "lab-playback",
+            str(bundle),
+            event_id,
+            "--variant",
+            "patient",
+            "--json",
+        ]
+    )
+    output = capsys.readouterr()
+
+    assert result == 0
+    assert output.out == expected.to_json() + "\n"
+    assert output.err == ""
+    after = {
+        path.relative_to(bundle): path.read_bytes()
+        for path in bundle.rglob("*")
+        if path.is_file()
+    }
+    assert after == before
+
+
 def test_lab_playback_cli_reports_invalid_requests_without_traceback(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
@@ -248,7 +284,14 @@ def test_lab_playback_cli_reports_invalid_requests_without_traceback(
 
     assert (
         cli_main(
-            ["lab-playback", str(bundle), "f" * 64, "--variant", "patient"]
+            [
+                "lab-playback",
+                str(bundle),
+                "f" * 64,
+                "--variant",
+                "patient",
+                "--json",
+            ]
         )
         == 2
     )
