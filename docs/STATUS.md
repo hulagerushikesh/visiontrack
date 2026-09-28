@@ -75,7 +75,7 @@ published to PyPI).
       use-cases, the controlled study demoted to an "under the hood" section
 
 ### Quality / infra
-- [x] 551 tests passing (1 slow, opt-in) · ruff clean · CI on py3.10/3.11/3.12
+- [x] 553 tests passing (1 slow, opt-in) · ruff clean · CI on py3.10/3.11/3.12
 - [x] Batched Kalman hot path — per-frame predict + Mahalanobis gating run as one
       `(N, 8)` NumPy call over the whole track set: ~1.4–1.5× faster, bit-identical
       (2841 → 294 FPS across 4–64 objects; MOTA/IDSW unchanged)

@@ -179,6 +179,11 @@ Python and browser decision records are locked to shared conformance vectors.
 Run `npm run test:decision-contract` to verify exact fingerprints, canonical
 JSON, Unicode handling, UTC forms, and downloaded file bytes.
 
+Python and browser playback records are likewise locked to shared known-timing
+and unknown-timing vectors. `npm run test:playback-contract` verifies exact
+fingerprints and serialized bytes while rejecting remote paths, incomplete
+lanes, timing drift, and ambiguous missing-frame metadata.
+
 `lab-demo` provides a dataset-free Reliability Lab walkthrough. It previews a
 fixed synthetic comparison without writing, then `--write` creates a complete
 verified bundle and prints the `report.json` path to import at `/lab`. The
@@ -226,7 +231,7 @@ Every run is pinned by a config hash; bootstrap resampling and synthetic scenes 
 ## Engineering
 
 - **Zero ML-framework dependency in the core** — just NumPy. Heavy/optional deps (`scipy`, `pandas`, `matplotlib`, `pillow`, `onnxruntime`, `torch`) are isolated in extras (`[experiments]`, `[appearance]`, `[onnx]`) and lazily imported; nothing in `core/` imports them.
-- **551 tests**: unit, property (Hungarian vs SciPy), convergence (Kalman), metric cross-checks (HOTA/IDF1 vs `trackeval`), video/webcam pipelines, the benchmarking tool, product-surface contracts, and end-to-end integration with a MOTA floor.
+- **553 tests**: unit, property (Hungarian vs SciPy), convergence (Kalman), metric cross-checks (HOTA/IDF1 vs `trackeval`), video/webcam pipelines, the benchmarking tool, product-surface contracts, and end-to-end integration with a MOTA floor.
 - **CI** on Python 3.10/3.11/3.12 + ruff.
 
 ```

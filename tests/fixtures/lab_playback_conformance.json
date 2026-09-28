@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "vectors": [
+    {
+      "name": "known_timing_mixed_privacy",
+      "values": {
+        "experiment_id": "1111111111111111111111111111111111111111111111111111111111111111",
+        "source_id": "2222222222222222222222222222222222222222222222222222222222222222",
+        "comparison_id": "3333333333333333333333333333333333333333333333333333333333333333",
+        "report_id": "4444444444444444444444444444444444444444444444444444444444444444",
+        "anchor_event_id": "5555555555555555555555555555555555555555555555555555555555555555",
+        "event_frame_index": 5,
+        "frame_range": {"start": 4, "end": 7},
+        "baseline": "bytetrack",
+        "variant": "appearance-v2",
+        "lanes": [
+          {
+            "variant": "bytetrack",
+            "run_id": "6666666666666666666666666666666666666666666666666666666666666666",
+            "frames": [
+              {"frame_index": 4, "offset_ms": 0, "status": "available", "relative_path": "runs/bytetrack/evidence/event/frame-000004.png", "image_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "privacy": "redacted", "schema_version": 1},
+              {"frame_index": 5, "offset_ms": 40, "status": "missing", "relative_path": null, "image_sha256": null, "privacy": null, "schema_version": 1},
+              {"frame_index": 6, "offset_ms": 80, "status": "available", "relative_path": "runs/bytetrack/evidence/event/frame-000006.png", "image_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "privacy": "source_pixels", "schema_version": 1}
+            ],
+            "schema_version": 1
+          },
+          {
+            "variant": "appearance-v2",
+            "run_id": "7777777777777777777777777777777777777777777777777777777777777777",
+            "frames": [
+              {"frame_index": 4, "offset_ms": 0, "status": "available", "relative_path": "runs/appearance-v2/evidence/event/frame-000004.png", "image_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "privacy": "synthetic", "schema_version": 1},
+              {"frame_index": 5, "offset_ms": 40, "status": "available", "relative_path": "runs/appearance-v2/evidence/event/frame-000005.png", "image_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "privacy": "synthetic", "schema_version": 1},
+              {"frame_index": 6, "offset_ms": 80, "status": "missing", "relative_path": null, "image_sha256": null, "privacy": null, "schema_version": 1}
+            ],
+            "schema_version": 1
+          }
+        ]
+      },
+      "playback_id": "be54aab53f48ff4b081eec85e9c40e3d382ccf7b1b50ed561998333078325f8a",
+      "canonical_sha256": "a54ccfb9e8eebda17b9121bb8bedff82f6584d7043fa486a369533e0791cc743",
+      "file_sha256": "b76328ed28da0805e1500575786fec2216f2f46e265e688c698d703987073600"
+    },
+    {
+      "name": "unknown_timing_all_missing",
+      "values": {
+        "experiment_id": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "source_id": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "comparison_id": "abababababababababababababababababababababababababababababababab",
+        "report_id": "bcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbcbc",
+        "anchor_event_id": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+        "event_frame_index": 0,
+        "frame_range": {"start": 0, "end": 2},
+        "baseline": "baseline",
+        "variant": "candidate",
+        "lanes": [
+          {
+            "variant": "baseline",
+            "run_id": "dededededededededededededededededededededededededededededededede",
+            "frames": [
+              {"frame_index": 0, "offset_ms": null, "status": "missing", "relative_path": null, "image_sha256": null, "privacy": null, "schema_version": 1},
+              {"frame_index": 1, "offset_ms": null, "status": "missing", "relative_path": null, "image_sha256": null, "privacy": null, "schema_version": 1}
+            ],
+            "schema_version": 1
+          },
+          {
+            "variant": "candidate",
+            "run_id": "efefefefefefefefefefefefefefefefefefefefefefefefefefefefefefefef",
+            "frames": [
+              {"frame_index": 0, "offset_ms": null, "status": "missing", "relative_path": null, "image_sha256": null, "privacy": null, "schema_version": 1},
+              {"frame_index": 1, "offset_ms": null, "status": "missing", "relative_path": null, "image_sha256": null, "privacy": null, "schema_version": 1}
+            ],
+            "schema_version": 1
+          }
+        ]
+      },
+      "playback_id": "d0cff699ce5a53ff601a720ba7477fc4c4771669e4b7879d0ae2726386ac967a",
+      "canonical_sha256": "83014d85d539f3266423cd33f3937afd893399bd89b2d7ad4347db2a7dca2f9c",
+      "file_sha256": "df7fb5b5f102146f09da0aed709eccdf1b82c3ec3af2c5619e62f7a53463dd95"
+    }
+  ]
+}
