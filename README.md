@@ -151,13 +151,14 @@ visiontrack lab-decision-import BUNDLE ./Downloads/decision.json  # preview only
 visiontrack lab-decision-import BUNDLE ./Downloads/decision.json --write
 visiontrack lab-demo ./lab-onboarding                  # preview only
 visiontrack lab-demo ./lab-onboarding --write          # create verified bundle
+visiontrack lab-playback BUNDLE EVENT_ID --variant appearance  # metadata only
 ```
 
 `lab-evidence` previews only by default; add `--write` after checking its crop,
 privacy class, and limits. `lab-decision` likewise previews the exact choice and
 verified lineage before `--write` creates `decision.json`. CLI subcommands:
 `demo`, `eval`, `ablate`, `track`, `webcam`, `lab-evidence`, `lab-decision`,
-`lab-decision-import`, `lab-demo`.
+`lab-decision-import`, `lab-demo`, `lab-playback`.
 Full public API: [docs/API.md](docs/API.md) ·
 packaging/release: [docs/RELEASE.md](docs/RELEASE.md).
 
@@ -182,6 +183,10 @@ JSON, Unicode handling, UTC forms, and downloaded file bytes.
 fixed synthetic comparison without writing, then `--write` creates a complete
 verified bundle and prints the `report.json` path to import at `/lab`. The
 output root must be new and is never reused or overwritten.
+
+`lab-playback` is metadata-only. It revalidates the sealed report and selected
+failure window, then prints synchronized lane availability, privacy counts, and
+complete fingerprints without displaying pixels or writing to the bundle.
 
 The first data-driven results slice is available at
 [`/benchmark/explorer`](https://visiontrack.hulage.in/benchmark/explorer). It
@@ -221,7 +226,7 @@ Every run is pinned by a config hash; bootstrap resampling and synthetic scenes 
 ## Engineering
 
 - **Zero ML-framework dependency in the core** — just NumPy. Heavy/optional deps (`scipy`, `pandas`, `matplotlib`, `pillow`, `onnxruntime`, `torch`) are isolated in extras (`[experiments]`, `[appearance]`, `[onnx]`) and lazily imported; nothing in `core/` imports them.
-- **549 tests**: unit, property (Hungarian vs SciPy), convergence (Kalman), metric cross-checks (HOTA/IDF1 vs `trackeval`), video/webcam pipelines, the benchmarking tool, product-surface contracts, and end-to-end integration with a MOTA floor.
+- **551 tests**: unit, property (Hungarian vs SciPy), convergence (Kalman), metric cross-checks (HOTA/IDF1 vs `trackeval`), video/webcam pipelines, the benchmarking tool, product-surface contracts, and end-to-end integration with a MOTA floor.
 - **CI** on Python 3.10/3.11/3.12 + ruff.
 
 ```

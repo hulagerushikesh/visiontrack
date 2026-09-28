@@ -1279,15 +1279,25 @@ other frame as an explicit missing slot. Crop-only evidence remains evidence
 but is never stretched into playback. Construction is deterministic and
 read-only: tests verify that every bundle file and byte remains unchanged.
 
+## Completed implementation increment: playback CLI preview
+
+`visiontrack lab-playback BUNDLE EVENT_ID --variant NAME` now exposes the
+verified builder as a metadata-only terminal workflow. It prints the exact
+event and timing window, baseline and variant, per-lane available and missing
+counts, privacy counts, run and report lineage, and the playback fingerprint.
+The command has no write flag, does not print artifact paths, and never decodes
+or displays pixels. CLI tests snapshot the bundle before and after execution
+and require every file byte to remain unchanged.
+
 ## Next implementation increment
 
-Expose this builder through a preview-only `visiontrack lab-playback` command.
-The command should print the exact event, variants, timing window, available,
-missing, and privacy counts plus the playback fingerprint. It must not write a
-manifest, copy media, decode video, reveal pixels, or accept remote paths.
+Lock `FailurePlayback` canonical serialization across Python and the browser
+with shared conformance fixtures and a strict TypeScript validator. This should
+establish the safe input boundary for a later React playback panel before any
+local image selection or rendering is introduced.
 
-Playback UI, collaborative review, remote storage, and raw video decoding
-remain later increments.
+Playback UI, local pixel selection, collaborative review, remote storage, and
+raw video decoding remain later increments.
 
 ## Acceptance criteria
 

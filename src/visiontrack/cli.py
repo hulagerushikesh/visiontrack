@@ -19,6 +19,8 @@ Subcommands
     Preview or immutably import one browser-downloaded Lab decision.
 ``lab-demo``
     Preview or create a complete deterministic synthetic Lab bundle.
+``lab-playback``
+    Preview synchronized failure-playback metadata without revealing pixels.
 
 The demo, default evaluation, and ablation commands use the built-in synthetic
 generator, so ``visiontrack demo`` works without model or video downloads.
@@ -579,6 +581,55 @@ def cmd_lab_demo(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_lab_playback(args: argparse.Namespace) -> int:
+    """Preview one synchronized failure window without displaying media."""
+    from .lab import build_failure_playback
+
+    try:
+        playback = build_failure_playback(
+            args.bundle,
+            event_id=args.event_id,
+            variant=args.variant,
+        )
+    except (OSError, ValueError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+
+    start, end = playback.frame_range["start"], playback.frame_range["end"]
+    offsets = [frame.offset_ms for frame in playback.lanes[0].frames]
+    timing = (
+        "unknown"
+        if any(offset is None for offset in offsets)
+        else f"{offsets[0]}–{offsets[-1]} ms"
+    )
+    print("Synchronized failure playback preview")
+    print(f"  bundle: {args.bundle}")
+    print(f"  event: {playback.anchor_event_id}")
+    print(f"  event frame: {playback.event_frame_index}")
+    print(f"  frame window: {start}–{end - 1} ({end - start} frames)")
+    print(f"  timing: {timing}")
+    print(f"  baseline: {playback.baseline}")
+    print(f"  variant: {playback.variant}")
+    for lane in playback.lanes:
+        available = sum(frame.status == "available" for frame in lane.frames)
+        missing = len(lane.frames) - available
+        privacy = {
+            label: sum(frame.privacy == label for frame in lane.frames)
+            for label in ("source_pixels", "redacted", "synthetic")
+        }
+        print(f"  lane {lane.variant}: {available} available, {missing} missing")
+        print(
+            "    privacy: "
+            f"{privacy['source_pixels']} source_pixels, "
+            f"{privacy['redacted']} redacted, {privacy['synthetic']} synthetic"
+        )
+        print(f"    run: {lane.run_id}")
+    print(f"  report: {playback.report_id}")
+    print(f"  playback: {playback.playback_id}")
+    print("Preview only; no media was decoded or displayed and nothing was written.")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="visiontrack", description="Online multi-object tracking demo & evaluation"
@@ -770,6 +821,19 @@ def build_parser() -> argparse.ArgumentParser:
         help="create the previewed bundle; without this flag nothing is written",
     )
     p_lab_demo.set_defaults(func=cmd_lab_demo)
+
+    p_lab_playback = sub.add_parser(
+        "lab-playback",
+        help="preview synchronized local failure-playback metadata",
+    )
+    p_lab_playback.add_argument("bundle", help="sealed Reliability Lab bundle directory")
+    p_lab_playback.add_argument("event_id", help="failure-event fingerprint from report.json")
+    p_lab_playback.add_argument(
+        "--variant",
+        required=True,
+        help="declared non-baseline variant to compare with the baseline",
+    )
+    p_lab_playback.set_defaults(func=cmd_lab_playback)
 
     return parser
 

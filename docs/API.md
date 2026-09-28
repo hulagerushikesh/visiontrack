@@ -87,6 +87,7 @@ visiontrack lab-decision-import BUNDLE ./Downloads/decision.json  # preview only
 visiontrack lab-decision-import BUNDLE ./Downloads/decision.json --write
 visiontrack lab-demo ./lab-onboarding              # preview only
 visiontrack lab-demo ./lab-onboarding --write      # create complete bundle
+visiontrack lab-playback BUNDLE EVENT_ID --variant appearance
 ```
 
 `lab-evidence` accepts only explicit `FRAME=PNG_PATH` inputs and prints the
@@ -166,6 +167,12 @@ pair. A counterpart is paired only when its frame, failure type, ground-truth
 IDs, and evidence window match; otherwise that lane remains explicitly
 missing. Only declared, verified full-frame artifacts are referenced. Crops
 remain valid evidence but are not silently promoted to playback frames.
+
+`visiontrack lab-playback` exposes the same builder as a metadata-only terminal
+preview. It prints the frame and timing window, baseline and variant names,
+per-lane available/missing counts, privacy counts, run IDs, report ID, and
+playback fingerprint. The command has no write mode and never prints media
+paths or pixel data.
 
 ## Reliability Lab decisions
 
