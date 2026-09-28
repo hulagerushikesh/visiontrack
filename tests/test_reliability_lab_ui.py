@@ -183,6 +183,24 @@ def test_lab_decision_verifies_schema_fingerprint_and_full_lineage() -> None:
     assert "The accepted variant is not present in the active report." in decision
 
 
+def test_lab_playback_contract_is_strict_private_and_checked_in_ci() -> None:
+    playback = (ROOT / "src/features/reliability-lab/playback.ts").read_text()
+    contract = (ROOT / "src/features/reliability-lab/playback-contract.mjs").read_text()
+    package = (ROOT / "package.json").read_text()
+    workflow = (ROOT / ".github/workflows/ci.yml").read_text()
+
+    assert "export async function parseFailurePlayback" in playback
+    assert "verifyFailurePlayback(value)" in playback
+    assert "hasExactFields(value, topFields)" in contract
+    assert "The playback fingerprint does not match its content." in contract
+    assert "The playback lanes are not synchronized" in contract
+    assert "https://" not in contract
+    assert "fetch(" not in playback
+    assert "showDirectoryPicker" not in playback
+    assert '"test:playback-contract"' in package
+    assert "npm run test:playback-contract" in workflow
+
+
 def test_lab_decision_ui_has_missing_invalid_and_verified_states() -> None:
     component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
 

@@ -80,6 +80,8 @@ jobs:
         run: npm ci
       - name: Verify decision contract
         run: npm run test:decision-contract
+      - name: Verify playback contract
+        run: npm run test:playback-contract
       - name: Verify benchmark report contract
         run: npm run test:benchmark-contract
       - name: Verify live tracker contract

@@ -174,6 +174,13 @@ per-lane available/missing counts, privacy counts, run IDs, report ID, and
 playback fingerprint. The command has no write mode and never prints media
 paths or pixel data.
 
+Playback interoperability is locked by
+`tests/fixtures/lab_playback_conformance.json`. Python and the browser verify
+the same known- and unknown-timing records, content fingerprints, canonical
+JSON bytes, and newline-terminated file bytes. The browser boundary additionally
+rejects unknown fields, remote-style paths, incomplete frame grids, lane timing
+drift, invalid privacy declarations, and changed fingerprints.
+
 ## Reliability Lab decisions
 
 ```python

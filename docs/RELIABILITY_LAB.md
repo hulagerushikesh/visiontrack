@@ -1289,12 +1289,25 @@ The command has no write flag, does not print artifact paths, and never decodes
 or displays pixels. CLI tests snapshot the bundle before and after execution
 and require every file byte to remain unchanged.
 
+## Completed implementation increment: browser playback contract
+
+Shared known- and unknown-timing fixtures now lock `FailurePlayback` across
+Python and the browser. Both runtimes must produce the same playback ID,
+canonical JSON hash, and newline-terminated file hash. The strict browser
+validator requires exact fields, safe local paths, bounded complete frame
+grids, paired lane order, distinct runs, synchronized timing, explicit missing
+media, valid privacy classes, and the correct content fingerprint. CI executes
+the same validator intended for the later React boundary and includes negative
+cases for remote paths, partial lanes, timing drift, privacy ambiguity, and
+tampering.
+
 ## Next implementation increment
 
-Lock `FailurePlayback` canonical serialization across Python and the browser
-with shared conformance fixtures and a strict TypeScript validator. This should
-establish the safe input boundary for a later React playback panel before any
-local image selection or rendering is introduced.
+Add an explicit `--json` mode to `visiontrack lab-playback` that emits only the
+canonical playback record to standard output. Human-readable preview remains
+the default. The command itself must still write nothing, and errors must stay
+on standard error so a researcher can deliberately redirect a verified record
+for later browser import without mixing it with status text.
 
 Playback UI, local pixel selection, collaborative review, remote storage, and
 raw video decoding remain later increments.

@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
+from pathlib import Path
+
 import pytest
 
 from visiontrack.lab import (
@@ -215,3 +219,16 @@ def test_playback_window_is_bounded_and_cannot_compare_baseline_to_itself() -> N
     values["variant"] = "baseline"
     with pytest.raises(ValueError, match="differ"):
         FailurePlayback.from_dict(values)
+
+
+def test_playback_conformance_vectors_match_canonical_python_bytes() -> None:
+    fixture_path = Path(__file__).parent / "fixtures/lab_playback_conformance.json"
+    fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+
+    assert fixture["schema_version"] == 1
+    for vector in fixture["vectors"]:
+        playback = FailurePlayback.create(**vector["values"])
+        canonical = playback.to_json().encode()
+        assert playback.playback_id == vector["playback_id"]
+        assert hashlib.sha256(canonical).hexdigest() == vector["canonical_sha256"]
+        assert hashlib.sha256(canonical + b"\n").hexdigest() == vector["file_sha256"]
