@@ -29,7 +29,8 @@ No release tag was created by this audit.
 
 ## Release blockers and follow-ups
 
-- [ ] Choose the exact `0.3.0` scope and write user-facing release notes.
+- [x] Freeze the exact `0.3.0` scope and write user-facing release notes in
+      [`RELEASE_NOTES_0.3.0.md`](RELEASE_NOTES_0.3.0.md).
 - [ ] Update the package version only after the scope is frozen.
 - [ ] Remove the setuptools license-table/classifier deprecation before its
       2027 enforcement date; it is a warning, not a current build failure.
@@ -45,5 +46,6 @@ fixture. That blocker is now closed: both public trackers consume the canonical
 `visiontrack.tracker-parity/v1` fixture in normal CI, and VisionTrack C++ commit
 `b8bc1b1` records strict machine-readable provenance for both implementation
 revisions, the fixture digest, successful CI runs, and the exact local
-reproduction environment. The remaining release hold is product scope and
-release communication, not cross-runtime correctness infrastructure.
+reproduction environment. Product scope and release communication are also now
+closed by the frozen release-candidate notes. Versioning, packaging cleanup,
+final gates, and publication remain deliberately separate steps.

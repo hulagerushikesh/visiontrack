@@ -1,9 +1,9 @@
 # VisionTrack — Status & Roadmap Checklist
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
-Last updated: 2026-10-06 — the Reliability Lab technical alpha, release-readiness
-audit, and first versioned Python/C++ synchronization boundary are reflected
-here; the two remaining research extensions remain **compute-blocked with
+Last updated: 2026-10-06 — the Reliability Lab technical alpha, frozen `0.3.0`
+scope, and versioned Python/C++ synchronization boundary are reflected here;
+the two remaining research extensions remain **compute-blocked with
 measured numbers**, not merely "planned". Previously:
 2026-09-07, SportsMOT oracle numbers landed (45 val sequences, `/benchmark/sportsmot`
 live); v0.2.0 (`/live` in-browser tracker + SportsMOT code path + site redesign,
@@ -230,6 +230,6 @@ independent tracker research.
 
 The local-first Reliability Lab technical alpha is now built and the versioned
 Python/C++ synchronization boundary is executable and provenance-backed. Next:
-freeze the VisionTrack `0.3.0` scope, validate the Lab with practitioners, and
-begin selective anonymous identity-continuity research in Python before any new
-C++ behavior is ported.
+prepare the frozen VisionTrack `0.3.0` candidate for publication, validate the
+Lab with practitioners, and begin selective anonymous identity-continuity
+research in Python before any new C++ behavior is ported.

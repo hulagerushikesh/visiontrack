@@ -18,13 +18,17 @@ optional extras, and a build that produces a valid sdist + wheel
 
 ## Cut a release
 
+For `0.3.0`, first verify every remaining gate in
+[`RELEASE_NOTES_0.3.0.md`](RELEASE_NOTES_0.3.0.md). Freezing scope does not
+authorize a version bump or tag by itself.
+
 ```bash
 # 1. bump the version in BOTH places (they must match):
 #    - pyproject.toml  [project] version
 #    - src/visiontrack/__init__.py  __version__
 # 2. commit, then tag and push the tag:
-git commit -am "release: v0.1.0"
-git tag v0.1.0
+git commit -am "release: v0.3.0"
+git tag v0.3.0
 git push origin main --tags
 ```
 
