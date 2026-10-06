@@ -1383,16 +1383,17 @@ changed in this increment.
 
 ## Next implementation increment
 
-Hold the verified VisionTrack `0.3.0` candidate before the release tag. Both
-package version declarations identify the candidate; the complete Python,
-browser, documentation, distribution, clean-install, and CLI gates pass;
-packaging uses current SPDX/license-file metadata; and documentation passes a
-strict missing-link gate with explicit repository source URLs. The included
-surfaces, research previews, non-goals, and limitations are fixed in
+VisionTrack `0.3.0` is published and verified. Both package version declarations
+identify the release; the complete Python, browser, documentation,
+distribution, clean-install, CLI, and hosted gates pass; packaging uses current
+SPDX/license-file metadata; and documentation passes a strict missing-link gate
+with explicit repository source URLs. The included surfaces, research previews,
+non-goals, and limitations are fixed in
 [`RELEASE_NOTES_0.3.0.md`](RELEASE_NOTES_0.3.0.md).
 
-Collaborative review, remote storage, and raw-video decoding remain later
-increments.
+Next, validate the Reliability Lab problem with tracking practitioners before
+choosing a vertical or expanding into collaborative storage or raw-video
+decoding.
 
 ## Acceptance criteria
 

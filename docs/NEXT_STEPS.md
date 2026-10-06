@@ -147,6 +147,8 @@ The first local workflow and its versioned records are defined in
       packaging gates were frozen; keep tagging and publication separate.
 - [x] Move CI and release workflows to current Node 24-compatible official
       action majors and lock that release-harness policy in tests.
+- [x] Publish `visiontrack-mot 0.3.0` through trusted publishing and verify the
+      tag, GitHub Release, public wheel, sdist, metadata, digests, and attestations.
 - [ ] Interview 5–10 tracking practitioners and collect representative failure
       clips that can legally be evaluated.
 - [ ] Validate the Reliability Lab problem with at least three prospective

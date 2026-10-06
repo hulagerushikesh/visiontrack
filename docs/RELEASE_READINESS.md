@@ -1,23 +1,22 @@
 # VisionTrack release-readiness audit
 
-Audit date: 2026-10-06  
-Audited revision: `8d4266d100be35cd20a31b1f6522a57c0da198df`  
-Published package: `visiontrack-mot 0.2.0`
+- Audit date: 2026-10-06
+- Baseline audit revision: `8d4266d100be35cd20a31b1f6522a57c0da198df`
+- Released revision: `850e1b8d3b88173ecf48e71f04a2268b7584fb05`
+- Published package: `visiontrack-mot 0.3.0`
 
 ## Result
 
-The repository is healthy and reproducible, but the work after `v0.2.0` should
-not be described as released yet. The tracker, Reliability Lab, React site,
-browser contracts, documentation build, and Python distribution all pass their
-local gates. The next package should be a deliberate `0.3.0` candidate because
-it contains a substantial new Reliability Lab surface rather than a patch.
-
-No release tag was created by this audit.
+VisionTrack `0.3.0` is released. The tracker, Reliability Lab, React site,
+browser contracts, documentation build, and Python distribution passed their
+local and hosted gates before `v0.3.0` was created. The tag-triggered workflow
+built and published through PyPI trusted publishing, and both the public PyPI
+artifacts and GitHub Release record were verified afterward.
 
 ## Verified gates
 
 - [x] `main` equals `origin/main`; the working tree was clean at audit start.
-- [x] 560 active Python tests pass; one slow, data-dependent test remains opt-in.
+- [x] The complete active Python suite passes; one slow, data-dependent test remains opt-in.
 - [x] Ruff passes over the shipped Python, tests, experiments, and data tools.
 - [x] Decision, playback, browser-workflow, benchmark, and live-tracker browser
       contracts pass.
@@ -41,8 +40,8 @@ No release tag was created by this audit.
       repository source/evidence references to explicit external URLs.
 - [x] Replace Node 20-era CI/release action majors with their current official
       Node 24-compatible majors and enforce the versions in the test suite.
-- [ ] Run the tag-triggered GitHub release workflow and verify the public PyPI
-      artifact after the remaining scope, version, and release-note gates close.
+- [x] Run the tag-triggered workflow and verify the public PyPI wheel, sdist,
+      metadata, digests, digital attestations, and GitHub Release record.
 
 ## Scope boundary
 
@@ -52,6 +51,5 @@ fixture. That blocker is now closed: both public trackers consume the canonical
 `b8bc1b1` records strict machine-readable provenance for both implementation
 revisions, the fixture digest, successful CI runs, and the exact local
 reproduction environment. Product scope and release communication are also now
-closed by the frozen release-candidate notes. The candidate version, packaging
-cleanup, and complete local gates are now closed. Tagging, the tag-triggered
-release workflow, and publication remain deliberately separate steps.
+closed by the frozen release notes. The version, packaging cleanup, local and
+hosted gates, tag, GitHub Release, and PyPI publication are now closed.

@@ -1,10 +1,10 @@
-# VisionTrack 0.3.0 release-candidate scope
+# VisionTrack 0.3.0 release notes
 
-Scope status: **frozen on 2026-10-06**  
-Release status: **not yet published**  
-Candidate package version: **0.3.0**
+Scope status: **frozen on 2026-10-06**
 
-Current public PyPI version until publication: **0.2.0**
+Release status: **published on 2026-10-06**
+
+Public package version: **0.3.0**
 
 Version `0.3.0` is the first Reliability Lab release. It turns VisionTrack's
 research and evaluation machinery into a local, reproducible workflow for
@@ -117,6 +117,8 @@ code embedded in the PyPI wheel:
 - [x] Bump both package version declarations from `0.2.0` to `0.3.0`.
 - [x] Re-run the complete Python, browser, documentation, and distribution gates.
 - [x] Update CI and release workflows to Node 24-compatible official action majors.
-- [ ] Create and push `v0.3.0`, then verify the GitHub Release and public PyPI artifact.
+- [x] Create and push `v0.3.0`, then verify the GitHub Release and public PyPI artifact.
 
-No release tag is created by freezing this scope.
+Release verification: the tag points to `850e1b8`; GitHub Actions built and
+published the wheel and sdist through trusted publishing; both artifacts are
+visible in the public PyPI JSON API; and the GitHub Release record is public.
