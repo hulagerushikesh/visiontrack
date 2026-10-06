@@ -223,10 +223,13 @@ plus dispatch overhead say a GPU would not have paid even with one. Parity now
 holds across three platforms, three compilers and two LAPACK backends, with 12
 CI-gated wheels.
 
-The C++ package is live on PyPI. Its next work is maintenance evidence and a
-release compatibility matrix, not independent tracker research.
+The C++ package is live on PyPI. Its shared fixture, exact public-binding gate,
+and machine-readable synchronization evidence are complete. Its next work is a
+release compatibility matrix and deliberate toolchain maintenance, not
+independent tracker research.
 
-The local-first Reliability Lab technical alpha is now built. Next: make the
-versioned Python/C++ synchronization boundary executable, validate the Lab with
-practitioners, and begin selective anonymous identity-continuity research in
-Python before any new C++ behavior is ported.
+The local-first Reliability Lab technical alpha is now built and the versioned
+Python/C++ synchronization boundary is executable and provenance-backed. Next:
+freeze the VisionTrack `0.3.0` scope, validate the Lab with practitioners, and
+begin selective anonymous identity-continuity research in Python before any new
+C++ behavior is ported.

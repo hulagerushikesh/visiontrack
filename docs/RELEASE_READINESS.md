@@ -36,13 +36,14 @@ No release tag was created by this audit.
 - [ ] Decide whether to make the current MkDocs repository-link warnings strict
       or suppress them intentionally. They do not block the current site build.
 - [ ] Run the tag-triggered GitHub release workflow and verify the public PyPI
-      artifact only after the versioned cross-runtime boundary is executable.
+      artifact after the remaining scope, version, and release-note gates close.
 
 ## Scope boundary
 
-This audit does not claim that the Python and C++ packages consume one shared
-fixture yet. Their existing parity evidence is strong, but it predates the
-Reliability Lab contract. The next engineering increment is therefore the
-versioned synchronization contract in
-[`CROSS_RUNTIME_CONTRACT.md`](CROSS_RUNTIME_CONTRACT.md), followed by a small
-dataset-free golden fixture and runners in both repositories.
+At audit time, the Python and C++ packages did not yet consume one shared
+fixture. That blocker is now closed: both public trackers consume the canonical
+`visiontrack.tracker-parity/v1` fixture in normal CI, and VisionTrack C++ commit
+`b8bc1b1` records strict machine-readable provenance for both implementation
+revisions, the fixture digest, successful CI runs, and the exact local
+reproduction environment. The remaining release hold is product scope and
+release communication, not cross-runtime correctness infrastructure.

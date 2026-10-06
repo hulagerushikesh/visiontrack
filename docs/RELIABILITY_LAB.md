@@ -1374,15 +1374,19 @@ artifacts. Its result and deliberate `0.3.0` hold point are recorded in
 The first explicit synchronization boundary with `visiontrack-cpp` is defined
 in [`CROSS_RUNTIME_CONTRACT.md`](CROSS_RUNTIME_CONTRACT.md): ordered float64
 golden inputs, canonical confirmed-track outputs, coordinate and lifecycle
-semantics, exact-parity policy, exclusions, and a five-step cross-repository
-test rollout. No tracker behavior changed in this design increment.
+semantics, exact-parity policy, exclusions, and a six-step cross-repository
+test rollout. The rollout and its machine-readable release provenance are now
+complete: VisionTrack C++ commit `b8bc1b1` records both implementation
+revisions, successful CI runs, the shared fixture digest, and the exact local
+compiler/Eigen/Python/NumPy/BLAS reproduction context. No tracker behavior
+changed in this increment.
 
 ## Next implementation increment
 
-Freeze the VisionTrack `0.3.0` scope and create machine-readable synchronization
-evidence that records both source revisions, the shared fixture digest, runtime
-and numerical backend versions, and the two CI results. This is release
-provenance, not a tracker behavior change.
+Freeze the VisionTrack `0.3.0` scope and write user-facing release notes. The
+cross-runtime correctness gate and its release provenance are complete; the
+remaining decision is which finished Reliability Lab surfaces belong in the
+candidate and which explicitly remain research previews.
 
 Collaborative review, remote storage, and raw-video decoding remain later
 increments.
