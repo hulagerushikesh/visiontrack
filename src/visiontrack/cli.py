@@ -21,6 +21,8 @@ Subcommands
     Preview or create a complete deterministic synthetic Lab bundle.
 ``lab-playback``
     Preview synchronized failure-playback metadata without revealing pixels.
+``parity-contract``
+    Verify the canonical dataset-free Python/C++ tracker contract fixture.
 
 The demo, default evaluation, and ablation commands use the built-in synthetic
 generator, so ``visiontrack demo`` works without model or video downloads.
@@ -217,6 +219,31 @@ def cmd_ablate(args) -> int:
             f"{name:<28} {d['MOTA']:>7.3f} {d['MOTP']:>7.3f} "
             f"{d['IDSW']:>6} {d['FP']:>6} {d['FN']:>6}"
         )
+    return 0
+
+
+def cmd_parity_contract(args: argparse.Namespace) -> int:
+    """Validate, hash, execute, and reset-check a tracker parity fixture."""
+    from .parity_contract import assert_contract, fixture_sha256, load_contract
+
+    fixture = Path(args.fixture)
+    digest_line = Path(args.digest).read_text(encoding="utf-8").strip()
+    try:
+        expected_digest, expected_name = digest_line.split("  ")
+    except ValueError as exc:
+        raise ValueError("digest file must contain '<sha256>  <fixture-name>'") from exc
+    if expected_name != fixture.name:
+        raise ValueError(
+            f"digest names {expected_name!r}, but selected fixture is {fixture.name!r}"
+        )
+    payload = load_contract(fixture, expected_sha256=expected_digest)
+    observations = assert_contract(payload)
+    print(f"contract: {payload['contract_id']}")
+    print(f"fixture: {fixture}")
+    print(f"sha256: {fixture_sha256(fixture.read_bytes())}")
+    print(f"frames: {len(payload['frames'])}")
+    print(f"observations: {len(observations)}")
+    print("parity: exact; reset: deterministic")
     return 0
 
 
@@ -682,6 +709,18 @@ def build_parser() -> argparse.ArgumentParser:
     p_ab = sub.add_parser("ablate", help="compare tracker component variants")
     add_scene_args(p_ab)
     p_ab.set_defaults(func=cmd_ablate)
+
+    p_parity = sub.add_parser(
+        "parity-contract",
+        help="verify a canonical dataset-free Python/C++ tracker contract",
+    )
+    p_parity.add_argument("fixture", help="canonical tracker-parity JSON fixture")
+    p_parity.add_argument(
+        "--digest",
+        required=True,
+        help="SHA-256 file containing '<digest>  <fixture-name>'",
+    )
+    p_parity.set_defaults(func=cmd_parity_contract)
 
     p_track = sub.add_parser("track", help="track a real video (needs [video] extra + YOLOX)")
     p_track.add_argument("input", help="input video path (e.g. clip.mp4)")

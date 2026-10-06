@@ -36,6 +36,8 @@ jobs:
         run: |
           visiontrack eval --json
           visiontrack ablate
+          visiontrack parity-contract tests/fixtures/tracker_parity_v1.json \
+            --digest tests/fixtures/tracker_parity_v1.sha256
 
   reproduce:
     name: reproduce (synthetic smoke)
