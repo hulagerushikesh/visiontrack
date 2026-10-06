@@ -75,6 +75,7 @@ nav:
   - Use it:
       - Public API: API.md
       - Run on your own video: VIDEO.md
+      - 0.3.0 release-candidate scope: RELEASE_NOTES_0.3.0.md
       - Release to PyPI: RELEASE.md
       - Deploy the site: DEPLOY.md
   - Roadmap:

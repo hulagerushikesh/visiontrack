@@ -1383,10 +1383,12 @@ changed in this increment.
 
 ## Next implementation increment
 
-Freeze the VisionTrack `0.3.0` scope and write user-facing release notes. The
-cross-runtime correctness gate and its release provenance are complete; the
-remaining decision is which finished Reliability Lab surfaces belong in the
-candidate and which explicitly remain research previews.
+Prepare the frozen VisionTrack `0.3.0` candidate for publication: remove the
+setuptools license-metadata deprecation, make an explicit decision about the
+existing MkDocs source-link warnings, bump both package version declarations,
+and rerun the full release gates. The included surfaces, research previews,
+non-goals, and limitations are fixed in
+[`RELEASE_NOTES_0.3.0.md`](RELEASE_NOTES_0.3.0.md).
 
 Collaborative review, remote storage, and raw-video decoding remain later
 increments.

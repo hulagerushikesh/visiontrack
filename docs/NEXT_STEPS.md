@@ -139,6 +139,8 @@ The first local workflow and its versioned records are defined in
 - [x] Record strict machine-readable synchronization evidence with both source
       revisions, fixture identity, successful CI runs, and the exact local
       numerical/toolchain reproduction context.
+- [x] Freeze the `0.3.0` package/site scope, compatibility statement, explicit
+      non-goals, known limitations, and user-facing release-candidate notes.
 - [ ] Interview 5–10 tracking practitioners and collect representative failure
       clips that can legally be evaluated.
 - [ ] Validate the Reliability Lab problem with at least three prospective
