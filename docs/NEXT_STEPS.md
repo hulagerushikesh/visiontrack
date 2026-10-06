@@ -134,8 +134,8 @@ The first local workflow and its versioned records are defined in
       dataset-free parity test plan before changing C++ tracker behavior.
 - [x] Implement the canonical v1 golden fixture, SHA-256 identity, strict NumPy
       validator/runner, reset determinism check, and normal-CI CLI gate.
-- [ ] Mirror the exact fixture bytes in `visiontrack-cpp`, add a digest guard,
-      and run it through the public C++ binding in CI.
+- [x] Mirror the exact fixture bytes in `visiontrack-cpp`, add a digest guard,
+      and run exact output plus reset through its public binding in normal CI.
 - [ ] Interview 5–10 tracking practitioners and collect representative failure
       clips that can legally be evaluated.
 - [ ] Validate the Reliability Lab problem with at least three prospective

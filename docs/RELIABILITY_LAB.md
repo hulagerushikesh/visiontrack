@@ -1379,10 +1379,10 @@ test rollout. No tracker behavior changed in this design increment.
 
 ## Next implementation increment
 
-Mirror the now-green `visiontrack.tracker-parity/v1` fixture byte-for-byte into
-`visiontrack-cpp`, enforce its SHA-256, drive the public C++ binding, and add the
-dataset-free exact-output gate to normal CI without weakening the existing
-real-data parity backstop.
+Freeze the VisionTrack `0.3.0` scope and create machine-readable synchronization
+evidence that records both source revisions, the shared fixture digest, runtime
+and numerical backend versions, and the two CI results. This is release
+provenance, not a tracker behavior change.
 
 Collaborative review, remote storage, and raw-video decoding remain later
 increments.
