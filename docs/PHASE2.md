@@ -6,7 +6,7 @@ when only IoU is on.
 
 ## What shipped
 
-- **[`tracking/cost.py`](../src/visiontrack/tracking/cost.py)** — the factored cost:
+- **[`tracking/cost.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/cost.py)** — the factored cost:
 
   ```
   cost = w_iou · motion  ⊕  w_app · appearance  ⊕  w_unc · uncertainty
@@ -21,11 +21,11 @@ when only IoU is on.
   - `build_association_cost` — assembles the gated, weighted matrix for
     `associate()`. Pure NumPy, fully unit-tested.
 
-- **[`tracking/config.py`](../src/visiontrack/tracking/config.py)** — new config
+- **[`tracking/config.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/config.py)** — new config
   fields `w_iou` (1.0), `w_app` (0.0), `w_unc` (0.0), `use_giou` (False); every
   branch of the cost is now a config field, so a variant is a config override.
 
-- **[`tracking/tracker.py`](../src/visiontrack/tracking/tracker.py)** — `_match`
+- **[`tracking/tracker.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/tracker.py)** — `_match`
   now builds inputs (IoU, optional GIoU motion, class-mismatch mask, Kalman
   gating distances, appearance hook) and delegates to `build_association_cost`.
   The solver call is unchanged.

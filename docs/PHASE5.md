@@ -12,12 +12,12 @@ feature for tracking-by-detection.
 
 | Piece | Where | Role |
 |-------|-------|------|
-| Calibration analysis | [`eval/calibration.py`](../src/visiontrack/eval/calibration.py) | innovation χ² along GT tracks, χ²(4) reliability curve, calibration factor |
-| Noise injection | [`detection/noise.py`](../src/visiontrack/detection/noise.py) | `perturb_detections` (jitter/drop/false-positives) + `PerturbedSequence` |
-| Calibration knob | [`tracking/config.py`](../src/visiontrack/tracking/config.py) | `kf_noise_scale` — scale the filter covariance (calibrate it) |
+| Calibration analysis | [`eval/calibration.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/eval/calibration.py) | innovation χ² along GT tracks, χ²(4) reliability curve, calibration factor |
+| Noise injection | [`detection/noise.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/detection/noise.py) | `perturb_detections` (jitter/drop/false-positives) + `PerturbedSequence` |
+| Calibration knob | [`tracking/config.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/config.py) | `kf_noise_scale` — scale the filter covariance (calibrate it) |
 | Soft-uncertainty cost | `tracking/cost.py` (Phase 2 hook, `w_unc`) | normalized Mahalanobis folded into the cost |
-| Study | [`experiments/uncertainty_study.py`](../experiments/uncertainty_study.py) | reliability figure + noised-MOT17 sweep |
-| Synthetic sweep | [`experiments/configs/rq3_uncertainty_synth.yaml`](../experiments/configs) | controlled high-noise probe via the Phase 1 harness |
+| Study | [`experiments/uncertainty_study.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/uncertainty_study.py) | reliability figure + noised-MOT17 sweep |
+| Synthetic sweep | [`experiments/configs/rq3_uncertainty_synth.yaml`](https://github.com/hulagerushikesh/visiontrack/tree/main/experiments/configs) | controlled high-noise probe via the Phase 1 harness |
 
 ## A cost-surface fix discovered here
 
@@ -41,7 +41,7 @@ default         0.15      0.04                 1.000   (ideal ≈ 0.95)
 scaled × 0.19   2.61      0.65                 0.939
 ```
 
-![Kalman calibration](../assets/kalman_calibration.png)
+![Kalman calibration](https://raw.githubusercontent.com/hulagerushikesh/visiontrack/main/assets/kalman_calibration.png)
 
 The default filter is **~25× under-confident**: GT pedestrian motion is far
 smoother than the noise model assumes, so **the 95% Mahalanobis gate never

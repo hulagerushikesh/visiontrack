@@ -25,7 +25,7 @@ subdomain of `hulage.in`.
 | `/study` | VisionTrack study guide | `learning/LEARNING_PATH.html` |
 | `/roadmap` | CV junior→research roadmap | `learning/CV_ROADMAP.html` |
 
-Both the build and routing are defined in [`vercel.json`](../vercel.json). It uses
+Both the build and routing are defined in [`vercel.json`](https://github.com/hulagerushikesh/visiontrack/blob/main/vercel.json). It uses
 an explicit `builds` list for the legacy static entries plus a static build that
 produces the React app and MkDocs output. Declaring `builds` **disables Vercel's
 zero-config auto-detection** — without it, Vercel sees `pyproject.toml` and wrongly

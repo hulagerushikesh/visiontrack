@@ -11,14 +11,14 @@ Consistent with the project's ethos (the hard math on NumPy), the residual is
 back-propagation and Adam**, trained and run on NumPy, weights serialized to
 `.npz` — a peer of the from-scratch Kalman filter and Hungarian solver.
 
-- [`tracking/motion/residual.py`](../src/visiontrack/tracking/motion/residual.py):
+- [`tracking/motion/residual.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/motion/residual.py):
   `residual_features` (last `WINDOW=5` velocities, scale-normalized by box size —
   translation- and scale-invariant), `MLPResidual` (forward/backward + Adam +
   save/load), `MotionResidual` (inference; a no-op when no model is set).
 - **Target.** CV predicts `p_{t+1} ≈ p_t + v_t`; the residual learns the part CV
   misses, `r = p_{t+1} − (p_t + v_t)`, normalized by the box size. At inference,
   `p_{t+1} = (p_t + v_t) + s·model(features)`.
-- [`experiments/train_residual.py`](../experiments/train_residual.py): extracts
+- [`experiments/train_residual.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/train_residual.py): extracts
   GT centroid trajectories from the MOT17 + DanceTrack caches, splits **by track**
   (no leakage), trains, and reports held-out next-centre error.
 - Wired into the tracker via `TrackerConfig.motion_residual_path`: after each

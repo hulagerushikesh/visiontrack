@@ -1383,11 +1383,11 @@ changed in this increment.
 
 ## Next implementation increment
 
-Prepare the frozen VisionTrack `0.3.0` candidate for publication: remove the
-setuptools license-metadata deprecation, make an explicit decision about the
-existing MkDocs source-link warnings, bump both package version declarations,
-and rerun the full release gates. The included surfaces, research previews,
-non-goals, and limitations are fixed in
+Prepare the frozen VisionTrack `0.3.0` candidate for publication: bump both
+package version declarations and rerun the full release gates. Packaging now
+uses current SPDX/license-file metadata, and documentation passes a strict
+missing-link gate with explicit repository source URLs. The included surfaces,
+research previews, non-goals, and limitations are fixed in
 [`RELEASE_NOTES_0.3.0.md`](RELEASE_NOTES_0.3.0.md).
 
 Collaborative review, remote storage, and raw-video decoding remain later

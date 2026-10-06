@@ -7,7 +7,7 @@ compensation**: estimate the camera's frame-to-frame motion and shift the
 predictions to match. RQ4 asks the study's usual question — *when does it help?*
 
 **From-scratch, NumPy-only.** Rather than OpenCV's ORB+RANSAC affine estimator,
-GMC here uses **phase correlation** ([`tracking/motion/gmc.py`](../src/visiontrack/tracking/motion/gmc.py)):
+GMC here uses **phase correlation** ([`tracking/motion/gmc.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/motion/gmc.py)):
 the normalized cross-power spectrum of two frames has an inverse-FFT that peaks
 at their relative shift — a few `np.fft` calls. Scope, stated honestly:
 **translation only** (the dominant term for pans/handheld jitter), not the full
