@@ -136,6 +136,9 @@ The first local workflow and its versioned records are defined in
       validator/runner, reset determinism check, and normal-CI CLI gate.
 - [x] Mirror the exact fixture bytes in `visiontrack-cpp`, add a digest guard,
       and run exact output plus reset through its public binding in normal CI.
+- [x] Record strict machine-readable synchronization evidence with both source
+      revisions, fixture identity, successful CI runs, and the exact local
+      numerical/toolchain reproduction context.
 - [ ] Interview 5–10 tracking practitioners and collect representative failure
       clips that can legally be evaluated.
 - [ ] Validate the Reliability Lab problem with at least three prospective

@@ -133,6 +133,10 @@ without baking an Accelerate-versus-OpenBLAS rounding difference into JSON.
    canonical observations while retaining MOT17 as the real-data gate.
 5. **Complete:** run both dataset-free gates in normal CI. Cross-runtime v1 is
    executable; the VisionTrack `0.3.0` release scope can now be frozen.
+6. **Complete:** record both implementation revisions, successful CI runs, the
+   fixture digest, exact-output/reset results, and compiler, Eigen, Python,
+   NumPy, and BLAS context in canonical machine-readable evidence. VisionTrack
+   C++ commit `b8bc1b1` owns and validates that record in normal CI.
 
 The authority fixture is `tests/fixtures/tracker_parity_v1.json`; its digest is
 recorded beside it in `tracker_parity_v1.sha256`. Run it directly with:
