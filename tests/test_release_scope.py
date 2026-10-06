@@ -18,7 +18,7 @@ def test_frozen_release_scope_is_linked_and_candidate_versions_agree() -> None:
     navigation = (ROOT / "mkdocs.yml").read_text(encoding="utf-8")
 
     assert "Scope status: **frozen" in notes
-    assert "Release status: **not yet published**" in notes
+    assert "Release status: **published on 2026-10-06**" in notes
     assert "Persistent recognition" in notes
     assert "Track IDs are temporary labels" in notes
     package_version = re.search(r'^version = "([^"]+)"$', project, re.MULTILINE)
@@ -42,7 +42,7 @@ def test_release_scope_names_stable_surfaces_and_remaining_gates() -> None:
     ):
         assert surface in notes
     assert "[x] Bump both package version declarations" in notes
-    assert "[ ] Create and push `v0.3.0`" in notes
+    assert "[x] Create and push `v0.3.0`" in notes
 
 
 def test_release_candidate_uses_current_license_metadata() -> None:

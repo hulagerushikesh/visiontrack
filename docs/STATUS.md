@@ -1,8 +1,8 @@
 # VisionTrack — Status & Roadmap Checklist
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
-Last updated: 2026-10-06 — the Reliability Lab technical alpha, frozen `0.3.0`
-scope, and versioned Python/C++ synchronization boundary are reflected here;
+Last updated: 2026-10-06 — `visiontrack-mot 0.3.0` is published with the
+Reliability Lab technical alpha and versioned Python/C++ synchronization boundary;
 the two remaining research extensions remain **compute-blocked with
 measured numbers**, not merely "planned". Previously:
 2026-09-07, SportsMOT oracle numbers landed (45 val sequences, `/benchmark/sportsmot`
@@ -44,7 +44,8 @@ published to PyPI).
 - [x] H2.1 — real-footage annotated demo (+ YOLOX raw-grid decode fix)
 - [x] H2.2 — throughput/FPS profiling
 - [x] H2.3 — pip-installable + stable public API + release automation
-- [x] **Published to PyPI** — `pip install visiontrack-mot` (**0.2.0** live; 0.1.0 first cut)
+- [x] **Published to PyPI** — `pip install visiontrack-mot` (**0.3.0** live;
+      Reliability Lab release, with 0.2.0 and 0.1.0 preserved in history)
       via tag-triggered Trusted-Publishing Action; GitHub Release page per tag
 
 ### Horizon 3 — product
@@ -231,9 +232,10 @@ independent tracker research.
 The local-first Reliability Lab technical alpha is now built and the versioned
 Python/C++ synchronization boundary is executable and provenance-backed. The
 frozen VisionTrack `0.3.0` scope, current SPDX package metadata, strict
-documentation-link gate, synchronized `0.3.0` package declarations, and full
-local candidate verification are complete. The CI and release harness also use
-current Node 24-compatible official action majors. Next: hold before the tag
-and publish only with explicit release authorization.
+documentation-link gate, synchronized `0.3.0` package declarations, full
+candidate verification, release tag, GitHub Release, and public PyPI artifacts
+are complete. The CI and release harness use current Node 24-compatible official
+action majors. Next: validate the Reliability Lab with practitioners before
+choosing a product vertical or expanding the platform surface.
 Practitioner validation and selective anonymous identity-continuity research
 remain post-candidate work in Python before any new C++ behavior is ported.
