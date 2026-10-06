@@ -1364,13 +1364,25 @@ The fixture contains no private or real-world media. It does not bypass file
 validation: its inline PNG bytes are converted to browser-shaped file objects
 and pass through the same SHA-256 and PNG checks used by the UI.
 
+## Completed implementation increment: release audit and runtime boundary
+
+The release-readiness audit now covers the Python suite, browser contracts,
+TypeScript and production web build, documentation build, and Python package
+artifacts. Its result and deliberate `0.3.0` hold point are recorded in
+[`RELEASE_READINESS.md`](RELEASE_READINESS.md).
+
+The first explicit synchronization boundary with `visiontrack-cpp` is defined
+in [`CROSS_RUNTIME_CONTRACT.md`](CROSS_RUNTIME_CONTRACT.md): ordered float64
+golden inputs, canonical confirmed-track outputs, coordinate and lifecycle
+semantics, exact-parity policy, exclusions, and a five-step cross-repository
+test rollout. No tracker behavior changed in this design increment.
+
 ## Next implementation increment
 
-Close the current VisionTrack slice with a release-readiness audit, then define
-the first explicit synchronization boundary with `visiontrack-cpp`: shared
-golden inputs, canonical track outputs, coordinate and lifecycle semantics, and
-cross-runtime parity tolerances. The handoff should begin as a versioned
-contract and test plan before changing the C++ tracker implementation.
+Make `visiontrack.tracker-parity/v1` executable in the NumPy repository with a
+small canonical dataset-free fixture, strict validator, SHA-256 identity, and
+public-API runner. Mirror it into `visiontrack-cpp` only after the NumPy gate is
+green.
 
 Collaborative review, remote storage, and raw-video decoding remain later
 increments.

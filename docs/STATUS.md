@@ -1,9 +1,10 @@
 # VisionTrack — Status & Roadmap Checklist
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
-Last updated: 2026-09-27 — the learning product, unified light-first UI, React
-live tracker, and published C++ sibling are reflected here; the two remaining research extensions
-remain **compute-blocked with measured numbers**, not merely "planned". Previously:
+Last updated: 2026-10-06 — the Reliability Lab technical alpha, release-readiness
+audit, and first versioned Python/C++ synchronization boundary are reflected
+here; the two remaining research extensions remain **compute-blocked with
+measured numbers**, not merely "planned". Previously:
 2026-09-07, SportsMOT oracle numbers landed (45 val sequences, `/benchmark/sportsmot`
 live); v0.2.0 (`/live` in-browser tracker + SportsMOT code path + site redesign,
 published to PyPI).
@@ -135,7 +136,10 @@ published to PyPI).
 
 ### Product direction
 - [x] H3.2 — learning product and guided curriculum
-- [ ] H3.3 — local-first Reliability Lab alpha
+- [x] H3.3 — local-first Reliability Lab technical alpha (immutable local
+      bundles, verified comparisons, evidence, decisions, synchronized playback,
+      and browser acceptance workflow)
+- [ ] H3.3 — practitioner validation and initial vertical selection
 - [ ] Selective anonymous identity-continuity research under bounded memory
 - [ ] Choose a vertical only after practitioner interviews and design-partner validation
 
@@ -222,6 +226,7 @@ CI-gated wheels.
 The C++ package is live on PyPI. Its next work is maintenance evidence and a
 release compatibility matrix, not independent tracker research.
 
-Next after this: **Horizon 3 product direction** — build the local-first
-Reliability Lab workflow, validate it with practitioners, and begin selective
-anonymous identity-continuity research in Python before any new C++ port.
+The local-first Reliability Lab technical alpha is now built. Next: make the
+versioned Python/C++ synchronization boundary executable, validate the Lab with
+practitioners, and begin selective anonymous identity-continuity research in
+Python before any new C++ behavior is ported.

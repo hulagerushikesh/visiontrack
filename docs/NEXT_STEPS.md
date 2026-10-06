@@ -128,6 +128,13 @@ The first local workflow and its versioned records are defined in
       moving its UI into the shared React product shell.
 - [x] Port the interactive tracker shell without changing tracker behavior or
       browser privacy guarantees.
+- [x] Audit release readiness across Python, browser contracts, documentation,
+      and package artifacts; record the remaining `0.3.0` release decisions.
+- [x] Define the versioned Python-to-C++ synchronization boundary and exact
+      dataset-free parity test plan before changing C++ tracker behavior.
+- [ ] Implement the canonical v1 golden fixture and NumPy validator/runner.
+- [ ] Mirror the exact fixture bytes in `visiontrack-cpp`, add a digest guard,
+      and run it through the public C++ binding in CI.
 - [ ] Interview 5–10 tracking practitioners and collect representative failure
       clips that can legally be evaluated.
 - [ ] Validate the Reliability Lab problem with at least three prospective
