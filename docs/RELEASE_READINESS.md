@@ -39,6 +39,8 @@ No release tag was created by this audit.
       SPDX expression plus an explicit license file on `setuptools>=77`.
 - [x] Make `mkdocs build --strict` the documentation release gate by converting
       repository source/evidence references to explicit external URLs.
+- [x] Replace Node 20-era CI/release action majors with their current official
+      Node 24-compatible majors and enforce the versions in the test suite.
 - [ ] Run the tag-triggered GitHub release workflow and verify the public PyPI
       artifact after the remaining scope, version, and release-note gates close.
 

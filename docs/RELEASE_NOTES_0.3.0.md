@@ -116,6 +116,7 @@ code embedded in the PyPI wheel:
 - [x] Make repository source/evidence links explicit and pass MkDocs in strict mode.
 - [x] Bump both package version declarations from `0.2.0` to `0.3.0`.
 - [x] Re-run the complete Python, browser, documentation, and distribution gates.
+- [x] Update CI and release workflows to Node 24-compatible official action majors.
 - [ ] Create and push `v0.3.0`, then verify the GitHub Release and public PyPI artifact.
 
 No release tag is created by freezing this scope.

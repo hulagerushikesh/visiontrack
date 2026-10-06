@@ -60,3 +60,25 @@ def test_documentation_policy_has_no_missing_link_allowlist() -> None:
     assert "A strict build is the release" in config
     assert "any new missing target must fail" in config
     assert "not_found: warn" in config
+
+
+def test_release_workflows_use_node24_compatible_action_majors() -> None:
+    ci = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    release = (ROOT / ".github/workflows/release.yml").read_text(encoding="utf-8")
+    workflows = ci + release
+
+    assert "actions/checkout@v7" in ci
+    assert "actions/setup-python@v7" in ci
+    assert "actions/setup-node@v7" in ci
+    assert "actions/checkout@v7" in release
+    assert "actions/setup-python@v7" in release
+    assert "actions/upload-artifact@v7" in release
+    assert "actions/download-artifact@v8" in release
+    for deprecated in (
+        "actions/checkout@v4",
+        "actions/setup-python@v5",
+        "actions/setup-node@v4",
+        "actions/upload-artifact@v4",
+        "actions/download-artifact@v4",
+    ):
+        assert deprecated not in workflows
