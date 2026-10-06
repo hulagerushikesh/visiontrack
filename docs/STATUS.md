@@ -232,7 +232,8 @@ The local-first Reliability Lab technical alpha is now built and the versioned
 Python/C++ synchronization boundary is executable and provenance-backed. The
 frozen VisionTrack `0.3.0` scope, current SPDX package metadata, strict
 documentation-link gate, synchronized `0.3.0` package declarations, and full
-local candidate verification are complete. Next: hold before the tag and
-publish only with explicit release authorization.
+local candidate verification are complete. The CI and release harness also use
+current Node 24-compatible official action majors. Next: hold before the tag
+and publish only with explicit release authorization.
 Practitioner validation and selective anonymous identity-continuity research
 remain post-candidate work in Python before any new C++ behavior is ported.
