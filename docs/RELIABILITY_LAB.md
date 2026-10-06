@@ -1379,10 +1379,10 @@ test rollout. No tracker behavior changed in this design increment.
 
 ## Next implementation increment
 
-Make `visiontrack.tracker-parity/v1` executable in the NumPy repository with a
-small canonical dataset-free fixture, strict validator, SHA-256 identity, and
-public-API runner. Mirror it into `visiontrack-cpp` only after the NumPy gate is
-green.
+Mirror the now-green `visiontrack.tracker-parity/v1` fixture byte-for-byte into
+`visiontrack-cpp`, enforce its SHA-256, drive the public C++ binding, and add the
+dataset-free exact-output gate to normal CI without weakening the existing
+real-data parity backstop.
 
 Collaborative review, remote storage, and raw-video decoding remain later
 increments.

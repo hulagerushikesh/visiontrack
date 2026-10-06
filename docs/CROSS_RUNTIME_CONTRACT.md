@@ -1,7 +1,9 @@
 # VisionTrack cross-runtime tracking contract
 
-Contract ID: `visiontrack.tracker-parity/v1`  
-Status: accepted design; executable fixture is the next increment  
+Contract ID: `visiontrack.tracker-parity/v1`
+
+Status: executable in the NumPy authority; C++ consumption is next
+
 Authority: the NumPy implementation defines behavior; the C++ implementation
 may optimize only while preserving this contract.
 
@@ -12,9 +14,11 @@ This is the first explicit synchronization boundary between `visiontrack` and
 the stable online ByteTrack path needed by the Reliability Lab, not detectors,
 video decoding, evaluation, UI, or research-only tracker extensions.
 
-Both repositories will carry the same canonical golden fixture bytes. CI will
-reject fixture drift and will compare each runtime's canonical output with the
-fixture's expected output.
+The NumPy repository now carries canonical golden fixture bytes plus a recorded
+SHA-256. Its normal tests and CLI run the public tracker, demand exact expected
+output, and repeat after `reset()`. The C++ repository will next copy those
+bytes unchanged; CI will reject fixture drift and compare its public binding's
+canonical output with the same expected stream.
 
 ## Versioned envelope
 
@@ -46,7 +50,8 @@ Each item in `frames` has:
 - `score`: a finite float64 confidence;
 - `class_id`: an integer, where `-1` is class-agnostic;
 - `feature`: when present, a finite float64 vector with one consistent,
-  non-zero dimension throughout the sequence.
+  non-zero dimension throughout the sequence. A frame supplies features for
+  every detection or for none so the same `(N, d)` C++ boundary can represent it.
 
 Detection order is part of the input because equal-cost assignment ties may be
 order-sensitive. Each runtime must reset before a fixture and must receive one
@@ -109,18 +114,33 @@ The initial dataset-free fixture must cover, in one short deterministic stream:
 9. appearance input when `w_app > 0`;
 10. an assignment tie whose detection ordering is fixed.
 
+The fixture intentionally uses stationary boxes whose corrected coordinates are
+exact across supported numerical backends. Moving-box Kalman numerical parity
+remains the responsibility of the existing platform-specific unit and MOT17
+trajectory gates; the portable fixture locks association and lifecycle behavior
+without baking an Accelerate-versus-OpenBLAS rounding difference into JSON.
+
 ## Test and rollout plan
 
-1. Add the canonical fixture and SHA-256 digest to `visiontrack`; generate its
-   expected output only through the public NumPy tracker.
-2. Add a Python validator/runner that rejects malformed input and exact-output
-   drift without requiring datasets, models, or network access.
+1. **Complete:** add the canonical fixture and SHA-256 digest to `visiontrack`;
+   generate its expected output only through the public NumPy tracker.
+2. **Complete:** add a Python validator/runner that rejects malformed input and
+   exact-output drift without requiring datasets, models, or network access.
 3. Copy the identical fixture bytes into `visiontrack-cpp`; add a digest guard so
    either repository fails when its recorded peer digest is stale.
 4. Run the fixture through the public C++ binding and compare exact canonical
    observations. Keep the existing MOT17 parity harness as the real-data gate.
-5. Add both dataset-free runners to normal CI. Only then mark synchronization v1
-   executable and consider the VisionTrack `0.3.0` release scope frozen.
+5. Add both dataset-free runners to normal CI. The NumPy runner is already in
+   its normal matrix; only after the C++ runner joins it should cross-runtime v1
+   be marked complete and the VisionTrack `0.3.0` release scope be frozen.
+
+The authority fixture is `tests/fixtures/tracker_parity_v1.json`; its digest is
+recorded beside it in `tracker_parity_v1.sha256`. Run it directly with:
+
+```bash
+visiontrack parity-contract tests/fixtures/tracker_parity_v1.json \
+  --digest tests/fixtures/tracker_parity_v1.sha256
+```
 
 Research behavior is accepted in Python first. A later contract version may add
 bounded anonymous identity continuity only after its gallery, abstention,
