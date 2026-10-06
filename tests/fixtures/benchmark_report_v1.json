@@ -15,7 +15,7 @@
     "source_document": "experiments/benchmark.py",
     "source_kind": "structured_experiment_result",
     "config_hash": "abcdef123456",
-    "visiontrack_version": "0.2.0",
+    "visiontrack_version": "0.3.0",
     "git_revision": null
   },
   "baseline": "bytetrack",

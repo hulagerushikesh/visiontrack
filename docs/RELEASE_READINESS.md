@@ -25,14 +25,16 @@ No release tag was created by this audit.
 - [x] MkDocs builds successfully in strict mode. Repository source and evidence
       references are explicit GitHub/raw URLs, while local documentation links
       remain checked; there is no missing-link warning allowlist.
-- [x] The `0.2.0` sdist and universal wheel rebuild locally and pass `twine check`.
+- [x] The `0.3.0` candidate sdist and universal wheel rebuild locally, pass
+      `twine check`, install in a clean environment, and report matching package
+      and import versions through a successful CLI smoke test.
 - [x] The latest GitHub CI run for the audited revision is green.
 
 ## Release blockers and follow-ups
 
 - [x] Freeze the exact `0.3.0` scope and write user-facing release notes in
       [`RELEASE_NOTES_0.3.0.md`](RELEASE_NOTES_0.3.0.md).
-- [ ] Update the package version only after the scope is frozen.
+- [x] Update both package version declarations to `0.3.0` after freezing scope.
 - [x] Replace the deprecated setuptools license table and classifier with an
       SPDX expression plus an explicit license file on `setuptools>=77`.
 - [x] Make `mkdocs build --strict` the documentation release gate by converting
@@ -48,5 +50,6 @@ fixture. That blocker is now closed: both public trackers consume the canonical
 `b8bc1b1` records strict machine-readable provenance for both implementation
 revisions, the fixture digest, successful CI runs, and the exact local
 reproduction environment. Product scope and release communication are also now
-closed by the frozen release-candidate notes. Versioning, packaging cleanup,
-final gates, and publication remain deliberately separate steps.
+closed by the frozen release-candidate notes. The candidate version, packaging
+cleanup, and complete local gates are now closed. Tagging, the tag-triggered
+release workflow, and publication remain deliberately separate steps.

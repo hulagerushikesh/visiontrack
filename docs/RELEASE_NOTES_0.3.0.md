@@ -2,7 +2,9 @@
 
 Scope status: **frozen on 2026-10-06**  
 Release status: **not yet published**  
-Current package version until the release commit: **0.2.0**
+Candidate package version: **0.3.0**
+
+Current public PyPI version until publication: **0.2.0**
 
 Version `0.3.0` is the first Reliability Lab release. It turns VisionTrack's
 research and evaluation machinery into a local, reproducible workflow for
@@ -112,8 +114,8 @@ code embedded in the PyPI wheel:
 - [x] Complete Python/C++ fixture parity and synchronization provenance.
 - [x] Remove the setuptools license metadata deprecation.
 - [x] Make repository source/evidence links explicit and pass MkDocs in strict mode.
-- [ ] Bump both package version declarations from `0.2.0` to `0.3.0`.
-- [ ] Re-run the complete Python, browser, documentation, and distribution gates.
+- [x] Bump both package version declarations from `0.2.0` to `0.3.0`.
+- [x] Re-run the complete Python, browser, documentation, and distribution gates.
 - [ ] Create and push `v0.3.0`, then verify the GitHub Release and public PyPI artifact.
 
 No release tag is created by freezing this scope.

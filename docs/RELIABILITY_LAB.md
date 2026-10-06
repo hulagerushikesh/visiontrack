@@ -1383,11 +1383,12 @@ changed in this increment.
 
 ## Next implementation increment
 
-Prepare the frozen VisionTrack `0.3.0` candidate for publication: bump both
-package version declarations and rerun the full release gates. Packaging now
-uses current SPDX/license-file metadata, and documentation passes a strict
-missing-link gate with explicit repository source URLs. The included surfaces,
-research previews, non-goals, and limitations are fixed in
+Hold the verified VisionTrack `0.3.0` candidate before the release tag. Both
+package version declarations identify the candidate; the complete Python,
+browser, documentation, distribution, clean-install, and CLI gates pass;
+packaging uses current SPDX/license-file metadata; and documentation passes a
+strict missing-link gate with explicit repository source URLs. The included
+surfaces, research previews, non-goals, and limitations are fixed in
 [`RELEASE_NOTES_0.3.0.md`](RELEASE_NOTES_0.3.0.md).
 
 Collaborative review, remote storage, and raw-video decoding remain later
