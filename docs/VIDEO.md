@@ -19,14 +19,14 @@ summary = track_video("input.mp4", "out.mp4", det)
 print(summary)   # VideoSummary(frames=..., unique_tracks=..., fps=..., output_path=...)
 ```
 
-The pipeline ([`src/visiontrack/video.py`](../src/visiontrack/video.py)) is
+The pipeline ([`src/visiontrack/video.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/video.py)) is
 **detector-agnostic**: it accepts anything with `detect(frame_rgb) ->
 list[Detection]`, so it is exercised end-to-end in tests with a stub detector
 over a real (tiny) mp4 — no model needed for CI.
 
 ## Getting a YOLOX model
 
-The detector ([`detection/yolox_onnx.py`](../src/visiontrack/detection/yolox_onnx.py))
+The detector ([`detection/yolox_onnx.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/detection/yolox_onnx.py))
 consumes a YOLOX ONNX export with `(1, N, 5+nc)` output. YOLOX is the detector the
 ByteTrack / OC-SORT papers use, so it keeps the tracking lineage consistent. It
 handles **both** export flavours automatically:
@@ -53,7 +53,7 @@ VisionTrack stays weight-clean. `--input-size` must match the export (nano/tiny 
 
 ## Reproduce the annotated demo
 
-[`scripts/render_video_demo.py`](../scripts/render_video_demo.py) runs the whole
+[`scripts/render_video_demo.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/scripts/render_video_demo.py) runs the whole
 pipeline over any clip and keeps the common street classes (person + vehicles) by
 default, with tracker gates relaxed for a COCO YOLOX-nano (whose scores run lower
 than a MOT-tuned detector):

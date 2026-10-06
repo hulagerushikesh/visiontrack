@@ -8,12 +8,12 @@ defensible and a null result is provably null.
 
 | Piece | Where | Role |
 |-------|-------|------|
-| Statistics library | [`eval/stats.py`](../src/visiontrack/eval/stats.py) | `summarize` (mean/std/SEM/CI), `paired_bootstrap`, `wilcoxon_pvalue`, `cohens_d_paired`, `compare` |
-| Experiment config | [`experiments/config.py`](../experiments/config.py) | typed dataclass + YAML + **content hash** (a run is specified by its hash) |
-| Cell runner | [`experiments/runner.py`](../experiments/runner.py) | `(variant, sequence, seed) → metrics`; synthetic + MOT17 |
-| Sweep matrix | [`experiments/run_matrix.py`](../experiments/run_matrix.py) | runs all cells → tidy `results.parquet` (one row per run) |
-| Analysis | [`experiments/analyze.py`](../experiments/analyze.py) | mean±std tables + paired p-values (+ optional bar figure) |
-| Configs | [`experiments/configs/`](../experiments/configs) | `synth_baseline.yaml`, `mot17_frcnn.yaml` |
+| Statistics library | [`eval/stats.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/eval/stats.py) | `summarize` (mean/std/SEM/CI), `paired_bootstrap`, `wilcoxon_pvalue`, `cohens_d_paired`, `compare` |
+| Experiment config | [`experiments/config.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/config.py) | typed dataclass + YAML + **content hash** (a run is specified by its hash) |
+| Cell runner | [`experiments/runner.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/runner.py) | `(variant, sequence, seed) → metrics`; synthetic + MOT17 |
+| Sweep matrix | [`experiments/run_matrix.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/run_matrix.py) | runs all cells → tidy `results.parquet` (one row per run) |
+| Analysis | [`experiments/analyze.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/analyze.py) | mean±std tables + paired p-values (+ optional bar figure) |
+| Configs | [`experiments/configs/`](https://github.com/hulagerushikesh/visiontrack/tree/main/experiments/configs) | `synth_baseline.yaml`, `mot17_frcnn.yaml` |
 
 ## Run it
 

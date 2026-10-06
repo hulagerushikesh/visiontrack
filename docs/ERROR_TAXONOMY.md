@@ -1,7 +1,7 @@
 # H1.3a — ID-switch error taxonomy
 
 An IDSW count says *how often* the tracker swaps identities; it doesn't say
-*when*. This tool ([`experiments/error_taxonomy.py`](../experiments/error_taxonomy.py))
+*when*. This tool ([`experiments/error_taxonomy.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/error_taxonomy.py))
 classifies every identity switch by the local scene condition at the frame it
 happens, and compares each condition's rate **among switches** to its **base
 rate** across all ground-truth observations. The ratio is a *lift*: how

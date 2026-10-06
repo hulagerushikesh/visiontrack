@@ -5,7 +5,7 @@ config flag. OC-SORT's premise: a constant-velocity Kalman filter is
 *estimation*-centric — during an occlusion gap it coasts on prediction and its
 never-re-anchored velocity drifts, causing ID switches on reappearance. OC-SORT
 trusts *observations* over the linear estimate in two places, both implemented
-from scratch in [`tracking/motion/oc.py`](../src/visiontrack/tracking/motion/oc.py)
+from scratch in [`tracking/motion/oc.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/motion/oc.py)
 and gated off by default (so the baseline is bit-identical).
 
 ## The two mechanics

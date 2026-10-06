@@ -178,7 +178,7 @@ owner's PyPI account — the repo is release-ready.*
   preview card (`assets/og-image.png`, drawn from scratch by `make og-image` —
   license-clean, deterministic), so `visiontrack.hulage.in` previews nicely when
   shared on Slack/LinkedIn/Twitter/etc.
-- **"Reproduce in Colab" badge ✅ *done*** — [`notebooks/reproduce.ipynb`](../notebooks/reproduce.ipynb)
+- **"Reproduce in Colab" badge ✅ *done*** — [`notebooks/reproduce.ipynb`](https://github.com/hulagerushikesh/visiontrack/blob/main/notebooks/reproduce.ipynb)
   clones the repo, installs the `[experiments]` extra, and reproduces the
   seed-varied, significance-tested **synthetic** study (baseline-sanity p=1.00 +
   real ablations at p<0.05) in-browser, CPU-only, no dataset. Colab badge on the

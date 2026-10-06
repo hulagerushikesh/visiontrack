@@ -22,8 +22,9 @@ No release tag was created by this audit.
 - [x] Decision, playback, browser-workflow, benchmark, and live-tracker browser
       contracts pass.
 - [x] TypeScript type checking and the production Vite build pass.
-- [x] MkDocs builds successfully. Existing warnings are repository-source links
-      that MkDocs cannot resolve as documentation pages, not missing source files.
+- [x] MkDocs builds successfully in strict mode. Repository source and evidence
+      references are explicit GitHub/raw URLs, while local documentation links
+      remain checked; there is no missing-link warning allowlist.
 - [x] The `0.2.0` sdist and universal wheel rebuild locally and pass `twine check`.
 - [x] The latest GitHub CI run for the audited revision is green.
 
@@ -32,10 +33,10 @@ No release tag was created by this audit.
 - [x] Freeze the exact `0.3.0` scope and write user-facing release notes in
       [`RELEASE_NOTES_0.3.0.md`](RELEASE_NOTES_0.3.0.md).
 - [ ] Update the package version only after the scope is frozen.
-- [ ] Remove the setuptools license-table/classifier deprecation before its
-      2027 enforcement date; it is a warning, not a current build failure.
-- [ ] Decide whether to make the current MkDocs repository-link warnings strict
-      or suppress them intentionally. They do not block the current site build.
+- [x] Replace the deprecated setuptools license table and classifier with an
+      SPDX expression plus an explicit license file on `setuptools>=77`.
+- [x] Make `mkdocs build --strict` the documentation release gate by converting
+      repository source/evidence references to explicit external URLs.
 - [ ] Run the tag-triggered GitHub release workflow and verify the public PyPI
       artifact after the remaining scope, version, and release-note gates close.
 

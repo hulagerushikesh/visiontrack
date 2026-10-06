@@ -8,10 +8,10 @@ site_dir: site
 # subpath (/docs) on plain static hosting without directory-index routing.
 use_directory_urls: false
 
-# docs/ doubles as GitHub-rendered markdown, so many pages link out to ../src,
-# ../assets, etc. Those resolve on GitHub but not inside the built site — keep
-# them as warnings, not build-breakers, and don't nag about the few internal
-# docs (PROJECT.md, EXECUTION_PLAN.md, *.html) that are intentionally off-nav.
+# docs/ doubles as GitHub-rendered markdown. Repository source and evidence
+# references therefore use explicit GitHub/raw URLs, while documentation-page
+# links remain local and are checked by MkDocs. A strict build is the release
+# gate: any new missing target must fail rather than join a warning allowlist.
 validation:
   nav:
     omitted_files: info

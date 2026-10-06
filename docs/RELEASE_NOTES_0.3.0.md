@@ -110,8 +110,8 @@ code embedded in the PyPI wheel:
 
 - [x] Freeze the exact `0.3.0` scope and user-facing notes.
 - [x] Complete Python/C++ fixture parity and synchronization provenance.
-- [ ] Remove the setuptools license metadata deprecation.
-- [ ] Resolve or deliberately document the remaining MkDocs source-link warnings.
+- [x] Remove the setuptools license metadata deprecation.
+- [x] Make repository source/evidence links explicit and pass MkDocs in strict mode.
 - [ ] Bump both package version declarations from `0.2.0` to `0.3.0`.
 - [ ] Re-run the complete Python, browser, documentation, and distribution gates.
 - [ ] Create and push `v0.3.0`, then verify the GitHub Release and public PyPI artifact.

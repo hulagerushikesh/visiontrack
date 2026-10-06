@@ -32,7 +32,7 @@ git tag v0.3.0
 git push origin main --tags
 ```
 
-Pushing the `v*` tag triggers [`.github/workflows/release.yml`](../.github/workflows/release.yml),
+Pushing the `v*` tag triggers [`.github/workflows/release.yml`](https://github.com/hulagerushikesh/visiontrack/blob/main/.github/workflows/release.yml),
 which builds the distributions, runs `twine check`, and publishes to PyPI via
 OIDC. Watch the Actions tab; on success `pip install visiontrack-mot` works.
 

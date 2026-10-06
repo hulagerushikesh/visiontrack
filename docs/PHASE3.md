@@ -10,13 +10,13 @@ storage constraint means DanceTrack/SportsMOT don't fit yet.
 
 | Piece | Where | Role |
 |-------|-------|------|
-| Embedders | [`appearance/embedder.py`](../src/visiontrack/appearance/embedder.py) | `ColorHistogramEmbedder` (from-scratch HSV histogram, **no download**), `IdentityEmbedder` (tests) |
-| Deep re-ID (wired) | [`appearance/reid_onnx.py`](../src/visiontrack/appearance/reid_onnx.py) | `OnnxReID` — pretrained OSNet/FastReID ONNX behind the same interface (lazy); batch-padded, ImageNet-normalized. **Run and reported below** — the strongest RQ1 result |
-| EMA gallery | [`appearance/gallery.py`](../src/visiontrack/appearance/gallery.py) | per-track appearance memory (`update_gallery`) |
-| Track wiring | [`tracking/track.py`](../src/visiontrack/tracking/track.py) | tracks carry an EMA `feature`, updated from matched detections |
+| Embedders | [`appearance/embedder.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/appearance/embedder.py) | `ColorHistogramEmbedder` (from-scratch HSV histogram, **no download**), `IdentityEmbedder` (tests) |
+| Deep re-ID (wired) | [`appearance/reid_onnx.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/appearance/reid_onnx.py) | `OnnxReID` — pretrained OSNet/FastReID ONNX behind the same interface (lazy); batch-padded, ImageNet-normalized. **Run and reported below** — the strongest RQ1 result |
+| EMA gallery | [`appearance/gallery.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/appearance/gallery.py) | per-track appearance memory (`update_gallery`) |
+| Track wiring | [`tracking/track.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/tracking/track.py) | tracks carry an EMA `feature`, updated from matched detections |
 | Cost hook | already in place (Phase 2) | `w_app` term in `build_association_cost` |
-| Embedding cache | [`data/cache/precompute_embeddings.py`](../data/cache/precompute_embeddings.py) + `datasets/cache.py` | embed each detection once → `.emb.npz` aligned to the detection cache |
-| Study | [`experiments/appearance_study.py`](../experiments/appearance_study.py) | appearance-on/off sweep with paired significance + figure |
+| Embedding cache | [`data/cache/precompute_embeddings.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/data/cache/precompute_embeddings.py) + `datasets/cache.py` | embed each detection once → `.emb.npz` aligned to the detection cache |
+| Study | [`experiments/appearance_study.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/appearance_study.py) | appearance-on/off sweep with paired significance + figure |
 
 Design: the embedder is **pluggable** (color histogram now, deep re-ID later),
 appearance is a **weighted cost term** (`w_app`), and embeddings are **cached
@@ -47,7 +47,7 @@ Detection cache: 5.2 MB. Embedding cache (32-dim color histogram, 7 seqs):
 | 0.30  | +0.001 | +0.001 | +0.002 | −0.000 | 182 |
 | 0.60  | +0.001 | +0.002 | +0.003 | +0.001 | **170 (−18)** |
 
-![appearance on MOT17](../assets/appearance_mot17_frcnn.png)
+![appearance on MOT17](https://raw.githubusercontent.com/hulagerushikesh/visiontrack/main/assets/appearance_mot17_frcnn.png)
 
 > **Numbers updated after the Phase 5 cost fix.** Phase 5 found that the
 > original cost let a soft term *veto* feasible pairs (shrinking the gate); the
@@ -124,7 +124,7 @@ pairing, `*` = p<0.05 (Wilcoxon):
 | 0.90 | colorhist | +0.002 | +0.003 | +0.004 | +0.001 | 167 |
 | 0.90 | **OSNet** | +0.004 | +0.005 | +0.008 | +0.001 | **163 (−25)** |
 
-![deep re-ID appearance on MOT17](../assets/appearance_mot17_frcnn_osnet.png)
+![deep re-ID appearance on MOT17](https://raw.githubusercontent.com/hulagerushikesh/visiontrack/main/assets/appearance_mot17_frcnn_osnet.png)
 
 Reading it honestly:
 
@@ -180,7 +180,7 @@ script: `experiments/appearance_multidetector.py` (deep-re-ID embeddings,
 | SDP   | 7 | +0.002 (p.69) | +0.005 (p.30) | +0.003 (p.69) | +0.001 (p.16) | −4.14 (p.03*) |
 | **POOLED** | **21** | +0.002 (p.06) | **+0.003 (p.02\*)** | +0.004 (p.06) | **+0.001 (p.03\*)** | **−2.62 (p.005\*)** |
 
-![where does deep re-ID help](../assets/appearance_mot17_stratified.png)
+![where does deep re-ID help](https://raw.githubusercontent.com/hulagerushikesh/visiontrack/main/assets/appearance_mot17_stratified.png)
 
 Two findings, one of them counter to the obvious guess:
 
@@ -240,7 +240,7 @@ runs appearance off (`w_app=0`) vs on over 24 paired seeds per level.
 | 0.70 | +0.008\* | +0.008\* | −1.21 |
 | 1.0 (distinct) | +0.007\* | +0.006\* | −0.83 |
 
-![synthetic appearance crossover](../assets/appearance_crossover_synth.png)
+![synthetic appearance crossover](https://raw.githubusercontent.com/hulagerushikesh/visiontrack/main/assets/appearance_crossover_synth.png)
 
 What it shows — and the honest twist:
 
@@ -312,7 +312,7 @@ re-ID (OSNet) embeddings come from the *real dancer crops*.
 | 0.30 | +0.001 | +0.003 | −0.000 | **−8.2\*** |
 | 0.60 | +0.002 | +0.003 | +0.001 | **−15.3\*** |
 
-![appearance on DanceTrack](../assets/appearance_dancetrack.png)
+![appearance on DanceTrack](https://raw.githubusercontent.com/hulagerushikesh/visiontrack/main/assets/appearance_dancetrack.png)
 
 - **Appearance HELPS on DanceTrack — it does not hurt.** ID switches drop
   significantly (217 → 202, −7%, p<0.05), IDF1 rises, nothing regresses. The
@@ -372,7 +372,7 @@ tracker, is the real-time and quality bottleneck.
 | 0.30 | +0.001 | −0.002 | +0.001 | −1.8 |
 | 0.60 | **+0.003** | +0.001 | **+0.003** | −1.8 |
 
-![appearance on DanceTrack, real YOLOX](../assets/appearance_dancetrack_yolox.png)
+![appearance on DanceTrack, real YOLOX](https://raw.githubusercontent.com/hulagerushikesh/visiontrack/main/assets/appearance_dancetrack_yolox.png)
 
 - **The hypothesis stays refuted — appearance still never hurts.** Even with weak,
   imperfect real detections, every metric at `w_app=0.6` moves the *beneficial*
@@ -431,7 +431,7 @@ and surfaces a shift in *which* trick matters once detections are real:
   fair single-stage `sort` baseline, adds switches (ΔIDSW **+4.8, p=0.05**),
   reproducing the earlier oracle-DanceTrack negative under real detections too.
 
-![tracker zoo on real-detector DanceTrack](../assets/zoo_dancetrack_yolox.png)
+![tracker zoo on real-detector DanceTrack](https://raw.githubusercontent.com/hulagerushikesh/visiontrack/main/assets/zoo_dancetrack_yolox.png)
 
 ## Notes / limitations
 

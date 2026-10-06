@@ -43,3 +43,20 @@ def test_release_scope_names_stable_surfaces_and_remaining_gates() -> None:
         assert surface in notes
     assert "[ ] Bump both package version declarations" in notes
     assert "[ ] Create and push `v0.3.0`" in notes
+
+
+def test_release_candidate_uses_current_license_metadata() -> None:
+    project = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+
+    assert 'requires = ["setuptools>=77", "wheel"]' in project
+    assert 'license = "MIT"' in project
+    assert 'license-files = ["LICENSE"]' in project
+    assert "License :: OSI Approved :: MIT License" not in project
+
+
+def test_documentation_policy_has_no_missing_link_allowlist() -> None:
+    config = (ROOT / "mkdocs.yml").read_text(encoding="utf-8")
+
+    assert "A strict build is the release" in config
+    assert "any new missing target must fail" in config
+    assert "not_found: warn" in config
