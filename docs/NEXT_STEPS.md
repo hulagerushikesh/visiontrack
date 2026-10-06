@@ -143,6 +143,8 @@ The first local workflow and its versioned records are defined in
       non-goals, known limitations, and user-facing release-candidate notes.
 - [x] Modernize package licensing to SPDX metadata and turn documentation into
       a strict missing-link gate with explicit repository source/evidence URLs.
+- [x] Bump both package version declarations to `0.3.0` only after scope and
+      packaging gates were frozen; keep tagging and publication separate.
 - [ ] Interview 5–10 tracking practitioners and collect representative failure
       clips that can legally be evaluated.
 - [ ] Validate the Reliability Lab problem with at least three prospective
