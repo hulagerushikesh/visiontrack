@@ -2,7 +2,7 @@
 
 Contract ID: `visiontrack.tracker-parity/v1`
 
-Status: executable in the NumPy authority; C++ consumption is next
+Status: executable in both the NumPy authority and C++ public binding
 
 Authority: the NumPy implementation defines behavior; the C++ implementation
 may optimize only while preserving this contract.
@@ -14,11 +14,12 @@ This is the first explicit synchronization boundary between `visiontrack` and
 the stable online ByteTrack path needed by the Reliability Lab, not detectors,
 video decoding, evaluation, UI, or research-only tracker extensions.
 
-The NumPy repository now carries canonical golden fixture bytes plus a recorded
+The NumPy repository carries canonical golden fixture bytes plus a recorded
 SHA-256. Its normal tests and CLI run the public tracker, demand exact expected
-output, and repeat after `reset()`. The C++ repository will next copy those
-bytes unchanged; CI will reject fixture drift and compare its public binding's
-canonical output with the same expected stream.
+output, and repeat after `reset()`. VisionTrack C++ commit `3cd3dad` carries the
+same bytes, checks the same digest, and runs the same expected stream through
+the public binding in normal push CI. The existing MOT17 parity harness remains
+the real-data backstop.
 
 ## Versioned envelope
 
@@ -126,13 +127,12 @@ without baking an Accelerate-versus-OpenBLAS rounding difference into JSON.
    generate its expected output only through the public NumPy tracker.
 2. **Complete:** add a Python validator/runner that rejects malformed input and
    exact-output drift without requiring datasets, models, or network access.
-3. Copy the identical fixture bytes into `visiontrack-cpp`; add a digest guard so
-   either repository fails when its recorded peer digest is stale.
-4. Run the fixture through the public C++ binding and compare exact canonical
-   observations. Keep the existing MOT17 parity harness as the real-data gate.
-5. Add both dataset-free runners to normal CI. The NumPy runner is already in
-   its normal matrix; only after the C++ runner joins it should cross-runtime v1
-   be marked complete and the VisionTrack `0.3.0` release scope be frozen.
+3. **Complete:** copy the identical fixture bytes into `visiontrack-cpp` and
+   enforce the accepted peer digest.
+4. **Complete:** run the fixture through the public C++ binding and compare exact
+   canonical observations while retaining MOT17 as the real-data gate.
+5. **Complete:** run both dataset-free gates in normal CI. Cross-runtime v1 is
+   executable; the VisionTrack `0.3.0` release scope can now be frozen.
 
 The authority fixture is `tests/fixtures/tracker_parity_v1.json`; its digest is
 recorded beside it in `tracker_parity_v1.sha256`. Run it directly with:
