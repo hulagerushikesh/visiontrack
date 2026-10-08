@@ -140,6 +140,7 @@ published to PyPI).
 - [x] H3.3 — local-first Reliability Lab technical alpha (immutable local
       bundles, verified comparisons, evidence, decisions, synchronized playback,
       and browser acceptance workflow)
+- [x] H3.3 — practitioner discovery protocol and lawful failure-evidence intake
 - [ ] H3.3 — practitioner validation and initial vertical selection
 - [ ] Selective anonymous identity-continuity research under bounded memory
 - [ ] Choose a vertical only after practitioner interviews and design-partner validation
@@ -239,3 +240,7 @@ action majors. Next: validate the Reliability Lab with practitioners before
 choosing a product vertical or expanding the platform surface.
 Practitioner validation and selective anonymous identity-continuity research
 remain post-candidate work in Python before any new C++ behavior is ported.
+The next human-research step now has a fixed screener, interview guide,
+evidence-rights intake, case template, scoring rubric, and Stage 0 decision gate
+in `docs/PRACTITIONER_DISCOVERY.md`; no interview or design-partner result is
+claimed until that process is actually completed.

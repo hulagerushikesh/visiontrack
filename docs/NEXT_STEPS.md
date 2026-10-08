@@ -30,6 +30,9 @@ strongest problem.
 
 The first local workflow and its versioned records are defined in
 [`RELIABILITY_LAB.md`](RELIABILITY_LAB.md).
+The practitioner interview, evidence-rights, failure-intake, scoring, and
+decision-gate process is defined in
+[`PRACTITIONER_DISCOVERY.md`](PRACTITIONER_DISCOVERY.md).
 
 - [x] Establish the React + TypeScript + Tailwind + shadcn/ui + Motion shell.
 - [x] Migrate the landing, teaching, and real-footage routes first.
@@ -149,6 +152,9 @@ The first local workflow and its versioned records are defined in
       action majors and lock that release-harness policy in tests.
 - [x] Publish `visiontrack-mot 0.3.0` through trusted publishing and verify the
       tag, GitHub Release, public wheel, sdist, metadata, digests, and attestations.
+- [x] Prepare a consistent practitioner discovery playbook with screening,
+      interview, lawful evidence intake, failure-case registration, scoring,
+      synthesis, and an explicit proceed/narrow/stop gate.
 - [ ] Interview 5–10 tracking practitioners and collect representative failure
       clips that can legally be evaluated.
 - [ ] Validate the Reliability Lab problem with at least three prospective
