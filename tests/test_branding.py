@@ -104,6 +104,8 @@ def test_practitioner_discovery_is_linked_and_does_not_claim_validation() -> Non
     assert "initial ten-lead candidate-source list" in playbook
     assert "without contacting anyone" in plan
     assert "owner-gated outreach" in plan
+    assert "four public first-wave leads" in plan
+    assert "fifth\n      warm-referral slot visibly blocked" in playbook
     assert "Replace three owner-network placeholders" in playbook
     assert "owner-only local discovery workspace" in plan
     assert "- [ ] Interview 5–10 tracking practitioners" in plan
