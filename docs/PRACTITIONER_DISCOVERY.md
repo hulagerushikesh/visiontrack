@@ -294,6 +294,9 @@ research system.
 - [x] Personalize four public first-wave drafts against each project's actual
       tracking/evaluation scope; keep every message on hold and leave the fifth
       warm-referral slot visibly blocked rather than inventing a contact.
+- [x] Prepare response triage, written screening, consent-aware scheduling,
+      interview facilitation, anti-bias prompts, post-call scoring, and an
+      outreach audit log without authorizing any external message.
 - [ ] Replace three owner-network placeholders with real retail, warehouse, or
       locally accessible deployment decision owners; then approve the balanced
       first wave before sending any message.

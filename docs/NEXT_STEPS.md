@@ -166,6 +166,9 @@ decision-gate process is defined in
 - [x] Prepare accurate personalized drafts for the four public first-wave leads
       while keeping the commercial deployment slot blocked on a real warm
       referral and retaining explicit per-recipient send approval.
+- [x] Make the discovery round operationally ready with response/screener
+      templates, consent-aware scheduling, a facilitator guide, anti-bias and
+      data-boundary scripts, post-call scoring, and a private audit log.
 - [ ] Interview 5–10 tracking practitioners and collect representative failure
       clips that can legally be evaluated.
 - [ ] Validate the Reliability Lab problem with at least three prospective
