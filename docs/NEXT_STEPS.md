@@ -155,6 +155,9 @@ decision-gate process is defined in
 - [x] Prepare a consistent practitioner discovery playbook with screening,
       interview, lawful evidence intake, failure-case registration, scoring,
       synthesis, and an explicit proceed/narrow/stop gate.
+- [x] Create an owner-only local discovery workspace outside both repositories
+      with blank candidate, interview, rights, case, synthesis, and deletion
+      records; keep all participant data and evidence out of Git.
 - [ ] Interview 5–10 tracking practitioners and collect representative failure
       clips that can legally be evaluated.
 - [ ] Validate the Reliability Lab problem with at least three prospective

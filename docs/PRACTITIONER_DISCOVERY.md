@@ -283,7 +283,7 @@ research system.
 
 ## Immediate operating checklist
 
-- [ ] Create a private interview-notes location with access control and a
+- [x] Create a private interview-notes location with access control and a
       deletion policy; keep it outside both public repositories.
 - [ ] Build a candidate list that covers the participant-mix dimensions.
 - [ ] Screen candidates using the seven questions above.
