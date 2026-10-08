@@ -158,6 +158,9 @@ decision-gate process is defined in
 - [x] Create an owner-only local discovery workspace outside both repositories
       with blank candidate, interview, rights, case, synthesis, and deletion
       records; keep all participant data and evidence out of Git.
+- [x] Source a ten-lead, six-domain practitioner list from current public project
+      channels without contacting anyone or treating public maintainership as
+      validation; require review and screening before qualification.
 - [ ] Interview 5–10 tracking practitioners and collect representative failure
       clips that can legally be evaluated.
 - [ ] Validate the Reliability Lab problem with at least three prospective

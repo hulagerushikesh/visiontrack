@@ -285,7 +285,11 @@ research system.
 
 - [x] Create a private interview-notes location with access control and a
       deletion policy; keep it outside both public repositories.
-- [ ] Build a candidate list that covers the participant-mix dimensions.
+- [x] Build an initial ten-lead candidate-source list spanning tracker/evaluation
+      tooling, traffic, sports, fisheries, autonomous racing, annotation, and
+      edge deployment; treat every lead as unqualified until screening.
+- [ ] Review each public contact route, add 2–3 owner-network deployment leads,
+      and approve the balanced outreach list before sending any message.
 - [ ] Screen candidates using the seven questions above.
 - [ ] Schedule and conduct 5–10 interviews using the same guide.
 - [ ] Complete a score and follow-up decision after every interview.
