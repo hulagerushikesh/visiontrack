@@ -100,4 +100,6 @@ def test_practitioner_discovery_is_linked_and_does_not_claim_validation() -> Non
     assert "do not copy the evidence" in playbook
     assert "at least three independent teams" in playbook
     assert "Do not compensate by adding" in playbook
+    assert "- [x] Create a private interview-notes location" in playbook
+    assert "owner-only local discovery workspace" in plan
     assert "- [ ] Interview 5–10 tracking practitioners" in plan
