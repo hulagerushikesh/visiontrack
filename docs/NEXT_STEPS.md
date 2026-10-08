@@ -15,6 +15,11 @@ why a tracking change helps or hurts.
       and track lifecycle.
 - [x] Add a NumPy-versus-C++ parity capstone.
 - [x] Complete mobile, keyboard, contrast, and reduced-motion QA.
+- [x] Add a zero-to-hero curriculum for non-technical readers, students,
+      developers, and the project research lead, plus a parity-focused C++
+      mastery companion.
+- [ ] Surface the new zero-to-hero and research-lead routes in the deployed
+      learning UI without duplicating their content or breaking stable routes.
 
 The detailed curriculum plan is in
 [`LEARNING_PRODUCT_PLAN.md`](LEARNING_PRODUCT_PLAN.md).

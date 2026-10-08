@@ -5,15 +5,21 @@ project.
 
 ## Modules
 
-1. [VisionTrack study guide](LEARNING_PATH.html) — work through the tracker from
+1. [Zero-to-hero curriculum](ZERO_TO_HERO.md) — choose a non-technical,
+   student, developer, or research-lead route and finish with concrete mastery
+   evidence rather than reading alone.
+2. [Research-lead path](RESEARCH_LEAD_PATH.md) — understand the current product
+   research, the selective bounded identity-continuity frontier, the proposed
+   contribution, and the two-repository decision gates.
+3. [VisionTrack study guide](LEARNING_PATH.html) — work through the tracker from
    geometry and Kalman filtering to association, evaluation, and the research
    findings. Progress is saved locally in the browser.
-2. [Computer-vision roadmap](CV_ROADMAP.html) — a junior-to-research progression
+4. [Computer-vision roadmap](CV_ROADMAP.html) — a junior-to-research progression
    covering foundations, tracking, production, and research practice.
-3. [Dataset-free exercises](EXERCISES.md) — runnable checks for geometry,
+5. [Dataset-free exercises](EXERCISES.md) — runnable checks for geometry,
    Kalman filtering, global assignment, and track lifecycle using the real
    implementation and no external data.
-4. [NumPy-versus-C++ parity capstone](PARITY_CAPSTONE.md) — prove that the
+6. [NumPy-versus-C++ parity capstone](PARITY_CAPSTONE.md) — prove that the
    optimized sibling preserves the reference contract from primitives through
    complete synthetic trajectories.
 
