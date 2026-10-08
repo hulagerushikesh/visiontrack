@@ -288,8 +288,12 @@ research system.
 - [x] Build an initial ten-lead candidate-source list spanning tracker/evaluation
       tooling, traffic, sports, fisheries, autonomous racing, annotation, and
       edge deployment; treat every lead as unqualified until screening.
-- [ ] Review each public contact route, add 2–3 owner-network deployment leads,
-      and approve the balanced outreach list before sending any message.
+- [x] Review every public lead's appropriate contact route, prioritize a
+      five-lead mixed first wave, and prepare restrained unsent outreach drafts
+      with an explicit owner-approval gate.
+- [ ] Replace three owner-network placeholders with real retail, warehouse, or
+      locally accessible deployment decision owners; then approve the balanced
+      first wave before sending any message.
 - [ ] Screen candidates using the seven questions above.
 - [ ] Schedule and conduct 5–10 interviews using the same guide.
 - [ ] Complete a score and follow-up decision after every interview.

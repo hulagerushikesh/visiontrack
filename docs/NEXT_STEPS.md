@@ -161,6 +161,8 @@ decision-gate process is defined in
 - [x] Source a ten-lead, six-domain practitioner list from current public project
       channels without contacting anyone or treating public maintainership as
       validation; require review and screening before qualification.
+- [x] Review contact-channel appropriateness, prioritize a mixed five-lead first
+      wave, and prepare unsent, owner-gated outreach and follow-up drafts.
 - [ ] Interview 5–10 tracking practitioners and collect representative failure
       clips that can legally be evaluated.
 - [ ] Validate the Reliability Lab problem with at least three prospective
