@@ -85,3 +85,19 @@ def test_reliability_lab_contract_is_linked_and_bounded() -> None:
     assert "does not introduce a server" in contract
     assert "It is not a person identifier" in contract
     assert "It should not yet implement the React explorer" in contract
+
+
+def test_practitioner_discovery_is_linked_and_does_not_claim_validation() -> None:
+    config = (ROOT / "mkdocs.yml").read_text()
+    plan = (ROOT / "docs" / "NEXT_STEPS.md").read_text()
+    status = (ROOT / "docs" / "STATUS.md").read_text()
+    playbook = (ROOT / "docs" / "PRACTITIONER_DISCOVERY.md").read_text()
+
+    assert "PRACTITIONER_DISCOVERY.md" in config
+    assert "PRACTITIONER_DISCOVERY.md" in plan
+    assert "no interview or design-partner result is" in status
+    assert "Do not ask for files during screening" in playbook
+    assert "do not copy the evidence" in playbook
+    assert "at least three independent teams" in playbook
+    assert "Do not compensate by adding" in playbook
+    assert "- [ ] Interview 5–10 tracking practitioners" in plan

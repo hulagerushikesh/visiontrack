@@ -81,6 +81,7 @@ nav:
   - Roadmap:
       - Status checklist: STATUS.md
       - Reliability Lab — first slice: RELIABILITY_LAB.md
+      - Practitioner discovery playbook: PRACTITIONER_DISCOVERY.md
       - Release-readiness audit: RELEASE_READINESS.md
       - Python/C++ runtime contract: CROSS_RUNTIME_CONTRACT.md
       - Horizons: HORIZONS.md
