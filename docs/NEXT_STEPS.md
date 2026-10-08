@@ -163,6 +163,9 @@ decision-gate process is defined in
       validation; require review and screening before qualification.
 - [x] Review contact-channel appropriateness, prioritize a mixed five-lead first
       wave, and prepare unsent, owner-gated outreach and follow-up drafts.
+- [x] Prepare accurate personalized drafts for the four public first-wave leads
+      while keeping the commercial deployment slot blocked on a real warm
+      referral and retaining explicit per-recipient send approval.
 - [ ] Interview 5–10 tracking practitioners and collect representative failure
       clips that can legally be evaluated.
 - [ ] Validate the Reliability Lab problem with at least three prospective

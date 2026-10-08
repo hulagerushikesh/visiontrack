@@ -291,6 +291,9 @@ research system.
 - [x] Review every public lead's appropriate contact route, prioritize a
       five-lead mixed first wave, and prepare restrained unsent outreach drafts
       with an explicit owner-approval gate.
+- [x] Personalize four public first-wave drafts against each project's actual
+      tracking/evaluation scope; keep every message on hold and leave the fifth
+      warm-referral slot visibly blocked rather than inventing a contact.
 - [ ] Replace three owner-network placeholders with real retail, warehouse, or
       locally accessible deployment decision owners; then approve the balanced
       first wave before sending any message.
