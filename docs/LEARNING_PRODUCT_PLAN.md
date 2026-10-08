@@ -16,6 +16,12 @@ implementation.
 3. **Performance engineer** — follow the same tracker from the NumPy oracle into
    the parity-gated C++ implementation, profiling, packaging, and the GPU
    feasibility decision.
+4. **Computer-vision student** — start from frames and boxes, build the required
+   mathematics and research discipline, then finish with an ablation and parity
+   capstone.
+5. **Research/product lead** — distinguish built mechanisms from product and
+   scientific evidence, master the bounded identity-continuity thesis, and
+   control which behavior earns a runtime port.
 
 ## Delivery checklist
 
@@ -50,8 +56,19 @@ implementation.
       and reduced motion.
 - [ ] Add learning-product analytics only if a privacy-preserving requirement is
       explicitly chosen.
-- [ ] Mark H3.2 complete when all three audience paths have a beginning, guided
+- [ ] Mark H3.2 complete when every audience path has a beginning, guided
       sequence, exercises, and a concrete finish.
+
+### Milestone 5 — zero-to-research mastery extension
+
+- [x] Add one shared zero-to-hero curriculum for non-technical readers,
+      students, developers, and research leads.
+- [x] Add an owner path that explains the current research, future scientific
+      questions, intended contribution, boundaries, and six-week mastery proof.
+- [x] Add a C++ companion path covering build literacy, parity, numerical
+      behavior, honest benchmarking, and the port-readiness gate.
+- [ ] Surface the new routes in the deployed learning UI after their written
+      curriculum and link contracts are verified.
 
 ## Guardrails
 
