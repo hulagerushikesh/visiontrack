@@ -67,8 +67,8 @@ implementation.
       questions, intended contribution, boundaries, and six-week mastery proof.
 - [x] Add a C++ companion path covering build literacy, parity, numerical
       behavior, honest benchmarking, and the port-readiness gate.
-- [ ] Surface the new routes in the deployed learning UI after their written
-      curriculum and link contracts are verified.
+- [x] Surface the new routes in the deployed learning UI, keeping the complete
+      curricula in their canonical repository documents.
 
 ## Guardrails
 

@@ -18,8 +18,9 @@ why a tracking change helps or hurts.
 - [x] Add a zero-to-hero curriculum for non-technical readers, students,
       developers, and the project research lead, plus a parity-focused C++
       mastery companion.
-- [ ] Surface the new zero-to-hero and research-lead routes in the deployed
-      learning UI without duplicating their content or breaking stable routes.
+- [x] Surface zero-to-hero and research-lead paths from the deployed learning
+      UI through `/learn/zero-to-hero` and `/learn/research-lead`, linking to
+      their canonical source documents without copying the full curricula.
 
 The detailed curriculum plan is in
 [`LEARNING_PRODUCT_PLAN.md`](LEARNING_PRODUCT_PLAN.md).
@@ -179,6 +180,15 @@ decision-gate process is defined in
       per-recipient approval, channel, risk, and staged-cadence checks.
 - [ ] Interview 5–10 tracking practitioners and collect representative failure
       clips that can legally be evaluated.
+- [x] Register the first selective anonymous re-entry experiment, including
+      its outcome taxonomy, fixed controls, operating points, split policy,
+      and stop gates; implement independent event-level scoring.
+- [x] Implement the registered dataset-free re-entry stress probe and four
+      decision policies; report held-out results for 10–10,000 candidates,
+      including the 1,000-candidate margin rule's failed risk bound.
+- [ ] Secure rights-reviewed, identity-annotated re-entry data and freeze the
+      detector, crop, identity/session split, and memory-expiry protocol before
+      any real-data RQ5 claim.
 - [ ] Validate the Reliability Lab problem with at least three prospective
       design partners.
 - [ ] Choose one initial vertical only after that validation: retail footfall,

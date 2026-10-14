@@ -316,6 +316,10 @@ threshold tuning, screenshots, and unrepeatable “this looked better” decisio
 
 ## 6. Recommended research program: selective bounded identity continuity
 
+The first falsifiable RQ5 experiment, its controls, split policy, risk budget,
+and stop gates are registered in
+[`IDENTITY_CONTINUITY_PROTOCOL.md`](IDENTITY_CONTINUITY_PROTOCOL.md).
+
 ### 6.1 Research thesis
 
 Re-entry should be formulated as a **selective, open-set association problem

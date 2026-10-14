@@ -10,6 +10,8 @@ def test_product_routes_use_react_shell() -> None:
     routes = {route["src"]: route["dest"] for route in config["routes"]}
     assert routes["/"] == "/app/index.html"
     assert routes["/teaching/?"] == "/app/index.html"
+    assert routes["/learn/zero-to-hero/?"] == "/app/index.html"
+    assert routes["/learn/research-lead/?"] == "/app/index.html"
     assert routes["/video/?"] == "/app/index.html"
     assert routes["/live/?"] == "/app/index.html"
     assert routes["/writeup/?"] == "/app/index.html"

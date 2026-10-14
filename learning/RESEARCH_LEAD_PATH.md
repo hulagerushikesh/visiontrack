@@ -129,6 +129,11 @@ result—showing where continuity is unsafe—is still a contribution.
 These questions are future work until hypotheses, thresholds, data rights, and
 evaluation protocols are registered.
 
+RQ5 now has a registered [first experiment](../docs/IDENTITY_CONTINUITY_PROTOCOL.md)
+and a [dataset-free synthetic stress result](../docs/IDENTITY_CONTINUITY_SYNTHETIC.md).
+Those artifacts test the scoring and decision rules; real-data accuracy and
+product value remain unmeasured.
+
 ## Your six-week mastery plan
 
 ### Week 1 — Explain the complete system
