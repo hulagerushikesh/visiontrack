@@ -186,6 +186,10 @@ decision-gate process is defined in
 - [x] Implement the registered dataset-free re-entry stress probe and four
       decision policies; report held-out results for 10–10,000 candidates,
       including the 1,000-candidate margin rule's failed risk bound.
+- [x] Audit the locally available DanceTrack annotation gaps and official
+      dataset terms to identify a possible non-commercial research path.
+- [ ] Validate GT gaps as observable re-entry events and pre-register the
+      event list and recording-level development/test split.
 - [ ] Secure rights-reviewed, identity-annotated re-entry data and freeze the
       detector, crop, identity/session split, and memory-expiry protocol before
       any real-data RQ5 claim.

@@ -82,6 +82,7 @@ nav:
       - Status checklist: STATUS.md
       - RQ5 re-entry protocol: IDENTITY_CONTINUITY_PROTOCOL.md
       - RQ5 synthetic stress result: IDENTITY_CONTINUITY_SYNTHETIC.md
+      - RQ5 data feasibility audit: IDENTITY_CONTINUITY_DATA_AUDIT.md
       - Reliability Lab — first slice: RELIABILITY_LAB.md
       - Practitioner discovery playbook: PRACTITIONER_DISCOVERY.md
       - Release-readiness audit: RELEASE_READINESS.md
