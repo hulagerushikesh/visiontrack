@@ -115,11 +115,28 @@ Use one of these outcomes:
 
 Record the reviewed frame numbers, outcome, reviewer, and reason in an
 owner-local audit record; do not commit frames, crops, or identifiable notes.
-Sparse-frame spot checks of two long-gap sample events were **indeterminate**:
-`dancetrack0081` ID 17 (frames 779, 870, 957) remained a crowded performance
-scene, and `dancetrack0073` ID 12 (frames 78, 165, 252) changed framing among
-similarly dressed dancers. Endpoint boxes plus those midpoint frames could not
-establish an actual exit and return. These checks are not the full 20-candidate
-adjudication and do not change the frozen sample. If these pre-inspected
-sequences are later proposed for a held-out test split, treat them as
-development/audit exposure instead.
+Treat any sequence inspected while refining this rubric as development/audit
+exposure, not as an untouched held-out test recording.
+
+### First long-gap triage (5 of 20 sampled candidates)
+
+The five pre-selected `100+`-frame candidates were each checked at their last
+annotated frame, one midpoint frame, and their next annotated frame. This is
+**sparse-frame triage**, not the full before/during/after adjudication required
+by the rubric. The reviewer was Codex; no second reviewer has checked these
+cases. No pixels, crops, or review copies were saved to the repository.
+
+| Sequence-scoped candidate | Frames inspected | Triage finding |
+|---|---|---|
+| `dancetrack0081`, ID 17 | 779, 870, 957 | Not verified: crowded cheerleading formation prevents reliable attribution across the gap. |
+| `dancetrack0081`, ID 19 | 326, 391, 457 | Not verified: similarly dressed performers remain active in the same scene. |
+| `dancetrack0018`, ID 5 | 108, 175, 242 | Not verified: dancers remain in the scene, but the sampled frames do not establish the annotated person's continuous visibility or absence. |
+| `dancetrack0073`, ID 12 | 78, 165, 252 | Not verified: changing framing and similar clothing prevent a reliable exit/return judgment. |
+| `dancetrack0094`, ID 4 | 386, 463, 541 | Not verified: a crowded, moving formation does not support a reliable person-level judgment from three frames. |
+
+These are **five unresolved opportunities**, not five negative identity outcomes.
+Do not divide by five to claim a re-entry rate. The full 20-event review still
+requires denser frame inspection, an explicit final label and reason for each
+case, and preferably an independent second reviewer. If reliable truth cannot
+be established, stop this dataset's RQ5 path and find a better consented or
+rights-cleared re-entry source instead of silently using GT gaps as labels.
