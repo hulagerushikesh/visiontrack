@@ -48,8 +48,11 @@ solely idealized entrances.
 
 ## Truth and split contract
 
-1. Assign random **session-local participant codes** in a private key held by
-   the owner; do not put names or the key in the research repository. Record
+1. Assign random **session-local participant codes** and a separate, stable
+   random **participant-group key** in a private mapping held by the owner.
+   The group key is needed to catch the same volunteer appearing in both
+   development and test under different session-local codes. Do not put names,
+   the mapping, or actual event records in the research repository. Record
    event IDs, recording IDs, frame numbers, and whether the person fully left
    the observable scene. An occlusion or missed detection is a different event.
 2. Mark the last fully visible frame before exit, first fully out-of-scene
@@ -71,6 +74,15 @@ solely idealized entrances.
    boundaries, gallery policy, exclusions, and threshold grid on development
    data. Score abstain-all, forced-nearest, threshold-only, and threshold-plus-
    margin on the identical test opportunity list.
+
+The metadata-only [`experiments/reentry_capture_ledger.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/reentry_capture_ledger.py)
+contract checks that two distinct reviewer codes labeled each event, disagreements
+are not silently promoted, returns have an ordered observable exit boundary,
+and recording/session/participant groups do not cross splits. It returns only
+counts by event category. It cannot establish consent, correct visual truth,
+or that a private group key actually represents the same person, or that the
+reviewers worked independently; those remain owner and reviewer
+responsibilities. No real ledger has been created.
 
 ## Pilot acceptance and scale-up gate
 

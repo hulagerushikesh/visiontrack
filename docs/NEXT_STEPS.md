@@ -203,6 +203,9 @@ decision-gate process is defined in
 - [x] Define a consented, same-camera pilot capture and two-reviewer truth
       protocol with novel, return, lookalike, occlusion, expiry, and reset
       controls; keep collection owner-gated and separate from product use.
+- [x] Add a metadata-only capture-ledger validator: require two distinct
+      reviewer codes, ordered exit evidence for returns, and a private stable
+      participant-group key to detect development/test identity leakage.
 - [ ] Decide whether dense, independent review can validate any DanceTrack GT
       gaps as observable returns; otherwise close that RQ5 data path. Freeze
       the event list and recording-level development/test split for the chosen
