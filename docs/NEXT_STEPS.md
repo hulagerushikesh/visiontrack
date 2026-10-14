@@ -210,6 +210,9 @@ decision-gate process is defined in
       absence/expiry intervals, bounded gallery, retention, rights-process
       references, and scenario counts; fingerprint owner-local frozen choices
       without creating a real participant record.
+- [x] Add seeded, dependency-grouped descriptive intervals for RQ5 event risk
+      and eligible-return recall; do not treat a zero-error or one-group pilot
+      as passing the registered 1% risk gate.
 - [ ] Decide whether dense, independent review can validate any DanceTrack GT
       gaps as observable returns; otherwise close that RQ5 data path. Freeze
       the event list and recording-level development/test split for the chosen
