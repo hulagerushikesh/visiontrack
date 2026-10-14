@@ -194,6 +194,9 @@ decision-gate process is defined in
 - [x] Triage the five pre-selected 100+-frame gaps at sparse checkpoints; record
       all five as *not verified*, without treating them as negative examples or
       changing the frozen sample.
+- [x] Triage the five frozen 30–99-frame gaps at sparse checkpoints; record
+      all five as *not verified*. Ten of 20 candidates have preliminary review,
+      but none has a verified re-entry label or an untouched test status.
 - [ ] Validate GT gaps as observable re-entry events and pre-register the
       event list and recording-level development/test split.
 - [ ] Secure rights-reviewed, identity-annotated re-entry data and freeze the
