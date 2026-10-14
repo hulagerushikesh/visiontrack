@@ -191,6 +191,9 @@ decision-gate process is defined in
 - [x] Add a reproducible GT gap-candidate extractor with sequence-scoped IDs,
       deterministic duration-stratified audit sampling, and a frozen candidate
       digest; confirm its 1,370 candidates against the earlier read-only audit.
+- [x] Triage the five pre-selected 100+-frame gaps at sparse checkpoints; record
+      all five as *not verified*, without treating them as negative examples or
+      changing the frozen sample.
 - [ ] Validate GT gaps as observable re-entry events and pre-register the
       event list and recording-level development/test split.
 - [ ] Secure rights-reviewed, identity-annotated re-entry data and freeze the
