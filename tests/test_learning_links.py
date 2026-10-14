@@ -37,6 +37,15 @@ def test_learning_hub_exposes_all_three_paths() -> None:
     )
 
 
+def test_react_learning_hub_exposes_new_paths_and_canonical_documents() -> None:
+    app = (ROOT / "src" / "App.tsx").read_text()
+    pages = (ROOT / "src" / "features" / "learning" / "LearningRoutes.tsx").read_text()
+    assert "href:'/learn/zero-to-hero'" in app
+    assert "href:'/learn/research-lead'" in app
+    assert "ZERO_TO_HERO.md" in pages
+    assert "RESEARCH_LEAD_PATH.md" in pages
+
+
 def test_learning_routes_point_to_committed_modules() -> None:
     config = json.loads((ROOT / "vercel.json").read_text())
     routes = {route["src"]: route["dest"] for route in config["routes"]}

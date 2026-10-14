@@ -1,10 +1,13 @@
 # VisionTrack — Status & Roadmap Checklist
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
-Last updated: 2026-10-06 — `visiontrack-mot 0.3.0` is published with the
-Reliability Lab technical alpha and versioned Python/C++ synchronization boundary;
-the two remaining research extensions remain **compute-blocked with
-measured numbers**, not merely "planned". Previously:
+Last updated: 2026-10-14 — the zero-to-hero and research-lead learning paths
+are surfaced in the React site, and the first selective anonymous re-entry
+protocol, scorer, and synthetic stress probe are in place. These are research
+foundations, not real-data validation. `visiontrack-mot 0.3.0` remains the
+published Reliability Lab technical alpha with a versioned Python/C++
+synchronization boundary; the two earlier research extensions remain
+**compute-blocked with measured numbers**. Previously:
 2026-09-07, SportsMOT oracle numbers landed (45 val sequences, `/benchmark/sportsmot`
 live); v0.2.0 (`/live` in-browser tracker + SportsMOT code path + site redesign,
 published to PyPI).
@@ -141,8 +144,11 @@ published to PyPI).
       bundles, verified comparisons, evidence, decisions, synchronized playback,
       and browser acceptance workflow)
 - [x] H3.3 — practitioner discovery protocol and lawful failure-evidence intake
+- [x] RQ5 first protocol, event-level restore/abstain scoring, and synthetic
+      held-out stress probe for galleries of 10–10,000 candidates
 - [ ] H3.3 — practitioner validation and initial vertical selection
-- [ ] Selective anonymous identity-continuity research under bounded memory
+- [ ] Selective anonymous identity-continuity **real-data** research under
+      bounded memory and a rights-reviewed evaluation protocol
 - [ ] Choose a vertical only after practitioner interviews and design-partner validation
 
 ### Sibling project (all four phases resolved)
