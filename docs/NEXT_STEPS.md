@@ -197,8 +197,16 @@ decision-gate process is defined in
 - [x] Triage the five frozen 30–99-frame gaps at sparse checkpoints; record
       all five as *not verified*. Ten of 20 candidates have preliminary review,
       but none has a verified re-entry label or an untouched test status.
-- [ ] Validate GT gaps as observable re-entry events and pre-register the
-      event list and recording-level development/test split.
+- [x] Complete preliminary triage of all 20 frozen DanceTrack GT gaps; identify
+      two likely visible-but-unannotated short gaps and zero verified returns.
+      Do not turn these audit dispositions into an accuracy or prevalence rate.
+- [x] Define a consented, same-camera pilot capture and two-reviewer truth
+      protocol with novel, return, lookalike, occlusion, expiry, and reset
+      controls; keep collection owner-gated and separate from product use.
+- [ ] Decide whether dense, independent review can validate any DanceTrack GT
+      gaps as observable returns; otherwise close that RQ5 data path. Freeze
+      the event list and recording-level development/test split for the chosen
+      rights-reviewed source before running a real-data comparison.
 - [ ] Secure rights-reviewed, identity-annotated re-entry data and freeze the
       detector, crop, identity/session split, and memory-expiry protocol before
       any real-data RQ5 claim.

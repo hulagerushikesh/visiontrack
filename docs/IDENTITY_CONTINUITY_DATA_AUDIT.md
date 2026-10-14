@@ -165,3 +165,35 @@ held-out test recordings. Continue with dense frame-by-frame review and a
 second reviewer before any event is admitted to an RQ5 evaluation. If that
 cannot yield reliable identity truth, use a consented, rights-cleared capture
 with designed exits and returns instead of promoting GT gaps to labels.
+
+### Short-gap triage (final 10 of 20 sampled candidates)
+
+All missing frames in the five `1–9`-frame candidates were inspected. The five
+`10–29`-frame candidates were inspected at both endpoints and three spaced
+checkpoints inside each gap. This is a single-reviewer visual triage by Codex,
+not independently adjudicated truth. No media was copied into the repository.
+
+| Sequence-scoped candidate | Frames inspected | Preliminary finding |
+|---|---|---|
+| `dancetrack0005`, ID 1 | 586–589 (all frames) | Likely visible but unannotated: the same foreground dancer appears to stay in view during both missing-box frames. No observed exit. |
+| `dancetrack0034`, ID 9 | 728–731 (all frames) | Likely visible but unannotated: the foreground dancer appears continuous across both missing-box frames. No observed exit. |
+| `dancetrack0041`, ID 8 | 932–936 (all frames) | Not verified: umbrellas and similar costumes obscure person-level attribution in a crowded stage formation. |
+| `dancetrack0043`, ID 3 | 130–133 (all frames) | Not verified: similarly dressed outdoor dancers remain in the shot; the target cannot be attributed reliably. |
+| `dancetrack0041`, ID 15 | 451–453 (all frames) | Not verified: one missing-box frame in a dense, uniform-costume formation does not establish an exit and return. |
+| `dancetrack0041`, ID 15 | 305, 308, 311, 314, 317 | Not verified: the parasol formation remains on stage, with no reliable target identity path at sampled frames. |
+| `dancetrack0041`, ID 20 | 286, 289, 292, 295, 297 | Not verified: many similarly dressed dancers move together; person-level continuity is ambiguous. |
+| `dancetrack0035`, ID 5 | 566, 570, 575, 579, 584 | Not verified: the tightly overlapping group remains on stage, but the target cannot be isolated reliably. |
+| `dancetrack0026`, ID 12 | 83, 86, 90, 93, 97 | Not verified: similarly dressed ballet performers remain in the scene; target attribution is uncertain. |
+| `dancetrack0094`, ID 6 | 440, 443, 447, 450, 454 | Not verified: a large, similarly dressed formation remains visible; the sampled frames cannot prove the annotated ID left and returned. |
+
+**Decision from the frozen triage:** all 20 candidates were inspected at sparse
+checkpoints or, for the shortest gaps, at every frame. Two short gaps have
+preliminary visual evidence of a person staying
+visible; 18 remain unresolved at the person level. **Zero have been admitted as
+verified re-entry events.** These counts describe audit disposition, not a
+re-entry prevalence estimate, and the two apparent annotation omissions need
+independent confirmation before a final label. DanceTrack GT gaps must not be
+used directly as RQ5 re-entry truth. Dense review plus a second reviewer may
+still rescue individual events, but a designed, consented capture is now the
+preferred route to a reliable first real-data study. See the
+[capture and adjudication plan](IDENTITY_CONTINUITY_CAPTURE_PLAN.md).
