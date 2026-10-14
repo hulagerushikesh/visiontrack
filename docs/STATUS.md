@@ -149,6 +149,9 @@ published to PyPI).
 - [x] RQ5 metadata-only DanceTrack GT gap extraction: 1,370 candidate windows,
       a frozen 20-event duration-stratified audit sample, and no re-entry truth
       or real-data accuracy claim
+- [x] RQ5 owner-local pilot preflight: pre-recording manifest validation and
+      fingerprinting plus a two-reviewer event-ledger contract; no footage or
+      participant records collected by these tools
 - [ ] H3.3 — practitioner validation and initial vertical selection
 - [ ] Selective anonymous identity-continuity **real-data** research under
       bounded memory and a rights-reviewed evaluation protocol
