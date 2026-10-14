@@ -41,10 +41,15 @@ reported, never silently padded with repeated correlated attempts.
 | Session reset | End one authorized session and start another | No identity carryover across sessions |
 
 Before recording, specify actual short/long intervals, gallery capacity, TTL,
-number of takes, and permissible scene changes in a dated manifest. Avoid
-choosing these after seeing tracker errors. Mix scenario order where practical
-and include ordinary footage between scripted events so the stream is not
-solely idealized entrances.
+number of takes, and permissible scene changes in a dated manifest. The
+metadata-only [`CaptureManifest`](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/reentry_capture_manifest.py)
+validates these choices and yields a stable fingerprint. Keep the populated
+manifest and fingerprint in the owner's private study record, not Git; record
+the fingerprint before the first take to make later changes detectable. The
+hash alone does not prove *when* the plan was frozen. The validator checks
+structure, **not** whether permissions or consent actually exist. Mix scenario
+order where practical and include ordinary footage between scripted events so
+the stream is not solely idealized entrances.
 
 ## Truth and split contract
 
