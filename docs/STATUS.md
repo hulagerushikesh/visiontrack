@@ -155,6 +155,9 @@ published to PyPI).
 - [x] RQ5 grouped descriptive uncertainty: participant/recording-connected
       bootstrap for future real-video scoring, with no claim of a certified
       operating-risk bound or real-data result
+- [x] First-study data-source decision: preserve the DanceTrack gap audit but
+      do not use its unverified gaps as re-entry truth; prioritize an
+      owner-controlled, consented capture after rights and privacy review
 - [ ] H3.3 — practitioner validation and initial vertical selection
 - [ ] Selective anonymous identity-continuity **real-data** research under
       bounded memory and a rights-reviewed evaluation protocol
