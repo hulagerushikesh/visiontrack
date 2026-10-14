@@ -27,6 +27,32 @@ over the annotations found:
 | Gaps of at least 30 missing frames | 116 |
 | Gaps of at least 100 missing frames | 15 |
 
+The reproducible, metadata-only extractor is
+[`experiments/reentry_gap_audit.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/reentry_gap_audit.py).
+Run it locally with:
+
+```bash
+python -m experiments.reentry_gap_audit --root /path/to/dancetrack/val
+```
+
+It found the same 225,148 rows, 273 sequence-scoped identity keys, and 1,370
+gap candidates across the 25 validation sequences. The duration strata are:
+
+| Missing frames | Candidate count |
+|---|---:|
+| 1–9 | 1,026 |
+| 10–29 | 228 |
+| 30–99 | 101 |
+| 100+ | 15 |
+
+The canonical candidate-list SHA-256 is
+`8f2036b0f81df88f2872061054a8236fbdb790cce0ec14b3c108cd189dff7a04`.
+The CLI deterministically selects the five lowest SHA-256-ranked events in
+each stratum for a **20-candidate visual audit**, before opening frames. Its
+output includes only sequence IDs and frame numbers; it reads no images and
+writes no files. One sequence contains no gap candidate, which is why the
+per-sequence candidate summary lists 24 rather than 25 sequences.
+
 These are **candidate absence windows**, not verified returns. A missing GT
 box may mean occlusion, annotation policy, movement outside the frame, or
 another cause. Several gaps may belong to one person, so event counts are
@@ -52,9 +78,12 @@ establish a publishable RQ5 protocol.
 
 1. Review the upstream dataset conditions again at execution time and record
    the exact source/version and permitted use. Keep raw media local.
-2. Build an event-list extractor from GT gaps, then manually audit a small,
-   pre-selected sample of each gap-duration stratum to decide whether the
-   GT labels actually describe an observable re-entry opportunity.
+2. Use the frozen 20-candidate audit sample above. Inspect local frames around
+   each window and label whether the person truly leaves the observable scene,
+   is merely occluded, remains visible but unannotated, or is indeterminate.
+   Record who reviewed each event, the decision rubric, and disagreement; do
+   not change the sample after seeing frames. A GT gap is never auto-promoted
+   to a true re-entry label.
 3. Identify the source recordings where possible. Split development and test
    by recording/source, and assess whether the same performers might appear
    across clips. If identity separation cannot be established, label the
