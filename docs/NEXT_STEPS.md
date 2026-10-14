@@ -188,6 +188,9 @@ decision-gate process is defined in
       including the 1,000-candidate margin rule's failed risk bound.
 - [x] Audit the locally available DanceTrack annotation gaps and official
       dataset terms to identify a possible non-commercial research path.
+- [x] Add a reproducible GT gap-candidate extractor with sequence-scoped IDs,
+      deterministic duration-stratified audit sampling, and a frozen candidate
+      digest; confirm its 1,370 candidates against the earlier read-only audit.
 - [ ] Validate GT gaps as observable re-entry events and pre-register the
       event list and recording-level development/test split.
 - [ ] Secure rights-reviewed, identity-annotated re-entry data and freeze the

@@ -146,6 +146,9 @@ published to PyPI).
 - [x] H3.3 — practitioner discovery protocol and lawful failure-evidence intake
 - [x] RQ5 first protocol, event-level restore/abstain scoring, and synthetic
       held-out stress probe for galleries of 10–10,000 candidates
+- [x] RQ5 metadata-only DanceTrack GT gap extraction: 1,370 candidate windows,
+      a frozen 20-event duration-stratified audit sample, and no re-entry truth
+      or real-data accuracy claim
 - [ ] H3.3 — practitioner validation and initial vertical selection
 - [ ] Selective anonymous identity-continuity **real-data** research under
       bounded memory and a rights-reviewed evaluation protocol
