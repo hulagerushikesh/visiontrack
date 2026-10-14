@@ -152,6 +152,9 @@ published to PyPI).
 - [x] RQ5 owner-local pilot preflight: pre-recording manifest validation and
       fingerprinting plus a two-reviewer event-ledger contract; no footage or
       participant records collected by these tools
+- [x] RQ5 grouped descriptive uncertainty: participant/recording-connected
+      bootstrap for future real-video scoring, with no claim of a certified
+      operating-risk bound or real-data result
 - [ ] H3.3 — practitioner validation and initial vertical selection
 - [ ] Selective anonymous identity-continuity **real-data** research under
       bounded memory and a rights-reviewed evaluation protocol

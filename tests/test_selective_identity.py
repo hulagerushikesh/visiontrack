@@ -3,7 +3,9 @@
 import pytest
 
 from visiontrack.eval.selective_identity import (
+    GroupedReentryDecision,
     ReentryDecision,
+    grouped_reentry_bootstrap,
     score_reentry,
     wilson_upper_bound,
 )
@@ -60,3 +62,51 @@ def test_invalid_candidates_or_duplicate_events_fail() -> None:
     event = ReentryDecision("event", "a", ("a",), "a")
     with pytest.raises(ValueError, match="duplicate event_id"):
         score_reentry([event, event])
+
+
+def _grouped(event_id: str, participant: str, recording: str, correct: bool):
+    return GroupedReentryDecision(
+        ReentryDecision(event_id, "true", ("true", "other"), "true" if correct else "other"),
+        participant,
+        recording,
+    )
+
+
+def test_grouped_bootstrap_is_seeded_and_uses_whole_dependency_groups() -> None:
+    events = [
+        _grouped("a", "p1", "r1", True),
+        _grouped("b", "p2", "r2", False),
+        _grouped("c", "p3", "r3", True),
+    ]
+    estimate = grouped_reentry_bootstrap(events, resamples=300, seed=7)
+    assert estimate == grouped_reentry_bootstrap(events, resamples=300, seed=7)
+    assert estimate.independent_groups == 3
+    assert estimate.observed.selective_risk == pytest.approx(1 / 3)
+    assert estimate.risk_interval is not None
+    assert estimate.risk_interval.low <= 1 / 3 <= estimate.risk_interval.high
+    assert estimate.eligible_recall_interval is not None
+
+    # A shared recording joins two participants; a participant seen in two
+    # recordings joins those recordings too. These are not four independent events.
+    linked = [
+        _grouped("a", "p1", "r1", True),
+        _grouped("b", "p2", "r1", False),
+        _grouped("c", "p2", "r2", True),
+        _grouped("d", "p3", "r3", True),
+    ]
+    assert grouped_reentry_bootstrap(linked, resamples=50).independent_groups == 2
+
+
+def test_grouped_bootstrap_withholds_unsupported_intervals() -> None:
+    no_errors = [_grouped("a", "p1", "r1", True), _grouped("b", "p2", "r2", True)]
+    assert grouped_reentry_bootstrap(no_errors, resamples=50).risk_interval is None
+    one_group = [_grouped("a", "p1", "r1", True), _grouped("b", "p2", "r1", False)]
+    estimate = grouped_reentry_bootstrap(one_group, resamples=50)
+    assert estimate.independent_groups == 1
+    assert estimate.risk_interval is None
+    assert estimate.eligible_recall_interval is None
+
+    with pytest.raises(ValueError, match="duplicate event_id"):
+        grouped_reentry_bootstrap([no_errors[0], no_errors[0]])
+    with pytest.raises(ValueError, match="resamples must be positive"):
+        grouped_reentry_bootstrap(no_errors, resamples=0)

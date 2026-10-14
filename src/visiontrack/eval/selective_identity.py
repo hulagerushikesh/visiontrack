@@ -7,8 +7,9 @@ retain embeddings, or change the default online tracker.
 from __future__ import annotations
 
 from collections.abc import Iterable
-from dataclasses import dataclass
-from math import isfinite
+from dataclasses import dataclass, fields
+from math import floor, isfinite
+from random import Random
 
 
 @dataclass(frozen=True)
@@ -80,6 +81,121 @@ class SelectiveIdentityMetrics:
         if not self.novel_arrivals:
             return None
         return self.false_restorations_of_novel / self.novel_arrivals
+
+
+@dataclass(frozen=True)
+class GroupedReentryDecision:
+    """An event with owner-private, anonymous dependency-group keys.
+
+    The same participant may span recordings, and a recording may contain
+    several participants. Neither key should be a name or public identifier.
+    """
+
+    decision: ReentryDecision
+    participant_group: str
+    recording_group: str
+
+    def __post_init__(self) -> None:
+        if not self.participant_group.strip() or not self.recording_group.strip():
+            raise ValueError("participant and recording groups must not be empty")
+
+
+@dataclass(frozen=True)
+class MetricInterval:
+    low: float
+    high: float
+
+
+@dataclass(frozen=True)
+class GroupedReentryEstimate:
+    observed: SelectiveIdentityMetrics
+    independent_groups: int
+    resamples: int
+    risk_interval: MetricInterval | None
+    eligible_recall_interval: MetricInterval | None
+
+
+def _percentile(values: list[float], q: float) -> float:
+    ordered = sorted(values)
+    position = (len(ordered) - 1) * q
+    lower = floor(position)
+    upper = min(lower + 1, len(ordered) - 1)
+    weight = position - lower
+    return ordered[lower] * (1 - weight) + ordered[upper] * weight
+
+
+def grouped_reentry_bootstrap(
+    events: Iterable[GroupedReentryDecision],
+    *,
+    resamples: int = 2000,
+    seed: int = 0,
+    confidence: float = 0.95,
+) -> GroupedReentryEstimate:
+    """Descriptive cluster-bootstrap intervals for real-video event ratios.
+
+    A participant shared across recordings or participants sharing a recording
+    form one dependency-connected group. Resampling events individually would
+    overstate precision. These percentile intervals are *not* a certified
+    operating-risk bound; zero observed false restores, one group, or a
+    denominator-free resample yields no corresponding interval.
+    """
+    if resamples < 1:
+        raise ValueError("resamples must be positive")
+    if not isfinite(confidence) or not 0 < confidence < 1:
+        raise ValueError("confidence must be between zero and one")
+
+    records = tuple(events)
+    observed = score_reentry(record.decision for record in records)
+    parent: dict[str, str] = {}
+
+    def root(key: str) -> str:
+        parent.setdefault(key, key)
+        while parent[key] != key:
+            parent[key] = parent[parent[key]]
+            key = parent[key]
+        return key
+
+    for record in records:
+        participant = f"p:{record.participant_group}"
+        recording = f"r:{record.recording_group}"
+        parent[root(recording)] = root(participant)
+
+    groups: dict[str, list[ReentryDecision]] = {}
+    for record in records:
+        key = root(f"p:{record.participant_group}")
+        groups.setdefault(key, []).append(record.decision)
+    group_metrics = [score_reentry(group) for group in groups.values()]
+    number_of_groups = len(group_metrics)
+    if number_of_groups < 2:
+        return GroupedReentryEstimate(observed, number_of_groups, resamples, None, None)
+
+    rng = Random(seed)
+    risk_samples: list[float] = []
+    recall_samples: list[float] = []
+    metric_names = tuple(field.name for field in fields(SelectiveIdentityMetrics))
+    for _ in range(resamples):
+        sampled = [group_metrics[rng.randrange(number_of_groups)] for _ in range(number_of_groups)]
+        totals = {name: sum(getattr(group, name) for group in sampled) for name in metric_names}
+        metrics = SelectiveIdentityMetrics(**totals)
+        if metrics.selective_risk is not None:
+            risk_samples.append(metrics.selective_risk)
+        if metrics.eligible_return_recall is not None:
+            recall_samples.append(metrics.eligible_return_recall)
+
+    alpha = 1 - confidence
+    risk_interval = None
+    if observed.false_restorations and len(risk_samples) == resamples:
+        risk_interval = MetricInterval(
+            _percentile(risk_samples, alpha / 2), _percentile(risk_samples, 1 - alpha / 2)
+        )
+    recall_interval = None
+    if len(recall_samples) == resamples:
+        recall_interval = MetricInterval(
+            _percentile(recall_samples, alpha / 2), _percentile(recall_samples, 1 - alpha / 2)
+        )
+    return GroupedReentryEstimate(
+        observed, number_of_groups, resamples, risk_interval, recall_interval
+    )
 
 
 def score_reentry(decisions: Iterable[ReentryDecision]) -> SelectiveIdentityMetrics:

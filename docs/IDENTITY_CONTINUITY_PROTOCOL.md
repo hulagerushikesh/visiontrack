@@ -87,6 +87,12 @@ calibration belong to later ablations; they must not be silently mixed into H1.
   grouped bootstrap for real video because nearby opportunities are
   correlated. The Wilson bound in the scoring helper applies only to
   independent synthetic events or as a clearly labeled descriptive check.
+  The evaluator now has `grouped_reentry_bootstrap`: participants sharing a
+  recording, or recordings sharing a participant, are resampled as one
+  dependency-connected group. Its percentile intervals are descriptive, **not**
+  a certified bound for the 1% operating point. It withholds intervals with
+  fewer than two independent groups, and withholds a risk interval after zero
+  observed false restorations. A small pilot cannot pass the product risk gate.
 
 ## Required evaluation matrix
 
@@ -115,7 +121,8 @@ for false-restoration counts.
 The first scoring implementation is
 [`src/visiontrack/eval/selective_identity.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/src/visiontrack/eval/selective_identity.py).
 It accepts explicit candidate lists and decisions, rejects impossible restores,
-and keeps abstention distinct from expiry. No identity memory or inference code
+keeps abstention distinct from expiry, and provides grouped descriptive
+uncertainty for a future real-video study. No identity memory or inference code
 is enabled by adding this evaluator.
 
 ## Stop, narrow, and handoff gates
