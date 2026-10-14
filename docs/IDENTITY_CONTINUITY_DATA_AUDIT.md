@@ -140,3 +140,28 @@ requires denser frame inspection, an explicit final label and reason for each
 case, and preferably an independent second reviewer. If reliable truth cannot
 be established, stop this dataset's RQ5 path and find a better consented or
 rights-cleared re-entry source instead of silently using GT gaps as labels.
+
+### Medium-gap triage (5 more of 20 sampled candidates)
+
+The five frozen `30–99`-frame candidates were checked at both annotated
+endpoints and three spaced frames inside each gap. This is still **sparse-frame
+triage**, not final person-level adjudication. The reviewer was Codex; there
+was no independent second review. The local footage was inspected only; no
+frames or person crops were added to the repository.
+
+| Sequence-scoped candidate | Frames inspected | Triage finding |
+|---|---|---|
+| `dancetrack0034`, ID 11 | 370, 387, 403, 420, 437 | Not verified: partial figures at the image edge and similarly dressed dancers prevent a reliable exit/return judgment. |
+| `dancetrack0014`, ID 4 | 821, 837, 853, 869, 885 | Not verified: performers remain on stage through changing, overlapping formations; the target cannot be attributed across the sampled gap. |
+| `dancetrack0063`, ID 4 | 651, 673, 695, 717, 740 | Not verified: the similarly dressed formation remains visible, but the target's identity path is ambiguous. |
+| `dancetrack0094`, ID 23 | 121, 133, 146, 159, 172 | Not verified: a crowded troupe and changing positions do not establish an observable person-level exit and return. |
+| `dancetrack0073`, ID 13 | 461, 477, 493, 509, 526 | Not verified: masked dancers remain in view, but these checkpoints cannot reliably link the annotated ID through the gap. |
+
+Ten of the frozen 20 candidates have now had preliminary sparse-frame review;
+**none has a verified re-entry label**. This is neither a measured zero
+re-entry rate nor evidence that an identity method failed. These reviewed
+sequences are development/audit exposure and cannot be called untouched
+held-out test recordings. Continue with dense frame-by-frame review and a
+second reviewer before any event is admitted to an RQ5 evaluation. If that
+cannot yield reliable identity truth, use a consented, rights-cleared capture
+with designed exits and returns instead of promoting GT gaps to labels.
