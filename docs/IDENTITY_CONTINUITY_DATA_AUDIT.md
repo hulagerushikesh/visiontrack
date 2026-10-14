@@ -99,3 +99,27 @@ The [registered protocol](IDENTITY_CONTINUITY_PROTOCOL.md) and
 [synthetic probe](IDENTITY_CONTINUITY_SYNTHETIC.md) provide the decision and
 scoring definitions. This audit establishes feasibility for event extraction;
 it does not satisfy the rights, annotation, split, or statistical gates above.
+
+### Visual adjudication rubric
+
+For each frozen candidate, inspect several frames before the last annotation,
+through the gap, and after the next annotation—not just the two endpoints.
+Use one of these outcomes:
+
+| Outcome | Required observation | RQ5 eligibility |
+|---|---|---|
+| Observable exit and return | The person leaves the observable scene and later returns, with sequence-scoped identity supported by the footage | Candidate for further protocol checks |
+| Occluded but still in scene | The person is hidden by another person/object or merged into a crowd, without an observable exit | Not a re-entry event |
+| Visible but unannotated | The person remains visible during at least part of the GT gap | Not a GT-backed absence event |
+| Cut, identity ambiguity, or insufficient frames | Camera/framing changes or uniform appearance prevent reliable attribution | Exclude; do not guess |
+
+Record the reviewed frame numbers, outcome, reviewer, and reason in an
+owner-local audit record; do not commit frames, crops, or identifiable notes.
+Sparse-frame spot checks of two long-gap sample events were **indeterminate**:
+`dancetrack0081` ID 17 (frames 779, 870, 957) remained a crowded performance
+scene, and `dancetrack0073` ID 12 (frames 78, 165, 252) changed framing among
+similarly dressed dancers. Endpoint boxes plus those midpoint frames could not
+establish an actual exit and return. These checks are not the full 20-candidate
+adjudication and do not change the frozen sample. If these pre-inspected
+sequences are later proposed for a held-out test split, treat them as
+development/audit exposure instead.

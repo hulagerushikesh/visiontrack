@@ -425,29 +425,42 @@ active tracks in camera
 
 ## 7. Repository responsibilities
 
+This section is the current gate checklist, refreshed after the technical
+alpha and first RQ5 feasibility work. Detailed implementation history lives
+in [`NEXT_STEPS.md`](NEXT_STEPS.md); checked items here do not imply external
+product validation or real-data identity accuracy.
+
 ### 7.1 VisionTrack checklist
 
 **Product foundation**
 
-- [ ] Define stable input/output schemas for detections, tracks, tracklets,
-  anonymous identities, events, and experiment manifests.
-- [ ] Accept MOT-format files and a simple detector-adapter protocol.
-- [ ] Turn the existing HTML benchmark into a data-backed React report explorer.
-- [ ] Add synchronized error playback for ID switches and fragmentation.
-- [ ] Save immutable experiment manifests and paired comparison outputs.
-- [ ] Add exportable acceptance reports and configuration bundles.
+- [x] Version and validate the first detection, experiment, GT, comparison,
+  failure, report, playback, and human-decision records.
+- [x] Import MOT-format ground truth and compare controlled tracker variants
+  against one verified detection stream.
+- [x] Ship a React benchmark explorer and a local-first Reliability Lab with
+  synchronized, privacy-aware failure playback.
+- [x] Preserve immutable comparison bundles and explicit human decisions.
+- [ ] Observe an external practitioner diagnosing a real failure and making an
+  evidence-backed decision in the Lab.
+- [ ] Define the final tracklet/anonymous-identity contracts and export a
+  deployment configuration only after a real use case and accepted behavior.
 
 **Research foundation**
 
-- [ ] Add `track_id` / `anonymous_identity_id` separation to an experimental
-  branch without changing the default tracker contract.
-- [ ] Implement retired identities as a bounded component outside `Track`.
-- [ ] Add explicit restore, reject, expire, and evict decisions.
-- [ ] Build synthetic re-entry generation with controllable absence, ambiguity,
-  drift, gallery size, and new-person probability.
-- [ ] Define false-restoration and selective-risk metrics.
-- [ ] Cross-check existing long-video/multi-camera metrics where applicable.
-- [ ] Pre-register RQ5–RQ8 hypotheses and thresholds before real-data evaluation.
+- [x] Register RQ5's selective restore-or-abstain question, 0.1/1/5% research
+  risk points, event taxonomy, baselines, and split/stop rules.
+- [x] Build a deterministic synthetic stress probe and event-level false-
+  restoration scoring; report its negative and inconclusive operating points.
+- [x] Extract 1,370 DanceTrack GT gap *candidates* and freeze a 20-event
+  duration-stratified feasibility sample without treating gaps as returns.
+- [ ] Visually adjudicate that sample and freeze a recording-level split before
+  any real-data RQ5 claim; seek a better rights-cleared source if it fails.
+- [ ] Then test a bounded retired-identity component, explicit abstention,
+  expiry and eviction, and `track_id`/`anonymous_identity_id` separation in
+  Python only. Do not alter the default tracker during exploratory work.
+- [ ] Register separate RQ6–RQ8 experiments when their datasets and outcomes
+  are defined; RQ5 registration does not cover them automatically.
 
 **Product proof**
 
@@ -459,9 +472,10 @@ active tracks in camera
 
 ### 7.2 VisionTrack C++ checklist
 
-- [ ] Keep version 0.1.x focused on its released parity contract.
-- [ ] Regenerate release parity/benchmark reports and support matrices.
-- [ ] Do not implement identity-memory research independently.
+- [x] Release 0.1.1 with exact Python 0.3.0 oracle compatibility, cross-platform
+  wheels, support matrix, and parity evidence.
+- [x] Keep identity-memory research out of the C++ repository while its Python
+  behavior remains unaccepted.
 - [ ] Once Python behavior freezes, port only the accepted gallery, candidate
   scoring, abstention, and lifecycle mechanics.
 - [ ] Keep embedding inference outside the C++ tracking core; accept vectors from
@@ -473,6 +487,11 @@ active tracks in camera
   mode; do not weaken the default exact contract silently.
 
 ## 8. Delivery plan and gates
+
+The durations below were initial estimates, **not** a countdown from the
+current date. Stage 1's technical alpha exists, but its external-user gate
+remains open. Stage 2 has a synthetic result, not a real-data result. Stages
+3–5 are conditional on those gates rather than a committed feature schedule.
 
 ### Stage 0 — Direction freeze (1–2 weeks)
 
@@ -556,15 +575,24 @@ Reject or defer it when:
 
 ## 10. Immediate next actions
 
-1. Treat the existing UI migration as support work, not the roadmap’s center.
-2. Turn the benchmark report into the first Reliability Lab workflow before
-   redesigning every remaining static page.
-3. Draft the detection/tracklet/identity/experiment schemas.
-4. Implement only a synthetic selective-ReID evaluation harness first—no live
-   identity storage yet.
-5. Define the acceptable false-restoration budget and abstention metrics.
-6. Recruit three design partners with real clips and deployment failures.
-7. Keep C++ in maintenance mode until a Python behavior passes the research gate.
+1. Adjudicate the frozen DanceTrack gap sample using the rubric in
+   [`IDENTITY_CONTINUITY_DATA_AUDIT.md`](IDENTITY_CONTINUITY_DATA_AUDIT.md).
+   If those gaps mostly reflect occlusion, camera cuts, or annotation policy,
+   stop treating DanceTrack as a re-entry benchmark and source better data.
+2. Identify source-recording and performer overlap, then freeze a development/
+   test split, detector, crop, gallery expiry, exclusions, and threshold grid
+   before viewing any test outcomes. Report insufficient evidence if the split
+   cannot bound the registered false-restoration risk.
+3. Continue practitioner discovery independently of any particular outreach
+   reply. Observe real tracking failures and the Lab's decision workflow;
+   choose a vertical only after at least three qualified design partners show
+   a repeated, costly problem and permission to test representative clips.
+4. Write a one-page product problem statement and a measurable acceptance
+   decision from that evidence. Keep the existing site and learning product
+   usable, but do not substitute UI expansion for validation.
+5. Prototype bounded anonymous identity memory in Python only if the data and
+   risk gates justify it. Port its frozen, versioned decision stream to C++
+   only after the reference behavior passes those gates.
 
 ## 11. Positioning
 
