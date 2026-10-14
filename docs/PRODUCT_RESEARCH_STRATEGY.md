@@ -454,8 +454,12 @@ product validation or real-data identity accuracy.
   restoration scoring; report its negative and inconclusive operating points.
 - [x] Extract 1,370 DanceTrack GT gap *candidates* and freeze a 20-event
   duration-stratified feasibility sample without treating gaps as returns.
-- [ ] Visually adjudicate that sample and freeze a recording-level split before
-  any real-data RQ5 claim; seek a better rights-cleared source if it fails.
+- [x] Triage the frozen DanceTrack sample and decline it as the **first** RQ5
+  real-data source: no verified returns and no independent second review.
+  Preserve the audit without turning unverified gaps into negatives.
+- [ ] Secure a consented or otherwise rights-reviewed source with actual
+  observable returns and novel arrivals; independently adjudicate it and
+  freeze participant/recording splits before any real-data RQ5 claim.
 - [ ] Then test a bounded retired-identity component, explicit abstention,
   expiry and eviction, and `track_id`/`anonymous_identity_id` separation in
   Python only. Do not alter the default tracker during exploratory work.
@@ -575,14 +579,15 @@ Reject or defer it when:
 
 ## 10. Immediate next actions
 
-1. Adjudicate the frozen DanceTrack gap sample using the rubric in
-   [`IDENTITY_CONTINUITY_DATA_AUDIT.md`](IDENTITY_CONTINUITY_DATA_AUDIT.md).
-   If those gaps mostly reflect occlusion, camera cuts, or annotation policy,
-   stop treating DanceTrack as a re-entry benchmark and source better data.
-2. Identify source-recording and performer overlap, then freeze a development/
-   test split, detector, crop, gallery expiry, exclusions, and threshold grid
-   before viewing any test outcomes. Report insufficient evidence if the split
-   cannot bound the registered false-restoration risk.
+1. Use the [DanceTrack audit decision](IDENTITY_CONTINUITY_DATA_AUDIT.md) to
+   keep unverified GT gaps out of RQ5 scoring. The first real-data route is an
+   owner-controlled, consented pilot, not a retrospective accuracy claim.
+2. Before recording, the owner must settle venue, rights, informed consent,
+   withdrawal, secure storage, and retention. Then freeze the capture manifest.
+   Before evaluating, independently label events and freeze a participant- and
+   recording-disjoint split, detector, crop, gallery expiry, exclusions, and
+   threshold grid. Report insufficient evidence if the sample cannot bound
+   the registered false-restoration risk.
 3. Continue practitioner discovery independently of any particular outreach
    reply. Observe real tracking failures and the Lab's decision workflow;
    choose a vertical only after at least three qualified design partners show

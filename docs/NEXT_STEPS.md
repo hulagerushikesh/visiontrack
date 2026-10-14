@@ -213,10 +213,13 @@ decision-gate process is defined in
 - [x] Add seeded, dependency-grouped descriptive intervals for RQ5 event risk
       and eligible-return recall; do not treat a zero-error or one-group pilot
       as passing the registered 1% risk gate.
-- [ ] Decide whether dense, independent review can validate any DanceTrack GT
-      gaps as observable returns; otherwise close that RQ5 data path. Freeze
-      the event list and recording-level development/test split for the chosen
-      rights-reviewed source before running a real-data comparison.
+- [x] Deprioritize DanceTrack GT gaps as the **first** RQ5 real-data source:
+      preliminary review found zero verified returns, and independent dense
+      adjudication has not occurred. Preserve the frozen audit; do not count
+      these gaps as re-entry events or as a held-out test set.
+- [ ] For a chosen rights-reviewed source, freeze the event list and a
+      participant- and recording-disjoint development/test split before any
+      real-data comparison.
 - [ ] Secure rights-reviewed, identity-annotated re-entry data and freeze the
       detector, crop, identity/session split, and memory-expiry protocol before
       any real-data RQ5 claim.

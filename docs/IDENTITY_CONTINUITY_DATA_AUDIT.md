@@ -74,7 +74,7 @@ this audit. It remains a possible independent domain check after confirming
 the local dataset path and exact accepted terms; the caches alone do not
 establish a publishable RQ5 protocol.
 
-## Gate for the first real-data RQ5 study
+## Gate if the DanceTrack route is reopened
 
 1. Review the upstream dataset conditions again at execution time and record
    the exact source/version and permitted use. Keep raw media local.
@@ -161,10 +161,11 @@ Ten of the frozen 20 candidates have now had preliminary sparse-frame review;
 **none has a verified re-entry label**. This is neither a measured zero
 re-entry rate nor evidence that an identity method failed. These reviewed
 sequences are development/audit exposure and cannot be called untouched
-held-out test recordings. Continue with dense frame-by-frame review and a
-second reviewer before any event is admitted to an RQ5 evaluation. If that
-cannot yield reliable identity truth, use a consented, rights-cleared capture
-with designed exits and returns instead of promoting GT gaps to labels.
+held-out test recordings. If this route is reopened, require dense
+frame-by-frame review and a second reviewer before any event is admitted to
+an RQ5 evaluation. If that cannot yield reliable identity truth, use a
+consented, rights-cleared capture with designed exits and returns instead of
+promoting GT gaps to labels.
 
 ### Short-gap triage (final 10 of 20 sampled candidates)
 
@@ -197,3 +198,22 @@ used directly as RQ5 re-entry truth. Dense review plus a second reviewer may
 still rescue individual events, but a designed, consented capture is now the
 preferred route to a reliable first real-data study. See the
 [capture and adjudication plan](IDENTITY_CONTINUITY_CAPTURE_PLAN.md).
+
+## First-study source decision (2026-10-14)
+
+**Do not use DanceTrack GT gaps as the first real-data RQ5 benchmark.** The
+frozen 20-event sample produced zero verified exits-and-returns in preliminary
+single-reviewer triage, 18 person-level ambiguities, and two likely annotation
+omissions. Dense independent review *might* resolve individual events, but it
+has not been done; the audit cannot estimate the prevalence of true returns.
+Spending the first study on this uncertain label source would make a negative
+identity result hard to interpret. Preserve the sample and its digest as a
+feasibility audit, with no accuracy denominator or held-out-test claim.
+
+The preferred first-study path is the owner-controlled, consented capture in
+the [capture plan](IDENTITY_CONTINUITY_CAPTURE_PLAN.md), after its venue,
+permissions, consent, withdrawal, storage, and split gates are met. This is a
+**priority decision**, not a claim that DanceTrack can never support re-entry
+research. Reopen its gap route only with a specific reason to expect enough
+observable returns and a genuinely independent second review; do not relabel
+the already inspected sequences as untouched test data.
