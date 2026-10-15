@@ -1,0 +1,31 @@
+{
+  "study_id": "EXAMPLE-ONLY-NOT-REAL-DATA",
+  "frozen_on": "2026-10-15",
+  "camera_setup": "example fixed camera",
+  "scene_exit_rule": "example person fully outside marked boundary",
+  "frame_rate": 30,
+  "width": 1280,
+  "height": 720,
+  "short_absence_seconds": 5,
+  "long_absence_seconds": 20,
+  "gallery_ttl_seconds": 60,
+  "expired_return_seconds": 90,
+  "gallery_capacity": 100,
+  "retention_days": 7,
+  "rights_review_ref": "EXAMPLE-NOT-A-RIGHTS-REVIEW",
+  "consent_process_ref": "EXAMPLE-NOT-CONSENT",
+  "withdrawal_process_ref": "EXAMPLE-NOT-A-WITHDRAWAL-PROCESS",
+  "storage_plan_ref": "EXAMPLE-NOT-A-STORAGE-PLAN",
+  "permitted_scene_changes": ["none"],
+  "planned_takes": [
+    {"split": "development", "scenario": "novel", "count": 1},
+    {"split": "development", "scenario": "short_return", "count": 1},
+    {"split": "development", "scenario": "long_return", "count": 1},
+    {"split": "development", "scenario": "expired_return", "count": 1},
+    {"split": "development", "scenario": "lookalike_novel", "count": 1},
+    {"split": "development", "scenario": "occlusion_control", "count": 1},
+    {"split": "development", "scenario": "session_reset", "count": 1},
+    {"split": "test", "scenario": "novel", "count": 1},
+    {"split": "test", "scenario": "short_return", "count": 1}
+  ]
+}

@@ -152,6 +152,9 @@ published to PyPI).
 - [x] RQ5 owner-local pilot preflight: pre-recording manifest validation and
       fingerprinting plus a two-reviewer event-ledger contract; no footage or
       participant records collected by these tools
+- [x] RQ5 owner-local pilot CLI: strict private JSON/JSONL preflight, frozen
+      fingerprint check, split-integrity validation, and aggregate-only output;
+      example records are synthetic and no actual participant data was taken
 - [x] RQ5 grouped descriptive uncertainty: participant/recording-connected
       bootstrap for future real-video scoring, with no claim of a certified
       operating-risk bound or real-data result

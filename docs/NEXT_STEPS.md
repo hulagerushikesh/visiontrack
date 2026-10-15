@@ -210,6 +210,10 @@ decision-gate process is defined in
       absence/expiry intervals, bounded gallery, retention, rights-process
       references, and scenario counts; fingerprint owner-local frozen choices
       without creating a real participant record.
+- [x] Add a strict, metadata-only owner-local preflight command with synthetic
+      example inputs: freeze a private manifest fingerprint before recording,
+      recheck a two-reviewer ledger against it, and output aggregate counts
+      without reading media or claiming real-data accuracy.
 - [x] Add seeded, dependency-grouped descriptive intervals for RQ5 event risk
       and eligible-return recall; do not treat a zero-error or one-group pilot
       as passing the registered 1% risk gate.
