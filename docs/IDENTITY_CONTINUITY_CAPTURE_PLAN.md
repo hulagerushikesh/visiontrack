@@ -89,6 +89,44 @@ or that a private group key actually represents the same person, or that the
 reviewers worked independently; those remain owner and reviewer
 responsibilities. No real ledger has been created.
 
+### Owner-local preflight command
+
+The [preflight CLI](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/reentry_pilot_preflight.py) connects the
+frozen manifest and two-reviewer ledger without opening footage. Start with
+the checked-in [example plan](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/examples/reentry_pilot_manifest.example.json)
+and [example ledger](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/examples/reentry_pilot_ledger.example.jsonl)
+to learn the format; every `EXAMPLE` value is fake, and the example is **not**
+rights, consent, or a research result. For a real pilot, create populated files
+**outside both repositories** in the owner's restricted local study workspace.
+Do not substitute a public URL or upload these records.
+
+Before any recording, run the manifest-only check and write down its printed
+SHA-256 in the private dated freeze log:
+
+```bash
+python -m experiments.reentry_pilot_preflight --manifest /private/path/pilot-plan.json
+```
+
+After the independent reviews and any reasoned adjudication, run the ledger
+check against that **previously recorded** fingerprint:
+
+```bash
+python -m experiments.reentry_pilot_preflight \
+  --manifest /private/path/pilot-plan.json \
+  --ledger /private/path/pilot-events.jsonl \
+  --expected-fingerprint PRE_RECORDING_SHA256
+```
+
+The command rejects unknown or duplicate JSON fields, changed plans, malformed
+reviews, impossible exit boundaries, and split leakage. It emits only the plan
+fingerprint and aggregate event counts, never participant keys or event IDs.
+`metadata_incomplete` means the ledger still lacks unambiguous novel/return
+events in both splits or has unresolved reviews. Even
+`metadata_only_review_required` is **not** clearance to score or publish: a
+human must still establish actual consent/rights, independent visual truth,
+planned-versus-recorded take coverage, and the frozen detector/crop/gallery
+protocol. The CLI deliberately does not mark those conditions as passed.
+
 ## Pilot acceptance and scale-up gate
 
 First verify that every scripted event has a reviewable video boundary and a
