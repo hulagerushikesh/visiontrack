@@ -143,6 +143,9 @@ published to PyPI).
 - [x] H3.3 — local-first Reliability Lab technical alpha (immutable local
       bundles, verified comparisons, evidence, decisions, synchronized playback,
       and browser acceptance workflow)
+- [x] H3.3 — synthetic onboarding and browser-to-Python decision round trip:
+      fresh generated reports, both human outcomes, exact file bytes, valid
+      UTC calendar dates, and immutable import checked in CI
 - [x] H3.3 — practitioner discovery protocol and lawful failure-evidence intake
 - [x] RQ5 first protocol, event-level restore/abstain scoring, and synthetic
       held-out stress probe for galleries of 10–10,000 candidates

@@ -190,6 +190,23 @@ fixed synthetic comparison without writing, then `--write` creates a complete
 verified bundle and prints the `report.json` path to import at `/lab`. The
 output root must be new and is never reused or overwritten.
 
+After importing that report at `/lab`, review the metrics and failure events,
+preview a decision, and download `decision.json`. Save it into the original
+bundle using the bundle path printed by `lab-demo` and your download's full path:
+
+```bash
+visiontrack lab-decision-import "BUNDLE_PATH" "DOWNLOADED_DECISION_PATH"
+visiontrack lab-decision-import "BUNDLE_PATH" "DOWNLOADED_DECISION_PATH" --write
+```
+
+The first command previews the import; the second stores the exact downloaded
+bytes. Identical imports are idempotent and conflicting records are refused.
+With the Python Lab dependencies and web dependencies installed, run
+`npm run test:decision-workflow` to rehearse the full generated-report,
+browser-decision, Python-import round trip in temporary storage. It exercises
+both outcomes, UTC calendar validation, Unicode, preview-only behavior,
+fingerprints, lineage, and immutable writes using the production modules.
+
 `lab-playback` is metadata-only. It revalidates the sealed report and selected
 failure window, then prints synchronized lane availability, privacy counts, and
 complete fingerprints without displaying pixels or writing to the bundle. Add

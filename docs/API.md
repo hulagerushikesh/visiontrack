@@ -141,6 +141,18 @@ the exact JavaScript canonicalization and hashing module used by React. Both
 must produce identical fingerprints, Unicode-preserving canonical JSON, and
 newline-terminated file bytes.
 
+`npm run test:decision-workflow` additionally creates fresh synthetic bundles
+using the Python pipeline, parses each report with the React report parser,
+drafts both acceptance and rejection outcomes with the browser decision module,
+and returns the canonical downloads through the Python import CLI. It verifies
+that preview and rejected imports preserve every bundle byte, a successful
+write adds only `decision.json`, repeat imports are idempotent, and conflicting
+choices cannot replace a stored record. Invalid calendar dates are rejected
+before browser preview or import; valid leap days and UTC offset forms survive
+the complete round trip. The check uses temporary storage and requires the
+Python `[lab]` extra plus `npm ci`; `VISIONTRACK_PYTHON` can select a specific
+Python interpreter. It tests production logic without driving a browser UI.
+
 ### Synchronized failure-playback contract
 
 `PlaybackFrame`, `PlaybackLane`, and `FailurePlayback` define the first
