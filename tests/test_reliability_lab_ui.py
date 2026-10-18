@@ -72,7 +72,10 @@ def test_sample_explains_how_to_rehearse_full_lab_workflow() -> None:
     assert 'visiontrack lab-demo ./lab-onboarding --write' in component
     assert 'python -m pip install -e ".[lab]"' in component
     assert 'Select the exact <code>report.json</code> path printed by the command' in component
-    assert 'Synthetic results are a workflow rehearsal, not evidence of real-world accuracy.' in component
+    assert (
+        'Synthetic results are a workflow rehearsal, not evidence of real-world accuracy.'
+        in component
+    )
     assert '"lab-demo"' in cli
 
 
