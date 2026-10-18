@@ -1,7 +1,8 @@
 # RQ5 real-data feasibility audit
 
-Checked: 2026-10-14. This is a read-only audit of local annotations and
-upstream dataset terms. It does **not** report identity-restoration accuracy.
+Initial local audit: 2026-10-14. Backup-source screen: 2026-10-18. This is a
+read-only audit of local annotations and upstream dataset terms. It does **not**
+report identity-restoration accuracy.
 
 ## Available candidate: DanceTrack validation split
 
@@ -217,3 +218,24 @@ permissions, consent, withdrawal, storage, and split gates are met. This is a
 research. Reopen its gap route only with a specific reason to expect enough
 observable returns and a genuinely independent second review; do not relabel
 the already inspected sequences as untouched test data.
+
+## Backup-source screen (2026-10-18; no data downloaded)
+
+This screen used official dataset pages and documentation only. It does not
+establish a dataset's legal suitability for our specific processing, the
+existence of enough observable exits-and-returns, or permission to redistribute
+media, crops, embeddings, or example frames. Those require a source-specific
+rights review and an independent event audit before any experiment.
+
+| Source | Evidence in official material | First-study decision |
+|---|---|---|
+| [PersonPath22](https://amazon-science.github.io/tracking-dataset/personpath22.html) | Its maintainers describe 236 mostly static-camera videos, consented/redistributable source material, within-video person IDs, visible and amodal boxes, and public detections. The page says CC BY-NC 4.0 and asks users **not to identify or generate biometric information** about depicted people. | **Hold for RQ5.** Appearance embeddings used to restore a person-level ID may fall within that caution; do not infer permission from ordinary tracking annotations. Seek explicit use clarification before any such processing. No verified exit/return event list has been audited. |
+| [BDD100K MOT](https://github.com/bdd100k/bdd100k/blob/master/doc/source/download.rst) | Official documentation describes 5 Hz MOT frames and identities that are stable *within* each video, not across videos. Its [data license](https://github.com/bdd100k/bdd100k/blob/master/doc/source/license.rst) grants educational, research, and not-for-profit use under stated conditions; the repository's BSD code license is **not** the data license. | **Secondary domain candidate only.** Short moving-camera driving clips are unlike the intended fixed-camera person pilot. No observable person exit/return count or held-out identity split has been established. Review the exact data terms before any download or use. |
+
+Neither source changes the first-study priority. If the owner-controlled pilot
+cannot proceed, select **one** alternative only after written rights-process
+review, a small pre-frozen visual feasibility sample, enough independently
+adjudicated novel and eligible-return events, and a recording/participant split
+that does not leak identities. A public tracking ID or annotation gap is never
+by itself proof that a person left and returned. Until then, retain the
+registered protocol and report **no real-data RQ5 accuracy**.
