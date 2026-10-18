@@ -134,6 +134,17 @@ function ImportControls({
           </label>
         </div>
       </div>
+      {origin.kind === "sample" && (
+        <div className="mt-6 rounded-2xl border border-indigo-100 bg-indigo-50/60 p-5" aria-label="Try the complete Lab workflow">
+          <p className="text-sm font-semibold text-slate-900">Want to try the complete Lab workflow?</p>
+          <p className="mt-2 text-sm leading-6 text-slate-700">This illustrative sample is for exploring the screen; it cannot create a decision record. Generate a local, synthetic report to try the evidence-to-decision flow without a camera, dataset, or upload.</p>
+          <ol className="mt-4 grid gap-4 text-sm leading-6 text-slate-700 md:grid-cols-3">
+            <li><strong className="block text-slate-900">1. Generate</strong>From a <a className="font-medium text-primary underline underline-offset-2" href="https://github.com/hulagerushikesh/visiontrack">local VisionTrack checkout</a>, run:<code className="mt-2 block overflow-x-auto rounded-lg bg-slate-950 px-3 py-2 font-mono text-xs leading-5 text-slate-100">python -m pip install -e ".[lab]"<br />visiontrack lab-demo ./lab-onboarding --write</code><span className="mt-2 block text-xs">Use a new output folder name if you repeat the exercise.</span></li>
+            <li><strong className="block text-slate-900">2. Import</strong>Select the exact <code>report.json</code> path printed by the command using the button above. The report stays in this browser tab.</li>
+            <li><strong className="block text-slate-900">3. Review</strong>Compare variants and failure events, then preview a human decision. Synthetic results are a workflow rehearsal, not evidence of real-world accuracy.</li>
+          </ol>
+        </div>
+      )}
     </section>
   )
 }
