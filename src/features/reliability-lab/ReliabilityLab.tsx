@@ -24,6 +24,7 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { reliabilityReportFixture } from "./fixture"
+import { ReportFileReader } from "./report-import"
 import {
   parseReportModel,
   type FailureType,
@@ -792,14 +793,16 @@ function LabReport({ report, origin }: { report: ReliabilityReport; origin: Repo
 export default function ReliabilityLab() {
   const [state, setState] = useState<ReportLoadResult | { kind: "loading" }>({ kind: "loading" })
   const [origin, setOrigin] = useState<ReportOrigin>({ kind: "sample" })
+  const reportReader = useRef(new ReportFileReader(parseReportModel))
   useEffect(() => {
     let active = true
+    const reader = reportReader.current
     queueMicrotask(() => { if (active) setState(parseReportModel(reliabilityReportFixture)) })
-    return () => { active = false }
+    return () => { active = false; reader.cancel() }
   }, [])
-  if (state.kind === "loading") return <LoadingState />
 
   const loadSample = () => {
+    reportReader.current.cancel()
     setOrigin({ kind: "sample" })
     setState(parseReportModel(reliabilityReportFixture))
   }
@@ -807,16 +810,11 @@ export default function ReliabilityLab() {
     const input = event.currentTarget
     const file = input.files?.[0]
     if (!file) return
+    input.value = ""
     setOrigin({ kind: "file", filename: file.name })
     setState({ kind: "loading" })
-    try {
-      const report = JSON.parse(await file.text()) as unknown
-      setState(parseReportModel(report))
-    } catch {
-      setState({ kind: "missing", message: "The selected file is not valid JSON." })
-    } finally {
-      input.value = ""
-    }
+    const result = await reportReader.current.read(file)
+    if (result) setState(result)
   }
 
   return (
@@ -824,7 +822,7 @@ export default function ReliabilityLab() {
       <div className="relative z-10 mx-auto max-w-7xl px-5 pt-28 lg:px-8">
         <ImportControls origin={origin} reportId={state.kind === "ready" ? state.report.report_id : undefined} onImport={importReport} onSample={loadSample} />
       </div>
-      {state.kind === "ready" ? <LabReport report={state.report} origin={origin} /> : <ReportError state={state} />}
+      {state.kind === "loading" ? <LoadingState /> : state.kind === "ready" ? <LabReport report={state.report} origin={origin} /> : <ReportError state={state} />}
     </div>
   )
 }

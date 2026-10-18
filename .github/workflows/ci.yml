@@ -82,6 +82,8 @@ jobs:
         run: npm ci
       - name: Verify decision contract
         run: npm run test:decision-contract
+      - name: Verify report selection and cancellation
+        run: npm run test:report-import
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
