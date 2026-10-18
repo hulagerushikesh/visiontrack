@@ -1,21 +1,28 @@
 """Owner-local RQ5 preflight must never turn metadata into an accuracy claim."""
 
 import json
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from pathlib import Path
 
 import pytest
 
-from experiments.reentry_capture_ledger import CaptureEvent, IndependentReview
+from experiments.reentry_capture_ledger import (
+    CaptureEvent,
+    IndependentReview,
+    validate_capture_ledger,
+)
 from experiments.reentry_capture_manifest import SCENARIOS, CaptureManifest, PlannedTake
 from experiments.reentry_pilot_preflight import (
+    load_inventory,
     load_ledger,
     load_manifest,
     main,
     parse_event,
+    parse_inventory,
     parse_manifest,
     summarize,
 )
+from experiments.reentry_take_inventory import validate_take_inventory
 
 
 def _manifest() -> CaptureManifest:
@@ -78,30 +85,32 @@ def test_private_cli_checks_frozen_ledger_and_only_returns_aggregates(tmp_path, 
     manifest_path = tmp_path / "plan.json"
     manifest_path.write_text(json.dumps(asdict(manifest)), encoding="utf-8")
     events = tuple(
-        _event(split, label)
-        for split in ("development", "test")
-        for label in ("novel", "return")
+        _event(split, label) for split in ("development", "test") for label in ("novel", "return")
     )
     ledger_path = tmp_path / "ledger.jsonl"
     ledger_path.write_text(
         "".join(json.dumps(asdict(event)) + "\n" for event in events), encoding="utf-8"
     )
 
-    assert main(
-        [
-            "--manifest",
-            str(manifest_path),
-            "--ledger",
-            str(ledger_path),
-            "--expected-fingerprint",
-            manifest.fingerprint,
-        ]
-    ) == 0
+    assert (
+        main(
+            [
+                "--manifest",
+                str(manifest_path),
+                "--ledger",
+                str(ledger_path),
+                "--expected-fingerprint",
+                manifest.fingerprint,
+            ]
+        )
+        == 0
+    )
     output = capsys.readouterr().out
     result = json.loads(output)
     assert result["counts"]["events"] == 4
     assert result["counts"]["return"] == 2
-    assert result["research_gate"] == "metadata_only_review_required"
+    assert result["research_gate"] == "metadata_incomplete"
+    assert result["take_coverage"] == "not_checked"
     assert result["identity_accuracy"] == "not_evaluated"
     for event in events:
         assert event.event_id not in output
@@ -154,19 +163,192 @@ def test_checked_in_examples_are_synthetic_and_runnable(capsys) -> None:
     ledger = root / "experiments/examples/reentry_pilot_ledger.example.jsonl"
     fingerprint = load_manifest(plan).fingerprint
 
-    assert main(
-        [
-            "--manifest",
-            str(plan),
-            "--ledger",
-            str(ledger),
-            "--expected-fingerprint",
-            fingerprint,
-        ]
-    ) == 0
+    assert (
+        main(
+            [
+                "--manifest",
+                str(plan),
+                "--ledger",
+                str(ledger),
+                "--expected-fingerprint",
+                fingerprint,
+            ]
+        )
+        == 0
+    )
     output = capsys.readouterr().out
     assert json.loads(output)["counts"]["events"] == 4
     assert "EXAMPLE-DEV-GROUP" not in output
+
+
+def test_example_take_inventory_exposes_incomplete_coverage_without_private_ids(capsys) -> None:
+    root = Path(__file__).resolve().parents[1]
+    plan = root / "experiments/examples/reentry_pilot_manifest.example.json"
+    ledger = root / "experiments/examples/reentry_pilot_ledger.example.jsonl"
+    inventory = root / "experiments/examples/reentry_pilot_inventory.example.json"
+    fingerprint = load_manifest(plan).fingerprint
+
+    assert (
+        main(
+            [
+                "--manifest",
+                str(plan),
+                "--ledger",
+                str(ledger),
+                "--inventory",
+                str(inventory),
+                "--expected-fingerprint",
+                fingerprint,
+            ]
+        )
+        == 0
+    )
+    output = capsys.readouterr().out
+    result = json.loads(output)
+    assert result["take_coverage"] == {
+        "planned": 9,
+        "recorded": 4,
+        "missing": 5,
+        "excluded": 0,
+        "linked_events": 4,
+        "reset_controls": 0,
+    }
+    assert result["research_gate"] == "metadata_incomplete"
+    assert result["identity_accuracy"] == "not_evaluated"
+    assert "EXAMPLE-DEV-NOVEL-TAKE" not in output
+    assert "EXAMPLE-DEV-RECORDING" not in output
+
+
+def test_take_inventory_rejects_missing_duplicate_or_mislinked_slots() -> None:
+    root = Path(__file__).resolve().parents[1]
+    plan = load_manifest(root / "experiments/examples/reentry_pilot_manifest.example.json")
+    ledger = load_ledger(root / "experiments/examples/reentry_pilot_ledger.example.jsonl")
+    raw = json.loads(
+        (root / "experiments/examples/reentry_pilot_inventory.example.json").read_text()
+    )
+    inventory = parse_inventory(raw)
+    assert validate_take_inventory(plan, inventory, ledger).missing == 5
+
+    incomplete = json.loads(json.dumps(raw))
+    incomplete["takes"].pop()
+    with pytest.raises(ValueError, match="each planned slot"):
+        validate_take_inventory(plan, parse_inventory(incomplete), ledger)
+
+    duplicated = json.loads(json.dumps(raw))
+    duplicated["takes"][1]["scenario"] = "novel"
+    with pytest.raises(ValueError, match="each planned slot"):
+        validate_take_inventory(plan, parse_inventory(duplicated), ledger)
+
+    wrong_event = json.loads(json.dumps(raw))
+    wrong_event["takes"][0]["event_id"] = "EXAMPLE-TEST-NOVEL"
+    with pytest.raises(ValueError, match="does not match"):
+        validate_take_inventory(plan, parse_inventory(wrong_event), ledger)
+
+    wrong_hash = json.loads(json.dumps(raw))
+    wrong_hash["manifest_sha256"] = "0" * 64
+    with pytest.raises(ValueError, match="frozen manifest"):
+        validate_take_inventory(plan, parse_inventory(wrong_hash), ledger)
+
+    duplicate_id = json.loads(json.dumps(raw))
+    duplicate_id["takes"][1]["take_id"] = duplicate_id["takes"][0]["take_id"]
+    with pytest.raises(ValueError, match="duplicate take_id"):
+        validate_take_inventory(plan, parse_inventory(duplicate_id), ledger)
+
+    crossed_recording = json.loads(json.dumps(raw))
+    crossed_recording["takes"][7]["recording_id"] = "EXAMPLE-DEV-RECORDING"
+    with pytest.raises(ValueError, match="recording crosses"):
+        validate_take_inventory(plan, parse_inventory(crossed_recording), ledger)
+
+
+def test_take_inventory_rejects_invalid_states_and_unlinked_events(tmp_path, capsys) -> None:
+    root = Path(__file__).resolve().parents[1]
+    plan = load_manifest(root / "experiments/examples/reentry_pilot_manifest.example.json")
+    ledger = load_ledger(root / "experiments/examples/reentry_pilot_ledger.example.jsonl")
+    raw = json.loads(
+        (root / "experiments/examples/reentry_pilot_inventory.example.json").read_text()
+    )
+    invalid = json.loads(json.dumps(raw))
+    invalid["takes"][2]["status"] = "excluded"
+    with pytest.raises(ValueError, match="exclusion code"):
+        parse_inventory(invalid)
+    invalid = json.loads(json.dumps(raw))
+    invalid["takes"][2]["slot"] = True
+    with pytest.raises(ValueError, match="must be an integer"):
+        parse_inventory(invalid)
+    invalid = json.loads(json.dumps(raw))
+    invalid["takes"][2]["unexpected"] = "private-value"
+    with pytest.raises(ValueError, match="unknown fields"):
+        parse_inventory(invalid)
+    excluded = json.loads(json.dumps(raw))
+    excluded["takes"][2]["status"] = "excluded"
+    excluded["takes"][2]["exclusion_code"] = "technical"
+    assert validate_take_inventory(plan, parse_inventory(excluded), ledger).excluded == 1
+    with pytest.raises(ValueError, match="missing or duplicated"):
+        validate_take_inventory(plan, parse_inventory(raw), ledger[:-1])
+    extra = replace(ledger[0], event_id="EXAMPLE-EXTRA", opportunity_frame=100)
+    with pytest.raises(ValueError, match="not linked"):
+        validate_take_inventory(plan, parse_inventory(raw), ledger + (extra,))
+
+    path = tmp_path / "inventory.json"
+    path.write_text('{"manifest_sha256":"private","manifest_sha256":"other"}')
+    with pytest.raises(ValueError, match="invalid take inventory JSON"):
+        load_inventory(path)
+    with pytest.raises(SystemExit):
+        main(
+            [
+                "--manifest",
+                str(root / "experiments/examples/reentry_pilot_manifest.example.json"),
+                "--inventory",
+                str(path),
+            ]
+        )
+    assert "requires --ledger" in capsys.readouterr().err
+
+
+def test_complete_declared_take_coverage_still_needs_human_review() -> None:
+    root = Path(__file__).resolve().parents[1]
+    plan = load_manifest(root / "experiments/examples/reentry_pilot_manifest.example.json")
+    ledger = list(load_ledger(root / "experiments/examples/reentry_pilot_ledger.example.jsonl"))
+    raw = json.loads(
+        (root / "experiments/examples/reentry_pilot_inventory.example.json").read_text()
+    )
+    for index in range(2, 7):
+        take = raw["takes"][index]
+        take["status"] = "recorded"
+        take["recording_id"] = "EXAMPLE-DEV-RECORDING"
+        take["session_id"] = "EXAMPLE-DEV-SESSION"
+        scenario = take["scenario"]
+        if scenario == "session_reset":
+            continue
+        take["event_id"] = f"EXAMPLE-{scenario}"
+        label = (
+            "return"
+            if scenario in ("long_return", "expired_return")
+            else "occlusion_control"
+            if scenario == "occlusion_control"
+            else "novel"
+        )
+        template = ledger[1] if label == "return" else ledger[0]
+        ledger.append(
+            replace(
+                template,
+                event_id=take["event_id"],
+                participant_group=f"EXAMPLE-GROUP-{scenario}",
+                session_person_code=f"EXAMPLE-PERSON-{scenario}",
+                opportunity_frame=120 + index,
+                reviews=(IndependentReview("a", label), IndependentReview("b", label)),
+            )
+        )
+    events = tuple(ledger)
+    validate_capture_ledger(events)
+    result = summarize(plan, events, parse_inventory(raw))
+    assert result["take_coverage"]["missing"] == 0
+    assert result["take_coverage"]["recorded"] == 9
+    assert result["take_coverage"]["reset_controls"] == 1
+    assert result["research_gate"] == "metadata_only_review_required"
+    assert result["rights_and_consent"] == "not_verified_by_software"
+    assert result["visual_truth"] == "not_verified_by_software"
+    assert result["identity_accuracy"] == "not_evaluated"
 
 
 def test_duplicate_json_key_is_rejected_without_echoing_private_values(tmp_path, capsys) -> None:

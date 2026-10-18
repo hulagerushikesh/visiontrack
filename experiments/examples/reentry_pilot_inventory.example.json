@@ -1,0 +1,14 @@
+{
+  "manifest_sha256": "f8bd05bcbbe3090b39d4fe5eeecebdbc46da6d25273885f699c056756644bfa6",
+  "takes": [
+    {"take_id":"EXAMPLE-DEV-NOVEL-TAKE","split":"development","scenario":"novel","slot":1,"status":"recorded","recording_id":"EXAMPLE-DEV-RECORDING","session_id":"EXAMPLE-DEV-SESSION","event_id":"EXAMPLE-DEV-NOVEL","exclusion_code":null},
+    {"take_id":"EXAMPLE-DEV-SHORT-TAKE","split":"development","scenario":"short_return","slot":1,"status":"recorded","recording_id":"EXAMPLE-DEV-RECORDING","session_id":"EXAMPLE-DEV-SESSION","event_id":"EXAMPLE-DEV-RETURN","exclusion_code":null},
+    {"take_id":"EXAMPLE-DEV-LONG-TAKE","split":"development","scenario":"long_return","slot":1,"status":"missing","recording_id":null,"session_id":null,"event_id":null,"exclusion_code":null},
+    {"take_id":"EXAMPLE-DEV-EXPIRED-TAKE","split":"development","scenario":"expired_return","slot":1,"status":"missing","recording_id":null,"session_id":null,"event_id":null,"exclusion_code":null},
+    {"take_id":"EXAMPLE-DEV-LOOKALIKE-TAKE","split":"development","scenario":"lookalike_novel","slot":1,"status":"missing","recording_id":null,"session_id":null,"event_id":null,"exclusion_code":null},
+    {"take_id":"EXAMPLE-DEV-OCCLUSION-TAKE","split":"development","scenario":"occlusion_control","slot":1,"status":"missing","recording_id":null,"session_id":null,"event_id":null,"exclusion_code":null},
+    {"take_id":"EXAMPLE-DEV-RESET-TAKE","split":"development","scenario":"session_reset","slot":1,"status":"missing","recording_id":null,"session_id":null,"event_id":null,"exclusion_code":null},
+    {"take_id":"EXAMPLE-TEST-NOVEL-TAKE","split":"test","scenario":"novel","slot":1,"status":"recorded","recording_id":"EXAMPLE-TEST-RECORDING","session_id":"EXAMPLE-TEST-SESSION","event_id":"EXAMPLE-TEST-NOVEL","exclusion_code":null},
+    {"take_id":"EXAMPLE-TEST-SHORT-TAKE","split":"test","scenario":"short_return","slot":1,"status":"recorded","recording_id":"EXAMPLE-TEST-RECORDING","session_id":"EXAMPLE-TEST-SESSION","event_id":"EXAMPLE-TEST-RETURN","exclusion_code":null}
+  ]
+}

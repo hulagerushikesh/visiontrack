@@ -19,10 +19,17 @@ from experiments.reentry_capture_ledger import (
     validate_capture_ledger,
 )
 from experiments.reentry_capture_manifest import CaptureManifest, PlannedTake
+from experiments.reentry_take_inventory import (
+    MAX_TAKES,
+    TakeInventory,
+    TakeRecord,
+    validate_take_inventory,
+)
 
 MAX_MANIFEST_BYTES = 100_000
 MAX_LEDGER_BYTES = 10_000_000
 MAX_LEDGER_EVENTS = 20_000
+MAX_INVENTORY_BYTES = 2_000_000
 
 
 def _no_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -158,6 +165,35 @@ def parse_event(value: dict[str, Any]) -> CaptureEvent:
     )
 
 
+def parse_inventory(value: dict[str, Any]) -> TakeInventory:
+    _shape(value, TakeInventory, "take inventory")
+    takes = value["takes"]
+    if not isinstance(takes, list) or len(takes) > MAX_TAKES:
+        raise ValueError("take inventory must be a bounded array")
+    parsed: list[TakeRecord] = []
+    for take in takes:
+        if not isinstance(take, dict):
+            raise ValueError("take record must be an object")
+        _shape(take, TakeRecord, "take record")
+        parsed.append(
+            TakeRecord(
+                take_id=_string(take["take_id"], "take ID"),
+                split=_string(take["split"], "take split"),
+                scenario=_string(take["scenario"], "take scenario"),
+                slot=_int(take["slot"], "take slot"),
+                status=_string(take["status"], "take status"),
+                recording_id=_optional_string(take["recording_id"], "recording ID"),
+                session_id=_optional_string(take["session_id"], "session ID"),
+                event_id=_optional_string(take["event_id"], "event ID"),
+                exclusion_code=_optional_string(take["exclusion_code"], "exclusion code"),
+            )
+        )
+    return TakeInventory(
+        manifest_sha256=_string(value["manifest_sha256"], "inventory fingerprint"),
+        takes=tuple(parsed),
+    )
+
+
 def load_manifest(path: Path) -> CaptureManifest:
     if path.stat().st_size > MAX_MANIFEST_BYTES:
         raise ValueError("manifest exceeds the size limit")
@@ -183,7 +219,17 @@ def load_ledger(path: Path) -> tuple[CaptureEvent, ...]:
     return tuple(events)
 
 
-def summarize(manifest: CaptureManifest, events: tuple[CaptureEvent, ...] | None) -> dict:
+def load_inventory(path: Path) -> TakeInventory:
+    if path.stat().st_size > MAX_INVENTORY_BYTES:
+        raise ValueError("take inventory exceeds the size limit")
+    return parse_inventory(_json_object(path.read_text(encoding="utf-8"), "take inventory"))
+
+
+def summarize(
+    manifest: CaptureManifest,
+    events: tuple[CaptureEvent, ...] | None,
+    inventory: TakeInventory | None = None,
+) -> dict:
     """Return only plan identity and aggregate metadata; never participant keys."""
     result: dict[str, Any] = {
         "manifest_sha256": manifest.fingerprint,
@@ -193,6 +239,8 @@ def summarize(manifest: CaptureManifest, events: tuple[CaptureEvent, ...] | None
         "identity_accuracy": "not_evaluated",
     }
     if events is None:
+        if inventory is not None:
+            raise ValueError("take inventory requires a reviewed event ledger")
         result["phase"] = "plan_preflight"
         return result
     summary = validate_capture_ledger(events)
@@ -213,17 +261,33 @@ def summarize(manifest: CaptureManifest, events: tuple[CaptureEvent, ...] | None
         }
         for split in ("development", "test")
     }
-    result["research_gate"] = (
-        "metadata_incomplete"
-        if not events
+    ledger_incomplete = (
+        not events
         or summary.indeterminate
         or any(
             result["coverage"][split][label] == 0
             for split in ("development", "test")
             for label in ("novel", "return")
         )
-        else "metadata_only_review_required"
     )
+    if inventory is None:
+        result["take_coverage"] = "not_checked"
+        result["research_gate"] = "metadata_incomplete"
+    else:
+        checked = validate_take_inventory(manifest, inventory, events)
+        result["take_coverage"] = {
+            "planned": checked.planned,
+            "recorded": checked.recorded,
+            "missing": checked.missing,
+            "excluded": checked.excluded,
+            "linked_events": checked.linked_events,
+            "reset_controls": checked.reset_controls,
+        }
+        result["research_gate"] = (
+            "metadata_incomplete"
+            if ledger_incomplete or checked.missing or checked.excluded
+            else "metadata_only_review_required"
+        )
     return result
 
 
@@ -231,12 +295,15 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", type=Path, required=True, help="Owner-private plan JSON")
     parser.add_argument("--ledger", type=Path, help="Optional owner-private event JSONL")
+    parser.add_argument("--inventory", type=Path, help="Optional owner-private take inventory JSON")
     parser.add_argument(
         "--expected-fingerprint", help="Pre-recording SHA-256, required with --ledger"
     )
     args = parser.parse_args(argv)
     if args.ledger is not None and args.expected_fingerprint is None:
         parser.error("--ledger requires --expected-fingerprint from the frozen plan")
+    if args.inventory is not None and args.ledger is None:
+        parser.error("--inventory requires --ledger and --expected-fingerprint")
     try:
         manifest = load_manifest(args.manifest)
         if args.expected_fingerprint is not None and (
@@ -244,9 +311,13 @@ def main(argv: list[str] | None = None) -> int:
         ):
             raise ValueError("manifest differs from the recorded pre-capture fingerprint")
         events = load_ledger(args.ledger) if args.ledger is not None else None
+        inventory = load_inventory(args.inventory) if args.inventory is not None else None
+        if inventory is not None:
+            assert events is not None
+            validate_take_inventory(manifest, inventory, events)
     except (OSError, UnicodeError, ValueError) as exc:
         parser.error(str(exc))
-    print(json.dumps(summarize(manifest, events), indent=2, sort_keys=True))
+    print(json.dumps(summarize(manifest, events, inventory), indent=2, sort_keys=True))
     return 0
 
 
