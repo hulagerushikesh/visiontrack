@@ -224,6 +224,9 @@ decision-gate process is defined in
       preliminary review found zero verified returns, and independent dense
       adjudication has not occurred. Preserve the frozen audit; do not count
       these gaps as re-entry events or as a held-out test set.
+- [x] Screen official PersonPath22 and BDD100K sources as possible backups
+      without downloading data; record their use/fit caveats and keep the
+      consented fixed-camera pilot as the first-study priority.
 - [ ] For a chosen rights-reviewed source, freeze the event list and a
       participant- and recording-disjoint development/test split before any
       real-data comparison.
