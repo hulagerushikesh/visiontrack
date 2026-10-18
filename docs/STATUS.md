@@ -1,7 +1,7 @@
 # VisionTrack — Status & Roadmap Checklist
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
-Last updated: 2026-10-14 — the zero-to-hero and research-lead learning paths
+Last updated: 2026-10-18 — the zero-to-hero and research-lead learning paths
 are surfaced in the React site, and the first selective anonymous re-entry
 protocol, scorer, and synthetic stress probe are in place. These are research
 foundations, not real-data validation. `visiontrack-mot 0.3.0` remains the
@@ -155,6 +155,9 @@ published to PyPI).
 - [x] RQ5 owner-local pilot CLI: strict private JSON/JSONL preflight, frozen
       fingerprint check, split-integrity validation, and aggregate-only output;
       example records are synthetic and no actual participant data was taken
+- [x] RQ5 planned-take inventory: private recorded/missing/excluded slot
+      reconciliation and exact event linkage, with aggregate-only gap reporting;
+      declared recordings and labels still require human verification
 - [x] RQ5 grouped descriptive uncertainty: participant/recording-connected
       bootstrap for future real-video scoring, with no claim of a certified
       operating-risk bound or real-data result

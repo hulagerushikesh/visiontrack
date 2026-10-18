@@ -214,6 +214,9 @@ decision-gate process is defined in
       example inputs: freeze a private manifest fingerprint before recording,
       recheck a two-reviewer ledger against it, and output aggregate counts
       without reading media or claiming real-data accuracy.
+- [x] Reconcile every frozen planned take slot against a private, strict
+      recorded/missing/excluded inventory and its reviewed event link; report
+      aggregate gaps without claiming footage, consent, or visual truth.
 - [x] Add seeded, dependency-grouped descriptive intervals for RQ5 event risk
       and eligible-return recall; do not treat a zero-error or one-group pilot
       as passing the registered 1% risk gate.

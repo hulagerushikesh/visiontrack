@@ -117,15 +117,40 @@ python -m experiments.reentry_pilot_preflight \
   --expected-fingerprint PRE_RECORDING_SHA256
 ```
 
+For planned-versus-recorded accounting, create a private take inventory with
+**one row per frozen `(split, scenario, slot)`**. A row is `recorded`, `missing`,
+or `excluded`; an excluded row uses only a controlled code (`withdrawn`,
+`bystander`, `technical`, or `other`), not a name or free-text explanation.
+Every recorded scored take links to exactly one reviewed ledger event with the
+same split, recording, session, and scenario label. A recorded `session_reset`
+control has no scored event and still needs human review of the reset boundary.
+The [synthetic inventory example](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/examples/reentry_pilot_inventory.example.json)
+shows the format and intentionally has five missing takes. Run:
+
+```bash
+python -m experiments.reentry_pilot_preflight \
+  --manifest /private/path/pilot-plan.json \
+  --ledger /private/path/pilot-events.jsonl \
+  --inventory /private/path/pilot-takes.json \
+  --expected-fingerprint PRE_RECORDING_SHA256
+```
+
 The command rejects unknown or duplicate JSON fields, changed plans, malformed
 reviews, impossible exit boundaries, and split leakage. It emits only the plan
 fingerprint and aggregate event counts, never participant keys or event IDs.
-`metadata_incomplete` means the ledger still lacks unambiguous novel/return
-events in both splits or has unresolved reviews. Even
+Without an inventory, the output explicitly marks take coverage `not_checked`
+and keeps the research gate incomplete. The optional inventory rejects omitted/duplicate planned slots, extra ledger
+events, mismatched event links, and recording/session split conflicts. Its
+output is aggregate counts only. `metadata_incomplete` means the ledger still
+lacks unambiguous novel/return events in both splits, has unresolved reviews,
+or the inventory declares missing/excluded takes. Even
 `metadata_only_review_required` is **not** clearance to score or publish: a
 human must still establish actual consent/rights, independent visual truth,
-planned-versus-recorded take coverage, and the frozen detector/crop/gallery
-protocol. The CLI deliberately does not mark those conditions as passed.
+whether each declared recording actually exists and covers the scripted take,
+the reason for any exclusion, reset behavior, and the frozen
+detector/crop/gallery protocol. The CLI deliberately does not mark those
+conditions as passed. Do not silently replace missing or excluded slots after
+seeing outcomes; document protocol deviations in the private study record.
 
 ## Pilot acceptance and scale-up gate
 
