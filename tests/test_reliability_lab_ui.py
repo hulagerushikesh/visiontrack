@@ -63,6 +63,19 @@ def test_lab_import_stays_private_and_can_return_to_sample() -> None:
     assert "FormData" not in component
 
 
+def test_sample_explains_how_to_rehearse_full_lab_workflow() -> None:
+    component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+    cli = (ROOT / "src/visiontrack/cli.py").read_text()
+
+    assert 'origin.kind === "sample" && (' in component
+    assert 'aria-label="Try the complete Lab workflow"' in component
+    assert 'visiontrack lab-demo ./lab-onboarding --write' in component
+    assert 'python -m pip install -e ".[lab]"' in component
+    assert 'Select the exact <code>report.json</code> path printed by the command' in component
+    assert 'Synthetic results are a workflow rehearsal, not evidence of real-world accuracy.' in component
+    assert '"lab-demo"' in cli
+
+
 def test_lab_import_validates_nested_evidence() -> None:
     types = (ROOT / "src/features/reliability-lab/types.ts").read_text()
 
