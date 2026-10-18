@@ -123,6 +123,12 @@ decision-gate process is defined in
 - [x] Run one checked-in deterministic synthetic browser workflow through the
       production report parser, playback lineage, both PNG lanes, privacy and
       missing-slot boundaries, and bounded transport in CI.
+- [x] Guide first-time Lab visitors through synthetic report generation,
+      local import, review, and decision preview.
+- [x] Rehearse fresh Python-generated reports through browser decision drafts
+      and Python import in CI; verify both outcomes, calendar validity, exact
+      bytes, lineage, preview-only behavior, and immutable storage. Surface the
+      explicit download-to-bundle save step in the Lab.
 - [x] Ship the first versioned, strictly validated, read-only benchmark explorer
       slice without replacing the generated reports.
 - [x] Export structured experiment results as canonical schema-v1 benchmark

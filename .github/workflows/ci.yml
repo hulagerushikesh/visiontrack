@@ -82,6 +82,14 @@ jobs:
         run: npm ci
       - name: Verify decision contract
         run: npm run test:decision-contract
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install synthetic Lab workflow dependencies
+        run: python -m pip install -e ".[lab]"
+      - name: Verify browser-to-Python decision workflow
+        run: npm run test:decision-workflow
       - name: Verify playback contract
         run: npm run test:playback-contract
       - name: Verify synthetic playback workflow

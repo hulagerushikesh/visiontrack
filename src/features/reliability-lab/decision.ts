@@ -54,8 +54,21 @@ const hasExactFields = (value: Record<string, unknown>, fields: string[]) => {
   const expected = [...fields].sort()
   return actual.length === expected.length && actual.every((field, index) => field === expected[index])
 }
-const isUtcTimestamp = (value: unknown): value is string =>
-  typeof value === "string" && /(?:Z|\+00(?::?00)?)$/.test(value) && !Number.isNaN(Date.parse(value))
+function isUtcTimestamp(value: unknown): value is string {
+  if (typeof value !== "string") return false
+  const match = /^(\d{4})-(\d{2})-(\d{2})[Tt ](\d{2}):(\d{2})(?::(\d{2})(?:[.,]\d{1,6})?)?(?:Z|\+00(?::?00)?)$/.exec(value)
+  if (!match || match[0] !== value) return false
+  const [, year, month, day, hour, minute, second = "0"] = match
+  const y = Number(year)
+  const m = Number(month)
+  const d = Number(day)
+  const leapYear = y % 4 === 0 && (y % 100 !== 0 || y % 400 === 0)
+  const days = [31, leapYear ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+  // Date.parse silently rolls dates such as February 30 into the next month.
+  // Validate calendar fields before hashing so Python can read every draft.
+  return y >= 1 && m >= 1 && m <= 12 && d >= 1 && d <= days[m - 1] &&
+    Number(hour) <= 23 && Number(minute) <= 59 && Number(second) <= 59
+}
 
 function parseDecision(value: unknown): LabDecision | null {
   if (!isRecord(value) || !hasExactFields(value, decisionFields)) return null
