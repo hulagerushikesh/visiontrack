@@ -52,10 +52,13 @@ def test_lab_ui_keeps_evidence_and_identity_boundaries_visible() -> None:
 
 def test_lab_import_stays_private_and_can_return_to_sample() -> None:
     component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+    reader = (ROOT / "src/features/reliability-lab/report-import.ts").read_text()
 
     assert 'type="file"' in component
     assert 'accept="application/json,.json"' in component
-    assert "JSON.parse(await file.text())" in component
+    assert "reportReader.current.read(file)" in component
+    assert "text = await file.text()" in reader
+    assert "this.parseReport(JSON.parse(text) as unknown)" in reader
     assert "Processed only in this browser tab. Nothing is uploaded." in component
     assert "Return to sample" in component
     assert 'input.value = ""' in component

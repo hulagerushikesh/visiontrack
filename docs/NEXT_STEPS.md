@@ -129,6 +129,10 @@ decision-gate process is defined in
       and Python import in CI; verify both outcomes, calendar validity, exact
       bytes, lineage, preview-only behavior, and immutable storage. Surface the
       explicit download-to-bundle save step in the Lab.
+- [x] Prepare a first-user walkthrough with a synthetic report and feedback
+      template; keep report controls accessible during bounded, cancelable imports.
+- [ ] Complete the owner usability walkthrough and prioritize its observed
+      blockers before inviting a practitioner to the same workflow.
 - [x] Ship the first versioned, strictly validated, read-only benchmark explorer
       slice without replacing the generated reports.
 - [x] Export structured experiment results as canonical schema-v1 benchmark

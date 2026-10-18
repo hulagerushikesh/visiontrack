@@ -14,6 +14,9 @@ platform for understanding *when* tracking techniques help—and where they fail
 
 ## Choose a starting point
 
+Trying the Reliability Lab for the first time? Follow the
+[15–20 minute walkthrough](LAB_WALKTHROUGH.md) with a synthetic report.
+
 <div class="grid cards" markdown>
 
 -   :material-rocket-launch: **I want to use it**

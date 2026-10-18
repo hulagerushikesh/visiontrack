@@ -153,6 +153,16 @@ the complete round trip. The check uses temporary storage and requires the
 Python `[lab]` extra plus `npm ci`; `VISIONTRACK_PYTHON` can select a specific
 Python interpreter. It tests production logic without driving a browser UI.
 
+Report selection is limited to 16 MiB before reading. The report controls stay
+available while a file loads; choosing another report or returning to the
+sample cancels publication of the earlier read. Empty, unreadable, malformed,
+and unsupported files produce a recoverable state. Run
+`npm run test:report-import` to check bounded reads, selection ordering,
+cancellation, stale failures, and recovery with the production importer.
+
+The [first Lab walkthrough](LAB_WALKTHROUGH.md) provides a short browser-only
+checklist and feedback template for someone using a prepared synthetic report.
+
 ### Synchronized failure-playback contract
 
 `PlaybackFrame`, `PlaybackLane`, and `FailurePlayback` define the first

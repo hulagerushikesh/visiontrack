@@ -73,6 +73,7 @@ nav:
       - ID-switch error taxonomy: ERROR_TAXONOMY.md
   - Results & benchmarks: BENCHMARKS.md
   - Use it:
+      - First Lab walkthrough: LAB_WALKTHROUGH.md
       - Public API: API.md
       - Run on your own video: VIDEO.md
       - 0.3.0 release-candidate scope: RELEASE_NOTES_0.3.0.md
