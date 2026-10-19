@@ -80,6 +80,26 @@ def test_sample_explains_how_to_rehearse_full_lab_workflow() -> None:
         in component
     )
     assert '"lab-demo"' in cli
+    assert "Developer setup (optional)" in component
+    assert "project folder on your computer" in component
+    assert "this link does not run the command" in component
+    assert ">local VisionTrack checkout</a>" not in component
+
+
+def test_lab_explains_the_task_before_import_and_keeps_review_optional() -> None:
+    component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+    assert component.index("<LabGuide />") < component.index("<ImportControls origin=")
+    assert "Explore tracking mistakes." in component
+    assert "What this mistake means" in component
+    assert "explainFailure(selectedEvent)" in component
+    assert "No pictures are attached to this event. Nothing failed to load" in component
+    assert (
+        '<summary className="cursor-pointer text-sm font-semibold">Technical details'
+        in component
+    )
+    assert "No decision is required." in component
+    assert "For researchers: draft a new local decision" in component
+    assert "does not automatically change the tracker" in component
 
 
 def test_lab_import_validates_nested_evidence() -> None:

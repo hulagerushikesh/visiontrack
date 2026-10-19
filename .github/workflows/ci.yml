@@ -84,6 +84,8 @@ jobs:
         run: npm run test:decision-contract
       - name: Verify report selection and cancellation
         run: npm run test:report-import
+      - name: Verify beginner Lab lesson and failure explanations
+        run: npm run test:lab-guide
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"

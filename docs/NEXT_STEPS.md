@@ -131,6 +131,10 @@ decision-gate process is defined in
       explicit download-to-bundle save step in the Lab.
 - [x] Prepare a first-user walkthrough with a synthetic report and feedback
       template; keep report controls accessible during bounded, cancelable imports.
+- [x] Address observed beginner confusion with an explicitly illustrative,
+      three-step visual lesson before import, plain-language failure meanings,
+      optional technical details and researcher-only decision drafting, and a
+      shorter walkthrough that requires no installation or acceptance choice.
 - [ ] Complete the owner usability walkthrough and prioritize its observed
       blockers before inviting a practitioner to the same workflow.
 - [x] Ship the first versioned, strictly validated, read-only benchmark explorer

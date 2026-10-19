@@ -1,39 +1,63 @@
 # Your first Reliability Lab walkthrough
 
-Allow 15–20 minutes. A browser and the prepared synthetic `report.json` are
-enough; you do not need to install anything or record footage. This session
+Allow 5–10 minutes for the beginner steps. A browser is enough; you do not need
+to install anything, use GitHub, record footage, or make a research decision. This session
 checks how understandable the Lab is. Your observations help us choose the
 next improvements, but they do not establish tracking accuracy or validate a
 market.
 
-## Before you start — 2 minutes
+## First understand the task — 3 minutes
+
+The Lab is a workspace for testing trackers, not the webcam tracker itself.
+We compare known reference answers with a tracker's output, explore mistakes,
+and only later decide whether a change meets agreed research criteria.
 
 - [ ] Open [the Reliability Lab](https://visiontrack.hulage.in/lab).
+- [ ] Start with **New here? Start with one simple example.** Select each of
+      the three pillar-example steps. The drawings are a teaching example,
+      not evidence from the report below.
+- [ ] At **Back in view**, compare the expected ID 7 with the example tracker's
+      ID 12. This illustrates a tracking-ID change, not recognition of a named person.
+- [ ] Tell us whether the example explains what a tracking mistake means.
+      If not, stop here and tell us which part is unclear.
+
+## Explore one reported mistake — 3–5 minutes
+
+- [ ] Choose **Explore the report below**. A variant means one tracker version
+      or settings choice. A frame means one picture in a sequence.
+- [ ] Find **Explore tracking mistakes** and select **Inspect** on one event.
+      Read **What this mistake means** before any technical details.
+- [ ] If no pictures are attached, do not look for a missing video: the report
+      can describe a mismatch without providing pictures that explain its cause.
+- [ ] Tell us in your own words what you think the event means, or what is
+      still confusing. You do not need to understand every metric.
+
+**You can stop here. Human review and decision downloads are not required for
+this beginner walkthrough.** Human review is a researcher's reasoned choice
+against agreed criteria, not a test of the reader's technical knowledge. If
+the evidence is unclear or insufficient, leave the decision section untouched.
+
+## Optional: explore a prepared report
+
 - [ ] Keep a blank note beside it and write down your browser and device.
 - [ ] Locate the prepared synthetic `report.json` linked in the chat. If it is
       unavailable on your device, complete the sample-only steps and leave the
       import steps for our next session.
 
-## Explore the sample — 5 minutes
-
-- [ ] Before reading the instructions in detail, write one sentence describing
-      what you think this page lets you do.
-- [ ] Look at the two tracker variants and their measurements. Write down what
-      you understand and which labels need an explanation. Understanding every
-      metric is not required.
-- [ ] Find **Inspect the failure set**, try one filter, and select **Inspect**
-      on an event. Describe the event in your own words.
-- [ ] Look for an explanation of where files are processed and how a human
-      decision is made. Note whether you found it easily.
-
-## Try your own local report — 5–8 minutes
-
 - [ ] Choose **Import report.json** and select the prepared synthetic report.
 - [ ] Check whether you can tell that you have moved from the illustrative
       sample to an imported report.
-- [ ] Review one failure event, then find **Human review** and **Draft a new
-      local decision**.
-- [ ] For this rehearsal, choose **Reject all variants**. Use `owner-reviewer`
+- [ ] Review one failure event. No decision is necessary.
+
+## Optional advanced rehearsal — only with guidance
+
+This tests saving a record, not whether a tracker should be accepted. Do not
+interpret the practice rejection below as a research result. Skip this entire
+section if the evidence or criteria are unclear.
+
+- [ ] Find **Human review**, then open **For researchers: draft a new local
+      decision**.
+- [ ] Only for this guided rehearsal, choose **Reject all variants**. Use `owner-reviewer`
       as the author and `Synthetic usability rehearsal; no real-data acceptance
       decision.` as the rationale. Choose **Use current UTC**.
 - [ ] Select **Preview exact decision**. Check whether the displayed outcome,
