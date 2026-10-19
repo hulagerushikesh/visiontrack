@@ -37,6 +37,7 @@ def test_report_types_and_runtime_states_are_explicit() -> None:
 
 def test_lab_ui_keeps_evidence_and_identity_boundaries_visible() -> None:
     component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+    comparison = (ROOT / "src/features/reliability-lab/MetricComparison.tsx").read_text()
     fixture = (ROOT / "src/features/reliability-lab/fixture.ts").read_text()
 
     assert "Demonstration fixture · illustrative data" in component
@@ -45,9 +46,25 @@ def test_lab_ui_keeps_evidence_and_identity_boundaries_visible() -> None:
     assert "Automatic selection is not enabled" in component
     assert "Track IDs are run-local and are not persistent person identities" in fixture
     assert "satisfies ReliabilityReport" in fixture
-    assert '<caption className=' in component
-    assert 'scope="col"' in component
-    assert 'scope="row"' in component
+    assert '<MetricComparison report={report} />' in component
+    assert '<caption className=' in comparison
+    assert 'scope="col"' in comparison
+    assert 'scope="row"' in comparison
+
+
+def test_metric_comparison_only_explains_recorded_report_values() -> None:
+    comparison = (ROOT / "src/features/reliability-lab/MetricComparison.tsx").read_text()
+    assert "number(variant.metrics[metric])" in comparison
+    assert "number(variant.metric_deltas[metric], true)" in comparison
+    assert "JSON.stringify(variant.configuration, null, 2)" in comparison
+    assert "Object.hasOwn(metricMeanings, metric)" in comparison
+    assert "not a statistical significance test" in comparison
+    assert "No decision is required" in comparison
+    assert "Direction not specified" in comparison
+    assert "useEffect" not in comparison
+    assert "fetch(" not in comparison
+    assert "localStorage" not in comparison
+    assert "createDecisionDraft" not in comparison
 
 
 def test_lab_import_stays_private_and_can_return_to_sample() -> None:

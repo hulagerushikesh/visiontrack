@@ -27,6 +27,7 @@ import { reliabilityReportFixture } from "./fixture"
 import { ReportFileReader } from "./report-import"
 import LabGuide from "./LabGuide"
 import EvidenceProgress from "./EvidenceProgress"
+import MetricComparison from "./MetricComparison"
 import { explainFailure, failureExplanations } from "./explanations"
 import {
   parseReportModel,
@@ -84,11 +85,6 @@ function mediaEvidence(failure: ReliabilityReport["failures"][number]): ReportMe
 type ReportOrigin =
   | { kind: "sample" }
   | { kind: "file"; filename: string }
-
-function number(value: number, signed = false) {
-  const rendered = Number.isInteger(value) ? String(value) : value.toFixed(4).replace(/0+$/, "").replace(/\.$/, "")
-  return signed && value > 0 ? `+${rendered}` : rendered
-}
 
 function short(value: string) {
   return `${value.slice(0, 8)}…${value.slice(-6)}`
@@ -169,21 +165,6 @@ function ReportError({ state }: { state: Exclude<ReportLoadResult, { kind: "read
         </p>
         <Button asChild variant="outline" className="mt-7"><a href="/docs/">Read the Lab contract <ArrowUpRight className="size-4" /></a></Button>
       </div>
-    </div>
-  )
-}
-
-function MetricTable({ report }: { report: ReliabilityReport }) {
-  const metrics = Object.keys(report.variants[0].metrics)
-  return (
-    <div className="overflow-x-auto rounded-3xl border border-border bg-white shadow-sm">
-      <table className="w-full min-w-[680px] border-collapse text-left">
-        <caption className="px-6 py-5 text-left text-sm text-muted-foreground">Value and delta relative to {report.experiment.baseline}</caption>
-        <thead className="border-y border-border bg-slate-50/80 text-xs uppercase tracking-[.12em] text-muted-foreground">
-          <tr><th scope="col" className="px-6 py-4">Metric</th>{report.variants.map((variant) => <th scope="col" className="px-6 py-4" key={variant.name}>{variant.name}{variant.baseline && <span className="ml-2 rounded-full bg-indigo-100 px-2 py-1 text-[9px] text-indigo-700">baseline</span>}</th>)}</tr>
-        </thead>
-        <tbody>{metrics.map((metric) => <tr className="border-b border-border last:border-0" key={metric}><th scope="row" className="px-6 py-4 font-mono text-sm">{metric}</th>{report.variants.map((variant) => <td className="px-6 py-4" key={variant.name}><span className="font-semibold">{number(variant.metrics[metric])}</span><span className="ml-2 text-xs text-muted-foreground">{number(variant.metric_deltas[metric], true)} Δ</span></td>)}</tr>)}</tbody>
-      </table>
     </div>
   )
 }
@@ -792,7 +773,7 @@ function LabReport({ report, origin }: { report: ReliabilityReport; origin: Repo
           ].map(([label, value, Icon]) => <div className="rounded-3xl border border-white bg-white/90 p-6 shadow-[0_18px_55px_-38px_rgba(30,41,59,.45)] ring-1 ring-slate-200/70" key={String(label)}><Icon className="size-5 text-primary" /><p className="mt-8 font-mono text-[10px] font-semibold uppercase tracking-[.16em] text-muted-foreground">{String(label)}</p><p className="mt-2 font-semibold">{String(value)}</p></div>)}
         </section>
 
-        <section className="mt-20" aria-labelledby="metrics-title"><div className="mb-8 max-w-3xl"><p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Paired measurement</p><h2 id="metrics-title" className="mt-3 text-4xl font-semibold tracking-[-.04em]">Same evidence. Controlled change.</h2><p className="mt-4 leading-7 text-muted-foreground">Every variant consumed the same immutable detection stream and frame range. Deltas are descriptive; acceptance remains a human decision.</p></div><MetricTable report={report} /></section>
+        <section className="mt-20" aria-labelledby="metrics-title"><div className="mb-8 max-w-3xl"><p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Paired measurement</p><h2 id="metrics-title" className="mt-3 text-4xl font-semibold tracking-[-.04em]">Same evidence. Controlled change.</h2><p className="mt-4 leading-7 text-muted-foreground">Every variant consumed the same immutable detection stream and frame range. Compare the recorded results below without changing the experiment or choosing a winner.</p></div><MetricComparison report={report} /></section>
 
         <section className="mt-20" aria-labelledby="failures-title"><div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Failure taxonomy</p><h2 id="failures-title" className="mt-3 text-4xl font-semibold tracking-[-.04em]">Where tracking breaks.</h2></div><p className="max-w-md text-sm leading-6 text-muted-foreground">Counts use the same correspondence as the published metrics—not a second UI-only calculation.</p></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{failureOrder.map((failure) => <article className="rounded-3xl border border-border bg-white p-6" key={failure}><p className="text-sm font-medium text-muted-foreground">{failureLabels[failure]}</p><div className="mt-5 space-y-3">{report.variants.map((variant) => <div className="flex items-center justify-between" key={variant.name}><span className="text-sm">{variant.name}</span><strong className="text-2xl">{variant.failure_counts[failure]}</strong></div>)}</div></article>)}</div></section>
 

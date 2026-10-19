@@ -171,10 +171,19 @@ verified in the current browser and images deliberately revealed. Before
 selection, during verification, and after an error, the latter two counts are
 zero; a successful selection does not reveal pixels. File verification checks
 record integrity and lineage, not tracking accuracy or the cause of a mistake.
+The metric comparison explains the baseline, signed changes, per-metric
+directions, and whole-frame-range scope without recalculating or rescaling
+values. Core tracking metrics remain visible; additional metrics and recorded
+configuration JSON are available through optional disclosures. All 28 current
+Python-exported metric keys have explanations; unknown keys remain visible
+without an inferred preferred direction. No score selects a winner or asserts
+statistical significance or real-world performance from synthetic evidence.
 `npm run test:lab-guide` checks the rendered lesson stages, accessible control
-markup, evidence boundaries, all four failure explanations, and the
-listed/checked/revealed image states. This automated
-check does not replace interactive browser or first-user usability review.
+markup, evidence boundaries, all four failure explanations,
+listed/checked/revealed image states, and rendered metric comparisons (signed
+values, optional disclosures, unknown keys, escaping, and report immutability).
+This automated check does not replace interactive browser or first-user
+usability review.
 
 ### Synchronized failure-playback contract
 
