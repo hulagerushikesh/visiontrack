@@ -255,6 +255,15 @@ decision-gate process is defined in
 - [ ] For a chosen rights-reviewed source, freeze the event list and a
       participant- and recording-disjoint development/test split before any
       real-data comparison.
+- [x] Start the owner-selected existing-dataset route with an official MEVID
+      annotation-only audit: verify chip-table alignment and upstream participant
+      separation, expose the empty row, and retain source-time/exit truth as
+      unpassed gates. Document why ordinary MOT17 IDs are not re-entry truth.
+- [x] Prepare a plain-language recording-day guide for the separate volunteer
+      pilot, with owner choices and consent/storage/freeze checks before capture.
+- [ ] Establish MEVID tracklet-to-original-recording/time provenance and resolve
+      its empty annotation row before freezing a development-only visual audit.
+      Stop this same-session route if the mapping cannot be established.
 - [ ] Secure rights-reviewed, identity-annotated re-entry data and freeze the
       detector, crop, identity/session split, and memory-expiry protocol before
       any real-data RQ5 claim.

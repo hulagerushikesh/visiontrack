@@ -7,6 +7,10 @@ anonymous re-entry probe can export its complete fixed-grid synthetic curves
 without changing development selection or its original results. The
 1,000-candidate margin rule still fails the primary synthetic risk bound.
 These are usability and research foundations, not real-data validation.
+The owner-selected existing-dataset route has begun with a reproducible MEVID
+annotation-only intake; its source-video timing/exit truth is still unverified.
+A separate, plain-language recording-day guide is ready for the proposed
+volunteer pilot. No recording or real-data RQ5 comparison has been performed.
 The zero-to-hero and research-lead learning paths are surfaced in the React
 site. `visiontrack-mot 0.3.0` remains the
 published Reliability Lab technical alpha with a versioned Python/C++

@@ -4,6 +4,13 @@ Initial local audit: 2026-10-14. Backup-source screen: 2026-10-18. This is a
 read-only audit of local annotations and upstream dataset terms. It does **not**
 report identity-restoration accuracy.
 
+Update 2026-10-19: the owner selected existing-dataset work while preparing a
+separate friend-volunteer pilot. The [MEVID intake](IDENTITY_CONTINUITY_DATASET_INTAKE.md)
+now records an executed annotation-only audit, an exposed empty upstream row,
+and the still-missing source-time/exit mapping. MOT17 was screened out as
+unmodified re-entry truth because its ID contract does not preserve identity
+after field-of-view exit. No real-data RQ5 comparison has started.
+
 ## Available candidate: DanceTrack validation split
 
 The [official DanceTrack repository](https://github.com/DanceTrack/DanceTrack)
