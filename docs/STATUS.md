@@ -9,6 +9,10 @@ without changing development selection or its original results. The
 These are usability and research foundations, not real-data validation.
 The owner-selected existing-dataset route has begun with a reproducible MEVID
 annotation-only intake; its source-video timing/exit truth is still unverified.
+The official annotation-tool source was inspected without execution: a populated
+crop-to-source mapping was not recovered, so same-session MEVID admission is on
+hold. An optional local recording metadata checker now flags technical setup
+issues without reading identity results or claiming constant frame timing.
 A separate, plain-language recording-day guide is ready for the proposed
 volunteer pilot. No recording or real-data RQ5 comparison has been performed.
 The zero-to-hero and research-lead learning paths are surfaced in the React

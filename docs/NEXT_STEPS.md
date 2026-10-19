@@ -261,6 +261,13 @@ decision-gate process is defined in
       unpassed gates. Document why ordinary MOT17 IDs are not re-entry truth.
 - [x] Prepare a plain-language recording-day guide for the separate volunteer
       pilot, with owner choices and consent/storage/freeze checks before capture.
+- [x] Investigate the official MEVID annotation toolchain without running it;
+      document the unrecovered source mapping and hold admission rather than
+      treating crop-local frames as chronological re-entry evidence.
+- [x] Add an optional owner-local recording metadata check for resolution,
+      reported rates, audio and frozen-plan mismatches, with synthetic tests
+      and explicit unverified timing/consent/accuracy boundaries. Keep the
+      two-person rehearsal separate from a disjoint-participant study.
 - [ ] Establish MEVID tracklet-to-original-recording/time provenance and resolve
       its empty annotation row before freezing a development-only visual audit.
       Stop this same-session route if the mapping cannot be established.
