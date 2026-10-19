@@ -207,6 +207,10 @@ decision-gate process is defined in
 - [x] Implement the registered dataset-free re-entry stress probe and four
       decision policies; report held-out results for 10–10,000 candidates,
       including the 1,000-candidate margin rule's failed risk bound.
+- [x] Export the complete original fixed-grid synthetic coverage/risk/recall
+      trade-offs with development-only selection, explicit denominators and
+      undefined rates, and untouched held-out reporting; reproduce the original
+      results at all four gallery sizes without selecting a new test-set winner.
 - [x] Audit the locally available DanceTrack annotation gaps and official
       dataset terms to identify a possible non-commercial research path.
 - [x] Add a reproducible GT gap-candidate extractor with sequence-scoped IDs,

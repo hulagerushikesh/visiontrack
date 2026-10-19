@@ -144,4 +144,9 @@ is enabled by adding this evaluator.
 The deterministic synthetic event generator, four registered decision
 policies, and first held-out results are documented in
 [`IDENTITY_CONTINUITY_SYNTHETIC.md`](IDENTITY_CONTINUITY_SYNTHETIC.md).
+The optional `--include-curves` export now preserves every point in the
+original fixed development grid, with paired development/held-out raw counts
+and rates. Held-out curves are descriptive only and never reselect a policy;
+this is an implementation of the reporting requirement, not a protocol or
+operating-point change.
 The next gate is a rights-reviewed real-data plan.

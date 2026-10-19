@@ -1,10 +1,14 @@
 # VisionTrack — Status & Roadmap Checklist
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
-Last updated: 2026-10-18 — the zero-to-hero and research-lead learning paths
-are surfaced in the React site, and the first selective anonymous re-entry
-protocol, scorer, and synthetic stress probe are in place. These are research
-foundations, not real-data validation. `visiontrack-mot 0.3.0` remains the
+Last updated: 2026-10-19 — the Reliability Lab now explains failures, optional
+image verification, and metric trade-offs for beginners. The selective
+anonymous re-entry probe can export its complete fixed-grid synthetic curves
+without changing development selection or its original results. The
+1,000-candidate margin rule still fails the primary synthetic risk bound.
+These are usability and research foundations, not real-data validation.
+The zero-to-hero and research-lead learning paths are surfaced in the React
+site. `visiontrack-mot 0.3.0` remains the
 published Reliability Lab technical alpha with a versioned Python/C++
 synchronization boundary; the two earlier research extensions remain
 **compute-blocked with measured numbers**. Previously:
