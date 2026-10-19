@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button"
 import { reliabilityReportFixture } from "./fixture"
 import { ReportFileReader } from "./report-import"
 import LabGuide from "./LabGuide"
+import EvidenceProgress from "./EvidenceProgress"
 import { explainFailure, failureExplanations } from "./explanations"
 import {
   parseReportModel,
@@ -66,7 +67,7 @@ const failureOrder = Object.keys(failureLabels) as FailureType[]
 const mediaLabels: Record<ReportMediaEvidence["status"], string> = {
   not_declared: "Not declared",
   declared_empty: "Declared empty",
-  available: "Available",
+  available: "Images listed in report",
 }
 
 function mediaEvidence(failure: ReliabilityReport["failures"][number]): ReportMediaEvidence {
@@ -396,8 +397,9 @@ function EvidenceInspector({
     <div className="mt-5 border-t border-indigo-100 pt-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm font-semibold">Inspect verified local images</p>
+          <p className="text-sm font-semibold">Optional: open the matching image files</p>
           <p className="mt-1 text-xs leading-5 text-muted-foreground">Select this event's manifest.json and every PNG it declares. Files stay in browser memory and are never uploaded.</p>
+          <p className="mt-1 text-xs leading-5 text-muted-foreground">The manifest is a file list with checksums used to check that the pictures belong to this event. If you do not have these files, skip this step; the report alone cannot display them.</p>
         </div>
         <label className="inline-flex h-9 shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md border border-input bg-white px-4 text-sm font-medium shadow-xs transition hover:bg-accent focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
           <FileImage className="size-4" />Select evidence files
@@ -405,6 +407,9 @@ function EvidenceInspector({
         </label>
       </div>
 
+      <EvidenceProgress {...(state.kind === "ready"
+        ? { status: "ready" as const, listedCount: media.artifact_count, verifiedCount: state.evidence.artifacts.length, revealedCount: state.evidence.artifacts.filter(({ artifact }) => Boolean(revealed[artifact.relative_path])).length }
+        : { status: state.kind, listedCount: media.artifact_count })} />
       {state.kind === "verifying" && <p className="mt-4 text-sm text-indigo-700" role="status" aria-live="polite">Verifying manifest lineage, hashes, filenames, and PNG dimensions…</p>}
       {state.kind === "error" && <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900" role="alert"><strong>Evidence not opened.</strong> {state.message}</div>}
       {state.kind === "idle" && <p className="mt-4 text-xs leading-5 text-muted-foreground">Metadata remains visible above. No image URL exists until a verified image is deliberately revealed.</p>}
@@ -750,7 +755,7 @@ function FailureExplorer({ report }: { report: ReliabilityReport }) {
                 <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Image evidence</p>
                 <div className="mt-3 flex flex-wrap gap-x-8 gap-y-2 text-sm">
                   <p><strong>{mediaLabels[mediaEvidence(selectedEvent).status]}</strong></p>
-                  <p>{mediaEvidence(selectedEvent).artifact_count} verified local {mediaEvidence(selectedEvent).artifact_count === 1 ? "image" : "images"}</p>
+                  <p>{mediaEvidence(selectedEvent).artifact_count} {mediaEvidence(selectedEvent).artifact_count === 1 ? "image" : "images"} listed in this report</p>
                   <p>Privacy: {mediaEvidence(selectedEvent).privacy.join(", ") || "not applicable"}</p>
                 </div>
                 <p className="mt-3 text-xs leading-5 text-muted-foreground">Report metadata does not contain image bytes. Any selected files are independently verified in this browser before display.</p>
