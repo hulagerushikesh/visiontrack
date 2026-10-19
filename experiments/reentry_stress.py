@@ -30,6 +30,13 @@ class ProbeEvent:
     runner_up_score: float
 
 
+def policy_grid(*, allow_margin: bool) -> tuple[tuple[float, float], ...]:
+    """The original fixed development grid, not a held-out threshold search."""
+    thresholds = (0.0, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.0)
+    margins = (0.0, 0.03, 0.06, 0.10, 0.15, 0.20) if allow_margin else (0.0,)
+    return tuple((threshold, margin) for threshold in thresholds for margin in margins)
+
+
 def _unit(vector: np.ndarray) -> np.ndarray:
     return vector / np.linalg.norm(vector)
 
@@ -115,21 +122,45 @@ def calibrate(
     development: list[ProbeEvent], *, allow_margin: bool, risk_budget: float = 0.01
 ) -> tuple[float, float] | None:
     """Choose the most useful development rule meeting the registered risk bound."""
-    margins = (0.0, 0.03, 0.06, 0.10, 0.15, 0.20) if allow_margin else (0.0,)
     eligible = []
-    for threshold in (0.0, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80, 0.90, 1.0):
-        for margin in margins:
-            result = evaluate(development, threshold=threshold, margin=margin)
-            upper = result["synthetic_risk_upper_95"]
-            if upper is not None and upper <= risk_budget:
-                eligible.append((result["eligible_return_recall"], -threshold, -margin))
+    for threshold, margin in policy_grid(allow_margin=allow_margin):
+        result = evaluate(development, threshold=threshold, margin=margin)
+        upper = result["synthetic_risk_upper_95"]
+        if upper is not None and upper <= risk_budget:
+            eligible.append((result["eligible_return_recall"], -threshold, -margin))
     if not eligible:
         return None
     _, negative_threshold, negative_margin = max(eligible)
     return -negative_threshold, -negative_margin
 
 
-def run_probe(*, gallery_size: int = 100, events: int = 3000, seed: int = 7) -> dict:
+def operating_curve(events: list[ProbeEvent], *, allow_margin: bool) -> list[dict]:
+    """Score every fixed grid point; never select or rank using these results.
+
+    Risk need not improve monotonically as a gate tightens. Preserve every
+    point and its counts, including undefined risk when there are no attempts.
+    """
+    points = []
+    for threshold, margin in policy_grid(allow_margin=allow_margin):
+        metrics = evaluate(events, threshold=threshold, margin=margin)
+        points.append(
+            {
+                "threshold": threshold,
+                "margin": margin,
+                "metrics": {
+                    **metrics,
+                    "attempted_restorations": (
+                        metrics["correct_restorations"] + metrics["false_restorations"]
+                    ),
+                },
+            }
+        )
+    return points
+
+
+def run_probe(
+    *, gallery_size: int = 100, events: int = 3000, seed: int = 7, include_curves: bool = False
+) -> dict:
     if events < 1:
         raise ValueError("events must be positive")
     development = generate_events(seed=seed, gallery_size=gallery_size, events=events)
@@ -150,7 +181,7 @@ def run_probe(*, gallery_size: int = 100, events: int = 3000, seed: int = 7) -> 
                 "held_out": evaluate(test, threshold=parameters[0], margin=parameters[1]),
             }
         )
-    return {
+    result = {
         "label": "synthetic stress probe; no real-data accuracy claim",
         "seed": seed,
         "gallery_size": gallery_size,
@@ -160,6 +191,35 @@ def run_probe(*, gallery_size: int = 100, events: int = 3000, seed: int = 7) -> 
         "fixed_baselines": results,
         "calibrated_policies": selected,
     }
+    if include_curves:
+        # Calibration above is complete before producing descriptive test curves.
+        # Neither the test curve nor a test risk bound can change the chosen rule.
+        curves = {}
+        for name, allow_margin in (("threshold_only", False), ("threshold_and_margin", True)):
+            development_curve = operating_curve(development, allow_margin=allow_margin)
+            test_curve = operating_curve(test, allow_margin=allow_margin)
+            chosen = selected[name]
+            curves[name] = [
+                {
+                    "threshold": dev["threshold"],
+                    "margin": dev["margin"],
+                    "selected_on_development": chosen is not None
+                    and (dev["threshold"], dev["margin"])
+                    == (chosen["threshold"], chosen["margin"]),
+                    "development": dev["metrics"],
+                    "held_out": held_out["metrics"],
+                }
+                for dev, held_out in zip(development_curve, test_curve, strict=True)
+            ]
+        result["operating_curves"] = {
+            "schema_version": 1,
+            "label": "descriptive fixed-grid synthetic curves; not real-data accuracy",
+            "selection_partition": "development only; held-out curves must not select a rule",
+            "risk_bound_scope": "one-sided 95% Wilson; independent synthetic events only",
+            "undefined_rates": "null means no denominator, not zero risk or zero recall",
+            "policies": curves,
+        }
+    return result
 
 
 def main() -> None:
@@ -167,8 +227,23 @@ def main() -> None:
     parser.add_argument("--gallery-size", type=int, default=100)
     parser.add_argument("--events", type=int, default=3000)
     parser.add_argument("--seed", type=int, default=7)
+    parser.add_argument(
+        "--include-curves",
+        action="store_true",
+        help="Include every fixed-grid development/test point; test curves are descriptive only",
+    )
     args = parser.parse_args()
-    print(json.dumps(run_probe(gallery_size=args.gallery_size, events=args.events, seed=args.seed)))
+    print(
+        json.dumps(
+            run_probe(
+                gallery_size=args.gallery_size,
+                events=args.events,
+                seed=args.seed,
+                include_curves=args.include_curves,
+            ),
+            allow_nan=False,
+        )
+    )
 
 
 if __name__ == "__main__":

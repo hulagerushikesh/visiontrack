@@ -78,3 +78,82 @@ The seed defaults to 7 and the JSON output carries every count, rate,
 selected development parameter, and held-out result. No data is downloaded
 or written. The probe retains only the two highest candidate scores for each
 event, so a 10,000-candidate run does not retain a full score matrix.
+
+## Full fixed-grid trade-offs
+
+Added 2026-10-19: the optional `--include-curves` export closes the protocol's
+trade-off reporting gap. It does **not** introduce a new identity policy,
+change the original calibration grid, or modify the live tracker. Without the
+flag, the original report structure and numerical results are preserved.
+
+```bash
+PYTHONPATH=src python -m experiments.reentry_stress --gallery-size 1000 --events 3000 --seed 7 --include-curves
+```
+
+The command prints JSON to standard output and does not save files. Its
+`operating_curves` section has `schema_version: 1` and two policy families:
+
+- `threshold_only`: all 10 original thresholds with margin zero.
+- `threshold_and_margin`: all 60 pairs from those same thresholds and the six
+  original margins. The ten margin-zero pairs also appear in the first family;
+  they are not extra events or independent experiments.
+
+Thresholds remain `[0, .2, .3, .4, .5, .6, .7, .8, .9, 1]`; margins remain
+`[0, .03, .06, .10, .15, .20]`. A point restores the best candidate only when
+both its similarity and its best-versus-runner-up gap reach their thresholds
+(inclusive comparisons). Every point carries:
+
+- `threshold`, `margin`, and `selected_on_development`.
+- Separate `development` and `held_out` metrics on the same respective events
+  used by the original probe, with all existing raw counts and rates.
+- An explicit `attempted_restorations` count, the denominator of selective risk,
+  alongside the eligible-return denominator and the independent-synthetic
+  one-sided Wilson bound.
+
+No point is dropped, ranked, interpolated, or chosen using held-out results.
+The existing development-only calibration runs first. Exactly its chosen pair
+is marked in each family, or no pair is marked when development evidence is
+insufficient. Fixed abstain-all and forced-nearest results remain in
+`fixed_baselines` outside the grid. The margin grid is a family of curves, not
+a single ordering in which every point must be better than the previous one.
+
+### How to read the trade-off
+
+Coverage asks **how often we attempted a link**. Eligible recall asks **how
+many available true returns we restored correctly**. Selective risk asks
+**what fraction of attempted links were incorrect**. They have different
+denominators and must be read together. Lower coverage is not proof of lower
+risk, and abstaining on everything is not useful recovery.
+
+Tightening one gate while holding the other fixed can only remove attempts,
+but may remove correct links disproportionately. Therefore the *rate* of
+incorrect links among the remaining attempts can increase even while the
+absolute false-link count falls. `null` means an absent denominator, not zero
+risk. A zero-error point still has a nonzero Wilson upper bound when it has
+attempts; too few attempts cannot establish the registered risk budget.
+
+These are descriptive grid results, not confidence bounds for an adaptively
+chosen test-set winner, significance tests, or real-video guarantees. Do not
+retune from the held-out curve and call the resulting policy held-out validated.
+A follow-up policy needs a new registered study and untouched evaluation data.
+The synthetic unavailable-return group models absence from the gallery; it
+does not execute or validate a real expiry/eviction mechanism.
+
+### Verification and current conclusion
+
+The 2026-10-19 reproduction used seed 7 and 3,000 events per partition at gallery
+sizes 10, 100, 1,000, and 10,000. For all four sizes, the original report
+(including selected parameters, baselines, counts, and rates) exactly matched
+the pre-export implementation. The newly marked curve points matched those
+selected held-out metrics. In particular, the 1,000-candidate margin rule still
+made **8 false links among 1,225 attempts**, with a one-sided synthetic upper
+bound of **1.16%**: it still fails the primary 1% operating point. No test-set
+alternative has replaced it.
+
+Tests cover hand-scored eligible, novel, and unavailable returns; empty and
+no-attempt denominators; gate/count monotonicity without assuming monotone
+risk; deterministic output; unchanged default output; and a held-out truth
+perturbation that cannot change development selection. Ordinary CI runs these
+tests. This closes a **synthetic reporting** gap only: lawful real-video data,
+frozen splits and preprocessing, grouped uncertainty, and the product/C++
+handoff gates remain unfinished.
