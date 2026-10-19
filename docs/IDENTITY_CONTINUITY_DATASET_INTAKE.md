@@ -105,6 +105,45 @@ upstream participants do not by themselves prove recording-disjoint RQ5 data.
 Current admitted re-entry events: **zero**. This is an intake status, not a
 measured zero prevalence or zero-error result. No restore policy was run.
 
+## Source-mapping investigation — hold recorded 2026-10-19
+
+Reviewed the official repository at commit
+`b793f4c5e3c99a36d11b7397335fce5d720abc84`, its published file-format description,
+and the small [official annotation-tool source archive](https://mevadata-public-01.s3.amazonaws.com/tools/mevid-annotation-tool.21may24-bec18f1.tgz)
+linked from that README. The archive was 2,758,304 bytes, SHA-256
+`4dae4e5e913521dd8db6ab16e8d30b18adef0d463a6a2b037466dcccf06cb9d8`.
+Only selected source text was read from the archive outside Git: no install,
+Docker build, script execution, service login, or dataset media acquisition.
+
+The toolchain offers a plausible provenance path, **not the populated mapping**:
+
+| Reviewed source | What it establishes | What it does not supply here |
+|---|---|---|
+| `server/meva_server/meva_database/models.py` | Detection records have source/track keys, frame, time and box fields; source records can name recordings | Actual records joining our released crop names to those keys |
+| `mevaTracker/scripts/GetLinkedChip.py` | Export logic joins actor links to folder/track IDs, resolves a recording folder name, and writes chip JSON | An offline release of the populated link tables or the final crop-name crosswalk |
+| `server/meva_server/meva_detection.py` | `get_chip` reads per-folder chip records through a user-access-controlled route | Anonymous access to a complete mapping or verified frame conventions |
+| `server/meva_tasks/chip_extraction.py` | Crop-local indices and original `frame` fields are separate concepts | Proof that a specific public JPEG's local index equals an original video frame |
+
+Do not run `GetLinkedChip.py` as an intake shortcut: its code authenticates to
+an annotation service and downloads actor-linked chips. None of those actions
+was taken. A source-code schema is not evidence that the necessary production
+database rows are publicly available or complete. We did not attempt to log in,
+probe the service, contact maintainers, or reconstruct links from appearance.
+
+**Decision: pause MEVID same-session RQ5 admission at the provenance gate.**
+No exact mapping was recovered from the reviewed release. This is a bounded
+investigation outcome, not a claim that no mapping exists anywhere. Reopen only
+with an authorized, versioned export that explicitly joins the released crop
+tracklet key to original recording, camera/session, source-frame/time and box
+records. Verify frame origin, sampling, missing frames and every join before
+selecting a training-only visual sample. A source mapping still cannot prove a
+true scene exit; independent visual review remains mandatory. The empty
+training row also remains unresolved. Do not bulk-download media hoping that
+filenames alone will recover the missing join, and do not replace RQ5 with
+crop retrieval without a separate research decision.
+
+The consented pilot and dataset-free engineering can continue independently.
+
 ## Next admission gates, in order
 
 1. Establish an exact tracklet-to-original-recording/time/bounding-box mapping

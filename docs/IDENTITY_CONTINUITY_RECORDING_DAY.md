@@ -21,6 +21,62 @@ held-out-person pilot needs at least two separate pairs for development and
 test, with no person appearing in both. Four volunteers is a practical minimum
 for those paired scenarios, not a statistically sufficient study.
 
+## Current setup choice — rehearsal first
+
+When only two willing adults are available, start with a pipeline rehearsal,
+not a participant-disjoint development/test study. Availability is **not
+consent or a completed setup check**. Do not assign the same two people to both
+splits to make a manifest pass. Actual participant, location and permission
+records belong in the private study workspace, not this public guide.
+
+Prefer the laptop webcam for the first rehearsal because it is easier to
+operate and inspect locally. Use a fixed phone stand instead if the webcam
+cannot show full bodies and a clear exit. A living-room corner facing an open
+walking area and doorway can work; another location is not required if the
+venue permissions, background and bystander checks pass. Turning away from
+the lens is not a scene exit. Aim for landscape 720p/30 fps **if supported**;
+verify actual output rather than assuming the selected setting was applied.
+
+Before filming anyone, make a short empty-room test clip using your local
+recording app. The website's live tracker is not the research recorder. Save
+the clip outside both repos and outside cloud-synced folders. I can help with
+the optional technical check below; you do not need to operate it unaided.
+
+### Optional local recording check
+
+From the local VisionTrack checkout, with FFmpeg's `ffprobe` installed:
+
+```bash
+python -m experiments.reentry_recording_check --video /private/path/empty-room-test.mp4
+```
+
+This reads one explicitly selected local MP4/MOV/MKV/WebM/AVI, at most 2 GiB.
+It does not open a camera, upload or display media, change the file, export
+pictures, or run detection/identity models. It uses local-file-only probing,
+restricted container formats, a 20-second deadline and a 64 KiB stdout cap.
+Use a maintained local FFmpeg installation and trusted owner-recorded files;
+these restrictions are not a sandbox for arbitrary hostile media.
+
+The output contains resolution, reported nominal/average frame rates, reported
+duration and audio-stream count, with warnings for missing/differing rates or
+audio. It omits filenames, location tags and other free-text media metadata.
+`30` means 30 fps; `30000/1001` is about 29.97 fps and is not silently rounded.
+An audio stream can contain silence: its presence is a settings warning, not
+proof of a recorded conversation. Return code 0 means the metadata was read,
+**not that warnings are absent or the recording is approved**. Code 2 means
+the check failed; check the local file/container, FFmpeg and optional manifest.
+
+For an already frozen full-study plan only, add
+`--manifest /private/path/pilot-plan.json` to compare reported resolution and
+both reported rates exactly. Do not use the example manifest as your actual
+plan. A mismatch is a warning; the tool never modifies a frozen plan or media.
+Keep populated results private. Dimensions describe the encoded video; phone
+rotation/display orientation still needs visual checking. Even matching rates
+do **not** verify constant frame timing, dropped frames, completeness, scene
+exits, consent or accuracy.
+Before frame-to-seconds research scoring, validate actual timestamps separately.
+For a two-person rehearsal, omit the manifest rather than inventing a test split.
+
 ## Before turning on recording
 
 - [ ] Explain to each adult: this studies temporary anonymous tracking when
