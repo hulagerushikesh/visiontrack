@@ -166,8 +166,14 @@ are optional. The Lab starts with a three-step, explicitly illustrative pillar
 example, separate from all report evidence. Failure details explain recorded
 mismatches without inferring their cause. Raw context and researcher decision
 drafting are collapsed by default; no acceptance choice is required to explore.
+Image evidence distinguishes the report's declared image count from files
+verified in the current browser and images deliberately revealed. Before
+selection, during verification, and after an error, the latter two counts are
+zero; a successful selection does not reveal pixels. File verification checks
+record integrity and lineage, not tracking accuracy or the cause of a mistake.
 `npm run test:lab-guide` checks the rendered lesson stages, accessible control
-markup, evidence boundaries, and the four failure explanations. This automated
+markup, evidence boundaries, all four failure explanations, and the
+listed/checked/revealed image states. This automated
 check does not replace interactive browser or first-user usability review.
 
 ### Synchronized failure-playback contract

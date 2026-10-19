@@ -29,6 +29,12 @@ and only later decide whether a change meets agreed research criteria.
       Read **What this mistake means** before any technical details.
 - [ ] If no pictures are attached, do not look for a missing video: the report
       can describe a mismatch without providing pictures that explain its cause.
+- [ ] If images are listed, distinguish the report's list from pictures opened
+      in this browser: **Listed in the report**, **Checked in this browser**,
+      and **Pictures revealed** are separate counts. Importing `report.json`
+      does not open image files. Skip the optional file selection if you do not
+      have that event's `manifest.json` and its PNG files. File checks confirm
+      that selected files match the evidence records, not that a tracker is accurate.
 - [ ] Tell us in your own words what you think the event means, or what is
       still confusing. You do not need to understand every metric.
 

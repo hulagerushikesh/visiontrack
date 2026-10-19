@@ -135,6 +135,9 @@ decision-gate process is defined in
       three-step visual lesson before import, plain-language failure meanings,
       optional technical details and researcher-only decision drafting, and a
       shorter walkthrough that requires no installation or acceptance choice.
+- [x] Distinguish images listed in report metadata from files checked in the
+      current browser and pictures deliberately revealed; explain the optional
+      manifest selection without treating file integrity as tracking accuracy.
 - [ ] Complete the owner usability walkthrough and prioritize its observed
       blockers before inviting a practitioner to the same workflow.
 - [x] Ship the first versioned, strictly validated, read-only benchmark explorer
@@ -257,6 +260,12 @@ decision-gate process is defined in
       detector, data rights, or deployment infrastructure.
 - [ ] Build only a small evidence-producing prototype after the vertical is
       chosen.
+
+Owner walkthrough progress: the owner confirmed that the three-step teaching
+example makes sense and opened an ID-switch event with the new explanation.
+This is partial comprehension/navigation feedback, not a completed usability
+review, research decision, or real-data validation. Image selection and optional
+researcher decisions have not been reviewed by the owner in this walkthrough.
 
 ## Deferred research compute
 

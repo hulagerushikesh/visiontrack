@@ -147,12 +147,32 @@ def test_lab_surfaces_media_availability_and_privacy_before_local_reveal() -> No
     fixture = (ROOT / "src/features/reliability-lab/fixture.ts").read_text()
 
     assert "Image evidence" in component
-    assert "verified local" in component
+    assert "Images listed in report" in component
+    assert "listed in this report" in component
+    assert "verified local {mediaEvidence" not in component
     assert "Privacy:" in component
     assert "Report metadata does not contain image bytes." in component
     assert "No image URL exists until a verified image is deliberately revealed." in component
     assert 'status: "available"' in fixture
     assert 'privacy: ["synthetic"]' in fixture
+
+
+def test_lab_image_progress_separates_report_metadata_from_browser_selection() -> None:
+    component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
+    progress = (ROOT / "src/features/reliability-lab/EvidenceProgress.tsx").read_text()
+
+    assert "Optional: open the matching image files" in component
+    assert "If you do not have these files, skip this step" in component
+    assert "verifiedCount: state.evidence.artifacts.length" in component
+    assert "Boolean(revealed[artifact.relative_path])" in component
+    assert "1. Listed in the report" in progress
+    assert "2. Checked in this browser" in progress
+    assert "3. Pictures revealed" in progress
+    assert "do not prove tracking accuracy" in progress
+    assert 'props.status === "ready" ? props.verifiedCount : 0' in progress
+    assert 'props.status === "ready" ? props.revealedCount : 0' in progress
+    assert "URL.createObjectURL" not in progress
+    assert "<img" not in progress
 
 
 def test_lab_import_strictly_validates_optional_media_metadata() -> None:
