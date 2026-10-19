@@ -161,7 +161,14 @@ and unsupported files produce a recoverable state. Run
 cancellation, stale failures, and recovery with the production importer.
 
 The [first Lab walkthrough](LAB_WALKTHROUGH.md) provides a short browser-only
-checklist and feedback template for someone using a prepared synthetic report.
+beginner checklist and feedback template; report import and decision rehearsal
+are optional. The Lab starts with a three-step, explicitly illustrative pillar
+example, separate from all report evidence. Failure details explain recorded
+mismatches without inferring their cause. Raw context and researcher decision
+drafting are collapsed by default; no acceptance choice is required to explore.
+`npm run test:lab-guide` checks the rendered lesson stages, accessible control
+markup, evidence boundaries, and the four failure explanations. This automated
+check does not replace interactive browser or first-user usability review.
 
 ### Synchronized failure-playback contract
 

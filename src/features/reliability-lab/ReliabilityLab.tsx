@@ -25,6 +25,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { reliabilityReportFixture } from "./fixture"
 import { ReportFileReader } from "./report-import"
+import LabGuide from "./LabGuide"
+import { explainFailure, failureExplanations } from "./explanations"
 import {
   parseReportModel,
   type FailureType,
@@ -136,15 +138,16 @@ function ImportControls({
         </div>
       </div>
       {origin.kind === "sample" && (
-        <div className="mt-6 rounded-2xl border border-indigo-100 bg-indigo-50/60 p-5" aria-label="Try the complete Lab workflow">
+        <details className="mt-6 rounded-2xl border border-indigo-100 bg-indigo-50/60 p-5" aria-label="Try the complete Lab workflow">
+          <summary className="cursor-pointer text-sm font-semibold text-slate-900">Developer setup (optional): generate your own practice report</summary>
           <p className="text-sm font-semibold text-slate-900">Want to try the complete Lab workflow?</p>
           <p className="mt-2 text-sm leading-6 text-slate-700">This illustrative sample is for exploring the screen; it cannot create a decision record. Generate a local, synthetic report to try the evidence-to-decision flow without a camera, dataset, or upload.</p>
           <ol className="mt-4 grid gap-4 text-sm leading-6 text-slate-700 md:grid-cols-3">
-            <li><strong className="block text-slate-900">1. Generate</strong>From a <a className="font-medium text-primary underline underline-offset-2" href="https://github.com/hulagerushikesh/visiontrack">local VisionTrack checkout</a>, run:<code className="mt-2 block overflow-x-auto rounded-lg bg-slate-950 px-3 py-2 font-mono text-xs leading-5 text-slate-100">python -m pip install -e ".[lab]"<br />visiontrack lab-demo ./lab-onboarding --write</code><span className="mt-2 block text-xs">Use a new output folder name if you repeat the exercise.</span></li>
+            <li><strong className="block text-slate-900">1. Generate</strong>In a terminal opened in the VisionTrack project folder on your computer, run:<code className="mt-2 block overflow-x-auto rounded-lg bg-slate-950 px-3 py-2 font-mono text-xs leading-5 text-slate-100">python -m pip install -e ".[lab]"<br />visiontrack lab-demo ./lab-onboarding --write</code><span className="mt-2 block text-xs">Use a new output folder name if you repeat the exercise. Need the code? <a className="text-primary underline underline-offset-2" href="https://github.com/hulagerushikesh/visiontrack">View the repository on GitHub</a> (this link does not run the command).</span></li>
             <li><strong className="block text-slate-900">2. Import</strong>Select the exact <code>report.json</code> path printed by the command using the button above. The report stays in this browser tab.</li>
             <li><strong className="block text-slate-900">3. Review</strong>Compare variants and failure events, then preview a human decision. Synthetic results are a workflow rehearsal, not evidence of real-world accuracy.</li>
           </ol>
-        </div>
+        </details>
       )}
     </section>
   )
@@ -292,7 +295,9 @@ function DecisionInspector({ report, canDraft }: { report: ReliabilityReport; ca
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
           <div className="max-w-2xl">
             <p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Human review</p>
-            <h2 id="decision-title" className="mt-3 text-3xl font-semibold tracking-tight">Review an auditable decision.</h2>
+            <h2 id="decision-title" className="mt-3 text-3xl font-semibold tracking-tight">Optional: record a researcher's choice.</h2>
+            <p className="mt-3 text-sm leading-6 text-slate-700">Human review means a person checks the evidence against agreed success criteria, then records why they choose one tracker variant or none. It is not identifying a person in a video, and it does not automatically change the tracker.</p>
+            <p className="mt-3 rounded-xl bg-indigo-50 p-4 text-sm leading-6 text-indigo-950">Just exploring, unsure, or missing evidence? Leave this section untouched. No decision is required. A synthetic practice decision is not approval for real-world use.</p>
             <p className="mt-3 text-sm leading-6 text-muted-foreground">Inspect an existing decision.json or deliberately draft a new one. Verification and drafting stay in browser memory; nothing is uploaded or written into the bundle.</p>
           </div>
           {state.kind !== "ready" && <label className="inline-flex h-10 shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-xs transition hover:bg-primary/90 focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
@@ -324,7 +329,7 @@ function DecisionInspector({ report, canDraft }: { report: ReliabilityReport; ca
             </article>
           )
         })()}
-        {(state.kind === "idle" || state.kind === "error") && <DecisionDraft report={report} enabled={canDraft} />}
+        {(state.kind === "idle" || state.kind === "error") && <details className="mt-6 rounded-2xl border border-slate-200 p-4"><summary className="cursor-pointer text-sm font-semibold">For researchers: draft a new local decision</summary><DecisionDraft report={report} enabled={canDraft} /></details>}
       </div>
     </section>
   )
@@ -665,7 +670,8 @@ function FailureExplorer({ report }: { report: ReliabilityReport }) {
     <section className="mt-20" aria-labelledby="events-title">
       <div className="mb-8">
         <p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Frame-level evidence</p>
-        <h2 id="events-title" className="mt-3 text-4xl font-semibold tracking-[-.04em]">Inspect the failure set.</h2>
+        <h2 id="events-title" className="mt-3 text-4xl font-semibold tracking-[-.04em]">Explore tracking mistakes.</h2>
+        <p className="mt-4 max-w-3xl leading-7 text-slate-700">These are the mistakes recorded by the experiment, also called the failure set. Choose Inspect to understand one event. A recorded mismatch shows what the evaluation found, not why it happened.</p>
         <p className="mt-4 max-w-3xl leading-7 text-muted-foreground">Filter the events already present in this verified report. These controls never recalculate metrics or change the source artifacts.</p>
       </div>
 
@@ -727,6 +733,12 @@ function FailureExplorer({ report }: { report: ReliabilityReport }) {
                 <div><p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Selected evidence</p><h3 id="failure-detail-title" className="mt-2 text-2xl font-semibold tracking-tight">{failureLabels[selectedEvent.event_type]} at frame {selectedEvent.frame_index}</h3></div>
                 <Button type="button" variant="outline" onClick={clearSelection}>Close details</Button>
               </div>
+              <div className="mt-6 rounded-2xl border border-indigo-100 bg-white p-5" aria-label="What this mistake means">
+                <h4 className="font-semibold">{failureExplanations[selectedEvent.event_type].label}</h4>
+                <p className="mt-2 text-sm leading-7 text-slate-700">{explainFailure(selectedEvent)}</p>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">Reference labels describe the expected objects. This event alone does not establish the cause or prove which tracker is better.</p>
+                {mediaEvidence(selectedEvent).status !== "available" && <p className="mt-3 rounded-xl bg-slate-50 p-3 text-sm leading-6 text-slate-700">No pictures are attached to this event. Nothing failed to load; this report cannot show you the scene visually.</p>}
+              </div>
               <dl className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                 <div><dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Variant</dt><dd className="mt-2 text-sm font-semibold">{selectedEvent.variant}</dd></div>
                 <div><dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Evidence range</dt><dd className="mt-2 font-mono text-sm">{selectedEvent.evidence_frames.start}–{selectedEvent.evidence_frames.end - 1}</dd></div>
@@ -743,7 +755,7 @@ function FailureExplorer({ report }: { report: ReliabilityReport }) {
                 <p className="mt-3 text-xs leading-5 text-muted-foreground">Report metadata does not contain image bytes. Any selected files are independently verified in this browser before display.</p>
                 <EvidenceInspector key={`${report.report_id}:${selectedEvent.event_id}`} report={report} failure={selectedEvent} />
               </div>
-              <div className="mt-6 rounded-2xl border border-indigo-100 bg-white/80 p-5"><p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Recorded context</p><pre className="mt-3 overflow-x-auto whitespace-pre-wrap break-words font-mono text-xs leading-6 text-slate-700">{JSON.stringify(selectedEvent.context, null, 2)}</pre></div>
+              <details className="mt-6 rounded-2xl border border-indigo-100 bg-white/80 p-5"><summary className="cursor-pointer text-sm font-semibold">Technical details (optional)</summary><p className="mt-3 text-xs leading-5 text-muted-foreground">Recorded context for debugging and reproducing this event. Fingerprints identify evidence records, not people.</p><pre className="mt-3 overflow-x-auto whitespace-pre-wrap break-words font-mono text-xs leading-6 text-slate-700">{JSON.stringify(selectedEvent.context, null, 2)}</pre></details>
               <p className="mt-5 text-xs leading-5 text-muted-foreground">Track IDs shown here are local to this run. This panel displays report evidence and does not infer a persistent person identity.</p>
             </aside>
           )}
@@ -820,6 +832,7 @@ export default function ReliabilityLab() {
   return (
     <div>
       <div className="relative z-10 mx-auto max-w-7xl px-5 pt-28 lg:px-8">
+        <LabGuide />
         <ImportControls origin={origin} reportId={state.kind === "ready" ? state.report.report_id : undefined} onImport={importReport} onSample={loadSample} />
       </div>
       {state.kind === "loading" ? <LoadingState /> : state.kind === "ready" ? <LabReport report={state.report} origin={origin} /> : <ReportError state={state} />}

@@ -15,7 +15,7 @@ platform for understanding *when* tracking techniques help—and where they fail
 ## Choose a starting point
 
 Trying the Reliability Lab for the first time? Follow the
-[15–20 minute walkthrough](LAB_WALKTHROUGH.md) with a synthetic report.
+[5–10 minute beginner walkthrough](LAB_WALKTHROUGH.md), with an optional synthetic-report exercise.
 
 <div class="grid cards" markdown>
 
