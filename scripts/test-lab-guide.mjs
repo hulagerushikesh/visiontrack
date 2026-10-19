@@ -82,4 +82,72 @@ for (const revealedCount of [0, 1, 2]) {
 const empty = progress({ status: "idle", listedCount: 0 })
 assert.match(empty, />0 images</)
 assert.equal((empty.match(/>0 of 0</g) ?? []).length, 2)
-console.log("Lab guide passed: rendered lesson stages, failure explanations, and listed/checked/revealed image states.")
+const { default: MetricComparison, metricMeanings } = await browserModule("MetricComparison", "tsx")
+const comparison = (report) => renderToStaticMarkup(createElement(MetricComparison, { report }))
+const example = structuredClone(fixture.report)
+example.variants[0].metrics = { HOTA: 0.5, IDSW: 2, MOTA: -0.25, FP: 3, frames: 3, custom_metric: 42 }
+example.variants[0].metric_deltas = { HOTA: 0, IDSW: 0, MOTA: 0, FP: 0, frames: 0, custom_metric: 0 }
+example.variants[1].metrics = { HOTA: 0.6, IDSW: 1, MOTA: -0.2, FP: 4, frames: 3, custom_metric: 43 }
+example.variants[1].metric_deltas = { HOTA: 0.1, IDSW: -1, MOTA: 0.05, FP: 1, frames: 0, custom_metric: 1 }
+example.variants[1].configuration = { preset: "example-only", overrides: { max_age: 60 } }
+const frozenReport = JSON.stringify(example)
+const renderedComparison = comparison(example)
+assert.equal(JSON.stringify(example), frozenReport, "Rendering must not mutate the report")
+for (const text of [
+  "How to read this comparison", "reference configuration, not a guaranteed best tracker",
+  "one fewer switch, not a negative error count", "not automatically converted to percentages",
+  "not a statistical significance test", "not just the failure event you opened",
+  "Synthetic or illustrative results do not establish real-world performance",
+  "No decision is required", "Tracking-ID changes", "Lower is preferred for this metric alone",
+  "Higher is preferred for this metric alone", "Context only · no preferred direction",
+  "Direction not specified", "Additional metric supplied by this report",
+  "More recorded metrics and evaluation counts (3)", "example-only", "max_age",
+]) assert.ok(renderedComparison.includes(text), `Missing comparison explanation: ${text}`)
+assert.match(renderedComparison, />0\.6<.*?Change: \+0\.1/s)
+assert.match(renderedComparison, />1<.*?Change: -1/s)
+assert.match(renderedComparison, />-0\.2<.*?Change: \+0\.05/s)
+assert.match(renderedComparison, />43<.*?Change: \+1/s)
+assert.match(renderedComparison, /<caption /)
+assert.match(renderedComparison, /scope="row"/)
+assert.match(renderedComparison, /scope="col"/)
+assert.equal((renderedComparison.match(/<table /g) ?? []).length, 2)
+assert.equal((renderedComparison.match(/<details /g) ?? []).length, 2)
+assert.doesNotMatch(renderedComparison, /<details open|<button|<input|<form|<img|<video|<iframe/)
+
+const full = structuredClone(example)
+for (const variant of full.variants) {
+  variant.metrics = Object.fromEntries(Object.keys(metricMeanings).map((key) => [key, 0]))
+  variant.metric_deltas = { ...variant.metrics }
+}
+const allMetrics = comparison(full)
+assert.equal(Object.keys(metricMeanings).length, 28)
+for (const [key, info] of Object.entries(metricMeanings)) {
+  assert.ok(allMetrics.includes(`(${key})`), `Missing metric ${key}`)
+  assert.ok(allMetrics.includes(info.label), `Missing label ${key}`)
+}
+assert.match(metricMeanings.MT.meaning, /at least 80%/)
+assert.match(metricMeanings.ML.meaning, /less than 20%/)
+assert.match(metricMeanings.MOTP.meaning, /intersection-over-union/)
+assert.match(metricMeanings.Frag.meaning, /matched reference object to an unmatched one/)
+
+// A supported report may contain only non-core or previously unknown metrics.
+const unusual = structuredClone(fixture.report)
+unusual.variants = [unusual.variants[0]]
+unusual.variants[0].metrics = { __proto_metric: 1, PT: 0, constructor: 2 }
+unusual.variants[0].metric_deltas = { __proto_metric: 0, PT: 0, constructor: 0 }
+const uncommon = comparison(unusual)
+assert.equal((uncommon.match(/<table /g) ?? []).length, 1)
+assert.doesNotMatch(uncommon, /More recorded metrics/)
+assert.match(uncommon, /__proto_metric/)
+assert.match(uncommon, /constructor/)
+assert.equal((uncommon.match(/Direction not specified/g) ?? []).length, 2)
+
+const unsafe = structuredClone(fixture.report)
+unsafe.experiment.baseline = "<script>not-html</script>"
+unsafe.variants[0].name = unsafe.experiment.baseline
+unsafe.variants[0].configuration = { note: "<img src=x onerror=alert(1)>" }
+const escaped = comparison(unsafe)
+assert.match(escaped, /&lt;script&gt;/)
+assert.match(escaped, /&lt;img/)
+assert.doesNotMatch(escaped, /<script|<img/)
+console.log("Lab guide passed: lesson stages, failure explanations, image states, and immutable metric comparisons.")

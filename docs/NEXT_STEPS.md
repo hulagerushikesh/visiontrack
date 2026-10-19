@@ -138,6 +138,10 @@ decision-gate process is defined in
 - [x] Distinguish images listed in report metadata from files checked in the
       current browser and pictures deliberately revealed; explain the optional
       manifest selection without treating file integrity as tracking accuracy.
+- [x] Explain whole-report metric comparisons with baseline/change examples,
+      plain-language meanings and per-metric directions, optional recorded
+      settings and secondary metrics, and explicit trade-off/significance
+      boundaries; preserve the report's values without selecting a winner.
 - [ ] Complete the owner usability walkthrough and prioritize its observed
       blockers before inviting a practitioner to the same workflow.
 - [x] Ship the first versioned, strictly validated, read-only benchmark explorer

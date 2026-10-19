@@ -38,6 +38,27 @@ and only later decide whether a change meets agreed research criteria.
 - [ ] Tell us in your own words what you think the event means, or what is
       still confusing. You do not need to understand every metric.
 
+## Optional: understand the whole-report comparison — 3 minutes
+
+- [ ] Find **Same evidence. Controlled change.** Read **How to read this
+      comparison**. The baseline is the reference configuration, not the winner.
+- [ ] Read one row, such as **Tracking-ID changes (IDSW)** if it is present.
+      The main number is the recorded count; **Change** is relative to the
+      baseline. A change of −1 means one fewer switch, not a negative count.
+- [ ] Notice that each row explains its preferred direction. Error counts
+      generally prefer lower values; quality scores generally prefer higher
+      values. Context counts do not have a preferred direction.
+- [ ] These are summaries of the evaluated frame range, not just the event
+      you inspected. Look across rows for trade-offs; a better value on one
+      row does not establish an overall winner or statistical significance.
+- [ ] Optionally open **Which settings were actually recorded?** or **More
+      recorded metrics and evaluation counts**. These disclose existing report
+      data; they do not change settings or rerun the tracker.
+
+The teaching numbers in the reading guide are examples, not extra results from
+your report. Synthetic or illustrative scores do not establish real-world
+performance. No acceptance decision is needed for this step.
+
 **You can stop here. Human review and decision downloads are not required for
 this beginner walkthrough.** Human review is a researcher's reasoned choice
 against agreed criteria, not a test of the reader's technical knowledge. If
