@@ -734,7 +734,8 @@ function FailureExplorer({ report }: { report: ReliabilityReport }) {
                 <Button type="button" variant="outline" onClick={clearSelection}>Close details</Button>
               </div>
               <div className="mt-6 rounded-2xl border border-indigo-100 bg-white p-5" aria-label="What this mistake means">
-                <h4 className="font-semibold">{failureExplanations[selectedEvent.event_type].label}</h4>
+                <p className="text-xs font-medium uppercase tracking-wide text-primary">What this mistake means</p>
+                <h4 className="mt-2 font-semibold">{failureExplanations[selectedEvent.event_type].label}</h4>
                 <p className="mt-2 text-sm leading-7 text-slate-700">{explainFailure(selectedEvent)}</p>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">Reference labels describe the expected objects. This event alone does not establish the cause or prove which tracker is better.</p>
                 {mediaEvidence(selectedEvent).status !== "available" && <p className="mt-3 rounded-xl bg-slate-50 p-3 text-sm leading-6 text-slate-700">No pictures are attached to this event. Nothing failed to load; this report cannot show you the scene visually.</p>}

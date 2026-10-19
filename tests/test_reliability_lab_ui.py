@@ -91,6 +91,7 @@ def test_lab_explains_the_task_before_import_and_keeps_review_optional() -> None
     assert component.index("<LabGuide />") < component.index("<ImportControls origin=")
     assert "Explore tracking mistakes." in component
     assert "What this mistake means" in component
+    assert ">What this mistake means</p>" in component
     assert "explainFailure(selectedEvent)" in component
     assert "No pictures are attached to this event. Nothing failed to load" in component
     assert (
