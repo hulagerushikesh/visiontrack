@@ -1,5 +1,9 @@
 # RQ5 consented capture and adjudication plan
 
+Owner-friendly starting point: [your recording-day checklist](IDENTITY_CONTINUITY_RECORDING_DAY.md).
+The [MEVID dataset intake](IDENTITY_CONTINUITY_DATASET_INTAKE.md) is a separate
+research source, not permission to combine public and private footage.
+
 Status: **plan only, 2026-10-14**. No participant recruitment, recording, or
 real-data result is authorized or reported here. This plan addresses the
 [DanceTrack feasibility audit](IDENTITY_CONTINUITY_DATA_AUDIT.md): a GT box gap
