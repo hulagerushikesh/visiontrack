@@ -1,7 +1,13 @@
 # VisionTrack — Status & Roadmap Checklist
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
-Last updated: 2026-10-19 — the Reliability Lab now explains failures, optional
+Last updated: 2026-10-21 — a bounded traffic-reliability probe is planned in
+[TRAFFIC_RELIABILITY_PLAN.md](TRAFFIC_RELIABILITY_PLAN.md), following a read-only
+public-source pipeline inspection. Its [v1 synthetic recipe](TRAFFIC_RELIABILITY_PROTOCOL.md)
+now freezes geometry, observation errors, baseline settings, scenario/seed
+splits and crossing-score semantics with integrity checks before comparisons.
+No traffic tracker experiment or product validation is complete.
+The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective
 anonymous re-entry probe can export its complete fixed-grid synthetic curves
 without changing development selection or its original results. The

@@ -291,6 +291,25 @@ This is partial comprehension/navigation feedback, not a completed usability
 review, research decision, or real-data validation. Image selection and optional
 researcher decisions have not been reviewed by the owner in this walkthrough.
 
+## Next independent milestone — traffic reliability probe
+
+The bounded plan is [TRAFFIC_RELIABILITY_PLAN.md](TRAFFIC_RELIABILITY_PLAN.md).
+It does not require volunteer capture or another external reply and does not
+replace RQ5 with an unregistered traffic claim.
+
+- [x] Inspect the public OTVision IOU plugin and post-tracking coordinate
+      transformation at a pinned revision without changing or running upstream.
+- [x] Define the ordered projection/box-instability probe, crossing-to-flow
+      evaluation stages, real-data admission and Python/C++ handoff boundaries.
+- [x] Freeze a separate ground-plane synthetic protocol and deterministic
+      fixture definition before running or inspecting comparative outcomes:
+      [v1 recipe](TRAFFIC_RELIABILITY_PROTOCOL.md), byte-level integrity
+      preflight, explicit four-condition inputs and disjoint scenario/seed sets.
+      No tracker comparison or held-out tracking run has been performed.
+- [ ] Implement and test the failure-reproduction harness, then add explicit
+      counting-event semantics and controlled intervention comparisons.
+- [ ] Validate any transfer claim on representative rights-reviewed evidence.
+
 ## Deferred research compute
 
 - [ ] Run the SportsMOT real-detector pass only with suitable GPU compute and a

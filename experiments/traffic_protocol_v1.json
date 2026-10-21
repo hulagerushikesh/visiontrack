@@ -1,0 +1,102 @@
+{
+  "protocol_id": "visiontrack.traffic-mechanism/v1",
+  "frozen_on": "2026-10-21",
+  "baseline_revision": "16c287a6b18c5c142a28e4bce70b3232946459db",
+  "purpose": "synthetic mechanism characterization, not intervention selection",
+  "frame_grid": {"width": 1280, "height": 720, "fps": 30, "frames": 300},
+  "world_roi": {"x": [-6, 6], "y": [0, 20]},
+  "projection": {
+    "affine": [[60, 0, 640], [0, -16.25, 650], [0, 0, 1]],
+    "perspective": [[60, 32, 640], [0, 0, 650], [0, 0.05, 1]],
+    "min_abs_determinant": 1e-9,
+    "min_positive_denominator": 1e-6,
+    "roundtrip_absolute_tolerance": 1e-9
+  },
+  "ideal_box": {
+    "world_width": 0.6,
+    "world_height": 1.7,
+    "width_scale": 60,
+    "height_scale": 100,
+    "score": 0.9,
+    "class_id": 0,
+    "appearance": null
+  },
+  "observation_error": {
+    "rng": "numpy.random.Generator(PCG64(seed))",
+    "draw_order": "frame, ascending object_id, edge x1 y1 x2 y2",
+    "draw_distribution": "uniform(-1, 1), four draws for every object/frame in every condition",
+    "edge_jitter_fraction": 0.02,
+    "bottom_truncation": {"start_frame": 135, "stop_frame_exclusive": 165, "ideal_height_fraction": 0.35},
+    "top_truncation": {"start_frame": 210, "stop_frame_exclusive": 240, "ideal_height_fraction": 0.35},
+    "miss_rate": 0,
+    "false_positive_rate": 0
+  },
+  "conditions": [
+    {"id": "control", "projection": "affine", "box_error": false},
+    {"id": "perspective_only", "projection": "perspective", "box_error": false},
+    {"id": "box_error_only", "projection": "affine", "box_error": true},
+    {"id": "combined", "projection": "perspective", "box_error": true}
+  ],
+  "splits": {
+    "development": {"seeds": [101, 102, 103, 104, 105, 106, 107, 108, 109, 110], "scenarios": ["solo", "opposing", "converging"]},
+    "heldout": {"seeds": [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010], "scenarios": ["offcentre", "close_opposing", "slanted"]}
+  },
+  "scenarios": {
+    "solo": [{"object_id": 1, "start": [0, 2], "end": [0, 18]}],
+    "opposing": [{"object_id": 1, "start": [-2, 2], "end": [-2, 18]}, {"object_id": 2, "start": [2, 18], "end": [2, 2]}],
+    "converging": [{"object_id": 1, "start": [-3, 2], "end": [-0.6, 18]}, {"object_id": 2, "start": [3, 18], "end": [0.6, 2]}],
+    "offcentre": [{"object_id": 1, "start": [3.5, 18], "end": [3.5, 2]}],
+    "close_opposing": [{"object_id": 1, "start": [-0.65, 3], "end": [-0.65, 17]}, {"object_id": 2, "start": [0.65, 17], "end": [0.65, 3]}],
+    "slanted": [{"object_id": 1, "start": [-4, 2], "end": [-1, 18]}, {"object_id": 2, "start": [4, 2], "end": [1, 18]}]
+  },
+  "tracker_config": {
+    "high_score_thresh": 0.5,
+    "low_score_thresh": 0.1,
+    "match_iou_thresh": 0.3,
+    "recovery_iou_thresh": 0.5,
+    "new_track_thresh": 0.6,
+    "n_init": 3,
+    "max_age": 30,
+    "use_mahalanobis_gating": true,
+    "class_aware": true,
+    "w_iou": 1.0,
+    "w_app": 0.0,
+    "w_unc": 0.0,
+    "use_giou": false,
+    "appearance_ema_alpha": 0.9,
+    "kf_noise_scale": 1.0,
+    "motion_residual_path": null,
+    "w_ocm": 0.0,
+    "ocm_delta_t": 3,
+    "use_oru": false,
+    "use_gmc": false
+  },
+  "anchors": ["bottom_centre", "box_centre"],
+  "crossing": {
+    "world_y": 10,
+    "world_x_min_inclusive": -6,
+    "world_x_max_exclusive": 6,
+    "count_window_frames": 30,
+    "max_match_time_error_frames": 30,
+    "max_match_x_error_world_units": 1,
+    "max_sample_gap_frames": 1,
+    "deduplicate": "first event per track_id and direction",
+    "primary_anchor": "bottom_centre",
+    "secondary_anchor": "box_centre"
+  },
+  "diagnostics": {
+    "gt_match_iou": 0.5,
+    "regions_y": [[0, 6.666666666666667], [6.666666666666667, 13.333333333333334], [13.333333333333334, 20]],
+    "primary_count_error": "unmatched truth events plus unmatched predicted events",
+    "primary_completeness": "fraction of true object-frames with a one-to-one IoU match",
+    "aggregation_unit": "scenario; seeds are repeated measurement noise, not independent scenes"
+  },
+  "execution_policy": {
+    "comparative_outcomes_observed_at_freeze": false,
+    "heldout_tracking_executed_at_freeze": false,
+    "candidate_interventions": [],
+    "tuning_allowed": false,
+    "real_data_claims_allowed": false,
+    "cpp_port_authorized": false
+  }
+}
