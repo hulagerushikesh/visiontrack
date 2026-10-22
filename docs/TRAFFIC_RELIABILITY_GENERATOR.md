@@ -101,11 +101,12 @@ must be disclosed, not treated as new evidence or silently re-frozen.
 
 1. The frozen crossing-event scorer is now implemented and tested on
    [hand-checked fixtures](TRAFFIC_RELIABILITY_SCORER.md), without tracker runs.
-2. Build a development-only runner: verify the pinned baseline source, use the
-   explicit tracker configuration, prevent reference IDs from entering detector
-   inputs, and verify reset/replay behavior.
-3. Record source/dependency provenance, input/output digests and every outcome,
-   including misses, ID switches, crossing errors and unfavorable results.
+2. The [development-only replay adapter](TRAFFIC_RELIABILITY_RUNNER.md) now
+   verifies the pinned source/configuration, reference-free detector inputs and
+   reset/fresh equality, recording provenance, input/output digests and crossing
+   scores. It is not yet the complete study report.
+3. Complete tracking/completeness and contact-localization strata, result
+   exports and paired development summaries, including unfavorable results.
 4. Freeze the complete tested harness revision and input digests **before** the
    one-pass held-out tracker evaluation. No intervention tuning is part of v1.
 

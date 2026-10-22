@@ -46,8 +46,11 @@ The [v1 protocol](TRAFFIC_RELIABILITY_PROTOCOL.md) and locked JSON recipe now
 specify these choices. Integrity and input-geometry checks do not run trackers
 or open held-out tracking outcomes. The separate
 [input generator](TRAFFIC_RELIABILITY_GENERATOR.md) and
-[crossing scorer](TRAFFIC_RELIABILITY_SCORER.md) are now implemented and tested;
-the development tracker runner is next. Scorer fixtures are not study outcomes.
+[crossing scorer](TRAFFIC_RELIABILITY_SCORER.md) are implemented and tested.
+The [development-only replay adapter](TRAFFIC_RELIABILITY_RUNNER.md) now verifies
+the pinned baseline/configuration and reset/fresh equality, preserving public
+rows and scoring both anchors. Development smoke cases are not a full study;
+tracking/localization strata, exports and paired summaries remain next.
 
 - [x] Define a separate, dataset-free ground-plane scene with an explicit
       camera projection and true object paths. Do not relabel our existing
@@ -77,8 +80,10 @@ tracker, new public API, live-camera behavior or accuracy claim in this step.
       that invalidate the model rather than clamping them into good results.
 - [x] Test anchor movement under box truncation independently of true motion.
       Verify that unperturbed controls remain unchanged.
-- [ ] Replay fixed detections through the existing NumPy baseline with no
-      appearance cue. Keep detector inputs identical between tracker variants.
+- [x] Connect development fixed detections to the existing NumPy baseline with
+      no appearance cue; verify source/configuration and reset/fresh replay.
+      Derive both anchors from the same output stream, without truth-based
+      filtering. Full development summaries and held-out execution remain pending.
 - [ ] Export regime-labelled errors, input/configuration digests and known
       ground-truth events so another person can reproduce a failure.
 

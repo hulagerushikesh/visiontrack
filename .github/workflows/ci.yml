@@ -17,6 +17,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+        with:
+          # Traffic replay tests verify source bytes against the frozen baseline commit.
+          fetch-depth: 0
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v7
