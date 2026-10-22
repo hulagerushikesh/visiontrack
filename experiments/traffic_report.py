@@ -1,4 +1,4 @@
-"""Reproducible full development grid export; never opens held-out tracking.
+"""Development export CLI and shared report mechanics for frozen traffic grids.
 
 Requires a committed, clean harness. Writes a new external bundle only; never
 overwrites a prior attempt. Failure preserves an audit trail and stops the grid.
@@ -49,7 +49,7 @@ def _sha(value: object) -> str:
 def _snapshot() -> dict:
     revision = _git(ROOT, "rev-parse", "HEAD").decode().strip()
     if _git(ROOT, "status", "--porcelain", "-uno"):
-        raise ValueError("commit tracked changes before exporting a development grid")
+        raise ValueError("commit tracked changes before exporting a traffic grid")
     sources = {}
     for path in sorted((ROOT / "experiments").glob("traffic_*.py")):
         name = str(path.relative_to(ROOT))
@@ -61,19 +61,25 @@ def _snapshot() -> dict:
 
 
 def _cases(spec: dict) -> list[tuple[str, int, str]]:
-    development = spec["splits"]["development"]
+    return _split_cases(spec, "development")
+
+
+def _split_cases(spec: dict, split: str) -> list[tuple[str, int, str]]:
+    if split not in {"development", "heldout"}:
+        raise ValueError("unknown traffic split")
+    selected = spec["splits"][split]
     return [
         (scenario, seed, condition["id"])
-        for scenario in development["scenarios"]
-        for seed in development["seeds"]
+        for scenario in selected["scenarios"]
+        for seed in selected["seeds"]
         for condition in spec["conditions"]
     ]
 
 
-def _key(record: dict) -> tuple[str, int, str]:
+def _key(record: dict, split: str = "development") -> tuple[str, int, str]:
     scene = record["input"]
-    if scene["split"] != "development":
-        raise ValueError("non-development record")
+    if scene["split"] != split:
+        raise ValueError(f"non-{split} record")
     return scene["scenario"], scene["seed"], scene["condition"]
 
 
@@ -126,23 +132,27 @@ def _descriptive(vectors: list[dict]) -> dict:
 
 def summarize_development(records: list[dict]) -> dict:
     """All registered cases or failure, no filtering/imputation/ranking/p-values."""
+    return _summarize(records, split="development")
+
+
+def _summarize(records: list[dict], *, split: str) -> dict:
     spec, hashes = load_frozen_protocol()
-    expected = _cases(spec)
+    expected = _cases(spec) if split == "development" else _split_cases(spec, split)
     indexed, inputs = {}, {}
     for record in records:
-        key = _key(record)
+        key = _key(record, split)
         if key not in expected or key in indexed:
-            raise ValueError("unexpected or duplicate development record")
+            raise ValueError(f"unexpected or duplicate {split} record")
         if record["protocol_id"] != spec["protocol_id"] or record["protocol_hashes"] != hashes:
             raise ValueError("inconsistent report protocol")
         indexed[key] = _metrics(record)
         inputs[key] = record["input"]
     if set(indexed) != set(expected):
-        raise ValueError("complete registered development grid required")
+        raise ValueError(f"complete registered {split} grid required")
     scenes = []
-    for scenario in spec["splits"]["development"]["scenarios"]:
+    for scenario in spec["splits"][split]["scenarios"]:
         pairs = []
-        for seed in spec["splits"]["development"]["seeds"]:
+        for seed in spec["splits"][split]["seeds"]:
             absolute = {c["id"]: indexed[(scenario, seed, c["id"])] for c in spec["conditions"]}
             paired_inputs = {c["id"]: inputs[(scenario, seed, c["id"])] for c in spec["conditions"]}
             control_inputs = paired_inputs["control"]["sha256"]
@@ -197,17 +207,18 @@ def summarize_development(records: list[dict]) -> dict:
             }
         )
     return {
-        "format": "visiontrack.traffic-development-summary/v1",
+        "format": f"visiontrack.traffic-{split}-summary/v1",
         "protocol_id": spec["protocol_id"],
         "protocol_hashes": hashes,
         "run_count": len(records),
         "scenario_count": len(scenes),
         "scenarios": scenes,
-        "complete_development_grid": True,
+        "complete_development_grid": split == "development",
+        "complete_heldout_grid": split == "heldout",
         "complete_study_report": False,
-        "heldout_tracking_executed": False,
+        "heldout_tracking_executed": split == "heldout",
         "limitations": [
-            "Synthetic development characterization, not improvement or traffic validation.",
+            f"Synthetic {split} characterization, not improvement or traffic validation.",
             "Each scenario is the unit; seeds repeat measurement noise, not independent scenes.",
             "No frame/seed p-values, confidence intervals, pooled site claims or automatic winner.",
             "Null components make contrasts undefined; means state their defined counts.",
@@ -218,7 +229,9 @@ def summarize_development(records: list[dict]) -> dict:
     }
 
 
-def _validate_record(record: dict, planned: dict, source: dict, spec: dict, hashes: dict) -> None:
+def _validate_record(
+    record: dict, planned: dict, source: dict, spec: dict, hashes: dict, *, split="development"
+) -> None:
     copy = dict(record)
     digest = copy.pop("record_sha256")
     if _sha(copy) != digest or record["input"] != planned:
@@ -235,7 +248,7 @@ def _validate_record(record: dict, planned: dict, source: dict, spec: dict, hash
         record["config"] != spec["tracker_config"]
         or record["protocol_hashes"] != hashes
         or record["protocol_id"] != spec["protocol_id"]
-        or record["heldout_tracking_executed"]
+        or record["heldout_tracking_executed"] is not (split == "heldout")
         or record["config_sha256"] != _sha(spec["tracker_config"])
         or record["output_sha256"] != _sha(record["output"])
         or record["diagnostics"]["input_sha256"] != planned["input_sha256"]
@@ -251,10 +264,13 @@ def _validate_record(record: dict, planned: dict, source: dict, spec: dict, hash
 
 
 def _markdown(summary: dict) -> str:
+    heldout = summary.get("heldout_tracking_executed", False)
+    split = "heldout" if heldout else "development"
     lines = [
-        "# Traffic mechanism — complete development grid",
+        f"# Traffic mechanism — complete {split} grid",
         "",
-        "Synthetic failure characterization only. Held-out tracking is unopened.",
+        "Synthetic failure characterization only. "
+        + ("Held-out tracking is now opened." if heldout else "Held-out tracking is unopened."),
         "",
         "Values below are seed means [min, max], not independent-scene confidence bounds.",
         "",
@@ -307,13 +323,41 @@ def _markdown(summary: dict) -> str:
 
 def export_development(output: Path, *, progress=None) -> dict:
     """Write a fresh external attempt; stop and retain the ledger on any error."""
+    return _export_grid(
+        output,
+        split="development",
+        runner=run_development,
+        summarize=summarize_development,
+        progress=progress,
+    )
+
+
+def _export_grid(
+    output: Path,
+    *,
+    split: str,
+    runner,
+    summarize,
+    progress=None,
+    preflight=None,
+    before_runs=None,
+    freeze_sha256=None,
+    freeze_revision=None,
+) -> dict:
+    """Shared mechanics; held-out callers must provide the separate freeze gate."""
+    if split not in {"development", "heldout"} or (
+        split == "heldout"
+        and any(x is None for x in (preflight, before_runs, freeze_sha256, freeze_revision))
+    ):
+        raise ValueError("held-out export requires a freeze and one-pass gate")
     spec, hashes = load_frozen_protocol()
     source = _snapshot()
-    cases = _cases(spec)
+    cases = _cases(spec) if split == "development" else _split_cases(spec, split)
     planned = [
-        generate_scene(split="development", scenario=s, seed=n, condition=c).manifest()
-        for s, n, c in cases
+        generate_scene(split=split, scenario=s, seed=n, condition=c).manifest() for s, n, c in cases
     ]
+    if preflight is not None:
+        preflight(source, planned)
     output = Path(output).resolve()
     if output.is_relative_to(ROOT.resolve()):
         raise ValueError("export results outside the repository")
@@ -331,17 +375,21 @@ def export_development(output: Path, *, progress=None) -> dict:
         "plan.json",
         _json_bytes(
             {
-                "format": "visiontrack.traffic-development-plan/v1",
+                "format": f"visiontrack.traffic-{split}-plan/v1",
                 "protocol_id": spec["protocol_id"],
                 "protocol_hashes": hashes,
                 "recipe": spec,
                 "source": source,
                 "inputs": planned,
-                "heldout_tracking_authorized": False,
+                "heldout_tracking_authorized": split == "heldout",
+                "freeze_sha256": freeze_sha256,
+                "frozen_harness_revision": freeze_revision,
             }
         )
         + b"\n",
     )
+    if before_runs is not None:
+        before_runs(output)
     records, baseline, environment, error = [], None, None, None
     attempted = 0
     with (output / "attempts.jsonl").open("xb") as ledger:
@@ -353,8 +401,8 @@ def export_development(output: Path, *, progress=None) -> dict:
             ledger.write(_json_bytes({"event": "start", **selector}) + b"\n")
             ledger.flush()
             try:
-                record = run_development(**selector)
-                _validate_record(record, inputs, source, spec, hashes)
+                record = runner(**selector)
+                _validate_record(record, inputs, source, spec, hashes, split=split)
                 if records and (
                     record["environment"] != environment or record["source"]["baseline"] != baseline
                 ):
@@ -383,13 +431,15 @@ def export_development(output: Path, *, progress=None) -> dict:
         try:
             if _snapshot() != source:
                 raise ValueError("harness changed during grid export")
-            summary = summarize_development(records)
+            if preflight is not None:
+                preflight(source, planned)
+            summary = summarize(records)
             write("summary.json", _json_bytes(summary) + b"\n")
             write("summary.md", _markdown(summary).encode())
         except Exception as exc:
             error = {"error_type": type(exc).__name__, "message": str(exc)[:1000]}
     manifest = {
-        "format": "visiontrack.traffic-development-bundle/v1",
+        "format": f"visiontrack.traffic-{split}-bundle/v1",
         "source": source,
         "protocol_id": spec["protocol_id"],
         "protocol_hashes": hashes,
@@ -401,7 +451,9 @@ def export_development(output: Path, *, progress=None) -> dict:
         "error": error,
         "files_sha256": files,
         "complete_study_report": False,
-        "heldout_tracking_executed": False,
+        "heldout_tracking_executed": split == "heldout" and attempted > 0,
+        "freeze_sha256": freeze_sha256,
+        "frozen_harness_revision": freeze_revision,
     }
     manifest["manifest_sha256"] = _sha(manifest)
     # Manifest authenticates its own fields separately, never lists/hash-includes itself.

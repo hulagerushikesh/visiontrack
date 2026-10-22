@@ -1,7 +1,7 @@
-"""Development-only replay adapter for the frozen traffic mechanism protocol.
+"""Development replay CLI and shared adapter for the frozen traffic protocol.
 
-No tuning, held-out tracking, result files or changes to the production tracker.
-The returned record is a partial harness check, not the final study report.
+The public CLI never opens held-out tracking; traffic_holdout gates that grid.
+No tuning, result files or production-tracker changes. One record is not a study.
 """
 
 from __future__ import annotations
@@ -19,7 +19,7 @@ from pathlib import Path
 import numpy as np
 
 from experiments.traffic_crossing import AnchorSample, extract_crossings, score_crossings
-from experiments.traffic_diagnostics import diagnose_development
+from experiments.traffic_diagnostics import _diagnose, diagnose_development
 from experiments.traffic_protocol import ROOT, load_frozen_protocol
 from experiments.traffic_scene import (
     GroundProjection,
@@ -186,12 +186,32 @@ def _anchor_samples(rows: list[dict], projection: GroundProjection, anchor: str)
 def run_development(*, scenario: str, seed: int, condition: str) -> dict:
     """Run one registered development case, with reset and fresh-instance replay.
 
-    Deliberately no split/config override or held-out entry point. Three passes
+    Deliberately no split/config override. Three passes
     check identical public bytes; both anchors consume the same first pass.
     """
+    return _run_case(split="development", scenario=scenario, seed=seed, condition=condition)
+
+
+def _environment() -> dict:
+    return {
+        "python": platform.python_version(),
+        "numpy": np.__version__,
+        "system": platform.system(),
+        "machine": platform.machine(),
+        "byteorder": sys.byteorder,
+    }
+
+
+def _run_case(*, split: str, scenario: str, seed: int, condition: str) -> dict:
+    """Internal adapter; only traffic_holdout may dispatch the held-out grid.
+
+    This is a workflow guard, not a sandbox against callers editing Python.
+    """
+    if split not in {"development", "heldout"}:
+        raise ValueError("unknown traffic split")
     spec, hashes = load_frozen_protocol()
     # Validate selectors before imports or tracker construction, never infer a split.
-    scene = generate_scene(split="development", scenario=scenario, seed=seed, condition=condition)
+    scene = generate_scene(split=split, scenario=scenario, seed=seed, condition=condition)
     baseline = _verify_tree(ROOT, spec["baseline_revision"])
     from visiontrack.tracking.config import TrackerConfig
     from visiontrack.tracking.tracker import ByteTracker
@@ -224,7 +244,11 @@ def run_development(*, scenario: str, seed: int, condition: str) -> dict:
         anchor: score_crossings(truth, extract_crossings(_anchor_samples(rows, projection, anchor)))
         for anchor in spec["anchors"]
     }
-    diagnostics = diagnose_development(scene, rows)
+    diagnostics = (
+        diagnose_development(scene, rows)
+        if split == "development"
+        else _diagnose(scene, rows, split=split)
+    )
     _check_import_origins()
     if _verify_tree(ROOT, spec["baseline_revision"]) != baseline:
         raise ValueError("baseline source changed during replay/diagnostics")
@@ -233,7 +257,7 @@ def run_development(*, scenario: str, seed: int, condition: str) -> dict:
         for path in sorted((ROOT / "experiments").glob("traffic_*.py"))
     }
     result = {
-        "format": "visiontrack.traffic-development-replay/v1",
+        "format": f"visiontrack.traffic-{split}-replay/v1",
         "protocol_id": spec["protocol_id"],
         "protocol_hashes": hashes,
         "input": scene.manifest(),
@@ -254,13 +278,7 @@ def run_development(*, scenario: str, seed: int, condition: str) -> dict:
             "baseline": baseline,
             "experiment_sha256": experiment_sources,
         },
-        "environment": {
-            "python": platform.python_version(),
-            "numpy": np.__version__,
-            "system": platform.system(),
-            "machine": platform.machine(),
-            "byteorder": sys.byteorder,
-        },
+        "environment": _environment(),
         "replay": {
             "passes": 3,
             "reset_equal": True,
@@ -271,11 +289,11 @@ def run_development(*, scenario: str, seed: int, condition: str) -> dict:
         "output_sha256": hashlib.sha256(payload).hexdigest(),
         "crossing": anchors,
         "diagnostics": diagnostics,
-        "heldout_tracking_executed": False,
+        "heldout_tracking_executed": split == "heldout",
         "complete_study_report": False,
         "limitations": [
-            "Development synthetic mechanism check, not measured traffic accuracy or improvement.",
-            "Full result export and paired study summaries remain pending.",
+            f"{split} synthetic mechanism check, not measured traffic accuracy or improvement.",
+            "A single case is not a complete paired study report.",
             "Dependency versions recorded, not a cross-environment bit-parity guarantee.",
             "Input manifest describes generator inputs; tracker execution is recorded separately.",
         ],
