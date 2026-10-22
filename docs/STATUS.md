@@ -16,8 +16,12 @@ pinned source/configuration, and checks reset/fresh replay equality. Development
 smoke/fixture runs have begun. [Tracking/contact diagnostics](TRAFFIC_RELIABILITY_DIAGNOSTICS.md)
 now retain canonical IoU matches, misses, FP, ID switches and fragmentation,
 with independent observation errors and conditional matched-track errors,
-region/pulse strata and explicit missing values. Full result export, paired
-development reports and the complete harness freeze remain next. No traffic study or product
+region/pulse strata and explicit missing values. The [complete development grid](TRAFFIC_RELIABILITY_DEVELOPMENT.md)
+has now run all 120 cases from committed harness `19a7c82`, retaining full results,
+37 endpoint comparisons, paired differences, interactions and independently
+verified bundle hashes. Box errors harmed the baseline in these toy paths;
+perspective alone did not change primary count/ID outcomes. The complete
+held-out harness/input freeze remains next. No full traffic study or product
 validation is complete. Held-out tracking is unopened.
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective

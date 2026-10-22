@@ -3,8 +3,8 @@
 The [frozen traffic protocol](TRAFFIC_RELIABILITY_PROTOCOL.md) now has a
 development-only exporter connecting the verified runner, crossing scorer and
 tracking/contact diagnostics. **An exporter is not a completed study.** This
-page initially documents the implementation; measured development findings
-will be recorded separately after the committed harness runs all 120 cases.
+page documents the implementation; the committed harness has now completed all
+120 cases, with [measured findings and evidence](TRAFFIC_RELIABILITY_DEVELOPMENT.md).
 Held-out tracking remains unopened, and no tracker behavior changes here.
 
 ## What the report will tell us
@@ -83,8 +83,8 @@ fixture bundles, no overwrite, and held-out/config override rejection.
 
 ## Remaining gates
 
-Run and inspect the complete development grid, retain its manifest and honest
-findings, then separately freeze the **complete** harness and input digests
+The complete development grid and its checksum-verified bundle are now retained.
+Next, separately freeze the **complete** harness and input digests
 before one-pass held-out tracking. A development export is not that final
 held-out freeze. No new intervention, tuning, real-data transfer, upstream
 contribution or C++ port is authorized by a development result alone.

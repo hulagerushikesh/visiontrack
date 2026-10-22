@@ -53,7 +53,8 @@ rows and scoring both anchors. [Tracking/contact diagnostics](TRAFFIC_RELIABILIT
 now partition the canonical matches/failures by true region and scheduled pulse
 without resetting history; detector and matched-track contact errors remain
 separate. Development smoke cases are not a full study; exports and complete
-paired summaries remain next.
+paired summaries are now [complete for all 120 development cases](TRAFFIC_RELIABILITY_DEVELOPMENT.md).
+The complete held-out harness/input freeze and one-pass evaluation remain pending.
 
 - [x] Define a separate, dataset-free ground-plane scene with an explicit
       camera projection and true object paths. Do not relabel our existing
@@ -86,9 +87,11 @@ tracker, new public API, live-camera behavior or accuracy claim in this step.
 - [x] Connect development fixed detections to the existing NumPy baseline with
       no appearance cue; verify source/configuration and reset/fresh replay.
       Derive both anchors from the same output stream, without truth-based
-      filtering. Full development summaries and held-out execution remain pending.
-- [ ] Export regime-labelled errors, input/configuration digests and known
-      ground-truth events so another person can reproduce a failure.
+      filtering. Full development summaries are now retained; held-out execution
+      remains pending.
+- [x] Export all 120 development runs with regime-labelled errors, input/config/
+      output/source digests, known events, paired summaries and attempt ledger;
+      independently verify the retained bundle's hashes. No held-out run yet.
 
 Output: a reproducible mechanism demonstration. A mathematical projection model
 is not a measured traffic camera, and box perturbations are not a real detector.
@@ -107,13 +110,15 @@ is not a measured traffic camera, and box perturbations are not a real detector.
 - [x] Implement/test ID switches, misses, FP and matched-object-frame completeness
       alongside counting, with separate contact error and true region/pulse
       strata. These diagnostics are now in the development replay record;
-      the complete exported comparison report remains pending.
+      the exported 120-case development report is now retained. Held-out
+      comparisons remain pending.
 - [ ] Compare only predeclared interventions. Candidate later ablations include
       anchor choice and geometry-aware motion/noise; changing calibration,
       anchor, lifecycle and detector together cannot identify which helped.
-- [ ] Report paired per-scenario effects and variation, including negatives.
+- [x] Report paired development per-scenario effects and variation, including negatives.
       Do not tune on held-out results or treat correlated frames as independent
-      statistical samples. Decide acceptance margins before the held-out run.
+      statistical samples. Practical acceptance margins apply to a future
+      separately registered intervention, not a claimed gain in v1 characterization.
 
 Output: an evidence-backed synthetic result, not proof of a better traffic
 system. Do not build a traffic dashboard or announce a new tracker first.

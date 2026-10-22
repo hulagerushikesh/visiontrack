@@ -354,3 +354,22 @@ def test_all_37_fixed_endpoints_present(records):
     assert len(report._metrics(records[0])) == 37
     summary = report.summarize_development(list(reversed(records)))
     assert summary == report.summarize_development(records)
+
+
+def test_committed_development_evidence_index_is_scoped_not_validation():
+    index = json.loads((ROOT / "experiments/traffic_development_v1_evidence.json").read_bytes())
+    spec, _ = load_frozen_protocol()
+    assert index["protocol_id"] == spec["protocol_id"]
+    assert index["baseline_revision"] == spec["baseline_revision"]
+    assert index["bundle"]["status"] == "complete"
+    assert index["bundle"]["planned_runs"] == index["bundle"]["successful_runs"] == 120
+    assert index["bundle"]["unattempted_runs"] == 0
+    for flag in (
+        "heldout_tracking_executed",
+        "complete_study_report",
+        "real_data_validated",
+        "tracker_behavior_changed",
+    ):
+        assert index[flag] is False
+    for digest in index["bundle"]["file_sha256"].values():
+        assert len(digest) == 64 and set(digest) <= set("0123456789abcdef")

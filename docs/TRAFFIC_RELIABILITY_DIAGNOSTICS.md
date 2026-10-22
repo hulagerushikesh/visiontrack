@@ -117,7 +117,8 @@ test oracles, **not claims about what the tracker achieves** on perturbed inputs
 
 ## Next gates
 
-1. Reproducible full-result export and complete development summaries: all four
+1. Reproducible full-result export and complete development summaries are now
+   [retained for all 120 cases](TRAFFIC_RELIABILITY_DEVELOPMENT.md): all four
    absolute conditions, paired differences, interaction and per-scenario seed
    means/ranges, with negatives retained. Seeds are noise repeats, not new sites.
 2. Freeze the complete tested harness revision and input digests.
