@@ -329,12 +329,16 @@ replace RQ5 with an unregistered traffic claim.
 - [x] Freeze the complete harness/input digests before one-pass held-out tracking:
       [freeze and execution gate](TRAFFIC_RELIABILITY_HOLDOUT.md). Prepared and
       read-only verified from `fe88a16`; all 120 held-out input manifests are
-      locked, with no held-out tracker outcomes or opening claim. Public
+      locked before held-out tracker outcomes or an opening claim. Public
       development commands still reject held-out inputs.
-- [ ] Execute the registered held-out grid once through the saved freeze and
-      retain all runs/errors; compare with development without tuning or a
-      winner claim. New interventions require a separate protocol and new
-      held-out evidence. Complete the scoped synthetic interpretation afterward.
+- [x] Execute the registered held-out grid once through the saved freeze and
+      retain all runs/errors: 120/120 completed from `5ac67f2`, no failures,
+      skips or selective reruns. Independently verify both bundles and all
+      fixed endpoint summaries; record the [scoped development/held-out findings](TRAFFIC_RELIABILITY_FINDINGS.md)
+      without tuning or a winner claim. The original opening is now consumed.
+- [ ] Register a separate minimal intervention question, comparator, practical
+      margins and new untouched scenarios before changing behavior. Do not
+      reuse the opened v1 characterization set as untouched acceptance evidence.
 - [ ] Validate any transfer claim on representative rights-reviewed evidence.
 
 ## Deferred research compute

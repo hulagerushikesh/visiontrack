@@ -3,7 +3,9 @@
 Executed 2026-10-22 with committed harness
 `19a7c821ea4b8d1f54d0ffc0450beb9391b38e1e` and the unchanged baseline at
 `16c287a6b18c5c142a28e4bce70b3232946459db`. **120/120 development runs
-completed; no failed or skipped case. Held-out tracking remains unopened.**
+completed; no failed or skipped case. Held-out tracking was unopened at this
+development milestone.** The subsequent one-pass held-out results are now in
+the [combined scoped findings](TRAFFIC_RELIABILITY_FINDINGS.md).
 The [frozen v1 protocol](TRAFFIC_RELIABILITY_PROTOCOL.md) is unchanged. These
 are synthetic development findings, not proof of a better tracker, traffic
 performance, novelty, an upstream partnership or a completed research study.
@@ -95,10 +97,10 @@ legitimately change output hashes and must not be silently labelled identical.
 
 ## What this permits next — and what it does not
 
-The [complete harness/input freeze](TRAFFIC_RELIABILITY_HOLDOUT.md) is now
-prepared and verified; next is one-pass held-out tracking through that gate.
-No held-out outcome has been opened or used to tune
-anything. A proposed fix needs its own registered question, practical margins
+The [complete harness/input freeze](TRAFFIC_RELIABILITY_HOLDOUT.md) was prepared
+before the subsequent single held-out export. Its [scoped findings](TRAFFIC_RELIABILITY_FINDINGS.md)
+are now recorded, without tuning on held-out outcomes.
+A proposed fix needs its own registered question, practical margins
 and new untouched evidence; this study does not automatically select that fix.
 Rights-reviewed real data, RQ5 re-entry, volunteer consent and practitioner
 validation remain separate gates. There is no C++ change or website behavior
