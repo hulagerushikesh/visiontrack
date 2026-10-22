@@ -345,7 +345,11 @@ replace RQ5 with an unregistered traffic claim.
       all 120 development input combinations, paired detector fingerprints,
       immutable arrays and independent arithmetic/draw-order checks. No new
       tracker comparisons or held-out observations generated in this milestone.
-- [ ] Implement and validate the separate ablation scoring/replay/report harness,
+- [x] Implement/test the separate [development reference scorer](BOX_GATE_SCORING.md):
+      all 37 inherited endpoints, input regeneration, canonical match history,
+      missing-value handling and hand-worked crossing/count/ID-switch fixtures.
+      No new tracker comparisons or held-out inputs/outcomes in these tests.
+- [ ] Implement and validate the separate ablation replay/report harness,
       commit it before development comparisons, then freeze the new held-out
       gate before its first opening. Preserve no-effect/failure outcomes and
       all registered per-case non-regression gates, not just an average gain.
