@@ -306,8 +306,13 @@ replace RQ5 with an unregistered traffic claim.
       [v1 recipe](TRAFFIC_RELIABILITY_PROTOCOL.md), byte-level integrity
       preflight, explicit four-condition inputs and disjoint scenario/seed sets.
       No tracker comparison or held-out tracking run has been performed.
-- [ ] Implement and test the failure-reproduction harness, then add explicit
-      counting-event semantics and controlled intervention comparisons.
+- [x] Implement the separate projection/observation input generator with
+      validity/replay checks, paired noise and separate true/measured anchors:
+      [input milestone](TRAFFIC_RELIABILITY_GENERATOR.md). No tracker outcomes.
+- [ ] Implement/test the frozen crossing scorer and development baseline runner,
+      including source verification, reset/replay and provenance. Then freeze
+      the complete harness/input digests before one-pass held-out tracking.
+      New interventions require a separate protocol and new held-out evidence.
 - [ ] Validate any transfer claim on representative rights-reviewed evidence.
 
 ## Deferred research compute

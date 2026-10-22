@@ -1,7 +1,8 @@
 # Traffic reliability probe — bounded next milestone
 
-Prepared 2026-10-21. **Plan and public-source inspection only; no experiment
-results, traffic deployment validation, or selected product vertical.**
+Prepared 2026-10-21; updated 2026-10-22 with the verified synthetic input
+generator. **No tracker experiment results, traffic deployment validation,
+or selected product vertical.**
 
 ## Aim in plain language
 
@@ -43,7 +44,9 @@ this plan does not authorize copying code or establish license compatibility.
 
 The [v1 protocol](TRAFFIC_RELIABILITY_PROTOCOL.md) and locked JSON recipe now
 specify these choices. Integrity and input-geometry checks do not run trackers
-or open held-out tracking outcomes. The failure-reproduction harness is next.
+or open held-out tracking outcomes. The separate
+[input generator](TRAFFIC_RELIABILITY_GENERATOR.md) is now implemented and tested;
+the scorer and development tracker runner are next.
 
 - [x] Define a separate, dataset-free ground-plane scene with an explicit
       camera projection and true object paths. Do not relabel our existing
@@ -66,12 +69,12 @@ tracker, new public API, live-camera behavior or accuracy claim in this step.
 
 ### 2. Build and validate the failure-reproduction harness
 
-- [ ] Implement the separate projection/observation generator without changing
+- [x] Implement the separate projection/observation generator without changing
       old synthetic defaults, random streams or golden parity fixtures.
-- [ ] Test projection/inverse consistency for valid ground-plane points;
+- [x] Test projection/inverse consistency for valid ground-plane points;
       reject singular transforms, nonfinite coordinates and near-horizon cases
       that invalidate the model rather than clamping them into good results.
-- [ ] Test anchor movement under box truncation independently of true motion.
+- [x] Test anchor movement under box truncation independently of true motion.
       Verify that unperturbed controls remain unchanged.
 - [ ] Replay fixed detections through the existing NumPy baseline with no
       appearance cue. Keep detector inputs identical between tracker variants.
