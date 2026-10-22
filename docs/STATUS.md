@@ -29,13 +29,17 @@ without failures or selective reruns. The [combined scoped findings](TRAFFIC_REL
 retain the primary perspective-only negative, severe box-error crossing failures
 and mixed tracking interactions. Both bundles' hashes, complete ledgers and all
 37 endpoint/contrast summaries were independently checked from saved records.
-All 1,107 tests pass; the package and parity fixtures remain unchanged.
+All 1,259 tests pass; the package and parity fixtures remain unchanged.
 A separate [one-switch box-gate ablation](BOX_GATE_ABLATION_PROTOCOL.md) now
 registers the comparator, fresh scenario/seed sets, practical ID-switch margins
 and per-case tracking/count non-regression gates before new outcomes. Its
-read-only preflight and geometry checks execute no tracker comparison. Next is
-the separate validated ablation harness and development grid, followed by a new
-held-out harness/input freeze; not tuning on the opened v1 set or a C++ port.
+read-only preflight and geometry checks execute no tracker comparison. The
+separate [paired input generator](BOX_GATE_INPUTS.md) now checks all 120 new
+development input combinations, immutable arrays, detector-only fingerprints,
+and independent arithmetic/draw order, without generating new tracking outcomes.
+Next is the separate validated ablation scorer/replay/report harness and
+development grid, followed by a new held-out harness/input freeze; not tuning
+on the opened v1 set or a C++ port.
 Real-data transfer and product validation remain incomplete.
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective

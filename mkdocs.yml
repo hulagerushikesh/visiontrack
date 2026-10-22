@@ -100,6 +100,7 @@ nav:
       - Traffic held-out freeze and execution gate: TRAFFIC_RELIABILITY_HOLDOUT.md
       - Traffic development and held-out findings: TRAFFIC_RELIABILITY_FINDINGS.md
       - Next research — box-gate ablation protocol: BOX_GATE_ABLATION_PROTOCOL.md
+      - Box-gate paired input milestone: BOX_GATE_INPUTS.md
       - Release-readiness audit: RELEASE_READINESS.md
       - Python/C++ runtime contract: CROSS_RUNTIME_CONTRACT.md
       - Horizons: HORIZONS.md
