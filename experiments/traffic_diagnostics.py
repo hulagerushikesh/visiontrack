@@ -1,4 +1,4 @@
-"""Frozen traffic development diagnostics, not a new matching algorithm.
+"""Frozen traffic diagnostics, not a new matching algorithm.
 
 Use the existing pinned CLEAR-MOT evaluator. Observation contact errors include
 all true object-frames; tracked contact errors are conditional on its IoU match.
@@ -127,17 +127,23 @@ def diagnose_development(scene: SceneInputs, rows: list[dict]) -> dict:
     Caller verifies baseline source before/after this experiment-only adapter.
     No tracker invocation, held-out entry point, gap fill or result-file writes.
     """
+    return _diagnose(scene, rows, split="development")
+
+
+def _diagnose(scene: SceneInputs, rows: list[dict], *, split: str) -> dict:
+    """Internal shared scorer; held-out execution is gated by traffic_holdout."""
     spec, hashes = load_frozen_protocol()
     if (
-        scene.split != "development"
-        or scene.scenario not in spec["splits"]["development"]["scenarios"]
+        split not in {"development", "heldout"}
+        or scene.split != split
+        or scene.scenario not in spec["splits"][split]["scenarios"]
         or type(scene.seed) is not int
-        or scene.seed not in spec["splits"]["development"]["seeds"]
+        or scene.seed not in spec["splits"][split]["seeds"]
         or scene.protocol_id != spec["protocol_id"]
         or dict(scene.protocol_hashes) != hashes
         or scene.condition not in {condition["id"] for condition in spec["conditions"]}
     ):
-        raise ValueError("diagnostics require registered development inputs")
+        raise ValueError(f"diagnostics require registered {split} inputs")
     if scene.object_ids != tuple(obj["object_id"] for obj in spec["scenarios"][scene.scenario]):
         raise ValueError("unexpected true object IDs")
     grid = spec["frame_grid"]
@@ -220,7 +226,7 @@ def diagnose_development(scene: SceneInputs, rows: list[dict]) -> dict:
     ):
         raise ValueError("diagnostic strata disagree with canonical evaluator")
     return {
-        "format": "visiontrack.traffic-development-diagnostics/v1",
+        "format": f"visiontrack.traffic-{split}-diagnostics/v1",
         "protocol_id": spec["protocol_id"],
         "protocol_hashes": hashes,
         "condition": scene.condition,
@@ -250,7 +256,7 @@ def diagnose_development(scene: SceneInputs, rows: list[dict]) -> dict:
         ],
         "samples": samples,
         "failures": failures,
-        "heldout_tracking_executed": False,
+        "heldout_tracking_executed": split == "heldout",
         "limitations": [
             "Toy ground units, exact projection and imposed box errors, not measured traffic.",
             "Tracked localization is conditional on IoU matches; misses have no position estimate.",
