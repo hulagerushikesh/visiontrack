@@ -95,8 +95,9 @@ legitimately change output hashes and must not be silently labelled identical.
 
 ## What this permits next — and what it does not
 
-Next, review and freeze the complete harness revision and input digests before
-one-pass held-out tracking. No held-out outcome has been opened or used to tune
+The [complete harness/input freeze](TRAFFIC_RELIABILITY_HOLDOUT.md) is now
+prepared and verified; next is one-pass held-out tracking through that gate.
+No held-out outcome has been opened or used to tune
 anything. A proposed fix needs its own registered question, practical margins
 and new untouched evidence; this study does not automatically select that fix.
 Rights-reviewed real data, RQ5 re-entry, volunteer consent and practitioner
