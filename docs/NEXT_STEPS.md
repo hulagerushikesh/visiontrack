@@ -309,8 +309,11 @@ replace RQ5 with an unregistered traffic claim.
 - [x] Implement the separate projection/observation input generator with
       validity/replay checks, paired noise and separate true/measured anchors:
       [input milestone](TRAFFIC_RELIABILITY_GENERATOR.md). No tracker outcomes.
-- [ ] Implement/test the frozen crossing scorer and development baseline runner,
-      including source verification, reset/replay and provenance. Then freeze
+- [x] Implement/test the frozen crossing scorer on hand-checked fixtures,
+      preserving missed/extra events, matching priorities and time-window errors:
+      [scorer milestone](TRAFFIC_RELIABILITY_SCORER.md). No tracker outcomes.
+- [ ] Implement/test the development baseline runner, including source
+      verification, reset/replay and provenance. Then freeze
       the complete harness/input digests before one-pass held-out tracking.
       New interventions require a separate protocol and new held-out evidence.
 - [ ] Validate any transfer claim on representative rights-reviewed evidence.

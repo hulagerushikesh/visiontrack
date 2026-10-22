@@ -45,8 +45,9 @@ this plan does not authorize copying code or establish license compatibility.
 The [v1 protocol](TRAFFIC_RELIABILITY_PROTOCOL.md) and locked JSON recipe now
 specify these choices. Integrity and input-geometry checks do not run trackers
 or open held-out tracking outcomes. The separate
-[input generator](TRAFFIC_RELIABILITY_GENERATOR.md) is now implemented and tested;
-the scorer and development tracker runner are next.
+[input generator](TRAFFIC_RELIABILITY_GENERATOR.md) and
+[crossing scorer](TRAFFIC_RELIABILITY_SCORER.md) are now implemented and tested;
+the development tracker runner is next. Scorer fixtures are not study outcomes.
 
 - [x] Define a separate, dataset-free ground-plane scene with an explicit
       camera projection and true object paths. Do not relabel our existing
@@ -86,13 +87,15 @@ is not a measured traffic camera, and box perturbations are not a real detector.
 
 ### 3. Connect errors to the operational outcome
 
-- [ ] First specify a simple directed crossing event and a fixed counting
+- [x] Specify a simple directed crossing event and a fixed counting
       window, including boundary, repeat-crossing, missing-frame and direction
-      rules. Then extend to explicit origin-to-destination flows; a single line
+      rules in the frozen v1 protocol.
+- [ ] Later extend to explicit origin-to-destination flows; a single line
       crossing is not already a complete flow-assignment evaluator.
-- [ ] Score known crossings with one-to-one event matching, missed/extra counts
+- [x] Implement/test known fixture crossings with one-to-one matching, missed/extra counts
       and time-window errors. Prevent opposite errors from cancelling in a
       signed total. Test perfect, duplicated, missing and fragmented fixtures.
+      This completes the scorer, not the tracker experiment or flow validation.
 - [ ] Report ID switches, misses and trajectory completeness alongside counts,
       not as substitutes for them. Stratify by scene region and perturbation.
 - [ ] Compare only predeclared interventions. Candidate later ablations include
