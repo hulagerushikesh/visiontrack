@@ -1,9 +1,12 @@
 # Traffic reliability probe — bounded next milestone
 
-Prepared 2026-10-21; updated 2026-10-22 with the complete
+Prepared 2026-10-21; updated 2026-10-23 with the complete
 [development/held-out synthetic findings](TRAFFIC_RELIABILITY_FINDINGS.md):
 120 cases per split, no failures or selective reruns. **No intervention gain,
 traffic deployment validation or selected product vertical.**
+The separate [box-gate ablation protocol](BOX_GATE_ABLATION_PROTOCOL.md) now
+registers one existing configuration switch, fresh paths/seeds and conservative
+success/failure margins. Its new tracker comparisons have not begun.
 
 ## Aim in plain language
 
@@ -115,18 +118,21 @@ is not a measured traffic camera, and box perturbations are not a real detector.
       alongside counting, with separate contact error and true region/pulse
       strata. These diagnostics are now in the development replay record;
       the exported 120-case development and 120-case held-out reports are retained.
-- [ ] Compare only predeclared interventions. Candidate later ablations include
-      anchor choice and geometry-aware motion/noise; changing calibration,
-      anchor, lifecycle and detector together cannot identify which helped.
+- [ ] Compare only predeclared interventions. The next registered candidate is
+      the existing `use_mahalanobis_gating` switch, not simultaneous changes to
+      calibration, anchor, lifecycle and detector. Anchor choice or geometry-aware
+      motion/noise would require separate future registrations.
 - [x] Report paired development per-scenario effects and variation, including negatives.
       Do not tune on held-out results or treat correlated frames as independent
       statistical samples. Practical acceptance margins apply to a future
       separately registered intervention, not a claimed gain in v1 characterization.
 - [x] Report all held-out conditions, paired contrasts and interactions against
       development findings without a pooled-site or winner claim.
-- [ ] Register one minimal intervention, practical success/failure margins and
-      new untouched scenarios before implementation. The opened v1 paths cannot
-      be relabelled as untouched acceptance evidence for a new fix.
+- [x] Register one minimal intervention, practical success/failure margins and
+      new untouched scenarios before implementation:
+      [box-gate ablation v1](BOX_GATE_ABLATION_PROTOCOL.md). No new tracker runs
+      or implementation freeze yet. The opened v1 paths cannot be relabelled
+      as untouched acceptance evidence for a new fix.
 
 Output: an evidence-backed synthetic result, not proof of a better traffic
 system. Do not build a traffic dashboard or announce a new tracker first.

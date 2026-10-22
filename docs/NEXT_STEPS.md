@@ -336,9 +336,15 @@ replace RQ5 with an unregistered traffic claim.
       skips or selective reruns. Independently verify both bundles and all
       fixed endpoint summaries; record the [scoped development/held-out findings](TRAFFIC_RELIABILITY_FINDINGS.md)
       without tuning or a winner claim. The original opening is now consumed.
-- [ ] Register a separate minimal intervention question, comparator, practical
-      margins and new untouched scenarios before changing behavior. Do not
-      reuse the opened v1 characterization set as untouched acceptance evidence.
+- [x] Register a separate minimal intervention question, comparator, practical
+      margins and new untouched scenarios before changing behavior:
+      [one-switch box-gate ablation](BOX_GATE_ABLATION_PROTOCOL.md). Geometry and
+      exact-byte checks only; no new tracker outcomes or implementation freeze.
+      Do not reuse the opened v1 characterization set as untouched evidence.
+- [ ] Implement and validate the separate ablation input/replay/report harness,
+      commit it before development comparisons, then freeze the new held-out
+      gate before its first opening. Preserve no-effect/failure outcomes and
+      all registered per-case non-regression gates, not just an average gain.
 - [ ] Validate any transfer claim on representative rights-reviewed evidence.
 
 ## Deferred research compute

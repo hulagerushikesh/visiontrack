@@ -1,7 +1,7 @@
 # VisionTrack — Status & Roadmap Checklist
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
-Last updated: 2026-10-22 — a bounded traffic-reliability probe is planned in
+Last updated: 2026-10-23 — a bounded traffic-reliability probe is planned in
 [TRAFFIC_RELIABILITY_PLAN.md](TRAFFIC_RELIABILITY_PLAN.md), following a read-only
 public-source pipeline inspection. Its [v1 synthetic recipe](TRAFFIC_RELIABILITY_PROTOCOL.md)
 now freezes geometry, observation errors, baseline settings, scenario/seed
@@ -29,9 +29,13 @@ without failures or selective reruns. The [combined scoped findings](TRAFFIC_REL
 retain the primary perspective-only negative, severe box-error crossing failures
 and mixed tracking interactions. Both bundles' hashes, complete ledgers and all
 37 endpoint/contrast summaries were independently checked from saved records.
-All 1,086 tests pass; the package and parity fixtures remain unchanged.
-Next is a separately registered intervention question with practical margins
-and new untouched scenarios, not tuning on the opened v1 set or a C++ port.
+All 1,107 tests pass; the package and parity fixtures remain unchanged.
+A separate [one-switch box-gate ablation](BOX_GATE_ABLATION_PROTOCOL.md) now
+registers the comparator, fresh scenario/seed sets, practical ID-switch margins
+and per-case tracking/count non-regression gates before new outcomes. Its
+read-only preflight and geometry checks execute no tracker comparison. Next is
+the separate validated ablation harness and development grid, followed by a new
+held-out harness/input freeze; not tuning on the opened v1 set or a C++ port.
 Real-data transfer and product validation remain incomplete.
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective
