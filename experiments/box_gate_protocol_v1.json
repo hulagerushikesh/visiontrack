@@ -1,0 +1,81 @@
+{
+  "protocol_id": "visiontrack.box-gate-ablation/v1",
+  "registered_on": "2026-10-23",
+  "purpose": "single-switch synthetic association ablation, not a production default change",
+  "parent_artifacts": {
+    "experiments/traffic_protocol_v1.json": "3a6dc71688eeb7ce981dc30ea614f22b82f44052f1aedd8ac68176ac156cf957",
+    "docs/TRAFFIC_RELIABILITY_PROTOCOL.md": "27b89dd580cfc7a90668a04a5e8b4aae685b745b85c988bd17eb5af6bf4d808b"
+  },
+  "baseline_revision": "16c287a6b18c5c142a28e4bce70b3232946459db",
+  "inherit_unchanged": [
+    "frame_grid", "world_roi", "projection", "ideal_box", "observation_error",
+    "conditions", "tracker_config", "anchors", "crossing", "diagnostics"
+  ],
+  "hypothesis": "Disabling only the xyah Mahalanobis rejection gate may reduce shape-pulse fragmentation without increasing association or counting errors; this may fail.",
+  "variants": [
+    {"id": "baseline", "config_patch": {}},
+    {"id": "gate_off", "config_patch": {"use_mahalanobis_gating": false}}
+  ],
+  "splits": {
+    "development": {
+      "seeds": [2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010],
+      "scenarios": ["gate_dev_solo", "gate_dev_separated", "gate_dev_close"]
+    },
+    "heldout": {
+      "seeds": [4001, 4002, 4003, 4004, 4005, 4006, 4007, 4008, 4009, 4010],
+      "scenarios": ["gate_test_solo", "gate_test_slanted", "gate_test_close"]
+    }
+  },
+  "scenarios": {
+    "gate_dev_solo": [{"object_id": 1, "start": [-2.4, 3], "end": [-2.4, 17]}],
+    "gate_dev_separated": [{"object_id": 1, "start": [-2.8, 4], "end": [-2.8, 18]}, {"object_id": 2, "start": [2.8, 16], "end": [2.8, 2]}],
+    "gate_dev_close": [{"object_id": 1, "start": [-0.15, 2], "end": [-0.15, 16]}, {"object_id": 2, "start": [0.15, 18], "end": [0.15, 4]}],
+    "gate_test_solo": [{"object_id": 1, "start": [2.6, 17], "end": [2.6, 3]}],
+    "gate_test_slanted": [{"object_id": 1, "start": [-3.6, 2], "end": [-1.4, 16]}, {"object_id": 2, "start": [3.6, 18], "end": [1.4, 4]}],
+    "gate_test_close": [{"object_id": 1, "start": [-0.12, 4], "end": [-0.12, 18]}, {"object_id": 2, "start": [0.12, 16], "end": [0.12, 2]}]
+  },
+  "grid": {
+    "paired_cases_per_split": 120,
+    "variant_runs_per_split": 240,
+    "passes_per_variant": 3,
+    "pass_order": ["fresh", "reset", "independent_fresh"],
+    "variant_order": ["baseline", "gate_off"],
+    "ordering": "registered scenario order, seed order, condition order, variant order"
+  },
+  "evaluation": {
+    "retain_all_parent_37_endpoints": true,
+    "pairing": "identical immutable detections, no truth features, separate tracker instances",
+    "primary": "mean ID switches per reference object over all seeds and the two box-error conditions, separately per scenario",
+    "error_conditions": ["box_error_only", "combined"],
+    "control_conditions": ["control", "perspective_only"],
+    "minimum_baseline_id_switches_per_object": 0.5,
+    "minimum_relative_id_switch_reduction": 0.25,
+    "minimum_absolute_id_switch_reduction_per_object": 0.5,
+    "minimum_improved_scenarios_per_split": 2,
+    "per_paired_case_nonincrease": [
+      "id_switches", "missed_object_frames", "false_positive_rows",
+      "bottom_centre_missed_plus_extra_events", "bottom_centre_absolute_window_count_error"
+    ],
+    "acceptance": "all nonincrease gates in every paired case and improvement margins in at least two of three scenarios, independently in each split",
+    "no_effect": "complete valid data with no paired difference in any registered endpoint",
+    "failure": "any safety-gate regression, or complete valid adequately challenged nonzero-effect data missing an improvement margin",
+    "inconclusive": "incomplete or invalid evidence, or fewer than two scenarios with baseline primary at least the minimum, in either split",
+    "decision_precedence": ["inconclusive", "failure", "no_effect", "pass"],
+    "null_policy": "retain undefined values and their counts; never replace with zero",
+    "inference": "descriptive scenario-specific evidence only; no pooled site estimate, p-value or confidence interval"
+  },
+  "execution_policy": {
+    "comparative_outcomes_observed_at_registration": false,
+    "random_observation_inputs_generated_at_registration": false,
+    "new_tracker_runs_at_registration": false,
+    "implementation_harness_frozen": false,
+    "tuning_allowed": false,
+    "old_v1_heldout_reuse_as_untouched_allowed": false,
+    "development_before_new_heldout_harness_freeze": true,
+    "heldout_policy": "one complete registered grid; exclusive opening claim; stop on first error; retain partial evidence; no selective reruns",
+    "invalidity_policy": "stop and document a versioned amendment; do not silently replace seeds or revive an opened holdout",
+    "real_data_claims_allowed": false,
+    "production_default_change_authorized": false,
+    "cpp_port_authorized": false
+  }
+}
