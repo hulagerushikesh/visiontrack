@@ -105,8 +105,10 @@ must be disclosed, not treated as new evidence or silently re-frozen.
    verifies the pinned source/configuration, reference-free detector inputs and
    reset/fresh equality, recording provenance, input/output digests and crossing
    scores. It is not yet the complete study report.
-3. Complete tracking/completeness and contact-localization strata, result
-   exports and paired development summaries, including unfavorable results.
+3. The [tracking/contact diagnostics](TRAFFIC_RELIABILITY_DIAGNOSTICS.md) now
+   implement the region/pulse strata with missing estimates kept explicit.
+   Complete result exports and paired development summaries remain next,
+   including unfavorable results.
 4. Freeze the complete tested harness revision and input digests **before** the
    one-pass held-out tracker evaluation. No intervention tuning is part of v1.
 

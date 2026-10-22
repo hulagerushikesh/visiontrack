@@ -51,6 +51,11 @@ def test_real_baseline_reset_provenance_and_serialization(control):
     digest = clone.pop("record_sha256")
     assert hashlib.sha256(runner._json_bytes(clone)).hexdigest() == digest
     assert control["crossing"]["bottom_centre"]["summary"]["event_error"] == 0
+    tracking = control["diagnostics"]["overall"]
+    assert tracking["matched_object_frames"] == 298
+    assert tracking["missed_object_frames"] == 2
+    assert tracking["id_switches"] == tracking["false_positive_rows"] == 0
+    assert control["diagnostics"]["input_sha256"] == control["input"]["input_sha256"]
 
 
 def test_repeat_is_byte_identical(control):

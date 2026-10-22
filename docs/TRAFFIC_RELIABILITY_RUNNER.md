@@ -102,8 +102,10 @@ python -m pytest tests/test_traffic_runner.py
 
 ## What comes next
 
-1. Add the existing IoU-0.5 tracking evaluator and separate contact-localization
-   diagnostics, stratified by true scene region and perturbation window.
+1. The existing IoU-0.5 tracking evaluator and separate contact-localization
+   diagnostics are now [implemented and fixture-tested](TRAFFIC_RELIABILITY_DIAGNOSTICS.md),
+   stratified by true scene region and scheduled perturbation window. The
+   in-memory record includes them; matching history is not reset per stratum.
 2. Complete reproducible result export and all four development-condition
    summaries, paired differences and the frozen interaction. Keep negatives.
 3. Freeze the complete harness commit and input digests **before** one-pass
