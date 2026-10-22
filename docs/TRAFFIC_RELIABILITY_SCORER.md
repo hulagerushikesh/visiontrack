@@ -97,7 +97,8 @@ verified inputs to the pinned baseline and this scorer. Source/configuration
 verification, reference-free detector inputs, reset/fresh replay checks and
 in-memory provenance are implemented. [Tracking/contact diagnostics](TRAFFIC_RELIABILITY_DIAGNOSTICS.md)
 now preserve region/pulse strata and conditional position-error denominators.
-Full result exports and paired development summaries remain next.
+Full result exports and paired summaries are now
+[complete for all 120 development cases](TRAFFIC_RELIABILITY_DEVELOPMENT.md).
 
 Only after those checks pass do we freeze the complete harness revision and
 input digests, followed by the one-pass held-out tracker evaluation. No new

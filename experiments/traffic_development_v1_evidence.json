@@ -1,0 +1,42 @@
+{
+  "format": "visiontrack.traffic-development-evidence-index/v1",
+  "recorded_on": "2026-10-22",
+  "scope": "complete development grid, not a held-out harness freeze or real-data validation",
+  "protocol_id": "visiontrack.traffic-mechanism/v1",
+  "harness_revision": "19a7c821ea4b8d1f54d0ffc0450beb9391b38e1e",
+  "baseline_revision": "16c287a6b18c5c142a28e4bce70b3232946459db",
+  "command": "python -m experiments.traffic_report --output /absolute/new/external/development-bundle",
+  "environment": {
+    "python": "3.12.9",
+    "numpy": "2.3.1",
+    "system": "Darwin",
+    "machine": "arm64",
+    "byteorder": "little"
+  },
+  "bundle": {
+    "status": "complete",
+    "planned_runs": 120,
+    "attempted_runs": 120,
+    "successful_runs": 120,
+    "unattempted_runs": 0,
+    "verified_non_manifest_files": 124,
+    "manifest_content_sha256": "0f541b479018f1905ecf1e086de80bb23130b64a4958904e08c8587d3d95112a",
+    "file_sha256": {
+      "manifest.json": "d6deb6fcfa8f213a8c773bcd9498475ca77efd82805aa1427dfca82dab77628a",
+      "plan.json": "38602c2b179f9d1552e920cc776e2ca79e3c2c080773e946964c5a6b28205059",
+      "summary.json": "f226c15496c5b82b8aea95d9e9886fe8fc93a31a376d1e013d5bb6029c58540d"
+    },
+    "storage": "local external bundle; raw generated outputs are not checked into Git"
+  },
+  "heldout_tracking_executed": false,
+  "complete_study_report": false,
+  "real_data_validated": false,
+  "tracker_behavior_changed": false,
+  "limitations": [
+    "Three toy scenarios; noise seeds are not independent camera sites.",
+    "Perspective alone left primary count and ID metrics unchanged, not all localization metrics.",
+    "Imposed box errors harmed tracking and primary crossings; no fix or winner is tested.",
+    "Hashes establish evidence integrity, not scientific validity or cross-environment bit parity.",
+    "Reproduce using the recorded harness revision; later code may produce a different artifact."
+  ]
+}

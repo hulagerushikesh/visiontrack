@@ -107,7 +107,8 @@ must be disclosed, not treated as new evidence or silently re-frozen.
    scores. It is not yet the complete study report.
 3. The [tracking/contact diagnostics](TRAFFIC_RELIABILITY_DIAGNOSTICS.md) now
    implement the region/pulse strata with missing estimates kept explicit.
-   Complete result exports and paired development summaries remain next,
+   Complete result exports and paired summaries are now
+   [retained for all 120 development cases](TRAFFIC_RELIABILITY_DEVELOPMENT.md),
    including unfavorable results.
 4. Freeze the complete tested harness revision and input digests **before** the
    one-pass held-out tracker evaluation. No intervention tuning is part of v1.

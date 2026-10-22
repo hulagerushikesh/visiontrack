@@ -106,8 +106,10 @@ python -m pytest tests/test_traffic_runner.py
    diagnostics are now [implemented and fixture-tested](TRAFFIC_RELIABILITY_DIAGNOSTICS.md),
    stratified by true scene region and scheduled perturbation window. The
    in-memory record includes them; matching history is not reset per stratum.
-2. Complete reproducible result export and all four development-condition
-   summaries, paired differences and the frozen interaction. Keep negatives.
+2. Reproducible result export and all four development-condition summaries,
+   paired differences and the frozen interaction are now
+   [complete for 120 development cases](TRAFFIC_RELIABILITY_DEVELOPMENT.md),
+   including unfavorable outcomes and explicit missingness.
 3. Freeze the complete harness commit and input digests **before** one-pass
    held-out tracking. This milestone does not open that evaluation or authorize
    a fix, tuning, an acceptance claim, a C++ port or a traffic-product pivot.

@@ -96,6 +96,7 @@ nav:
       - Traffic development replay milestone: TRAFFIC_RELIABILITY_RUNNER.md
       - Traffic tracking and contact diagnostics: TRAFFIC_RELIABILITY_DIAGNOSTICS.md
       - Traffic development-grid report: TRAFFIC_RELIABILITY_REPORT.md
+      - Traffic development findings: TRAFFIC_RELIABILITY_DEVELOPMENT.md
       - Release-readiness audit: RELEASE_READINESS.md
       - Python/C++ runtime contract: CROSS_RUNTIME_CONTRACT.md
       - Horizons: HORIZONS.md

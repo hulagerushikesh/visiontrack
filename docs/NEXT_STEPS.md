@@ -321,7 +321,11 @@ replace RQ5 with an unregistered traffic claim.
       localization diagnostics with region/pulse strata and canonical evaluator
       agreement checks: [diagnostic milestone](TRAFFIC_RELIABILITY_DIAGNOSTICS.md).
       Missing position estimates remain undefined; regional FP is not fabricated.
-- [ ] Add full-result export and complete paired development summaries.
+- [x] Add full-result export and complete paired development summaries; execute
+      all 120 registered development cases from a committed clean harness, and
+      verify the retained bundle's hashes. [Findings](TRAFFIC_RELIABILITY_DEVELOPMENT.md)
+      preserve box-error failures, mixed interactions and the primary negative
+      perspective-only result. This is not real-data validation or held-out tracking.
 - [ ] Freeze the complete harness/input digests before one-pass held-out tracking.
       New interventions require a separate protocol and new held-out evidence.
 - [ ] Validate any transfer claim on representative rights-reviewed evidence.
