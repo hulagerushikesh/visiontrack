@@ -49,8 +49,11 @@ or open held-out tracking outcomes. The separate
 [crossing scorer](TRAFFIC_RELIABILITY_SCORER.md) are implemented and tested.
 The [development-only replay adapter](TRAFFIC_RELIABILITY_RUNNER.md) now verifies
 the pinned baseline/configuration and reset/fresh equality, preserving public
-rows and scoring both anchors. Development smoke cases are not a full study;
-tracking/localization strata, exports and paired summaries remain next.
+rows and scoring both anchors. [Tracking/contact diagnostics](TRAFFIC_RELIABILITY_DIAGNOSTICS.md)
+now partition the canonical matches/failures by true region and scheduled pulse
+without resetting history; detector and matched-track contact errors remain
+separate. Development smoke cases are not a full study; exports and complete
+paired summaries remain next.
 
 - [x] Define a separate, dataset-free ground-plane scene with an explicit
       camera projection and true object paths. Do not relabel our existing
@@ -101,8 +104,10 @@ is not a measured traffic camera, and box perturbations are not a real detector.
       and time-window errors. Prevent opposite errors from cancelling in a
       signed total. Test perfect, duplicated, missing and fragmented fixtures.
       This completes the scorer, not the tracker experiment or flow validation.
-- [ ] Report ID switches, misses and trajectory completeness alongside counts,
-      not as substitutes for them. Stratify by scene region and perturbation.
+- [x] Implement/test ID switches, misses, FP and matched-object-frame completeness
+      alongside counting, with separate contact error and true region/pulse
+      strata. These diagnostics are now in the development replay record;
+      the complete exported comparison report remains pending.
 - [ ] Compare only predeclared interventions. Candidate later ablations include
       anchor choice and geometry-aware motion/noise; changing calibration,
       anchor, lifecycle and detector together cannot identify which helped.

@@ -94,6 +94,7 @@ nav:
       - Traffic synthetic input milestone: TRAFFIC_RELIABILITY_GENERATOR.md
       - Traffic crossing scorer milestone: TRAFFIC_RELIABILITY_SCORER.md
       - Traffic development replay milestone: TRAFFIC_RELIABILITY_RUNNER.md
+      - Traffic tracking and contact diagnostics: TRAFFIC_RELIABILITY_DIAGNOSTICS.md
       - Release-readiness audit: RELEASE_READINESS.md
       - Python/C++ runtime contract: CROSS_RUNTIME_CONTRACT.md
       - Horizons: HORIZONS.md

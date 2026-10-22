@@ -13,8 +13,11 @@ The [crossing scorer](TRAFFIC_RELIABILITY_SCORER.md) passes hand-checked
 event/matching/window fixtures. The [development runner](TRAFFIC_RELIABILITY_RUNNER.md)
 now connects generated detections to the unchanged baseline and scorer, verifies
 pinned source/configuration, and checks reset/fresh replay equality. Development
-smoke/fixture runs have begun; full tracking/localization strata, paired reports
-and the complete harness freeze remain next. No traffic study or product
+smoke/fixture runs have begun. [Tracking/contact diagnostics](TRAFFIC_RELIABILITY_DIAGNOSTICS.md)
+now retain canonical IoU matches, misses, FP, ID switches and fragmentation,
+with independent observation errors and conditional matched-track errors,
+region/pulse strata and explicit missing values. Full result export, paired
+development reports and the complete harness freeze remain next. No traffic study or product
 validation is complete. Held-out tracking is unopened.
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective

@@ -317,8 +317,11 @@ replace RQ5 with an unregistered traffic claim.
       validation, provenance and crossing scores from the same output stream:
       [runner milestone](TRAFFIC_RELIABILITY_RUNNER.md). Development smoke and
       fixture cases only, not the complete study report or held-out tracking.
-- [ ] Add tracking/completeness and separate contact-localization diagnostics
-      with region/pulse strata, result export and paired development summaries.
+- [x] Add tracking/completeness and separate observation/matched-track contact
+      localization diagnostics with region/pulse strata and canonical evaluator
+      agreement checks: [diagnostic milestone](TRAFFIC_RELIABILITY_DIAGNOSTICS.md).
+      Missing position estimates remain undefined; regional FP is not fabricated.
+- [ ] Add full-result export and complete paired development summaries.
 - [ ] Freeze the complete harness/input digests before one-pass held-out tracking.
       New interventions require a separate protocol and new held-out evidence.
 - [ ] Validate any transfer claim on representative rights-reviewed evidence.

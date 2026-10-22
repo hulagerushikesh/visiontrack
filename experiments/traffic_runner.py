@@ -19,6 +19,7 @@ from pathlib import Path
 import numpy as np
 
 from experiments.traffic_crossing import AnchorSample, extract_crossings, score_crossings
+from experiments.traffic_diagnostics import diagnose_development
 from experiments.traffic_protocol import ROOT, load_frozen_protocol
 from experiments.traffic_scene import (
     GroundProjection,
@@ -210,9 +211,6 @@ def run_development(*, scenario: str, seed: int, condition: str) -> dict:
     payload = _json_bytes(rows)
     if payload != _json_bytes(reset_rows) or payload != _json_bytes(fresh_rows):
         raise ValueError("baseline reset/fresh replay mismatch")
-    _check_import_origins()
-    if _verify_tree(ROOT, spec["baseline_revision"]) != baseline:
-        raise ValueError("baseline source changed during replay")
     projection_name = next(c["projection"] for c in spec["conditions"] if c["id"] == condition)
     projection = GroundProjection(np.array(spec["projection"][projection_name]))
     truth = extract_crossings(
@@ -226,6 +224,10 @@ def run_development(*, scenario: str, seed: int, condition: str) -> dict:
         anchor: score_crossings(truth, extract_crossings(_anchor_samples(rows, projection, anchor)))
         for anchor in spec["anchors"]
     }
+    diagnostics = diagnose_development(scene, rows)
+    _check_import_origins()
+    if _verify_tree(ROOT, spec["baseline_revision"]) != baseline:
+        raise ValueError("baseline source changed during replay/diagnostics")
     experiment_sources = {
         str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest()
         for path in sorted((ROOT / "experiments").glob("traffic_*.py"))
@@ -268,11 +270,12 @@ def run_development(*, scenario: str, seed: int, condition: str) -> dict:
         "output": rows,
         "output_sha256": hashlib.sha256(payload).hexdigest(),
         "crossing": anchors,
+        "diagnostics": diagnostics,
         "heldout_tracking_executed": False,
         "complete_study_report": False,
         "limitations": [
             "Development synthetic mechanism check, not measured traffic accuracy or improvement.",
-            "Tracking/completeness/localization strata and paired study summaries remain pending.",
+            "Full result export and paired study summaries remain pending.",
             "Dependency versions recorded, not a cross-environment bit-parity guarantee.",
             "Input manifest describes generator inputs; tracker execution is recorded separately.",
         ],
@@ -303,6 +306,11 @@ def main() -> int:
                 "output_sha256": record["output_sha256"],
                 "replay": record["replay"],
                 "crossing": {name: score["summary"] for name, score in record["crossing"].items()},
+                "tracking": {
+                    name: value
+                    for name, value in record["diagnostics"]["overall"].items()
+                    if name not in {"observation_contact_error", "matched_track_contact_error"}
+                },
                 "complete_study_report": False,
                 "heldout_tracking_executed": False,
             },
