@@ -9,10 +9,13 @@ splits and crossing-score semantics with integrity checks before comparisons.
 Its separate [input generator](TRAFFIC_RELIABILITY_GENERATOR.md) now implements
 the locked recipe, with tests of all 120 development input combinations,
 paired random draws, projection validity, anchor shifts and replay digests.
-The [crossing scorer](TRAFFIC_RELIABILITY_SCORER.md) now passes hand-checked
-event/matching/window fixtures, without tracker execution. No traffic tracker
-experiment or product validation is complete; the development baseline runner
-remains next. Held-out tracking is unopened.
+The [crossing scorer](TRAFFIC_RELIABILITY_SCORER.md) passes hand-checked
+event/matching/window fixtures. The [development runner](TRAFFIC_RELIABILITY_RUNNER.md)
+now connects generated detections to the unchanged baseline and scorer, verifies
+pinned source/configuration, and checks reset/fresh replay equality. Development
+smoke/fixture runs have begun; full tracking/localization strata, paired reports
+and the complete harness freeze remain next. No traffic study or product
+validation is complete. Held-out tracking is unopened.
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective
 anonymous re-entry probe can export its complete fixed-grid synthetic curves

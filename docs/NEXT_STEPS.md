@@ -312,9 +312,14 @@ replace RQ5 with an unregistered traffic claim.
 - [x] Implement/test the frozen crossing scorer on hand-checked fixtures,
       preserving missed/extra events, matching priorities and time-window errors:
       [scorer milestone](TRAFFIC_RELIABILITY_SCORER.md). No tracker outcomes.
-- [ ] Implement/test the development baseline runner, including source
-      verification, reset/replay and provenance. Then freeze
-      the complete harness/input digests before one-pass held-out tracking.
+- [x] Implement/test the development-only baseline replay adapter, including
+      pinned source/configuration verification, reset/fresh equality, public-row
+      validation, provenance and crossing scores from the same output stream:
+      [runner milestone](TRAFFIC_RELIABILITY_RUNNER.md). Development smoke and
+      fixture cases only, not the complete study report or held-out tracking.
+- [ ] Add tracking/completeness and separate contact-localization diagnostics
+      with region/pulse strata, result export and paired development summaries.
+- [ ] Freeze the complete harness/input digests before one-pass held-out tracking.
       New interventions require a separate protocol and new held-out evidence.
 - [ ] Validate any transfer claim on representative rights-reviewed evidence.
 

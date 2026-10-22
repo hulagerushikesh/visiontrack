@@ -92,10 +92,11 @@ limits. A test prevents tracker or scene-generator execution in these fixtures.
 
 ## Next implementation step
 
-Connect the [verified scene inputs](TRAFFIC_RELIABILITY_GENERATOR.md) to a
-**development-only** baseline runner. Verify the pinned source and explicit
-configuration, keep reference IDs out of detector inputs, and prove tracker
-reset/replay behavior. Then export the full diagnostics and provenance.
+The [development-only runner](TRAFFIC_RELIABILITY_RUNNER.md) now connects the
+verified inputs to the pinned baseline and this scorer. Source/configuration
+verification, reference-free detector inputs, reset/fresh replay checks and
+in-memory provenance are implemented. Full tracking/localization diagnostics,
+result exports and paired development summaries remain next.
 
 Only after those checks pass do we freeze the complete harness revision and
 input digests, followed by the one-pass held-out tracker evaluation. No new
