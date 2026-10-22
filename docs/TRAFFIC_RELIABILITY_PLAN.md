@@ -1,8 +1,9 @@
 # Traffic reliability probe — bounded next milestone
 
-Prepared 2026-10-21; updated 2026-10-22 with the verified synthetic input
-generator. **No tracker experiment results, traffic deployment validation,
-or selected product vertical.**
+Prepared 2026-10-21; updated 2026-10-22 with the complete
+[development/held-out synthetic findings](TRAFFIC_RELIABILITY_FINDINGS.md):
+120 cases per split, no failures or selective reruns. **No intervention gain,
+traffic deployment validation or selected product vertical.**
 
 ## Aim in plain language
 
@@ -54,7 +55,8 @@ now partition the canonical matches/failures by true region and scheduled pulse
 without resetting history; detector and matched-track contact errors remain
 separate. Development smoke cases are not a full study; exports and complete
 paired summaries are now [complete for all 120 development cases](TRAFFIC_RELIABILITY_DEVELOPMENT.md).
-The complete held-out harness/input freeze and one-pass evaluation remain pending.
+The complete held-out harness/input freeze preceded a one-pass 120-case export;
+its scoped interpretation is now complete, with no new tracker behavior.
 
 - [x] Define a separate, dataset-free ground-plane scene with an explicit
       camera projection and true object paths. Do not relabel our existing
@@ -87,11 +89,13 @@ tracker, new public API, live-camera behavior or accuracy claim in this step.
 - [x] Connect development fixed detections to the existing NumPy baseline with
       no appearance cue; verify source/configuration and reset/fresh replay.
       Derive both anchors from the same output stream, without truth-based
-      filtering. Full development summaries are now retained; held-out execution
-      remains pending.
+      filtering. Full development and held-out summaries are now retained.
 - [x] Export all 120 development runs with regime-labelled errors, input/config/
       output/source digests, known events, paired summaries and attempt ledger;
-      independently verify the retained bundle's hashes. No held-out run yet.
+      independently verify the retained bundle's hashes.
+- [x] Freeze the full held-out harness/inputs, execute all 120 cases once,
+      independently verify both bundles and complete the scoped interpretation.
+      Preserve the consumed opening claim; no selective rerun or tuning.
 
 Output: a reproducible mechanism demonstration. A mathematical projection model
 is not a measured traffic camera, and box perturbations are not a real detector.
@@ -110,8 +114,7 @@ is not a measured traffic camera, and box perturbations are not a real detector.
 - [x] Implement/test ID switches, misses, FP and matched-object-frame completeness
       alongside counting, with separate contact error and true region/pulse
       strata. These diagnostics are now in the development replay record;
-      the exported 120-case development report is now retained. Held-out
-      comparisons remain pending.
+      the exported 120-case development and 120-case held-out reports are retained.
 - [ ] Compare only predeclared interventions. Candidate later ablations include
       anchor choice and geometry-aware motion/noise; changing calibration,
       anchor, lifecycle and detector together cannot identify which helped.
@@ -119,6 +122,11 @@ is not a measured traffic camera, and box perturbations are not a real detector.
       Do not tune on held-out results or treat correlated frames as independent
       statistical samples. Practical acceptance margins apply to a future
       separately registered intervention, not a claimed gain in v1 characterization.
+- [x] Report all held-out conditions, paired contrasts and interactions against
+      development findings without a pooled-site or winner claim.
+- [ ] Register one minimal intervention, practical success/failure margins and
+      new untouched scenarios before implementation. The opened v1 paths cannot
+      be relabelled as untouched acceptance evidence for a new fix.
 
 Output: an evidence-backed synthetic result, not proof of a better traffic
 system. Do not build a traffic dashboard or announce a new tracker first.

@@ -1,0 +1,60 @@
+{
+  "format": "visiontrack.traffic-heldout-evidence-index/v1",
+  "recorded_on": "2026-10-22",
+  "scope": "complete one-pass held-out grid and scoped development/held-out synthetic interpretation; no intervention or real-data validation",
+  "protocol_id": "visiontrack.traffic-mechanism/v1",
+  "actual_run_revision": "5ac67f230ea67fc600f8ce446d996e685af80c69",
+  "frozen_harness_revision": "fe88a169a5c86b7f80400fa8f6f605f4d1802d02",
+  "baseline_revision": "16c287a6b18c5c142a28e4bce70b3232946459db",
+  "freeze_content_sha256": "2c6a56b0ecb91d95820f52c67a921d58572fe2c7f8159a287c47e875485ac1a5",
+  "command": "python -m experiments.traffic_holdout run --freeze /absolute/original/external/freeze.json --output /absolute/new/external/heldout-bundle",
+  "environment": {
+    "python": "3.12.9",
+    "numpy": "2.3.1",
+    "system": "Darwin",
+    "machine": "arm64",
+    "byteorder": "little"
+  },
+  "bundle": {
+    "status": "complete",
+    "planned_runs": 120,
+    "attempted_runs": 120,
+    "successful_runs": 120,
+    "unattempted_runs": 0,
+    "failed_runs": 0,
+    "verified_non_manifest_files": 124,
+    "verified_ordered_ledger_entries": 240,
+    "manifest_content_sha256": "d6eff9382ee1ebc11c0c27f10fa0d5f7c5c1f9217bec1eadc95db03c1f238fe2",
+    "file_sha256": {
+      "manifest.json": "315d0cf2f9ad821d93dc675b8cea87ee2e576925b45899743ff6673376632e35",
+      "plan.json": "7c4674ca004ac7a60bb83c357d4b3d6b24508af3df21aca80b687412d300c93a",
+      "attempts.jsonl": "da92dc0fe19908790364957ae98abfc434da3747b2cde33524695bfbcb99aa6f",
+      "summary.json": "5582da9b2a3c6dca616688ae538d9ccec45fdebb19c2b3b06b98ab58a14e7a81",
+      "summary.md": "5e51b4e00cd07f7fc1e861e0eeb44dacc208e75c2b98c3d13a79b2a4d75377cf"
+    },
+    "storage": "local external bundle; raw generated outputs and consumed opening claim remain outside Git"
+  },
+  "verification": {
+    "original_freeze_inputs_source_baseline_environment": "matched",
+    "reset_and_fresh_passes_per_case": 3,
+    "development_bundle_reverified": true,
+    "independent_summary_reconstruction": "all 37 endpoints, paired differences, interactions, descriptive means/ranges and null counts from saved records, without tracker re-execution",
+    "per_split_per_seed_endpoint_and_contrast_values": 8880,
+    "per_split_aggregated_endpoints": 888
+  },
+  "development_manifest_content_sha256": "0f541b479018f1905ecf1e086de80bb23130b64a4958904e08c8587d3d95112a",
+  "heldout_tracking_executed": true,
+  "original_opening_consumed": true,
+  "scoped_synthetic_interpretation_complete": true,
+  "complete_study_report": false,
+  "real_data_validated": false,
+  "tracker_behavior_changed": false,
+  "limitations": [
+    "Six fixed toy paths across two splits; noise seeds are not independent camera sites.",
+    "Severe imposed box errors overlap the crossing period; no real detector or traffic prevalence is measured.",
+    "Perspective alone preserves primary count and ID outcomes here, not all localization outcomes or all domains.",
+    "Mixed interactions and secondary-anchor outcomes do not select a winner or improvement.",
+    "Opened held-out inputs cannot serve as untouched acceptance evidence for a later tuned intervention.",
+    "Hashes establish evidence consistency, not independent scientific validity or universal numerical parity."
+  ]
+}

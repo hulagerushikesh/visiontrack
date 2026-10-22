@@ -1,5 +1,11 @@
 # Held-out harness and input freeze
 
+Current status: the original opening has now been consumed by a complete
+120/120-case export, without failures or selective reruns. See the
+[development/held-out findings](TRAFFIC_RELIABILITY_FINDINGS.md). The preparation
+record below describes the earlier unopened milestone; it is not permission
+to open the same set again as untouched evidence.
+
 ## What this step means
 
 We have development results for three toy paths. Before evaluating three
@@ -99,7 +105,7 @@ files. Freeze content SHA-256:
 The machine-readable record is
 [`experiments/traffic_heldout_v1_freeze_evidence.json`](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/traffic_heldout_v1_freeze_evidence.json).
 The full freeze stays in the local external research folder, outside Git.
-No opening claim or held-out tracking output exists at this milestone.
+No opening claim or held-out tracking output existed at that preparation milestone.
 
 Verification: 1,086 tests passed (one slow test deselected), Ruff lint/changed-file
 format and strict docs build passed. A separate 12-case development regression
@@ -113,8 +119,8 @@ checksum verification, clean/committed-source and environment gates, recorded
 failures, no overwrite and consumed-opening rejection. Existing development
 replay/scorer tests continue to exercise the real unchanged baseline.
 
-With the committed freeze now recorded and verified, the next step is one
-complete held-out run, followed by a combined development/held-out interpretation
-that retains negative and mixed findings. Completing a synthetic grid is not
+The subsequent complete held-out run and scoped development/held-out
+interpretation are now recorded in the [findings](TRAFFIC_RELIABILITY_FINDINGS.md),
+including negative and mixed outcomes. Completing a synthetic grid is not
 real-data validation, an automatic product feature, an upstream contribution
 or a reason to port new behavior to C++. RQ5/volunteer recording is separate.
