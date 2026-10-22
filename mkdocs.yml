@@ -92,6 +92,7 @@ nav:
       - Traffic reliability probe plan: TRAFFIC_RELIABILITY_PLAN.md
       - Frozen traffic mechanism protocol: TRAFFIC_RELIABILITY_PROTOCOL.md
       - Traffic synthetic input milestone: TRAFFIC_RELIABILITY_GENERATOR.md
+      - Traffic crossing scorer milestone: TRAFFIC_RELIABILITY_SCORER.md
       - Release-readiness audit: RELEASE_READINESS.md
       - Python/C++ runtime contract: CROSS_RUNTIME_CONTRACT.md
       - Horizons: HORIZONS.md

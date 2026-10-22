@@ -99,7 +99,8 @@ must be disclosed, not treated as new evidence or silently re-frozen.
 
 ## What comes next
 
-1. Implement and test the frozen crossing-event scorer on hand-checked fixtures.
+1. The frozen crossing-event scorer is now implemented and tested on
+   [hand-checked fixtures](TRAFFIC_RELIABILITY_SCORER.md), without tracker runs.
 2. Build a development-only runner: verify the pinned baseline source, use the
    explicit tracker configuration, prevent reference IDs from entering detector
    inputs, and verify reset/replay behavior.
