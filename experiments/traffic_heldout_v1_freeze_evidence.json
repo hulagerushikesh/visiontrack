@@ -1,0 +1,50 @@
+{
+  "format": "visiontrack.traffic-heldout-freeze-evidence-index/v1",
+  "recorded_on": "2026-10-22",
+  "scope": "committed harness and geometry-input freeze only; no held-out tracker outcomes",
+  "protocol_id": "visiontrack.traffic-mechanism/v1",
+  "harness_revision": "fe88a169a5c86b7f80400fa8f6f605f4d1802d02",
+  "baseline_revision": "16c287a6b18c5c142a28e4bce70b3232946459db",
+  "freeze_content_sha256": "2c6a56b0ecb91d95820f52c67a921d58572fe2c7f8159a287c47e875485ac1a5",
+  "freeze_file_sha256": "a8bd07b78e178cd8f279c2b8f31e94ddf18c461642b8922b5e7f768204adf046",
+  "input_plan_sha256": "08b5b70ff402b1a7ee91aa146e169aceb941fa328e15a350775b2058be895965",
+  "planned_runs": 120,
+  "heldout_scenarios": ["offcentre", "close_opposing", "slanted"],
+  "heldout_seed_range_inclusive": [1001, 1010],
+  "bound_harness_files": 19,
+  "bound_baseline_files": 57,
+  "environment": {
+    "python": "3.12.9",
+    "numpy": "2.3.1",
+    "system": "Darwin",
+    "machine": "arm64",
+    "byteorder": "little"
+  },
+  "development_evidence": {
+    "harness_revision": "19a7c821ea4b8d1f54d0ffc0450beb9391b38e1e",
+    "manifest_content_sha256": "0f541b479018f1905ecf1e086de80bb23130b64a4958904e08c8587d3d95112a",
+    "successful_runs": 120,
+    "verified_non_manifest_files": 124
+  },
+  "verification": {
+    "pytest_passed": 1086,
+    "slow_tests_deselected": 1,
+    "development_regression_cases": 12,
+    "development_regression_scope": "seed 101, all three development paths and all four conditions; exact canonical input/output/crossing/diagnostic bytes and 37 endpoint equality with retained results",
+    "strict_docs_build": "passed",
+    "ruff_lint_and_changed_file_format": "passed",
+    "prepare_then_read_only_verify": "passed"
+  },
+  "storage": "local external freeze.json; raw input manifests remain outside Git",
+  "heldout_tracking_executed": false,
+  "opening_claim_exists_at_recording": false,
+  "complete_study_report": false,
+  "real_data_validated": false,
+  "tracker_behavior_changed": false,
+  "limitations": [
+    "Prepared geometry is not a held-out tracker result or a performance gain.",
+    "Toy scenarios and repeated noise seeds are not representative traffic sites.",
+    "Local hashes and opening claims are integrity/workflow guards, not an adversarial registry.",
+    "Dependency metadata is not a complete native runtime lock or universal bit-parity claim."
+  ]
+}

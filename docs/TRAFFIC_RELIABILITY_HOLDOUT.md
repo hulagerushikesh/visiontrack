@@ -91,13 +91,29 @@ requires a separate registration, practical margins and new untouched scenarios.
 
 ## Verification and next milestone
 
+Prepared and read-only verified on 2026-10-22 from committed harness
+`fe88a169a5c86b7f80400fa8f6f605f4d1802d02`. All 120 held-out input
+manifests are frozen, binding 19 harness/test/settings files and 57 baseline
+files. Freeze content SHA-256:
+`2c6a56b0ecb91d95820f52c67a921d58572fe2c7f8159a287c47e875485ac1a5`.
+The machine-readable record is
+[`experiments/traffic_heldout_v1_freeze_evidence.json`](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/traffic_heldout_v1_freeze_evidence.json).
+The full freeze stays in the local external research folder, outside Git.
+No opening claim or held-out tracking output exists at this milestone.
+
+Verification: 1,086 tests passed (one slow test deselected), Ruff lint/changed-file
+format and strict docs build passed. A separate 12-case development regression
+check (seed 101, three paths × four conditions) matched the retained input,
+output, crossing and diagnostic canonical bytes and all 37 endpoints exactly.
+The whole production package and parity fixtures remain unchanged.
+
 Tests of held-out export use deliberately **fake outcomes**, not an actual
 held-out tracker run. They check all-case enforcement, missing-value propagation,
 checksum verification, clean/committed-source and environment gates, recorded
 failures, no overwrite and consumed-opening rejection. Existing development
 replay/scorer tests continue to exercise the real unchanged baseline.
 
-After the committed freeze is recorded and verified, the next step is one
+With the committed freeze now recorded and verified, the next step is one
 complete held-out run, followed by a combined development/held-out interpretation
 that retains negative and mixed findings. Completing a synthetic grid is not
 real-data validation, an automatic product feature, an upstream contribution

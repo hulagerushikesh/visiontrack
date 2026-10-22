@@ -21,8 +21,14 @@ has now run all 120 cases from committed harness `19a7c82`, retaining full resul
 37 endpoint comparisons, paired differences, interactions and independently
 verified bundle hashes. Box errors harmed the baseline in these toy paths;
 perspective alone did not change primary count/ID outcomes. The complete
-held-out harness/input freeze remains next. No full traffic study or product
-validation is complete. Held-out tracking is unopened.
+[held-out harness/input freeze](TRAFFIC_RELIABILITY_HOLDOUT.md) is now prepared
+and verified from committed harness `fe88a16`, with all 120 input manifests,
+19 harness/test/settings files and 57 baseline source files bound. The separate
+one-pass execution gate is implemented and tested with fake outcomes; actual
+held-out tracking remains unopened. All 1,086 tests pass, and 12 development
+regression cases exactly preserve retained output/diagnostic bytes and endpoints.
+Next is the registered held-out run, not tuning or a C++ port. No full traffic
+study or product validation is complete.
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective
 anonymous re-entry probe can export its complete fixed-grid synthetic curves

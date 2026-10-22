@@ -326,8 +326,15 @@ replace RQ5 with an unregistered traffic claim.
       verify the retained bundle's hashes. [Findings](TRAFFIC_RELIABILITY_DEVELOPMENT.md)
       preserve box-error failures, mixed interactions and the primary negative
       perspective-only result. This is not real-data validation or held-out tracking.
-- [ ] Freeze the complete harness/input digests before one-pass held-out tracking.
-      New interventions require a separate protocol and new held-out evidence.
+- [x] Freeze the complete harness/input digests before one-pass held-out tracking:
+      [freeze and execution gate](TRAFFIC_RELIABILITY_HOLDOUT.md). Prepared and
+      read-only verified from `fe88a16`; all 120 held-out input manifests are
+      locked, with no held-out tracker outcomes or opening claim. Public
+      development commands still reject held-out inputs.
+- [ ] Execute the registered held-out grid once through the saved freeze and
+      retain all runs/errors; compare with development without tuning or a
+      winner claim. New interventions require a separate protocol and new
+      held-out evidence. Complete the scoped synthetic interpretation afterward.
 - [ ] Validate any transfer claim on representative rights-reviewed evidence.
 
 ## Deferred research compute

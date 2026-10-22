@@ -84,7 +84,8 @@ fixture bundles, no overwrite, and held-out/config override rejection.
 ## Remaining gates
 
 The complete development grid and its checksum-verified bundle are now retained.
-Next, separately freeze the **complete** harness and input digests
-before one-pass held-out tracking. A development export is not that final
-held-out freeze. No new intervention, tuning, real-data transfer, upstream
+The separate [complete harness/input freeze](TRAFFIC_RELIABILITY_HOLDOUT.md)
+is now prepared and verified; actual one-pass held-out tracking remains next.
+A development export is not that final held-out freeze. No new intervention,
+tuning, real-data transfer, upstream
 contribution or C++ port is authorized by a development result alone.
