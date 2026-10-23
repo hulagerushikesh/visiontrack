@@ -173,6 +173,15 @@ The proposed first audience is fixed-camera CV engineers/applied researchers.
 The conditional technical estimate is 4–5 focused working days after suitable
 data/labels are available; external acquisition/review delays remain separate.
 
+The [five-minute demonstration](SHOWCASE_DEMO.md) is now prepared locally using
+the existing deterministic onboarding workflow. Its report reproduces byte for
+byte and passes Python bundle verification and the actual browser report parser.
+The two configurations tie; the counting trade-off is from the separate completed
+box-gate study, not manufactured inside this report. No owner/practitioner
+usability result is inferred. The [daily/weekly plan](WEEKLY_DELIVERY_PLAN.md)
+keeps the next goal at comprehension plus one explicit real-clip admission
+decision. Real-data claims, outreach and C++ adoption remain gated.
+
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective
 anonymous re-entry probe can export its complete fixed-grid synthetic curves

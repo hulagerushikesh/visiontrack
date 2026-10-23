@@ -427,14 +427,21 @@ replace RQ5 with an unregistered traffic claim.
 
 See the [showcase milestone, audience and conditional effort estimates](SHOWCASE_MILESTONE.md).
 
-- [ ] Prepare a short existing-report demo: explain one mistake, one trade-off
-      and the supported decision. Label synthetic evidence explicitly.
+- [x] Prepare the [five-minute existing-report demo](SHOWCASE_DEMO.md): generated
+      and separately reproduced report, Python/browser import validation,
+      one miss, an honest tie and a separate completed synthetic trade-off.
+- [ ] Complete the owner's short walkthrough and record actual comprehension
+      feedback; preparation is not a completed usability study.
 - [ ] Admit one permitted real clip with an explicit task, detector and checked
       labels; data acquisition/permission is not assumed complete.
 - [ ] Produce one fixed comparison and reproducible, visually understandable
       report. Retain negative results; one clip is not a general accuracy claim.
 - [ ] Review it with an interested practitioner if available; record workflow
       feedback without calling it a validated partnership or product demand.
+
+Follow the [daily/weekly delivery checkpoints](WEEKLY_DELIVERY_PLAN.md). The
+first weekly target is an understandable demo and an explicit real-data admission
+decision, not an unsupported accuracy release. No new C++ port is required.
 
 ## Deferred research compute
 
