@@ -415,14 +415,26 @@ replace RQ5 with an unregistered traffic claim.
 - [x] Implement the [isolated counter](CROSSING_BAND_COUNTER.md) and 64 authored
       boundary/gap/reversal/timing tests. Retain real short-passage misses,
       unfinished/canceled state and excessive delay; no association/default change.
-- [ ] Review its structural misses/delay before full-grid investment. An authored
-      feasibility rejection is not a study verdict; do not tune v1 to rescue it.
-- [ ] Build/commit the complete new input/replay/report harness before its full
-      development grid, then freeze/open genuinely fresh held-out evidence once.
-      Do not tune v1 or relabel either consumed set as untouched validation.
-- [ ] Independently audit the new study and retain failures/no-effect as well
-      as gains. Counting-only changes cannot establish better ID/localization.
+- [x] Review structural misses/delay: [stop at engineering feasibility](CROSSING_BAND_COUNTER.md#feasibility-decision-2026-10-23).
+      Retain genuine-passage misses and the excessive-delay example. This is
+      not an executed study verdict; registration/locks remain unchanged.
+- Not undertaken after this stop: full-grid input/replay/report harness,
+      development/held-out execution and audit. Do not mark these complete,
+      silently tune v1 or relabel consumed evidence as untouched validation.
 - [ ] Validate any transfer claim on representative rights-reviewed evidence.
+
+## Active delivery goal — one understandable case study
+
+See the [showcase milestone, audience and conditional effort estimates](SHOWCASE_MILESTONE.md).
+
+- [ ] Prepare a short existing-report demo: explain one mistake, one trade-off
+      and the supported decision. Label synthetic evidence explicitly.
+- [ ] Admit one permitted real clip with an explicit task, detector and checked
+      labels; data acquisition/permission is not assumed complete.
+- [ ] Produce one fixed comparison and reproducible, visually understandable
+      report. Retain negative results; one clip is not a general accuracy claim.
+- [ ] Review it with an interested practitioner if available; record workflow
+      feedback without calling it a validated partnership or product demand.
 
 ## Deferred research compute
 

@@ -157,10 +157,21 @@ first-event/gap/segment semantics and late events without suppressing them.
 equivalence and candidate invariants. Shallow/start/end ideal passages remain
 misses; a retained 18-frame delay exceeds the registered limit. These are unit
 feasibility examples, not registered study outcomes or an accepted accuracy fix.
-Review these structural costs before investing in the full replay/report harness.
+The structural review now **stops this candidate at engineering feasibility**:
+do not build its full grid harness as the next task. This is not a registered
+development/held-out verdict, and the original definitions/locks remain intact.
+See the [decision](CROSSING_BAND_COUNTER.md#feasibility-decision-2026-10-23).
 No new noisy registered inputs/tracker outcomes, held-out opening, production or
 C++ changes. At this checkpoint **1,866 non-slow tests pass**; Ruff and strict
 documentation build pass. The registered artifacts/locks remain unchanged.
+
+The active delivery goal is now [one understandable diagnostic case study](SHOWCASE_MILESTONE.md),
+starting with a short existing-report demo and then a permitted real clip with
+checked labels. The research alpha can be demonstrated now with synthetic
+evidence disclosed; real-world improvement and product demand are not established.
+The proposed first audience is fixed-camera CV engineers/applied researchers.
+The conditional technical estimate is 4–5 focused working days after suitable
+data/labels are available; external acquisition/review delays remain separate.
 
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective
