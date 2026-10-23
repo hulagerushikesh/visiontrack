@@ -40,8 +40,8 @@ Question: can disabling only the tracker’s shape-sensitive rejection gate redu
 broken IDs **without worsening** the registered tracking/counting measures?
 It could help, do nothing or harm nearby-object associations.
 
-There are **eight milestone groups** in this summary. Seven are complete;
-one remains. That is a count of milestone groups, **not a percentage of total
+There are **eight milestone groups** in this experiment. All eight are complete.
+That is a count of milestone groups, **not a percentage of total
 effort, a probability of success or a whole-project completion percentage**.
 
 - [x] 1. Register the question, single changed setting, fresh scenario/seed
@@ -76,10 +76,15 @@ effort, a probability of success or a whole-project completion percentage**.
   120 pairs / 240 variants / 720 passes, no errors or selective retries.
   All 365 files and 480 ledger entries passed a separate artifact inventory.
   Saved endpoints show 206 safety violations in all 60 box-error pairs; no
-  candidate tuning or acceptance. Independent endpoint arithmetic remains next.
-- [ ] 8. Independently audit and explain the combined results. Report negative
-  outcomes. Passing is only a bounded synthetic result, not permission to claim
-  real-world accuracy or silently change defaults.
+  candidate tuning or acceptance. Endpoint arithmetic is now checked in step 8.
+- [x] 8. Audit and explain the [combined results](BOX_GATE_FINDINGS.md), retaining
+  all negative outcomes. All 730 raw files, 17,760 endpoint values, 8,880 contrasts
+  and exact decision margins were checked from saved records without tracker
+  replay. **Final registered classification: failure** — 380 safety violations
+  across 120 affected pairs, despite the ID-switch benefit. This uses unchanged
+  development arithmetic helpers independently of the scorer, not a second
+  implementation of those helpers. Saved correspondence/inputs remain trusted.
+  Defaults and C++ are unchanged; this is not real-world validation.
 
 The original traffic-v1 held-out set is already opened. It will not be relabeled
 as untouched or reused as the new experiment's held-out evidence.
@@ -145,10 +150,11 @@ no GPU path or weakened parity is justified by the current plan.
 
 ## Immediate next action
 
-Complete milestone 8: independently audit the saved held-out endpoint arithmetic
-and both complete splits, apply the unchanged decision rules, then report the
-bounded combined findings. Do not modify the pinned development auditor, rerun
-the consumed grid or tune the candidate to rescue the safety failures. Both raw
-bundles are retained; the combined classification is not yet audited/reported.
-This needs no new footage or owner assistance. Real recording and discovery can
-proceed on their own schedule without holding up this engineering work.
+The experiment is closed with a negative result, not an accepted tracker change.
+Next, inspect saved **development** failures to separate match rejection, box
+localization and crossing-window timing before choosing a narrower intervention.
+Any new comparative study needs a new registration and genuinely fresh held-out
+cases; neither opened set may be relabeled as untouched validation. This diagnosis
+needs no new footage or owner assistance. Real recording, usability walkthrough
+and discovery remain separate pending work. C++ stays in maintenance until a
+useful behavior earns an explicitly accepted parity handoff.

@@ -367,7 +367,7 @@ replace RQ5 with an unregistered traffic claim.
       Zero gate-off ID switches did not imply acceptance: 174 safety endpoint
       violations affected all 60 box-error pairs. Candidate not accepted;
       development-only numerical summary remains inconclusive by design;
-      independently audited combined interpretation is still required.
+      the combined interpretation is now recorded below.
 - [x] Implement/test the [new held-out code/input/evidence freeze](BOX_GATE_HOLDOUT.md)
       and read-only verifier (milestone 7a): exact clean committed revision,
       runtime, reviewed negative development audit and all 120 future input
@@ -384,10 +384,18 @@ replace RQ5 with an unregistered traffic claim.
       without errors or selective retries. The 365-file artifact inventory and
       480-entry ordered ledger agree with the freeze, settings and replay receipts.
       Saved endpoints contain 206 safety violations in all 60 box-error pairs;
-      no candidate acceptance. The opening is consumed; independent arithmetic
-      and combined interpretation remain the next action, not a replay.
-- [ ] Independently audit and report combined results, preserving failure,
-      no-effect and inconclusive outcomes, not just an average gain.
+      no candidate acceptance. The opening is consumed and remains untouched.
+- [x] Audit saved arithmetic and report [combined findings](BOX_GATE_FINDINGS.md):
+      all 240 pairs / 480 variants / 1,440 recorded passes; 17,760 endpoint values,
+      8,880 contrasts and exact margins checked without a new tracker run.
+      Final registered classification **failure**: 174 development + 206 held-out
+      safety violations across 120 affected pairs. Keep defaults/C++ unchanged.
+      The pinned development auditor and original indices are not rewritten.
+- [ ] Inspect saved development failures to frame the next mechanism question
+      before choosing another intervention. Separate ID continuity, localization
+      and time-window counts; no cause claim from aggregate improvements alone.
+- [ ] Register any new comparative study with new held-out evidence; do not tune
+      a candidate and relabel either opened set as untouched validation.
 - [ ] Validate any transfer claim on representative rights-reviewed evidence.
 
 ## Deferred research compute

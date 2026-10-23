@@ -8,7 +8,9 @@ full-grid execution gate. **Milestone 7 is now complete:** the real freeze was
 issued and verified from committed harness `c99c4e7`, then all 120 held-out pairs
 ran once without errors or selective retries. See the
 [held-out results and evidence inventory](BOX_GATE_HELDOUT_RESULTS.md).
-Independent endpoint arithmetic and combined-study audit remain milestone 8.
+The subsequent [saved-record arithmetic and combined audit](BOX_GATE_FINDINGS.md)
+has now completed milestone 8 with a failure classification. This page describes
+the preserved execution safeguards, not permission to reopen the experiment.
 
 Think of a freeze as a sealed experiment checklist: it records exactly which
 code, settings, runtime, earlier evidence and future input cases may be used.
@@ -131,13 +133,14 @@ records exact paths and hashes. No tracker was rerun for the inventory.
 
 The original opening is **consumed**. Do not retry, tune or selectively replace
 a case, and do not call these inputs untouched evidence for a later candidate.
-The next action is the independent saved-record and combined-study audit,
-not another opening. The pinned development auditor must remain unchanged.
+The subsequent saved-record and combined-study audit is complete; see the final
+findings above. There is no further opening. The pinned development auditor
+remains unchanged.
 
 Every later commit invalidates an unused freeze, even a documentation change.
 Bind the actual run to the reviewed committed harness, not a pre-commit snapshot.
 No production setting, C++ behavior, website, release or outreach changes here.
 
 The candidate is still **not accepted**. Held-out saved results also show safety
-violations, and cannot erase the earlier development violations. Completing the
-combined audit is faithful reporting, not a search for a more favorable result.
+violations, and cannot erase the earlier development violations. The completed
+combined audit retains both sets of failures, not a more favorable subset.

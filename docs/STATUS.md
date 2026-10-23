@@ -55,7 +55,7 @@ Gate-off removed ID switches in these fixtures but failed non-regression:
 174 endpoint violations affected all 60 box-error pairs. The 60 control pairs
 were unchanged across all 37 endpoints. The candidate is not accepted; the
 development-only numerical summary is inconclusive by design. Both splits are
-now retained, but independent combined interpretation is still required.
+now retained and the combined interpretation is recorded below.
 Independent saved-record arithmetic checked all file hashes, ledger coverage,
 8,880 endpoint values, 4,440 differences, 1,332 descriptive endpoint groups
 and exact rational margins. This does not independently establish raw input
@@ -77,15 +77,23 @@ Saved scorer endpoints show 206 safety violations in all 60 box-error pairs,
 despite zero candidate ID switches; all 60 control/perspective-only pairs remain
 identical across 37 endpoints. This inventory is not independent endpoint
 arithmetic or a combined verdict. The opening is consumed and the candidate
-remains not accepted. **Next: milestone 8**, separate independent arithmetic
-and combined-study audit/reporting, not tuning, another run or a C++ port.
-All **1,573 non-slow tests pass**, including 56 freeze/input/evidence tests and
-39 new execution-gate/analytic-fixture tests;
+remains not accepted. **Milestone 8 is now complete:** the separate
+[combined audit and final findings](BOX_GATE_FINDINGS.md) check all 730 raw files,
+960 ledger entries, 17,760 endpoint values, 8,880 contrasts and 2,664 descriptive
+endpoint groups without a new tracker run. The unchanged development arithmetic
+helpers are reused independently of the scorer, not reimplemented twice;
+saved input manifests and canonical correspondence remain trusted primitives.
+Separate exact rational decision checks confirm **failure**: 380 safety violations
+across 120 pairs, despite the ID-switch benefit. Original indices, auditor,
+freeze/opening and raw split summaries remain unchanged. No defaults/C++ adoption.
+All **1,620 non-slow tests pass**, including 47 new saved-audit/table/forgery tests;
 Ruff and the strict documentation build pass.
 Real-data transfer and product validation remain incomplete.
 The [two-project progress overview](PROGRESS_OVERVIEW.md) separates completed
-foundations, seven completed experimental milestone groups, one
-remaining group and the later real-data/product/C++ adoption gates.
+foundations, all eight completed groups of this experiment and the later
+real-data/product/C++ adoption gates. Next is development-only mechanism diagnosis
+before selecting/registering another intervention, not rescue tuning on the
+consumed held-out set.
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective
 anonymous re-entry probe can export its complete fixed-grid synthetic curves
