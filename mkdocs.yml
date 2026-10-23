@@ -80,6 +80,7 @@ nav:
       - Release to PyPI: RELEASE.md
       - Deploy the site: DEPLOY.md
   - Roadmap:
+      - Two-project progress overview: PROGRESS_OVERVIEW.md
       - Status checklist: STATUS.md
       - RQ5 re-entry protocol: IDENTITY_CONTINUITY_PROTOCOL.md
       - RQ5 synthetic stress result: IDENTITY_CONTINUITY_SYNTHETIC.md
@@ -102,6 +103,7 @@ nav:
       - Next research — box-gate ablation protocol: BOX_GATE_ABLATION_PROTOCOL.md
       - Box-gate paired input milestone: BOX_GATE_INPUTS.md
       - Box-gate reference scoring milestone: BOX_GATE_SCORING.md
+      - Box-gate paired replay milestone: BOX_GATE_REPLAY.md
       - Release-readiness audit: RELEASE_READINESS.md
       - Python/C++ runtime contract: CROSS_RUNTIME_CONTRACT.md
       - Horizons: HORIZONS.md

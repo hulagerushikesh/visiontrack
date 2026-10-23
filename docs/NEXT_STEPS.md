@@ -4,6 +4,9 @@ VisionTrack is the NumPy reference, research platform, and learning product.
 Work here must protect readability, reproducibility, and the ability to explain
 why a tracking change helps or hurts.
 
+For a short two-project snapshot of finished work, the current experiment's
+eight milestone groups and remaining gates, see [Progress overview](PROGRESS_OVERVIEW.md).
+
 ## Active focus — H3.2 learning product
 
 - [x] Create one public learning front door with three audience paths.
@@ -349,7 +352,11 @@ replace RQ5 with an unregistered traffic claim.
       all 37 inherited endpoints, input regeneration, canonical match history,
       missing-value handling and hand-worked crossing/count/ID-switch fixtures.
       No new tracker comparisons or held-out inputs/outcomes in these tests.
-- [ ] Implement and validate the separate ablation replay/report harness,
+- [x] Implement/test the [development replay adapter](BOX_GATE_REPLAY.md) using
+      doubles: isolated one-switch configurations, actual pre-update detector
+      receipts, reset/fresh checks, scorer lineage and drift failures. Actual
+      new tracker comparisons remain unmeasured; no new held-out opening.
+- [ ] Implement and validate the separate ablation report/export/decision harness,
       commit it before development comparisons, then freeze the new held-out
       gate before its first opening. Preserve no-effect/failure outcomes and
       all registered per-case non-regression gates, not just an average gain.
