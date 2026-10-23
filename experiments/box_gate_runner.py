@@ -130,6 +130,15 @@ def run_development(*, scenario: str, seed: int, condition: str) -> dict:
     No acceptance verdict: a single case cannot satisfy the registered study.
     The later grid exporter must enforce a committed clean complete harness.
     """
+    return _run_development(scenario=scenario, seed=seed, condition=condition)
+
+
+def _run_development(*, scenario: str, seed: int, condition: str, variant_sink=None) -> dict:
+    """Exporter hook preserves each finished variant before attempting the next.
+
+    Sink receives immutable canonical bytes, never mutable tracker/scorer state.
+    Still development-only; this is not a generic split or held-out bypass.
+    """
     scene = generate_inputs(
         split="development", scenario=scenario, seed=seed, condition=condition,
     )
@@ -176,6 +185,8 @@ def run_development(*, scenario: str, seed: int, condition: str) -> dict:
             },
             "scoring": scored,
         })
+        if variant_sink is not None:
+            variant_sink(variant["id"], _json_bytes(variants[-1]))
     _check_import_origins()
     if (
         _verify_tree(ROOT, registration["baseline_revision"]) != baseline

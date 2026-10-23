@@ -104,6 +104,7 @@ nav:
       - Box-gate paired input milestone: BOX_GATE_INPUTS.md
       - Box-gate reference scoring milestone: BOX_GATE_SCORING.md
       - Box-gate paired replay milestone: BOX_GATE_REPLAY.md
+      - Box-gate development reporting and numerical rules: BOX_GATE_REPORT.md
       - Release-readiness audit: RELEASE_READINESS.md
       - Python/C++ runtime contract: CROSS_RUNTIME_CONTRACT.md
       - Horizons: HORIZONS.md

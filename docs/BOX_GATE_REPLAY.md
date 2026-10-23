@@ -14,8 +14,11 @@ The input generator supplies the same imperfect rectangles to two versions:
 
 `experiments/box_gate_runner.py` provides one development-pair function,
 `run_development(scenario=..., seed=..., condition=...)`. It has no arbitrary
-configuration, variant or split override, no CLI and no file writes. A later
-full-grid exporter must enforce the committed clean harness before comparisons.
+configuration, variant or split override, no CLI and no file writes. The
+[development exporter](BOX_GATE_REPORT.md) enforces a committed clean harness
+before comparisons. A private development-only sink emits immutable bytes for
+each finished variant, so the exporter can preserve a baseline before attempting
+the candidate; it does not expose mutable tracker/scorer state.
 
 For each version the adapter performs three passes in registered order:
 
@@ -75,9 +78,10 @@ artifact, registered acceptance margin or C++ behavior changes here.
 
 ## Next
 
-Build the complete paired-grid exporter and decision evaluator, with hand-worked
-coverage/null/regression/no-effect/margin tests. Commit that whole harness before
-running the 120 development pairs (240 variant runs, 720 passes). After retaining
+The [paired-grid exporter and numerical rules](BOX_GATE_REPORT.md) are now
+implemented/tested with hand-worked tables and explicit doubles. Next, run and
+independently audit the 120 development pairs from the committed harness
+(240 variant runs, 720 passes). After retaining
 development results without tuning, freeze a separate new held-out gate and open
 it once. Preserve failure and no-effect outcomes as faithfully as benefits.
 

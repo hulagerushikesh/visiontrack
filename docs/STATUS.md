@@ -29,7 +29,7 @@ without failures or selective reruns. The [combined scoped findings](TRAFFIC_REL
 retain the primary perspective-only negative, severe box-error crossing failures
 and mixed tracking interactions. Both bundles' hashes, complete ledgers and all
 37 endpoint/contrast summaries were independently checked from saved records.
-All 1,373 non-slow tests pass; the package and parity fixtures remain unchanged.
+All 1,451 non-slow tests pass; the package and parity fixtures remain unchanged.
 A separate [one-switch box-gate ablation](BOX_GATE_ABLATION_PROTOCOL.md) now
 registers the comparator, fresh scenario/seed sets, practical ID-switch margins
 and per-case tracking/count non-regression gates before new outcomes. Its
@@ -43,13 +43,18 @@ count-window, missing-value and input-integrity tests. It executes no tracker;
 supplied-row scoring does not establish either variant's performance.
 The [paired replay adapter](BOX_GATE_REPLAY.md) is implemented with detector-only
 payload receipts, isolated one-switch configs and reset/fresh checks. Its tests
-use doubles, not actual new tracker comparisons. Next is the validated ablation
-report/export/decision harness and
-development grid, followed by a new held-out harness/input freeze; not tuning
+use doubles, not actual new tracker comparisons. The
+[development export and numerical-rule harness](BOX_GATE_REPORT.md) now checks
+full coverage, source/input/output lineage, independent re-scoring consistency,
+all 37 endpoints, exact margins and every per-case regression. It retains
+finished variants when a later attempt fails. Hand-worked tables/doubles test
+all four outcomes; no new actual tracker results have been generated.
+Next is the committed development grid and saved-record audit, followed by a
+new held-out harness/input freeze; not tuning
 on the opened v1 set or a C++ port.
 Real-data transfer and product validation remain incomplete.
 The [two-project progress overview](PROGRESS_OVERVIEW.md) separates completed
-foundations, four implemented/current experimental milestone groups, four
+foundations, five implemented/current experimental milestone groups, three
 remaining groups and the later real-data/product/C++ adoption gates.
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective
