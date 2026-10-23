@@ -100,9 +100,18 @@ correct localization or counts. A retained solo crossing is about 15 frames earl
 a shared separated-case extra crossing precedes the first imposed shape pulse.
 Internal association causes remain unproven without trace data. All **1,650
 non-slow tests pass**, including 30 new diagnosis tests; Ruff and strict docs pass.
-Next: specify/test development-only tracing with exact saved-output parity before
-any diagnostic replay, then choose/register a new intervention with fresh
-validation, not rescue tuning on the consumed held-out set.
+The [internal tracing preparation](BOX_GATE_TRACE.md) now specifies and tests an
+opt-in in-memory observer outside production. It captures actual association
+matrices, forbidden masks, solver proposals, accepted matches and pre/post state,
+without recalculating costs or adding Kalman updates. Authored fixtures check
+exact public outputs and final state, budgets and profiler cleanup; **no saved
+study trace or held-out replay has run**. All **1,695 non-slow tests pass**,
+including 45 tracing tests; Ruff and the strict documentation build pass.
+Next: build/test and commit the development-only provenance/replay wrapper,
+then require complete exact saved-output parity before exploratory interpretation.
+Observer records alone retain provenance/interpretation/validation flags false.
+Any later intervention needs fresh validation, not rescue tuning on the consumed
+held-out set. Defaults and C++ remain unchanged.
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective
 anonymous re-entry probe can export its complete fixed-grid synthetic curves
