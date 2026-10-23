@@ -113,15 +113,18 @@ C++ adoption.
   noisy observations, tracker runs or comparative research outcomes.
 - [x] Implement/test the [isolated state machine](CROSSING_BAND_COUNTER.md) and
   emission-time records: 64 authored tests, including genuine misses and delay.
-- [ ] Review structural safety costs before investing in a complete study;
-  reject at unit feasibility if appropriate without claiming a study verdict.
-- [ ] Build/commit the full input/replay/report harness, then run development.
-- [ ] Freeze/open fresh held-out evidence once; independently audit all results.
+- [x] Review structural safety costs: **stop at engineering feasibility** because
+  authored ideal paths expose genuine misses and excessive reporting delay.
+  This is not an executed development/held-out verdict.
+- Not undertaken after that stop: full input/replay/report harness, development
+  grid, held-out execution and result audit. These are not completed study steps
+  or the active backlog; definitions, locks and negative examples are retained.
 
 The candidate's 0.25-unit toy band may reject jitter but also miss real short
 passages or delay counting. Per-case misses/extras and both event/emission-time
 window errors must not worsen; every emitted event must confirm within 15
 frames. No acceptance or real-world transfer is established by this design.
+See the [recorded feasibility decision](CROSSING_BAND_COUNTER.md#feasibility-decision-2026-10-23).
 
 ### Research and real data
 
@@ -183,13 +186,17 @@ no GPU path or weakened parity is justified by the current plan.
 
 ## Immediate next action
 
-The [isolated counter](CROSSING_BAND_COUNTER.md) and authored edge-case tests are
-complete. Review the structural short/start/end passage misses and reporting
-delay before full-grid investment. If the original screen remains useful to
-quantify its limits, build the guarded replay/report harness before any complete
-study grid; do not tune away unfavorable truth or rules. Unit feasibility is not
-a development/held-out verdict. The box-gate study and its diagnosis are finished;
-neither opened set may become untouched validation again. No footage or owner
-assistance is needed for this engineering step. Real recording, usability
-walkthrough and discovery remain separate pending work. C++ stays in maintenance
-until a useful behavior earns an explicitly accepted parity handoff.
+The counter's engineering feasibility review is complete: **stop the fixed band
+candidate**, retain its examples/locks and do not invest in its full grid now.
+This is not a development/held-out verdict. The box-gate study and diagnosis are
+finished; neither opened set may become untouched validation again.
+
+Follow the [bounded showcase plan](SHOWCASE_MILESTONE.md): first prepare a short,
+understandable existing-report demonstration, then one permitted real-clip
+diagnostic case study. Its proposed first audience is fixed-camera CV engineers
+and applied researchers, not a validated market. Technical case-study effort is
+estimated at 4–5 focused working days **after usable permitted data/labels are
+ready**, with external permission/review delays separate. The alpha can already
+be shown with synthetic evidence labelled honestly; real-world improvement is
+not yet proved. Real recording, usability and discovery remain pending. C++ stays
+in maintenance until useful behavior earns an explicitly accepted parity handoff.

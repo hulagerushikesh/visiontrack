@@ -100,3 +100,24 @@ fresh/reset/independent passes, full coverage and exclusive failure-preserving
 execution. No registered noisy inputs or tracker outcomes have been generated
 for this counter checkpoint; no held-out set has been opened. C++ adoption is
 not authorized by implementing or testing an experiment.
+
+## Feasibility decision — 2026-10-23
+
+**Stop this candidate at the engineering feasibility gate; do not build its full
+grid harness as the next task.** The authored ideal-path examples already show
+structural misses of genuine shallow/start/end passages and an 18-frame reporting
+delay against the intended unchanged crossing target and 15-frame bound. The
+same observed recrossing can represent noise or genuine movement; this rule has
+no additional information to distinguish them. This does not assert that every
+registered noisy case fails, or that the registered grid was executed.
+
+The fixed rule, original registration/locks and tests remain unchanged and
+retained. There are no new noisy inputs, development/held-out results, acceptance
+decision or production/C++ changes. Full-grid execution/audit is **not undertaken**,
+not completed and not required for this engineering stop. Quantifying this
+negative design could be a separate explicitly justified future task, but we will
+not silently tune it, redefine truth or turn the same set into fresh validation.
+
+Next prioritize an understandable existing-report demonstration and one permitted
+real-clip diagnostic case study, as scoped in the [showcase milestone](SHOWCASE_MILESTONE.md).
+The purpose is useful evidence and workflow feedback, not another unvalidated fix.
