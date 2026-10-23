@@ -391,9 +391,13 @@ replace RQ5 with an unregistered traffic claim.
       Final registered classification **failure**: 174 development + 206 held-out
       safety violations across 120 affected pairs. Keep defaults/C++ unchanged.
       The pinned development auditor and original indices are not rewritten.
-- [ ] Inspect saved development failures to frame the next mechanism question
-      before choosing another intervention. Separate ID continuity, localization
-      and time-window counts; no cause claim from aggregate improvements alone.
+- [x] Inspect all 120 saved development pairs in a read-only
+      [symptom diagnosis](BOX_GATE_DIAGNOSIS.md). Separate missing public output,
+      below-threshold overlap, ID continuity and crossing timing; retain all
+      conditions and common-frame localization without any new tracker run.
+      Internal gate causes remain unproven because those traces were not saved.
+- [ ] Specify/test opt-in development-only association/state tracing with exact
+      saved-output parity before any diagnostic replay or next intervention.
 - [ ] Register any new comparative study with new held-out evidence; do not tune
       a candidate and relabel either opened set as untouched validation.
 - [ ] Validate any transfer claim on representative rights-reviewed evidence.

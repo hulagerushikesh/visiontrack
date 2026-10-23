@@ -109,6 +109,7 @@ nav:
       - Box-gate held-out freeze and execution safeguards: BOX_GATE_HOLDOUT.md
       - Box-gate held-out execution record: BOX_GATE_HELDOUT_RESULTS.md
       - Box-gate final combined findings: BOX_GATE_FINDINGS.md
+      - Box-gate development symptom diagnosis: BOX_GATE_DIAGNOSIS.md
       - Release-readiness audit: RELEASE_READINESS.md
       - Python/C++ runtime contract: CROSS_RUNTIME_CONTRACT.md
       - Horizons: HORIZONS.md

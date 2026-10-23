@@ -142,9 +142,10 @@ the compact indices alone cannot recreate the raw evidence.
 
 1. Keep the existing tracker/defaults and C++ parity boundary. Do not release or
    port the rejected candidate as an improvement.
-2. Inspect the saved **development** failures to frame a narrower mechanism
-   question: distinguish match rejection, box localization and count-window
-   timing before choosing another intervention. This is diagnosis, not a claim
+2. The [saved-development symptom diagnosis](BOX_GATE_DIAGNOSIS.md) now
+   distinguishes missing public output, box overlap and count-window timing
+   across all 120 pairs. Specify/test development-only internal tracing next,
+   with exact saved-output parity before replay. This is diagnosis, not a claim
    that disabling only shape gating, using ground-plane motion or adding
    appearance is already the answer.
 3. Before any new comparative experiment, register its comparator, metrics,
