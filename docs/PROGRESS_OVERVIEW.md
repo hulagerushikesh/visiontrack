@@ -151,8 +151,12 @@ no GPU path or weakened parity is justified by the current plan.
 ## Immediate next action
 
 The experiment is closed with a negative result, not an accepted tracker change.
-Next, inspect saved **development** failures to separate match rejection, box
-localization and crossing-window timing before choosing a narrower intervention.
+The [saved-development symptom diagnosis](BOX_GATE_DIAGNOSIS.md) now covers all
+120 pairs without replay. It distinguishes missing public output from boxes
+below the evaluator's overlap threshold and preserves crossing timing and
+common-frame localization. Internal match-rejection causes are not established.
+Next, specify/test opt-in development-only association and state tracing with
+exact saved-output parity before any diagnostic replay or narrower intervention.
 Any new comparative study needs a new registration and genuinely fresh held-out
 cases; neither opened set may be relabeled as untouched validation. This diagnosis
 needs no new footage or owner assistance. Real recording, usability walkthrough

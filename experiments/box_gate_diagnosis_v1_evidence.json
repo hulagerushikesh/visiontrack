@@ -1,0 +1,57 @@
+{
+  "format": "visiontrack.box-gate-development-diagnosis-evidence/v1",
+  "recorded_on": "2026-10-23",
+  "scope": "post-study exploratory saved-development symptoms, not new validation or an intervention trial",
+  "development_index": "experiments/box_gate_development_v1_evidence.json",
+  "development_index_sha256": "1a22391990785295a0d4fcefae29ee8ca63312380c5b754e5608b1cd66b41627",
+  "original_indices_revision": "8df9cff159c2f2b37c965721a03c280f2e1fe2d8",
+  "development_source_revision": "817e6f7c9d802f4a762c6ca00ba26035a9eab6ca",
+  "development_manifest_sha256": "307fe7ad651b0e81befa4715f7b7d7b465007f2f4fb03a28e6af6e24d090570a",
+  "implementation_sha256": {
+    "experiments/box_gate_diagnosis.py": "776bed28d2efaa28569c0f78f602447c4d2ebde84b38f850f8455e0106f46c66",
+    "tests/test_box_gate_diagnosis.py": "2a86fbd80f21c5373f8bcea0374599187da379dbf1e00fde1ebab9ffc11a1697",
+    "experiments/box_gate_combined_audit.py": "6cf06dee4906dfa78dd9c790451798ac67b4f184ef3fe8cdec7600c7f1648e9b",
+    "experiments/box_gate_audit.py": "8e8153fa5ee5eae643c9c1e2a789c5b1135fb010d7f23c83b47200b0f0023f4f"
+  },
+  "output": {
+    "path": "/Users/rushikeshhulage/Documents/Quant/visiontrack-walkthrough/box-gate-dev-diagnosis-S4oXrt/diagnosis.json",
+    "sha256": "140095f98072eb62fa1aa0aeb08282217256f0b439a3ff85c6b4e0303bd54871",
+    "bytes": 2440863
+  },
+  "paired_cases": 120,
+  "variant_records": 240,
+  "new_tracker_runs": 0,
+  "heldout_files_read": false,
+  "box_error_conditions": {
+    "scope": "60 development pairs; totals over reference object-frames, not independent camera sites",
+    "reference_object_frames_per_variant": 30000,
+    "baseline": {
+      "misses": 712,
+      "no_public_output": 600,
+      "all_public_boxes_below_iou": 112,
+      "eligible_box_unmatched": 0,
+      "false_positive_rows": 72,
+      "id_switches": 380
+    },
+    "gate_off": {
+      "misses": 957,
+      "no_public_output": 200,
+      "all_public_boxes_below_iou": 757,
+      "eligible_box_unmatched": 0,
+      "false_positive_rows": 757,
+      "id_switches": 0
+    }
+  },
+  "internal_gate_cause_established": false,
+  "candidate_accepted": false,
+  "production_change_authorized": false,
+  "cpp_port_authorized": false,
+  "limitations": [
+    "Post-study exploratory analysis, not a new preregistered experiment or validation set.",
+    "Saved labels, canonical correspondence, crossing events and receipts remain trusted primitives.",
+    "No public output does not identify the internal association/lifecycle cause.",
+    "Below-IoU output does not establish object identity or detector hallucination.",
+    "Common-frame localization means exclude misses and are not unconditional accuracy.",
+    "No new tracker, generator, scorer or held-out evidence reads; original study failure is unchanged."
+  ]
+}

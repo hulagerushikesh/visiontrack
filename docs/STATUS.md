@@ -91,9 +91,18 @@ Ruff and the strict documentation build pass.
 Real-data transfer and product validation remain incomplete.
 The [two-project progress overview](PROGRESS_OVERVIEW.md) separates completed
 foundations, all eight completed groups of this experiment and the later
-real-data/product/C++ adoption gates. Next is development-only mechanism diagnosis
-before selecting/registering another intervention, not rescue tuning on the
-consumed held-out set.
+real-data/product/C++ adoption gates. The subsequent
+[development-only symptom diagnosis](BOX_GATE_DIAGNOSIS.md) covers all 120 saved
+pairs with no new tracker runs or held-out reads. Across the 60 error pairs,
+misses on frames with no public output fall from 600 to 200, but below-IoU misses
+increase from 112 to 757 (total misses 712 to 957). Stable IDs do not establish
+correct localization or counts. A retained solo crossing is about 15 frames early;
+a shared separated-case extra crossing precedes the first imposed shape pulse.
+Internal association causes remain unproven without trace data. All **1,650
+non-slow tests pass**, including 30 new diagnosis tests; Ruff and strict docs pass.
+Next: specify/test development-only tracing with exact saved-output parity before
+any diagnostic replay, then choose/register a new intervention with fresh
+validation, not rescue tuning on the consumed held-out set.
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective
 anonymous re-entry probe can export its complete fixed-grid synthetic curves
