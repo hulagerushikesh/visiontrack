@@ -214,7 +214,13 @@ def observe_sequence(tracker, detection_frames, *, frames, expected_output):
                     or not 0 <= det.score <= 1 or type(det.class_id) is not int):
                 raise ValueError("finite feature-free detections required")
     events, output = [], []
+    handed = hashlib.sha256()
     for index, detections in enumerate(detection_frames):
+        # Fingerprint the actual payload immediately BEFORE every update,
+        # including frames not selected for detailed internal snapshots.
+        handed.update(_bytes(dict(frame=index, detections=[dict(
+            xyxy=_array(d.xyxy), score=d.score, class_id=d.class_id, feature=None,
+        ) for d in detections])) + b"\n")
         if len(tracker.tracks) > MAX_OBJECTS:
             raise ValueError("track budget exceeded")
         if index not in frames:
@@ -247,6 +253,7 @@ def observe_sequence(tracker, detection_frames, *, frames, expected_output):
         public_output=output, events=events,
         expected_output_sha256=hashlib.sha256(expected_bytes).hexdigest(),
         actual_output_sha256=hashlib.sha256(actual_bytes).hexdigest(),
+        detection_payload_sha256=handed.hexdigest(),
         exact_public_output_parity=matches, interpretation_allowed=False,
         provenance_verified=False, validation_evidence=False,
     )

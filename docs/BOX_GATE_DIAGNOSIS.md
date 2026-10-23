@@ -156,9 +156,11 @@ update produces each observed gap, overlap failure and crossing artifact?**
   Require exact public-output parity with the saved development records; stop
   if instrumentation changes the numerical behavior. A trace replay would be
   a newly disclosed diagnostic run, not the old once-only study or fresh validation.
-- [ ] Add and commit the development-only saved-evidence/provenance wrapper
+- [x] Add and commit the [saved-evidence/provenance wrapper](BOX_GATE_TRACE_REPLAY.md)
   before the diagnostic replay. Observer fixture parity is not yet parity with
   authenticated saved study outputs; no actual study trace has been run.
+- [ ] Execute the committed development-only diagnostic and require complete
+  exact saved-output parity before interpreting its internal trace evidence.
 - [ ] Use that evidence to choose between narrower association, state-estimation
   or counting hypotheses. Position-only gating, a different state model,
   ground-plane motion and appearance are possibilities, **not accepted fixes**.
