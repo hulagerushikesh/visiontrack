@@ -147,14 +147,18 @@ required. The compact index alone cannot reproduce the full report.
 The narrower question is: **which association decision and subsequent box-state
 update produces each observed gap, overlap failure and crossing artifact?**
 
-- [ ] Specify a development-only diagnostic trace before running it: candidate
+- [x] Specify a development-only diagnostic trace before running it: candidate
   IoU, full-state Mahalanobis distance/threshold, stage, assignment/rejection,
   track lifecycle and pre/post-update box state around the fixed pulse boundaries,
   startup and saved crossing brackets (including the shared pre-pulse artifact).
-- [ ] Build/test opt-in instrumentation outside the production behavior path.
+- [x] Build/test opt-in instrumentation outside the production behavior path:
+  [observer contract and authored implementation tests](BOX_GATE_TRACE.md).
   Require exact public-output parity with the saved development records; stop
   if instrumentation changes the numerical behavior. A trace replay would be
   a newly disclosed diagnostic run, not the old once-only study or fresh validation.
+- [ ] Add and commit the development-only saved-evidence/provenance wrapper
+  before the diagnostic replay. Observer fixture parity is not yet parity with
+  authenticated saved study outputs; no actual study trace has been run.
 - [ ] Use that evidence to choose between narrower association, state-estimation
   or counting hypotheses. Position-only gating, a different state model,
   ground-plane motion and appearance are possibilities, **not accepted fixes**.

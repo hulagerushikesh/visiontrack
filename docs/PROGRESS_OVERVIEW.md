@@ -91,6 +91,13 @@ as untouched or reused as the new experiment's held-out evidence.
 
 ## What remains beyond this experiment
 
+The post-study [saved-development diagnosis](BOX_GATE_DIAGNOSIS.md) is complete
+without tracker replay. The next [internal tracing preparation](BOX_GATE_TRACE.md)
+now has a bounded opt-in observer and authored parity/state/cleanup tests.
+It has not yet traced the saved study. Next build and commit the development-only
+provenance/replay wrapper, then run a disclosed exploratory trace only if complete
+saved-output parity passes. No held-out reopening, default change or C++ adoption.
+
 ### Research and real data
 
 - [ ] Complete a small permitted recording rehearsal when the owner is ready.

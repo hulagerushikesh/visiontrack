@@ -396,8 +396,13 @@ replace RQ5 with an unregistered traffic claim.
       below-threshold overlap, ID continuity and crossing timing; retain all
       conditions and common-frame localization without any new tracker run.
       Internal gate causes remain unproven because those traces were not saved.
-- [ ] Specify/test opt-in development-only association/state tracing with exact
-      saved-output parity before any diagnostic replay or next intervention.
+- [x] Specify/test [opt-in association/state tracing](BOX_GATE_TRACE.md) outside
+      production, capturing actual masks/costs/assignments and state transitions.
+      Authored fixtures verify exact outputs/state, budgets and cleanup; they
+      are not a replay of saved development evidence or a new validation study.
+- [ ] Build/test and commit the development-only provenance/replay wrapper,
+      requiring complete exact saved-output parity and retaining failure receipts
+      before any exploratory study trace or next intervention.
 - [ ] Register any new comparative study with new held-out evidence; do not tune
       a candidate and relabel either opened set as untouched validation.
 - [ ] Validate any transfer claim on representative rights-reviewed evidence.
