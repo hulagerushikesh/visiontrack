@@ -192,8 +192,15 @@ full-sequence runs with byte-identical raw/scored/failure/summary files: FN 21,8
 FP 49, IDSW 43, IDF1 61.32%, HOTA 52.55%. First switch: reference 85, track
 19 → 31 at source frame 54, with annotation-only adjacent-input/output inspection.
 All 1,900 non-slow tests pass, with one slow test deselected. No visual cause or
-new improvement is established. Next separate raw-detection coverage from
-tracking/output loss before tuning. Independent pixel/reference review, a new
+new improvement is established. The [saved-box coverage analysis](REAL_DATA_COVERAGE.md)
+now partitions all 21,825 misses: 19,387 without raw geometric support at IoU 0.5,
+149 with only below-low-score support, 270 whose eligible neighbours are removed
+by ignore handling, and 2,019 with retained eligible neighbours but no scored
+match. Unique assignment and output-geometry checks prevent interpreting these
+as causal or automatically recoverable losses. This executes no tracker and
+retains the original baseline. All 1,923 non-slow tests pass, with one slow test
+deselected. Next trace actual unchanged association/lifecycle decisions for the
+same first switch before proposing an intervention. Independent pixel/reference review, a new
 comparison, transfer claims, outreach and C++ adoption remain gated.
 
 The Reliability Lab now explains failures, optional

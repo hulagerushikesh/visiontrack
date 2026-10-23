@@ -47,8 +47,12 @@ teaching, not a prerequisite for this research work.
 | Session 5 — decide scope | Summarize the baseline diagnosis; justify/freeze one comparison before outcomes, or stop if unsupported | Review the plain-language summary | A defensible next research decision, not a promised winner or demo deadline |
 
 Sessions 1–3 are complete **at the annotation-only level**, as is the earlier
-internal demo preparation. The next bounded technical task is to separate raw
-detection coverage from tracking/output loss on this fixed sequence before tuning.
+internal demo preparation. The [saved-box coverage diagnosis](REAL_DATA_COVERAGE.md)
+now partitions all 21,825 misses: 19,387 without raw IoU ≥0.5 support, 149 with
+only sub-threshold support, 270 losing eligible neighbours to ignore handling,
+and 2,019 with eligible retained neighbours but no canonical match. These are
+descriptive, not causal or recoverable-error counts. Next inspect actual unchanged
+association/lifecycle evidence for the same first switch before tuning.
 Complete visual case admission, owner walkthrough and reviewer participation
 remain pending. These sessions need not consume five full
 engineering days; permission/label availability may dominate calendar time.
