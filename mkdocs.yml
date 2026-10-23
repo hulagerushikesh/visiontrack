@@ -118,6 +118,7 @@ nav:
       - Counting-band isolated counter and unit limits: CROSSING_BAND_COUNTER.md
       - Next delivery goal — one understandable case study: SHOWCASE_MILESTONE.md
       - Daily checkpoints and weekly goal: WEEKLY_DELIVERY_PLAN.md
+      - Real-data case — annotation intake: REAL_DATA_CASE_INTAKE.md
       - Release-readiness audit: RELEASE_READINESS.md
       - Python/C++ runtime contract: CROSS_RUNTIME_CONTRACT.md
       - Horizons: HORIZONS.md

@@ -166,8 +166,9 @@ C++ changes. At this checkpoint **1,866 non-slow tests pass**; Ruff and strict
 documentation build pass. The registered artifacts/locks remain unchanged.
 
 The active delivery goal is now [one understandable diagnostic case study](SHOWCASE_MILESTONE.md),
-starting with a short existing-report demo and then a permitted real clip with
-checked labels. The research alpha can be demonstrated now with synthetic
+focused on permitted real-data evidence with checked labels. The prepared demo
+is an optional internal teaching aid, not the next research priority. The
+research alpha can be explained internally with synthetic
 evidence disclosed; real-world improvement and product demand are not established.
 The proposed first audience is fixed-camera CV engineers/applied researchers.
 The conditional technical estimate is 4–5 focused working days after suitable
@@ -179,8 +180,15 @@ byte and passes Python bundle verification and the actual browser report parser.
 The two configurations tie; the counting trade-off is from the separate completed
 box-gate study, not manufactured inside this report. No owner/practitioner
 usability result is inferred. The [daily/weekly plan](WEEKLY_DELIVERY_PLAN.md)
-keeps the next goal at comprehension plus one explicit real-clip admission
-decision. Real-data claims, outreach and C++ adoption remain gated.
+now prioritizes substantive evidence over demonstration readiness. The
+[first real-data intake](REAL_DATA_CASE_INTAKE.md) verifies all nine cached
+MOT17-04-FRCNN detection/GT arrays against the pinned official annotation ZIP:
+1,050 frames, 28,406 detections, 47,557 scored pedestrian boxes / 83 reference IDs,
+and 60,448 non-scoring rows retained for proper ignore handling. This admits local
+annotation-only diagnosis, **not** independent visual review or a finished case
+study. No new tracker outcomes or imagery were read in this step. Next reproduce
+the unchanged baseline and inspect the first chronological scored ID switch if
+present. A new comparison, transfer claims, outreach and C++ adoption remain gated.
 
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective

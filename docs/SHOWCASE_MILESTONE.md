@@ -3,6 +3,11 @@
 Planning checkpoint: **2026-10-23**. This is a bounded delivery plan, not a
 new accuracy claim, validated customer segment, or promised completion date.
 
+**Priority clarification:** the owner wants confidence in the research before a
+public demonstration, not a rushed presentation. The prepared demo is an internal
+teaching aid, not a mandatory next step. Substantive real-data evidence is the
+critical path. See the [annotation-only intake and remaining gates](REAL_DATA_CASE_INTAKE.md).
+
 ## What we can show now
 
 VisionTrack is a research alpha: a tracker, a local-first Reliability Lab and
@@ -98,9 +103,9 @@ showing the research alpha; one response does not establish demand either.
 
 ## Owner help and boundaries
 
-The owner need not learn every metric or run terminal commands to help. First
-complete the short [Lab walkthrough](LAB_WALKTHROUGH.md) and say which explanation
-is unclear. For a private recording route, start with the empty-room setup check;
+The owner need not learn every metric or run terminal commands to help. The short
+[Lab walkthrough](LAB_WALKTHROUGH.md) is optional teaching, not a blocker for
+technical research. For a private recording route, start with the empty-room setup check;
 agree permission, adult consent, storage and retention **before** filming people.
 We can guide recording one step at a time. Existing-dataset use is an alternative
 only after rights and task-label suitability are checked.

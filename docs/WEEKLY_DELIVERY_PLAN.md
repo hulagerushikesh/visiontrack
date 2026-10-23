@@ -14,25 +14,40 @@ The first audience hypothesis remains fixed-camera CV engineers and applied
 researchers working on counts/trajectories. We must test usefulness with them;
 we have not selected a validated commercial vertical or promised higher accuracy.
 
-## Week 1: make it understandable and settle the data route
+## Priority clarification: evidence before demonstration
 
-Planned weekly target: a usable five-minute synthetic demonstration, one owner
-comprehension check, and a written **admit / hold / reject** decision for one
-real-clip route. The admission decision may be “hold”; it must name the missing
-permission, input or label, rather than inventing readiness.
+The owner's clarification on 2026-10-23 supersedes a demo-first reading of this
+plan. Do not wait for the owner walkthrough to advance technical research, or
+create presentation work to fill time. The demo is an optional internal teaching
+aid, not public readiness. Recommend a public demonstration only when the problem,
+evidence and limitations are sufficiently clear and the owner agrees.
+
+The [first real-data intake](REAL_DATA_CASE_INTAKE.md) has now verified the
+existing MOT17-04-FRCNN cache against the pinned official annotations. This
+admits **annotation-only diagnosis**, not a completed visual/checked-label
+case study. Next reproduce the unchanged baseline and inspect one pre-defined
+chronological failure; independent pixel review remains an explicit later gate.
+
+## Weekly aim: establish the real-data baseline and its limits
+
+Primary weekly target: a source-verified real-data input, a reproducible unchanged
+baseline and one bounded, explainable diagnostic event (or an explicit absence).
+Do not claim a causal visual explanation without pixels/review, or an improvement
+without a prospectively fixed comparison. The owner walkthrough remains optional
+teaching, not a prerequisite for this research work.
 
 | Session | Our delivery | Owner help | Done means |
 | --- | --- | --- | --- |
-| Day 1 — prepare | Generate and verify the existing report; prepare the [five-minute demonstration](SHOWCASE_DEMO.md) | Optional: read the short explanation | Report opens, imports and reproduces; synthetic/tie/limitations are explicit |
-| Day 2 — understand | Walk through one miss and the separate completed study's counting trade-off; address observed confusion only | 5–10 minutes: explain what you understood and where you got stuck | Actual feedback recorded, not an assumed usability pass |
-| Day 3 — choose | Check one candidate clip route for rights, camera/task fit, available detections and independently reviewable labels | Confirm access/permission if it is a private source; no filming people before consent | One explicit admission decision and a named next dependency |
-| Day 4 — scope | If admitted, freeze the task, frame range, detector/labels and one justified comparison before comparative results; otherwise document the hold | Confirm the intended task and reviewer availability if needed | Reproducible input/label checks, or a concrete hold; no invented truth or tuned winner |
-| Day 5 — review | Give a one-page outcome: what works, what is missing, what we can safely show and the next decision | Review the outcome in plain language | Checkboxes supported by artifacts/feedback; next week scoped, not silently expanded |
+| Session 1 — intake | Verify the existing cache against official annotation members and define the limited admission | None for the annotation-only route | Done: exact source conversion, task/range and remaining visual/rights gates recorded |
+| Session 2 — baseline | Run and reproduce an unchanged, full-sequence cold-start baseline with complete settings and outputs | None | Two fresh runs agree; proper ignore handling and all relevant metrics retained |
+| Session 3 — diagnose | Inspect the first chronological scored ID switch if present; document adjacent inputs/outputs without claiming a visual cause | Optional questions about the explanation | One bounded evidence record, or a reported absence; no range/parameter hunting |
+| Session 4 — review evidence | Resolve lawful pixel access and independent reference/context review, or record a specific hold | Help only if a permission or reviewer decision is needed | Actual review or explicit missing dependency; metadata correspondence is not visual review |
+| Session 5 — decide scope | Summarize the baseline diagnosis; justify/freeze one comparison before outcomes, or stop if unsupported | Review the plain-language summary | A defensible next research decision, not a promised winner or demo deadline |
 
-Only Day 1's **technical preparation** is complete at this checkpoint. The owner
-walkthrough, data admission and reviewer participation remain pending. These
-sessions need not consume five full engineering days; technical preparation was
-small, and permission/label availability may dominate calendar time.
+Session 1's annotation intake and the earlier internal demo preparation are
+complete. The baseline, complete visual case admission, owner walkthrough and
+reviewer participation remain pending. These sessions need not consume five full
+engineering days; permission/label availability may dominate calendar time.
 
 ## Next big deliverable: one real-clip diagnostic case study
 
@@ -59,8 +74,9 @@ rehearsal is not automatically representative of traffic or a re-entry risk test
 
 Spend at most one focused session assessing one suitable existing-dataset route.
 If rights, task fit or labels fail, record the reason and stop that route. Do not
-download restricted imagery or quietly reinterpret labels. Prepare the demo and
-feedback questions while waiting; do not create another framework just to fill time.
+download restricted imagery or quietly reinterpret labels. A narrower annotation
+diagnostic can proceed only if explicitly suitable; do not silently call it the
+complete real-data goal or create another framework just to fill time.
 Acquiring data, annotating it and independent review are real work, not included
 in the post-readiness technical estimate. Escalate the specific missing choice.
 
