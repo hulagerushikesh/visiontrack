@@ -40,8 +40,8 @@ Question: can disabling only the tracker’s shape-sensitive rejection gate redu
 broken IDs **without worsening** the registered tracking/counting measures?
 It could help, do nothing or harm nearby-object associations.
 
-There are **eight milestone groups** in this summary. Five are implemented and
-tested; three remain. That is a count of milestone groups, **not a percentage of total
+There are **eight milestone groups** in this summary. Six are complete;
+two remain. That is a count of milestone groups, **not a percentage of total
 effort, a probability of success or a whole-project completion percentage**.
 
 - [x] 1. Register the question, single changed setting, fresh scenario/seed
@@ -52,15 +52,20 @@ effort, a probability of success or a whole-project completion percentage**.
   history, missing-value handling and hand-worked mistakes.
 - [x] 4. Implement/test the [paired replay adapter](BOX_GATE_REPLAY.md): isolated
   variants, detector-only handoff and fresh/reset/fresh checks, using test doubles.
-  Actual new tracker outcomes remain unmeasured.
+  Actual development outcomes are now retained in milestone 6 below.
 - [x] 5. Build/test [complete paired exports and decision rules](BOX_GATE_REPORT.md); require exact
   coverage, retain per-case regressions, reject invalid/incomplete evidence,
   preserve nulls and distinguish inconclusive/failure/no-effect/pass.
   The development harness is committed before the development grid. All rule
   and exporter tests use hand-worked tables/doubles, not new tracker outcomes.
-- [ ] 6. Execute and independently audit all **120 development pairs**:
+- [x] 6. Execute and independently audit all **120 development pairs**:
   240 variant runs, each with three passes. Keep every result, configuration,
   input/output digest and failed attempt; do not tune the registered candidate.
+  All pairs completed from `817e6f7`, with no errors or selective retries.
+  [Development findings](BOX_GATE_DEVELOPMENT.md): gate-off removed ID switches
+  but violated safety requirements in all 60 box-error pairs (174 endpoint
+  violations). The candidate is not accepted; the full-study classification
+  remains inconclusive because held-out evidence is missing.
 - [ ] 7. Freeze the complete reviewed harness, environment and new held-out
   input hashes; execute the **120 new held-out pairs once** through a separate
   exclusive gate. Stop on error, retain partial evidence, no selective retries.
@@ -132,7 +137,8 @@ no GPU path or weakened parity is justified by the current plan.
 
 ## Immediate next action
 
-Begin milestone 6: execute and independently audit the 120 development pairs
-from the committed harness, without tuning. It needs no new footage or owner
-assistance. Real recording and discovery can proceed on
+Begin milestone 7: build/test and freeze the separate held-out gate before one
+opening of the new grid, retaining negative outcomes. Do not tune the candidate
+to rescue the failed development safety requirement. It needs no new footage
+or owner assistance. Real recording and discovery can proceed on
 their own schedule without holding up this engineering work.

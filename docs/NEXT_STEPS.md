@@ -360,8 +360,13 @@ replace RQ5 with an unregistered traffic claim.
       with hand-worked tables/doubles: full coverage, lineage/re-scoring, exact
       margins, nulls, all per-case regressions and retained partial variants.
       Commit before development comparisons; no new actual tracker outcomes yet.
-- [ ] Run and independently audit all 120 development pairs from the committed
-      harness without tuning the candidate, margins or case selection.
+- [x] Run and independently audit all 120 development pairs from the committed
+      harness without tuning the candidate, margins or case selection:
+      [development findings](BOX_GATE_DEVELOPMENT.md). All 240 variants / 720
+      passes completed from `817e6f7` without errors or selective retries.
+      Zero gate-off ID switches did not imply acceptance: 174 safety endpoint
+      violations affected all 60 box-error pairs. Candidate not accepted;
+      whole-study classification remains inconclusive without held-out evidence.
 - [ ] Build/freeze the separate new held-out gate before its first opening;
       retain one complete grid or stop with partial evidence, never selective retries.
 - [ ] Independently audit and report combined results, preserving failure,

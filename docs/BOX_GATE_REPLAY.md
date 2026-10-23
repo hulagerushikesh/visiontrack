@@ -71,18 +71,19 @@ Run from the repository root:
 python -m pytest tests/test_box_gate_runner.py
 ```
 
-Actual baseline/candidate numerical behavior, real reset/fresh parity on these
-new cases, usefulness and performance remain to be measured by the committed
-complete experiment. No production tracker, website behavior, old traffic-study
-artifact, registered acceptance margin or C++ behavior changes here.
+At this implementation milestone, actual baseline/candidate numerical behavior
+and real reset/fresh parity remained unmeasured. The later
+[complete development run](BOX_GATE_DEVELOPMENT.md) now retains those measurements
+and all per-case regressions. No production tracker, website behavior, old
+traffic-study artifact, registered acceptance margin or C++ behavior changed.
 
 ## Next
 
 The [paired-grid exporter and numerical rules](BOX_GATE_REPORT.md) are now
-implemented/tested with hand-worked tables and explicit doubles. Next, run and
-independently audit the 120 development pairs from the committed harness
-(240 variant runs, 720 passes). After retaining
-development results without tuning, freeze a separate new held-out gate and open
-it once. Preserve failure and no-effect outcomes as faithfully as benefits.
+implemented/tested with hand-worked tables and explicit doubles. The 120
+development pairs (240 variants, 720 passes) have since completed and been
+audited from saved records, without tuning. The candidate failed development
+non-regression despite zero ID switches. Next, build/freeze a separate new
+held-out gate and open it once. Preserve negative outcomes as faithfully as gains.
 
 See the [two-project progress overview](PROGRESS_OVERVIEW.md) for the wider plan.

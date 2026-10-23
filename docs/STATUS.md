@@ -29,7 +29,7 @@ without failures or selective reruns. The [combined scoped findings](TRAFFIC_REL
 retain the primary perspective-only negative, severe box-error crossing failures
 and mixed tracking interactions. Both bundles' hashes, complete ledgers and all
 37 endpoint/contrast summaries were independently checked from saved records.
-All 1,451 non-slow tests pass; the package and parity fixtures remain unchanged.
+The package and parity fixtures remain unchanged.
 A separate [one-switch box-gate ablation](BOX_GATE_ABLATION_PROTOCOL.md) now
 registers the comparator, fresh scenario/seed sets, practical ID-switch margins
 and per-case tracking/count non-regression gates before new outcomes. Its
@@ -48,13 +48,23 @@ use doubles, not actual new tracker comparisons. The
 full coverage, source/input/output lineage, independent re-scoring consistency,
 all 37 endpoints, exact margins and every per-case regression. It retains
 finished variants when a later attempt fails. Hand-worked tables/doubles test
-all four outcomes; no new actual tracker results have been generated.
-Next is the committed development grid and saved-record audit, followed by a
-new held-out harness/input freeze; not tuning
-on the opened v1 set or a C++ port.
+all four outcomes. The [actual development grid and saved-record audit](BOX_GATE_DEVELOPMENT.md)
+have now completed all 120 pairs / 240 variant runs / 720 passes from clean
+committed harness `817e6f7`, with no errors, skipped cases or selective retries.
+Gate-off removed ID switches in these fixtures but failed non-regression:
+174 endpoint violations affected all 60 box-error pairs. The 60 control pairs
+were unchanged across all 37 endpoints. The candidate is not accepted; the
+whole-study numerical classification remains inconclusive without held-out evidence.
+Independent saved-record arithmetic checked all file hashes, ledger coverage,
+8,880 endpoint values, 4,440 differences, 1,332 descriptive endpoint groups
+and exact rational margins. This does not independently establish raw input
+geometry or canonical matching. Next is the separate new held-out gate and
+harness/input freeze; not tuning on opened outcomes or a C++ port.
+All **1,478 non-slow tests pass**, including 27 new saved-record audit tests;
+Ruff and the strict documentation build pass.
 Real-data transfer and product validation remain incomplete.
 The [two-project progress overview](PROGRESS_OVERVIEW.md) separates completed
-foundations, five implemented/current experimental milestone groups, three
+foundations, six completed/current experimental milestone groups, two
 remaining groups and the later real-data/product/C++ adoption gates.
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective

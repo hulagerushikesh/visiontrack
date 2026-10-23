@@ -85,11 +85,11 @@ revalidate provenance and inputs before executing either tracker variant.
 1. The [development reference scorer](BOX_GATE_SCORING.md) is now tested on
    hand-worked rows, retaining all 37 endpoints. The [replay adapter](BOX_GATE_REPLAY.md)
    is implemented/tested with doubles, including the single-switch configuration,
-   detector-only handoff and fresh/reset/fresh checks. Actual new tracker
-   comparisons remain unmeasured. The [export/numerical-rule harness](BOX_GATE_REPORT.md)
+   detector-only handoff and fresh/reset/fresh checks. The [export/numerical-rule harness](BOX_GATE_REPORT.md)
    is now implemented/tested with hand-worked tables and explicit doubles.
-2. Run and independently audit the full development grid from the committed
-   harness without tuning; preserve all registered comparisons and failures.
+2. The [full development grid and independent saved-record arithmetic audit](BOX_GATE_DEVELOPMENT.md)
+   have now completed from committed `817e6f7`, without tuning. All results are
+   retained; candidate non-regression failed despite zero candidate ID switches.
 3. Freeze the complete reviewed harness, environment and new held-out input
    hashes, then open that grid once through a separate guarded execution gate.
 4. Interpret all results, including regressions. Only later consider real-data
