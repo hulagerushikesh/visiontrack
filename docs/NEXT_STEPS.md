@@ -434,14 +434,21 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       feedback; preparation is not a completed usability study.
 - [ ] Admit one permitted real clip with an explicit task, detector and checked
       labels; data acquisition/permission is not assumed complete.
+- [x] Verify [one existing real-data cache against official annotations](REAL_DATA_CASE_INTAKE.md):
+      MOT17-04-FRCNN, annotation-only diagnosis admitted; full visual case still held.
+- [ ] Reproduce its unchanged full-sequence baseline and inspect the first
+      chronological scored ID switch if present; retain no-event outcomes.
 - [ ] Produce one fixed comparison and reproducible, visually understandable
       report. Retain negative results; one clip is not a general accuracy claim.
 - [ ] Review it with an interested practitioner if available; record workflow
       feedback without calling it a validated partnership or product demand.
 
-Follow the [daily/weekly delivery checkpoints](WEEKLY_DELIVERY_PLAN.md). The
-first weekly target is an understandable demo and an explicit real-data admission
-decision, not an unsupported accuracy release. No new C++ port is required.
+Follow the [daily/weekly delivery checkpoints](WEEKLY_DELIVERY_PLAN.md). The owner
+clarified that substantive evidence takes priority over demonstrations. The next
+weekly target is a reproducible real-data baseline and bounded diagnosis;
+presentation and owner teaching are not prerequisites or accuracy evidence.
+Independent visual review and any justified comparison remain open. No new C++
+port is required.
 
 ## Deferred research compute
 

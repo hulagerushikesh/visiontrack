@@ -194,9 +194,14 @@ finished; neither opened set may become untouched validation again.
 Follow the [bounded showcase plan](SHOWCASE_MILESTONE.md): the short
 [existing-report demonstration](SHOWCASE_DEMO.md) is now prepared and verified
 locally. Its two configurations tie; the research trade-off is explicitly from
-a separate completed synthetic study. Next complete the owner's comprehension
-check and one real-clip admission decision using the
-[daily/weekly checkpoints](WEEKLY_DELIVERY_PLAN.md), then produce one permitted
+a separate completed synthetic study. The owner has clarified that substantive
+evidence, not a demonstration, takes priority. The
+[existing MOT17-04-FRCNN intake](REAL_DATA_CASE_INTAKE.md) now passes source/cache
+correspondence for annotation-only diagnosis. Next reproduce its unchanged baseline
+and inspect the first chronological scored ID switch if present. Full visual
+review and a justified comparison remain open; the owner walkthrough is not a
+technical prerequisite. Follow the [daily/weekly checkpoints](WEEKLY_DELIVERY_PLAN.md)
+toward one permitted
 real-clip diagnostic case study. Its proposed first audience is fixed-camera CV engineers
 and applied researchers, not a validated market. Technical case-study effort is
 estimated at 4–5 focused working days **after usable permitted data/labels are
