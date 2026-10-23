@@ -367,7 +367,13 @@ replace RQ5 with an unregistered traffic claim.
       Zero gate-off ID switches did not imply acceptance: 174 safety endpoint
       violations affected all 60 box-error pairs. Candidate not accepted;
       whole-study classification remains inconclusive without held-out evidence.
-- [ ] Build/freeze the separate new held-out gate before its first opening;
+- [x] Implement/test the [new held-out code/input/evidence freeze](BOX_GATE_HOLDOUT.md)
+      and read-only verifier (milestone 7a): exact clean committed revision,
+      runtime, reviewed negative development audit and all 120 future input
+      manifests. Recheck the actual saved development evidence without tracker
+      execution. No real freeze or opening issued yet.
+- [ ] Finish/test the separate held-out scorer/replay/export execution gate,
+      commit it, and only then issue the real freeze before its first opening;
       retain one complete grid or stop with partial evidence, never selective retries.
 - [ ] Independently audit and report combined results, preserving failure,
       no-effect and inconclusive outcomes, not just an average gain.

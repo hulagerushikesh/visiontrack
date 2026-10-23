@@ -58,9 +58,14 @@ whole-study numerical classification remains inconclusive without held-out evide
 Independent saved-record arithmetic checked all file hashes, ledger coverage,
 8,880 endpoint values, 4,440 differences, 1,332 descriptive endpoint groups
 and exact rational margins. This does not independently establish raw input
-geometry or canonical matching. Next is the separate new held-out gate and
-harness/input freeze; not tuning on opened outcomes or a C++ port.
-All **1,478 non-slow tests pass**, including 27 new saved-record audit tests;
+geometry or canonical matching. The [held-out preparation safeguards](BOX_GATE_HOLDOUT.md)
+now bind the exact committed revision, runtime, reviewed negative development
+evidence and all 120 future input manifests. Preparation/verification reject drift,
+forgeries, existing output directories and consumed openings; the checks re-audited the 365-file
+development bundle without a tracker run. No real new freeze/opening has been
+issued. Next is the separate held-out scorer/replay/export and exclusive execution
+gate, committed before the actual freeze/run; not tuning or a C++ port.
+All **1,534 non-slow tests pass**, including 56 new freeze/input/evidence tests;
 Ruff and the strict documentation build pass.
 Real-data transfer and product validation remain incomplete.
 The [two-project progress overview](PROGRESS_OVERVIEW.md) separates completed
