@@ -1,6 +1,7 @@
 """Authored implementation fixtures ONLY, not saved-study diagnostic replays."""
 
 import copy
+import hashlib
 import json
 import sys
 from concurrent.futures import ThreadPoolExecutor
@@ -300,6 +301,16 @@ def test_exact_json_parity_does_not_tolerate_numeric_type_drift():
     expected[0]["track_id"] = float(expected[0]["track_id"])
     with pytest.raises(trace.ParityMismatch):
         trace.observe_sequence(ByteTracker(), frames, frames=[2], expected_output=expected)
+
+
+def test_payload_hash_covers_even_unselected_updates():
+    frames = [detections(f * 0.25) for f in range(6)]
+    expected = b"".join(json.dumps(dict(frame=f, detections=[dict(
+        xyxy=d.xyxy.tolist(), score=d.score, class_id=d.class_id, feature=None,
+    ) for d in batch]), sort_keys=True, separators=(",", ":"), allow_nan=False).encode() + b"\n"
+                       for f, batch in enumerate(frames))
+    report, _ = run(frames, selection=[0])
+    assert report["detection_payload_sha256"] == hashlib.sha256(expected).hexdigest()
 
 
 def test_fixed_selection_covers_both_boundaries_and_shared_extra():

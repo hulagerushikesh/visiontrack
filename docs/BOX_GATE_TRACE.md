@@ -7,6 +7,9 @@ protocols, held-out opening and C++ implementation are unchanged. The preceding
 internal causes. This tool prepares the next question: what did the tracker
 actually predict, reject, match, update and publish?
 
+The companion [verified replay wrapper](BOX_GATE_TRACE_REPLAY.md) is now
+implemented and tested. Its actual exploratory replay remains pending.
+
 ## What this adds
 
 `experiments/box_gate_trace.py` is an opt-in, in-memory observer outside the
@@ -70,6 +73,9 @@ output parity passes. A future development-only runner must separately verify
 the original index, saved bundle hashes, selector, baseline source/configuration,
 input payload and all expected rows before authorizing exploratory inspection.
 Parity with a caller-created list alone is not saved-study parity or validation.
+The observer also fingerprints the actual detection payload immediately before
+every update, including unselected frames; the wrapper checks that receipt
+against the independently regenerated, saved-manifest-verified input stream.
 
 The observer refuses an existing profiler/debugger or a non-main-thread call.
 The temporary hook is removed in `finally`, including tracker/callback failures;
@@ -87,10 +93,10 @@ budgets, selection, existing hooks and cleanup on errors. These fixtures are not
 the registered grid, held-out observations or an explanation of the saved failures.
 
 - [x] Specify bounded tracing and test the opt-in observer outside production.
-- [ ] Build a clean-revision development-only replay wrapper that authenticates
+- [x] Build a clean-revision development-only replay wrapper that authenticates
   saved evidence and inputs first, preserves a new trace/failure receipt, and
   checks complete exact output parity before permitting interpretation.
-- [ ] Commit that wrapper and its tests **before** the new diagnostic replay.
+- [x] Commit that wrapper and its tests **before** the new diagnostic replay.
 - [ ] Run the disclosed exploratory development replay, retaining failures;
   inspect actual decisions without reopening held-out tracking.
 - [ ] Choose a narrower hypothesis from that evidence. Any new intervention

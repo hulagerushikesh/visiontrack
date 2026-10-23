@@ -107,8 +107,16 @@ without recalculating costs or adding Kalman updates. Authored fixtures check
 exact public outputs and final state, budgets and profiler cleanup; **no saved
 study trace or held-out replay has run**. All **1,695 non-slow tests pass**,
 including 45 tracing tests; Ruff and the strict documentation build pass.
-Next: build/test and commit the development-only provenance/replay wrapper,
-then require complete exact saved-output parity before exploratory interpretation.
+The [development-only provenance/replay wrapper](BOX_GATE_TRACE_REPLAY.md) now
+authenticates saved evidence, source/runtime, regenerated inputs, configurations,
+actual pre-update payloads and complete public outputs before allowing a sealed
+complete-grid exploratory manifest. Tests exercise explicit doubles, partial
+failure/interruption retention, exclusive writes and output-tampering refusal.
+The actual trace remains pending; implementation is not a new research result.
+All **1,739 non-slow tests pass**, including 43 new wrapper tests and an additional
+observer payload-receipt test; Ruff and the strict documentation build pass.
+Next: run the committed diagnostic and require complete exact saved-output parity
+before exploratory interpretation.
 Observer records alone retain provenance/interpretation/validation flags false.
 Any later intervention needs fresh validation, not rescue tuning on the consumed
 held-out set. Defaults and C++ remain unchanged.
