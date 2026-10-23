@@ -8,7 +8,8 @@ internal causes. This tool prepares the next question: what did the tracker
 actually predict, reject, match, update and publish?
 
 The companion [verified replay wrapper](BOX_GATE_TRACE_REPLAY.md) is now
-implemented and tested. Its actual exploratory replay remains pending.
+implemented and tested. Its [exploratory replay and read-only audit](BOX_GATE_TRACE_FINDINGS.md)
+are now complete; the observer-preparation limits below remain applicable.
 
 ## What this adds
 
@@ -97,7 +98,7 @@ the registered grid, held-out observations or an explanation of the saved failur
   saved evidence and inputs first, preserves a new trace/failure receipt, and
   checks complete exact output parity before permitting interpretation.
 - [x] Commit that wrapper and its tests **before** the new diagnostic replay.
-- [ ] Run the disclosed exploratory development replay, retaining failures;
+- [x] Run the disclosed exploratory development replay, retaining failures;
   inspect actual decisions without reopening held-out tracking.
 - [ ] Choose a narrower hypothesis from that evidence. Any new intervention
   needs a separate registration and genuinely fresh validation cases.

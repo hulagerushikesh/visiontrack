@@ -1,0 +1,67 @@
+{
+  "format": "visiontrack.box-gate-development-trace-evidence/v1",
+  "recorded_on": "2026-10-23",
+  "scope": "New exploratory development-only diagnostic, not the original execution or validation",
+  "execution_revision": "dd653aaacde96e33ddb647c72521478507f6ae7a",
+  "original_development_revision": "817e6f7c9d802f4a762c6ca00ba26035a9eab6ca",
+  "original_development_manifest_sha256": "307fe7ad651b0e81befa4715f7b7d7b465007f2f4fb03a28e6af6e24d090570a",
+  "bundle_path": "/Users/rushikeshhulage/Documents/Quant/visiontrack-walkthrough/box-gate-dev-trace-4gHt1Z/bundle",
+  "bundle_manifest_sha256": "257a7032f614a525606541017699e29347e7ea29172205ee657b4ea28a208a42",
+  "manifest_raw_sha256": "380b0502bfee4233b2e0352ef625e4631427f2aa0e4b1051e5d0f2a726956dab",
+  "plan_raw_sha256": "63ec6b31117e5a48d99cfd3a97becac2957d804831699484c33291d46219bad2",
+  "execution_code_sha256": {
+    "experiments/box_gate_trace.py": "6a8c711bbda857dead71052afdd02f3e14ae931b3aaf8560742f321a032fa870",
+    "experiments/box_gate_trace_replay.py": "53789f4f24336e3f2d2ee433c097288430e378fed04fc839b3f34a7f904c4b9f",
+    "tests/test_box_gate_trace_replay.py": "efdecc9ec7e7e5011aca1769c30e5cabd6bcc14c1a390afcd343afa2e1d98ed0"
+  },
+  "execution": {
+    "planned_pairs": 120,
+    "attempted_variants": 240,
+    "completed_variants": 240,
+    "unattempted_variants": 0,
+    "errors": 0,
+    "traced_passes_per_variant": 1,
+    "updates_per_variant": 300,
+    "recorded_updates": 72000,
+    "exact_saved_output_variants": 240,
+    "selected_frame_variant_records": 18526,
+    "recorded_association_stages": 55578,
+    "trace_bundle_files": 482,
+    "heldout_data_read": false,
+    "original_evidence_modified": false,
+    "validation_evidence": false,
+    "production_change_authorized": false,
+    "cpp_adoption_authorized": false
+  },
+  "audit": {
+    "implemented_after_trace_execution": true,
+    "script": "experiments/box_gate_trace_audit.py",
+    "script_sha256": "e018badeb2f4e645db36473b5f61122775be2afb2a51d6b4faf45637b0c6a1db",
+    "tests": "tests/test_box_gate_trace_audit.py",
+    "tests_sha256": "321f26f187560001fe9175856956d2e22de51ae56ca580829d0efdf5225451e1",
+    "output_path": "/Users/rushikeshhulage/Documents/Quant/visiontrack-walkthrough/box-gate-dev-trace-4gHt1Z/audit.json",
+    "output_sha256": "57010c5acb07152b4aaf5922ddf18fcadb4b039bfbf9f986fb6b4eb2e8574380",
+    "verified_original_files": 365,
+    "verified_trace_files": 482,
+    "new_tracker_runs": 0,
+    "actual_payload_receipts_independently_regenerated": false,
+    "filter_arithmetic_independently_recomputed": false
+  },
+  "selected_window_candidate_pair_vetoes": {
+    "baseline_box_error_only": 665,
+    "baseline_combined": 664,
+    "baseline_control": 0,
+    "baseline_perspective_only": 0,
+    "gate_off_all_conditions": 0,
+    "meaning": "Recorded candidate pairs forbidden only by the active 4D gate despite eligible IoU/class; not independent mistakes, objects, people or trials"
+  },
+  "limits": [
+    "One NEW traced pass per variant, not another original fresh/reset/independent-fresh execution.",
+    "Original manifests, source, configurations and complete public output bytes remain unchanged.",
+    "Recorded masks/costs/assignment arithmetic audited without a new tracker, generator or scorer call.",
+    "Payload receipts and execution remain recorded provenance, not independently witnessed events.",
+    "Covariance/filter arithmetic is not recomputed; concrete trace examples do not establish universal causes.",
+    "Development-only toy geometry and imposed box errors; no fresh held-out or real-traffic validation.",
+    "The earlier registered failure still stands. No production/default change or C++ adoption."
+  ]
+}

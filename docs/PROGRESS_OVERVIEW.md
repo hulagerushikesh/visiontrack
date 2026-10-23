@@ -96,9 +96,12 @@ without tracker replay. The next [internal tracing preparation](BOX_GATE_TRACE.m
 now has a bounded opt-in observer and authored parity/state/cleanup tests.
 The [development-only provenance/replay wrapper](BOX_GATE_TRACE_REPLAY.md) is now
 implemented/tested, including pre-update payload receipts and failure preservation.
-It has not yet traced the saved study. Next run the committed diagnostic and
-interpret only if full saved-output parity passes. No held-out reopening, default
-change or C++ adoption.
+The [new exploratory trace and read-only audit](BOX_GATE_TRACE_FINDINGS.md) now
+cover all 240 variants with exact saved-output parity and no errors/retries.
+Recorded events explain concrete gate/confirmation gaps and same-ID anchor
+recrossings; they do not accept a fix or validate transfer. Next register a
+narrower intervention separating association and anchor/count stability with
+fresh validation. No held-out reopening, default change or C++ adoption.
 
 ### Research and real data
 

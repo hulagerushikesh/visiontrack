@@ -159,7 +159,7 @@ update produces each observed gap, overlap failure and crossing artifact?**
 - [x] Add and commit the [saved-evidence/provenance wrapper](BOX_GATE_TRACE_REPLAY.md)
   before the diagnostic replay. Observer fixture parity is not yet parity with
   authenticated saved study outputs; no actual study trace has been run.
-- [ ] Execute the committed development-only diagnostic and require complete
+- [x] Execute the [development-only diagnostic](BOX_GATE_TRACE_FINDINGS.md) and require complete
   exact saved-output parity before interpreting its internal trace evidence.
 - [ ] Use that evidence to choose between narrower association, state-estimation
   or counting hypotheses. Position-only gating, a different state model,
