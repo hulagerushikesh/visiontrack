@@ -143,11 +143,24 @@ per-case missed/extra and timestamp/emission-window safety gates plus a 15-frame
 maximum confirmation delay. Fresh development/held-out paths and seeds are
 defined; no noisy inputs, tracker outcomes or old held-out bundles were opened
 for this registration. Byte-integrity/scope/ideal-geometry tests are preparation,
-not evidence of efficacy. Next implement the counter, then the complete guarded
-replay/report harness. There is no accepted fix, production change or C++ port.
+not evidence of efficacy. The counter is now implemented as described below;
+the complete guarded replay/report harness is still pending. There is no
+accepted fix, production change or C++ port.
 At this registration checkpoint, **1,802 non-slow tests pass** (34 new
 definition/scope/ideal-geometry cases); Ruff and the strict documentation build
 also pass. The prior negative findings and their frozen artifacts are unchanged.
+
+The [isolated counter implementation](CROSSING_BAND_COUNTER.md) now retains
+line-arrival and emission times separately, every pending/cancellation fate,
+first-event/gap/segment semantics and late events without suppressing them.
+**64 authored tests** include all 625 small four-sample diagrams for legacy
+equivalence and candidate invariants. Shallow/start/end ideal passages remain
+misses; a retained 18-frame delay exceeds the registered limit. These are unit
+feasibility examples, not registered study outcomes or an accepted accuracy fix.
+Review these structural costs before investing in the full replay/report harness.
+No new noisy registered inputs/tracker outcomes, held-out opening, production or
+C++ changes. At this checkpoint **1,866 non-slow tests pass**; Ruff and strict
+documentation build pass. The registered artifacts/locks remain unchanged.
 
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective

@@ -154,7 +154,7 @@ def main() -> int:
     for name, digest in hashes.items():
         print(f"{digest}  {name}")
     print("Registration verified; no noisy inputs, tracker runs or research outcomes.")
-    print("Counter and complete replay/held-out harness are not yet implemented/frozen.")
+    print("This preflight executes no counters and does not freeze the replay/held-out harness.")
     return 0
 
 

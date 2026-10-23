@@ -111,7 +111,10 @@ C++ adoption.
   near-line dwell, genuine shallow/full returns and band-start/end crossings.
 - [x] Lock definitions; test integrity, scope and ideal geometry without new
   noisy observations, tracker runs or comparative research outcomes.
-- [ ] Implement/test the isolated state machine and its emission-time records.
+- [x] Implement/test the [isolated state machine](CROSSING_BAND_COUNTER.md) and
+  emission-time records: 64 authored tests, including genuine misses and delay.
+- [ ] Review structural safety costs before investing in a complete study;
+  reject at unit feasibility if appropriate without claiming a study verdict.
 - [ ] Build/commit the full input/replay/report harness, then run development.
 - [ ] Freeze/open fresh held-out evidence once; independently audit all results.
 
@@ -180,12 +183,13 @@ no GPU path or weakened parity is justified by the current plan.
 
 ## Immediate next action
 
-Implement and test the isolated counter from the
-[new registration](CROSSING_BAND_PROTOCOL.md), including genuine short passages,
-initialization/gaps, pending cancellation, segment bounds and explicit emission
-latency. Then build the guarded replay/report harness before any complete study
-grid. The box-gate study and its exact-parity internal diagnosis are finished;
+The [isolated counter](CROSSING_BAND_COUNTER.md) and authored edge-case tests are
+complete. Review the structural short/start/end passage misses and reporting
+delay before full-grid investment. If the original screen remains useful to
+quantify its limits, build the guarded replay/report harness before any complete
+study grid; do not tune away unfavorable truth or rules. Unit feasibility is not
+a development/held-out verdict. The box-gate study and its diagnosis are finished;
 neither opened set may become untouched validation again. No footage or owner
-assistance is needed for this implementation step. Real recording, usability
+assistance is needed for this engineering step. Real recording, usability
 walkthrough and discovery remain separate pending work. C++ stays in maintenance
 until a useful behavior earns an explicitly accepted parity handoff.
