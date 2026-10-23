@@ -69,10 +69,11 @@ effort, a probability of success or a whole-project completion percentage**.
 - [ ] 7. Freeze the complete reviewed harness, environment and new held-out
   input hashes; execute the **120 new held-out pairs once** through a separate
   exclusive gate. Stop on error, retain partial evidence, no selective retries.
-  [Preparation safeguard substep 7a](BOX_GATE_HOLDOUT.md) is implemented/tested:
-  exact revision/runtime/evidence checks and all 120 input manifests, with no
-  new held-out tracking. Execution adapters/exporter and the actual freeze/run
-  are still pending; this whole milestone remains unchecked.
+  [Safeguard substeps 7a and 7b](BOX_GATE_HOLDOUT.md) are implemented/tested:
+  exact revision/runtime/evidence checks, all 120 input manifests, separate
+  scoring/replay/export and an exclusive no-retry opening gate. No new held-out
+  tracking has run. The actual freeze/run remains pending; this whole milestone
+  remains unchecked.
 - [ ] 8. Independently audit and explain the combined results. Report negative
   outcomes. Passing is only a bounded synthetic result, not permission to claim
   real-world accuracy or silently change defaults.
@@ -141,10 +142,10 @@ no GPU path or weakened parity is justified by the current plan.
 
 ## Immediate next action
 
-Continue milestone 7: implement/test the separate held-out scorer/replay/export
-and exclusive opening gate. The code/input/evidence freeze checks are ready,
-but a real freeze must wait until the complete executor is reviewed and committed.
-Then open the new grid once, retaining negative outcomes. Do not tune the candidate
+Continue milestone 7: review the committed complete execution gate, issue/verify
+the exact code/input/evidence/runtime freeze, then open the new grid once,
+retaining negative outcomes. The preparation and execution safeguards are now
+implemented/tested; actual held-out outcomes are still pending. Do not tune the candidate
 to rescue the failed development safety requirement. It needs no new footage
 or owner assistance. Real recording and discovery can proceed on
 their own schedule without holding up this engineering work.

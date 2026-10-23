@@ -63,9 +63,15 @@ now bind the exact committed revision, runtime, reviewed negative development
 evidence and all 120 future input manifests. Preparation/verification reject drift,
 forgeries, existing output directories and consumed openings; the checks re-audited the 365-file
 development bundle without a tracker run. No real new freeze/opening has been
-issued. Next is the separate held-out scorer/replay/export and exclusive execution
-gate, committed before the actual freeze/run; not tuning or a C++ port.
-All **1,534 non-slow tests pass**, including 56 new freeze/input/evidence tests;
+issued. The separate held-out scorer/replay/export and exclusive execution gate
+is now implemented/tested (7b), retaining partial variants and stopping on the
+first error without retry. Public development split guards remain intact.
+Shared-core reference scoring exactly reproduced all 24 saved development
+variant records for seed 2001; no tracker was rerun. Next is the actual exact
+freeze and one-time held-out run from the complete committed harness, not tuning
+or a C++ port.
+All **1,573 non-slow tests pass**, including 56 freeze/input/evidence tests and
+39 new execution-gate/analytic-fixture tests;
 Ruff and the strict documentation build pass.
 Real-data transfer and product validation remain incomplete.
 The [two-project progress overview](PROGRESS_OVERVIEW.md) separates completed
