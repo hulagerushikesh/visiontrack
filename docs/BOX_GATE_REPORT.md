@@ -125,7 +125,9 @@ real scorer and partial-variant sink. Export doubles cover the complete ordered
 grid, exclusive paths, retained failures, source drift and altered saved files.
 They are not experimental outcomes or proof of actual tracker reset parity.
 
-Next: run and independently audit the 120 development pairs from the committed
-harness, retaining all outcomes without tuning. Then build/freeze the separate
-new held-out execution gate and open that set once. No new owner recording or
-action is required for the development run. See the [progress overview](PROGRESS_OVERVIEW.md).
+This implementation milestone is now followed by the completed
+[120-pair development run and saved-record audit](BOX_GATE_DEVELOPMENT.md).
+The harness ran unchanged from `817e6f7`; candidate safety requirements failed
+despite improved ID switches. Next: build/freeze the separate new held-out
+execution gate and open that set once, without tuning. No new owner recording
+or action is required. See the [progress overview](PROGRESS_OVERVIEW.md).

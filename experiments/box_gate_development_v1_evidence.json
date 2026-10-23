@@ -1,0 +1,242 @@
+{
+  "format": "visiontrack.box-gate-development-evidence/v1",
+  "recorded_on": "2026-10-23",
+  "protocol_id": "visiontrack.box-gate-ablation/v1",
+  "protocol_hashes": {
+    "docs/BOX_GATE_ABLATION_PROTOCOL.md": "413cd0b83843b660d072f7584c1495d858f701f40dca81cce669e31d2d7b62cc",
+    "docs/TRAFFIC_RELIABILITY_PROTOCOL.md": "27b89dd580cfc7a90668a04a5e8b4aae685b745b85c988bd17eb5af6bf4d808b",
+    "experiments/box_gate_protocol_v1.json": "c240d372c9e79d6bf3367bcb8ce131066a1185b8818af47d42b37e346e064a7f",
+    "experiments/traffic_protocol_v1.json": "3a6dc71688eeb7ce981dc30ea614f22b82f44052f1aedd8ac68176ac156cf957"
+  },
+  "source_revision": "817e6f7c9d802f4a762c6ca00ba26035a9eab6ca",
+  "baseline_revision": "16c287a6b18c5c142a28e4bce70b3232946459db",
+  "environment": {
+    "byteorder": "little",
+    "machine": "arm64",
+    "numpy": "2.3.1",
+    "python": "3.12.9",
+    "system": "Darwin"
+  },
+  "bundle_path": "/Users/rushikeshhulage/Documents/Quant/visiontrack-walkthrough/box-gate-development-xuQjms/bundle",
+  "bundle_manifest_sha256": "307fe7ad651b0e81befa4715f7b7d7b465007f2f4fb03a28e6af6e24d090570a",
+  "manifest_raw_sha256": "4dbb611b423d0fca56ebe996f06fae8d3798c36ad27dbbd12c87f1ea60bcc177",
+  "artifact_sha256": {
+    "plan.json": "edacb98bba02beec3c3f35a1b1ef892022c6d3d054fc591b4f5bfaf450cc4f2b",
+    "attempts.jsonl": "04e2383ef21afe33bdfc44e323e15bd35c586d7a69d78a0f5ce76440c3c40ff3",
+    "summary.json": "575575f7d69b2a4b1b465613fa7c5d4798bcf9d241b0d1839f3ad1cceaf03ca2",
+    "summary.md": "1fb1908db4d52434bbe24df3c3627e2454ceccb1c680271617a97c29d9eab0de"
+  },
+  "counts": {
+    "planned_pairs": 120,
+    "attempted_pairs": 120,
+    "successful_pairs": 120,
+    "unattempted_pairs": 0,
+    "failed_pairs": 0,
+    "variant_runs": 240,
+    "replay_passes": 720,
+    "updates_per_pass": 300
+  },
+  "development_primary": [
+    {
+      "scenario": "gate_dev_solo",
+      "reference_objects": 1,
+      "error_cases": 20,
+      "baseline_primary": 4,
+      "gate_off_primary": 0,
+      "absolute_reduction": 4,
+      "relative_reduction": 1,
+      "adequate_challenge": true,
+      "meets_both_improvement_margins": true
+    },
+    {
+      "scenario": "gate_dev_separated",
+      "reference_objects": 2,
+      "error_cases": 20,
+      "baseline_primary": 3.75,
+      "gate_off_primary": 0,
+      "absolute_reduction": 3.75,
+      "relative_reduction": 1,
+      "adequate_challenge": true,
+      "meets_both_improvement_margins": true
+    },
+    {
+      "scenario": "gate_dev_close",
+      "reference_objects": 2,
+      "error_cases": 20,
+      "baseline_primary": 3.75,
+      "gate_off_primary": 0,
+      "absolute_reduction": 3.75,
+      "relative_reduction": 1,
+      "adequate_challenge": true,
+      "meets_both_improvement_margins": true
+    }
+  ],
+  "development_non_regression": {
+    "met": false,
+    "metric_violations": 174,
+    "distinct_paired_cases_affected": 60,
+    "regressions_by_endpoint": {
+      "tracking.missed_object_frames": 54,
+      "tracking.false_positive_rows": 60,
+      "crossing.bottom_centre.event_error": 30,
+      "crossing.bottom_centre.window_count_abs_error": 30
+    },
+    "regressions_by_scenario": {
+      "gate_dev_solo": 40,
+      "gate_dev_separated": 57,
+      "gate_dev_close": 77
+    },
+    "regressions_by_condition": {
+      "box_error_only": 84,
+      "combined": 90
+    },
+    "control_pairs_identical_all_37_endpoints": 60
+  },
+  "error_condition_means": [
+    {
+      "scenario": "gate_dev_solo",
+      "condition": "box_error_only",
+      "baseline": {
+        "tracking.id_switches": 4,
+        "tracking.missed_object_frames": 6,
+        "tracking.false_positive_rows": 0,
+        "crossing.bottom_centre.event_error": 1,
+        "crossing.bottom_centre.window_count_abs_error": 1
+      },
+      "gate_off": {
+        "tracking.id_switches": 0,
+        "tracking.missed_object_frames": 9.8,
+        "tracking.false_positive_rows": 7.8,
+        "crossing.bottom_centre.event_error": 0,
+        "crossing.bottom_centre.window_count_abs_error": 0
+      }
+    },
+    {
+      "scenario": "gate_dev_solo",
+      "condition": "combined",
+      "baseline": {
+        "tracking.id_switches": 4,
+        "tracking.missed_object_frames": 6,
+        "tracking.false_positive_rows": 0,
+        "crossing.bottom_centre.event_error": 1,
+        "crossing.bottom_centre.window_count_abs_error": 1
+      },
+      "gate_off": {
+        "tracking.id_switches": 0,
+        "tracking.missed_object_frames": 9.9,
+        "tracking.false_positive_rows": 7.9,
+        "crossing.bottom_centre.event_error": 0,
+        "crossing.bottom_centre.window_count_abs_error": 0
+      }
+    },
+    {
+      "scenario": "gate_dev_separated",
+      "condition": "box_error_only",
+      "baseline": {
+        "tracking.id_switches": 7.5,
+        "tracking.missed_object_frames": 14.8,
+        "tracking.false_positive_rows": 1.8,
+        "crossing.bottom_centre.event_error": 0.9,
+        "crossing.bottom_centre.window_count_abs_error": 0.9
+      },
+      "gate_off": {
+        "tracking.id_switches": 0,
+        "tracking.missed_object_frames": 19,
+        "tracking.false_positive_rows": 15,
+        "crossing.bottom_centre.event_error": 1.3,
+        "crossing.bottom_centre.window_count_abs_error": 1.3
+      }
+    },
+    {
+      "scenario": "gate_dev_separated",
+      "condition": "combined",
+      "baseline": {
+        "tracking.id_switches": 7.5,
+        "tracking.missed_object_frames": 14.8,
+        "tracking.false_positive_rows": 1.8,
+        "crossing.bottom_centre.event_error": 0.4,
+        "crossing.bottom_centre.window_count_abs_error": 0.4
+      },
+      "gate_off": {
+        "tracking.id_switches": 0,
+        "tracking.missed_object_frames": 19,
+        "tracking.false_positive_rows": 15,
+        "crossing.bottom_centre.event_error": 1,
+        "crossing.bottom_centre.window_count_abs_error": 1
+      }
+    },
+    {
+      "scenario": "gate_dev_close",
+      "condition": "box_error_only",
+      "baseline": {
+        "tracking.id_switches": 7.5,
+        "tracking.missed_object_frames": 14.8,
+        "tracking.false_positive_rows": 1.8,
+        "crossing.bottom_centre.event_error": 1.2,
+        "crossing.bottom_centre.window_count_abs_error": 1.2
+      },
+      "gate_off": {
+        "tracking.id_switches": 0,
+        "tracking.missed_object_frames": 19,
+        "tracking.false_positive_rows": 15,
+        "crossing.bottom_centre.event_error": 3,
+        "crossing.bottom_centre.window_count_abs_error": 3
+      }
+    },
+    {
+      "scenario": "gate_dev_close",
+      "condition": "combined",
+      "baseline": {
+        "tracking.id_switches": 7.5,
+        "tracking.missed_object_frames": 14.8,
+        "tracking.false_positive_rows": 1.8,
+        "crossing.bottom_centre.event_error": 0.9,
+        "crossing.bottom_centre.window_count_abs_error": 0.9
+      },
+      "gate_off": {
+        "tracking.id_switches": 0,
+        "tracking.missed_object_frames": 19,
+        "tracking.false_positive_rows": 15,
+        "crossing.bottom_centre.event_error": 2.7,
+        "crossing.bottom_centre.window_count_abs_error": 2.7
+      }
+    }
+  ],
+  "audit": {
+    "script": "experiments/box_gate_audit.py",
+    "script_sha256": "8e8153fa5ee5eae643c9c1e2a789c5b1135fb010d7f23c83b47200b0f0023f4f",
+    "implemented_after_development": true,
+    "output_path": "/Users/rushikeshhulage/Documents/Quant/visiontrack-walkthrough/box-gate-development-xuQjms/audit.json",
+    "output_sha256": "5fada1cee0ca3e7cbc13f9afab475f1f29a39e043d43f1e75634325d66e87f1f",
+    "indexed_files_verified": 364,
+    "ordered_ledger_entries": 480,
+    "harness_files_verified": 34,
+    "baseline_files_verified": 57,
+    "endpoint_values_reconstructed": 8880,
+    "paired_differences_checked": 4440,
+    "descriptive_endpoint_groups_checked": 1332,
+    "limits": [
+      "Read-only artifact/arithmetic audit, not independent runtime execution proof.",
+      "Saved canonical CLEAR-MOT correspondence and input manifests are trusted primitives; not independently regenerated.",
+      "Localization aggregates checked from retained errors, not independent geometric projection.",
+      "No new tracker replay, scorer call, generator call or held-out measurements.",
+      "Diagnostic arithmetic tolerance 1e-12; registered rational margins and integer safety comparisons have no tolerance.",
+      "Synthetic evidence only, not consent, real accuracy or permission to change production/C++."
+    ]
+  },
+  "complete_development_grid": true,
+  "complete_study_report": false,
+  "study_classification": "inconclusive",
+  "heldout_tracking_executed": false,
+  "candidate_tuned": false,
+  "production_change_authorized": false,
+  "cpp_port_authorized": false,
+  "limitations": [
+    "Development safety requirement failed despite zero candidate ID switches; do not accept on one metric.",
+    "174 metric violations affect 60 pairs, not 174 independent cases.",
+    "The full registered numerical verdict requires both splits; the new held-out set remains unopened.",
+    "All 37 per-seed endpoints and ranges/null counts remain in the external summary; this compact index is not their replacement.",
+    "Input manifests and canonical correspondence are not independently regenerated by the saved-record auditor.",
+    "Synthetic numeric boxes, not real detector output or evidence about permanent person identity."
+  ]
+}
