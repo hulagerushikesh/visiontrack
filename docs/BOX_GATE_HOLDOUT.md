@@ -1,11 +1,14 @@
-# Box-gate held-out safeguards — execution gate ready, outcomes pending
+# Box-gate held-out safeguards — freeze and once-only run completed
 
 ## What this step finishes
 
 Milestones **7a and 7b** implement and test the code/input/evidence freeze,
 read-only verifier, separate reference-scoring/replay adapter and exclusive
-full-grid execution gate. Milestone 7 as a whole is **not finished**. No real
-ablation freeze or opening has been issued, and no new held-out tracker has run.
+full-grid execution gate. **Milestone 7 is now complete:** the real freeze was
+issued and verified from committed harness `c99c4e7`, then all 120 held-out pairs
+ran once without errors or selective retries. See the
+[held-out results and evidence inventory](BOX_GATE_HELDOUT_RESULTS.md).
+Independent endpoint arithmetic and combined-study audit remain milestone 8.
 
 Think of a freeze as a sealed experiment checklist: it records exactly which
 code, settings, runtime, earlier evidence and future input cases may be used.
@@ -116,20 +119,25 @@ scientific validity, real-world accuracy or tracker execution. Local checks are
 workflow safeguards, not a malicious-runtime sandbox or a global registry that
 can prevent someone copying a freeze or deliberately disguising a rerun.
 
-## Next: commit, freeze and open once
+## Actual opening and next step
 
-1. Review and commit the entire implemented execution harness and its tests.
-   Only then issue the real
-   code/runtime/evidence/input freeze and verify it before one ordered run:
-   120 pairs, 240 variants, 720 fresh/reset/fresh passes.
-2. Execute through the separate whole-grid gate, retaining one complete grid or
-   stopped partial evidence. Never retry, tune or selectively replace a case.
-3. Audit combined evidence and apply the unchanged registered decision rules.
+The complete execution harness was committed before preparation. The exact
+freeze binds revision `c99c4e72bf0fd6a740ec0b22135448b931eac448`, all 120 inputs,
+the reviewed negative development evidence and the same runtime. It was verified
+before the exclusive opening. All 120 pairs / 240 variants / 720 passes completed.
+The retained evidence inventory checked all 365 files and 480 ledger entries;
+the [compact index](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/box_gate_heldout_v1_evidence.json)
+records exact paths and hashes. No tracker was rerun for the inventory.
+
+The original opening is **consumed**. Do not retry, tune or selectively replace
+a case, and do not call these inputs untouched evidence for a later candidate.
+The next action is the independent saved-record and combined-study audit,
+not another opening. The pinned development auditor must remain unchanged.
 
 Every later commit invalidates an unused freeze, even a documentation change.
 Bind the actual run to the reviewed committed harness, not a pre-commit snapshot.
 No production setting, C++ behavior, website, release or outreach changes here.
 
-The development candidate is still **not accepted**. Completing held-out evidence
-cannot erase its development safety violations. This next run completes a
-prospective negative study; it is not a search for a more favorable result.
+The candidate is still **not accepted**. Held-out saved results also show safety
+violations, and cannot erase the earlier development violations. Completing the
+combined audit is faithful reporting, not a search for a more favorable result.

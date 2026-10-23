@@ -4,8 +4,10 @@
 clean committed harness `817e6f7c9d802f4a762c6ca00ba26035a9eab6ca`:
 240 variant runs, 720 fresh/reset/fresh passes, 300 updates per pass.
 There were no failed, skipped, replaced or selectively repeated cases.
-The new held-out grid remains **unopened**. No tracker defaults, website behavior,
-Python package source, parity fixtures or C++ behavior changed.
+At this development snapshot the new held-out grid was **unopened**. It has now
+completed separately; see the [held-out run and pending combined audit](BOX_GATE_HELDOUT_RESULTS.md).
+No tracker defaults, website behavior, Python package source, parity fixtures
+or C++ behavior changed.
 
 ## What we learned in plain language
 
@@ -93,9 +95,11 @@ timing improvement. Stable IDs are not proof of precise contact localization.
 ## Verdict and limits
 
 **Development non-regression requirement: failed. Candidate not accepted.**
-The complete study's stored numerical classification remains **inconclusive**:
-both splits are required by the unchanged decision policy, and held-out results
-do not exist yet. That wording must not conceal the already observed violations.
+The stored development-only numerical classification remains **inconclusive**:
+both splits are required by the unchanged decision policy, and this historical
+summary does not include held-out rows. Both bundles now exist, but independent
+combined audit/reporting is still pending. That wording must not conceal the
+already observed violations.
 Completing held-out work cannot erase these development violations or justify
 acceptance of this unchanged candidate under the registered requirements.
 
@@ -156,12 +160,12 @@ python -m experiments.box_gate_audit /absolute/path/to/bundle --root /absolute/p
 
 ## Next, without changing this candidate
 
-Milestone 7: build and test the separate exclusive held-out gate, freeze the
-whole reviewed harness/runtime and all new held-out input hashes, then open
-the fixed 120 held-out pairs once. Preserve partial evidence and stop on the
-first error. The purpose is faithful completion of the registered comparison,
-including negative outcomes—not finding a way to turn this result into a pass.
-Milestone 8 audits and reports both splits together.
+Milestone 7 has now completed the separate exact freeze and once-only held-out
+run from committed `c99c4e7`; all 120 pairs finished without errors or selective
+retries. See the [held-out results](BOX_GATE_HELDOUT_RESULTS.md), which also
+retain safety regressions. Milestone 8 independently audits and reports both
+splits together, without changing the pinned development auditor. The purpose
+is faithful reporting, not finding a way to turn the candidate into a pass.
 
 No owner recording is needed for these steps. Real-data transfer, a future
 separately registered intervention, production-default decisions and any C++

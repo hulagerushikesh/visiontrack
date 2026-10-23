@@ -40,8 +40,8 @@ Question: can disabling only the tracker’s shape-sensitive rejection gate redu
 broken IDs **without worsening** the registered tracking/counting measures?
 It could help, do nothing or harm nearby-object associations.
 
-There are **eight milestone groups** in this summary. Six are complete;
-two remain. That is a count of milestone groups, **not a percentage of total
+There are **eight milestone groups** in this summary. Seven are complete;
+one remains. That is a count of milestone groups, **not a percentage of total
 effort, a probability of success or a whole-project completion percentage**.
 
 - [x] 1. Register the question, single changed setting, fresh scenario/seed
@@ -64,16 +64,19 @@ effort, a probability of success or a whole-project completion percentage**.
   All pairs completed from `817e6f7`, with no errors or selective retries.
   [Development findings](BOX_GATE_DEVELOPMENT.md): gate-off removed ID switches
   but violated safety requirements in all 60 box-error pairs (174 endpoint
-  violations). The candidate is not accepted; the full-study classification
-  remains inconclusive because held-out evidence is missing.
-- [ ] 7. Freeze the complete reviewed harness, environment and new held-out
+  violations). The candidate is not accepted. Its development-only numerical
+  summary is inconclusive by design; it does not include the held-out rows.
+- [x] 7. Freeze the complete reviewed harness, environment and new held-out
   input hashes; execute the **120 new held-out pairs once** through a separate
   exclusive gate. Stop on error, retain partial evidence, no selective retries.
   [Safeguard substeps 7a and 7b](BOX_GATE_HOLDOUT.md) are implemented/tested:
   exact revision/runtime/evidence checks, all 120 input manifests, separate
-  scoring/replay/export and an exclusive no-retry opening gate. No new held-out
-  tracking has run. The actual freeze/run remains pending; this whole milestone
-  remains unchecked.
+  scoring/replay/export and an exclusive no-retry opening gate. The real freeze
+  and [once-only run](BOX_GATE_HELDOUT_RESULTS.md) completed from `c99c4e7`:
+  120 pairs / 240 variants / 720 passes, no errors or selective retries.
+  All 365 files and 480 ledger entries passed a separate artifact inventory.
+  Saved endpoints show 206 safety violations in all 60 box-error pairs; no
+  candidate tuning or acceptance. Independent endpoint arithmetic remains next.
 - [ ] 8. Independently audit and explain the combined results. Report negative
   outcomes. Passing is only a bounded synthetic result, not permission to claim
   real-world accuracy or silently change defaults.
@@ -142,10 +145,10 @@ no GPU path or weakened parity is justified by the current plan.
 
 ## Immediate next action
 
-Continue milestone 7: review the committed complete execution gate, issue/verify
-the exact code/input/evidence/runtime freeze, then open the new grid once,
-retaining negative outcomes. The preparation and execution safeguards are now
-implemented/tested; actual held-out outcomes are still pending. Do not tune the candidate
-to rescue the failed development safety requirement. It needs no new footage
-or owner assistance. Real recording and discovery can proceed on
-their own schedule without holding up this engineering work.
+Complete milestone 8: independently audit the saved held-out endpoint arithmetic
+and both complete splits, apply the unchanged decision rules, then report the
+bounded combined findings. Do not modify the pinned development auditor, rerun
+the consumed grid or tune the candidate to rescue the safety failures. Both raw
+bundles are retained; the combined classification is not yet audited/reported.
+This needs no new footage or owner assistance. Real recording and discovery can
+proceed on their own schedule without holding up this engineering work.
