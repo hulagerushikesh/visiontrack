@@ -158,6 +158,12 @@ Ruff, strict documentation build and all six old protocol checksums pass.
 
 ## Next bounded decision
 
+**Coverage diagnosis is now complete:** [the saved-box decomposition](REAL_DATA_COVERAGE.md)
+reconciles every miss, accounts for score/ignore rules and unique detection
+capacity, and makes no causal or achievable-recall claim. The next task is the
+unchanged association/lifecycle trace of the same first switch (item 2 below),
+not a new parameter comparison.
+
 1. **Before tuning**, decompose the missed boxes on this same fixed sequence:
    which have no sufficiently overlapping raw detection versus a detection
    that does not become a scored output? Respect unique assignment, ignore

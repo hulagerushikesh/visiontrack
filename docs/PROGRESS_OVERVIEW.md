@@ -201,8 +201,12 @@ correspondence for annotation-only diagnosis. Its [unchanged baseline](REAL_DATA
 now reproduces all four run files exactly across two fresh runs: FN 21,825,
 FP 49, IDSW 43, IDF1 61.32%, HOTA 52.55%. The first switch (reference 85,
 track 19 → 31, source frame 54) has a bounded metadata inspection, not a visual
-causal explanation. Next separate detection coverage from tracking/output loss
-on the same fixed case before tuning. Full visual review and a justified comparison
+causal explanation. The [coverage diagnosis](REAL_DATA_COVERAGE.md) now reconciles
+all 21,825 misses: 19,387 lack any raw detection IoU ≥0.5 neighbour; 2,019 have
+an eligible retained neighbour but no scored match. The remaining 419 concern
+low scores/ignore handling; unique assignment capacity prevents treating neighbour
+counts as guaranteed recovery. Next inspect unchanged association/lifecycle
+evidence for the same first switch before tuning. Full visual review and a justified comparison
 remain open; the owner walkthrough is not a
 technical prerequisite. Follow the [daily/weekly checkpoints](WEEKLY_DELIVERY_PLAN.md)
 toward one permitted

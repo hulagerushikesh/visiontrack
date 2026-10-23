@@ -439,8 +439,11 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
 - [x] Reproduce its [unchanged full-sequence baseline](REAL_DATA_BASELINE.md):
       two fresh byte-identical runs, all metrics/raw/scored outputs retained;
       first chronological switch at source frame 54 inspected at annotation level.
-- [ ] Separate raw-detection coverage from tracking/output loss on the same
-      fixed case before tuning; a detection upper bound is not tracker accuracy.
+- [x] Complete the [saved-box coverage decomposition](REAL_DATA_COVERAGE.md):
+      all 21,825 misses partitioned with score/ignore rules, unique assignment
+      capacity and explicit non-causal limits; no new tracker execution.
+- [ ] Inspect unchanged association/lifecycle evidence for the same first
+      switch; verify replay against the saved baseline before any intervention.
 - [ ] Produce one fixed comparison and reproducible, visually understandable
       report. Retain negative results; one clip is not a general accuracy claim.
 - [ ] Review it with an interested practitioner if available; record workflow
