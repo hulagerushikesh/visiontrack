@@ -34,7 +34,7 @@ The traffic characterization found severe failures under the imposed box errors;
 perspective alone did not change the primary count/ID outcomes. These observations
 motivated the next question. They did **not** prove its cause or a solution.
 
-## Current focus: one-switch box-gate experiment
+## Completed research: one-switch box-gate experiment
 
 Question: can disabling only the tracker’s shape-sensitive rejection gate reduce
 broken IDs **without worsening** the registered tracking/counting measures?
@@ -99,9 +99,26 @@ implemented/tested, including pre-update payload receipts and failure preservati
 The [new exploratory trace and read-only audit](BOX_GATE_TRACE_FINDINGS.md) now
 cover all 240 variants with exact saved-output parity and no errors/retries.
 Recorded events explain concrete gate/confirmation gaps and same-ID anchor
-recrossings; they do not accept a fix or validate transfer. Next register a
-narrower intervention separating association and anchor/count stability with
-fresh validation. No held-out reopening, default change or C++ adoption.
+recrossings; they do not accept a fix or validate transfer. A new
+[counting-only study](CROSSING_BAND_PROTOCOL.md) is now registered to separate
+association from count stability. No held-out reopening, default change or
+C++ adoption.
+
+### Current focus: counting-only confirmation band
+
+- [x] Register one fixed counter rule on identical unchanged tracker outputs.
+- [x] Define fresh development/held-out paths and seeds, with through passages,
+  near-line dwell, genuine shallow/full returns and band-start/end crossings.
+- [x] Lock definitions; test integrity, scope and ideal geometry without new
+  noisy observations, tracker runs or comparative research outcomes.
+- [ ] Implement/test the isolated state machine and its emission-time records.
+- [ ] Build/commit the full input/replay/report harness, then run development.
+- [ ] Freeze/open fresh held-out evidence once; independently audit all results.
+
+The candidate's 0.25-unit toy band may reject jitter but also miss real short
+passages or delay counting. Per-case misses/extras and both event/emission-time
+window errors must not worsen; every emitted event must confirm within 15
+frames. No acceptance or real-world transfer is established by this design.
 
 ### Research and real data
 
@@ -154,23 +171,21 @@ A new synchronization happens only after:
 3. C++ implements only that stable subset, verifies exact parity/reset behavior
    across the supported matrix, and measures latency/memory before release.
 
-The present box-gate experiment uses a setting already in the Python tracker;
-it introduces no new algorithm requiring an immediate C++ port. Re-entry gallery,
-scoring, abstention, expiry/eviction and decision-stream parity remain conditional
+The completed box-gate experiment uses a setting already in the Python tracker;
+the new counting-only registration does not alter tracking or authorize a C++
+port. Re-entry gallery, scoring, abstention, expiry/eviction and decision-stream
+parity remain conditional
 future work. Approximate indexing must remain explicitly separate from exact mode;
 no GPU path or weakened parity is justified by the current plan.
 
 ## Immediate next action
 
-The experiment is closed with a negative result, not an accepted tracker change.
-The [saved-development symptom diagnosis](BOX_GATE_DIAGNOSIS.md) now covers all
-120 pairs without replay. It distinguishes missing public output from boxes
-below the evaluator's overlap threshold and preserves crossing timing and
-common-frame localization. Internal match-rejection causes are not established.
-Next, specify/test opt-in development-only association and state tracing with
-exact saved-output parity before any diagnostic replay or narrower intervention.
-Any new comparative study needs a new registration and genuinely fresh held-out
-cases; neither opened set may be relabeled as untouched validation. This diagnosis
-needs no new footage or owner assistance. Real recording, usability walkthrough
-and discovery remain separate pending work. C++ stays in maintenance until a
-useful behavior earns an explicitly accepted parity handoff.
+Implement and test the isolated counter from the
+[new registration](CROSSING_BAND_PROTOCOL.md), including genuine short passages,
+initialization/gaps, pending cancellation, segment bounds and explicit emission
+latency. Then build the guarded replay/report harness before any complete study
+grid. The box-gate study and its exact-parity internal diagnosis are finished;
+neither opened set may become untouched validation again. No footage or owner
+assistance is needed for this implementation step. Real recording, usability
+walkthrough and discovery remain separate pending work. C++ stays in maintenance
+until a useful behavior earns an explicitly accepted parity handoff.

@@ -408,8 +408,17 @@ replace RQ5 with an unregistered traffic claim.
 - [x] Independently audit its 482 files, all 240 exact output comparisons and
       55,578 recorded association stages; explain scoped startup, pulse rejection
       and same-ID line-recrossing mechanisms. No accepted fix or held-out replay.
-- [ ] Register any new comparative study with new held-out evidence; do not tune
-      a candidate and relabel either opened set as untouched validation.
+- [x] Register the narrower [counting-only confirmation-band study](CROSSING_BAND_PROTOCOL.md)
+      with identical tracker outputs, fresh paths/seeds, genuine shallow/start/end
+      passages and explicit count/delay safety gates. The read-only preflight
+      and deterministic geometry tests produce no noisy observations or outcomes.
+- [ ] Implement the isolated counter and hand-authored boundary/gap/reversal/
+      timing tests; do not change association, public boxes or production defaults.
+- [ ] Build/commit the complete new input/replay/report harness before its full
+      development grid, then freeze/open genuinely fresh held-out evidence once.
+      Do not tune v1 or relabel either consumed set as untouched validation.
+- [ ] Independently audit the new study and retain failures/no-effect as well
+      as gains. Counting-only changes cannot establish better ID/localization.
 - [ ] Validate any transfer claim on representative rights-reviewed evidence.
 
 ## Deferred research compute
