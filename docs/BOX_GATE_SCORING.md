@@ -94,8 +94,9 @@ performance or whether disabling the rejection gate is useful.
 
 1. The [development replay adapter](BOX_GATE_REPLAY.md) is now implemented and
    tested using doubles; actual new tracker comparisons remain unmeasured.
-2. Build/test complete paired exports and the registered decision rules on
-   hand-worked examples; commit the complete harness before the development grid.
+2. The [complete development exports and numerical rules](BOX_GATE_REPORT.md)
+   are now implemented/tested with hand-worked examples and explicit doubles;
+   the harness is committed before the development grid.
 3. Run and retain the full development grid without tuning, then separately
    freeze the complete harness/environment/new held-out input hashes before a
    single guarded held-out opening.

@@ -356,10 +356,16 @@ replace RQ5 with an unregistered traffic claim.
       doubles: isolated one-switch configurations, actual pre-update detector
       receipts, reset/fresh checks, scorer lineage and drift failures. Actual
       new tracker comparisons remain unmeasured; no new held-out opening.
-- [ ] Implement and validate the separate ablation report/export/decision harness,
-      commit it before development comparisons, then freeze the new held-out
-      gate before its first opening. Preserve no-effect/failure outcomes and
-      all registered per-case non-regression gates, not just an average gain.
+- [x] Implement/test the [development export and numerical-rule harness](BOX_GATE_REPORT.md)
+      with hand-worked tables/doubles: full coverage, lineage/re-scoring, exact
+      margins, nulls, all per-case regressions and retained partial variants.
+      Commit before development comparisons; no new actual tracker outcomes yet.
+- [ ] Run and independently audit all 120 development pairs from the committed
+      harness without tuning the candidate, margins or case selection.
+- [ ] Build/freeze the separate new held-out gate before its first opening;
+      retain one complete grid or stop with partial evidence, never selective retries.
+- [ ] Independently audit and report combined results, preserving failure,
+      no-effect and inconclusive outcomes, not just an average gain.
 - [ ] Validate any transfer claim on representative rights-reviewed evidence.
 
 ## Deferred research compute

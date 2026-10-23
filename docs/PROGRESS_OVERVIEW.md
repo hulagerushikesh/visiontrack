@@ -40,8 +40,8 @@ Question: can disabling only the tracker’s shape-sensitive rejection gate redu
 broken IDs **without worsening** the registered tracking/counting measures?
 It could help, do nothing or harm nearby-object associations.
 
-There are **eight milestone groups** in this summary. Four are implemented and
-tested; four remain. That is a count of milestone groups, **not 50% of total
+There are **eight milestone groups** in this summary. Five are implemented and
+tested; three remain. That is a count of milestone groups, **not a percentage of total
 effort, a probability of success or a whole-project completion percentage**.
 
 - [x] 1. Register the question, single changed setting, fresh scenario/seed
@@ -53,10 +53,11 @@ effort, a probability of success or a whole-project completion percentage**.
 - [x] 4. Implement/test the [paired replay adapter](BOX_GATE_REPLAY.md): isolated
   variants, detector-only handoff and fresh/reset/fresh checks, using test doubles.
   Actual new tracker outcomes remain unmeasured.
-- [ ] 5. Build/test complete paired exports and decision rules; require exact
+- [x] 5. Build/test [complete paired exports and decision rules](BOX_GATE_REPORT.md); require exact
   coverage, retain per-case regressions, reject invalid/incomplete evidence,
   preserve nulls and distinguish inconclusive/failure/no-effect/pass.
-  Commit the complete harness before the development grid.
+  The development harness is committed before the development grid. All rule
+  and exporter tests use hand-worked tables/doubles, not new tracker outcomes.
 - [ ] 6. Execute and independently audit all **120 development pairs**:
   240 variant runs, each with three passes. Keep every result, configuration,
   input/output digest and failed attempt; do not tune the registered candidate.
@@ -131,6 +132,7 @@ no GPU path or weakened parity is justified by the current plan.
 
 ## Immediate next action
 
-Complete milestone 5: paired report/export and acceptance-rule tests. It needs no
-new footage or owner assistance. Real recording and discovery can proceed on
+Begin milestone 6: execute and independently audit the 120 development pairs
+from the committed harness, without tuning. It needs no new footage or owner
+assistance. Real recording and discovery can proceed on
 their own schedule without holding up this engineering work.
