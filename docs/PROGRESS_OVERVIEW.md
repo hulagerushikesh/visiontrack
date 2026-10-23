@@ -197,9 +197,13 @@ locally. Its two configurations tie; the research trade-off is explicitly from
 a separate completed synthetic study. The owner has clarified that substantive
 evidence, not a demonstration, takes priority. The
 [existing MOT17-04-FRCNN intake](REAL_DATA_CASE_INTAKE.md) now passes source/cache
-correspondence for annotation-only diagnosis. Next reproduce its unchanged baseline
-and inspect the first chronological scored ID switch if present. Full visual
-review and a justified comparison remain open; the owner walkthrough is not a
+correspondence for annotation-only diagnosis. Its [unchanged baseline](REAL_DATA_BASELINE.md)
+now reproduces all four run files exactly across two fresh runs: FN 21,825,
+FP 49, IDSW 43, IDF1 61.32%, HOTA 52.55%. The first switch (reference 85,
+track 19 → 31, source frame 54) has a bounded metadata inspection, not a visual
+causal explanation. Next separate detection coverage from tracking/output loss
+on the same fixed case before tuning. Full visual review and a justified comparison
+remain open; the owner walkthrough is not a
 technical prerequisite. Follow the [daily/weekly checkpoints](WEEKLY_DELIVERY_PLAN.md)
 toward one permitted
 real-clip diagnostic case study. Its proposed first audience is fixed-camera CV engineers

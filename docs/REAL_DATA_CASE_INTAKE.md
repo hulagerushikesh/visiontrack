@@ -89,6 +89,12 @@ No previous frozen study artifact, production tracker or C++ code changed.
 
 ## Next bounded action: unchanged baseline, not a new intervention
 
+**Completed after this intake:** the [unchanged full-sequence baseline](REAL_DATA_BASELINE.md)
+now reproduces all four run artifacts byte for byte from two fresh trackers.
+It records 43 scored ID switches; the first is reference 85, track 19 → 31 at
+source frame 54. The checklist below records the original scope, not pending
+baseline work. No pixels were reviewed or candidate evaluated.
+
 1. Recheck these inputs and record the code revision, environment and complete
    `TrackerConfig()` defaults **before** execution. Use the full range above
    with a fresh tracker starting at frame 1; no warm-start, embedding or tuning.
@@ -116,7 +122,8 @@ If the evidence suggests no defensible intervention, retain that conclusion.
 
 ## Gates still open
 
-- [ ] Baseline output, reproducibility and a bounded diagnostic event.
+- [x] Baseline output, reproducibility and a bounded annotation diagnostic event;
+      see [the measured results and limits](REAL_DATA_BASELINE.md).
 - [ ] Lawful access to the relevant pixels and actual independent label/context
       review before making a visually grounded explanation. No new image
       download is authorized by this document.

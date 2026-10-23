@@ -186,9 +186,15 @@ MOT17-04-FRCNN detection/GT arrays against the pinned official annotation ZIP:
 1,050 frames, 28,406 detections, 47,557 scored pedestrian boxes / 83 reference IDs,
 and 60,448 non-scoring rows retained for proper ignore handling. This admits local
 annotation-only diagnosis, **not** independent visual review or a finished case
-study. No new tracker outcomes or imagery were read in this step. Next reproduce
-the unchanged baseline and inspect the first chronological scored ID switch if
-present. A new comparison, transfer claims, outreach and C++ adoption remain gated.
+study. No new tracker outcomes or imagery were read in the intake step. The
+subsequent [unchanged baseline](REAL_DATA_BASELINE.md) now completes two fresh
+full-sequence runs with byte-identical raw/scored/failure/summary files: FN 21,825,
+FP 49, IDSW 43, IDF1 61.32%, HOTA 52.55%. First switch: reference 85, track
+19 → 31 at source frame 54, with annotation-only adjacent-input/output inspection.
+All 1,900 non-slow tests pass, with one slow test deselected. No visual cause or
+new improvement is established. Next separate raw-detection coverage from
+tracking/output loss before tuning. Independent pixel/reference review, a new
+comparison, transfer claims, outreach and C++ adoption remain gated.
 
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective
