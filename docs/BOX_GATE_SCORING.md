@@ -92,8 +92,8 @@ performance or whether disabling the rejection gate is useful.
 
 ## Next
 
-1. Build/test the development replay adapter, changing only the registered gate
-   setting and feeding identical detector-only inputs to isolated instances.
+1. The [development replay adapter](BOX_GATE_REPLAY.md) is now implemented and
+   tested using doubles; actual new tracker comparisons remain unmeasured.
 2. Build/test complete paired exports and the registered decision rules on
    hand-worked examples; commit the complete harness before the development grid.
 3. Run and retain the full development grid without tuning, then separately

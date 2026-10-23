@@ -83,9 +83,10 @@ revalidate provenance and inputs before executing either tracker variant.
 ## What is still left
 
 1. The [development reference scorer](BOX_GATE_SCORING.md) is now tested on
-   hand-worked rows, retaining all 37 endpoints. Next implement/test the
-   development replay adapter and exact registered single-switch change.
-   Check fresh/reset/fresh output equality and actual detector-only handoff.
+   hand-worked rows, retaining all 37 endpoints. The [replay adapter](BOX_GATE_REPLAY.md)
+   is implemented/tested with doubles, including the single-switch configuration,
+   detector-only handoff and fresh/reset/fresh checks. Actual new tracker
+   comparisons remain unmeasured; the full export/decision harness is next.
 2. Build full paired exports and test the acceptance/no-effect/failure rules
    using hand-worked examples before running the committed development grid.
 3. Freeze the complete reviewed harness, environment and new held-out input
