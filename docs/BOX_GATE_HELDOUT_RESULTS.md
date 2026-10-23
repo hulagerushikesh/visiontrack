@@ -1,4 +1,4 @@
-# Box-gate ablation — held-out run complete, combined audit next
+# Box-gate ablation — held-out execution record
 
 **2026-10-23. Milestone 7 is complete.** The fixed grid ran once from clean
 committed harness `c99c4e72bf0fd6a740ec0b22135448b931eac448`, after preparation
@@ -6,9 +6,12 @@ and read-only verification of the exact code/runtime/evidence/input freeze.
 All **120 pairs / 240 variants / 720 fresh/reset/fresh passes** completed,
 300 updates per pass, without errors, skipped cases or selective retries.
 
-These are **saved scorer results, pending independent endpoint arithmetic and
-combined-study audit** in milestone 8. They are not a final study verdict or
-real-traffic accuracy claim. The candidate remains **not accepted**; defaults,
+This page records milestone 7's saved results and inventory. **Milestone 8 is
+now complete:** see the [final combined audit and findings](BOX_GATE_FINDINGS.md)
+for the registered **failure** classification. The original compact index retains
+its historical pending flags; a separate combined index records the final audit.
+Neither this execution record nor that verdict is a real-traffic accuracy claim.
+The candidate remains **not accepted**; defaults,
 package source, parity fixtures, website behavior and C++ remain unchanged.
 
 ## What this means in plain language
@@ -24,7 +27,7 @@ identical baseline/candidate values for all 37 endpoints.
 
 The earlier development evidence remains binding: its 174 violations have not
 been removed, reclassified or used to tune another candidate. Both sets of
-raw evidence now exist; their independent combined interpretation is next.
+raw evidence now exist; their combined interpretation is in the final findings.
 
 ## Fixed comparison and saved results
 
@@ -120,19 +123,18 @@ The original freeze and opening remain outside Git. The opening is consumed:
 do not delete it, retry the grid or reuse these cases as untouched evidence for
 a tuned candidate. Later commits do not change the recorded `c99c4e7` run.
 
-## What remains
+## Subsequent combined audit
 
-**Milestone 8:** add a separate saved-record auditor for held-out and combined
-evidence, without modifying the already pinned development auditor. Reconstruct
-the arithmetic, validate both complete splits and apply the unchanged decision
-rules, preserving every regression and conditional null. Publish a bounded
-combined interpretation, including negative findings.
+**Milestone 8 is complete:** a separate saved-record auditor checked both splits
+without modifying the pinned development auditor or running the tracker again.
+The [final findings](BOX_GATE_FINDINGS.md) retain every regression and conditional
+null and explain the unchanged registered failure decision.
 
 The held-out-only summary still says `inconclusive` because it intentionally
 does not include development rows. That is not a combined classification or a
-claim that held-out data is still missing. The combined classification has not
-yet been audited/reported. The development safety failure already prevents
-acceptance of this unchanged candidate.
+claim that held-out data is still missing. The combined classification is now
+audited/reported separately as failure. Neither split's safety failures were
+discarded or averaged away.
 
 No owner recording is needed for the audit. Real-data transfer, representative
 detector/camera evaluation, any new registered hypothesis and a future accepted

@@ -5,7 +5,9 @@ clean committed harness `817e6f7c9d802f4a762c6ca00ba26035a9eab6ca`:
 240 variant runs, 720 fresh/reset/fresh passes, 300 updates per pass.
 There were no failed, skipped, replaced or selectively repeated cases.
 At this development snapshot the new held-out grid was **unopened**. It has now
-completed separately; see the [held-out run and pending combined audit](BOX_GATE_HELDOUT_RESULTS.md).
+completed separately; see the [held-out execution record](BOX_GATE_HELDOUT_RESULTS.md)
+and [final combined findings](BOX_GATE_FINDINGS.md). The final registered
+classification is failure; this historical development-only audit stays unchanged.
 No tracker defaults, website behavior, Python package source, parity fixtures
 or C++ behavior changed.
 
@@ -97,9 +99,9 @@ timing improvement. Stable IDs are not proof of precise contact localization.
 **Development non-regression requirement: failed. Candidate not accepted.**
 The stored development-only numerical classification remains **inconclusive**:
 both splits are required by the unchanged decision policy, and this historical
-summary does not include held-out rows. Both bundles now exist, but independent
-combined audit/reporting is still pending. That wording must not conceal the
-already observed violations.
+summary does not include held-out rows. Both bundles now exist, and the combined
+audit/reporting is complete separately. The historical inconclusive wording must
+not conceal the already observed violations.
 Completing held-out work cannot erase these development violations or justify
 acceptance of this unchanged candidate under the registered requirements.
 
