@@ -412,8 +412,11 @@ replace RQ5 with an unregistered traffic claim.
       with identical tracker outputs, fresh paths/seeds, genuine shallow/start/end
       passages and explicit count/delay safety gates. The read-only preflight
       and deterministic geometry tests produce no noisy observations or outcomes.
-- [ ] Implement the isolated counter and hand-authored boundary/gap/reversal/
-      timing tests; do not change association, public boxes or production defaults.
+- [x] Implement the [isolated counter](CROSSING_BAND_COUNTER.md) and 64 authored
+      boundary/gap/reversal/timing tests. Retain real short-passage misses,
+      unfinished/canceled state and excessive delay; no association/default change.
+- [ ] Review its structural misses/delay before full-grid investment. An authored
+      feasibility rejection is not a study verdict; do not tune v1 to rescue it.
 - [ ] Build/commit the complete new input/replay/report harness before its full
       development grid, then freeze/open genuinely fresh held-out evidence once.
       Do not tune v1 or relabel either consumed set as untouched validation.
