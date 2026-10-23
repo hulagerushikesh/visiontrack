@@ -1,0 +1,105 @@
+{
+  "protocol_id": "visiontrack.crossing-band/v1",
+  "registered_on": "2026-10-23",
+  "purpose": "isolate counting-anchor stability from association; experimental postprocessor only",
+  "parent_artifacts": {
+    "experiments/traffic_protocol_v1.json": "3a6dc71688eeb7ce981dc30ea614f22b82f44052f1aedd8ac68176ac156cf957",
+    "docs/TRAFFIC_RELIABILITY_PROTOCOL.md": "27b89dd580cfc7a90668a04a5e8b4aae685b745b85c988bd17eb5af6bf4d808b",
+    "experiments/box_gate_protocol_v1.json": "c240d372c9e79d6bf3367bcb8ce131066a1185b8818af47d42b37e346e064a7f",
+    "docs/BOX_GATE_ABLATION_PROTOCOL.md": "413cd0b83843b660d072f7584c1495d858f701f40dca81cce669e31d2d7b62cc"
+  },
+  "baseline_revision": "16c287a6b18c5c142a28e4bce70b3232946459db",
+  "inherit_unchanged": [
+    "frame_grid", "world_roi", "projection", "ideal_box", "observation_error",
+    "conditions", "tracker_config", "anchors", "crossing", "diagnostics"
+  ],
+  "hypothesis": "A fixed spatial confirmation band may reduce noisy bottom-anchor recrossings, but can miss real shallow passages, band-start/end crossings or delay reporting. Any such safety regression blocks acceptance.",
+  "variants": [
+    {"id": "legacy", "tracker_config_patch": {}, "counter": "first_line_arrival_per_id_direction"},
+    {"id": "band", "tracker_config_patch": {}, "counter": "band_confirmed_line_arrival", "half_width_world_units": 0.25}
+  ],
+  "candidate_rules": {
+    "line_world_y": 10.0,
+    "half_width_world_units": 0.25,
+    "negative_stable_side": "y <= 9.75",
+    "positive_stable_side": "y >= 10.25",
+    "initialization": "no inferred origin inside band; wait for first stable side",
+    "pending": "last adjacent frozen-rule line arrival toward opposite stable side; cancel on strict return to origin half-plane",
+    "confirmation": "first adjacent sample on opposite stable side; consume pending arrival even if outside segment or already emitted",
+    "event_time": "retain interpolated pending line-arrival time and X; separately record integer confirmation frame",
+    "gap": "nonadjacent same-ID sample cancels pending and reinitializes side; never join IDs or fill gaps",
+    "end": "pending arrivals remain unconfirmed; no end-of-run flush or fabricated confirmation",
+    "deduplication": "first confirmed in-segment arrival per ID and direction across whole run",
+    "segment": "-6 <= interpolated line-arrival X < 6; use crossing X, not confirmation X",
+    "dwell_frames": 0,
+    "smoothing": false,
+    "truth_assistance": false
+  },
+  "splits": {
+    "development": {
+      "seeds": [6001, 6002, 6003, 6004, 6005, 6006, 6007, 6008, 6009, 6010],
+      "scenarios": ["band_dev_through", "band_dev_dwell", "band_dev_shallow_return", "band_dev_full_return", "band_dev_start_in_band", "band_dev_end_in_band"]
+    },
+    "heldout": {
+      "seeds": [8001, 8002, 8003, 8004, 8005, 8006, 8007, 8008, 8009, 8010],
+      "scenarios": ["band_test_through", "band_test_dwell", "band_test_shallow_return", "band_test_full_return", "band_test_start_in_band", "band_test_end_in_band"]
+    }
+  },
+  "path_rule": "one object with ID 1; each waypoint is [integer frame, world X, world Y]; float64 piecewise linear interpolation including endpoints; do not round crossing times",
+  "scenarios": {
+    "band_dev_through": [[0, -1.8, 3.4], [299, -1.8, 16.6]],
+    "band_dev_dwell": [[0, 1.6, 8.5], [110, 1.6, 9.92], [190, 1.6, 9.92], [299, 1.6, 8.5]],
+    "band_dev_shallow_return": [[0, -0.9, 8.4], [110, -0.9, 9.7], [150, -0.9, 10.12], [190, -0.9, 9.7], [299, -0.9, 8.4]],
+    "band_dev_full_return": [[0, 2.1, 7.2], [105, 2.1, 12.8], [190, 2.1, 12.8], [299, 2.1, 7.2]],
+    "band_dev_start_in_band": [[0, -2.2, 9.88], [299, -2.2, 15.4]],
+    "band_dev_end_in_band": [[0, 0.8, 4.2], [250, 0.8, 9.7], [299, 0.8, 10.12]],
+    "band_test_through": [[0, 2.4, 17.2], [299, -0.8, 2.8]],
+    "band_test_dwell": [[0, -1.4, 11.7], [100, -1.2, 10.07], [205, -1.0, 10.07], [299, -0.8, 11.7]],
+    "band_test_shallow_return": [[0, 1.1, 11.6], [100, 1.2, 10.3], [160, 1.3, 9.86], [210, 1.4, 10.3], [299, 1.5, 11.6]],
+    "band_test_full_return": [[0, -2.5, 12.6], [115, -2.1, 7.4], [180, -1.9, 7.4], [299, -1.5, 12.6]],
+    "band_test_start_in_band": [[0, 0.5, 10.14], [299, 1.0, 4.8]],
+    "band_test_end_in_band": [[0, -0.5, 15.8], [245, -0.3, 10.3], [299, -0.2, 9.86]]
+  },
+  "grid": {
+    "input_cases_per_split": 240,
+    "counter_views_per_split": 480,
+    "tracker_passes_per_input": 3,
+    "tracker_passes_per_split": 720,
+    "pass_order": ["fresh", "reset", "independent_fresh"],
+    "counter_order": ["legacy", "band"],
+    "ordering": "registered scenario, seed, condition, pass, counter order",
+    "pairing": "one immutable public-row vector per tracker pass, projected identically and consumed by both counters; not two tracker variants"
+  },
+  "evaluation": {
+    "truth": "legacy line-arrival rule on ideal world paths, never band-filtered; at most two truth events per case",
+    "primary": "mean bottom-centre missed-plus-extra events over ten seeds and box_error_only/combined, separately per scenario",
+    "minimum_baseline_primary": 1.0,
+    "minimum_qualifying_scenarios_per_split": 2,
+    "minimum_absolute_reduction": 0.5,
+    "minimum_relative_reduction": 0.25,
+    "per_paired_case_nonincrease": ["missed_events", "extra_events", "event_error", "absolute_window_count_error", "emission_window_count_error"],
+    "invariant_endpoints": ["id_switches", "missed_object_frames", "false_positive_rows", "all_parent_localization_endpoints", "entire_public_rows"],
+    "maximum_confirmation_delay_frames": 15.0,
+    "confirmation_delay": "confirmation frame minus retained interpolated line-arrival time, for every emitted candidate event including extras",
+    "emission_window_count_error": "sum absolute predicted-minus-truth counts per direction per half-open 30-frame window, using integer emission frames for predictions and exact ideal crossing times for truth",
+    "retain": "all 37 parent endpoints for both counters, both timestamp/emission window tables, each emission frame/delay, pending/cancellation diagnostics, all seeds and conditions including null/zero-truth cases",
+    "decision_order": ["invalid_or_incomplete:inconclusive", "any_safety_or_delay_regression:failure", "inadequate_challenge:inconclusive", "identical_all_records:no_effect", "missing_benefit_margin:failure", "otherwise:pass"],
+    "null_policy": "no matched crossings gives null conditional errors, not zero; no emitted events gives null maximum delay, not a latency success",
+    "inference": "descriptive synthetic screening only; no independence claim for seeds, statistical significance, real-world accuracy or novelty claim"
+  },
+  "execution_policy": {
+    "study_outcomes_observed_at_registration": false,
+    "random_observations_generated_at_registration": false,
+    "new_tracker_runs_at_registration": false,
+    "implementation_harness_frozen": false,
+    "authored_unit_diagrams_allowed": true,
+    "tuning_allowed": false,
+    "consumed_heldout_reuse_allowed": false,
+    "development_before_new_heldout_freeze": true,
+    "heldout_policy": "commit full reviewed harness and environment/input hashes; one exclusive opening; stop on first error; retain partial evidence; no retry, selective run or overwritten result",
+    "invalidity_policy": "document versioned amendment and fresh validation; never revive an opened set",
+    "production_default_change_authorized": false,
+    "cpp_port_authorized": false,
+    "real_data_claims_allowed": false
+  }
+}

@@ -113,6 +113,7 @@ nav:
       - Box-gate internal tracing preparation: BOX_GATE_TRACE.md
       - Box-gate verified development trace wrapper: BOX_GATE_TRACE_REPLAY.md
       - Box-gate development internal-trace findings: BOX_GATE_TRACE_FINDINGS.md
+      - Next research — counting-only confirmation-band protocol: CROSSING_BAND_PROTOCOL.md
       - Release-readiness audit: RELEASE_READINESS.md
       - Python/C++ runtime contract: CROSS_RUNTIME_CONTRACT.md
       - Horizons: HORIZONS.md

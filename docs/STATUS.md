@@ -134,6 +134,21 @@ association-versus-anchor/count-stability comparison with fresh validation.
 Observer records alone retain provenance/interpretation/validation flags false.
 Any later intervention needs fresh validation, not rescue tuning on the consumed
 held-out set. Defaults and C++ remain unchanged.
+
+The next [counting-only confirmation-band study](CROSSING_BAND_PROTOCOL.md) is
+now locally registered, not executed. Both counters will consume identical
+unchanged tracker outputs. The fixed 0.25 toy-unit band is tested prospectively
+against noisy counts **and** genuine shallow/return/start/end crossings, with
+per-case missed/extra and timestamp/emission-window safety gates plus a 15-frame
+maximum confirmation delay. Fresh development/held-out paths and seeds are
+defined; no noisy inputs, tracker outcomes or old held-out bundles were opened
+for this registration. Byte-integrity/scope/ideal-geometry tests are preparation,
+not evidence of efficacy. Next implement the counter, then the complete guarded
+replay/report harness. There is no accepted fix, production change or C++ port.
+At this registration checkpoint, **1,802 non-slow tests pass** (34 new
+definition/scope/ideal-geometry cases); Ruff and the strict documentation build
+also pass. The prior negative findings and their frozen artifacts are unchanged.
+
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective
 anonymous re-entry probe can export its complete fixed-grid synthetic curves
