@@ -436,16 +436,19 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       labels; data acquisition/permission is not assumed complete.
 - [x] Verify [one existing real-data cache against official annotations](REAL_DATA_CASE_INTAKE.md):
       MOT17-04-FRCNN, annotation-only diagnosis admitted; full visual case still held.
-- [ ] Reproduce its unchanged full-sequence baseline and inspect the first
-      chronological scored ID switch if present; retain no-event outcomes.
+- [x] Reproduce its [unchanged full-sequence baseline](REAL_DATA_BASELINE.md):
+      two fresh byte-identical runs, all metrics/raw/scored outputs retained;
+      first chronological switch at source frame 54 inspected at annotation level.
+- [ ] Separate raw-detection coverage from tracking/output loss on the same
+      fixed case before tuning; a detection upper bound is not tracker accuracy.
 - [ ] Produce one fixed comparison and reproducible, visually understandable
       report. Retain negative results; one clip is not a general accuracy claim.
 - [ ] Review it with an interested practitioner if available; record workflow
       feedback without calling it a validated partnership or product demand.
 
 Follow the [daily/weekly delivery checkpoints](WEEKLY_DELIVERY_PLAN.md). The owner
-clarified that substantive evidence takes priority over demonstrations. The next
-weekly target is a reproducible real-data baseline and bounded diagnosis;
+clarified that substantive evidence takes priority over demonstrations. The
+weekly baseline/annotation-diagnosis target is now met;
 presentation and owner teaching are not prerequisites or accuracy evidence.
 Independent visual review and any justified comparison remain open. No new C++
 port is required.

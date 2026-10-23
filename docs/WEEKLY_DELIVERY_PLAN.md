@@ -25,8 +25,10 @@ evidence and limitations are sufficiently clear and the owner agrees.
 The [first real-data intake](REAL_DATA_CASE_INTAKE.md) has now verified the
 existing MOT17-04-FRCNN cache against the pinned official annotations. This
 admits **annotation-only diagnosis**, not a completed visual/checked-label
-case study. Next reproduce the unchanged baseline and inspect one pre-defined
-chronological failure; independent pixel review remains an explicit later gate.
+case study. The [unchanged baseline](REAL_DATA_BASELINE.md) now reproduces
+byte for byte across two fresh full-sequence runs. The first chronological
+switch (reference 85, 19 → 31 at source frame 54) has a bounded annotation
+inspection; independent pixel review remains an explicit later gate.
 
 ## Weekly aim: establish the real-data baseline and its limits
 
@@ -39,14 +41,16 @@ teaching, not a prerequisite for this research work.
 | Session | Our delivery | Owner help | Done means |
 | --- | --- | --- | --- |
 | Session 1 — intake | Verify the existing cache against official annotation members and define the limited admission | None for the annotation-only route | Done: exact source conversion, task/range and remaining visual/rights gates recorded |
-| Session 2 — baseline | Run and reproduce an unchanged, full-sequence cold-start baseline with complete settings and outputs | None | Two fresh runs agree; proper ignore handling and all relevant metrics retained |
-| Session 3 — diagnose | Inspect the first chronological scored ID switch if present; document adjacent inputs/outputs without claiming a visual cause | Optional questions about the explanation | One bounded evidence record, or a reported absence; no range/parameter hunting |
+| Session 2 — baseline | Run and reproduce an unchanged, full-sequence cold-start baseline with complete settings and outputs | None | Done: all four run files byte-identical; ignore handling, complete outputs and metrics retained |
+| Session 3 — diagnose | Inspect the first chronological scored ID switch if present; document adjacent inputs/outputs without claiming a visual cause | Optional questions about the explanation | Done at annotation level: first switch at source frame 54, fixed 51–57 context plus same-event prior-match history; no visual cause claimed |
 | Session 4 — review evidence | Resolve lawful pixel access and independent reference/context review, or record a specific hold | Help only if a permission or reviewer decision is needed | Actual review or explicit missing dependency; metadata correspondence is not visual review |
 | Session 5 — decide scope | Summarize the baseline diagnosis; justify/freeze one comparison before outcomes, or stop if unsupported | Review the plain-language summary | A defensible next research decision, not a promised winner or demo deadline |
 
-Session 1's annotation intake and the earlier internal demo preparation are
-complete. The baseline, complete visual case admission, owner walkthrough and
-reviewer participation remain pending. These sessions need not consume five full
+Sessions 1–3 are complete **at the annotation-only level**, as is the earlier
+internal demo preparation. The next bounded technical task is to separate raw
+detection coverage from tracking/output loss on this fixed sequence before tuning.
+Complete visual case admission, owner walkthrough and reviewer participation
+remain pending. These sessions need not consume five full
 engineering days; permission/label availability may dominate calendar time.
 
 ## Next big deliverable: one real-clip diagnostic case study

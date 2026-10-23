@@ -119,6 +119,7 @@ nav:
       - Next delivery goal — one understandable case study: SHOWCASE_MILESTONE.md
       - Daily checkpoints and weekly goal: WEEKLY_DELIVERY_PLAN.md
       - Real-data case — annotation intake: REAL_DATA_CASE_INTAKE.md
+      - Real-data baseline and first scored identity switch: REAL_DATA_BASELINE.md
       - Release-readiness audit: RELEASE_READINESS.md
       - Python/C++ runtime contract: CROSS_RUNTIME_CONTRACT.md
       - Horizons: HORIZONS.md
