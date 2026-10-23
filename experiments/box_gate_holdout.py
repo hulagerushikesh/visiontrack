@@ -1,4 +1,4 @@
-"""Input/code/evidence freeze for the new ablation; NO held-out execution API.
+"""Input/code/evidence freeze; execution lives in box_gate_execution separately.
 
 Preparation generates geometry and audits saved development records only. Build
 and commit the complete held-out replay/export gate before issuing a real freeze.
@@ -215,7 +215,7 @@ def verify_freeze(path: Path) -> dict:
     """Read-only pre-opening check, including full development evidence re-audit.
 
     Exact revision required: no automatic descendant/refreeze exception. A
-    future executor must claim opening.json exclusively before any construction.
+    separate executor claims opening.json exclusively before any construction.
     Verification itself never creates that claim or authorizes an execution.
     """
     path = _external(path)

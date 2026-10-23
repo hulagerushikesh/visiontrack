@@ -72,19 +72,26 @@ def _sealed(value: dict, field: str) -> None:
 
 def _validate_pair(record: dict, scene, source: dict, baseline: dict, environment: dict) -> None:
     """Re-score saved public rows, not merely their advertised endpoint digest."""
+    if scene.split != "development":
+        raise ValueError("development validation requires development inputs")
+    _validate_pair_core(record, scene, source, baseline, environment, score_development)
+
+
+def _validate_pair_core(record, scene, source, baseline, environment, scorer) -> None:
+    """Shared record checks; the caller supplies a split-guarded reference scorer."""
     spec, hashes = load_registration()
     parent, _ = load_frozen_protocol()
     _sealed(record, "record_sha256")
     if (
-        record["format"] != "visiontrack.box-gate-development-pair/v1"
+        record["format"] != f"visiontrack.box-gate-{scene.split}-pair/v1"
         or record["protocol_id"] != spec["protocol_id"]
         or record["protocol_hashes"] != hashes
-        or record["input"] != scene.manifest()
+        or _json_bytes(record["input"]) != _json_bytes(scene.manifest())
         or _json_bytes(record["source"]) != _json_bytes(source["replay_source"])
         or record["source"]["worktree_dirty"] is not False
-        or record["baseline_source"] != baseline
-        or record["environment"] != environment
-        or record["heldout_tracking_executed"] is not False
+        or _json_bytes(record["baseline_source"]) != _json_bytes(baseline)
+        or _json_bytes(record["environment"]) != _json_bytes(environment)
+        or record["heldout_tracking_executed"] is not (scene.split == "heldout")
         or record["complete_study_report"] is not False
         or [v["id"] for v in record["variants"]] != spec["grid"]["variant_order"]
     ):
@@ -107,7 +114,7 @@ def _validate_pair(record: dict, scene, source: dict, baseline: dict, environmen
         ):
             raise ValueError("variant configuration, actual input receipt or replay mismatch")
         _sealed(variant["scoring"], "scoring_sha256")
-        rescored = score_development(scene, variant["output"])
+        rescored = scorer(scene, variant["output"])
         if _json_bytes(variant["scoring"]) != _json_bytes(rescored):
             raise ValueError("scoring differs from independently re-scored public rows")
         validate_endpoints(variant["scoring"]["endpoints"])
@@ -123,18 +130,23 @@ def _validate_pair(record: dict, scene, source: dict, baseline: dict, environmen
 
 def _summarize(records: list[dict], planned: list[dict], spec: dict, parent: dict) -> dict:
     """Complete ordered grid only; exporter validates provenance before this."""
-    expected = cases(spec, parent, "development")
+    return _summarize_grid(records, planned, spec, parent, split="development")
+
+
+def _summarize_grid(records, planned, spec, parent, *, split: str) -> dict:
+    """Shared complete-grid arithmetic, not an execution or provenance gate."""
+    expected = cases(spec, parent, split)
     actual = [
         (r["input"]["scenario"], r["input"]["seed"], r["input"]["condition"]) for r in records
     ]
     if actual != expected or [r["input"] for r in records] != planned:
-        raise ValueError("complete ordered development grid and planned inputs required")
+        raise ValueError(f"complete ordered {split} grid and planned inputs required")
     indexed = dict(zip(expected, records, strict=True))
     evidence = []
     for record in records:
         evidence.append(
             {
-                "split": "development",
+                "split": split,
                 "scenario": record["input"]["scenario"],
                 "seed": record["input"]["seed"],
                 "condition": record["input"]["condition"],
@@ -142,9 +154,9 @@ def _summarize(records: list[dict], planned: list[dict], spec: dict, parent: dic
             }
         )
     scenarios = []
-    for scenario in spec["splits"]["development"]["scenarios"]:
+    for scenario in spec["splits"][split]["scenarios"]:
         seeds = []
-        for seed in spec["splits"]["development"]["seeds"]:
+        for seed in spec["splits"][split]["seeds"]:
             paired = {c["id"]: indexed[(scenario, seed, c["id"])] for c in parent["conditions"]}
             controls = paired["control"]["input"]["sha256"]
             if any(
@@ -192,7 +204,7 @@ def _summarize(records: list[dict], planned: list[dict], spec: dict, parent: dic
             }
         )
     return {
-        "format": "visiontrack.box-gate-development-summary/v1",
+        "format": f"visiontrack.box-gate-{split}-summary/v1",
         "protocol_id": spec["protocol_id"],
         "protocol_hashes": load_registration()[1],
         "paired_cases": len(records),
@@ -200,11 +212,11 @@ def _summarize(records: list[dict], planned: list[dict], spec: dict, parent: dic
         "replay_passes": 6 * len(records),
         "scenarios": scenarios,
         "numerical_rules": evaluate_rules(evidence),
-        "complete_development_grid": True,
+        f"complete_{split}_grid": True,
         "complete_study_report": False,
-        "heldout_tracking_executed": False,
+        "heldout_tracking_executed": split == "heldout",
         "limitations": [
-            "Development only: numerical study verdict remains inconclusive "
+            f"{split.capitalize()} only: numerical study verdict remains inconclusive "
             "until both splits exist.",
             "Do not tune candidate, margins or selectors from these development outcomes.",
             "37 endpoints, null counts, all per-case contrasts and regressions retained; "

@@ -1,6 +1,7 @@
 """One development pair for the registered ablation, not a full-grid exporter.
 
-No split, variant, configuration override, CLI, file writes or held-out entry.
+No public split, variant, configuration override, CLI, file writes or held-out entry.
+Private replay mechanics are shared with the separate exclusive opening gate.
 Tests use explicit doubles; comparative experiment runs follow the committed
 complete reporting/decision harness, not this adapter's implementation tests.
 """
@@ -143,6 +144,15 @@ def _run_development(*, scenario: str, seed: int, condition: str, variant_sink=N
         split="development", scenario=scenario, seed=seed, condition=condition,
     )
     registration, hashes, parent = _validated_input(scene)
+    return _run_pair(scene, registration, hashes, parent, score_development, variant_sink)
+
+
+def _run_pair(scene, registration, hashes, parent, scorer, variant_sink=None) -> dict:
+    """Private replay mechanics, not authorization to open a held-out case.
+
+    Development retains its fixed wrapper; the separate held-out exporter must
+    verify a freeze and claim the opening before calling this core.
+    """
     baseline = _verify_tree(ROOT, registration["baseline_revision"])
     _check_import_origins()
     source, input_manifest = _snapshot(), scene.manifest()
@@ -169,7 +179,7 @@ def _run_development(*, scenario: str, seed: int, condition: str, variant_sink=N
             receipts.append(receipt)
         if any(_json_bytes(rows) != _json_bytes(outputs[0]) for rows in outputs[1:]):
             raise ValueError("variant reset/fresh output mismatch")
-        scored = score_development(scene, outputs[0])
+        scored = scorer(scene, outputs[0])
         if (
             scored["public_rows_sha256"] != _sha(outputs[0])
             or scored["input"] != input_manifest or scored["source"] != baseline
@@ -195,7 +205,7 @@ def _run_development(*, scenario: str, seed: int, condition: str, variant_sink=N
     ):
         raise ValueError("source, inputs or registration changed during paired replay")
     result = {
-        "format": "visiontrack.box-gate-development-pair/v1",
+        "format": f"visiontrack.box-gate-{scene.split}-pair/v1",
         "protocol_id": registration["protocol_id"], "protocol_hashes": hashes,
         "input": input_manifest, "baseline_source": baseline, "source": source,
         "environment": _environment(), "variants": variants,
@@ -203,9 +213,9 @@ def _run_development(*, scenario: str, seed: int, condition: str, variant_sink=N
             (1, variants[1]["scoring"]["endpoints"]),
             (-1, variants[0]["scoring"]["endpoints"]),
         ]),
-        "heldout_tracking_executed": False, "complete_study_report": False,
+        "heldout_tracking_executed": scene.split == "heldout", "complete_study_report": False,
         "limitations": [
-            "One development pair, not a full grid, decision or real-traffic claim.",
+            f"One {scene.split} pair, not a full grid, decision or real-traffic claim.",
             "Actual source/runtime recorded, not a cross-environment bit-parity guarantee.",
             "Input receipts fingerprint pre-update payloads, not truth-assisted associations.",
             "Workflow provenance is not a sandbox against monkeypatched or malicious runtimes.",

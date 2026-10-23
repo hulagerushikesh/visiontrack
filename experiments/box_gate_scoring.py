@@ -1,7 +1,9 @@
-"""Development-only reference scorer for the separately registered ablation.
+"""Development reference scorer plus private shared reference arithmetic.
 
 Consumes supplied public rows; never constructs a tracker or opens a holdout.
 Hand-fed rows are scorer fixtures, not evidence that either variant produced them.
+The public API remains development-only. The separate exclusive opening gate
+uses private split-specific regeneration/arithmetic without weakening that API.
 The original traffic-v1 files and their selector guards remain unchanged.
 """
 
@@ -46,12 +48,25 @@ def _validated_input(scene: BoxGateInputs) -> tuple[dict, dict, dict]:
     """
     if type(scene) is not BoxGateInputs or scene.split != "development":
         raise ValueError("scoring requires registered development BoxGateInputs")
+    return _validated_scene(scene, split="development")
+
+
+def _validated_scene(scene: BoxGateInputs, *, split: str) -> tuple[dict, dict, dict]:
+    """Private split-specific regeneration; held-out callers require the opening gate.
+
+    This helper grants no execution permission. The public development wrapper
+    rejects held-out inputs before reaching it; it is not a security boundary.
+    """
+    if split not in {"development", "heldout"} or type(scene) is not BoxGateInputs:
+        raise ValueError("expected registered BoxGateInputs and an explicit split")
+    if scene.split != split:
+        raise ValueError("input split differs from the required evaluation split")
     registration, hashes = load_registration()
     parent, parent_hashes = load_frozen_protocol()
     if parent_hashes != registration["parent_artifacts"]:
         raise ValueError("parent protocol changed during scoring preflight")
     expected = generate_inputs(
-        split="development", scenario=scene.scenario, seed=scene.seed, condition=scene.condition,
+        split=split, scenario=scene.scenario, seed=scene.seed, condition=scene.condition,
     )
     for field in fields(BoxGateInputs):
         actual, canonical = getattr(scene, field.name), getattr(expected, field.name)
@@ -198,6 +213,11 @@ def score_development(scene: BoxGateInputs, rows: list[dict]) -> dict:
     A later replay adapter must establish the actual producer/configuration.
     """
     registration, hashes, parent = _validated_input(scene)
+    return _score(scene, rows, registration, hashes, parent)
+
+
+def _score(scene, rows, registration, hashes, parent) -> dict:
+    """Shared arithmetic after split-specific regeneration; never runs a tracker."""
     normalized, by_frame = _public_rows(rows, parent)
     baseline = _verify_tree(ROOT, registration["baseline_revision"])
     _check_import_origins()
@@ -208,7 +228,7 @@ def score_development(scene: BoxGateInputs, rows: list[dict]) -> dict:
         for index, identity in enumerate(scene.object_ids)
     ])
     record = {
-        "format": "visiontrack.box-gate-development-scoring/v1",
+        "format": f"visiontrack.box-gate-{scene.split}-scoring/v1",
         "protocol_id": registration["protocol_id"], "protocol_hashes": hashes,
         "input": scene.manifest(), "public_rows_sha256": _sha(normalized),
         "source": baseline,

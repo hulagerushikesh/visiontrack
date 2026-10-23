@@ -372,8 +372,13 @@ replace RQ5 with an unregistered traffic claim.
       runtime, reviewed negative development audit and all 120 future input
       manifests. Recheck the actual saved development evidence without tracker
       execution. No real freeze or opening issued yet.
-- [ ] Finish/test the separate held-out scorer/replay/export execution gate,
-      commit it, and only then issue the real freeze before its first opening;
+- [x] Implement/test the separate held-out scorer/replay/export execution gate
+      (milestone 7b): exclusive opening before replay, ordered full coverage,
+      reference re-scoring, retained variants/attempts, stop-on-error and no retry.
+      Shared-core development scoring exactly reproduces 24 saved variant
+      records. Tests use explicit doubles; no real new held-out tracking yet.
+- [ ] Issue and verify the real exact-revision freeze from the complete committed
+      harness, then execute the new held-out grid once through its exclusive gate;
       retain one complete grid or stop with partial evidence, never selective retries.
 - [ ] Independently audit and report combined results, preserving failure,
       no-effect and inconclusive outcomes, not just an average gain.
