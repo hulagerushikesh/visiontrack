@@ -1,0 +1,141 @@
+{
+  "format": "visiontrack.box-gate-heldout-evidence/v1",
+  "recorded_on": "2026-10-23",
+  "scope": "complete once-only held-out execution and saved artifact inventory; independent endpoint and combined-study audit pending",
+  "protocol_id": "visiontrack.box-gate-ablation/v1",
+  "source_revision": "c99c4e72bf0fd6a740ec0b22135448b931eac448",
+  "baseline_revision": "16c287a6b18c5c142a28e4bce70b3232946459db",
+  "environment": {
+    "byteorder": "little",
+    "machine": "arm64",
+    "numpy": "2.3.1",
+    "python": "3.12.9",
+    "system": "Darwin"
+  },
+  "protocol_hashes": {
+    "docs/BOX_GATE_ABLATION_PROTOCOL.md": "413cd0b83843b660d072f7584c1495d858f701f40dca81cce669e31d2d7b62cc",
+    "docs/TRAFFIC_RELIABILITY_PROTOCOL.md": "27b89dd580cfc7a90668a04a5e8b4aae685b745b85c988bd17eb5af6bf4d808b",
+    "experiments/box_gate_protocol_v1.json": "c240d372c9e79d6bf3367bcb8ce131066a1185b8818af47d42b37e346e064a7f",
+    "experiments/traffic_protocol_v1.json": "3a6dc71688eeb7ce981dc30ea614f22b82f44052f1aedd8ac68176ac156cf957"
+  },
+  "bundle_path": "/Users/rushikeshhulage/Documents/Quant/visiontrack-walkthrough/box-gate-heldout-results-dkipv21_/bundle",
+  "bundle_manifest_sha256": "840735d9a22434695f59a52bf5f8db37e90b697ecd2b04863b2f98248e274f20",
+  "artifact_sha256": {
+    "manifest.json": "295e75ad277a53a1cd3f6014378075da74e6d74749f6bf264f58dc3230799fee",
+    "plan.json": "3d04b9836ca098e003f9ff6f9b6dcfcf0fdd6a009d5072c9e75110c9bff65808",
+    "attempts.jsonl": "fe4149a63a73ff8bfc53570057c0450f1ea4134e2d2295f422e5335e9b999784",
+    "summary.json": "1827abed6674b308be4affa6bddd4ee2330a7faf8946ceb751f71359a8f84959",
+    "summary.md": "919cdce5028acfd850110fd5aa929174a584e27e4c16d636ecc38e23fb63949c"
+  },
+  "freeze": {
+    "path": "/Users/rushikeshhulage/Documents/Quant/visiontrack-walkthrough/box-gate-heldout-freeze-2556e3dg/freeze/freeze.json",
+    "content_sha256": "37804d756abc2c294c1b7d59f7ee52b4c9e0058892b08c6e9bf02c656a1df654",
+    "raw_sha256": "4ddbde0902651aaf5f2ec91264c0cd8cb179eb7b5538cec6beac2a353b5a55c9",
+    "inputs_sha256": "bb9dbe4580c77c5633c7b662b77f813f7063f483c96a164334fa6114be91fb53",
+    "opening_content_sha256": "4e792e0d73671a7e2d0f5cc39cd7db8fea91794b93c1eea47c8bd9e3d1b463c5",
+    "opening_raw_sha256": "4c5ed6fd4cca57e6e708c45f4681d41fde79bea8e61dee9607bc540d29971045",
+    "verified_before_opening": true,
+    "opening_consumed": true,
+    "execution_policy": "one complete ordered grid; claim before tracker; stop on first error; no retry"
+  },
+  "counts": {
+    "planned_pairs": 120,
+    "attempted_pairs": 120,
+    "successful_pairs": 120,
+    "unattempted_pairs": 0,
+    "failed_pairs": 0,
+    "variant_runs": 240,
+    "replay_passes": 720,
+    "updates_per_pass": 300
+  },
+  "saved_endpoint_primary": [
+    {
+      "scenario": "gate_test_solo",
+      "reference_objects": 1,
+      "error_cases": 20,
+      "baseline_primary": 4.0,
+      "gate_off_primary": 0.0,
+      "absolute_reduction": 4.0,
+      "relative_reduction": 1.0,
+      "adequate_challenge": true,
+      "meets_both_improvement_margins": true
+    },
+    {
+      "scenario": "gate_test_slanted",
+      "reference_objects": 2,
+      "error_cases": 20,
+      "baseline_primary": 3.7,
+      "gate_off_primary": 0.0,
+      "absolute_reduction": 3.7,
+      "relative_reduction": 1.0,
+      "adequate_challenge": true,
+      "meets_both_improvement_margins": true
+    },
+    {
+      "scenario": "gate_test_close",
+      "reference_objects": 2,
+      "error_cases": 20,
+      "baseline_primary": 3.7,
+      "gate_off_primary": 0.0,
+      "absolute_reduction": 3.7,
+      "relative_reduction": 1.0,
+      "adequate_challenge": true,
+      "meets_both_improvement_margins": true
+    }
+  ],
+  "saved_endpoint_non_regression": {
+    "met": false,
+    "metric_violations": 206,
+    "distinct_paired_cases_affected": 60,
+    "regressions_by_endpoint": {
+      "tracking.missed_object_frames": 50,
+      "tracking.false_positive_rows": 60,
+      "crossing.bottom_centre.event_error": 38,
+      "crossing.bottom_centre.window_count_abs_error": 58
+    },
+    "regressions_by_scenario": {
+      "gate_test_solo": 58,
+      "gate_test_slanted": 78,
+      "gate_test_close": 70
+    },
+    "regressions_by_condition": {
+      "box_error_only": 103,
+      "combined": 103
+    },
+    "control_pairs_identical_all_37_endpoints": 60
+  },
+  "inventory": {
+    "script_path": "/Users/rushikeshhulage/Documents/Quant/visiontrack-walkthrough/box-gate-heldout-results-dkipv21_/verify_inventory.py",
+    "script_sha256": "4e7a399c20dc157479c45a355e7c5eb2d845dad42a8c5d5032a054c38cad2bd0",
+    "output_path": "/Users/rushikeshhulage/Documents/Quant/visiontrack-walkthrough/box-gate-heldout-results-dkipv21_/inventory.json",
+    "output_sha256": "c3ffe7466195a10c442ca2f09b3ba6015fb3b42bd41fdebe4ff91a677d1c1c95",
+    "verified_non_manifest_files": 364,
+    "total_bundle_files": 365,
+    "ordered_ledger_entries": 480,
+    "committed_harness_files": 41,
+    "baseline_files": 57,
+    "checks": "hashes, seals, exact coverage/order, freeze/opening lineage, source/runtime consistency, configurations, retained rows and all six replay receipts per pair",
+    "independent_endpoint_arithmetic_audited": false,
+    "combined_study_audited": false
+  },
+  "development_manifest_sha256": "307fe7ad651b0e81befa4715f7b7d7b465007f2f4fb03a28e6af6e24d090570a",
+  "development_safety_endpoint_violations": 174,
+  "heldout_tracking_executed": true,
+  "candidate_tuned": false,
+  "candidate_accepted": false,
+  "heldout_only_numerical_classification": "inconclusive",
+  "combined_study_classification": null,
+  "complete_study_report": false,
+  "real_data_validated": false,
+  "production_change_authorized": false,
+  "cpp_port_authorized": false,
+  "limitations": [
+    "Saved endpoint values are provisional pending independent arithmetic and combined-study audit.",
+    "The held-out-only numerical summary omits development by design; it is not a combined verdict.",
+    "Stable IDs do not imply accurate boxes, crossings or counts per time window.",
+    "Endpoint violations can overlap within a pair; they are not independent experiments.",
+    "Six fixed toy paths across both splits and repeated noise seeds are not independent camera sites.",
+    "No selective retries, candidate tuning, real detector, recording, package change or C++ adoption.",
+    "Opening is consumed; never reopen or relabel these cases as untouched evidence for a tuned candidate."
+  ]
+}

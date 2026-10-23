@@ -366,20 +366,26 @@ replace RQ5 with an unregistered traffic claim.
       passes completed from `817e6f7` without errors or selective retries.
       Zero gate-off ID switches did not imply acceptance: 174 safety endpoint
       violations affected all 60 box-error pairs. Candidate not accepted;
-      whole-study classification remains inconclusive without held-out evidence.
+      development-only numerical summary remains inconclusive by design;
+      independently audited combined interpretation is still required.
 - [x] Implement/test the [new held-out code/input/evidence freeze](BOX_GATE_HOLDOUT.md)
       and read-only verifier (milestone 7a): exact clean committed revision,
       runtime, reviewed negative development audit and all 120 future input
       manifests. Recheck the actual saved development evidence without tracker
-      execution. No real freeze or opening issued yet.
+      execution. The real freeze/opening subsequently completed below.
 - [x] Implement/test the separate held-out scorer/replay/export execution gate
       (milestone 7b): exclusive opening before replay, ordered full coverage,
       reference re-scoring, retained variants/attempts, stop-on-error and no retry.
       Shared-core development scoring exactly reproduces 24 saved variant
-      records. Tests use explicit doubles; no real new held-out tracking yet.
-- [ ] Issue and verify the real exact-revision freeze from the complete committed
+      records. Tests use explicit doubles, separate from actual outcomes below.
+- [x] Issue and verify the real exact-revision freeze from the complete committed
       harness, then execute the new held-out grid once through its exclusive gate;
-      retain one complete grid or stop with partial evidence, never selective retries.
+      [all 120 pairs / 240 variants / 720 passes completed from `c99c4e7`](BOX_GATE_HELDOUT_RESULTS.md)
+      without errors or selective retries. The 365-file artifact inventory and
+      480-entry ordered ledger agree with the freeze, settings and replay receipts.
+      Saved endpoints contain 206 safety violations in all 60 box-error pairs;
+      no candidate acceptance. The opening is consumed; independent arithmetic
+      and combined interpretation remain the next action, not a replay.
 - [ ] Independently audit and report combined results, preserving failure,
       no-effect and inconclusive outcomes, not just an average gain.
 - [ ] Validate any transfer claim on representative rights-reviewed evidence.

@@ -54,7 +54,8 @@ committed harness `817e6f7`, with no errors, skipped cases or selective retries.
 Gate-off removed ID switches in these fixtures but failed non-regression:
 174 endpoint violations affected all 60 box-error pairs. The 60 control pairs
 were unchanged across all 37 endpoints. The candidate is not accepted; the
-whole-study numerical classification remains inconclusive without held-out evidence.
+development-only numerical summary is inconclusive by design. Both splits are
+now retained, but independent combined interpretation is still required.
 Independent saved-record arithmetic checked all file hashes, ledger coverage,
 8,880 endpoint values, 4,440 differences, 1,332 descriptive endpoint groups
 and exact rational margins. This does not independently establish raw input
@@ -62,21 +63,29 @@ geometry or canonical matching. The [held-out preparation safeguards](BOX_GATE_H
 now bind the exact committed revision, runtime, reviewed negative development
 evidence and all 120 future input manifests. Preparation/verification reject drift,
 forgeries, existing output directories and consumed openings; the checks re-audited the 365-file
-development bundle without a tracker run. No real new freeze/opening has been
-issued. The separate held-out scorer/replay/export and exclusive execution gate
-is now implemented/tested (7b), retaining partial variants and stopping on the
+development bundle without a tracker run. The separate held-out scorer/replay/export
+and exclusive execution gate is now implemented/tested (7b), retaining partial variants and stopping on the
 first error without retry. Public development split guards remain intact.
 Shared-core reference scoring exactly reproduced all 24 saved development
-variant records for seed 2001; no tracker was rerun. Next is the actual exact
-freeze and one-time held-out run from the complete committed harness, not tuning
-or a C++ port.
+variant records for seed 2001; no tracker was rerun for those checks.
+The [actual exact freeze and once-only held-out run](BOX_GATE_HELDOUT_RESULTS.md)
+now completed from clean `c99c4e7`: **120 pairs / 240 variants / 720 passes**,
+with no errors, skipped cases or selective retries. A separate read-only inventory
+verified all 365 files, 480 ordered ledger entries, exact settings, replay receipts,
+freeze/opening lineage, 41 committed harness files and 57 baseline files.
+Saved scorer endpoints show 206 safety violations in all 60 box-error pairs,
+despite zero candidate ID switches; all 60 control/perspective-only pairs remain
+identical across 37 endpoints. This inventory is not independent endpoint
+arithmetic or a combined verdict. The opening is consumed and the candidate
+remains not accepted. **Next: milestone 8**, separate independent arithmetic
+and combined-study audit/reporting, not tuning, another run or a C++ port.
 All **1,573 non-slow tests pass**, including 56 freeze/input/evidence tests and
 39 new execution-gate/analytic-fixture tests;
 Ruff and the strict documentation build pass.
 Real-data transfer and product validation remain incomplete.
 The [two-project progress overview](PROGRESS_OVERVIEW.md) separates completed
-foundations, six completed/current experimental milestone groups, two
-remaining groups and the later real-data/product/C++ adoption gates.
+foundations, seven completed experimental milestone groups, one
+remaining group and the later real-data/product/C++ adoption gates.
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective
 anonymous re-entry probe can export its complete fixed-grid synthetic curves
