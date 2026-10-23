@@ -74,6 +74,7 @@ nav:
   - Results & benchmarks: BENCHMARKS.md
   - Use it:
       - First Lab walkthrough: LAB_WALKTHROUGH.md
+      - Five-minute demonstration: SHOWCASE_DEMO.md
       - Public API: API.md
       - Run on your own video: VIDEO.md
       - 0.3.0 release-candidate scope: RELEASE_NOTES_0.3.0.md
@@ -116,6 +117,7 @@ nav:
       - Counting-band protocol — stopped before full grid: CROSSING_BAND_PROTOCOL.md
       - Counting-band isolated counter and unit limits: CROSSING_BAND_COUNTER.md
       - Next delivery goal — one understandable case study: SHOWCASE_MILESTONE.md
+      - Daily checkpoints and weekly goal: WEEKLY_DELIVERY_PLAN.md
       - Release-readiness audit: RELEASE_READINESS.md
       - Python/C++ runtime contract: CROSS_RUNTIME_CONTRACT.md
       - Horizons: HORIZONS.md

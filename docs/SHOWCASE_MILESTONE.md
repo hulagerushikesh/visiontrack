@@ -61,7 +61,7 @@ They are effort estimates, not background work or calendar guarantees.
 | Order | Deliverable | State | Estimated effort / dependency |
 | --- | --- | --- | --- |
 | 1 | Stop the fixed counting-band candidate at its structural feasibility gate | Done; see [counter decision](CROSSING_BAND_COUNTER.md#feasibility-decision-2026-10-23) | Reviewed authored counterexamples; no grid run |
-| 2 | Prepare a 3–5 minute existing-report demonstration: problem, failure, trade-off, decision | Next | About 1 focused day; label synthetic evidence explicitly |
+| 2 | Prepare a 3–5 minute existing-report demonstration: problem, failure, trade-off, decision | Ready locally; owner/external walkthrough pending | [Generated/verified report and run sheet](SHOWCASE_DEMO.md); onboarding is a tie, trade-off comes from a separate completed synthetic study |
 | 3 | Admit one real clip with permission, task definition, detector and checked labels | Open | About 1 day of technical intake **after** rights/data are ready; acquisition/review time is separate |
 | 4 | Produce the fixed comparison, visual explanation and reproducible report | Open | About 2–3 focused days after step 3; stop on invalid evidence |
 | 5 | Review the case study and obtain one practitioner workflow response | Open | About 1 day of preparation/review, plus their availability |
@@ -71,6 +71,10 @@ after admissible data and labels are ready** (steps 3–5). Allow roughly **1–
 calendar weeks only if** permission, labelling and reviewer availability line up.
 If they do not, finish the synthetic workflow demonstration and report the
 specific missing dependency; do not wait idly or substitute synthetic scores.
+
+Use the [daily checkpoints and weekly delivery goal](WEEKLY_DELIVERY_PLAN.md) to
+track this work. Demo preparation is complete; comprehension, clip admission and
+real-data evidence are not. No reminders or background runs are scheduled.
 
 A first external pilot is a later checkpoint, not a promised product launch.
 Reserve a separate **4–6 week planning window after an engaged practitioner and

@@ -191,9 +191,13 @@ candidate**, retain its examples/locks and do not invest in its full grid now.
 This is not a development/held-out verdict. The box-gate study and diagnosis are
 finished; neither opened set may become untouched validation again.
 
-Follow the [bounded showcase plan](SHOWCASE_MILESTONE.md): first prepare a short,
-understandable existing-report demonstration, then one permitted real-clip
-diagnostic case study. Its proposed first audience is fixed-camera CV engineers
+Follow the [bounded showcase plan](SHOWCASE_MILESTONE.md): the short
+[existing-report demonstration](SHOWCASE_DEMO.md) is now prepared and verified
+locally. Its two configurations tie; the research trade-off is explicitly from
+a separate completed synthetic study. Next complete the owner's comprehension
+check and one real-clip admission decision using the
+[daily/weekly checkpoints](WEEKLY_DELIVERY_PLAN.md), then produce one permitted
+real-clip diagnostic case study. Its proposed first audience is fixed-camera CV engineers
 and applied researchers, not a validated market. Technical case-study effort is
 estimated at 4–5 focused working days **after usable permitted data/labels are
 ready**, with external permission/review delays separate. The alpha can already
