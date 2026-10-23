@@ -403,8 +403,11 @@ replace RQ5 with an unregistered traffic claim.
 - [x] Build/test and commit the [development-only replay wrapper](BOX_GATE_TRACE_REPLAY.md),
       requiring complete exact saved-output parity and retaining failure receipts
       before any exploratory study trace or next intervention.
-- [ ] Run the committed complete-grid development diagnostic, retain failures,
+- [x] Run the [complete-grid development diagnostic](BOX_GATE_TRACE_FINDINGS.md), retain failures,
       and require exact saved-output parity before interpreting internal causes.
+- [x] Independently audit its 482 files, all 240 exact output comparisons and
+      55,578 recorded association stages; explain scoped startup, pulse rejection
+      and same-ID line-recrossing mechanisms. No accepted fix or held-out replay.
 - [ ] Register any new comparative study with new held-out evidence; do not tune
       a candidate and relabel either opened set as untouched validation.
 - [ ] Validate any transfer claim on representative rights-reviewed evidence.

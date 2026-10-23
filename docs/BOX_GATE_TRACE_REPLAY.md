@@ -2,7 +2,10 @@
 
 **2026-10-23. Implementation and safeguards, not new tracking findings.**
 The [internal observer](BOX_GATE_TRACE.md) now has a development-only wrapper,
-`experiments/box_gate_trace_replay.py`. The actual exploratory trace is **pending**.
+`experiments/box_gate_trace_replay.py`. The exploratory trace is now
+[complete and independently audited](BOX_GATE_TRACE_FINDINGS.md): all 240 variant
+outputs match their saved development outputs exactly. The safeguards below
+describe the committed execution; do not rerun it merely to read the findings.
 The closed box-gate experiment remains a failure; defaults and C++ are unchanged.
 
 ## What the wrapper does
@@ -84,7 +87,7 @@ forgeries, source/runtime drift, first-error preservation, interruptions,
 exclusive writes, tampered-output refusal and unsupported CLI options. Separate
 authored observer tests continue to check actual output/state preservation.
 
-Next: run the committed wrapper as a clearly disclosed development-only
-diagnostic, require full saved-output parity, then inspect the actual causes.
-Only after that evidence should we choose and separately register a new
-intervention with fresh validation. No owner assistance is needed for this step.
+The complete run from `dd653aa` is retained separately from the original study.
+Next choose and separately register a narrower intervention with fresh validation,
+using the scoped trace findings without treating development exploration as
+validation. No owner assistance was needed for the diagnostic.

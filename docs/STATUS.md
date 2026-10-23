@@ -112,11 +112,25 @@ authenticates saved evidence, source/runtime, regenerated inputs, configurations
 actual pre-update payloads and complete public outputs before allowing a sealed
 complete-grid exploratory manifest. Tests exercise explicit doubles, partial
 failure/interruption retention, exclusive writes and output-tampering refusal.
-The actual trace remains pending; implementation is not a new research result.
+At that preparation checkpoint the actual trace was still pending.
 All **1,739 non-slow tests pass**, including 43 new wrapper tests and an additional
 observer payload-receipt test; Ruff and the strict documentation build pass.
-Next: run the committed diagnostic and require complete exact saved-output parity
-before exploratory interpretation.
+The [new exploratory development trace](BOX_GATE_TRACE_FINDINGS.md) has now
+completed from clean `dd653aa`: all **120 pairs / 240 variants**, one fresh
+300-update traced pass per variant, exact saved-output parity throughout, no
+errors/skips/retries or held-out data reads. A separate read-only post-run auditor
+verified all 482 trace files and 365 original files, historic code/lineage and
+55,578 recorded association stages over 18,526 selected frame/variant records.
+Actual masks, default costs, solver proposals, acceptance and selected-frame
+publication eligibility were checked; filter math/payload receipts/execution are
+not independently recomputed or witnessed. Concrete traces explain startup
+confirmation, a pulse-triggered 4D veto followed by a replacement confirmation
+delay, and post-update same-ID anchor recrossing before a pulse. Stable identity
+is not sufficient for accurate boxes/counts; the earlier failure stands.
+All **1,768 non-slow tests pass**, including 29 new trace-audit diagram/forgery tests;
+Ruff and strict docs pass. Raw traces stay local; a compact evidence index pins
+the execution and post-run audit separately. Next choose/register a narrower
+association-versus-anchor/count-stability comparison with fresh validation.
 Observer records alone retain provenance/interpretation/validation flags false.
 Any later intervention needs fresh validation, not rescue tuning on the consumed
 held-out set. Defaults and C++ remain unchanged.
