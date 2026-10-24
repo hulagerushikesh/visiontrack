@@ -5,6 +5,13 @@ Checkpoint: **2026-10-23**. The unchanged tracker has now run twice on the
 produce byte-identical inputs/outputs, scored pairs, failures and summaries.
 This establishes a reproducible starting point, **not an improvement**.
 
+**2026-10-24 measurement qualification:** the later
+[independent metric check](REAL_DATA_METRIC_CHECK.md) agrees on TP/FN/FP and IDF1,
+but not HOTA, CLEAR correspondence or fragmentation semantics. All numbers and
+the first-event selection below describe the **sealed historical implementation**,
+not a reference-equivalence pass. Preserve these records; align/version the
+evaluator and re-score unchanged outputs before any new accuracy comparison.
+
 ## Plain-language outcome
 
 On this 35-second pedestrian sequence, the tracker keeps some identities well,

@@ -1,6 +1,6 @@
 # Daily checkpoints and the next weekly goal
 
-Planning checkpoint: **2026-10-23**. Days below mean focused work sessions, not
+Planning checkpoint: **2026-10-24**. Days below mean focused work sessions, not
 automatic work while the chat is idle or promised calendar dates. No reminder,
 scheduled job, email, publication or new tracking study is authorized by this plan.
 
@@ -51,8 +51,18 @@ internal demo preparation. The [saved-box coverage diagnosis](REAL_DATA_COVERAGE
 now partitions all 21,825 misses: 19,387 without raw IoU ≥0.5 support, 149 with
 only sub-threshold support, 270 losing eligible neighbours to ignore handling,
 and 2,019 with eligible retained neighbours but no canonical match. These are
-descriptive, not causal or recoverable-error counts. Next inspect actual unchanged
-association/lifecycle evidence for the same first switch before tuning.
+descriptive, not causal or recoverable-error counts. The
+[unchanged association/lifecycle replay](REAL_DATA_TRACE.md) is now complete:
+all 1,050 frames match, 19 remains updated, and 31 is created at 52 then confirmed
+at 54. Nearby reference 89 overlaps 19 strongly; physical identity attribution
+still needs independent pixels/label review. No intervention is justified yet.
+The bounded review brief and reasons not to tune lifetime/gates/memory blindly
+are recorded. A subsequent [independent metric check](REAL_DATA_METRIC_CHECK.md)
+found IDSW 44 versus 43 and HOTA 0.52372649 versus 0.52554966. TP/FN/FP and IDF1
+agree, but the equivalence check fails. **Evaluator alignment and a separately
+versioned re-score of unchanged outputs now precede any new tracker comparison.**
+Session 4's independent pixel/reference review remains a separate gate; do not
+substitute a green test suite for metric agreement or visual evidence.
 Complete visual case admission, owner walkthrough and reviewer participation
 remain pending. These sessions need not consume five full
 engineering days; permission/label availability may dominate calendar time.
