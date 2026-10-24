@@ -17,6 +17,14 @@ const report = JSON.stringify(fixture.report)
 const file = (text) => ({ size: Buffer.byteLength(text), text: async () => text })
 const reader = new ReportFileReader(parseReportModel)
 assert.equal((await reader.read(file(report))).kind, "ready")
+const v2Report = structuredClone(fixture.report)
+v2Report.evaluator = "visiontrack.metrics/v2"
+for (const failure of v2Report.failures) failure.context.evaluator = "visiontrack.metrics/v2"
+assert.equal(parseReportModel(v2Report).kind, "ready")
+const mixedEvaluator = structuredClone(v2Report)
+delete mixedEvaluator.failures[0].context.evaluator
+assert.equal(parseReportModel(mixedEvaluator).kind, "missing")
+assert.equal(parseReportModel({ ...v2Report, evaluator: "unknown" }).kind, "missing")
 assert.equal((await reader.read(file("not json"))).kind, "missing")
 assert.equal((await reader.read(file('{"schema_version":2}'))).kind, "unsupported")
 

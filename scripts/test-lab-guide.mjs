@@ -44,7 +44,7 @@ for (const [step, item] of lessonSteps.entries()) {
   }
 }
 
-const { failureExplanations, explainFailure } = await browserModule("explanations", "ts")
+const { failureExplanations, explainFailure, explanationFor } = await browserModule("explanations", "ts")
 const fixture = JSON.parse(await readFile(new URL("../tests/fixtures/lab_browser_workflow.json", import.meta.url), "utf8"))
 for (const [type, explanation] of Object.entries(failureExplanations)) {
   const event = { ...fixture.report.failures[0], event_type: type, variant: "example-variant", frame_index: 0 }
@@ -56,6 +56,9 @@ assert.equal(Object.keys(failureExplanations).length, 4)
 assert.match(failureExplanations.miss.meaning, /under the evaluation rules/)
 assert.match(failureExplanations.fragmentation.meaning, /previously matched reference object is now unmatched/)
 assert.match(failureExplanations.false_positive.meaning, /reference labels under the evaluation rules/)
+const resumed = { ...fixture.report.failures[0], event_type: "fragmentation", context: { evaluator: "visiontrack.metrics/v2" } }
+assert.match(explainFailure(resumed), /matched again after an interruption/)
+assert.equal(explanationFor(resumed).label, "Tracking resumed after an interruption")
 
 const { default: EvidenceProgress } = await browserModule("EvidenceProgress", "tsx")
 const progress = (props) => renderToStaticMarkup(createElement(EvidenceProgress, props))

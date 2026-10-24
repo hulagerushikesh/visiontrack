@@ -4,6 +4,11 @@ Checkpoint: **2026-10-24**. **Not a pass.** The baseline is repeatable internall
 but several metrics differ from the installed TrackEval reference. Evaluator
 alignment is now the first technical priority before a new accuracy comparison.
 
+**Subsequent 2026-10-24 resolution:** [Evaluator v2](EVALUATOR_V2.md) corrects the
+algorithms and passes all 45 reference checks on unchanged saved scored inputs.
+This page preserves the original failed check and its receipts; do not rewrite
+it as a pass. Independent preprocessing, v2 coverage and visual review remain open.
+
 ## Actual check and results
 
 After the [first-switch trace](REAL_DATA_TRACE.md) showed correspondence-history

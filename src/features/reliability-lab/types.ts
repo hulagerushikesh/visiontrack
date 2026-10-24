@@ -66,6 +66,7 @@ export interface ReportFailure {
 
 export interface ReliabilityReport {
   schema_version: 1
+  evaluator?: "visiontrack.metrics/v1" | "visiontrack.metrics/v2"
   report_id: string
   comparison_id: string
   experiment: ReportExperiment
@@ -151,6 +152,9 @@ function isMediaEvidence(value: unknown, frameStart: number, frameEnd: number): 
 export function parseReportModel(value: unknown): ReportLoadResult {
   if (!isRecord(value)) return missing("The selected file is not a JSON object.")
   if (value.schema_version !== 1) return { kind: "unsupported", schemaVersion: value.schema_version }
+  if (value.evaluator !== undefined && value.evaluator !== "visiontrack.metrics/v1" && value.evaluator !== "visiontrack.metrics/v2") {
+    return missing("The metric evaluator definition is unsupported.")
+  }
   if (!isHash(value.report_id) || !isHash(value.comparison_id)) {
     return missing("The report or comparison fingerprint is missing or invalid.")
   }
@@ -240,6 +244,10 @@ export function parseReportModel(value: unknown): ReportLoadResult {
       failure.evidence_frames.end > source.frame_count || failure.frame_index < failure.evidence_frames.start ||
       failure.frame_index >= failure.evidence_frames.end || failure.schema_version !== 1
     ) return missing("One or more failure events have invalid lineage or frame bounds.")
+    const expectedEvaluator = value.evaluator ?? "visiontrack.metrics/v1"
+    if ((failure.context.evaluator ?? "visiontrack.metrics/v1") !== expectedEvaluator) {
+      return missing("Failure events and report use different metric evaluator definitions.")
+    }
     if (failure.media_evidence !== undefined && !isMediaEvidence(
       failure.media_evidence,
       failure.evidence_frames.start,

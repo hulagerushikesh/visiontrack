@@ -124,15 +124,15 @@ def test_failure_extraction_uses_metric_correspondence_and_evidence_links(
 
     assert [event.event_type for event in events] == [
         "id_switch",
-        "fragmentation",
         "miss",
         "false_positive",
     ]
-    assert [event.frame_index for event in events] == [1, 2, 2, 2]
+    assert [event.frame_index for event in events] == [1, 2, 2]
     assert events[0].track_ids == (10, 20)
     assert events[1].track_ids == (20,)
-    assert events[2].ground_truth_ids == (1,)
-    assert events[3].track_ids == (99,)
+    assert events[1].ground_truth_ids == (1,)
+    assert events[2].track_ids == (99,)
+    assert all(event.context["evaluator"] == "visiontrack.metrics/v2" for event in events)
     assert all(88 not in event.track_ids for event in events)
     assert all(
         event.evidence_frames["start"] <= event.frame_index
@@ -161,7 +161,7 @@ def test_failure_artifacts_are_idempotent_and_feed_diagnostic_summary(
     summary = create_comparison_summary(bundle)
     expected_counts = {
         "id_switch": 1,
-        "fragmentation": 1,
+        "fragmentation": 0,
         "miss": 1,
         "false_positive": 1,
     }
@@ -169,7 +169,7 @@ def test_failure_artifacts_are_idempotent_and_feed_diagnostic_summary(
         "baseline": expected_counts,
         "patient": expected_counts,
     }
-    assert summary["failure_sets"]["baseline"]["event_count"] == 4
+    assert summary["failure_sets"]["baseline"]["event_count"] == 3
     assert summary["failure_sets"]["baseline"]["metric_id"]
     assert summary["decision"]["accepted_variant"] is None
 

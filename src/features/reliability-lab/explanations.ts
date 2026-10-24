@@ -20,5 +20,15 @@ export const failureExplanations: Record<FailureType, { label: string; meaning: 
 }
 
 export function explainFailure(failure: ReportFailure) {
-  return `${failure.variant}, frame ${failure.frame_index}: ${failureExplanations[failure.event_type].meaning}`
+  return `${failure.variant}, frame ${failure.frame_index}: ${explanationFor(failure).meaning}`
+}
+
+export function explanationFor(failure: ReportFailure) {
+  if (failure.event_type === "fragmentation" && failure.context.evaluator === "visiontrack.metrics/v2") {
+    return {
+      label: "Tracking resumed after an interruption",
+      meaning: "A previously tracked reference object was matched again after an interruption under this evaluator's rules.",
+    }
+  }
+  return failureExplanations[failure.event_type]
 }

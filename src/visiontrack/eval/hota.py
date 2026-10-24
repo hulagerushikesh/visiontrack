@@ -28,7 +28,7 @@ from dataclasses import dataclass
 import numpy as np
 
 from ..core.assignment import linear_assignment
-from ..core.geometry import iou_matrix
+from .geometry import metric_iou as iou_matrix
 
 __all__ = [
     "FramePair",
@@ -125,56 +125,65 @@ def _accumulate_globals(
 
 
 def compute_hota(frames: list[FramePair], alphas: np.ndarray = HOTA_ALPHAS) -> HotaResult:
-    """Compute HOTA and its components over a sequence of aligned frames."""
+    """Reference-aligned HOTA v2; assignment precedes alpha thresholding.
+
+    V1 used unnormalised potential and a different assignment for each alpha.
+    Historical artifacts are evaluated only through ``_legacy_hota``.
+    """
+    alphas = np.asarray(alphas, dtype=np.float64)
+    if (alphas.ndim != 1 or not alphas.size or not np.isfinite(alphas).all()
+            or not ((alphas > 0) & (alphas <= 1)).all()):
+        raise ValueError("alphas must be a nonempty finite vector in (0, 1]")
     gt_map, tr_map = _remap_ids(frames)
     n_gt, n_tr = len(gt_map), len(tr_map)
     gt_count, tr_count, per_frame = _accumulate_globals(frames, gt_map, tr_map)
 
-    # Global alignment score = association-IoU between every (gt, tracker) id,
-    # accumulated over the whole sequence. Used to bias per-frame matching so a
-    # detection is assigned to the identity it *usually* co-occurs with.
+    # Normalize local similarity by competition for both boxes before summing
+    # identity potential. This is not a sum of raw IoUs.
+    machine_eps = np.finfo(np.float64).eps
     potential = np.zeros((n_gt, n_tr))
     for gr, tc, iou in per_frame:
         if gr.size and tc.size:
-            np.add.at(potential, (gr[:, None], tc[None, :]), iou)
+            competition = iou.sum(axis=0)[None, :] + iou.sum(axis=1)[:, None] - iou
+            normalized = np.divide(iou, competition, out=np.zeros_like(iou),
+                                   where=competition > machine_eps)
+            np.add.at(potential, (gr[:, None], tc[None, :]), normalized)
     denom = gt_count[:, None] + tr_count[None, :] - potential
-    global_align = potential / np.maximum(denom, _EPS)
+    global_align = np.divide(potential, denom, out=np.zeros_like(potential), where=denom > 0)
+
+    # Exactly one assignment per frame. Its objective uses both global identity
+    # alignment and local IoU; alpha is NOT part of this optimization.
+    counts = [np.zeros((n_gt, n_tr)) for _ in alphas]
+    tp_counts = np.zeros(len(alphas), dtype=np.int64)
+    for gr, tc, iou in per_frame:
+        if not gr.size or not tc.size:
+            continue
+        rows, cols = linear_assignment(-(global_align[np.ix_(gr, tc)] * iou))
+        for index, alpha in enumerate(alphas):
+            accepted = iou[rows, cols] >= alpha - machine_eps
+            rr, cc = rows[accepted], cols[accepted]
+            tp_counts[index] += len(rr)
+            np.add.at(counts[index], (gr[rr], tc[cc]), 1)
 
     hotas, det_as, ass_as = [], [], []
     det_res, det_prs, ass_res, ass_prs = [], [], [], []
 
-    for alpha in alphas:
-        matches_count = np.zeros((n_gt, n_tr))
-        tp = 0
-        n_gt_dets = 0
-        n_tr_dets = 0
-        for gr, tc, iou in per_frame:
-            n_gt_dets += gr.size
-            n_tr_dets += tc.size
-            if gr.size == 0 or tc.size == 0:
-                continue
-            mask = iou >= alpha - _EPS
-            score = global_align[np.ix_(gr, tc)] * mask
-            # Maximise total alignment score -> minimise the negation.
-            rows, cols = linear_assignment(-score)
-            for r, c in zip(rows.tolist(), cols.tolist(), strict=False):
-                if mask[r, c]:
-                    tp += 1
-                    matches_count[gr[r], tc[c]] += 1
+    for matches_count, tp in zip(counts, tp_counts.tolist(), strict=True):
+        n_gt_dets, n_tr_dets = int(gt_count.sum()), int(tr_count.sum())
         fn = n_gt_dets - tp
         fp = n_tr_dets - tp
 
-        det_a = tp / max(tp + fn + fp, _EPS)
-        det_re = tp / max(tp + fn, _EPS)
-        det_pr = tp / max(tp + fp, _EPS)
+        det_a = tp / max(tp + fn + fp, 1)
+        det_re = tp / max(tp + fn, 1)
+        det_pr = tp / max(tp + fp, 1)
 
         # Association: for each true-positive (g,t) pairing, its Ass-IoU is the
         # overlap of the two identities' trajectories.
         ass_denom = gt_count[:, None] + tr_count[None, :] - matches_count
-        ass_iou = matches_count / np.maximum(ass_denom, _EPS)
+        ass_iou = matches_count / np.maximum(ass_denom, 1)
         if tp > 0:
-            recall_term = matches_count / np.maximum(gt_count[:, None], _EPS)
-            precision_term = matches_count / np.maximum(tr_count[None, :], _EPS)
+            recall_term = matches_count / np.maximum(gt_count[:, None], 1)
+            precision_term = matches_count / np.maximum(tr_count[None, :], 1)
             ass_a = float((matches_count * ass_iou).sum() / tp)
             ass_re = float((matches_count * recall_term).sum() / tp)
             ass_pr = float((matches_count * precision_term).sum() / tp)
@@ -218,7 +227,7 @@ def compute_identity(frames: list[FramePair], iou_threshold: float = 0.5) -> Ide
     total_tr = float(tr_count.sum())
 
     if n_gt == 0 and n_tr == 0:
-        return IdentityResult(1.0, 1.0, 1.0, 0, 0, 0)
+        return IdentityResult(0.0, 0.0, 0.0, 0, 0, 0)
 
     # Ristani's bipartite formulation on a (G+T)×(G+T) cost matrix: real
     # gt↔tracker matches in the top-left block, plus unmatched "sinks" whose

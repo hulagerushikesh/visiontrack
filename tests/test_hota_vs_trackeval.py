@@ -25,13 +25,13 @@ for _name, _py in (("float", float), ("int", int), ("bool", bool)):
 trackeval = pytest.importorskip("trackeval", reason="trackeval not installed")
 from trackeval.metrics import HOTA, Identity  # noqa: E402
 
-TOL = 1e-3
+TOL = 1e-10
 
 
 def _to_trackeval_data(frames):
     """Convert our (gt_ids, gt_boxes, tr_ids, tr_boxes) frames to a trackeval
     `data` dict with 0-indexed ids and per-frame IoU similarity matrices."""
-    from visiontrack.core.geometry import iou_matrix
+    from trackeval.datasets._base_dataset import _BaseDataset
 
     gt_ids_all, tr_ids_all = set(), set()
     for g, _, t, _ in frames:
@@ -50,7 +50,7 @@ def _to_trackeval_data(frames):
         n_gt_dets += gi.size
         n_tr_dets += ti.size
         if gi.size and ti.size:
-            sims.append(iou_matrix(gb, tb))
+            sims.append(_BaseDataset._calculate_box_ious(gb, tb, box_format="x0y0x1y1"))
         else:
             sims.append(np.zeros((gi.size, ti.size)))
     return {

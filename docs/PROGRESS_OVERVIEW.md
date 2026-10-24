@@ -229,3 +229,10 @@ show algorithm/definition differences, not just rounding or solver ties.
 Next align the evaluators and re-score unchanged outputs with explicit history/
 report compatibility before a new tracker comparison. No owner footage is needed
 for that technical correction. Historical results are retained, not silently revised.
+
+**Resolved at metric level:** [evaluator v2](EVALUATOR_V2.md) now passes all 45
+reference checks on unchanged saved outputs. Corrected IDSW 44, Frag 108, HOTA
+52.37%, IDF1 61.32%; not a tracker improvement. Old Lab artifacts keep v1 semantics
+and hashes; mixed evaluators are rejected. All 1,099 frozen-study tests run at
+their original revision. Next verify preprocessing and re-derive v2 coverage,
+then complete independent pixel/reference review before selecting an intervention.

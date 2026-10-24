@@ -44,18 +44,20 @@ def test_miss_counted():
     assert m.false_negatives == 1
 
 
-def test_fragmentation_counts_tracked_to_untracked_transitions():
+def test_fragmentation_counts_resumption_not_a_terminal_miss():
     acc = MotAccumulator()
     gt_ids = np.array([1])
     gt_boxes = np.array([_box(100, 100)])
     assert acc.update(gt_ids, gt_boxes, np.array([7]), gt_boxes.copy()) == []
-    first_gap = acc.update(gt_ids, gt_boxes, np.empty(0, dtype=int), np.empty((0, 4)))
-    acc.update(gt_ids, gt_boxes, np.array([7]), gt_boxes.copy())
+    first_gap = acc.update(gt_ids, gt_boxes, np.array([99]), np.array([_box(500, 500)]))
+    resumed = acc.update(gt_ids, gt_boxes, np.array([7]), gt_boxes.copy())
     second_gap = acc.update(gt_ids, gt_boxes, np.empty(0, dtype=int), np.empty((0, 4)))
-    assert acc.result().fragmentations == 2
-    assert acc.result().as_dict()["Frag"] == 2
-    assert [event.event_type for event in first_gap] == ["fragmentation", "miss"]
-    assert [event.event_type for event in second_gap] == ["fragmentation", "miss"]
+    assert acc.result().fragmentations == 1
+    assert acc.result().as_dict()["Frag"] == 1
+    assert [event.event_type for event in first_gap] == ["miss", "false_positive"]
+    assert [event.event_type for event in resumed] == ["fragmentation"]
+    assert resumed[0].hyp_id == resumed[0].previous_hyp_id == 7
+    assert [event.event_type for event in second_gap] == ["miss"]
 
 
 def test_frame_failures_report_switch_miss_and_false_positive():
@@ -70,7 +72,6 @@ def test_frame_failures_report_switch_miss_and_false_positive():
         np.array([1]), box, np.array([99]), np.array([_box(500, 500)])
     )
     assert [event.event_type for event in failures] == [
-        "fragmentation",
         "miss",
         "false_positive",
     ]

@@ -6,6 +6,7 @@ from typing import Any
 
 import numpy as np
 
+from ..eval.definitions import EVALUATOR
 from ..eval.mot17 import evaluate_frames, preprocess_frame
 from .comparison import load_variant_result
 from .contracts import GroundTruthRecord, TrackObservationRecord, sha256_json
@@ -85,7 +86,8 @@ def calculate_bundle_metrics(bundle: str | Path) -> dict[str, dict[str, Any]]:
             evaluation_frames(ground_truth, tracks, start=start, end=end)
         )
         content: dict[str, Any] = {
-            "schema_version": 1,
+            "schema_version": 2,
+            "evaluator": EVALUATOR,
             "experiment_id": experiment.experiment_id,
             "source_id": source.source_id,
             "run_id": run_metadata["run_id"],
