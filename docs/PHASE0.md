@@ -1,5 +1,12 @@
 # Phase 0 — Real data + cached detections (runbook)
 
+**Historical runbook:** the old tolerance/results below predate the explicit
+[evaluator-v2 correction](EVALUATOR_V2.md). Current same-input reference checking
+uses exact counts and float tolerance ≤1e-10; independent
+[MOT17 preprocessing](MOT17_PREPROCESSING.md) and the
+[corrected case diagnosis](MOT17_COVERAGE_V2.md) are separately recorded.
+Do not use the historical tie-breaking explanation as current validation.
+
 Goal of this phase: stop being synthetic-only. Load **real MOT17**, run the
 from-scratch ByteTracker on its **public detections**, and score it with
 **MOTA + IDF1 + HOTA** — everything driven from a compact on-disk cache so the

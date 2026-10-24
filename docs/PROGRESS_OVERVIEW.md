@@ -234,5 +234,19 @@ for that technical correction. Historical results are retained, not silently rev
 reference checks on unchanged saved outputs. Corrected IDSW 44, Frag 108, HOTA
 52.37%, IDF1 61.32%; not a tracker improvement. Old Lab artifacts keep v1 semantics
 and hashes; mixed evaluators are rejected. All 1,099 frozen-study tests run at
-their original revision. Next verify preprocessing and re-derive v2 coverage,
-then complete independent pixel/reference review before selecting an intervention.
+their original revision. The next preprocessing/coverage gates are now also
+complete, as recorded below; independent pixel/reference review still precedes
+an intervention.
+
+**Current measurement milestone:** [MOT17 preprocessing](MOT17_PREPROCESSING.md)
+matches all 1,050 saved frames; general policy discrepancies are corrected under
+an explicit v2 policy with legacy reproduction. Existing Lab policy stays
+explicitly historical rather than changing under old artifact IDs.
+[V2 coverage and the extended actual trace](MOT17_COVERAGE_V2.md) now pass:
+19,393 misses without raw overlap, 149 low-score-only, 270 ignore-removed, 2,013
+with an eligible retained neighbour. Of the changed miss records, 29 replace
+object/frame pairs and 25 change history only. The same first event's last
+prior match is frame 37, so the actual trace now covers 36–57: 738 events/66
+stages, all 1,050 outputs/failures reproduced exactly, track 19 updated/public
+throughout. Next: independent lawful visual/reference review, then a justified
+comparison or reasoned stop. No new tracker behavior or C++ port is justified yet.

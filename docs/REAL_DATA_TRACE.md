@@ -1,5 +1,13 @@
 # Why the first scored ID switch became visible
 
+**Historical evaluator-v1 selection and receipt.** The actual tracker evidence
+below remains valid for its 45–57 window. Corrected v2 correspondence puts the
+last prior match at **37**, not 46. The subsequent
+[36–57 actual-call trace](MOT17_COVERAGE_V2.md) now covers the complete corrected
+window, with exact full-sequence parity. Track 19 stays updated/public throughout.
+Use **36–57** for the current independent-review brief; do not silently relabel
+this original receipt as having observed those earlier frames.
+
 Checkpoint: **2026-10-24**. This completes the next bounded diagnostic after the
 [baseline](REAL_DATA_BASELINE.md) and [miss coverage analysis](REAL_DATA_COVERAGE.md).
 It observes the **unchanged** tracker on the same MOT17-04-FRCNN input, not a new

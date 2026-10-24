@@ -1,11 +1,11 @@
 """MOT17 evaluation runner: preprocessing + tracker + all three metric families.
 
-The subtlety in MOT17 scoring is **not** the metrics — it is the preprocessing.
-Ground truth contains *distractor* classes (person-on-vehicle, static person,
-distractor, reflection) and *zero-marked* boxes that must not count against a
-tracker: a predicted box matched to one of them is silently removed rather than
-penalised as a false positive. Getting this exactly right is what lets our
-from-scratch HOTA/IDF1 agree with ``trackeval`` (see the cross-check test).
+MOT17 uses a dataset-specific preprocessing policy as well as metric formulas.
+Predictions assigned to distractor classes 2/7/8/12 are removed; zero-marked
+pedestrian GT is excluded from scoring but does not itself remove predictions.
+V2 thresholds assignment edges first. The explicit legacy policy retains the
+old broader-removal behavior for historical reproduction, not new comparisons.
+Same-input metric parity and preprocessing parity are distinct checks.
 
 This module:
 
@@ -26,6 +26,7 @@ from ..core.geometry import iou_matrix
 from ..detection.mot_loader import PEDESTRIAN_CLASS
 from ..tracking.config import TrackerConfig
 from ..tracking.tracker import ByteTracker
+from .geometry import metric_iou
 from .hota import FramePair, compute_hota, compute_identity
 from .mot import MotAccumulator
 
@@ -40,6 +41,8 @@ __all__ = [
 # Large per-sequence id offset so pooled sequences never share gt/tracker ids
 # (pooling with unique ids == trackeval's count-level combination across seqs).
 _SEQ_ID_OFFSET = 10_000_000
+MOT17_PREPROCESSING = "visiontrack.mot17-preprocessing/v2"
+LEGACY_MOT17_PREPROCESSING = "visiontrack.mot17-preprocessing/v1"
 
 
 def preprocess_frame(
@@ -50,14 +53,50 @@ def preprocess_frame(
     tr_boxes: np.ndarray,
     tr_ids: np.ndarray,
     iou_threshold: float = 0.5,
+    *,
+    policy: str = MOT17_PREPROCESSING,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    """Apply MOT17 distractor/ignore handling to one frame.
+    """Apply an explicit MOT17 preprocessing policy, returning scored pairs.
 
-    Returns ``(gt_score_ids, gt_score_boxes, tracker_keep_ids,
-    tracker_keep_boxes)`` where scoring GT is pedestrian + considered, and
-    tracker boxes matched to an ignore GT (distractor class or zero-marked)
-    have been removed.
+    Default v2 follows pinned TrackEval MOT17 rules, using our own assignment.
+    Legacy v1 preserves historical overbroad ignore handling. Neither policy
+    changes tracking. Do not silently combine results from different policies.
     """
+    if policy == LEGACY_MOT17_PREPROCESSING:
+        return _legacy_preprocess_frame(
+            gt_boxes, gt_ids, gt_classes, gt_conf, tr_boxes, tr_ids, iou_threshold)
+    if policy != MOT17_PREPROCESSING:
+        raise ValueError(f"unknown MOT17 preprocessing policy: {policy}")
+    if not np.isfinite(iou_threshold) or not 0 < iou_threshold <= 1:
+        raise ValueError("IoU threshold must be finite and in (0, 1]")
+    gt_boxes, tr_boxes = gt_boxes.reshape(-1, 4), tr_boxes.reshape(-1, 4)
+    if not (len(gt_ids) == len(gt_boxes) == len(gt_classes) == len(gt_conf)) or \
+            len(tr_ids) != len(tr_boxes):
+        raise ValueError("MOT17 IDs, classes, flags and boxes must align")
+    if len(np.unique(gt_ids)) != len(gt_ids) or len(np.unique(tr_ids)) != len(tr_ids):
+        raise ValueError("MOT17 IDs must be unique within each frame")
+    # metric_iou also validates finite coordinates on empty-sided frames.
+    ious = metric_iou(gt_boxes, tr_boxes)
+    scoring = (gt_classes == PEDESTRIAN_CLASS) & (gt_conf != 0)
+    keep_tracker = np.ones(len(tr_ids), dtype=bool)
+    if len(gt_ids) and len(tr_ids):
+        if not np.isin(gt_classes, np.arange(1, 14)).all():
+            raise ValueError("invalid MOT17 ground-truth class")
+        scores = ious.copy()
+        scores[scores < iou_threshold - np.finfo(float).eps] = 0
+        rows, cols = linear_assignment(-scores)
+        matched = scores[rows, cols] > np.finfo(float).eps
+        distractor = np.isin(gt_classes[rows], [2, 7, 8, 12])
+        keep_tracker[cols[matched & distractor]] = False
+    return gt_ids[scoring], gt_boxes[scoring], tr_ids[keep_tracker], tr_boxes[keep_tracker]
+
+
+def _legacy_preprocess_frame(
+    gt_boxes: np.ndarray, gt_ids: np.ndarray, gt_classes: np.ndarray,
+    gt_conf: np.ndarray, tr_boxes: np.ndarray, tr_ids: np.ndarray,
+    iou_threshold: float = 0.5,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """Historical v1 body retained verbatim; broad removal is not v2 policy."""
     gt_boxes = gt_boxes.reshape(-1, 4)
     tr_boxes = tr_boxes.reshape(-1, 4)
 

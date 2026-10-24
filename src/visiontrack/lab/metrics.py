@@ -7,7 +7,7 @@ from typing import Any
 import numpy as np
 
 from ..eval.definitions import EVALUATOR
-from ..eval.mot17 import evaluate_frames, preprocess_frame
+from ..eval.mot17 import LEGACY_MOT17_PREPROCESSING, evaluate_frames, preprocess_frame
 from .comparison import load_variant_result
 from .contracts import GroundTruthRecord, TrackObservationRecord, sha256_json
 from .runner import load_experiment_bundle
@@ -48,6 +48,10 @@ def evaluation_frames(
                 np.asarray([0.0 if record.ignored else 1.0 for record in gt]),
                 _boxes(tr),
                 np.asarray([record.track_id for record in tr], dtype=np.int64),
+                # Lab artifacts predate the independent MOT17-policy correction.
+                # Keep their existing policy until a separately versioned Lab
+                # migration; metric v2 alone must not reinterpret stored inputs.
+                policy=LEGACY_MOT17_PREPROCESSING,
             )
         )
     return frames

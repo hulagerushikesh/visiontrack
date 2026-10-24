@@ -32,8 +32,8 @@ precision, adapter lineage and source fingerprinting are explicit boundaries.
 ## General policy discrepancies found in authored examples
 
 A pass on this particular input does not make the old policy universally right.
-Regression examples expose three differences requiring a separately versioned
-correction before treating the pipeline as generally reference-aligned:
+Regression examples exposed three differences. They now have a separately
+versioned correction; the first audit below is retained, not rewritten:
 
 - MOT17 removes predictions assigned to classes **2, 7, 8 and 12**, not every
   non-scoring class. Cars, bicycles, motorbikes and occluder labels are not
@@ -44,9 +44,29 @@ correction before treating the pipeline as generally reference-aligned:
   maximizing all IoUs and rejecting weak pairs afterwards is not equivalent.
 
 These describe evaluation rules, not which detections are physically correct.
-Current source at this audit checkpoint still uses the broad historical policy.
-The next implementation must preserve explicit legacy reproduction and avoid
-claiming an accuracy gain from changing a measuring rule.
+At the first audit checkpoint the broad historical policy was still the default.
+The current MOT17 runner instead defaults to
+**`visiontrack.mot17-preprocessing/v2`**. An explicit
+`policy="visiontrack.mot17-preprocessing/v1"` preserves the original function
+body structurally unchanged. Unknown policies and malformed thresholds are
+rejected. V2 uses evaluation-only geometry and our own NumPy/Hungarian assignment;
+TrackEval/SciPy remain dev-only independent references, not runtime dependencies.
+
+The corrected policy passes all **1,050 frames again**, retaining exactly the
+same 25,781 public outputs in this case. Authored class/zero-marking/empty/lineage
+checks, a threshold-before-assignment counterexample, and **160 crowded frames
+across eight deterministic seeds** also match the independent reference. These
+are regression examples, not a guarantee of tie-specific IDs for all inputs.
+
+### Lab compatibility boundary
+
+Existing Lab metric schemas v1/v2 retain their historical preprocessing meaning.
+The stored identifier `visiontrack.eval.mot17.preprocess_frame` is explicitly
+executed with the **legacy** policy by the Lab's shared frame builder. This is
+intentional: changing a dataset runner's default must not change stored Lab
+metrics or failure extraction. Adopting the new dataset policy in Lab artifacts
+requires a separate explicit contract migration and mixed-policy rejection;
+it is not silently folded into the metric-v2 tag. No existing report is rewritten.
 
 ## Reproduction and receipt
 
@@ -58,7 +78,8 @@ PYTHONPATH=src:. python -m experiments.mot17_preprocessing_audit \
   --output /path/to/a/new/check-directory
 ```
 
-Actual audit: `../visiontrack-walkthrough/mot17-preprocessing-audit-xqgBG7/check`.
+Initial audit: `../visiontrack-walkthrough/mot17-preprocessing-audit-xqgBG7/check`,
+with its exact harness retained at repository revision `69f319c`.
 The method was written before reference execution and pins the full original
 baseline manifest, annotation/cache source correspondence, harness, local
 preprocessor/core and all reference Python sources. Inputs and sources are
@@ -75,10 +96,26 @@ Reference: TrackEval `12c8791b303e0a0b50f753af204249e622d0281a`, the same pinned
 dev-only reference used by the metric check. Its optional BURST import warning
 about `pycocotools` does not affect this MOT17 preprocessing check.
 
-Local authored tests: **26 pass**, covering class policy, zero-marking, empty
-sides, identity recovery, malformed inputs, immutability and CLI failure status.
-The tests expose old-policy counterexamples rather than pretending they pass.
+The subsequent corrected-policy receipt is separately retained at
+`../visiontrack-walkthrough/mot17-preprocessing-v2-0UcNhb/check`. Its adapter
+verifies that reference XYWH boxes are unchanged, then recovers the exact original
+XYXY boxes by verified IDs; it does not let an unnecessary floating-point
+roundtrip manufacture geometry differences. The unused confidence carrier is
+also checked against the independently relabelled IDs. No IoU/count tolerance
+was relaxed to obtain agreement.
 
-Next: correct and version the general preprocessing policy, recheck it against
-the independent implementation, then re-derive the v2 missed-object partition.
-Independent lawful pixel/reference review remains separate and open.
+| Corrected-policy artifact | SHA-256 |
+| --- | --- |
+| Pre-execution method | `ed9e7977b2133d3fd8a129150721b5c3055d00953df6ebed828489edee55b33c` |
+| Summary | `7dbd33ac9ff11972a05e81dfe856d6389a0ea783a2fb5163cf930d1e8280d68c` |
+| Reference-scored rows | `f9d1fc75a92861510ef63e50dd808b128e0feb7e520083cbf42f94b93a04ccf8` |
+| Manifest | `7091e51a25dd059d3915e5ecdfb1cf69232d89bdfcb20518103247e43b179898` |
+
+Both receipts pin pre-execution sources and check them afterwards. The source
+precision/adapter/text-loader limits above still apply. The current **44**
+authored preprocessing tests pass, including original-body preservation and
+malformed/unknown-policy guards. This is no tracker accuracy improvement.
+
+The [v2 coverage and same-event trace](MOT17_COVERAGE_V2.md) are now also complete.
+Independent lawful pixel/reference review remains separate and open before
+selecting a tracking intervention.

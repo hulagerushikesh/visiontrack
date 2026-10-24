@@ -10,10 +10,20 @@ from visiontrack.lab import (
     calculate_failure_events,
     create_comparison_summary,
 )
-from visiontrack.lab.contracts import sha256_json
+from visiontrack.lab.contracts import GroundTruthRecord, TrackObservationRecord, sha256_json
 from visiontrack.lab.metrics import evaluation_frames
 from visiontrack.lab.report import build_report_model
 from visiontrack.lab.storage import read_ground_truth_jsonl, read_track_jsonl
+
+
+def test_lab_keeps_legacy_preprocessing_when_mot17_runner_default_changes():
+    # The current Lab artifact identifier names its historical policy. Changing
+    # the MOT17 runner's default must not reinterpret that contract.
+    ground_truth = (GroundTruthRecord(0, 1, 7, (0, 0, 10, 10), 1, 1., True),)
+    tracks = (TrackObservationRecord(0, 1, (0, 0, 10, 10), .9, 1),)
+    frames = evaluation_frames(ground_truth, tracks, start=0, end=1)
+    assert frames[0][0].tolist() == []
+    assert frames[0][2].tolist() == []  # MOT17 v2 would retain this prediction.
 
 
 def convert_to_historical(bundle, name):

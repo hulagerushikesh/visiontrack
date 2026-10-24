@@ -1,5 +1,12 @@
 # VisionTrack Reliability Lab — first vertical slice
 
+**2026-10-24 compatibility note:** metric evaluator v2 and MOT17 preprocessing
+v2 are separate definitions. Existing Lab schema-v1/v2 metric artifacts keep
+their original `visiontrack.eval.mot17.preprocess_frame` policy: the shared Lab
+frame builder now selects legacy preprocessing explicitly. The MOT17 runner's
+corrected default cannot silently change old metrics or failure extraction.
+See the [policy boundary](MOT17_PREPROCESSING.md) before a new Lab migration.
+
 ## Decision
 
 The first Reliability Lab release is a **local, reproducible comparison of

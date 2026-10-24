@@ -1,5 +1,10 @@
 # Where the real-data misses come from: a bounded box diagnostic
 
+**Historical evaluator-v1 receipt.** Keep the measurements below intact. The
+current [v2 coverage and same-event trace](MOT17_COVERAGE_V2.md) separately
+re-derive the partition: 19,393 / 149 / 270 / 2,013. Do not treat this page's
+old correspondence, 2,019-neighbour count or capacities as current v2 evidence.
+
 Checkpoint: **2026-10-23**. We analyzed the **saved, unchanged MOT17-04-FRCNN
 baseline**, not a new tracker run or candidate. All 1,050 frames, scoring
 preprocessing and canonical failure events were rechecked against the

@@ -125,6 +125,7 @@ nav:
       - Real-data metric cross-check — discrepancies and hold: REAL_DATA_METRIC_CHECK.md
       - Evaluator v2 — corrected scores and historical compatibility: EVALUATOR_V2.md
       - MOT17 preprocessing — independent case and policy check: MOT17_PREPROCESSING.md
+      - Corrected coverage and same-event trace: MOT17_COVERAGE_V2.md
       - Release-readiness audit: RELEASE_READINESS.md
       - Python/C++ runtime contract: CROSS_RUNTIME_CONTRACT.md
       - Horizons: HORIZONS.md

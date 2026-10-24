@@ -226,10 +226,25 @@ saved scored pairs. IDSW **44**, Frag **108**, HOTA **0.52372649**; no tracker
 change. Historical v1 scores/reports remain intact, new metric artifacts/failures
 declare v2, and mixed definitions are rejected. The 1,099 historical study tests
 pass in their original revision without loosening source guards. Independent
-preprocessing, v2 missed-object coverage and visual/reference review remain open.
+preprocessing and v2 missed-object coverage were the next gates; both are now
+complete in the subsequent checkpoint below. Visual/reference review remains open.
 Latest local suite: **901 passed, one slow test deselected**, with all 1,099
 historical tests executed inside that run's isolated checkout. Browser contracts,
 type checking, app build, lint and strict docs pass; remote CI is separate.
+
+**Current checkpoint — measurement/diagnosis complete (2026-10-24):** independent
+[MOT17 preprocessing](MOT17_PREPROCESSING.md) matches all 1,050 saved frames.
+The general class/zero-marked/threshold-assignment policy is corrected and
+versioned, with explicit legacy reproduction. Existing Lab schemas deliberately
+retain their original preprocessing meaning. The
+[v2 coverage and extended same-event trace](MOT17_COVERAGE_V2.md) are complete:
+19,393 / 149 / 270 / 2,013 misses; 29 replaced missed object/frame pairs and 25
+history-only changes, not 54 replaced objects. Corrected prior match is frame 37;
+one new unchanged replay observes 36–57, 738 events/66 stages, exact parity across
+all 1,050 frames. Track 19 stays updated/public throughout. No tracker/default
+change, accuracy gain, release or C++ port. Next: lawful independent pixel/label
+review of that fixed context, then one justified frozen comparison or a reasoned
+stop. The core measurement work no longer depends on owner recording.
 
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective

@@ -26,7 +26,11 @@ from experiments.mot17_case_intake import (
     source_members,
 )
 from experiments.mot17_metric_crosscheck import reference_api
-from visiontrack.eval.mot17 import preprocess_frame
+from visiontrack.eval.mot17 import (
+    LEGACY_MOT17_PREPROCESSING,
+    MOT17_PREPROCESSING,
+    preprocess_frame,
+)
 
 
 @contextmanager
@@ -47,7 +51,10 @@ def reference_dataset(te, count):
 def frame_arrays(row):
     gt = np.asarray(row["gt_xyxy"], dtype=float).reshape(-1, 4)
     tr = np.asarray(row["track_xyxy"], dtype=float).reshape(-1, 4)
-    g, t = (np.asarray(row[key], dtype=np.int64) for key in ("gt_ids", "track_ids"))
+    g, t = (np.asarray(row[key]) for key in ("gt_ids", "track_ids"))
+    require(all(ids.ndim == 1 and (not len(ids) or ids.dtype.kind in "iu")
+                for ids in (g, t)), "integer ID vectors required")
+    g, t = g.astype(np.int64), t.astype(np.int64)
     classes, flags = (np.asarray(row[key]) for key in ("gt_classes", "gt_consider"))
     require(len(gt) == len(g) == len(classes) == len(flags), "GT alignment mismatch")
     require(len(tr) == len(t), "tracker alignment mismatch")
@@ -99,31 +106,39 @@ def reference_rows(rows, te, box_iou):
         require(np.array_equal(tids, processed["tracker_confidences"][i]),
                 "reference ID lineage recovery failed")
 
-        def xyxy(boxes):
-            result = boxes.copy()
-            result[:, 2:] += result[:, :2]
-            return result.tolist()
+        def original_boxes(ids, id_key, box_key, returned, row=row):
+            positions = {identity: n for n, identity in enumerate(row[id_key])}
+            boxes = np.asarray(row[box_key], dtype=float).reshape(-1, 4)
+            selected = boxes[[positions[int(identity)] for identity in ids]].reshape(-1, 4)
+            xywh = selected.copy()
+            xywh[:, 2:] -= xywh[:, :2]
+            require(np.array_equal(xywh, returned), "reference changed selected box geometry")
+            # Recover the verified originals, not a potentially lossy XYWH -> XYXY roundtrip.
+            return selected.tolist()
 
         result.append(dict(source_frame=row["source_frame"], gt_ids=gids.tolist(),
-                           gt_xyxy=xyxy(processed["gt_dets"][i]), track_ids=tids.tolist(),
-                           track_xyxy=xyxy(processed["tracker_dets"][i])))
+                           gt_xyxy=original_boxes(gids, "gt_ids", "gt_xyxy",
+                                                  processed["gt_dets"][i]),
+                           track_ids=tids.tolist(),
+                           track_xyxy=original_boxes(tids, "track_ids", "track_xyxy",
+                                                     processed["tracker_dets"][i])))
     return result
 
 
-def local_row(raw):
-    pairs = preprocess_frame(*frame_arrays(raw))
+def local_row(raw, *, policy=MOT17_PREPROCESSING):
+    pairs = preprocess_frame(*frame_arrays(raw), policy=policy)
     return dict(source_frame=raw["source_frame"], **dict(zip(
         ("gt_ids", "gt_xyxy", "track_ids", "track_xyxy"),
         (p.tolist() for p in pairs), strict=True)))
 
 
-def compare(raw_rows, scored_rows, reference):
+def compare(raw_rows, scored_rows, reference, *, policy=MOT17_PREPROCESSING):
     require(len(raw_rows) == len(scored_rows) == len(reference), "frame count mismatch")
     changes, count = [], dict(raw=0, saved=0, reference=0)
     for raw, saved, ref in zip(raw_rows, scored_rows, reference, strict=True):
         require(raw["source_frame"] == saved["source_frame"] == ref["source_frame"],
                 "frame order mismatch")
-        require(local_row(raw) == saved, "saved preprocessing not reproduced")
+        require(local_row(raw, policy=policy) == saved, "saved preprocessing not reproduced")
         require(saved["gt_ids"] == ref["gt_ids"] and saved["gt_xyxy"] == ref["gt_xyxy"],
                 "scoring GT disagreement")
         for key, row in (("raw", raw), ("saved", saved), ("reference", ref)):
@@ -136,7 +151,7 @@ def compare(raw_rows, scored_rows, reference):
                                 saved_ids=saved["track_ids"], reference_ids=ref["track_ids"]))
     return dict(schema="visiontrack.mot17-preprocessing-audit/v1", frames=len(raw_rows),
                 all_frames_agree=not changes, disagreement_frames=len(changes),
-                prediction_counts=count, frame_changes=changes,
+                prediction_counts=count, frame_changes=changes, preprocessing=policy,
                 tracker_executed=False, images_read=False, independent_visual_review=False,
                 reference_text_loader_tested=False, historical_records_rewritten=False)
 
@@ -151,7 +166,7 @@ def verify_source_rows(rows, arrays):
                     f"raw/source GT mismatch: {key}, frame {frame}")
 
 
-def execute(baseline, cache, labels, output):
+def execute(baseline, cache, labels, output, policy=MOT17_PREPROCESSING):
     require(not output.exists() and not output.is_symlink(), "new output required")
     contents = read_bundle(baseline)
     intake = audit(cache, labels)
@@ -179,6 +194,7 @@ def execute(baseline, cache, labels, output):
         numpy_compatibility_aliases=aliases,
         environment=dict(python=sys.version, platform=platform.platform()),
         policy="compare all saved raw outputs; no tracker, tuning, pixels or source edits",
+        preprocessing=policy,
         coordinate_policy="source verified float32 cache -> float64; no text roundtrip",
         reference_adapter="actual dataset constructor, full GT, class=1 predictions; original "
                           "track IDs carried in unused confidence field to invert dense IDs",
@@ -186,7 +202,7 @@ def execute(baseline, cache, labels, output):
         discrepancy_policy="retain every difference; do not rewrite original baseline"))
     reference = reference_rows(rows, te, box_iou)
     saved = [json.loads(line) for line in contents["run-1/scored.jsonl"].splitlines()]
-    result = compare(rows, saved, reference)
+    result = compare(rows, saved, reference, policy=policy)
     with (output / "reference-scored.jsonl").open("x") as stream:
         for row in reference:
             stream.write(encoded(row))
@@ -203,8 +219,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("baseline", "cache", "labels", "output"):
         parser.add_argument(f"--{name}", type=Path, required=True)
+    parser.add_argument("--policy", choices=(MOT17_PREPROCESSING, LEGACY_MOT17_PREPROCESSING),
+                        default=MOT17_PREPROCESSING)
     args = parser.parse_args()
-    raise SystemExit(0 if execute(args.baseline, args.cache, args.labels, args.output) else 2)
+    raise SystemExit(0 if execute(args.baseline, args.cache, args.labels, args.output,
+                                args.policy) else 2)
 
 
 if __name__ == "__main__":

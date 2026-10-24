@@ -66,8 +66,13 @@ substitute a green test suite for metric agreement or visual evidence.
 
 That [v2 evaluator correction](EVALUATOR_V2.md) is now complete: all 45 same-input
 reference checks pass, legacy reports remain unchanged and frozen studies stay
-at their original revision. Next finish independent preprocessing verification
-and re-derive the v2 failure partition; visual/reference review is still separate.
+at their original revision. Independent
+[preprocessing verification](MOT17_PREPROCESSING.md), the general versioned
+MOT17-policy correction, [v2 coverage and the extended same-event actual trace](MOT17_COVERAGE_V2.md)
+are now complete as well. The corrected prior match at 37 changes the fixed
+review window to **36–57**, not the old 45–57. Every raw/scored frame and v2
+failure is reproduced exactly; track 19 stays updated/public throughout.
+Visual/reference review is still separate and open.
 This is measurement correctness, not improved tracking or public accuracy readiness.
 Complete visual case admission, owner walkthrough and reviewer participation
 remain pending. These sessions need not consume five full

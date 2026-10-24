@@ -70,10 +70,17 @@ The changed switch history is specific:
 This accounts for the net **one additional switch**. These are scorer events,
 not newly introduced tracker behavior. All old/new differences are retained:
 **164 added** events (108 fragments, 54 misses, 2 switches), **203 removed**
-(148 fragments, 54 misses, 1 switch). FP events are unchanged. Equal total FN
-therefore does **not** imply the same missed reference objects per frame.
-The old coverage partition remains a historical v1 finding until re-derived for
-the corrected correspondence; do not reuse it as a v2 recoverability budget.
+(148 fragments, 54 misses, 1 switch). These are **history-sensitive event records**:
+the [subsequent coverage audit](MOT17_COVERAGE_V2.md) resolves them into **29
+replaced object/frame misses plus 25 unchanged object/frame pairs with changed
+previous-ID context**. FP events are unchanged. Equal total FN therefore does
+not imply identical missed references. The old coverage remains historical;
+the new v2 partition is separately derived, never a recoverability budget.
+
+The corrected scorer's last prior match for reference 85 is **37**, not the
+legacy scorer's 46. The original 45–57 trace captures only part of that history;
+the subsequent **36–57 actual trace** now closes this measurement gap without
+changing the first event or tracker. Track 19 stays updated/public throughout.
 
 ## Compatibility: old reports must not change silently
 
@@ -155,12 +162,13 @@ inferred remote CI/deployment result.
 - [x] Tighten the older end-to-end cross-check: unrounded metric comparisons,
       exact counts/float tolerance ≤1e-10, full-precision MOT export and one tracker
       pass. Its full dataset-dependent check was **not** run in this step.
-- [ ] Independently verify MOT17 preprocessing on raw predictions/reference rows.
-- [ ] Re-derive coverage for v2 before using the missed-object partition in a new trial.
+- [x] Independently verify [MOT17 preprocessing](MOT17_PREPROCESSING.md) on all
+      raw frames, correct/version its broader policy and retain legacy semantics.
+- [x] Re-derive [v2 coverage and the same-event trace](MOT17_COVERAGE_V2.md).
 - [ ] Complete lawful pixel/reference review; metadata/metric parity is not that review.
 - [ ] Freeze one justified intervention and fresh validation, or stop for a reason.
 
 No tracker/default/C++ change, footage collection, outreach, release or accuracy
 improvement claim. C++ still awaits useful accepted tracking behavior. The next
-annotation-only task needs no volunteer footage: independent preprocessing and
-the corrected failure partition come before a new intervention.
+annotation-only preprocessing/coverage/trace tasks are now complete without
+volunteer footage. Lawful visual/reference review still precedes an intervention.

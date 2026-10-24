@@ -1,5 +1,10 @@
 # Real-data baseline: what fails before we change anything
 
+**Sealed historical evaluator-v1 baseline.** Raw tracker outputs remain the
+baseline. [Metric v2](EVALUATOR_V2.md) and
+[corrected coverage/history](MOT17_COVERAGE_V2.md) separately re-score those
+unchanged boxes. Preserve the original numbers and receipts below.
+
 Checkpoint: **2026-10-23**. The unchanged tracker has now run twice on the
 [admitted annotation-only MOT17 case](REAL_DATA_CASE_INTAKE.md). Both fresh runs
 produce byte-identical inputs/outputs, scored pairs, failures and summaries.

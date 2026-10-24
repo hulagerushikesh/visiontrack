@@ -456,10 +456,16 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
 - [x] Complete [evaluator v2](EVALUATOR_V2.md): corrected HOTA/CLEAR, explicit Lab
       versions, preserved legacy reports/studies, unchanged-output re-score and
       all 45 reference metric checks passing. No tracker tuning or old-result rewrite.
-- [ ] Independently check MOT17 preprocessing; same-input metric checking does
-      not verify ignore/distractor policy.
-- [ ] Re-derive the missed-object coverage partition using v2 correspondence;
-      total FN is unchanged but 54 old misses are replaced by 54 other object-frames.
+- [x] Independently check [MOT17 preprocessing](MOT17_PREPROCESSING.md): all
+      1,050 frames agree. Correct/version the broader policy, retain legacy
+      reproduction and keep existing Lab preprocessing explicit.
+- [x] Re-derive [v2 missed-object coverage](MOT17_COVERAGE_V2.md): 19,393 without
+      raw overlap, 149 low-score-only, 270 ignore-removed, 2,013 eligible retained.
+      There are 29 replaced object/frame misses, plus 25 changed history records;
+      the earlier 54-object/frame shorthand was incorrect.
+- [x] Extend the same first-event actual trace under corrected history:
+      prior scored match is frame 37; window 36–57; all 1,050 frames match,
+      738 events/66 stages recorded, track 19 updated/public throughout.
 - [ ] Produce one fixed comparison and reproducible, visually understandable
       report. Retain negative results; one clip is not a general accuracy claim.
 - [ ] Review it with an interested practitioner if available; record workflow
@@ -469,9 +475,10 @@ Follow the [daily/weekly delivery checkpoints](WEEKLY_DELIVERY_PLAN.md). The own
 clarified that substantive evidence takes priority over demonstrations. The
 weekly baseline/annotation-diagnosis target is now met;
 presentation and owner teaching are not prerequisites or accuracy evidence.
-Evaluator alignment now passes its same-input reference checks. Independent
-preprocessing, v2 coverage, visual review and a justified comparison remain open.
-No new C++ port is required; owner recording is not needed for metric correction.
+Evaluator alignment, independent case preprocessing, corrected coverage and the
+extended same-event trace are complete. Lawful independent pixel/reference
+review of **36–57**, a justified comparison and the visual case study remain.
+No new C++ port is required; owner recording was not needed for these checks.
 
 ## Deferred research compute
 

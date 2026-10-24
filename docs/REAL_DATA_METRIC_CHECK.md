@@ -7,7 +7,9 @@ alignment is now the first technical priority before a new accuracy comparison.
 **Subsequent 2026-10-24 resolution:** [Evaluator v2](EVALUATOR_V2.md) corrects the
 algorithms and passes all 45 reference checks on unchanged saved scored inputs.
 This page preserves the original failed check and its receipts; do not rewrite
-it as a pass. Independent preprocessing, v2 coverage and visual review remain open.
+it as a pass. Independent [preprocessing](MOT17_PREPROCESSING.md) and
+[v2 coverage/extended trace](MOT17_COVERAGE_V2.md) are now also complete.
+Lawful independent visual/reference review remains open.
 
 ## Actual check and results
 
@@ -98,7 +100,8 @@ Do not preserve a known defect as a permanent contract.
 - [ ] Re-score **unchanged saved outputs** with a separate evaluator receipt;
       compare all components and changed per-frame correspondences. Do not rerun
       or tune the tracker to conceal a measurement change.
-- [ ] Validate MOT17 preprocessing independently as a separate task.
+- [x] Validate [MOT17 preprocessing](MOT17_PREPROCESSING.md) independently as a
+      separate task; keep the failed historical metric check intact.
 - [ ] Complete lawful pixel/reference review from the trace brief, then freeze
       one justified intervention and fresh validation, or record a reasoned stop.
 

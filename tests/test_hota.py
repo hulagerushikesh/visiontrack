@@ -119,4 +119,4 @@ def test_mot17_preprocess_drops_zero_marked_gt():
         gt_boxes, gt_ids, gt_classes, gt_conf, tr_boxes, tr_ids
     )
     assert g_ids.tolist() == [1]          # zero-marked gt not scored
-    assert t_ids.tolist() == []           # tracker matched to it is removed
+    assert t_ids.tolist() == [5]          # zero marking alone does not remove a prediction

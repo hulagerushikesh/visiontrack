@@ -33,17 +33,20 @@ def reference(rows):
 def test_reference_removes_only_mot17_distractor_classes(cls, removed):
     original = row([cls])
     result = reference([original])[0]
+    assert audit.local_row(original) == result
     assert result["track_ids"] == ([] if removed else [1])
     assert result["gt_ids"] == ([1] if cls == 1 else [])
     if cls not in (1, 2, 7, 8, 12):
-        assert audit.local_row(original)["track_ids"] == []  # Existing overbroad policy.
+        assert audit.local_row(original, policy=audit.LEGACY_MOT17_PREPROCESSING)[
+            "track_ids"] == []
 
 
 def test_zero_marked_pedestrian_does_not_remove_prediction_in_reference():
     original = row([1], flags=[0])
     result = reference([original])[0]
     assert result["gt_ids"] == [] and result["track_ids"] == [1]
-    assert audit.local_row(original)["track_ids"] == []
+    assert audit.local_row(original) == result
+    assert audit.local_row(original, policy=audit.LEGACY_MOT17_PREPROCESSING)["track_ids"] == []
 
 
 def test_dense_reference_ids_recover_original_lineage_even_for_identical_boxes():
@@ -66,10 +69,10 @@ def test_empty_sides_are_retained(original):
 
 def test_comparison_preserves_all_disagreements_and_inputs():
     raw = [row([3]), row([1], frame=2)]
-    saved = [audit.local_row(r) for r in raw]
+    saved = [audit.local_row(r, policy=audit.LEGACY_MOT17_PREPROCESSING) for r in raw]
     ref = reference(raw)
     snapshot = copy.deepcopy((raw, saved, ref))
-    result = audit.compare(raw, saved, ref)
+    result = audit.compare(raw, saved, ref, policy=audit.LEGACY_MOT17_PREPROCESSING)
     assert result["all_frames_agree"] is False
     assert result["disagreement_frames"] == 1
     assert result["prediction_counts"] == dict(raw=2, saved=1, reference=2)
@@ -85,7 +88,8 @@ def test_mismatched_saved_preprocessing_is_not_accepted():
         audit.compare(raw, saved, reference(raw))
 
 
-@pytest.mark.parametrize("kind", ["duplicate", "nonfinite", "flags", "alignment", "order"])
+@pytest.mark.parametrize("kind", ["duplicate", "nonfinite", "flags", "alignment", "order",
+                                 "fractional_id", "boolean_id"])
 def test_invalid_adapter_input_fails(kind):
     original = row()
     if kind == "duplicate":
@@ -96,8 +100,10 @@ def test_invalid_adapter_input_fails(kind):
         original["gt_consider"] = [0.5]
     elif kind == "alignment":
         original["track_ids"] = []
-    else:
+    elif kind == "order":
         original["source_frame"] = 2
+    else:
+        original["track_ids"] = [1.5 if kind == "fractional_id" else True]
     with pytest.raises(ValueError):
         reference([original])
 
