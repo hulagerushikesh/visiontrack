@@ -146,16 +146,23 @@ protocol-file checksums pass. No production or C++ files changed.
 
 ## Decision and next action
 
+**2026-10-24 qualification:** the later [metric reference check](REAL_DATA_METRIC_CHECK.md)
+found equal aggregate TP/FN/FP but different correspondence-dependent metrics.
+This partition describes the sealed **historical scorer's** missed reference
+objects; equal FN totals do not establish identical per-frame correspondence.
+New accuracy comparisons wait for evaluator alignment, not a tolerance relaxation.
+
 Do **not** treat persistent identity memory, a gate-off retry or a lower
 confirmation threshold as a proven answer. The dominant miss group lacks raw
 geometric support; the smaller eligible-neighbour group is not an automatic
 tracker improvement budget. This supports evaluating detector and tracker
 **together**, while retaining the narrower tracking research question.
 
-Next inspect actual association/lifecycle decisions for the **same first
-switch**, under unchanged defaults, and verify any replay against the saved
-baseline outputs. Resolve why well-overlapping detections at 51–53 did not become
-scored public output before proposing a single controlled intervention. No
-second failure hunt, tuning, new imagery or C++ port is needed for that task.
+The subsequent [actual association/lifecycle trace](REAL_DATA_TRACE.md) now
+completes that task: all 1,050 replay frames match; track 19 keeps receiving
+high-stage matches, frame 51's weak box is unused, and track 31 is created at 52
+then confirmed at 54. Shared geometry with reference 89 makes a simple physical
+identity explanation unsafe. No new candidate, threshold change or C++ port is
+justified yet; a bounded independent-review brief is now recorded.
 Independent lawful pixel/reference review remains a separate open gate before
 visual cause, annotation correctness or a completed real-clip case study claims.

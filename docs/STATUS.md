@@ -199,9 +199,26 @@ by ignore handling, and 2,019 with retained eligible neighbours but no scored
 match. Unique assignment and output-geometry checks prevent interpreting these
 as causal or automatically recoverable losses. This executes no tracker and
 retains the original baseline. All 1,923 non-slow tests pass, with one slow test
-deselected. Next trace actual unchanged association/lifecycle decisions for the
-same first switch before proposing an intervention. Independent pixel/reference review, a new
+deselected. The [actual unchanged association/lifecycle trace](REAL_DATA_TRACE.md)
+now reproduces every output across all 1,050 frames and captures 441 actual
+events/39 stages for the same first switch. Track 19 remains updated; 31 is
+created at 52 and confirmed at 54. Nearby reference 89 shares geometry with 19,
+so this does not establish a physical identity error, gate-only failure or
+forgotten/expired ID. The research decision rejects premature tuning and records
+a bounded independent-review brief. Independent pixel/reference review, a new
 comparison, transfer claims, outreach and C++ adoption remain gated.
+
+**Measurement gate found on 2026-10-24:** the
+[independent TrackEval metric check](REAL_DATA_METRIC_CHECK.md) fails equivalence:
+TP/FN/FP and IDF1 agree, but reference IDSW is **44 versus 43**, fragmentation
+**108 versus 148**, and HOTA **0.52372649 versus 0.52554966**. Three authored
+counterexamples demonstrate matching/definition differences, not just solver ties.
+The actual tracker trace remains unchanged; new accuracy comparisons wait for
+evaluator alignment, historical-report compatibility and a separate re-score of
+saved outputs. Preprocessing and visual review remain independently unverified.
+Local regression verification: **1,961 non-slow tests pass, one slow test
+deselected**. A green diagnostic/characterization suite is not a metric-equivalence
+pass; the failed real-data cross-check remains explicit.
 
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective

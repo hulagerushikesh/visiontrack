@@ -205,8 +205,12 @@ causal explanation. The [coverage diagnosis](REAL_DATA_COVERAGE.md) now reconcil
 all 21,825 misses: 19,387 lack any raw detection IoU ≥0.5 neighbour; 2,019 have
 an eligible retained neighbour but no scored match. The remaining 419 concern
 low scores/ignore handling; unique assignment capacity prevents treating neighbour
-counts as guaranteed recovery. Next inspect unchanged association/lifecycle
-evidence for the same first switch before tuning. Full visual review and a justified comparison
+counts as guaranteed recovery. The [actual unchanged trace](REAL_DATA_TRACE.md)
+now passes all 1,050 replay frames: 19 remains updated; 31 is born at 52 and
+confirmed at 54. Shared geometry with reference 89 prevents calling this a
+proven forgotten-person or tracker-drift error. The intervention decision and
+bounded independent-review brief are complete; no candidate is adopted.
+Full visual review and a justified comparison
 remain open; the owner walkthrough is not a
 technical prerequisite. Follow the [daily/weekly checkpoints](WEEKLY_DELIVERY_PLAN.md)
 toward one permitted
@@ -217,3 +221,11 @@ ready**, with external permission/review delays separate. The alpha can already
 be shown with synthetic evidence labelled honestly; real-world improvement is
 not yet proved. Real recording, usability and discovery remain pending. C++ stays
 in maintenance until useful behavior earns an explicitly accepted parity handoff.
+
+**New measurement gate (2026-10-24):** the [independent metric check](REAL_DATA_METRIC_CHECK.md)
+does not pass. Saved-output TP/FN/FP and IDF1 agree; TrackEval reports IDSW 44
+versus our historical 43, and HOTA 0.52372649 versus 0.52554966. Minimal examples
+show algorithm/definition differences, not just rounding or solver ties.
+Next align the evaluators and re-score unchanged outputs with explicit history/
+report compatibility before a new tracker comparison. No owner footage is needed
+for that technical correction. Historical results are retained, not silently revised.

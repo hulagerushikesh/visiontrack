@@ -442,8 +442,22 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
 - [x] Complete the [saved-box coverage decomposition](REAL_DATA_COVERAGE.md):
       all 21,825 misses partitioned with score/ignore rules, unique assignment
       capacity and explicit non-causal limits; no new tracker execution.
-- [ ] Inspect unchanged association/lifecycle evidence for the same first
-      switch; verify replay against the saved baseline before any intervention.
+- [x] Inspect [unchanged association/lifecycle evidence](REAL_DATA_TRACE.md) for
+      the same first switch: all 1,050 replay frames exactly match the baseline;
+      19 remains updated, 31 is created at 52 and confirmed at 54. Shared geometry
+      with reference 89 prevents a confident physical-identity interpretation.
+- [x] Record the resulting intervention decision and a bounded independent-review
+      brief: no gate-off, lifetime, memory or confirmation change is justified yet.
+- [ ] Resolve lawful pixel access and independent review of references 85/89 in
+      the sealed event context; do not silently change labels/scoring or hunt a new event.
+- [x] Run an [independent metric check](REAL_DATA_METRIC_CHECK.md) on all saved
+      scored pairs; retain the discrepancies and three non-tie/history/fragmentation
+      counterexamples. This is a completed diagnostic, not a metric-equivalence pass.
+- [ ] **Next technical priority:** align HOTA/CLEAR with the pinned reference,
+      decide compatibility for historical Lab failure records, then re-score
+      unchanged outputs with a separate evaluator receipt. No tracker tuning.
+- [ ] Independently check MOT17 preprocessing; same-input metric checking does
+      not verify ignore/distractor policy.
 - [ ] Produce one fixed comparison and reproducible, visually understandable
       report. Retain negative results; one clip is not a general accuracy claim.
 - [ ] Review it with an interested practitioner if available; record workflow
@@ -453,8 +467,9 @@ Follow the [daily/weekly delivery checkpoints](WEEKLY_DELIVERY_PLAN.md). The own
 clarified that substantive evidence takes priority over demonstrations. The
 weekly baseline/annotation-diagnosis target is now met;
 presentation and owner teaching are not prerequisites or accuracy evidence.
-Independent visual review and any justified comparison remain open. No new C++
-port is required.
+Evaluator alignment now comes first: internal repeatability is not reference
+equivalence. Independent visual review and any justified comparison remain open.
+No new C++ port is required; owner recording is not needed for metric correction.
 
 ## Deferred research compute
 
