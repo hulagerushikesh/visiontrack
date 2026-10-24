@@ -4,7 +4,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from ..eval.mot import MotAccumulator, MotFailure
+from ..eval.definitions import LEGACY_EVALUATOR, accumulator_for
+from ..eval.mot import MotFailure
 from .comparison import load_variant_metrics, load_variant_result
 from .contracts import FailureEvent
 from .metrics import evaluation_frames
@@ -81,7 +82,8 @@ def calculate_failure_events(bundle: str | Path) -> dict[str, tuple[FailureEvent
         if metric_artifact is None:
             raise ValueError(f"metric artifact is required before failure extraction for {name!r}")
 
-        accumulator = MotAccumulator(iou_threshold=0.5)
+        evaluator = metric_artifact.get("evaluator", LEGACY_EVALUATOR)
+        accumulator = accumulator_for(evaluator)
         failures: list[FailureEvent] = []
         frames = evaluation_frames(ground_truth, tracks, start=start, end=end)
         for gt_ids, gt_boxes, track_ids, track_boxes in frames:
@@ -96,13 +98,14 @@ def calculate_failure_events(bundle: str | Path) -> dict[str, tuple[FailureEvent
                         ground_truth_ids=()
                         if failure.gt_id is None
                         else (failure.gt_id,),
-                        context=_context(
+                        context={**_context(
                             failure,
                             metric_id=metric_artifact["metric_id"],
                             detection_sha256=source.detection_sha256,
                             ground_truth_sha256=ground_truth_sha256,
                             track_sha256=run_metadata["track_sha256"],
-                        ),
+                        ), **({"evaluator": evaluator}
+                              if metric_artifact["schema_version"] == 2 else {})},
                         evidence_frames={
                             "start": max(start, frame_index - 2),
                             "end": min(end, frame_index + 3),

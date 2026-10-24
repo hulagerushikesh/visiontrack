@@ -12,6 +12,9 @@ the first-event selection below describe the **sealed historical implementation*
 not a reference-equivalence pass. Preserve these records; align/version the
 evaluator and re-score unchanged outputs before any new accuracy comparison.
 
+That [versioned v2 correction and re-score](EVALUATOR_V2.md) is now complete at
+the same-input metric level. The sealed historical scores below are unchanged.
+
 ## Plain-language outcome
 
 On this 35-second pedestrian sequence, the tracker keeps some identities well,

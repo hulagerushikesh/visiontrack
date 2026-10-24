@@ -176,6 +176,12 @@ def build_report_model(bundle: str | Path) -> dict[str, Any]:
             "Variant acceptance remains an explicit human decision.",
         ],
     }
+    if "evaluator" in summary["evidence"]:
+        content["evaluator"] = summary["evidence"]["evaluator"]
+        content["limitations"].append(
+            "Metrics use visiontrack.metrics/v2: fragmentations mark resumed matches; "
+            "historical v1 scores and failure definitions are not directly comparable."
+        )
     content["report_id"] = sha256_json(content)
     return content
 

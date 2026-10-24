@@ -220,6 +220,17 @@ Local regression verification: **1,961 non-slow tests pass, one slow test
 deselected**. A green diagnostic/characterization suite is not a metric-equivalence
 pass; the failed real-data cross-check remains explicit.
 
+**Subsequent v2 correction:** [Evaluator v2](EVALUATOR_V2.md) now passes all **45**
+reference checks with exact counts and float tolerance 1e-10 on the unchanged
+saved scored pairs. IDSW **44**, Frag **108**, HOTA **0.52372649**; no tracker
+change. Historical v1 scores/reports remain intact, new metric artifacts/failures
+declare v2, and mixed definitions are rejected. The 1,099 historical study tests
+pass in their original revision without loosening source guards. Independent
+preprocessing, v2 missed-object coverage and visual/reference review remain open.
+Latest local suite: **901 passed, one slow test deselected**, with all 1,099
+historical tests executed inside that run's isolated checkout. Browser contracts,
+type checking, app build, lint and strict docs pass; remote CI is separate.
+
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective
 anonymous re-entry probe can export its complete fixed-grid synthetic curves

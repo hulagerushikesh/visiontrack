@@ -17,8 +17,9 @@ Run::
 
     python scripts/xcheck_mot17_trackeval.py --seq MOT17-09-FRCNN --data-root ~/Downloads/MOT17
 
-Expected: MOTA and IDF1 match exactly; HOTA agrees within ~2e-3 (Hungarian
-tie-breaking across HOTA's 19 localisation thresholds accounts for the rest).
+No expected PASS is assumed: check preprocessing separately from metric math.
+Integer counts must agree exactly, unrounded floats within 1e-10. Retain any
+discrepancy; do not dismiss an algorithm difference as Hungarian tie-breaking.
 """
 from __future__ import annotations
 
@@ -38,8 +39,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--seq", default="MOT17-09-FRCNN", help="sequence name")
     parser.add_argument("--data-root", default="~/Downloads/MOT17", help="MOT17 root")
     parser.add_argument("--cache-dir", default="data/cache/mot17")
-    parser.add_argument("--tol", type=float, default=3e-3, help="HOTA agreement tolerance")
+    parser.add_argument("--tol", type=float, default=1e-10, help="float tolerance, at most 1e-10")
     args = parser.parse_args(argv)
+    if not np.isfinite(args.tol) or not 0 < args.tol <= 1e-10:
+        parser.error("--tol must be finite, positive and no greater than 1e-10")
 
     # trackeval predates NumPy 2.0 and references the removed builtin aliases.
     for name, py in (("float", float), ("int", int), ("bool", bool)):
@@ -47,8 +50,9 @@ def main(argv: list[str] | None = None) -> int:
             setattr(np, name, py)
 
     from visiontrack.datasets.cache import CachedSequence
-    from visiontrack.datasets.splits import Split
-    from visiontrack.eval.mot17 import evaluate_sequences
+    from visiontrack.eval.hota import compute_hota, compute_identity
+    from visiontrack.eval.mot import MotAccumulator
+    from visiontrack.eval.mot17 import preprocess_frame
     from visiontrack.tracking.config import TrackerConfig
     from visiontrack.tracking.tracker import ByteTracker
 
@@ -59,23 +63,31 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     cache = CachedSequence(npz)
     length = len(cache)
-    video = seq_name.rsplit("-", 1)[0]  # MOT17-09-FRCNN -> MOT17-09
 
     # Run our tracker on the full sequence, capturing RAW output (no preproc).
     tracker = ByteTracker(TrackerConfig())
-    lines = []
+    lines, frames = [], []
     for fd in cache.iter_range(1, length):
-        for o in tracker.update(fd.detections()):
+        observations = tracker.update(fd.detections())
+        for o in observations:
             x1, y1, x2, y2 = o.xyxy
             lines.append(
-                f"{fd.frame},{o.track_id},{x1:.2f},{y1:.2f},"
-                f"{x2 - x1:.2f},{y2 - y1:.2f},{o.score:.3f},-1,-1,-1"
+                f"{fd.frame},{o.track_id},{x1:.17g},{y1:.17g},"
+                f"{x2 - x1:.17g},{y2 - y1:.17g},{o.score:.17g},-1,-1,-1"
             )
-
-    # Our pipeline (preprocessing + all metrics) over the full sequence.
-    entry = {"length": length, "train": [1, length // 2], "val": [1, length]}
-    split = Split("xcheck", "full", {video: entry})
-    ours, _ = evaluate_sequences([cache], TrackerConfig(), split, subset="all", per_sequence=False)
+        frames.append(preprocess_frame(
+            fd.gt_xyxy, fd.gt_ids, fd.gt_classes, fd.gt_conf,
+            np.array([o.xyxy for o in observations]).reshape(-1, 4),
+            np.array([o.track_id for o in observations], dtype=np.int64)))
+    accumulator = MotAccumulator()
+    for frame in frames:
+        accumulator.update(*frame)
+    clear = accumulator.result()
+    identity, hota = compute_identity(frames), compute_hota(frames)
+    ours = dict(MOTA=clear.mota, MOTP=clear.motp, IDF1=identity.idf1,
+                HOTA=hota.hota, DetA=hota.det_a, AssA=hota.ass_a,
+                TP=clear.true_positives, FP=clear.false_positives,
+                FN=clear.false_negatives, IDSW=clear.id_switches, Frag=clear.fragmentations)
 
     # trackeval on the identical raw output, using its own MOT17 preprocessing.
     import trackeval
@@ -109,21 +121,21 @@ def main(argv: list[str] | None = None) -> int:
         "HOTA": float(np.mean(res["HOTA"]["HOTA"])),
         "DetA": float(np.mean(res["HOTA"]["DetA"])),
         "AssA": float(np.mean(res["HOTA"]["AssA"])),
+        "MOTP": float(res["CLEAR"]["MOTP"]),
+        **{key: int(res["CLEAR"][reference]) for key, reference in dict(
+            TP="CLR_TP", FP="CLR_FP", FN="CLR_FN", IDSW="IDSW", Frag="Frag").items()},
     }
 
-    keys = ("MOTA", "IDF1", "HOTA", "DetA", "AssA")
+    keys = tuple(ours)
     print(f"cross-check on {seq_name} ({length} frames)\n")
     print(f"{'':10} " + " ".join(f"{k:>8}" for k in keys))
     print(f"{'OURS':10} " + " ".join(f"{ours[k]:>8.4f}" for k in keys))
     print(f"{'TRACKEVAL':10} " + " ".join(f"{te[k]:>8.4f}" for k in keys))
     print(f"{'DELTA':10} " + " ".join(f"{ours[k] - te[k]:>+8.4f}" for k in keys))
 
-    ok = (
-        abs(ours["MOTA"] - te["MOTA"]) < 1e-3
-        and abs(ours["IDF1"] - te["IDF1"]) < 1e-3
-        and abs(ours["HOTA"] - te["HOTA"]) < args.tol
-    )
-    print("\n" + ("PASS" if ok else "FAIL") + f"  (MOTA/IDF1 exact, HOTA within {args.tol})")
+    ok = all(abs(ours[key] - te[key]) <= (0 if isinstance(ours[key], int) else args.tol)
+             for key in keys)
+    print("\n" + ("PASS" if ok else "FAIL") + f"  (counts exact, floats within {args.tol})")
     return 0 if ok else 1
 
 

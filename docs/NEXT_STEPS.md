@@ -453,11 +453,13 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
 - [x] Run an [independent metric check](REAL_DATA_METRIC_CHECK.md) on all saved
       scored pairs; retain the discrepancies and three non-tie/history/fragmentation
       counterexamples. This is a completed diagnostic, not a metric-equivalence pass.
-- [ ] **Next technical priority:** align HOTA/CLEAR with the pinned reference,
-      decide compatibility for historical Lab failure records, then re-score
-      unchanged outputs with a separate evaluator receipt. No tracker tuning.
+- [x] Complete [evaluator v2](EVALUATOR_V2.md): corrected HOTA/CLEAR, explicit Lab
+      versions, preserved legacy reports/studies, unchanged-output re-score and
+      all 45 reference metric checks passing. No tracker tuning or old-result rewrite.
 - [ ] Independently check MOT17 preprocessing; same-input metric checking does
       not verify ignore/distractor policy.
+- [ ] Re-derive the missed-object coverage partition using v2 correspondence;
+      total FN is unchanged but 54 old misses are replaced by 54 other object-frames.
 - [ ] Produce one fixed comparison and reproducible, visually understandable
       report. Retain negative results; one clip is not a general accuracy claim.
 - [ ] Review it with an interested practitioner if available; record workflow
@@ -467,8 +469,8 @@ Follow the [daily/weekly delivery checkpoints](WEEKLY_DELIVERY_PLAN.md). The own
 clarified that substantive evidence takes priority over demonstrations. The
 weekly baseline/annotation-diagnosis target is now met;
 presentation and owner teaching are not prerequisites or accuracy evidence.
-Evaluator alignment now comes first: internal repeatability is not reference
-equivalence. Independent visual review and any justified comparison remain open.
+Evaluator alignment now passes its same-input reference checks. Independent
+preprocessing, v2 coverage, visual review and a justified comparison remain open.
 No new C++ port is required; owner recording is not needed for metric correction.
 
 ## Deferred research compute

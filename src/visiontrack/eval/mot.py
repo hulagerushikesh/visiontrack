@@ -13,9 +13,9 @@ comparable and regressions are catchable in CI:
 * **MT / ML** — mostly-tracked / mostly-lost trajectories (covered >80% / <20%
   of their life).
 
-The per-frame correspondence follows CLEAR-MOT exactly: existing GT↔hypothesis
-pairs are preserved when still geometrically valid (this is what makes IDSW
-meaningful), and only the remainder is re-solved with Hungarian matching.
+Evaluator v2 distinguishes previous-timestep matching priority from persistent
+last-match identity history. Fragmentation is counted when tracking resumes,
+not at a terminal loss. Frozen v1 semantics live in ``_legacy_mot`` for old reports.
 """
 from __future__ import annotations
 
@@ -25,7 +25,7 @@ from dataclasses import dataclass
 import numpy as np
 
 from ..core.assignment import linear_assignment
-from ..core.geometry import iou_matrix
+from .geometry import metric_iou as iou_matrix
 
 __all__ = ["MotFailure", "MotMetrics", "MotAccumulator", "evaluate_sequence"]
 
@@ -96,6 +96,8 @@ class MotAccumulator:
     """Streaming CLEAR-MOT accumulator; feed one frame at a time."""
 
     def __init__(self, iou_threshold: float = 0.5, on_switch=None) -> None:
+        if not np.isfinite(iou_threshold) or not 0 <= iou_threshold <= 1:
+            raise ValueError("iou_threshold must be finite and in [0, 1]")
         self.iou_threshold = iou_threshold
         # Optional hook fired on each identity switch, for error-taxonomy
         # analysis. Signature: on_switch(frame, gt_id, prev_hyp, new_hyp,
@@ -115,7 +117,7 @@ class MotAccumulator:
         # Per-GT life stats for MT/ML.
         self._gt_total: dict[int, int] = defaultdict(int)
         self._gt_matched: dict[int, int] = defaultdict(int)
-        self._gt_was_matched: dict[int, bool] = {}
+        self._previous: dict[int, int] = {}
 
     def update(
         self,
@@ -129,6 +131,11 @@ class MotAccumulator:
         hyp_ids = np.asarray(hyp_ids, dtype=np.int64).reshape(-1)
         gt_boxes = np.asarray(gt_boxes, dtype=np.float64).reshape(-1, 4)
         hyp_boxes = np.asarray(hyp_boxes, dtype=np.float64).reshape(-1, 4)
+        if (len(gt_ids) != len(gt_boxes) or len(hyp_ids) != len(hyp_boxes)
+                or len(set(gt_ids.tolist())) != len(gt_ids)
+                or len(set(hyp_ids.tolist())) != len(hyp_ids)
+                or not np.isfinite(gt_boxes).all() or not np.isfinite(hyp_boxes).all()):
+            raise ValueError("finite boxes and unique aligned frame IDs required")
 
         self._frames += 1
         self._num_gt += len(gt_ids)
@@ -143,36 +150,21 @@ class MotAccumulator:
 
         ious = iou_matrix(gt_boxes, hyp_boxes) if n_gt and n_hyp else np.zeros((n_gt, n_hyp))
 
-        # 1) Preserve existing correspondences that are still valid. This is
-        #    what prevents spurious identity switches when two objects cross.
-        gt_row = {int(g): i for i, g in enumerate(gt_ids)}
-        hyp_col = {int(h): j for j, h in enumerate(hyp_ids)}
-        for g, prev_h in self._last_hyp.items():
-            gi = gt_row.get(g)
-            hj = hyp_col.get(prev_h)
-            if gi is None or hj is None:
-                continue
-            if gi in matched_gt or hj in matched_hyp:
-                continue
-            if ious[gi, hj] >= self.iou_threshold:
-                matched_gt.add(gi)
-                matched_hyp.add(hj)
-                frame_matches.append((gi, hj, ious[gi, hj]))
-
-        # 2) Hungarian-match the remaining GTs and hypotheses.
-        free_gt = [i for i in range(n_gt) if i not in matched_gt]
-        free_hyp = [j for j in range(n_hyp) if j not in matched_hyp]
-        if free_gt and free_hyp:
-            sub = ious[np.ix_(free_gt, free_hyp)]
-            # Maximise IoU == minimise (1 - IoU); forbid sub-threshold pairs.
-            cost = 1.0 - sub
-            rows, cols = linear_assignment(cost)
+        # Reference-compatible weighted assignment: previous-step priority,
+        # then local overlap. Invalid edges are zero BEFORE optimization.
+        # Last-ever matches must not compete with current correspondences.
+        if n_gt and n_hyp:
+            priority = np.array([[self._previous.get(int(g)) == int(h) for h in hyp_ids]
+                                 for g in gt_ids], dtype=np.float64)
+            scores = 1000.0 * priority + ious
+            eps = np.finfo(np.float64).eps
+            scores[ious < self.iou_threshold - eps] = 0
+            rows, cols = linear_assignment(-scores)
             for r, c in zip(rows, cols, strict=False):
-                if sub[r, c] >= self.iou_threshold:
-                    gi, hj = free_gt[r], free_hyp[c]
-                    matched_gt.add(gi)
-                    matched_hyp.add(hj)
-                    frame_matches.append((gi, hj, sub[r, c]))
+                if scores[r, c] > eps:
+                    matched_gt.add(int(r))
+                    matched_hyp.add(int(c))
+                    frame_matches.append((int(r), int(c), float(ious[r, c])))
 
         # 3) Tally TP / FP / FN, switches and localisation error.
         for gi, hj, iou in frame_matches:
@@ -199,26 +191,28 @@ class MotAccumulator:
                     self._on_switch(
                         self._frames - 1, g, prev, h, gi, gt_ids, gt_boxes
                     )
+            # A fragment begins at the resumed match. The first match is not
+            # a fragment, and an unrecovered final miss is not one either.
+            if g not in self._previous and prev is not None:
+                self._fragments += 1
+                failures.append(MotFailure(
+                    event_type="fragmentation", frame_index=self._frames - 1,
+                    gt_id=g, hyp_id=h, previous_hyp_id=prev,
+                    gt_box=tuple(float(v) for v in gt_boxes[gi]),
+                    hyp_box=tuple(float(v) for v in hyp_boxes[hj])))
             self._last_hyp[g] = h
+
+        # Match the pinned reference's empty-timestep policy: if either entire
+        # side is empty, it counts FP/FN but carries the priority map forward.
+        # This is explicit compatibility, not a claim about unobserved identity.
+        if n_gt and n_hyp:
+            self._previous = {int(gt_ids[g]): int(hyp_ids[h]) for g, h, _ in frame_matches}
 
         self._fp += n_hyp - len(matched_hyp)
         self._fn += n_gt - len(matched_gt)
         for gi, gt_id in enumerate(gt_ids):
             identity = int(gt_id)
             is_matched = gi in matched_gt
-            if self._gt_was_matched.get(identity, False) and not is_matched:
-                self._fragments += 1
-                failures.append(
-                    MotFailure(
-                        event_type="fragmentation",
-                        frame_index=self._frames - 1,
-                        gt_id=identity,
-                        hyp_id=None,
-                        previous_hyp_id=self._last_hyp.get(identity),
-                        gt_box=tuple(float(value) for value in gt_boxes[gi]),
-                        hyp_box=None,
-                    )
-                )
             if not is_matched:
                 failures.append(
                     MotFailure(
@@ -231,7 +225,6 @@ class MotAccumulator:
                         hyp_box=None,
                     )
                 )
-            self._gt_was_matched[identity] = is_matched
         for hj, hyp_id in enumerate(hyp_ids):
             if hj not in matched_hyp:
                 failures.append(
@@ -258,7 +251,7 @@ class MotAccumulator:
         mt = pt = ml = 0
         for g, total in self._gt_total.items():
             ratio = self._gt_matched.get(g, 0) / total if total else 0.0
-            if ratio >= 0.8:
+            if ratio > 0.8:
                 mt += 1
             elif ratio < 0.2:
                 ml += 1

@@ -63,6 +63,12 @@ agree, but the equivalence check fails. **Evaluator alignment and a separately
 versioned re-score of unchanged outputs now precede any new tracker comparison.**
 Session 4's independent pixel/reference review remains a separate gate; do not
 substitute a green test suite for metric agreement or visual evidence.
+
+That [v2 evaluator correction](EVALUATOR_V2.md) is now complete: all 45 same-input
+reference checks pass, legacy reports remain unchanged and frozen studies stay
+at their original revision. Next finish independent preprocessing verification
+and re-derive the v2 failure partition; visual/reference review is still separate.
+This is measurement correctness, not improved tracking or public accuracy readiness.
 Complete visual case admission, owner walkthrough and reviewer participation
 remain pending. These sessions need not consume five full
 engineering days; permission/label availability may dominate calendar time.

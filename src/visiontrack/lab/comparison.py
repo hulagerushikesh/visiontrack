@@ -8,6 +8,7 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
+from ..eval.definitions import EVALUATOR, LEGACY_EVALUATOR
 from .contracts import FailureEvent, TrackObservationRecord, sha256_json
 from .runner import load_experiment_bundle, resolve_variant_config
 from .storage import read_failure_jsonl, read_track_jsonl, write_comparison_summary
@@ -127,10 +128,16 @@ def load_variant_metrics(
         artifact = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise ValueError(f"cannot read metric artifact: {path}") from exc
-    if not isinstance(artifact, dict) or set(artifact) != _METRIC_FIELDS:
-        raise ValueError("metric artifact fields do not match schema v1")
-    if artifact["schema_version"] != 1:
-        raise ValueError(f"unsupported metric schema_version: {artifact['schema_version']}")
+    if not isinstance(artifact, dict):
+        raise ValueError("metric artifact must be an object")
+    version = artifact.get("schema_version")
+    if type(version) is not int or version not in (1, 2):
+        raise ValueError(f"unsupported metric schema_version: {version}")
+    expected_fields = _METRIC_FIELDS | ({"evaluator"} if version == 2 else set())
+    if set(artifact) != expected_fields:
+        raise ValueError(f"metric artifact fields do not match schema v{version}")
+    if version == 2 and artifact["evaluator"] != EVALUATOR:
+        raise ValueError("unsupported metric evaluator")
     metric_id = artifact["metric_id"]
     content = dict(artifact)
     content.pop("metric_id")
@@ -186,6 +193,8 @@ def _load_variant_failures(
         "track_sha256": run_metadata["track_sha256"],
         "iou_threshold": metric_artifact["iou_threshold"],
     }
+    if metric_artifact["schema_version"] == 2:
+        expected_context["evaluator"] = metric_artifact["evaluator"]
     for event in events:
         if event.run_id != run_metadata["run_id"]:
             raise ValueError("failure event run_id does not match verified run evidence")
@@ -278,6 +287,9 @@ def create_comparison_summary(bundle: str | Path) -> dict[str, Any]:
     metric_values = {
         name: artifact["values"] for name, artifact in metric_artifacts.items()
     }
+    evaluators = {a.get("evaluator", LEGACY_EVALUATOR) for a in metric_artifacts.values()}
+    if len(evaluators) > 1:
+        raise ValueError("cannot compare mixed metric evaluator definitions")
     metric_deltas: dict[str, dict[str, int | float]] = {}
     if metric_values:
         baseline_metrics = metric_values[experiment.baseline]
@@ -380,6 +392,8 @@ def create_comparison_summary(bundle: str | Path) -> dict[str, Any]:
             else "diagnostic_counts_are_not_tracking_quality_metrics",
         },
     }
+    if evaluators == {EVALUATOR}:
+        content["evidence"]["evaluator"] = EVALUATOR
     content["comparison_id"] = sha256_json(content)
     write_comparison_summary(bundle_path, content)
     return content
