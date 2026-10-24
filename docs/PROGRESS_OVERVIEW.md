@@ -1,6 +1,6 @@
 # VisionTrack and VisionTrack C++ — progress overview
 
-Snapshot: **2026-10-23**. This is a summary of the canonical
+Snapshot: **2026-10-24**. This is a summary of the canonical
 [VisionTrack checklist](NEXT_STEPS.md), [status](STATUS.md) and
 [C++ checklist](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/NEXT_STEPS.md).
 Completed implementation is not the same as validated research or product demand.
@@ -250,3 +250,10 @@ prior match is frame 37, so the actual trace now covers 36–57: 738 events/66
 stages, all 1,050 outputs/failures reproduced exactly, track 19 updated/public
 throughout. Next: independent lawful visual/reference review, then a justified
 comparison or reasoned stop. No new tracker behavior or C++ port is justified yet.
+
+**Lab policy migration complete:** [new schema-3 metric artifacts](LAB_EVALUATION_POLICY.md)
+explicitly name preprocessing v2 as well as evaluator v2. Failure/report lineage
+carries that policy, mixed definitions are rejected, and historical v1/v2 report
+JSON, HTML and event-stream golden hashes remain exact. The browser names the
+rules and uses evaluator-correct metric explanations. This is a measurement
+compatibility milestone, not improved tracking or independent visual review.

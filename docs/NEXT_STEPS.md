@@ -466,6 +466,10 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
 - [x] Extend the same first-event actual trace under corrected history:
       prior scored match is frame 37; window 36–57; all 1,050 frames match,
       738 events/66 stages recorded, track 19 updated/public throughout.
+- [x] Adopt [explicit preprocessing in new Lab artifacts](LAB_EVALUATION_POLICY.md):
+      metric schema 3, policy-bearing failure/report lineage, mixed-policy
+      rejection and exact historical report/event byte preservation. No tracker
+      change, rewritten receipt or new C++ port.
 - [ ] Produce one fixed comparison and reproducible, visually understandable
       report. Retain negative results; one clip is not a general accuracy claim.
 - [ ] Review it with an interested practitioner if available; record workflow
@@ -476,8 +480,10 @@ clarified that substantive evidence takes priority over demonstrations. The
 weekly baseline/annotation-diagnosis target is now met;
 presentation and owner teaching are not prerequisites or accuracy evidence.
 Evaluator alignment, independent case preprocessing, corrected coverage and the
-extended same-event trace are complete. Lawful independent pixel/reference
-review of **36–57**, a justified comparison and the visual case study remain.
+extended same-event trace are complete. The Lab now explicitly versions new
+filtering policies while preserving old artifacts. Lawful independent
+pixel/reference review of **36–57**, a justified comparison and the visual case
+study remain.
 No new C++ port is required; owner recording was not needed for these checks.
 
 ## Deferred research compute

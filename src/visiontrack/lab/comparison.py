@@ -10,6 +10,7 @@ from typing import Any
 
 from ..eval.definitions import EVALUATOR, LEGACY_EVALUATOR
 from .contracts import FailureEvent, TrackObservationRecord, sha256_json
+from .evaluation_policy import preprocessing_for
 from .runner import load_experiment_bundle, resolve_variant_config
 from .storage import read_failure_jsonl, read_track_jsonl, write_comparison_summary
 
@@ -131,13 +132,14 @@ def load_variant_metrics(
     if not isinstance(artifact, dict):
         raise ValueError("metric artifact must be an object")
     version = artifact.get("schema_version")
-    if type(version) is not int or version not in (1, 2):
+    if type(version) is not int or version not in (1, 2, 3):
         raise ValueError(f"unsupported metric schema_version: {version}")
-    expected_fields = _METRIC_FIELDS | ({"evaluator"} if version == 2 else set())
+    expected_fields = _METRIC_FIELDS | ({"evaluator"} if version >= 2 else set())
     if set(artifact) != expected_fields:
         raise ValueError(f"metric artifact fields do not match schema v{version}")
-    if version == 2 and artifact["evaluator"] != EVALUATOR:
+    if version >= 2 and artifact["evaluator"] != EVALUATOR:
         raise ValueError("unsupported metric evaluator")
+    preprocessing_for(artifact)
     metric_id = artifact["metric_id"]
     content = dict(artifact)
     content.pop("metric_id")
@@ -193,9 +195,15 @@ def _load_variant_failures(
         "track_sha256": run_metadata["track_sha256"],
         "iou_threshold": metric_artifact["iou_threshold"],
     }
-    if metric_artifact["schema_version"] == 2:
+    if metric_artifact["schema_version"] >= 2:
         expected_context["evaluator"] = metric_artifact["evaluator"]
+    if metric_artifact["schema_version"] == 3:
+        expected_context["preprocessing"] = preprocessing_for(metric_artifact)
     for event in events:
+        if metric_artifact["schema_version"] == 1 and "evaluator" in event.context:
+            raise ValueError("historical schema-1 failure event cannot declare an evaluator")
+        if metric_artifact["schema_version"] < 3 and "preprocessing" in event.context:
+            raise ValueError("historical failure event cannot declare new preprocessing")
         if event.run_id != run_metadata["run_id"]:
             raise ValueError("failure event run_id does not match verified run evidence")
         if not start <= event.frame_index < end:
@@ -290,6 +298,9 @@ def create_comparison_summary(bundle: str | Path) -> dict[str, Any]:
     evaluators = {a.get("evaluator", LEGACY_EVALUATOR) for a in metric_artifacts.values()}
     if len(evaluators) > 1:
         raise ValueError("cannot compare mixed metric evaluator definitions")
+    preprocessing = {preprocessing_for(a) for a in metric_artifacts.values()}
+    if len(preprocessing) > 1:
+        raise ValueError("cannot compare mixed metric preprocessing policies")
     metric_deltas: dict[str, dict[str, int | float]] = {}
     if metric_values:
         baseline_metrics = metric_values[experiment.baseline]
@@ -394,6 +405,8 @@ def create_comparison_summary(bundle: str | Path) -> dict[str, Any]:
     }
     if evaluators == {EVALUATOR}:
         content["evidence"]["evaluator"] = EVALUATOR
+    if metric_artifacts and all(a["schema_version"] == 3 for a in metric_artifacts.values()):
+        content["evidence"]["preprocessing"] = next(iter(preprocessing))
     content["comparison_id"] = sha256_json(content)
     write_comparison_summary(bundle_path, content)
     return content

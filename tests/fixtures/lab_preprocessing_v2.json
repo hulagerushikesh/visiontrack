@@ -1,0 +1,253 @@
+{
+  "canonical_failure_contents": [
+    "{\"context\":{\"current_track_id\":30,\"detection_sha256\":\"8327bc6b2b817a838af6e0e5dca15618103f9ed48517eeda3287f5bcb0201fbe\",\"evaluator\":\"visiontrack.metrics/v2\",\"ground_truth_box\":null,\"ground_truth_sha256\":\"32132a9eaa3f8703cb1e825855b54d97968019ea0eaf6e63b117a13834288092\",\"iou_threshold\":0.5,\"metric_id\":\"d1e0b2eff6210453c0bffa6e9860cd712cc405b93d8bc512f1e1022f7136f497\",\"preprocessing\":\"visiontrack.mot17-preprocessing/v2\",\"previous_track_id\":null,\"track_box\":[100.0,10.0,120.0,50.0],\"track_sha256\":\"c9765258ead5809d80115a402b6812758e6a863b5dac951033d83c46da19b5d1\"},\"event_type\":\"false_positive\",\"evidence_frames\":{\"end\":3,\"start\":0},\"frame_index\":0,\"ground_truth_ids\":[],\"run_id\":\"4a490d41dace6be2d75466a3a58c409c66eeb54558b0d618b179b490772e3d87\",\"schema_version\":1,\"track_ids\":[30]}",
+    "{\"context\":{\"current_track_id\":20,\"detection_sha256\":\"8327bc6b2b817a838af6e0e5dca15618103f9ed48517eeda3287f5bcb0201fbe\",\"evaluator\":\"visiontrack.metrics/v2\",\"ground_truth_box\":null,\"ground_truth_sha256\":\"32132a9eaa3f8703cb1e825855b54d97968019ea0eaf6e63b117a13834288092\",\"iou_threshold\":0.5,\"metric_id\":\"d1e0b2eff6210453c0bffa6e9860cd712cc405b93d8bc512f1e1022f7136f497\",\"preprocessing\":\"visiontrack.mot17-preprocessing/v2\",\"previous_track_id\":null,\"track_box\":[60.0,10.0,80.0,50.0],\"track_sha256\":\"c9765258ead5809d80115a402b6812758e6a863b5dac951033d83c46da19b5d1\"},\"event_type\":\"false_positive\",\"evidence_frames\":{\"end\":3,\"start\":0},\"frame_index\":0,\"ground_truth_ids\":[],\"run_id\":\"4a490d41dace6be2d75466a3a58c409c66eeb54558b0d618b179b490772e3d87\",\"schema_version\":1,\"track_ids\":[20]}"
+  ],
+  "canonical_report_content": "{\"comparison_id\":\"851a5d633afef4d04835f064b0f4e50e0bfb2de5e1b953d715f0359786b10a6a\",\"decision\":{\"accepted_variant\":null,\"reason\":\"requires_human_acceptance_decision\",\"status\":\"not_selected\"},\"evaluator\":\"visiontrack.metrics/v2\",\"experiment\":{\"baseline\":\"baseline\",\"created_at\":\"2026-09-19T20:00:00Z\",\"experiment_id\":\"1fbfde9a8c01faf0b6a2a0ee41250ce7d5321391f231029b022a1e6c33c3c6c3\",\"frame_range\":{\"end\":3,\"start\":0},\"git_revision\":\"policy-fixture\",\"visiontrack_version\":\"0.3.0\"},\"failure_event_displayed\":2,\"failure_event_total\":2,\"failure_events_truncated\":false,\"failures\":[{\"context\":{\"current_track_id\":30,\"detection_sha256\":\"8327bc6b2b817a838af6e0e5dca15618103f9ed48517eeda3287f5bcb0201fbe\",\"evaluator\":\"visiontrack.metrics/v2\",\"ground_truth_box\":null,\"ground_truth_sha256\":\"32132a9eaa3f8703cb1e825855b54d97968019ea0eaf6e63b117a13834288092\",\"iou_threshold\":0.5,\"metric_id\":\"d1e0b2eff6210453c0bffa6e9860cd712cc405b93d8bc512f1e1022f7136f497\",\"preprocessing\":\"visiontrack.mot17-preprocessing/v2\",\"previous_track_id\":null,\"track_box\":[100.0,10.0,120.0,50.0],\"track_sha256\":\"c9765258ead5809d80115a402b6812758e6a863b5dac951033d83c46da19b5d1\"},\"event_id\":\"5f8617042ca9256f9a00dcffc1ef4bb8649dc0caa7fe0aee33f003525acaaeae\",\"event_type\":\"false_positive\",\"evidence_frames\":{\"end\":3,\"start\":0},\"frame_index\":0,\"ground_truth_ids\":[],\"media_evidence\":{\"artifact_count\":0,\"evidence_id\":null,\"frame_indices\":[],\"privacy\":[],\"status\":\"not_declared\",\"views\":[]},\"run_id\":\"4a490d41dace6be2d75466a3a58c409c66eeb54558b0d618b179b490772e3d87\",\"schema_version\":1,\"track_ids\":[30],\"variant\":\"baseline\"},{\"context\":{\"current_track_id\":20,\"detection_sha256\":\"8327bc6b2b817a838af6e0e5dca15618103f9ed48517eeda3287f5bcb0201fbe\",\"evaluator\":\"visiontrack.metrics/v2\",\"ground_truth_box\":null,\"ground_truth_sha256\":\"32132a9eaa3f8703cb1e825855b54d97968019ea0eaf6e63b117a13834288092\",\"iou_threshold\":0.5,\"metric_id\":\"d1e0b2eff6210453c0bffa6e9860cd712cc405b93d8bc512f1e1022f7136f497\",\"preprocessing\":\"visiontrack.mot17-preprocessing/v2\",\"previous_track_id\":null,\"track_box\":[60.0,10.0,80.0,50.0],\"track_sha256\":\"c9765258ead5809d80115a402b6812758e6a863b5dac951033d83c46da19b5d1\"},\"event_id\":\"f440482be235c0d4955635e614dc6622b80be7474df55058ef4f3323a96d9c2a\",\"event_type\":\"false_positive\",\"evidence_frames\":{\"end\":3,\"start\":0},\"frame_index\":0,\"ground_truth_ids\":[],\"media_evidence\":{\"artifact_count\":0,\"evidence_id\":null,\"frame_indices\":[],\"privacy\":[],\"status\":\"not_declared\",\"views\":[]},\"run_id\":\"4a490d41dace6be2d75466a3a58c409c66eeb54558b0d618b179b490772e3d87\",\"schema_version\":1,\"track_ids\":[20],\"variant\":\"baseline\"}],\"limitations\":[\"Track IDs are run-local and are not persistent person identities.\",\"Raw video and rendered frames are not embedded in this report.\",\"Variant acceptance remains an explicit human decision.\",\"Metrics use visiontrack.metrics/v2: fragmentations mark resumed matches; historical v1 scores and failure definitions are not directly comparable.\",\"Input filtering uses visiontrack.mot17-preprocessing/v2; historical Lab preprocessing is not directly comparable. Versioned evaluation is not evidence of improved tracking accuracy.\"],\"media_evidence\":{\"event_manifests\":0,\"image_artifacts\":0,\"images_embedded\":false,\"privacy_counts\":{\"redacted\":0,\"source_pixels\":0,\"synthetic\":0}},\"preprocessing\":\"visiontrack.mot17-preprocessing/v2\",\"schema_version\":1,\"source\":{\"detection_sha256\":\"8327bc6b2b817a838af6e0e5dca15618103f9ed48517eeda3287f5bcb0201fbe\",\"detector\":{\"name\":\"fixture, not a detector evaluation\"},\"fps\":30.0,\"frame_count\":3,\"ground_truth_sha256\":\"32132a9eaa3f8703cb1e825855b54d97968019ea0eaf6e63b117a13834288092\",\"height\":80,\"kind\":\"mot\",\"name\":\"hand-defined-policy-difference\",\"source_id\":\"7974a1c5370a30753bbf1eeb926eedc93c11fbcef3df79ac54b75ebc4264961d\",\"video_sha256\":null,\"video_status\":\"not_declared\",\"width\":160},\"variants\":[{\"baseline\":true,\"configuration\":{\"name\":\"baseline\",\"overrides\":{\"n_init\":2}},\"diagnostic_deltas\":{\"active_frame_count\":0,\"active_frame_fraction\":0.0,\"observation_count\":0,\"unique_track_count\":0},\"diagnostics\":{\"active_frame_count\":3,\"active_frame_fraction\":1.0,\"first_active_frame\":0,\"last_active_frame\":2,\"observation_count\":5,\"unique_track_count\":3},\"failure_counts\":{\"false_positive\":2,\"fragmentation\":0,\"id_switch\":0,\"miss\":0},\"failure_set\":{\"event_count\":2,\"failure_sha256\":\"8a5aba15cb0325d99e839eafb8fee844b6a305b672cdcb02a971d20e8f732af5\",\"ground_truth_sha256\":\"32132a9eaa3f8703cb1e825855b54d97968019ea0eaf6e63b117a13834288092\",\"metric_id\":\"d1e0b2eff6210453c0bffa6e9860cd712cc405b93d8bc512f1e1022f7136f497\",\"run_id\":\"4a490d41dace6be2d75466a3a58c409c66eeb54558b0d618b179b490772e3d87\",\"track_sha256\":\"c9765258ead5809d80115a402b6812758e6a863b5dac951033d83c46da19b5d1\"},\"metric_deltas\":{\"AssA\":0.0,\"AssPr\":0.0,\"AssRe\":0.0,\"DetA\":0.0,\"DetPr\":0.0,\"DetRe\":0.0,\"FN\":0,\"FP\":0,\"Frag\":0,\"HOTA\":0.0,\"IDF1\":0.0,\"IDFN\":0,\"IDFP\":0,\"IDP\":0.0,\"IDR\":0.0,\"IDSW\":0,\"IDTP\":0,\"ML\":0,\"MOTA\":0.0,\"MOTP\":0.0,\"MT\":0,\"PT\":0,\"TP\":0,\"frames\":0,\"gt_boxes\":0,\"precision\":0.0,\"recall\":0.0,\"unique_gt\":0},\"metrics\":{\"AssA\":1.0,\"AssPr\":1.0,\"AssRe\":1.0,\"DetA\":0.6,\"DetPr\":0.6,\"DetRe\":1.0,\"FN\":0,\"FP\":2,\"Frag\":0,\"HOTA\":0.7746,\"IDF1\":0.75,\"IDFN\":0,\"IDFP\":2,\"IDP\":0.6,\"IDR\":1.0,\"IDSW\":0,\"IDTP\":3,\"ML\":0,\"MOTA\":0.3333,\"MOTP\":1.0,\"MT\":1,\"PT\":0,\"TP\":3,\"frames\":3,\"gt_boxes\":3,\"precision\":0.6,\"recall\":1.0,\"unique_gt\":1},\"name\":\"baseline\",\"run_id\":\"4a490d41dace6be2d75466a3a58c409c66eeb54558b0d618b179b490772e3d87\"}]}",
+  "report": {
+    "comparison_id": "851a5d633afef4d04835f064b0f4e50e0bfb2de5e1b953d715f0359786b10a6a",
+    "decision": {
+      "accepted_variant": null,
+      "reason": "requires_human_acceptance_decision",
+      "status": "not_selected"
+    },
+    "evaluator": "visiontrack.metrics/v2",
+    "experiment": {
+      "baseline": "baseline",
+      "created_at": "2026-09-19T20:00:00Z",
+      "experiment_id": "1fbfde9a8c01faf0b6a2a0ee41250ce7d5321391f231029b022a1e6c33c3c6c3",
+      "frame_range": {
+        "end": 3,
+        "start": 0
+      },
+      "git_revision": "policy-fixture",
+      "visiontrack_version": "0.3.0"
+    },
+    "failure_event_displayed": 2,
+    "failure_event_total": 2,
+    "failure_events_truncated": false,
+    "failures": [
+      {
+        "context": {
+          "current_track_id": 30,
+          "detection_sha256": "8327bc6b2b817a838af6e0e5dca15618103f9ed48517eeda3287f5bcb0201fbe",
+          "evaluator": "visiontrack.metrics/v2",
+          "ground_truth_box": null,
+          "ground_truth_sha256": "32132a9eaa3f8703cb1e825855b54d97968019ea0eaf6e63b117a13834288092",
+          "iou_threshold": 0.5,
+          "metric_id": "d1e0b2eff6210453c0bffa6e9860cd712cc405b93d8bc512f1e1022f7136f497",
+          "preprocessing": "visiontrack.mot17-preprocessing/v2",
+          "previous_track_id": null,
+          "track_box": [
+            100.0,
+            10.0,
+            120.0,
+            50.0
+          ],
+          "track_sha256": "c9765258ead5809d80115a402b6812758e6a863b5dac951033d83c46da19b5d1"
+        },
+        "event_id": "5f8617042ca9256f9a00dcffc1ef4bb8649dc0caa7fe0aee33f003525acaaeae",
+        "event_type": "false_positive",
+        "evidence_frames": {
+          "end": 3,
+          "start": 0
+        },
+        "frame_index": 0,
+        "ground_truth_ids": [],
+        "media_evidence": {
+          "artifact_count": 0,
+          "evidence_id": null,
+          "frame_indices": [],
+          "privacy": [],
+          "status": "not_declared",
+          "views": []
+        },
+        "run_id": "4a490d41dace6be2d75466a3a58c409c66eeb54558b0d618b179b490772e3d87",
+        "schema_version": 1,
+        "track_ids": [
+          30
+        ],
+        "variant": "baseline"
+      },
+      {
+        "context": {
+          "current_track_id": 20,
+          "detection_sha256": "8327bc6b2b817a838af6e0e5dca15618103f9ed48517eeda3287f5bcb0201fbe",
+          "evaluator": "visiontrack.metrics/v2",
+          "ground_truth_box": null,
+          "ground_truth_sha256": "32132a9eaa3f8703cb1e825855b54d97968019ea0eaf6e63b117a13834288092",
+          "iou_threshold": 0.5,
+          "metric_id": "d1e0b2eff6210453c0bffa6e9860cd712cc405b93d8bc512f1e1022f7136f497",
+          "preprocessing": "visiontrack.mot17-preprocessing/v2",
+          "previous_track_id": null,
+          "track_box": [
+            60.0,
+            10.0,
+            80.0,
+            50.0
+          ],
+          "track_sha256": "c9765258ead5809d80115a402b6812758e6a863b5dac951033d83c46da19b5d1"
+        },
+        "event_id": "f440482be235c0d4955635e614dc6622b80be7474df55058ef4f3323a96d9c2a",
+        "event_type": "false_positive",
+        "evidence_frames": {
+          "end": 3,
+          "start": 0
+        },
+        "frame_index": 0,
+        "ground_truth_ids": [],
+        "media_evidence": {
+          "artifact_count": 0,
+          "evidence_id": null,
+          "frame_indices": [],
+          "privacy": [],
+          "status": "not_declared",
+          "views": []
+        },
+        "run_id": "4a490d41dace6be2d75466a3a58c409c66eeb54558b0d618b179b490772e3d87",
+        "schema_version": 1,
+        "track_ids": [
+          20
+        ],
+        "variant": "baseline"
+      }
+    ],
+    "limitations": [
+      "Track IDs are run-local and are not persistent person identities.",
+      "Raw video and rendered frames are not embedded in this report.",
+      "Variant acceptance remains an explicit human decision.",
+      "Metrics use visiontrack.metrics/v2: fragmentations mark resumed matches; historical v1 scores and failure definitions are not directly comparable.",
+      "Input filtering uses visiontrack.mot17-preprocessing/v2; historical Lab preprocessing is not directly comparable. Versioned evaluation is not evidence of improved tracking accuracy."
+    ],
+    "media_evidence": {
+      "event_manifests": 0,
+      "image_artifacts": 0,
+      "images_embedded": false,
+      "privacy_counts": {
+        "redacted": 0,
+        "source_pixels": 0,
+        "synthetic": 0
+      }
+    },
+    "preprocessing": "visiontrack.mot17-preprocessing/v2",
+    "report_id": "9ea418b9bb6c4f5035e9484904d8ed31953a55aae9b5ea9818f42d3257dd0973",
+    "schema_version": 1,
+    "source": {
+      "detection_sha256": "8327bc6b2b817a838af6e0e5dca15618103f9ed48517eeda3287f5bcb0201fbe",
+      "detector": {
+        "name": "fixture, not a detector evaluation"
+      },
+      "fps": 30.0,
+      "frame_count": 3,
+      "ground_truth_sha256": "32132a9eaa3f8703cb1e825855b54d97968019ea0eaf6e63b117a13834288092",
+      "height": 80,
+      "kind": "mot",
+      "name": "hand-defined-policy-difference",
+      "source_id": "7974a1c5370a30753bbf1eeb926eedc93c11fbcef3df79ac54b75ebc4264961d",
+      "video_sha256": null,
+      "video_status": "not_declared",
+      "width": 160
+    },
+    "variants": [
+      {
+        "baseline": true,
+        "configuration": {
+          "name": "baseline",
+          "overrides": {
+            "n_init": 2
+          }
+        },
+        "diagnostic_deltas": {
+          "active_frame_count": 0,
+          "active_frame_fraction": 0.0,
+          "observation_count": 0,
+          "unique_track_count": 0
+        },
+        "diagnostics": {
+          "active_frame_count": 3,
+          "active_frame_fraction": 1.0,
+          "first_active_frame": 0,
+          "last_active_frame": 2,
+          "observation_count": 5,
+          "unique_track_count": 3
+        },
+        "failure_counts": {
+          "false_positive": 2,
+          "fragmentation": 0,
+          "id_switch": 0,
+          "miss": 0
+        },
+        "failure_set": {
+          "event_count": 2,
+          "failure_sha256": "8a5aba15cb0325d99e839eafb8fee844b6a305b672cdcb02a971d20e8f732af5",
+          "ground_truth_sha256": "32132a9eaa3f8703cb1e825855b54d97968019ea0eaf6e63b117a13834288092",
+          "metric_id": "d1e0b2eff6210453c0bffa6e9860cd712cc405b93d8bc512f1e1022f7136f497",
+          "run_id": "4a490d41dace6be2d75466a3a58c409c66eeb54558b0d618b179b490772e3d87",
+          "track_sha256": "c9765258ead5809d80115a402b6812758e6a863b5dac951033d83c46da19b5d1"
+        },
+        "metric_deltas": {
+          "AssA": 0.0,
+          "AssPr": 0.0,
+          "AssRe": 0.0,
+          "DetA": 0.0,
+          "DetPr": 0.0,
+          "DetRe": 0.0,
+          "FN": 0,
+          "FP": 0,
+          "Frag": 0,
+          "HOTA": 0.0,
+          "IDF1": 0.0,
+          "IDFN": 0,
+          "IDFP": 0,
+          "IDP": 0.0,
+          "IDR": 0.0,
+          "IDSW": 0,
+          "IDTP": 0,
+          "ML": 0,
+          "MOTA": 0.0,
+          "MOTP": 0.0,
+          "MT": 0,
+          "PT": 0,
+          "TP": 0,
+          "frames": 0,
+          "gt_boxes": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "unique_gt": 0
+        },
+        "metrics": {
+          "AssA": 1.0,
+          "AssPr": 1.0,
+          "AssRe": 1.0,
+          "DetA": 0.6,
+          "DetPr": 0.6,
+          "DetRe": 1.0,
+          "FN": 0,
+          "FP": 2,
+          "Frag": 0,
+          "HOTA": 0.7746,
+          "IDF1": 0.75,
+          "IDFN": 0,
+          "IDFP": 2,
+          "IDP": 0.6,
+          "IDR": 1.0,
+          "IDSW": 0,
+          "IDTP": 3,
+          "ML": 0,
+          "MOTA": 0.3333,
+          "MOTP": 1.0,
+          "MT": 1,
+          "PT": 0,
+          "TP": 3,
+          "frames": 3,
+          "gt_boxes": 3,
+          "precision": 0.6,
+          "recall": 1.0,
+          "unique_gt": 1
+        },
+        "name": "baseline",
+        "run_id": "4a490d41dace6be2d75466a3a58c409c66eeb54558b0d618b179b490772e3d87"
+      }
+    ]
+  }
+}

@@ -8,9 +8,10 @@ from ..eval.definitions import LEGACY_EVALUATOR, accumulator_for
 from ..eval.mot import MotFailure
 from .comparison import load_variant_metrics, load_variant_result
 from .contracts import FailureEvent
+from .evaluation_policy import preprocessing_for
 from .metrics import evaluation_frames
 from .runner import load_experiment_bundle
-from .storage import read_ground_truth_jsonl, write_failure_jsonl
+from .storage import read_ground_truth_jsonl, serialize_failure_jsonl, write_failure_jsonl
 
 
 def _track_ids(failure: MotFailure) -> tuple[int, ...]:
@@ -58,6 +59,7 @@ def calculate_failure_events(bundle: str | Path) -> dict[str, tuple[FailureEvent
     )
     start, end = experiment.frame_range["start"], experiment.frame_range["end"]
     results: dict[str, tuple[FailureEvent, ...]] = {}
+    definitions: set[tuple[str, str]] = set()
 
     for variant in experiment.variants:
         name = variant["name"]
@@ -85,7 +87,13 @@ def calculate_failure_events(bundle: str | Path) -> dict[str, tuple[FailureEvent
         evaluator = metric_artifact.get("evaluator", LEGACY_EVALUATOR)
         accumulator = accumulator_for(evaluator)
         failures: list[FailureEvent] = []
-        frames = evaluation_frames(ground_truth, tracks, start=start, end=end)
+        preprocessing = preprocessing_for(metric_artifact)
+        definitions.add((evaluator, preprocessing))
+        if len(definitions) > 1:
+            raise ValueError("cannot extract failures using mixed metric evaluation policies")
+        frames = evaluation_frames(
+            ground_truth, tracks, start=start, end=end, preprocessing=preprocessing,
+        )
         for gt_ids, gt_boxes, track_ids, track_boxes in frames:
             for failure in accumulator.update(gt_ids, gt_boxes, track_ids, track_boxes):
                 frame_index = start + failure.frame_index
@@ -105,7 +113,9 @@ def calculate_failure_events(bundle: str | Path) -> dict[str, tuple[FailureEvent
                             ground_truth_sha256=ground_truth_sha256,
                             track_sha256=run_metadata["track_sha256"],
                         ), **({"evaluator": evaluator}
-                              if metric_artifact["schema_version"] == 2 else {})},
+                              if metric_artifact["schema_version"] >= 2 else {}),
+                            **({"preprocessing": preprocessing}
+                               if metric_artifact["schema_version"] == 3 else {})},
                         evidence_frames={
                             "start": max(start, frame_index - 2),
                             "end": min(end, frame_index + 3),
@@ -113,10 +123,18 @@ def calculate_failure_events(bundle: str | Path) -> dict[str, tuple[FailureEvent
                     )
                 )
 
+        results[name] = tuple(failures)
+    # Validate the complete batch before writing; preserve historical events and
+    # avoid publishing earlier variants if a later artifact is incompatible.
+    for name, failures in results.items():
+        path = bundle_path / "runs" / name / "failures.jsonl"
+        payload = serialize_failure_jsonl(failures, frame_count=source.frame_count)
+        if path.is_symlink() or (path.exists() and path.read_bytes() != payload):
+            raise FileExistsError(f"refusing to overwrite conflicting file: {path}")
+    for name, failures in results.items():
         write_failure_jsonl(
             bundle_path / "runs" / name / "failures.jsonl",
             failures,
             frame_count=source.frame_count,
         )
-        results[name] = tuple(failures)
     return results

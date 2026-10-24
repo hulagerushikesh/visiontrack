@@ -1,7 +1,7 @@
 # VisionTrack — Status & Roadmap Checklist
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
-Last updated: 2026-10-23 — a bounded traffic-reliability probe is planned in
+Last updated: 2026-10-24 — a bounded traffic-reliability probe is planned in
 [TRAFFIC_RELIABILITY_PLAN.md](TRAFFIC_RELIABILITY_PLAN.md), following a read-only
 public-source pipeline inspection. Its [v1 synthetic recipe](TRAFFIC_RELIABILITY_PROTOCOL.md)
 now freezes geometry, observation errors, baseline settings, scenario/seed
@@ -245,6 +245,17 @@ all 1,050 frames. Track 19 stays updated/public throughout. No tracker/default
 change, accuracy gain, release or C++ port. Next: lawful independent pixel/label
 review of that fixed context, then one justified frozen comparison or a reasoned
 stop. The core measurement work no longer depends on owner recording.
+
+**Lab compatibility checkpoint (2026-10-24):** [new metric schema 3](LAB_EVALUATION_POLICY.md)
+adopts explicit preprocessing v2 with metric evaluator v2. Failures, comparisons,
+reports and browser validation retain that policy; mixed definitions are rejected.
+Historical metric schemas 1/2 retain legacy filtering and exact report/event
+golden hashes. Later-variant conflicts are checked before publishing earlier
+variants. Browser metric explanations now follow the evaluator version. No
+tracker change, package release, real-data accuracy claim or C++ port is implied.
+Current local verification: **985 passed, one slow test deselected**, with the
+isolated historical-suite bootstrap still passing; all eight browser checks,
+type checking, production build, lint and strict docs pass.
 
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective

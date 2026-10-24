@@ -105,7 +105,7 @@ def test_metrics_reuse_mot_preprocessing_and_are_content_addressed(tmp_path: Pat
         assert values["IDSW"] == 0
         assert values["Frag"] == 0
         assert artifact["variant"] == name
-        assert artifact["preprocessing"] == "visiontrack.eval.mot17.preprocess_frame"
+        assert artifact["preprocessing"] == "visiontrack.mot17-preprocessing/v2"
         content = dict(artifact)
         metric_id = content.pop("metric_id")
         assert metric_id == sha256_json(content)

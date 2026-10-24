@@ -182,6 +182,13 @@ def build_report_model(bundle: str | Path) -> dict[str, Any]:
             "Metrics use visiontrack.metrics/v2: fragmentations mark resumed matches; "
             "historical v1 scores and failure definitions are not directly comparable."
         )
+    if "preprocessing" in summary["evidence"]:
+        content["preprocessing"] = summary["evidence"]["preprocessing"]
+        content["limitations"].append(
+            "Input filtering uses visiontrack.mot17-preprocessing/v2; "
+            "historical Lab preprocessing is not directly comparable. "
+            "Versioned evaluation is not evidence of improved tracking accuracy."
+        )
     content["report_id"] = sha256_json(content)
     return content
 

@@ -84,10 +84,13 @@ changing the first event or tracker. Track 19 stays updated/public throughout.
 
 ## Compatibility: old reports must not change silently
 
-Metric artifacts now write **schema v2** with the content-addressed evaluator
+At this checkpoint metric artifacts wrote **schema v2** with the content-addressed evaluator
 identifier **`visiontrack.metrics/v2`**. Existing schema-v1 metric artifacts
 implicitly mean **`visiontrack.metrics/v1`**. The generic report/experiment/run
 schemas are not all renamed to v2; only the metric artifact is versioned here.
+The subsequent [Lab preprocessing migration](LAB_EVALUATION_POLICY.md) writes
+**schema 3** with metric evaluator v2 and explicit preprocessing v2. The schema-2
+contract described here retains its legacy input filtering unchanged.
 
 - Exact v1 evaluator source is retained in `_legacy_mot.py` / `_legacy_hota.py`
   from revision `121c755`, apart from a leading provenance comment.

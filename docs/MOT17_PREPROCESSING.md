@@ -66,7 +66,10 @@ executed with the **legacy** policy by the Lab's shared frame builder. This is
 intentional: changing a dataset runner's default must not change stored Lab
 metrics or failure extraction. Adopting the new dataset policy in Lab artifacts
 requires a separate explicit contract migration and mixed-policy rejection;
-it is not silently folded into the metric-v2 tag. No existing report is rewritten.
+it is not silently folded into the metric-v2 tag. That
+[Lab migration is now implemented](LAB_EVALUATION_POLICY.md) for **new schema-3
+metrics**, with policy-bearing failures/reports. Existing schema-1/2 semantics
+are unchanged. No existing report is rewritten.
 
 ## Reproduction and receipt
 

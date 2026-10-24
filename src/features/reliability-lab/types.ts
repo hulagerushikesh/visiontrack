@@ -67,6 +67,7 @@ export interface ReportFailure {
 export interface ReliabilityReport {
   schema_version: 1
   evaluator?: "visiontrack.metrics/v1" | "visiontrack.metrics/v2"
+  preprocessing?: "visiontrack.mot17-preprocessing/v2"
   report_id: string
   comparison_id: string
   experiment: ReportExperiment
@@ -154,6 +155,10 @@ export function parseReportModel(value: unknown): ReportLoadResult {
   if (value.schema_version !== 1) return { kind: "unsupported", schemaVersion: value.schema_version }
   if (value.evaluator !== undefined && value.evaluator !== "visiontrack.metrics/v1" && value.evaluator !== "visiontrack.metrics/v2") {
     return missing("The metric evaluator definition is unsupported.")
+  }
+  if (value.preprocessing !== undefined &&
+    (value.preprocessing !== "visiontrack.mot17-preprocessing/v2" || value.evaluator !== "visiontrack.metrics/v2")) {
+    return missing("The input preprocessing policy or its evaluator combination is unsupported.")
   }
   if (!isHash(value.report_id) || !isHash(value.comparison_id)) {
     return missing("The report or comparison fingerprint is missing or invalid.")
@@ -247,6 +252,9 @@ export function parseReportModel(value: unknown): ReportLoadResult {
     const expectedEvaluator = value.evaluator ?? "visiontrack.metrics/v1"
     if ((failure.context.evaluator ?? "visiontrack.metrics/v1") !== expectedEvaluator) {
       return missing("Failure events and report use different metric evaluator definitions.")
+    }
+    if (failure.context.preprocessing !== value.preprocessing) {
+      return missing("Failure events and report use different input preprocessing policies.")
     }
     if (failure.media_evidence !== undefined && !isMediaEvidence(
       failure.media_evidence,

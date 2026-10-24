@@ -7,9 +7,14 @@ from typing import Any
 import numpy as np
 
 from ..eval.definitions import EVALUATOR
-from ..eval.mot17 import LEGACY_MOT17_PREPROCESSING, evaluate_frames, preprocess_frame
+from ..eval.mot17 import (
+    LEGACY_MOT17_PREPROCESSING,
+    MOT17_PREPROCESSING,
+    evaluate_frames,
+    preprocess_frame,
+)
 from .comparison import load_variant_result
-from .contracts import GroundTruthRecord, TrackObservationRecord, sha256_json
+from .contracts import GroundTruthRecord, TrackObservationRecord, canonical_json, sha256_json
 from .runner import load_experiment_bundle
 from .storage import read_ground_truth_jsonl, write_variant_metrics
 
@@ -26,7 +31,12 @@ def evaluation_frames(
     *,
     start: int,
     end: int,
+    preprocessing: str = LEGACY_MOT17_PREPROCESSING,
 ):
+    # Preserve the public helper's historical default. New artifacts and failure
+    # extraction choose an explicit policy; old callers are not reinterpreted.
+    if preprocessing not in (LEGACY_MOT17_PREPROCESSING, MOT17_PREPROCESSING):
+        raise ValueError("unsupported Lab preprocessing")
     ground_truth_by_frame: dict[int, list[GroundTruthRecord]] = {}
     tracks_by_frame: dict[int, list[TrackObservationRecord]] = {}
     for record in ground_truth:
@@ -48,10 +58,7 @@ def evaluation_frames(
                 np.asarray([0.0 if record.ignored else 1.0 for record in gt]),
                 _boxes(tr),
                 np.asarray([record.track_id for record in tr], dtype=np.int64),
-                # Lab artifacts predate the independent MOT17-policy correction.
-                # Keep their existing policy until a separately versioned Lab
-                # migration; metric v2 alone must not reinterpret stored inputs.
-                policy=LEGACY_MOT17_PREPROCESSING,
+                policy=preprocessing,
             )
         )
     return frames
@@ -87,10 +94,13 @@ def calculate_bundle_metrics(bundle: str | Path) -> dict[str, dict[str, Any]]:
             frame_count=source.frame_count,
         )
         values = evaluate_frames(
-            evaluation_frames(ground_truth, tracks, start=start, end=end)
+            evaluation_frames(
+                ground_truth, tracks, start=start, end=end,
+                preprocessing=MOT17_PREPROCESSING,
+            )
         )
         content: dict[str, Any] = {
-            "schema_version": 2,
+            "schema_version": 3,
             "evaluator": EVALUATOR,
             "experiment_id": experiment.experiment_id,
             "source_id": source.source_id,
@@ -101,10 +111,21 @@ def calculate_bundle_metrics(bundle: str | Path) -> dict[str, dict[str, Any]]:
             "track_sha256": run_metadata["track_sha256"],
             "frame_range": experiment.frame_range,
             "iou_threshold": 0.5,
-            "preprocessing": "visiontrack.eval.mot17.preprocess_frame",
+            "preprocessing": MOT17_PREPROCESSING,
             "values": values,
         }
         content["metric_id"] = sha256_json(content)
-        write_variant_metrics(bundle_path, name, content)
         artifacts[name] = content
+    # Preflight every destination before publishing any new metric. A conflict
+    # in a later variant must not leave an accidentally half-migrated bundle.
+    for name, content in artifacts.items():
+        path = bundle_path / "runs" / name / "metrics.json"
+        payload = (canonical_json(content) + "\n").encode("utf-8")
+        if path.is_symlink() or (path.exists() and path.read_bytes() != payload):
+            raise FileExistsError(
+                f"refusing to overwrite conflicting file: {path}; "
+                "use a new bundle for a different evaluation policy"
+            )
+    for name, content in artifacts.items():
+        write_variant_metrics(bundle_path, name, content)
     return artifacts

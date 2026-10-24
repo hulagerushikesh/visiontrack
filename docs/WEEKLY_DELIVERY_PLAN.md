@@ -74,6 +74,10 @@ review window to **36–57**, not the old 45–57. Every raw/scored frame and v2
 failure is reproduced exactly; track 19 stays updated/public throughout.
 Visual/reference review is still separate and open.
 This is measurement correctness, not improved tracking or public accuracy readiness.
+The [Lab policy migration](LAB_EVALUATION_POLICY.md) is also complete: new schema-3
+metrics explicitly carry preprocessing v2 through failures and reports, while
+historical artifacts remain unchanged and mixed policies are rejected. This
+does not replace Session 4's independent visual/reference review.
 Complete visual case admission, owner walkthrough and reviewer participation
 remain pending. These sessions need not consume five full
 engineering days; permission/label availability may dominate calendar time.

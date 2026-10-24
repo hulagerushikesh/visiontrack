@@ -48,7 +48,11 @@ function MetricTable({ report, metrics }: { report: ReliabilityReport; metrics: 
           <tr><th scope="col" className="px-6 py-4">What is measured</th>{report.variants.map((variant) => <th scope="col" className="px-6 py-4" key={variant.name}>{variant.name}{variant.baseline && <span className="ml-2 rounded-full bg-indigo-100 px-2 py-1 text-[9px] text-indigo-700">baseline</span>}</th>)}</tr>
         </thead>
         <tbody>{metrics.map((metric) => {
-          const info = Object.hasOwn(metricMeanings, metric) ? metricMeanings[metric] : undefined
+          let info = Object.hasOwn(metricMeanings, metric) ? metricMeanings[metric] : undefined
+          if (report.evaluator === "visiontrack.metrics/v2") {
+            if (metric === "Frag") info = { ...metricMeanings.Frag, label: "Tracking resumptions after interruptions", meaning: "Counts resumed matches after a previously matched reference object went unmatched; terminal losses are not fragmentations under evaluator v2." }
+            if (metric === "MT") info = { ...metricMeanings.MT, meaning: "Reference trajectories matched for more than 80% of their evaluated lifetime under evaluator v2." }
+          }
           return <tr className="border-b border-border last:border-0" key={metric}><th scope="row" className="max-w-sm px-6 py-4 text-sm font-normal"><span className="font-semibold">{info?.label ?? metric} <span className="font-mono text-xs text-muted-foreground">({metric})</span></span><span className="mt-1 block text-xs leading-5 text-muted-foreground">{info?.meaning ?? "Additional metric supplied by this report; consult its evaluation protocol before interpreting it."}</span><span className="mt-1 block text-xs font-medium text-slate-700">{info ? info.direction === "Context" ? "Context only · no preferred direction" : `${info.direction} is preferred for this metric alone` : "Direction not specified"}</span></th>{report.variants.map((variant) => <td className="px-6 py-4" key={variant.name}><span className="block font-semibold">{number(variant.metrics[metric])}</span><span className="mt-1 block text-xs text-muted-foreground">Change: {number(variant.metric_deltas[metric], true)}</span></td>)}</tr>
         })}</tbody>
       </table>
@@ -71,6 +75,7 @@ export default function MetricComparison({ report }: { report: ReliabilityReport
         </ol>
         <p className="mt-4">Scores are shown as recorded, not automatically converted to percentages. For example only, an IDF1 value of 0.68 is 68% on that metric&apos;s scale, not a claim of 68% real-world accuracy.</p>
         <p className="mt-3">These are summaries over this report&apos;s evaluated frame range, not just the failure event you opened. Changes are descriptive, not a statistical significance test. Synthetic or illustrative results do not establish real-world performance. No decision is required to explore.</p>
+        <p className="mt-3"><strong>Evaluation rules:</strong> metric evaluator {report.evaluator === "visiontrack.metrics/v2" ? "v2" : "v1 (historical)"}; input filtering {report.preprocessing ? "MOT17 v2" : "v1 (historical Lab policy)"}. Filtering decides which reference objects and tracker outputs enter scoring; it does not change tracking. Reports using different rules are not directly comparable.</p>
       </div>
       <details className="mb-6 rounded-2xl border border-border bg-white p-5">
         <summary className="cursor-pointer text-sm font-semibold">Which settings were actually recorded? (optional)</summary>

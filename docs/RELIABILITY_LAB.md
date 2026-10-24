@@ -1,11 +1,11 @@
 # VisionTrack Reliability Lab — first vertical slice
 
 **2026-10-24 compatibility note:** metric evaluator v2 and MOT17 preprocessing
-v2 are separate definitions. Existing Lab schema-v1/v2 metric artifacts keep
-their original `visiontrack.eval.mot17.preprocess_frame` policy: the shared Lab
-frame builder now selects legacy preprocessing explicitly. The MOT17 runner's
-corrected default cannot silently change old metrics or failure extraction.
-See the [policy boundary](MOT17_PREPROCESSING.md) before a new Lab migration.
+v2 are separate definitions. New metric artifacts use **schema 3**, evaluator
+v2 and explicit preprocessing v2. Existing schema-1/2 metrics keep legacy
+filtering and their original event/report hashes. Mixed policies are rejected.
+See the [Lab evaluation-policy contract](LAB_EVALUATION_POLICY.md); the earlier
+implementation increments below describe their original checkpoints.
 
 ## Decision
 
@@ -54,8 +54,9 @@ management dashboard.
 
 ## Versioned schemas
 
-Every top-level record includes `schema_version: 1`. Unknown schema versions
-must be rejected rather than guessed.
+The original records below use `schema_version: 1`. The metric artifact now
+supports versions 1–3 under the [explicit evaluation-policy contract](LAB_EVALUATION_POLICY.md);
+other records remain version 1. Unknown versions must be rejected rather than guessed.
 
 ### 1. Source manifest
 

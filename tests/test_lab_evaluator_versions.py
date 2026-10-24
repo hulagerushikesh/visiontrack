@@ -11,6 +11,7 @@ from visiontrack.lab import (
     create_comparison_summary,
 )
 from visiontrack.lab.contracts import GroundTruthRecord, TrackObservationRecord, sha256_json
+from visiontrack.lab.evaluation_policy import LEGACY_LAB_PREPROCESSING
 from visiontrack.lab.metrics import evaluation_frames
 from visiontrack.lab.report import build_report_model
 from visiontrack.lab.storage import read_ground_truth_jsonl, read_track_jsonl
@@ -36,6 +37,7 @@ def convert_to_historical(bundle, name):
     artifact.pop("evaluator")
     artifact.pop("metric_id")
     artifact["schema_version"] = 1
+    artifact["preprocessing"] = LEGACY_LAB_PREPROCESSING
     artifact["values"] = legacy_evaluate_frames(frames)
     artifact["metric_id"] = sha256_json(artifact)
     path.write_text(json.dumps(artifact))
@@ -61,7 +63,7 @@ def test_v1_failure_semantics_and_report_bytes_are_preserved(tmp_path):
 def test_v2_metrics_and_failures_have_explicit_semantics(tmp_path):
     bundle = make_failure_bundle(tmp_path, variants=1)
     metric = json.loads((bundle / "runs/baseline/metrics.json").read_text())
-    assert metric["schema_version"] == 2 and metric["evaluator"] == EVALUATOR
+    assert metric["schema_version"] == 3 and metric["evaluator"] == EVALUATOR
     events = calculate_failure_events(bundle)["baseline"]
     assert all(e.context["evaluator"] == EVALUATOR for e in events)
     assert all(e.event_type != "fragmentation" for e in events)

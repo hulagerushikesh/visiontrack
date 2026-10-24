@@ -17,6 +17,24 @@ const report = JSON.stringify(fixture.report)
 const file = (text) => ({ size: Buffer.byteLength(text), text: async () => text })
 const reader = new ReportFileReader(parseReportModel)
 assert.equal((await reader.read(file(report))).kind, "ready")
+const policyVector = JSON.parse(await readFile(new URL("../tests/fixtures/lab_preprocessing_v2.json", import.meta.url), "utf8"))
+const exportedPolicyReport = policyVector.report
+assert.equal((await reader.read(file(JSON.stringify(exportedPolicyReport)))).kind, "ready")
+async function sha256Text(text) {
+  return Buffer.from(await globalThis.crypto.subtle.digest("SHA-256", new TextEncoder().encode(text))).toString("hex")
+}
+// Hash exact Python canonical bytes. JSON.parse/stringify loses distinctions
+// such as 1.0 versus 1; the decision-only serializer is not a report hasher.
+const { report_id: exportedId, ...exportedContent } = exportedPolicyReport
+assert.deepEqual(JSON.parse(policyVector.canonical_report_content), exportedContent)
+assert.equal(await sha256Text(policyVector.canonical_report_content), exportedId)
+assert.equal(exportedPolicyReport.variants[0].metrics.FP, 2)
+for (const [index, failure] of exportedPolicyReport.failures.entries()) {
+  const { event_id, variant, media_evidence, ...content } = failure
+  assert.deepEqual(JSON.parse(policyVector.canonical_failure_contents[index]), content)
+  assert.equal(await sha256Text(policyVector.canonical_failure_contents[index]), event_id)
+  assert.equal(content.context.preprocessing, exportedPolicyReport.preprocessing)
+}
 const v2Report = structuredClone(fixture.report)
 v2Report.evaluator = "visiontrack.metrics/v2"
 for (const failure of v2Report.failures) failure.context.evaluator = "visiontrack.metrics/v2"
@@ -25,6 +43,24 @@ const mixedEvaluator = structuredClone(v2Report)
 delete mixedEvaluator.failures[0].context.evaluator
 assert.equal(parseReportModel(mixedEvaluator).kind, "missing")
 assert.equal(parseReportModel({ ...v2Report, evaluator: "unknown" }).kind, "missing")
+const policyReport = structuredClone(v2Report)
+policyReport.preprocessing = "visiontrack.mot17-preprocessing/v2"
+for (const failure of policyReport.failures) failure.context.preprocessing = policyReport.preprocessing
+assert.equal(parseReportModel(policyReport).kind, "ready")
+for (const preprocessing of [null, "unknown", "visiontrack.mot17-preprocessing/v1", {}]) {
+  assert.equal(parseReportModel({ ...policyReport, preprocessing }).kind, "missing")
+}
+assert.equal(parseReportModel({ ...policyReport, evaluator: "visiontrack.metrics/v1" }).kind, "missing")
+assert.equal(parseReportModel({ ...policyReport, evaluator: undefined }).kind, "missing")
+const missingPolicy = structuredClone(policyReport)
+delete missingPolicy.failures[0].context.preprocessing
+assert.equal(parseReportModel(missingPolicy).kind, "missing")
+assert.equal(parseReportModel({ ...policyReport, preprocessing: undefined }).kind, "missing")
+const wrongPolicy = structuredClone(policyReport)
+wrongPolicy.failures[0].context.preprocessing = "visiontrack.mot17-preprocessing/v1"
+assert.equal(parseReportModel(wrongPolicy).kind, "missing")
+// Even without displayed events an unknown policy must not be accepted.
+assert.equal(parseReportModel({ ...policyReport, failures: [], preprocessing: "unknown" }).kind, "missing")
 assert.equal((await reader.read(file("not json"))).kind, "missing")
 assert.equal((await reader.read(file('{"schema_version":2}'))).kind, "unsupported")
 
