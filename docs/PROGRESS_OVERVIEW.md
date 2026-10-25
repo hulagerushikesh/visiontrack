@@ -18,6 +18,13 @@ pixels/replay: public 19 overlaps reference 85 alone above IoU 0.5 throughout
 frames 3–35. That strengthens the correspondence-change hypothesis, not a
 physical-identity verdict, accepted fix or completed independent review.
 
+Latest measurement closure: the [actual MOT file-to-score chain](MOT17_TEXT_ROUNDTRIP.md)
+now passes on all 1,050 frames. TrackEval reads the original GT and an export of
+all 27,842 saved predictions, retains exactly the same 25,781 scoring outputs
+and agrees on all 45 corrected metric checks. No new tracking run, image intake
+or accepted fix. The next research gate is still the separate-person review,
+not another presentation or a speculative C++ port.
+
 ## Direction: unchanged
 
 VisionTrack is the readable NumPy reference and local-first **tracking Reliability

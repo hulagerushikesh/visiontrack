@@ -468,6 +468,10 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
 - [x] Independently check [MOT17 preprocessing](MOT17_PREPROCESSING.md): all
       1,050 frames agree. Correct/version the broader policy, retain legacy
       reproduction and keep existing Lab preprocessing explicit.
+- [x] Close the separate [real text-loader/export gap](MOT17_TEXT_ROUNDTRIP.md):
+      original GT bytes and 27,842 saved predictions pass the actual reference
+      loader, exact 25,781-output processed correspondence and all 45 corrected
+      metric checks. No tracker execution or physical-label acceptance.
 - [x] Re-derive [v2 missed-object coverage](MOT17_COVERAGE_V2.md): 19,393 without
       raw overlap, 149 low-score-only, 270 ignore-removed, 2,013 eligible retained.
       There are 29 replaced object/frame misses, plus 25 changed history records;
@@ -497,6 +501,8 @@ reasoned stop, and the final visual case study remain.
 The earlier saved prefix is now checked as well: 19 first becomes public at 3
 and supports 85, not 89, through 35. Earlier pixels remain unviewed; no tracker
 intervention follows automatically from rectangle overlap.
+The real MOT-file loading/preprocessing/metric chain is now checked as well;
+that completes a measurement gap, not the independent visual-review gate.
 No new C++ port is required; owner recording was not needed for these checks.
 
 ## Deferred research compute

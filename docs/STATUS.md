@@ -1,6 +1,17 @@
 # VisionTrack — Status & Roadmap Checklist
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
+
+**Current checkpoint — 2026-10-25:** the
+[real MOT file-to-score verification](MOT17_TEXT_ROUNDTRIP.md) passes all 1,050
+saved frames and all 45 corrected metric checks, without running a tracker.
+The unchanged baseline, versioned measurement corrections, coverage/trace,
+bounded source-image intake and preliminary inspection are complete. A separate
+person's scene/reference review remains open before a justified comparison or
+reasoned final non-intervention. No accepted tracker change or C++ port yet.
+See the [current two-project overview](PROGRESS_OVERVIEW.md) for the concise plan.
+The chronological checkpoints below retain their historical results and scope.
+
 Last updated: 2026-10-24 — a bounded traffic-reliability probe is planned in
 [TRAFFIC_RELIABILITY_PLAN.md](TRAFFIC_RELIABILITY_PLAN.md), following a read-only
 public-source pipeline inspection. Its [v1 synthetic recipe](TRAFFIC_RELIABILITY_PROTOCOL.md)

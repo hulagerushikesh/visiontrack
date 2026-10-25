@@ -26,8 +26,11 @@ not contain confidence; the reference's unused confidence field carries original
 track IDs solely to invert its dense relabelling, including identical boxes.
 It does not influence matching. Temporary empty inventory files satisfy the
 actual constructor; no alternative class map or fake preprocessing is used.
-**The reference text loader/export roundtrip is not tested.** Annotation/cache
-precision, adapter lineage and source fingerprinting are explicit boundaries.
+**The reference text loader/export roundtrip was not tested by this adapter.**
+That separate gap is now closed for this case by the
+[file-to-score check](MOT17_TEXT_ROUNDTRIP.md): actual GT/result-file loading,
+exact processed correspondence and all 45 corrected metric checks pass.
+The original adapter receipts and their narrower scope remain unchanged.
 
 ## General policy discrepancies found in authored examples
 
@@ -114,8 +117,9 @@ was relaxed to obtain agreement.
 | Reference-scored rows | `f9d1fc75a92861510ef63e50dd808b128e0feb7e520083cbf42f94b93a04ccf8` |
 | Manifest | `7091e51a25dd059d3915e5ecdfb1cf69232d89bdfcb20518103247e43b179898` |
 
-Both receipts pin pre-execution sources and check them afterwards. The source
-precision/adapter/text-loader limits above still apply. The current **44**
+Both receipts pin pre-execution sources and check them afterwards. Their source
+precision/adapter limits still apply; the separate file check does not rewrite them.
+The current **44**
 authored preprocessing tests pass, including original-body preservation and
 malformed/unknown-policy guards. This is no tracker accuracy improvement.
 

@@ -91,6 +91,12 @@ geometry: 19 is public from 3 and supports reference 85 alone through 35. No
 additional pixels or tracker runs were needed. This makes the review question
 more precise but does not complete Session 4 or justify an intervention.
 
+The separate [file-to-score verification](MOT17_TEXT_ROUNDTRIP.md) is now complete:
+actual reference text-file loading, preprocessing and all 45 corrected metrics
+agree on the unchanged full baseline. This closes the adapter-only boundary of
+the earlier checks. Independent scene/reference review is the next external
+dependency; do not create another harness solely to occupy the waiting time.
+
 ## Next big deliverable: one real-clip diagnostic case study
 
 After a clip, permitted use and independently checked task labels are ready:

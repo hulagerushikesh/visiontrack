@@ -125,6 +125,7 @@ nav:
       - Real-data metric cross-check — discrepancies and hold: REAL_DATA_METRIC_CHECK.md
       - Evaluator v2 — corrected scores and historical compatibility: EVALUATOR_V2.md
       - MOT17 preprocessing — independent case and policy check: MOT17_PREPROCESSING.md
+      - MOT17 file-to-score verification: MOT17_TEXT_ROUNDTRIP.md
       - Lab evaluation policies — explicit filtering and compatibility: LAB_EVALUATION_POLICY.md
       - Corrected coverage and same-event trace: MOT17_COVERAGE_V2.md
       - First real-pixel review — preliminary findings and handoff: MOT17_VISUAL_REVIEW.md
