@@ -1,5 +1,11 @@
 # First real-data diagnostic: annotation intake
 
+**Subsequent checkpoint (2026-10-25):** the originally annotation-only admission
+below is preserved. The fixed 36–57 source-image window now has a separate bounded
+local non-commercial admission and [preliminary visual review](MOT17_VISUAL_REVIEW.md).
+Independent human review and public image redistribution are not approved by that
+step; the original cache/annotation receipt remains unchanged.
+
 Checkpoint: **2026-10-23**. The owner clarified that confidence in substantive
 research, not demonstration polish or a deadline, is the priority. The prepared
 synthetic demo remains an internal teaching aid. It is not a prerequisite for

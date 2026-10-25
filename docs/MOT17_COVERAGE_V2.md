@@ -142,9 +142,12 @@ deployment must be confirmed separately after pushing.
 - [x] Correct the general MOT17 policy with legacy reproduction and regressions.
 - [x] Re-derive the full v2 coverage partition and history distinctions.
 - [x] Extend the actual same-event trace using corrected prior-match history.
-- [ ] Resolve lawful local pixel access and independently review **36–57**,
-      especially 36–38, 42–46, 51–52 and 54; start with unlabeled scene context,
-      then check references 85/89 and outputs. Record ambiguity, not forced truth.
+- [x] Obtain local source pixels for **36–57** with a bounded non-commercial
+      admission, verified annotation correspondence and retained receipts; see
+      [the preliminary visual review and handoff](MOT17_VISUAL_REVIEW.md).
+- [ ] Independently review that window, especially 36–38, 42–46, 51–52 and 54;
+      start with unlabeled scene context, then references 85/89 and outputs.
+      AI-assisted triage is not a completed human review. Record ambiguity.
 - [ ] Justify and prospectively freeze one useful comparison plus fresh validation,
       or record a reasoned stop if the evidence supports no change.
 - [ ] Produce the reproducible visual case study and review its usefulness with

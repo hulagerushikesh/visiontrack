@@ -257,6 +257,21 @@ Current local verification: **985 passed, one slow test deselected**, with the
 isolated historical-suite bootstrap still passing; all eight browser checks,
 type checking, production build, lint and strict docs pass.
 
+**Pixel-review checkpoint (2026-10-25):** the [fixed 36–57 image window](MOT17_VISUAL_REVIEW.md)
+is now acquired outside Git using 9,783,379 bounded transfer bytes rather than
+the full 5.86 GB ZIP. All three annotation members exactly match the admitted
+labels; all 22 JPEGs have local receipts. Preliminary AI-assisted inspection
+shows overlapping, opposing-motion figures with later separation: 19 aligns
+with reference 89, and 31 becomes public over 85. This does not establish which
+figure 19 originally represented before 36, a label correction or a causal fix.
+A private three-pass page and offline control tests are ready. Independent
+human review and actual-browser interaction feedback remain pending; the agent's
+browser surface refuses local-file navigation and was not bypassed. No tracker,
+scorer, reference-label, package or C++ change; no public dataset images.
+Current local verification: **1,008 passed, one slow test deselected** (including
+the isolated 1,099-test historical bootstrap), eight existing web scripts plus
+the new offline review check, type checking, app build, lint and strict docs.
+
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective
 anonymous re-entry probe can export its complete fixed-grid synthetic curves

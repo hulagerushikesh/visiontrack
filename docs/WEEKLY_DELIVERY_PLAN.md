@@ -1,6 +1,6 @@
 # Daily checkpoints and the next weekly goal
 
-Planning checkpoint: **2026-10-24**. Days below mean focused work sessions, not
+Planning checkpoint: **2026-10-25**. Days below mean focused work sessions, not
 automatic work while the chat is idle or promised calendar dates. No reminder,
 scheduled job, email, publication or new tracking study is authorized by this plan.
 
@@ -43,7 +43,7 @@ teaching, not a prerequisite for this research work.
 | Session 1 — intake | Verify the existing cache against official annotation members and define the limited admission | None for the annotation-only route | Done: exact source conversion, task/range and remaining visual/rights gates recorded |
 | Session 2 — baseline | Run and reproduce an unchanged, full-sequence cold-start baseline with complete settings and outputs | None | Done: all four run files byte-identical; ignore handling, complete outputs and metrics retained |
 | Session 3 — diagnose | Inspect the first chronological scored ID switch if present; document adjacent inputs/outputs without claiming a visual cause | Optional questions about the explanation | Done at annotation level: first switch at source frame 54, fixed 51–57 context plus same-event prior-match history; no visual cause claimed |
-| Session 4 — review evidence | Resolve lawful pixel access and independent reference/context review, or record a specific hold | Help only if a permission or reviewer decision is needed | Actual review or explicit missing dependency; metadata correspondence is not visual review |
+| Session 4 — review evidence | Fixed 22-image acquisition and preliminary AI-assisted triage done; private staged page ready. Independent human review remains | One separate reviewer can now use the ready local packet; no recording/setup needed | Record agreement/disagreement and ambiguity; preliminary AI inspection is not independent adjudication |
 | Session 5 — decide scope | Summarize the baseline diagnosis; justify/freeze one comparison before outcomes, or stop if unsupported | Review the plain-language summary | A defensible next research decision, not a promised winner or demo deadline |
 
 Sessions 1–3 are complete **at the annotation-only level**, as is the earlier
@@ -78,8 +78,12 @@ The [Lab policy migration](LAB_EVALUATION_POLICY.md) is also complete: new schem
 metrics explicitly carry preprocessing v2 through failures and reports, while
 historical artifacts remain unchanged and mixed policies are rejected. This
 does not replace Session 4's independent visual/reference review.
-Complete visual case admission, owner walkthrough and reviewer participation
-remain pending. These sessions need not consume five full
+The [fixed source images and preliminary visual triage](MOT17_VISUAL_REVIEW.md)
+are now ready: 22 images, exact annotation correspondence, private staged review
+and no public pixels. The late boxes align with two separating figures; earlier
+physical correspondence remains uncertain. No lifetime/memory/gate change is
+justified. Independent human review, full case admission and the optional owner
+walkthrough remain pending. These sessions need not consume five full
 engineering days; permission/label availability may dominate calendar time.
 
 ## Next big deliverable: one real-clip diagnostic case study

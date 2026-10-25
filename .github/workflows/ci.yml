@@ -108,6 +108,8 @@ jobs:
         run: npm run test:benchmark-contract
       - name: Verify live tracker contract
         run: npm run test:live-contract
+      - name: Verify private MOT17 review controls offline (no dataset download)
+        run: node scripts/test-mot17-review.mjs
       - name: Type-check React
         run: npm run typecheck
       - name: Build React app

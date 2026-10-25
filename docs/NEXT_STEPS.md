@@ -448,8 +448,13 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       with reference 89 prevents a confident physical-identity interpretation.
 - [x] Record the resulting intervention decision and a bounded independent-review
       brief: no gate-off, lifetime, memory or confirmation change is justified yet.
-- [ ] Resolve lawful pixel access and independent review of references 85/89 in
-      the sealed event context; do not silently change labels/scoring or hunt a new event.
+- [x] Acquire the fixed 36–57 source-image window for bounded local non-commercial
+      research, verify annotation correspondence, retain receipts and perform
+      [preliminary AI-assisted visual triage](MOT17_VISUAL_REVIEW.md). No public pixels.
+- [x] Prepare a private scene/reference/output review page with explicit local
+      notes and offline control tests; do not claim independent human review.
+- [ ] Independently review references 85/89 in the sealed event context; record
+      disagreement, do not silently change labels/scoring or hunt a new event.
 - [x] Run an [independent metric check](REAL_DATA_METRIC_CHECK.md) on all saved
       scored pairs; retain the discrepancies and three non-tie/history/fragmentation
       counterexamples. This is a completed diagnostic, not a metric-equivalence pass.
@@ -481,9 +486,10 @@ weekly baseline/annotation-diagnosis target is now met;
 presentation and owner teaching are not prerequisites or accuracy evidence.
 Evaluator alignment, independent case preprocessing, corrected coverage and the
 extended same-event trace are complete. The Lab now explicitly versions new
-filtering policies while preserving old artifacts. Lawful independent
-pixel/reference review of **36–57**, a justified comparison and the visual case
-study remain.
+filtering policies while preserving old artifacts. The **36–57** source images
+and private staged review are now available, with a preliminary overlapping-figure
+interpretation. Independent human/reference review, a justified comparison or
+reasoned stop, and the final visual case study remain.
 No new C++ port is required; owner recording was not needed for these checks.
 
 ## Deferred research compute

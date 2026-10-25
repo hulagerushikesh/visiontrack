@@ -1,10 +1,17 @@
 # VisionTrack and VisionTrack C++ — progress overview
 
-Snapshot: **2026-10-24**. This is a summary of the canonical
+Snapshot: **2026-10-25**. This is a summary of the canonical
 [VisionTrack checklist](NEXT_STEPS.md), [status](STATUS.md) and
 [C++ checklist](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/NEXT_STEPS.md).
 Completed implementation is not the same as validated research or product demand.
 This document does not claim the latest local work is already pushed or deployed.
+
+Latest advance: the fixed MOT17 **36–57** source-image window is available for
+local non-commercial research, with exact annotation correspondence, all 22
+image receipts, preliminary AI-assisted inspection and a private staged review.
+See [the findings and reviewer handoff](MOT17_VISUAL_REVIEW.md). Independent
+human/reference review remains open; no tracker intervention or C++ port is
+accepted, and no dataset images are published.
 
 ## Direction: unchanged
 

@@ -8,6 +8,10 @@ window, with exact full-sequence parity. Track 19 stays updated/public throughou
 Use **36–57** for the current independent-review brief; do not silently relabel
 this original receipt as having observed those earlier frames.
 
+The subsequent [source-image acquisition and preliminary visual review](MOT17_VISUAL_REVIEW.md)
+now cover that fixed window. A private staged review is ready, but independent
+human adjudication is still pending; the actual-call trace below is unchanged.
+
 Checkpoint: **2026-10-24**. This completes the next bounded diagnostic after the
 [baseline](REAL_DATA_BASELINE.md) and [miss coverage analysis](REAL_DATA_COVERAGE.md).
 It observes the **unchanged** tracker on the same MOT17-04-FRCNN input, not a new

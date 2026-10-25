@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  />
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'none'; img-src 'self' file:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'none'; base-uri 'none'; form-action 'none'"
+  />
+  <title>VisionTrack · private first-switch review</title>
+  <style>
+    body {
+      font:
+        16px/1.5 system-ui,
+        sans-serif;
+      color: #162140;
+      background: #f5f7ff;
+      margin: auto;
+      max-width: 1200px;
+      padding: 24px;
+    }
+    h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+    button,
+    select,
+    textarea,
+    input {
+      font: inherit;
+    }
+    button,
+    select,
+    input {
+      padding: 10px;
+      border: 1px solid #c8cee1;
+      border-radius: 8px;
+      background: white;
+      color: #162140;
+    }
+    button {
+      cursor: pointer;
+    }
+    button[aria-pressed="true"] {
+      background: #4f46e5;
+      color: white;
+    }
+    button:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+    section {
+      background: white;
+      border: 1px solid #dce1f1;
+      border-radius: 12px;
+      padding: 18px;
+      margin: 18px 0;
+    }
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #111;
+    }
+    textarea {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 88px;
+      padding: 10px;
+      border: 1px solid #c8cee1;
+      border-radius: 8px;
+    }
+    .muted {
+      color: #536078;
+    }
+    .warning {
+      background: #fff6df;
+      padding: 12px;
+      border-radius: 8px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    :focus-visible {
+      outline: 3px solid #4f46e5;
+      outline-offset: 3px;
+    }
+    #status {
+      min-height: 24px;
+    }
+    summary {
+      cursor: pointer;
+    }
+  </style>
+  <h1>What happened to the two nearby trajectories?</h1>
+  <p>
+    This is a private research review, not the live tracker. Use the same 22
+    source frames in three passes. No software is being rerun and no conclusion
+    is preselected.
+  </p>
+  <p class="warning">
+    Local, non-commercial MOTChallenge material · CC BY-NC-SA 3.0; additional
+    rights may apply. Do not upload or redistribute these images. Notes stay in
+    this tab unless you explicitly download them.
+  </p>
+  <section>
+    <div class="controls" role="group" aria-label="Review passes">
+      <button id="raw" aria-pressed="true">1. Scene only</button>
+      <button id="references" aria-pressed="false">2. Reference boxes</button>
+      <button id="outputs" aria-pressed="false">3. Saved tracker boxes</button>
+    </div>
+    <p id="instruction">
+      Start without boxes: step through the scene. Which movements are clear,
+      and what is hard to distinguish? This pass does not use tracker IDs.
+    </p>
+    <div class="controls">
+      <button id="previous">← Previous frame</button
+      ><label for="frame">Source frame</label
+      ><select id="frame"></select
+      ><button id="next">Next frame →</button>
+      <label
+        ><input id="detail" type="checkbox" disabled /> Detail view (after scene
+        pass)</label
+      >
+      <label
+        ><input id="detections" type="checkbox" disabled /> Supplied detection
+        boxes (pass 3)</label
+      >
+    </div>
+    <p id="status" role="status"></p>
+    <canvas
+      id="scene"
+      width="1920"
+      height="1080"
+      aria-label="Selected source frame and deliberately chosen overlays"
+    ></canvas>
+    <p id="legend" class="muted">
+      No overlays. Images are local files; this page makes no network requests.
+    </p>
+    <p class="muted">
+      Frame numbers are one-based. There is no interpolation, synthetic
+      animation, automatic playback or face recognition.
+    </p>
+  </section>
+  <section>
+    <h2>Your observations, not an acceptance decision</h2>
+    <label for="scene-note"
+      >1. Before inspecting boxes: what could you follow visually? What remains
+      unclear?</label
+    ><textarea id="scene-note" maxlength="6000"></textarea>
+    <label for="reference-note"
+      >2. Do references 85 and 89 consistently cover two distinguishable
+      objects? Note frames and uncertainty; do not change labels here.</label
+    ><textarea id="reference-note" maxlength="6000"></textarea>
+    <label for="output-note"
+      >3. Which visible support do saved tracks 19 and 31 overlap? Separate your
+      observation from a proposed cause or fix.</label
+    ><textarea id="output-note" maxlength="6000"></textarea>
+    <label for="reviewer">Reviewer alias (avoid personal details)</label
+    ><input id="reviewer" maxlength="80" autocomplete="off" />
+    <p class="muted">
+      A second person should review separately before reading the first person's
+      interpretation. This page is a lightweight staged aid, not a secure
+      blinded study. Opening it, checking hashes or downloading notes does not
+      establish independent review or accurate labels.
+    </p>
+    <button id="download">Download my review notes.json</button>
+    <p id="download-status" role="status"></p>
+  </section>
+  <details>
+    <summary>Source lineage and limitations</summary>
+    <pre
+      id="lineage"
+      style="white-space: pre-wrap; overflow-wrap: anywhere"
+    ></pre>
+    <p>
+      Images were hash-checked when this page was built. The browser does not
+      re-hash these relative image files; keep the sealed folder unchanged.
+      Bounding boxes are the original saved coordinates, not new annotations.
+      The detail viewport is a fixed display crop with surrounding context.
+      Published reference IDs and local track IDs are not people's identities. A
+      single event cannot establish the best tracker, causality or transfer to
+      blurred traffic cameras.
+    </p>
+    <p>
+      Attribution: MOTChallenge; Milan et al.,
+      <i>MOT16: A Benchmark for Multi-Object Tracking</i> (2016),
+      arXiv:1603.00831. Source: motchallenge.net/data/MOT17/. Images remain
+      under their dataset terms, not the repository's software licence.
+    </p>
+  </details>
+  <!-- prettier-ignore -->
+  <script type="application/json" id="review-data">__REVIEW_DATA__</script>
+  <script>
+    "use strict";
+    const data = JSON.parse(document.getElementById("review-data").textContent);
+    const el = (id) => document.getElementById(id),
+      canvas = el("scene"),
+      ctx = canvas.getContext("2d");
+    let index = 0,
+      pass = 1,
+      generation = 0,
+      sceneSnapshot = null,
+      referenceSnapshot = null;
+    const instructions = {
+      1: "Start without boxes: step through the scene. Which movements are clear, and what is hard to distinguish? This pass does not use tracker IDs.",
+      2: "Now inspect the two reference boxes. Follow their motion, extent, visibility and overlap. They are published labels, not independently verified truth.",
+      3: "Now compare the unchanged public tracker boxes with the references and optional raw detections. Missing public output is not proof that a track was deleted.",
+    };
+    for (const f of data.frames) {
+      const option = document.createElement("option");
+      option.value = f.source_frame;
+      option.textContent = f.source_frame;
+      el("frame").append(option);
+    }
+    function drawBox(row, color, prefix, view, dashed = false) {
+      const [x1, y1, x2, y2] = row.box;
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = pass === 3 && prefix === "Track " ? 3 : 2;
+      ctx.setLineDash(dashed ? [5, 4] : []);
+      ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+      ctx.font = "14px system-ui";
+      ctx.fillStyle = color;
+      const label = prefix + (row.id ?? row.row);
+      ctx.fillText(label, x1, Math.max(view[1] + 16, y1 - 4));
+      ctx.restore();
+    }
+    function draw() {
+      const ticket = ++generation,
+        f = data.frames[index];
+      el("frame").value = f.source_frame;
+      el("previous").disabled = index === 0;
+      el("next").disabled = index === data.frames.length - 1;
+      el("status").textContent = "Loading source frame " + f.source_frame + "…";
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const image = new Image();
+      image.onload = () => {
+        if (ticket !== generation) return;
+        if (image.naturalWidth !== 1920 || image.naturalHeight !== 1080) {
+          el("status").textContent =
+            "Unexpected image dimensions; frame not displayed.";
+          return;
+        }
+        const v =
+          pass > 1 && el("detail").checked
+            ? data.detail_viewport
+            : [0, 0, 1920, 1080];
+        canvas.width = v[2] - v[0];
+        canvas.height = v[3] - v[1];
+        ctx.drawImage(
+          image,
+          v[0],
+          v[1],
+          canvas.width,
+          canvas.height,
+          0,
+          0,
+          canvas.width,
+          canvas.height,
+        );
+        ctx.save();
+        ctx.translate(-v[0], -v[1]);
+        if (pass === 3 && el("detections").checked)
+          for (const r of f.detections)
+            drawBox(r, "#ffdc78", "Detection ", v, true);
+        if (pass > 1)
+          for (const r of f.references)
+            drawBox(r, r.id === 85 ? "#22d3ee" : "#f0abfc", "Ref ", v, true);
+        if (pass === 3)
+          for (const r of f.public_tracks)
+            drawBox(r, r.id === 19 ? "#a3e635" : "#fb923c", "Track ", v);
+        ctx.restore();
+        el("status").textContent =
+          "Source frame " + f.source_frame + " · pass " + pass + " of 3";
+      };
+      image.onerror = () => {
+        if (ticket === generation)
+          el("status").textContent =
+            "Local image unavailable. Keep the review page next to its original verified-frames folder.";
+      };
+      image.src = f.image;
+    }
+    function setPass(value) {
+      if (value > 1 && sceneSnapshot === null)
+        sceneSnapshot = el("scene-note").value;
+      if (value > 2 && referenceSnapshot === null)
+        referenceSnapshot = el("reference-note").value;
+      pass = value;
+      el("detail").disabled = pass === 1;
+      el("detections").disabled = pass !== 3;
+      el("instruction").textContent = instructions[pass];
+      for (const [i, id] of ["raw", "references", "outputs"].entries())
+        el(id).setAttribute("aria-pressed", String(pass === i + 1));
+      el("legend").textContent =
+        pass === 1
+          ? "No overlays. Local source imagery only."
+          : pass === 2
+            ? "Dashed cyan: reference 85 · dashed pink: reference 89."
+            : "Dashed cyan/pink: references 85/89 · solid lime: public track 19 · solid orange: public track 31 · optional dashed yellow: raw detections (row handles, not identities).";
+      draw();
+    }
+    el("raw").onclick = () => setPass(1);
+    el("references").onclick = () => setPass(2);
+    el("outputs").onclick = () => setPass(3);
+    el("previous").onclick = () => {
+      index = Math.max(0, index - 1);
+      draw();
+    };
+    el("next").onclick = () => {
+      index = Math.min(data.frames.length - 1, index + 1);
+      draw();
+    };
+    el("frame").onchange = () => {
+      index = data.frames.findIndex(
+        (f) => String(f.source_frame) === el("frame").value,
+      );
+      draw();
+    };
+    el("detail").onchange = draw;
+    el("detections").onchange = draw;
+    el("download").onclick = () => {
+      const notes = {
+        scene: el("scene-note").value.trim(),
+        references: el("reference-note").value.trim(),
+        outputs: el("output-note").value.trim(),
+      };
+      if (
+        !el("reviewer").value.trim() ||
+        Object.values(notes).some((v) => !v)
+      ) {
+        el("download-status").textContent =
+          "Add a reviewer alias and an observation (or “uncertain”) for each pass first.";
+        return;
+      }
+      const payload = {
+        schema: "visiontrack.mot17-review-notes/v1",
+        created_at: new Date().toISOString(),
+        reviewer_alias: el("reviewer").value.trim(),
+        source_window: data.source_window,
+        baseline_manifest_sha256: data.baseline_manifest_sha256,
+        rescore_manifest_sha256: data.rescore_manifest_sha256,
+        image_manifest_sha256: data.image_manifest_sha256,
+        observations: notes,
+        scene_notes_before_first_overlay: sceneSnapshot,
+        reference_notes_before_first_tracker_overlay: referenceSnapshot,
+        independent_review_verified: false,
+        tracker_or_label_changes: false,
+      };
+      const url = URL.createObjectURL(
+        new Blob([JSON.stringify(payload, null, 2) + "\n"], {
+          type: "application/json",
+        }),
+      );
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "mot17-review-notes.json";
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      el("download-status").textContent =
+        "Notes downloaded locally. This is your observation record, not automatic approval or a tracker decision.";
+    };
+    el("lineage").textContent = JSON.stringify(
+      {
+        source_window: data.source_window,
+        baseline_manifest_sha256: data.baseline_manifest_sha256,
+        rescore_manifest_sha256: data.rescore_manifest_sha256,
+        image_manifest_sha256: data.image_manifest_sha256,
+        independent_review_completed: false,
+      },
+      null,
+      2,
+    );
+    draw();
+  </script>
+</html>
