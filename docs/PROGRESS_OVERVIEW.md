@@ -13,6 +13,11 @@ See [the findings and reviewer handoff](MOT17_VISUAL_REVIEW.md). Independent
 human/reference review remains open; no tracker intervention or C++ port is
 accepted, and no dataset images are published.
 
+The [saved earlier context](MOT17_PRIOR_CONTEXT.md) is also checked without new
+pixels/replay: public 19 overlaps reference 85 alone above IoU 0.5 throughout
+frames 3–35. That strengthens the correspondence-change hypothesis, not a
+physical-identity verdict, accepted fix or completed independent review.
+
 ## Direction: unchanged
 
 VisionTrack is the readable NumPy reference and local-first **tracking Reliability

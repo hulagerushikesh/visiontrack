@@ -128,6 +128,7 @@ nav:
       - Lab evaluation policies — explicit filtering and compatibility: LAB_EVALUATION_POLICY.md
       - Corrected coverage and same-event trace: MOT17_COVERAGE_V2.md
       - First real-pixel review — preliminary findings and handoff: MOT17_VISUAL_REVIEW.md
+      - Before the overlap — saved prior context: MOT17_PRIOR_CONTEXT.md
       - Release-readiness audit: RELEASE_READINESS.md
       - Python/C++ runtime contract: CROSS_RUNTIME_CONTRACT.md
       - Horizons: HORIZONS.md

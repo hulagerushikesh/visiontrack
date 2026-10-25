@@ -453,6 +453,10 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       [preliminary AI-assisted visual triage](MOT17_VISUAL_REVIEW.md). No public pixels.
 - [x] Prepare a private scene/reference/output review page with explicit local
       notes and offline control tests; do not claim independent human review.
+- [x] Audit [all saved prior frames 1–35](MOT17_PRIOR_CONTEXT.md) without new
+      images/replay: public 19 supports reference 85 alone at IoU >=0.5 in all
+      33 public frames. This strengthens reference-relative history, not physical
+      identity truth or permission to bypass independent visual review.
 - [ ] Independently review references 85/89 in the sealed event context; record
       disagreement, do not silently change labels/scoring or hunt a new event.
 - [x] Run an [independent metric check](REAL_DATA_METRIC_CHECK.md) on all saved
@@ -490,6 +494,9 @@ filtering policies while preserving old artifacts. The **36–57** source images
 and private staged review are now available, with a preliminary overlapping-figure
 interpretation. Independent human/reference review, a justified comparison or
 reasoned stop, and the final visual case study remain.
+The earlier saved prefix is now checked as well: 19 first becomes public at 3
+and supports 85, not 89, through 35. Earlier pixels remain unviewed; no tracker
+intervention follows automatically from rectangle overlap.
 No new C++ port is required; owner recording was not needed for these checks.
 
 ## Deferred research compute

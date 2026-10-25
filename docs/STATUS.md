@@ -272,6 +272,16 @@ Current local verification: **1,008 passed, one slow test deselected** (includin
 the isolated 1,099-test historical bootstrap), eight existing web scripts plus
 the new offline review check, type checking, app build, lint and strict docs.
 
+**Prior-context checkpoint (2026-10-25):** the
+[saved frames 1–35 audit](MOT17_PRIOR_CONTEXT.md) is complete. Track 19 is public
+from 3 and has IoU >=0.5 with reference 85 alone in all 33 earlier public frames;
+its maximum overlap with 89 is 0.38754718. This strengthens a reference-relative
+correspondence-change hypothesis, not an independently verified physical switch.
+No earlier pixels, tracker rerun, labels/settings change or C++ port. The
+independent reviewer and actual-browser interaction checks remain open.
+Local verification: **1,022 passed, one slow test deselected**, historical-suite
+bootstrap included; web checks, type checking, build, lint and strict docs pass.
+
 The Reliability Lab now explains failures, optional
 image verification, and metric trade-offs for beginners. The selective
 anonymous re-entry probe can export its complete fixed-grid synthetic curves

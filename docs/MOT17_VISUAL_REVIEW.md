@@ -6,6 +6,11 @@ source correspondence, an **AI-assisted preliminary visual inspection** and a
 private staged review page are complete. **Independent human review is not.**
 No tracker, threshold, reference label, evaluator, old receipt or C++ code changes.
 
+Subsequent [saved prior-context audit](MOT17_PRIOR_CONTEXT.md): in every public
+frame 3–35, 19 has IoU >=0.5 with 85 alone, not 89. This supplies earlier
+geometric history, but no earlier pixels or independent physical correspondence.
+The preliminary visual observations below and the review gate remain unchanged.
+
 ## The finding in plain language
 
 The images show two nearby pedestrians moving in opposing directions, with

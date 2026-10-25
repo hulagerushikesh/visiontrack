@@ -86,6 +86,11 @@ justified. Independent human review, full case admission and the optional owner
 walkthrough remain pending. These sessions need not consume five full
 engineering days; permission/label availability may dominate calendar time.
 
+The [read-only prior-prefix audit](MOT17_PRIOR_CONTEXT.md) now adds earlier saved
+geometry: 19 is public from 3 and supports reference 85 alone through 35. No
+additional pixels or tracker runs were needed. This makes the review question
+more precise but does not complete Session 4 or justify an intervention.
+
 ## Next big deliverable: one real-clip diagnostic case study
 
 After a clip, permitted use and independently checked task labels are ready:
