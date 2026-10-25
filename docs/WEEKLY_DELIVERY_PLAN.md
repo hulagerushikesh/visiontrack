@@ -97,6 +97,14 @@ agree on the unchanged full baseline. This closes the adapter-only boundary of
 the earlier checks. Independent scene/reference review is the next external
 dependency; do not create another harness solely to occupy the waiting time.
 
+Independent maintenance during that wait found and closed real gaps in the
+existing C++ parity tools (omitted classes, signed-zero equality and ignored
+unit-test failure). [The maintenance record](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/PARITY_GUARDS.md)
+checks the published wheel against released and current NumPy separately.
+Runtime behavior and the next research gate are unchanged. The owner plans
+review tomorrow; do not turn unused session allowance into a speculative fix
+or additional data acquisition.
+
 ## Next big deliverable: one real-clip diagnostic case study
 
 After a clip, permitted use and independently checked task labels are ready:

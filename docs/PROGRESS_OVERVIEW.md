@@ -187,6 +187,14 @@ that does not change the release's Eigen 3.4.0 pin.
 C++ is therefore in **maintenance**, not an unfinished duplicate of this study.
 Ongoing work is deliberate toolchain testing and protection of existing parity.
 
+The [2026-10-25 C++ parity-tool maintenance](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/PARITY_GUARDS.md)
+now checks output classes and signed-zero bits and fails when requested tests
+fail. In a clean environment the published 0.1.1 wheel matches this reference
+checkout on all 27,842 MOT17-04 observations; the released oracle separately
+matches on all 7,545 MOT17-09 observations. No tracker change or research port.
+The independent scene/reference review remains open, planned by the owner for
+tomorrow; compatibility checks cannot complete it.
+
 A new synchronization happens only after:
 
 1. Python behavior demonstrates a useful, accepted result within the required
