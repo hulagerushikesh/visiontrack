@@ -28,9 +28,11 @@ now complete: one detector/public-box support-capacity rule, 27 fresh developmen
 cells, ordinary size/motion controls, and identical inputs with different truth
 to expose what geometry cannot know. Its offline observer, scene generator,
 replay and independent saved-record auditor now pass hand fixtures and double
-tests. The method is committed before actual study tracking; no outcome or
-accepted warning feature at this checkpoint. Next: execute and audit the full
-frozen grid without tuning on the known observation-study results.
+tests. The method was committed before actual study tracking. [All 27 cells and
+the saved-record audit](CONTINUITY_WARNING_FINDINGS.md) are complete: the fixed
+synthetic screen passes, but the warning fires only at shortage onset, misses
+later switches and also fires for duplicate detections of one reference object.
+It remains offline; there is no accepted warning feature or real-world claim.
 
 Latest advance: the fixed MOT17 **36–57** source-image window is available for
 local non-commercial research, with exact annotation correspondence, all 22
@@ -241,10 +243,11 @@ no GPU path or weakened parity is justified by the current plan.
 
 ## Immediate next action
 
-Execute/audit the [continuity-warning contract](CONTINUITY_WARNING_PROTOCOL.md)
-from the committed offline observer and hand-authored tests. Retain the complete
-fixed grid, including failed gates. No owner action is needed for that;
-independent real-data labels and practitioner usefulness remain future gates.
+Use the [completed warning findings](CONTINUITY_WARNING_FINDINGS.md) to define
+one engineer decision and a new prospective, representative evaluation of
+warning usefulness and burden. No owner action is needed for planning;
+permitted real observations, independent labels and practitioner usefulness
+remain future evidence gates.
 C++ stays unchanged until useful accepted reference behavior warrants a port.
 
 ### Historical sequence — preserved, not the current task

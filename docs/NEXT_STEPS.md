@@ -484,9 +484,16 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
 - [x] Implement the offline warning and recipe with hand-written boundary,
       capacity, input/GT-separation and non-interference fixtures. Commit the
       implementation/test freeze before actual tracking; do not change defaults.
-- [ ] Run the complete frozen warning grid, audit saved records, report every
-      cell and stop/pass decision without post-outcome retuning. A development
-      screen cannot establish identity correctness or real-world false-alarm rates.
+- [x] Run and [audit all 27 frozen warning cells](CONTINUITY_WARNING_FINDINGS.md):
+      108 tracker passes, all replay/integrity gates and the predefined synthetic
+      screen pass. Warnings occur only at episode onset; zero warnings do not
+      imply stable identity, and duplicate detections mimic shared support.
+      Keep the diagnostic offline; no post-outcome retuning, identity-correctness
+      claim or real-world false-alarm estimate.
+- [ ] Prospectively evaluate whether this bounded warning helps a fixed-camera
+      tracking engineer with a specified decision, permitted representative
+      observations and independent reference review. Record missed problems and
+      warning burden before considering user-facing UI or a v2 design.
 - [x] Run an [independent metric check](REAL_DATA_METRIC_CHECK.md) on all saved
       scored pairs; retain the discrepancies and three non-tie/history/fragmentation
       counterexamples. This is a completed diagnostic, not a metric-equivalence pass.

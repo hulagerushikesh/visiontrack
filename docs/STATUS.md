@@ -26,8 +26,13 @@ size/motion controls and identical-observation/different-truth counterexamples.
 Usefulness, nuisance/coverage and stop criteria precede implementation. The
 offline observer, 27-cell generator, replay and separate scalar auditor are now
 implemented and checked with hand fixtures and tracker doubles. The committed
-method precedes actual study tracking; no study outcomes or real-case fix claim
-at this checkpoint. Next: run and audit the complete fixed grid once.
+method preceded actual study tracking. [All 27 development cells and the
+independent saved-record audit](CONTINUITY_WARNING_FINDINGS.md) are now complete:
+the predefined screen passes, but warning coverage is one onset frame, later
+switches are outside its short window, and duplicate detections produce the same
+warning with only one reference object. The diagnostic stays offline. Next:
+representative permitted observations and independent reference review before
+any user-facing utility claim; no real-case fix claim.
 
 **Previous measurement checkpoint — 2026-10-25:** the
 [real MOT file-to-score verification](MOT17_TEXT_ROUNDTRIP.md) passes all 1,050

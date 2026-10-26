@@ -24,8 +24,11 @@ selective retries, null effects and long-gap harms retained. The
 the observable claim, one-frame support-capacity rule, 27 development cells,
 size/motion controls and semantic counterexamples before implementation. The
 offline observer, scenes, replay and separate auditor now pass hand fixtures and
-tracker doubles. Next: run/audit the complete committed grid once and report
-stop/pass without retuning.
+tracker doubles. [All 27 cells and the separate saved-record audit](CONTINUITY_WARNING_FINDINGS.md)
+are complete under the committed method. The registered synthetic screen passes,
+but warnings cover only the shortage onset and cannot distinguish one object's
+duplicate boxes from two objects. Next: specify the engineer's actual decision
+and prospective representative evaluation before any UI or default change.
 No promised fix, new public demonstration or C++ port; independent real-data
 validation remains open. This is the current sequence, superseding the historical
 waiting/review tasks below for explicitly exploratory work only.
