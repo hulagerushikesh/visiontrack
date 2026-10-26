@@ -1,0 +1,82 @@
+{
+  "schema": "visiontrack.continuity-warning-study/v1",
+  "stage": "design_only_not_implemented_or_executed",
+  "baseline_revision": "7308dfbe8f79da61b56beed05784e56b512c156a",
+  "tracker_config": {
+    "high_score_thresh": 0.5, "low_score_thresh": 0.1,
+    "match_iou_thresh": 0.3, "recovery_iou_thresh": 0.5,
+    "new_track_thresh": 0.6, "n_init": 3, "max_age": 30,
+    "use_mahalanobis_gating": true, "class_aware": true,
+    "w_iou": 1.0, "w_app": 0.0, "w_unc": 0.0,
+    "use_giou": false, "appearance_ema_alpha": 0.9,
+    "kf_noise_scale": 1.0, "motion_residual_path": null,
+    "w_ocm": 0.0, "ocm_delta_t": 3, "use_oru": false, "use_gmc": false
+  },
+  "observer": {
+    "reason": "insufficient_distinct_box_support",
+    "previous_public_frames": 1,
+    "minimum_detection_score": 0.1,
+    "minimum_support_iou": 0.3,
+    "iou_denominator_epsilon": 0,
+    "same_class_only": true,
+    "minimum_component_tracks": 2,
+    "flag_when": "maximum_matching_cardinality < component_track_count",
+    "isolated_tracks": "report_as_unsupported_not_as_collision_warning",
+    "timing": "previous_public_output_and_current_detections_before_current_tracker_update",
+    "no_warning_interpretation": "no_observed_support_shortfall_not_verified_identity",
+    "memory": "replace_previous_public_snapshot_after_each_update_no_gap_extrapolation"
+  },
+  "scene": {
+    "frames": 96,
+    "episode_start": 36,
+    "durations": [3, 9, 33],
+    "width": 28,
+    "height": 56,
+    "first_center_at_zero": [120, 180],
+    "second_center_at_zero": [270, 180],
+    "first_velocity": [1.5, 0],
+    "second_velocity": [-1.5, 0],
+    "separated_control_y": [96, 320],
+    "scale_pulse": 1.5,
+    "score": 0.9,
+    "class_id": 0,
+    "feature": null,
+    "randomness": "none",
+    "evaluation_iou": 0.5
+  },
+  "families": [
+    {"name": "crossing_distinct", "role": "benign_control"},
+    {"name": "unchanged_control", "role": "byte_identical_crossing_control"},
+    {"name": "scale_pulse_pair", "role": "benign_control"},
+    {"name": "motion_turn_pair", "role": "benign_control"},
+    {"name": "shared_union", "role": "target_support_shortfall"},
+    {"name": "missing_second", "role": "coverage_limit"},
+    {"name": "exit_new_entrant", "role": "same_observations_different_truth_than_missing_second"},
+    {"name": "coincident_two", "role": "target_with_semantic_counterexample"},
+    {"name": "duplicate_single", "role": "same_observations_different_truth_than_coincident_two"}
+  ],
+  "execution": {
+    "cells": 27,
+    "passes_per_cell": ["monitored_fresh", "monitored_reset", "monitored_second_fresh", "unmonitored_fresh"],
+    "tracker_passes": 108,
+    "require_exact_public_output_bytes_all_passes": true,
+    "require_exact_warning_records_monitored_passes": true,
+    "retain_all_cells_and_partial_failures": true,
+    "existing_studies_are_development_context_not_validation": true,
+    "held_out_split": null
+  },
+  "development_screen": {
+    "target_families": ["shared_union", "coincident_two"],
+    "minimum_episode_warning_frames_each_target_cell": 1,
+    "maximum_first_warning_delay_frames_each_target_cell": 2,
+    "benign_families": ["crossing_distinct", "unchanged_control", "scale_pulse_pair", "motion_turn_pair"],
+    "maximum_warning_frames_each_benign_cell": 0,
+    "opportunity_frame_range": [3, 96],
+    "minimum_two_supported_previous_tracks_fraction_each_benign_cell": 0.9,
+    "all_valid_frame_records_required": true,
+    "semantic_counterexample_warning_equality_required": true,
+    "decision_if_pass": "eligible_for_further_diagnostic_evaluation_not_product_or_identity_acceptance",
+    "decision_if_fail": "stop_candidate_retain_all_results_no_threshold_retuning_in_v1"
+  },
+  "scope": "Offline geometry-only development warning. No identity probability, actual association feasibility, automatic fix, tracker/configuration/default change, Lab UI, release, real-data transfer claim, outreach or C++ port. Family equations and reporting definitions are in docs/CONTINUITY_WARNING_PROTOCOL.md."
+}

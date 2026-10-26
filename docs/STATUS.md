@@ -19,8 +19,13 @@ reporting before outcomes. [All 12 cells / 36 repeatable passes and the saved-re
 audit](OBSERVATION_AVAILABILITY_FINDINGS.md) are now complete from committed
 `45d3250`: short gaps recover original IDs, while 36-frame missing/shared episodes
 produce one/two switches despite equal FN totals. First recovery is not stable
-continuity. Defaults remain unchanged. Next: specify a diagnostic-only warning
-study with fresh controls, not tune this geometry or claim real-case causality.
+continuity. Defaults remain unchanged. The [diagnostic-only continuity-warning
+protocol](CONTINUITY_WARNING_PROTOCOL.md) is now specified: one-frame public
+geometry only, distinct-box assignment capacity, 27 development cells, normal
+size/motion controls and identical-observation/different-truth counterexamples.
+Usefulness, nuisance/coverage and stop criteria precede implementation. No
+warning code or new study outcomes yet. Next: implement and test this contract
+with hand fixtures before committing the execution freeze; no real-case fix claim.
 
 **Previous measurement checkpoint — 2026-10-25:** the
 [real MOT file-to-score verification](MOT17_TEXT_ROUNDTRIP.md) passes all 1,050

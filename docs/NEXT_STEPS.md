@@ -476,9 +476,17 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       and long-gap harms retained. Same miss totals can conceal different ID
       histories; a same-ID first recovery can subsequently switch.
       No tracker candidate, real-case causal validation or C++ adoption.
-- [ ] Specify a diagnostic-only continuity-warning study before implementation:
-      detector/track-only inputs, fresh size/motion/false-alarm controls and
-      explicit usefulness/error criteria. No GT-fed runtime or automatic fix.
+- [x] Specify the [diagnostic-only continuity-warning study](CONTINUITY_WARNING_PROTOCOL.md)
+      before implementation: previous-public/current-detector inputs, distinct
+      support capacity, 27 development cells, size/motion/false-alarm controls,
+      indistinguishable semantic pairs and explicit usefulness/error/stop limits.
+      No GT-fed runtime, identity confidence or automatic fix; no outcomes yet.
+- [ ] Implement the offline warning and recipe with hand-written boundary,
+      capacity, input/GT-separation and non-interference fixtures. Commit the
+      implementation/test freeze before actual tracking; do not change defaults.
+- [ ] Run the complete frozen warning grid, audit saved records, report every
+      cell and stop/pass decision without post-outcome retuning. A development
+      screen cannot establish identity correctness or real-world false-alarm rates.
 - [x] Run an [independent metric check](REAL_DATA_METRIC_CHECK.md) on all saved
       scored pairs; retain the discrepancies and three non-tie/history/fragmentation
       counterexamples. This is a completed diagnostic, not a metric-equivalence pass.

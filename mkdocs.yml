@@ -133,6 +133,7 @@ nav:
       - Detections before IDs — fixed association inventory: MOT17_ASSOCIATION_INVENTORY.md
       - Observation availability — fixed development study: OBSERVATION_AVAILABILITY_PROTOCOL.md
       - Observation availability — complete findings: OBSERVATION_AVAILABILITY_FINDINGS.md
+      - Continuity warning — prospective diagnostic design: CONTINUITY_WARNING_PROTOCOL.md
       - Before the overlap — saved prior context: MOT17_PRIOR_CONTEXT.md
       - Release-readiness audit: RELEASE_READINESS.md
       - Python/C++ runtime contract: CROSS_RUNTIME_CONTRACT.md

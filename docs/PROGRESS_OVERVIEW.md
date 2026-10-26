@@ -22,9 +22,13 @@ filtered public geometry are now explicitly separated. The
 now has [complete 12-cell findings and a saved-record audit](OBSERVATION_AVAILABILITY_FINDINGS.md):
 36 repeatable passes, unchanged controls, short-gap null ID effects and long-gap
 harms. Equal miss totals conceal different ID histories; the first recovery
-match alone is not stable identity. Defaults/C++ remain unchanged. Next: specify
-a diagnostic-only continuity-warning study with fresh false-alarm controls,
-not claim a real-case fix or tune on these results.
+match alone is not stable identity. Defaults/C++ remain unchanged. The
+[diagnostic-only continuity-warning design](CONTINUITY_WARNING_PROTOCOL.md) is
+now complete: one detector/public-box support-capacity rule, 27 fresh development
+cells, ordinary size/motion controls, and identical inputs with different truth
+to expose what geometry cannot know. No implementation/outcomes or accepted
+warning feature yet. Next: implement and test the frozen contract, not claim a
+real-case fix or tune on the known observation-study results.
 
 Latest advance: the fixed MOT17 **36–57** source-image window is available for
 local non-commercial research, with exact annotation correspondence, all 22
@@ -234,6 +238,15 @@ future work. Approximate indexing must remain explicitly separate from exact mod
 no GPU path or weakened parity is justified by the current plan.
 
 ## Immediate next action
+
+Implement the [continuity-warning contract](CONTINUITY_WARNING_PROTOCOL.md) as
+an offline observer, with hand-authored tests and no actual study tracking until
+the implementation is committed. Then execute/audit the complete fixed grid and
+retain failed gates as well as successes. No owner action is needed for that;
+independent real-data labels and practitioner usefulness remain future gates.
+C++ stays unchanged until useful accepted reference behavior warrants a port.
+
+### Historical sequence — preserved, not the current task
 
 The counter's engineering feasibility review is complete: **stop the fixed band
 candidate**, retain its examples/locks and do not invest in its full grid now.

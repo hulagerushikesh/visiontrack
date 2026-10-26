@@ -19,10 +19,15 @@ unavailable detections from an unoffered low-score recovery pair. The
 now fixes all 12 small development cells, unchanged controls and complete
 startup/episode/recovery reporting. [Execution and audit](OBSERVATION_AVAILABILITY_FINDINGS.md)
 are now complete from the committed design: 36 repeatable passes, no skips or
-selective retries, null effects and long-gap harms retained. Next, specify a
-diagnostic-only continuity-warning study using detector/track inputs and fresh
-size/motion/false-alarm controls before implementation. No promised fix, new
-public demonstration or C++ port; independent real-data validation remains open.
+selective retries, null effects and long-gap harms retained. The
+[diagnostic-only warning protocol](CONTINUITY_WARNING_PROTOCOL.md) now fixes
+the observable claim, one-frame support-capacity rule, 27 development cells,
+size/motion controls and semantic counterexamples before implementation.
+Next: implement/test that contract with hand fixtures, commit the execution
+freeze, then run/audit the complete grid and report stop/pass without retuning.
+No promised fix, new public demonstration or C++ port; independent real-data
+validation remains open. This is the current sequence, superseding the historical
+waiting/review tasks below for explicitly exploratory work only.
 
 ## Big aim
 
