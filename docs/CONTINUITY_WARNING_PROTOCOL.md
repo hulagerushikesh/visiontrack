@@ -1,6 +1,9 @@
 # Continuity warning v1 — a limited, testable diagnostic
 
-Design checkpoint: **2026-10-26**. **Specified, not implemented or executed.**
+Design checkpoint: **2026-10-26**. The observer, grid, replay and audit code are
+implemented with hand-authored tests; **actual study tracking has not run at this
+method-freeze checkpoint**. The recipe's `stage` records its original design-only
+freeze and is intentionally unchanged.
 The [machine recipe](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/continuity_warning_v1.json)
 and this protocol precede candidate implementation and actual study tracking.
 This is an internal prospective development design, not external preregistration,
@@ -168,15 +171,15 @@ default change, real-world false-alarm claim or C++ port.
 
 - [x] Define one observable claim, candidate rule, fresh controls, semantic
       non-identifiability examples, usefulness/error limits and negative decision.
-- [ ] Implement the small offline observer and these exact inputs; author hand
+- [x] Implement the small offline observer and these exact inputs; author hand
       fixtures for IoU boundaries, class/score filters, empty/invalid/duplicate
       rows, component capacity (including a greedy-matching trap), reset,
       source-row permutations, coordinate scaling/translation and no mutation.
       Tests/doubles must not run the actual study tracker before the freeze.
-- [ ] Validate all 27 input/GT recipes and 16 unique detector payloads by separate
+- [x] Validate all 27 input/GT recipes and 16 unique detector payloads by separate
       scalar geometry; verify the two same-observation pairs, exact controls,
       truth exclusion and temporal ordering. No candidate performance yet.
-- [ ] Commit implementation, recipe, tests and protocol before actual execution;
+- [x] Commit implementation, recipe, tests and protocol before actual execution;
       bind hashes/revision/runtime/config and baseline package to a pre-run
       method receipt. Refuse existing/symlink outputs or outputs inside either
       repo; retain partial failures, no success manifest on failure or drift.
@@ -189,6 +192,6 @@ default change, real-world false-alarm claim or C++ port.
       independent physical/reference labels, a separate prospective evaluation
       and practitioner review of warning burden. These remain open.
 
-**Next action:** implementation and hand-written contract tests, not another
-website redesign or a tracking intervention. No owner action is needed for that.
+**Next action:** one complete execution of the frozen development grid and
+independent saved-record audit. No owner action is needed for that.
 No new recording, outreach, release, public pixel distribution or C++ change.

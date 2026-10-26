@@ -22,9 +22,10 @@ are now complete from the committed design: 36 repeatable passes, no skips or
 selective retries, null effects and long-gap harms retained. The
 [diagnostic-only warning protocol](CONTINUITY_WARNING_PROTOCOL.md) now fixes
 the observable claim, one-frame support-capacity rule, 27 development cells,
-size/motion controls and semantic counterexamples before implementation.
-Next: implement/test that contract with hand fixtures, commit the execution
-freeze, then run/audit the complete grid and report stop/pass without retuning.
+size/motion controls and semantic counterexamples before implementation. The
+offline observer, scenes, replay and separate auditor now pass hand fixtures and
+tracker doubles. Next: run/audit the complete committed grid once and report
+stop/pass without retuning.
 No promised fix, new public demonstration or C++ port; independent real-data
 validation remains open. This is the current sequence, superseding the historical
 waiting/review tasks below for explicitly exploratory work only.

@@ -481,7 +481,7 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       support capacity, 27 development cells, size/motion/false-alarm controls,
       indistinguishable semantic pairs and explicit usefulness/error/stop limits.
       No GT-fed runtime, identity confidence or automatic fix; no outcomes yet.
-- [ ] Implement the offline warning and recipe with hand-written boundary,
+- [x] Implement the offline warning and recipe with hand-written boundary,
       capacity, input/GT-separation and non-interference fixtures. Commit the
       implementation/test freeze before actual tracking; do not change defaults.
 - [ ] Run the complete frozen warning grid, audit saved records, report every

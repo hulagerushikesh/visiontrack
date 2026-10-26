@@ -26,9 +26,11 @@ match alone is not stable identity. Defaults/C++ remain unchanged. The
 [diagnostic-only continuity-warning design](CONTINUITY_WARNING_PROTOCOL.md) is
 now complete: one detector/public-box support-capacity rule, 27 fresh development
 cells, ordinary size/motion controls, and identical inputs with different truth
-to expose what geometry cannot know. No implementation/outcomes or accepted
-warning feature yet. Next: implement and test the frozen contract, not claim a
-real-case fix or tune on the known observation-study results.
+to expose what geometry cannot know. Its offline observer, scene generator,
+replay and independent saved-record auditor now pass hand fixtures and double
+tests. The method is committed before actual study tracking; no outcome or
+accepted warning feature at this checkpoint. Next: execute and audit the full
+frozen grid without tuning on the known observation-study results.
 
 Latest advance: the fixed MOT17 **36–57** source-image window is available for
 local non-commercial research, with exact annotation correspondence, all 22
@@ -239,10 +241,9 @@ no GPU path or weakened parity is justified by the current plan.
 
 ## Immediate next action
 
-Implement the [continuity-warning contract](CONTINUITY_WARNING_PROTOCOL.md) as
-an offline observer, with hand-authored tests and no actual study tracking until
-the implementation is committed. Then execute/audit the complete fixed grid and
-retain failed gates as well as successes. No owner action is needed for that;
+Execute/audit the [continuity-warning contract](CONTINUITY_WARNING_PROTOCOL.md)
+from the committed offline observer and hand-authored tests. Retain the complete
+fixed grid, including failed gates. No owner action is needed for that;
 independent real-data labels and practitioner usefulness remain future gates.
 C++ stays unchanged until useful accepted reference behavior warrants a port.
 

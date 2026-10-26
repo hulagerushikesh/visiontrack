@@ -23,9 +23,11 @@ continuity. Defaults remain unchanged. The [diagnostic-only continuity-warning
 protocol](CONTINUITY_WARNING_PROTOCOL.md) is now specified: one-frame public
 geometry only, distinct-box assignment capacity, 27 development cells, normal
 size/motion controls and identical-observation/different-truth counterexamples.
-Usefulness, nuisance/coverage and stop criteria precede implementation. No
-warning code or new study outcomes yet. Next: implement and test this contract
-with hand fixtures before committing the execution freeze; no real-case fix claim.
+Usefulness, nuisance/coverage and stop criteria precede implementation. The
+offline observer, 27-cell generator, replay and separate scalar auditor are now
+implemented and checked with hand fixtures and tracker doubles. The committed
+method precedes actual study tracking; no study outcomes or real-case fix claim
+at this checkpoint. Next: run and audit the complete fixed grid once.
 
 **Previous measurement checkpoint — 2026-10-25:** the
 [real MOT file-to-score verification](MOT17_TEXT_ROUNDTRIP.md) passes all 1,050
