@@ -1,8 +1,25 @@
 # Daily checkpoints and the next weekly goal
 
-Planning checkpoint: **2026-10-25**. Days below mean focused work sessions, not
+Planning checkpoint: **2026-10-26**. Days below mean focused work sessions, not
 automatic work while the chat is idle or promised calendar dates. No reminder,
 scheduled job, email, publication or new tracking study is authorized by this plan.
+
+**Review-route update:** no separate reviewer is available, and the owner has
+delegated the technical review to the assistant. The [bounded AI-assisted case
+note](MOT17_AI_REVIEW_DECISION.md) is complete with a no-change recommendation;
+independent scene/reference validation remains deferred. The owner confirmed
+page/image/frame controls, not a completed trajectory review. This supersedes
+the waiting dependency below **for exploratory documentation only**, not for
+independently validated labels, causality or acceptance of a future fix.
+
+**Next technical checkpoint:** the [fixed detection/association inventory](MOT17_ASSOCIATION_INVENTORY.md)
+is complete without new tracker execution. It distinguishes missing/separately
+unavailable detections from an unoffered low-score recovery pair. The
+[prospective observation-availability recipe](OBSERVATION_AVAILABILITY_PROTOCOL.md)
+now fixes all 12 small development cells, unchanged controls and complete
+startup/episode/recovery reporting. Commit the tested design before actual
+execution, then audit all saved outcomes. No promised fix, new public
+demonstration or C++ port.
 
 ## Big aim
 
@@ -101,9 +118,9 @@ Independent maintenance during that wait found and closed real gaps in the
 existing C++ parity tools (omitted classes, signed-zero equality and ignored
 unit-test failure). [The maintenance record](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/PARITY_GUARDS.md)
 checks the published wheel against released and current NumPy separately.
-Runtime behavior and the next research gate are unchanged. The owner plans
-review tomorrow; do not turn unused session allowance into a speculative fix
-or additional data acquisition.
+Runtime behavior is unchanged. The earlier plan for owner review tomorrow is
+superseded by the delegated-review update above; do not turn unused session
+allowance into a speculative fix or additional data acquisition.
 
 ## Next big deliverable: one real-clip diagnostic case study
 

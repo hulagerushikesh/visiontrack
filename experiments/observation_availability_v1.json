@@ -1,0 +1,24 @@
+{
+  "schema": "visiontrack.observation-availability/v1",
+  "baseline_revision": "7308dfbe8f79da61b56beed05784e56b512c156a",
+  "durations": [4, 12, 36],
+  "conditions": ["distinct", "unchanged_control", "missing_second", "shared_union"],
+  "warmup_frames": 12,
+  "recovery_frames": 20,
+  "geometry": {"x": 100, "y": 100, "width": 20, "height": 40, "second_dx": 8, "velocity_x": 2},
+  "score": 0.9,
+  "class_id": 0,
+  "reference_ids": [1, 2],
+  "evaluation_iou": 0.5,
+  "tracker_config": {
+    "high_score_thresh": 0.5, "low_score_thresh": 0.1,
+    "match_iou_thresh": 0.3, "recovery_iou_thresh": 0.5,
+    "new_track_thresh": 0.6, "n_init": 3, "max_age": 30,
+    "use_mahalanobis_gating": true, "class_aware": true,
+    "w_iou": 1.0, "w_app": 0.0, "w_unc": 0.0,
+    "use_giou": false, "appearance_ema_alpha": 0.9,
+    "kf_noise_scale": 1.0, "motion_residual_path": null,
+    "w_ocm": 0.0, "ocm_delta_t": 3, "use_oru": false, "use_gmc": false
+  },
+  "scope": "Deterministic development characterization of supplied observations, not a detector or tracker improvement, independent validation, physical identity or MOT17 causal explanation. No random seeds, held-out split, tuning or C++ adoption."
+}

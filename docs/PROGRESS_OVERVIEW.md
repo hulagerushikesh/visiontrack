@@ -1,10 +1,27 @@
 # VisionTrack and VisionTrack C++ — progress overview
 
-Snapshot: **2026-10-25**. This is a summary of the canonical
+Snapshot: **2026-10-26**. This is a summary of the canonical
 [VisionTrack checklist](NEXT_STEPS.md), [status](STATUS.md) and
 [C++ checklist](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/NEXT_STEPS.md).
 Completed implementation is not the same as validated research or product demand.
 This document does not claim the latest local work is already pushed or deployed.
+
+**Current review decision:** the owner delegated technical inspection because no
+second reviewer is available. The [AI-assisted exploratory case note](MOT17_AI_REVIEW_DECISION.md)
+retains the unchanged tracker and records the reason: 19 remains updated/public,
+so this episode is not evidence of deletion and re-entry. Independent label/scene
+validation is deferred, not passed. The owner need not complete the walkthrough
+for technical work to continue; no improved-tracker claim or C++ port follows.
+
+**Latest technical finding:** the [fixed 22-frame detection/association inventory](MOT17_ASSOCIATION_INVENTORY.md)
+is complete. Frames 36–50 lack two distinct eligible raw boxes supporting
+references 85/89 at diagnostic IoU >=0.5. At 51, the separate low-score row is not
+offered to already high-matched 19. Detection support, predicted association and
+filtered public geometry are now explicitly separated. The
+[prospective observation-availability study](OBSERVATION_AVAILABILITY_PROTOCOL.md)
+now has a fixed 12-cell development recipe and authored geometry/scoring tests.
+Next: execute the committed study and audit its saved outcomes, not claim a fix
+from this episode or port anything to C++.
 
 Latest advance: the fixed MOT17 **36–57** source-image window is available for
 local non-commercial research, with exact annotation correspondence, all 22
@@ -22,8 +39,9 @@ Latest measurement closure: the [actual MOT file-to-score chain](MOT17_TEXT_ROUN
 now passes on all 1,050 frames. TrackEval reads the original GT and an export of
 all 27,842 saved predictions, retains exactly the same 25,781 scoring outputs
 and agrees on all 45 corrected metric checks. No new tracking run, image intake
-or accepted fix. The next research gate is still the separate-person review,
-not another presentation or a speculative C++ port.
+or accepted fix. Separate-person review remains required for independent visual
+validation, but is no longer a prerequisite for the explicitly exploratory case
+note. It is not replaced by another presentation or a speculative C++ port.
 
 ## Direction: unchanged
 
@@ -192,8 +210,9 @@ now checks output classes and signed-zero bits and fails when requested tests
 fail. In a clean environment the published 0.1.1 wheel matches this reference
 checkout on all 27,842 MOT17-04 observations; the released oracle separately
 matches on all 7,545 MOT17-09 observations. No tracker change or research port.
-The independent scene/reference review remains open, planned by the owner for
-tomorrow; compatibility checks cannot complete it.
+The independent scene/reference review is deferred because no separate reviewer
+is available. The owner delegated assistant-led review on 2026-10-26;
+compatibility checks and AI inspection cannot complete independent validation.
 
 A new synchronization happens only after:
 

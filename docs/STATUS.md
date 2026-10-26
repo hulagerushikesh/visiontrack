@@ -2,7 +2,23 @@
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
 
-**Current checkpoint — 2026-10-25:** the
+**Current checkpoint — 2026-10-26:** the owner delegated technical review because
+no separate reviewer is available. The [AI-assisted exploratory case note](MOT17_AI_REVIEW_DECISION.md)
+records a bounded reinspection and no-change recommendation. Independent
+scene/reference validation is deferred, not completed; the owner's page/control
+feedback is not trajectory adjudication. No manual review is required for
+exploratory documentation to continue. No accepted tracker change or C++ port.
+
+The [fixed-window detection/association inventory](MOT17_ASSOCIATION_INVENTORY.md)
+now explains why two references do not imply two separately usable observations:
+36–50 have only one distinct eligible-box capacity, and the separate low-score
+row at 51 is not offered to already high-matched 19. No alternative tracker was
+run. The [prospective observation-availability recipe](OBSERVATION_AVAILABILITY_PROTOCOL.md)
+now fixes 12 small development cells, unchanged controls and startup/recovery
+reporting before outcomes. Next: execute the committed study and audit all cells;
+this does not authorize tracker tuning or establish real-case causality.
+
+**Previous measurement checkpoint — 2026-10-25:** the
 [real MOT file-to-score verification](MOT17_TEXT_ROUNDTRIP.md) passes all 1,050
 saved frames and all 45 corrected metric checks, without running a tracker.
 The unchanged baseline, versioned measurement corrections, coverage/trace,

@@ -137,6 +137,12 @@ deployment must be confirmed separately after pushing.
 
 ## What remains before an intervention
 
+Update **2026-10-26**: independent review below is deferred, not passed. The owner
+delegated [AI-assisted technical review](MOT17_AI_REVIEW_DECISION.md), and the
+[fixed detection/association inventory](MOT17_ASSOCIATION_INVENTORY.md) is complete.
+Neither changes labels or justifies an intervention. The limited exploratory
+case note no longer waits on a second person; stronger validation remains open.
+
 - [x] Correct metrics and retain legacy reports/studies.
 - [x] Independently verify preprocessing on this actual case.
 - [x] Correct the general MOT17 policy with legacy reproduction and regressions.

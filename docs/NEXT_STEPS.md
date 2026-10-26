@@ -459,6 +459,21 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       identity truth or permission to bypass independent visual review.
 - [ ] Independently review references 85/89 in the sealed event context; record
       disagreement, do not silently change labels/scoring or hunt a new event.
+      Deferred on 2026-10-26: no separate reviewer available; not marked passed.
+- [x] Complete the owner-delegated [AI-assisted exploratory case review](MOT17_AI_REVIEW_DECISION.md)
+      and reasoned no-change recommendation using existing 36–57 pixels and saved
+      evidence. This is not independent validation or a completed owner review.
+- [x] Inventory [every supplied detection and actual offered pair](MOT17_ASSOCIATION_INVENTORY.md)
+      in the same 36–57 trace. Frames 36–50 cannot provide two distinct eligible
+      neighbours for references 85/89 at diagnostic IoU >=0.5. The low-score row
+      at 51 is not offered to already high-matched 19; no tracker rerun or fix.
+- [x] Prospectively fix the [observation-availability development study](OBSERVATION_AVAILABILITY_PROTOCOL.md):
+      fixed trajectories/settings, distinct versus missing or shared support,
+      unchanged-input control, startup/recovery strata and complete failure reporting.
+      Generator/scorer/replay-double tests precede actual tracker outcomes.
+- [ ] Execute all 12 registered cells with fresh/reset/fresh repeatability;
+      audit saved records and retain every null effect/harm before interpreting.
+      No new tracker candidate, real-case causal validation or C++ adoption.
 - [x] Run an [independent metric check](REAL_DATA_METRIC_CHECK.md) on all saved
       scored pairs; retain the discrepancies and three non-tie/history/fragmentation
       counterexamples. This is a completed diagnostic, not a metric-equivalence pass.
@@ -496,8 +511,10 @@ Evaluator alignment, independent case preprocessing, corrected coverage and the
 extended same-event trace are complete. The Lab now explicitly versions new
 filtering policies while preserving old artifacts. The **36–57** source images
 and private staged review are now available, with a preliminary overlapping-figure
-interpretation. Independent human/reference review, a justified comparison or
-reasoned stop, and the final visual case study remain.
+interpretation. The delegated AI review now records an exploratory case note and
+reasoned no-change recommendation. Independent human/reference validation and
+the final independently validated case study remain; no speculative comparison
+is required merely to keep work moving.
 The earlier saved prefix is now checked as well: 19 first becomes public at 3
 and supports 85, not 89, through 35. Earlier pixels remain unviewed; no tracker
 intervention follows automatically from rectangle overlap.

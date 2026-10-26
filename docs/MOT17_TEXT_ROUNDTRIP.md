@@ -99,6 +99,11 @@ No GT, images or generated result packet is included in the commit.
 
 ## What remains
 
+**2026-10-26 update:** no separate reviewer is available. The owner has delegated
+technical review; the [AI-assisted exploratory case note](MOT17_AI_REVIEW_DECISION.md)
+now records a no-change recommendation. The independent validation described
+below is deferred, not passed, and no longer blocks limited exploratory writing.
+
 The measurement chain is now checked through real file loading. The next
 research gate is **a separate person's review of the already prepared 36–57
 scene/reference window**, preserving uncertainty and disagreement. See the

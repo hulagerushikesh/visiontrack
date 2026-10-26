@@ -1,5 +1,13 @@
 # First real-pixel review: what the scored switch does and does not show
 
+**2026-10-26 update:** the owner delegated the technical review to the assistant;
+no separate reviewer is available. The [AI-assisted case note and no-change
+recommendation](MOT17_AI_REVIEW_DECISION.md) now record the bounded reinspection.
+Independent human/reference validation remains **deferred, not completed**. The
+owner only confirmed page/image/frame controls, not trajectory interpretation.
+Exploratory documentation can proceed without requiring their manual review;
+the historical checkpoint and stronger validation limits below are retained.
+
 Checkpoint: **2026-10-25**. We now have the actual **22 source images, frames
 36–57**, for the already selected MOT17-04-FRCNN event. Bounded acquisition,
 source correspondence, an **AI-assisted preliminary visual inspection** and a
@@ -132,6 +140,8 @@ frames were inspected directly for the preliminary analysis above.
       specific question and a new fixed range **before** acquiring more images.
 - [ ] Justify/freeze one comparison and fresh validation, or retain a reasoned
       stop if no defensible intervention follows. No improvement is promised.
+      The subsequent AI-assisted note records a limited no-change recommendation,
+      not closure of this independent-validation gate.
 - [ ] Create the final understandable case study and test practitioner usefulness.
 
 **Current intervention decision: do not tune lifetime, add identity memory,
