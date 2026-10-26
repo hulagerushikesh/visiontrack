@@ -34,6 +34,14 @@ warning with only one reference object. The diagnostic stays offline. Next:
 representative permitted observations and independent reference review before
 any user-facing utility claim; no real-case fix claim.
 
+The later [fixed MOT17 exploratory triage check](CONTINUITY_WARNING_MOT17_FINDINGS.md)
+used the already investigated 1,050-frame case, exact unchanged-output parity,
+corrected v2 events and a separate scalar saved-record audit. Six warning frames
+queued 18 frames across five tasks; only one of 44 scored ID switches was
+temporally inside a queue, and its nearby warning concerned different track
+IDs. This is a negative task-fit result for v1, not untouched validation or a
+reason to adjust the window after outcomes. No UI alert or C++ port follows.
+
 **Previous measurement checkpoint — 2026-10-25:** the
 [real MOT file-to-score verification](MOT17_TEXT_ROUNDTRIP.md) passes all 1,050
 saved frames and all 45 corrected metric checks, without running a tracker.

@@ -32,7 +32,13 @@ tests. The method was committed before actual study tracking. [All 27 cells and
 the saved-record audit](CONTINUITY_WARNING_FINDINGS.md) are complete: the fixed
 synthetic screen passes, but the warning fires only at shortage onset, misses
 later switches and also fires for duplicate detections of one reference object.
-It remains offline; there is no accepted warning feature or real-world claim.
+The [committed-method MOT17 exploratory check](CONTINUITY_WARNING_MOT17_FINDINGS.md)
+now replays the known 1,050-frame case with exact baseline parity. Six warning
+frames queue five tasks/18 frames; only 1/44 corrected ID switches lies within
+the fixed three-frame windows, and that temporal match concerns different
+recent track IDs. The saved geometry and workload arithmetic passed separate
+audit. It remains offline; there is no accepted warning feature or real-world
+utility claim.
 
 Latest advance: the fixed MOT17 **36–57** source-image window is available for
 local non-commercial research, with exact annotation correspondence, all 22
@@ -243,11 +249,14 @@ no GPU path or weakened parity is justified by the current plan.
 
 ## Immediate next action
 
-Use the [completed warning findings](CONTINUITY_WARNING_FINDINGS.md) to define
-one engineer decision and a new prospective, representative evaluation of
-warning usefulness and burden. No owner action is needed for planning;
-permitted real observations, independent labels and practitioner usefulness
-remain future evidence gates.
+The [completed warning findings](CONTINUITY_WARNING_FINDINGS.md) and
+[known-case exploratory triage check](CONTINUITY_WARNING_MOT17_FINDINGS.md)
+argue against shipping v1 as an ID-continuity alert. The next evidence gate is
+a prospective, representative check of a specific engineer decision, warning
+burden and missed problems, with permitted observations and independent scene/
+reference review. Do not reinterpret the already studied MOT17 case as an
+untouched test. No owner action is needed to maintain the research record;
+collecting a consented pilot or practitioner response requires owner coordination.
 C++ stays unchanged until useful accepted reference behavior warrants a port.
 
 ### Historical sequence — preserved, not the current task

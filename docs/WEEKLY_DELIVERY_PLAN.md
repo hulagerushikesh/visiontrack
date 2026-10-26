@@ -29,6 +29,12 @@ are complete under the committed method. The registered synthetic screen passes,
 but warnings cover only the shortage onset and cannot distinguish one object's
 duplicate boxes from two objects. Next: specify the engineer's actual decision
 and prospective representative evaluation before any UI or default change.
+That decision is now fixed as a three-frame manual-inspection queue and the
+[already known MOT17 case has been checked](CONTINUITY_WARNING_MOT17_FINDINGS.md):
+five review tasks / 18 frames, only one of 44 corrected ID switches temporally
+inside a queue, with different warned track IDs. A separate scalar audit passes.
+This is exploratory transfer evidence, **not** the prospective representative
+evaluation or independent physical review; v1 stays offline.
 No promised fix, new public demonstration or C++ port; independent real-data
 validation remains open. This is the current sequence, superseding the historical
 waiting/review tasks below for explicitly exploratory work only.

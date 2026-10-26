@@ -136,6 +136,7 @@ nav:
       - Continuity warning — prospective diagnostic design: CONTINUITY_WARNING_PROTOCOL.md
       - Continuity warning — complete development findings: CONTINUITY_WARNING_FINDINGS.md
       - Continuity warning — fixed MOT17 exploratory triage check: CONTINUITY_WARNING_MOT17_PLAN.md
+      - Continuity warning — MOT17 exploratory triage findings: CONTINUITY_WARNING_MOT17_FINDINGS.md
       - Before the overlap — saved prior context: MOT17_PRIOR_CONTEXT.md
       - Release-readiness audit: RELEASE_READINESS.md
       - Python/C++ runtime contract: CROSS_RUNTIME_CONTRACT.md

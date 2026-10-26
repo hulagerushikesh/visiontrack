@@ -490,6 +490,12 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       imply stable identity, and duplicate detections mimic shared support.
       Keep the diagnostic offline; no post-outcome retuning, identity-correctness
       claim or real-world false-alarm estimate.
+- [x] Fix one engineer triage decision and run the [complete exploratory MOT17
+      transfer check](CONTINUITY_WARNING_MOT17_FINDINGS.md) from committed
+      method `b2027ee`: all 1,050 detector/public-output frames match the sealed
+      baseline, all saved warnings pass a separate scalar audit, and the
+      three-frame queue covers only 1/44 corrected ID switches by *time*—not by
+      implicated track. Do not retune this known case or ship the alert.
 - [ ] Prospectively evaluate whether this bounded warning helps a fixed-camera
       tracking engineer with a specified decision, permitted representative
       observations and independent reference review. Record missed problems and
