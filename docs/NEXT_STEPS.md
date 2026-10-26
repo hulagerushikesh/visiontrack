@@ -421,6 +421,14 @@ replace RQ5 with an unregistered traffic claim.
 - Not undertaken after this stop: full-grid input/replay/report harness,
       development/held-out execution and audit. Do not mark these complete,
       silently tune v1 or relabel consumed evidence as untouched validation.
+- [x] Screen six public fixed-camera/traffic candidates against rights,
+      annotation/task fit and access; record why none is yet admitted in the
+      [real-traffic evidence gate](REAL_TRAFFIC_EVIDENCE_GATE.md). This is
+      source triage, not a benchmark run or validated utility.
+- [ ] Admit one official, rights-verified dense sequence, independently audit
+      its development labels/task truth, and freeze detector/split/decision
+      measures before comparative outcomes. No alternate mirror or inspected
+      sequence becomes an untouched holdout by relabeling it.
 - [ ] Validate any transfer claim on representative rights-reviewed evidence.
 
 ## Active delivery goal — one understandable case study

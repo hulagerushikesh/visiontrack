@@ -92,6 +92,7 @@ nav:
       - Reliability Lab — first slice: RELIABILITY_LAB.md
       - Practitioner discovery playbook: PRACTITIONER_DISCOVERY.md
       - Traffic reliability probe plan: TRAFFIC_RELIABILITY_PLAN.md
+      - Real fixed-camera traffic evidence gate: REAL_TRAFFIC_EVIDENCE_GATE.md
       - Frozen traffic mechanism protocol: TRAFFIC_RELIABILITY_PROTOCOL.md
       - Traffic synthetic input milestone: TRAFFIC_RELIABILITY_GENERATOR.md
       - Traffic crossing scorer milestone: TRAFFIC_RELIABILITY_SCORER.md

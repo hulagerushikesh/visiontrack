@@ -1,12 +1,12 @@
 # Traffic reliability probe — bounded next milestone
 
-Prepared 2026-10-21; updated 2026-10-23 with the complete
-[development/held-out synthetic findings](TRAFFIC_RELIABILITY_FINDINGS.md):
-120 cases per split, no failures or selective reruns. **No intervention gain,
-traffic deployment validation or selected product vertical.**
-The separate [box-gate ablation protocol](BOX_GATE_ABLATION_PROTOCOL.md) now
-registers one existing configuration switch, fresh paths/seeds and conservative
-success/failure margins. Its new tracker comparisons have not begun.
+Prepared 2026-10-21; updated 2026-10-26. The complete
+[development/held-out synthetic findings](TRAFFIC_RELIABILITY_FINDINGS.md)
+cover 120 cases per split. The subsequent registered
+[box-gate intervention failed its safety gate](BOX_GATE_FINDINGS.md), and the
+[first real-traffic data source screen](REAL_TRAFFIC_EVIDENCE_GATE.md) has not
+admitted a new dataset. **No intervention gain, traffic deployment validation
+or selected product vertical.**
 
 ## Aim in plain language
 
@@ -118,30 +118,34 @@ is not a measured traffic camera, and box perturbations are not a real detector.
       alongside counting, with separate contact error and true region/pulse
       strata. These diagnostics are now in the development replay record;
       the exported 120-case development and 120-case held-out reports are retained.
-- [ ] Compare only predeclared interventions. The next registered candidate is
-      the existing `use_mahalanobis_gating` switch, not simultaneous changes to
-      calibration, anchor, lifecycle and detector. Anchor choice or geometry-aware
-      motion/noise would require separate future registrations.
+- [x] Compare only the predeclared `use_mahalanobis_gating` switch on the
+      registered fresh synthetic inputs. Its [complete paired result](BOX_GATE_FINDINGS.md)
+      is a **failure** under the safety rule; do not ship, retune the opened
+      holdout or combine it post hoc with anchor, lifecycle and detector changes.
+      Anchor choice or geometry-aware motion/noise would require separate future
+      registrations and evidence.
 - [x] Report paired development per-scenario effects and variation, including negatives.
       Do not tune on held-out results or treat correlated frames as independent
       statistical samples. Practical acceptance margins apply to a future
       separately registered intervention, not a claimed gain in v1 characterization.
 - [x] Report all held-out conditions, paired contrasts and interactions against
       development findings without a pooled-site or winner claim.
-- [x] Register one minimal intervention, practical success/failure margins and
-      new untouched scenarios before implementation:
-      [box-gate ablation v1](BOX_GATE_ABLATION_PROTOCOL.md). No new tracker runs
-      or implementation freeze yet. The opened v1 paths cannot be relabelled
-      as untouched acceptance evidence for a new fix.
+- [x] Register, execute and audit one minimal intervention with fresh
+      scenarios: [box-gate ablation v1](BOX_GATE_FINDINGS.md). It failed after
+      development and once-only held-out execution; the opened paths cannot
+      be relabelled as untouched acceptance evidence for a new fix.
 
 Output: an evidence-backed synthetic result, not proof of a better traffic
 system. Do not build a traffic dashboard or announce a new tracker first.
 
 ### 4. Admit representative real evidence separately
 
-- [ ] Find suitably licensed, representative fixed-camera traffic material and
-      confirm annotations, privacy conditions and operational event truth.
-      Public video availability is not complete permission or usable labels.
+- [ ] Admit suitably licensed, representative fixed-camera traffic material
+      with verified annotations, privacy conditions and operational event
+      truth. The [2026-10-26 candidate screen](REAL_TRAFFIC_EVIDENCE_GATE.md)
+      identified possible sources and explicit holds; it **did not** complete
+      admission. Public video availability is not complete permission or usable
+      labels.
 - [ ] Freeze recording/site-disjoint evaluation and detector versions. First
       hold detections fixed to compare tracking; then vary detector quality in
       a separate experiment. Evaluate class differences and actual blur/scale

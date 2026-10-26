@@ -40,6 +40,12 @@ recent track IDs. The saved geometry and workload arithmetic passed separate
 audit. It remains offline; there is no accepted warning feature or real-world
 utility claim.
 
+**Next evidence gate:** the [fixed-camera traffic source screen](REAL_TRAFFIC_EVIDENCE_GATE.md)
+checked six public candidates against rights, dense labels, camera/task fit and
+access. None is admitted yet: GRAM-RTM Urban1 is the first research candidate,
+but official kit access returned HTTP 403 here and its complete files/terms are
+not verified. This is source triage, not a new benchmark or product validation.
+
 Latest advance: the fixed MOT17 **36–57** source-image window is available for
 local non-commercial research, with exact annotation correspondence, all 22
 image receipts, preliminary AI-assisted inspection and a private staged review.
@@ -254,7 +260,9 @@ The [completed warning findings](CONTINUITY_WARNING_FINDINGS.md) and
 argue against shipping v1 as an ID-continuity alert. The next evidence gate is
 a prospective, representative check of a specific engineer decision, warning
 burden and missed problems, with permitted observations and independent scene/
-reference review. Do not reinterpret the already studied MOT17 case as an
+reference review. The [traffic evidence admission checklist](REAL_TRAFFIC_EVIDENCE_GATE.md)
+records the first source-level blockers before any new download or run. Do not
+reinterpret the already studied MOT17 case as an
 untouched test. No owner action is needed to maintain the research record;
 collecting a consented pilot or practitioner response requires owner coordination.
 C++ stays unchanged until useful accepted reference behavior warrants a port.
