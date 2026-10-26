@@ -19,9 +19,12 @@ references 85/89 at diagnostic IoU >=0.5. At 51, the separate low-score row is n
 offered to already high-matched 19. Detection support, predicted association and
 filtered public geometry are now explicitly separated. The
 [prospective observation-availability study](OBSERVATION_AVAILABILITY_PROTOCOL.md)
-now has a fixed 12-cell development recipe and authored geometry/scoring tests.
-Next: execute the committed study and audit its saved outcomes, not claim a fix
-from this episode or port anything to C++.
+now has [complete 12-cell findings and a saved-record audit](OBSERVATION_AVAILABILITY_FINDINGS.md):
+36 repeatable passes, unchanged controls, short-gap null ID effects and long-gap
+harms. Equal miss totals conceal different ID histories; the first recovery
+match alone is not stable identity. Defaults/C++ remain unchanged. Next: specify
+a diagnostic-only continuity-warning study with fresh false-alarm controls,
+not claim a real-case fix or tune on these results.
 
 Latest advance: the fixed MOT17 **36–57** source-image window is available for
 local non-commercial research, with exact annotation correspondence, all 22

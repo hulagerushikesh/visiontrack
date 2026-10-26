@@ -15,8 +15,12 @@ now explains why two references do not imply two separately usable observations:
 row at 51 is not offered to already high-matched 19. No alternative tracker was
 run. The [prospective observation-availability recipe](OBSERVATION_AVAILABILITY_PROTOCOL.md)
 now fixes 12 small development cells, unchanged controls and startup/recovery
-reporting before outcomes. Next: execute the committed study and audit all cells;
-this does not authorize tracker tuning or establish real-case causality.
+reporting before outcomes. [All 12 cells / 36 repeatable passes and the saved-record
+audit](OBSERVATION_AVAILABILITY_FINDINGS.md) are now complete from committed
+`45d3250`: short gaps recover original IDs, while 36-frame missing/shared episodes
+produce one/two switches despite equal FN totals. First recovery is not stable
+continuity. Defaults remain unchanged. Next: specify a diagnostic-only warning
+study with fresh controls, not tune this geometry or claim real-case causality.
 
 **Previous measurement checkpoint — 2026-10-25:** the
 [real MOT file-to-score verification](MOT17_TEXT_ROUNDTRIP.md) passes all 1,050

@@ -17,9 +17,12 @@ is complete without new tracker execution. It distinguishes missing/separately
 unavailable detections from an unoffered low-score recovery pair. The
 [prospective observation-availability recipe](OBSERVATION_AVAILABILITY_PROTOCOL.md)
 now fixes all 12 small development cells, unchanged controls and complete
-startup/episode/recovery reporting. Commit the tested design before actual
-execution, then audit all saved outcomes. No promised fix, new public
-demonstration or C++ port.
+startup/episode/recovery reporting. [Execution and audit](OBSERVATION_AVAILABILITY_FINDINGS.md)
+are now complete from the committed design: 36 repeatable passes, no skips or
+selective retries, null effects and long-gap harms retained. Next, specify a
+diagnostic-only continuity-warning study using detector/track inputs and fresh
+size/motion/false-alarm controls before implementation. No promised fix, new
+public demonstration or C++ port; independent real-data validation remains open.
 
 ## Big aim
 
