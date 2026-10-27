@@ -41,7 +41,10 @@ def test_lab_ui_keeps_evidence_and_identity_boundaries_visible() -> None:
     fixture = (ROOT / "src/features/reliability-lab/fixture.ts").read_text()
 
     assert "Demonstration fixture · illustrative data" in component
-    assert "The Python pipeline remains the source of truth" in component
+    assert "not a verified local experiment" in component
+    assert "Private local import · content fingerprint checked" in component
+    assert "It does not authenticate who produced it" in component
+    assert "This browser has not opened or rehashed the source files" in component
     assert "same correspondence as the published metrics" in component
     assert "Automatic selection is not enabled" in component
     assert "Track IDs are run-local and are not persistent person identities" in fixture

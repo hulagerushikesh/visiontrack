@@ -41,15 +41,17 @@ audit. It remains offline; there is no accepted warning feature or real-world
 utility claim.
 
 **Next evidence gate:** the [fixed-camera traffic source screen](REAL_TRAFFIC_EVIDENCE_GATE.md)
-checked seven public candidates against rights, dense labels, camera/task fit
+checked nine public candidates against rights, dense labels, camera/task fit
 and access. None is admitted yet: GRAM-RTM Urban1 is the first research
 candidate, but official kit access returned HTTP 403 here and its complete
 files/terms are not verified. Publisher-hosted HVSD archives were privately
 inspected; the supplied videos and sparse images contain no dense independent
-tracking-label files. This is source triage, not a new benchmark or product
-validation. The Lab's browser import now checks that a locally chosen report's
-displayed fingerprint matches its exact canonical contents before it can be
-used as report evidence; that is consistency, not source authentication.
+tracking-label files. UVH-26 is fixed-camera detection-only data, and one
+advertised dashcam corpus currently has no hosted data files. This is source
+triage, not a new benchmark or product validation. The Lab's browser import
+checks that a locally chosen report's displayed fingerprint matches its exact
+canonical contents before it can be used as report evidence; the UI now labels
+that as consistency, not source, authorship or accuracy authentication.
 
 Latest advance: the fixed MOT17 **36–57** source-image window is available for
 local non-commercial research, with exact annotation correspondence, all 22
