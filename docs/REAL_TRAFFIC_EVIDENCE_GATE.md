@@ -1,7 +1,7 @@
 # Real fixed-camera traffic evidence — admission decision
 
-Checked **2026-10-26**. This is a source and task-fit screen, **not** a dataset
-download, a legal opinion, a new tracking experiment, or evidence that
+Checked **2026-10-26–27**. This is a source and task-fit screen, **not** a legal
+opinion, a new tracking experiment, or evidence that
 VisionTrack works in traffic. The immediate research question is whether a
 local engineer can make a better review or configuration decision using a
 reproducible detector/tracker comparison and its failure evidence. A second,
@@ -29,12 +29,22 @@ follows from this screen.
 | [RoundaboutHD](https://researchdata.bath.ac.uk/1574/) | Four fixed 4K cameras, labeled vehicle trajectories and a single-camera tracking subset. | **Hold on asset-level rights and practicality.** The archive is 8 GB; the catalog's `Software: MIT License` label does not by itself establish the scope for footage, frames or derived public visuals. No files were downloaded or annotations inspected. |
 | [Drive-Thru partial set](https://figshare.com/articles/dataset/Dataset_for_Multicamera_multitarget_tracking_on_Drive_Thru_Areas/29277770) | Figshare's public record and API state CC BY 4.0. | **Not suitable for this dense-tracking gate.** The public manifest lists only 124 dispersed JPEGs across three cameras and three `vehicle0` trajectory CSVs; it is explicitly a partial release. Those are not a complete independently adjudicated dense multi-object sequence or flow truth. No images were downloaded. |
 | [Khan/Kelly vehicle set](https://data.mendeley.com/datasets/5d8k5bkb93/1) | The publisher page states CC BY 4.0, seven videos and 24,700 annotated frames under varied conditions. | **Hold on task fit/provenance.** The page describes DarkLabel annotations and source clips from other Creative-Commons material, but the per-frame ID continuity, clip-level rights chain, fixed-camera metadata and exact file structure were not verified. |
+| [Highway Vehicle Surveillance Dataset V1](https://data.mendeley.com/datasets/zdgmdg7p25/1) | The publisher page states CC BY 4.0 and offers day, night, and rainy highway footage. | **Not suitable as supplied for this dense-tracking gate.** The original archive and four companion ZIPs were downloaded to owner-local storage outside Git on 2026-10-27. The video ZIP contains three MP4s; day/night/rainy experiment ZIPs contain 12/10/12 sparse PNGs; the article ZIP contains TeX and illustration assets. Archive member lists contain no independent dense frame-level IDs or boxes. The first four ZIP SHA-256 digests match the publisher's file information. No image/video was extracted, republished, or used for a tracker score. The page's processed-results description does not substitute for inspectable ground truth. |
 
 These are **source observations**, not a ranking of tracker performance or a
 claim that other datasets are unusable. Terms can change; repeat this check at
 the exact version and file level before handling media. A public webpage, an
 open repository, and a code license are not interchangeable permission for
 video, faces, plates, annotations, publication, or commercial use.
+
+For the HVSD intake, publisher-listed and locally matched SHA-256 receipts were
+`Dataset.zip` `e32476f77547bf3498835e74b78317794ab1ba78f78023b647f2d02f9a89e9c0`,
+`DAY_Experiment.zip` `9b126e45d806afa23ca7007221d3f9221f964a9fad1911657a7e7ce141a21b45`,
+`NIGHT_Experiment.zip` `3cc2b812220d765998e5976b9abeb9c05ab5101337a625f0b74f81994f8773ba`,
+and `RAINY_Experiment.zip` `9d7850cfe95add0f2a855116008db3fe41dba0294d605b9a4efbdfa849895f52`.
+The article archive was inspected by member list only; its independently
+computed digest was `7e42b53ba3a2d7d01bbe380753e8419a548945f40dcf822b063c121a9265fa59`,
+but no publisher checksum comparison is claimed for it.
 
 ## What admits one dataset
 

@@ -546,6 +546,15 @@ human-decision boundary, and stated limitations. Malformed JSON, unsupported
 schema versions, and incomplete or inconsistent evidence produce explicit
 error states while leaving the importer available for retry.
 
+The browser also recomputes the imported report's SHA-256 fingerprint from the
+exact canonical JSON bytes written by the Python producer, excluding only the
+root `report_id` member. It rejects edited or reserialized files whose displayed
+ID no longer matches their contents; `JSON.parse`/`JSON.stringify` cannot be used
+for this check because they can change Python numeric tokens such as `1.0` to
+`1`. Regenerate `report.json` from its original local bundle if this check
+fails. A matching self-consistency fingerprint does **not** authenticate the
+report's author or upstream footage/labels and does not establish accuracy.
+
 ## Eleventh implementation increment — complete
 
 The next code change should make large verified failure sets easier to inspect

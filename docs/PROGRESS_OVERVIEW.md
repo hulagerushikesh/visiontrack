@@ -1,6 +1,6 @@
 # VisionTrack and VisionTrack C++ — progress overview
 
-Snapshot: **2026-10-26**. This is a summary of the canonical
+Snapshot: **2026-10-27**. This is a summary of the canonical
 [VisionTrack checklist](NEXT_STEPS.md), [status](STATUS.md) and
 [C++ checklist](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/NEXT_STEPS.md).
 Completed implementation is not the same as validated research or product demand.
@@ -41,10 +41,15 @@ audit. It remains offline; there is no accepted warning feature or real-world
 utility claim.
 
 **Next evidence gate:** the [fixed-camera traffic source screen](REAL_TRAFFIC_EVIDENCE_GATE.md)
-checked six public candidates against rights, dense labels, camera/task fit and
-access. None is admitted yet: GRAM-RTM Urban1 is the first research candidate,
-but official kit access returned HTTP 403 here and its complete files/terms are
-not verified. This is source triage, not a new benchmark or product validation.
+checked seven public candidates against rights, dense labels, camera/task fit
+and access. None is admitted yet: GRAM-RTM Urban1 is the first research
+candidate, but official kit access returned HTTP 403 here and its complete
+files/terms are not verified. Publisher-hosted HVSD archives were privately
+inspected; the supplied videos and sparse images contain no dense independent
+tracking-label files. This is source triage, not a new benchmark or product
+validation. The Lab's browser import now checks that a locally chosen report's
+displayed fingerprint matches its exact canonical contents before it can be
+used as report evidence; that is consistency, not source authentication.
 
 Latest advance: the fixed MOT17 **36–57** source-image window is available for
 local non-commercial research, with exact annotation correspondence, all 22

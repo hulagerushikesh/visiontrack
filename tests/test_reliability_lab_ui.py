@@ -75,7 +75,9 @@ def test_lab_import_stays_private_and_can_return_to_sample() -> None:
     assert 'accept="application/json,.json"' in component
     assert "reportReader.current.read(file)" in component
     assert "text = await file.text()" in reader
-    assert "this.parseReport(JSON.parse(text) as unknown)" in reader
+    assert "parsed = JSON.parse(text) as unknown" in reader
+    assert "result = this.parseReport(parsed)" in reader
+    assert "await verifyReportFingerprint(text, result.report.report_id)" in reader
     assert "Processed only in this browser tab. Nothing is uploaded." in component
     assert "Return to sample" in component
     assert 'input.value = ""' in component

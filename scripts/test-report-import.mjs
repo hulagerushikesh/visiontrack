@@ -11,15 +11,41 @@ async function browserModule(name) {
 }
 
 const { parseReportModel } = await browserModule("types")
-const { ReportFileReader, maxReportBytes } = await browserModule("report-import")
+const { ReportFileReader, maxReportBytes, verifyReportFingerprint } = await browserModule("report-import")
 const fixture = JSON.parse(await readFile(new URL("../tests/fixtures/lab_browser_workflow.json", import.meta.url), "utf8"))
-const report = JSON.stringify(fixture.report)
+const policyVector = JSON.parse(await readFile(new URL("../tests/fixtures/lab_preprocessing_v2.json", import.meta.url), "utf8"))
+const exportedPolicyReport = policyVector.report
+const insertionPoint = ',"schema_version":1,"source":'
+assert.equal(policyVector.canonical_report_content.split(insertionPoint).length, 2)
+const report = policyVector.canonical_report_content.replace(
+  insertionPoint,
+  `,"report_id":"${exportedPolicyReport.report_id}"${insertionPoint}`,
+) + "\n"
 const file = (text) => ({ size: Buffer.byteLength(text), text: async () => text })
 const reader = new ReportFileReader(parseReportModel)
 assert.equal((await reader.read(file(report))).kind, "ready")
-const policyVector = JSON.parse(await readFile(new URL("../tests/fixtures/lab_preprocessing_v2.json", import.meta.url), "utf8"))
-const exportedPolicyReport = policyVector.report
-assert.equal((await reader.read(file(JSON.stringify(exportedPolicyReport)))).kind, "ready")
+assert.deepEqual(JSON.parse(report), exportedPolicyReport)
+assert.equal(await verifyReportFingerprint(report, exportedPolicyReport.report_id), true)
+assert.equal(await verifyReportFingerprint(report.slice(0, -1), exportedPolicyReport.report_id), true)
+assert.equal((await reader.read(file(JSON.stringify(exportedPolicyReport)))).kind, "missing",
+  "a JS reserialization cannot preserve Python's numeric JSON tokens")
+for (const tampered of [
+  report.replace("Track IDs are run-local", "Track IDs are permanent"),
+  report.replace('"fps":30.0', '"fps":30'),
+  report.replace(exportedPolicyReport.report_id, "0".repeat(64)),
+  report.replace(',"report_id":', ', "report_id":'),
+  report.replace(',"report_id":', ',"report_id":"' + "0".repeat(64) + '","report_id":'),
+  `${report}\n`,
+]) {
+  const result = await reader.read(file(tampered))
+  assert.equal(result.kind, "missing", "edited report bytes must not be treated as verified evidence")
+}
+const nestedContent = '{"note":"literal \\u0022report_id\\u0022 inside text","other":{"report_id":"nested"},"value":1.0}'
+assert.equal(JSON.parse(nestedContent).note, 'literal "report_id" inside text')
+const nestedId = await sha256Text(nestedContent)
+const nestedReport = nestedContent.replace(',"value":', `,"report_id":"${nestedId}","value":`)
+assert.equal(await verifyReportFingerprint(nestedReport, nestedId), true,
+  "nested and escaped mentions of report_id are not removed from source bytes")
 async function sha256Text(text) {
   return Buffer.from(await globalThis.crypto.subtle.digest("SHA-256", new TextEncoder().encode(text))).toString("hex")
 }
@@ -104,4 +130,4 @@ replaced.resolve(report)
 assert.equal(await replacedRead, null, "even a rejected new selection supersedes the earlier read")
 assert.equal((await reader.read(file(report))).kind, "ready", "import can recover after failure or cancellation")
 
-console.log("Report import passed: validation, bounded reads, latest selection, cancellation, stale errors, and recovery.")
+console.log("Report import passed: canonical fingerprint, validation, bounded reads, latest selection, cancellation, stale errors, and recovery.")
