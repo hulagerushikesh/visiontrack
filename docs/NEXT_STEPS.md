@@ -520,6 +520,12 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       dense ID truth; CityFlowV2's multi-camera-only annotation rule leaves
       single-camera coverage incomplete; UA-DETRAC needs asset-level terms.
       No new source is admitted, downloaded, scored, or called a holdout.
+- [x] Extend the [official source screen](REAL_TRAFFIC_EVIDENCE_GATE.md) to
+      sixteen candidates: UTUAV v2 B/C offers MOT labels but requires publisher
+      contact and credentials; MEVDT's repository is blocked here and its DOI
+      metadata lacks dataset rights; eTraM's modalities and license statements
+      need resolution; FLUID's derived tracks are not independent truth. This
+      selects an access lead, not an admitted benchmark or a tracker result.
 - [x] Run an [independent metric check](REAL_DATA_METRIC_CHECK.md) on all saved
       scored pairs; retain the discrepancies and three non-tie/history/fragmentation
       counterexamples. This is a completed diagnostic, not a metric-equivalence pass.
