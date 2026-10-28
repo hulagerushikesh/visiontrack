@@ -514,6 +514,12 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       tracking engineer with a specified decision, permitted representative
       observations and independent reference review. Record missed problems and
       warning burden before considering user-facing UI or a v2 design.
+- [x] Recheck the official GRAM route and screen three other official
+      fixed-traffic sources against the actual decision and terms. GRAM's kit
+      remains inaccessible here; AI City 2021 offers count labels rather than
+      dense ID truth; CityFlowV2's multi-camera-only annotation rule leaves
+      single-camera coverage incomplete; UA-DETRAC needs asset-level terms.
+      No new source is admitted, downloaded, scored, or called a holdout.
 - [x] Run an [independent metric check](REAL_DATA_METRIC_CHECK.md) on all saved
       scored pairs; retain the discrepancies and three non-tie/history/fragmentation
       counterexamples. This is a completed diagnostic, not a metric-equivalence pass.

@@ -1,6 +1,6 @@
 # VisionTrack and VisionTrack C++ — progress overview
 
-Snapshot: **2026-10-27**. This is a summary of the canonical
+Snapshot: **2026-10-28**. This is a summary of the canonical
 [VisionTrack checklist](NEXT_STEPS.md), [status](STATUS.md) and
 [C++ checklist](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/NEXT_STEPS.md).
 Completed implementation is not the same as validated research or product demand.
@@ -41,10 +41,13 @@ audit. It remains offline; there is no accepted warning feature or real-world
 utility claim.
 
 **Next evidence gate:** the [fixed-camera traffic source screen](REAL_TRAFFIC_EVIDENCE_GATE.md)
-checked nine public candidates against rights, dense labels, camera/task fit
+checked twelve public candidates against rights, dense labels, camera/task fit
 and access. None is admitted yet: GRAM-RTM Urban1 is the first research
-candidate, but official kit access returned HTTP 403 here and its complete
-files/terms are not verified. Publisher-hosted HVSD archives were privately
+candidate, but official kit access still returns HTTP 403 here and its image
+host requires sign-in. AI City 2021 has relevant counts but not released dense
+ID truth; CityFlowV2 only labels multi-camera vehicles and carries restrictive
+research-use terms. UA-DETRAC's official page does not specify asset-level
+terms. Publisher-hosted HVSD archives were privately
 inspected; the supplied videos and sparse images contain no dense independent
 tracking-label files. UVH-26 is fixed-camera detection-only data, and one
 advertised dashcam corpus currently has no hosted data files. This is source

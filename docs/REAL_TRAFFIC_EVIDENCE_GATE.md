@@ -1,6 +1,6 @@
 # Real fixed-camera traffic evidence — admission decision
 
-Checked **2026-10-26–27**. This is a source and task-fit screen, **not** a legal
+Checked **2026-10-26–28**. This is a source and task-fit screen, **not** a legal
 opinion, a new tracking experiment, or evidence that
 VisionTrack works in traffic. The immediate research question is whether a
 local engineer can make a better review or configuration decision using a
@@ -23,7 +23,10 @@ follows from this screen.
 
 | Candidate and primary source | Why it is interesting | Admission result and exact missing check |
 | --- | --- | --- |
-| [GRAM-RTM](https://gram.web.uah.es/data/datasets/rtm/index.html), especially Urban1 | The authors describe a fixed surveillance traffic camera, 23,435 frames, manually annotated vehicle IDs, and research use. The official page says images are **test-only**, not for training/tuning. | **First candidate for local non-commercial research, not yet admitted.** The official development-kit URL returned HTTP 403 from this environment on 2026-10-26; the image-host access, complete annotation schema, file checksums, sequence timing and publication/redistribution scope are not verified. Do not replace it with an unattributed mirror or treat its single site as OpenTrafficCam-like deployment evidence. |
+| [GRAM-RTM](https://gram.web.uah.es/data/datasets/rtm/index.html), especially Urban1 | The authors describe a fixed surveillance traffic camera, 23,435 frames, manually annotated vehicle IDs, and research use. The official page says images are **test-only**, not for training/tuning. | **First candidate for local non-commercial research, not yet admitted.** The official development-kit URL returned HTTP 403 again from this machine on 2026-10-28; the linked Urban1 host redirected to Microsoft sign-in in the public web check. Complete annotation schema, original-file checksums, actual image access and publication/redistribution scope remain unverified. Do not use an unattributed mirror or treat this single site as OpenTrafficCam-like deployment evidence. |
+| [AI City Challenge 2021 Track 1](https://www.aicitychallenge.org/2021-data-and-evaluation/) | A fixed-camera, movement-specific vehicle-counting task across 20 camera views, with cross-validated counts. The organizer now lists the [dataset for quick access](https://www.aicitychallenge.org/ai-city-challenge-dataset-access/). | **Task-relevant, but not a dense tracking holdout.** The organizer says the accessible A split includes only a small ground-truth subset for demonstration; the B labels were reserved. The [2021 data agreement](https://www.aicitychallenge.org/wp-content/uploads/2021/01/DataLicenseAgreement_AICityChallenge_2021.pdf) limits post-challenge use to non-commercial academic purposes and restricts distribution. No files were opened. A count-only research question would need its own rights/task/label intake and cannot verify ID-switch or trajectory-warning truth. |
+| [AI City Challenge 2022 Track 1 / CityFlowV2](https://www.aicitychallenge.org/2022-data-and-evaluation/) | Fixed intersection/highway cameras, vehicle IDs, and provided baseline detections/single-camera tracks; the organizer now lists [direct access](https://www.aicitychallenge.org/2022-track1-download/). | **Hold for rights and label coverage.** The organizer says only vehicles seen in at least two cameras are annotated, so its labels cannot be assumed complete single-camera traffic truth. The [2022 agreement](https://www.aicitychallenge.org/wp-content/uploads/2022/02/Dataset-License-AIC2022.pdf) limits post-challenge use to non-commercial academic purposes and prohibits general redistribution or production use. No files were opened or license accepted. Clarify project-use fit and inspect annotation coverage before any narrow research intake. |
+| [UA-DETRAC](https://sites.google.com/view/daweidu/projects/ua-detrac) | The author's official page describes 100 traffic videos with boxes, occlusion and vehicle-type annotations, and offers image, annotation and detection downloads. | **Hold on asset-level terms and file access.** That page does not state a dataset-use license or enough about the precise ID/flow-label scope for this decision. No files were downloaded; a code repository or public download link alone would not settle footage, derivative-report or product-use rights. |
 | [FE-DETRAC](https://scidm.nchc.org.tw/en/dataset/fe-detrac) | The catalog describes 22 fixed fisheye traffic cameras, MOT-format annotations and camera-disjoint splits. | **Hold on terms/provenance.** The body states CC BY-NC-SA 4.0, while the page's license footer says CC BY-NC 4.0; listed resources are also labeled Fisheye8K. Resolve the exact asset/version and governing terms with the publisher before download or derived public material. |
 | [SVMOT](https://zenodo.org/records/19468203) | The record lists 30 sequences, MOT-format GT **and detections**, occlusion fields, and scene-level splits. | **Hold on rights.** The Zenodo record shows no usable license value in its Rights section as checked. The publisher-hosted 3.8 KB [release README](https://zenodo.org/records/19468203/files/README_RELEASE_v1.0.md?download=1) only refers back to that metadata for licensing. The 18.3 GB archive has not been downloaded, and fixed-camera/site and label details have not been inspected. |
 | [RoundaboutHD](https://researchdata.bath.ac.uk/1574/) | Four fixed 4K cameras, labeled vehicle trajectories and a single-camera tracking subset. | **Hold on asset-level rights and practicality.** The archive is 8 GB; the catalog's `Software: MIT License` label does not by itself establish the scope for footage, frames or derived public visuals. No files were downloaded or annotations inspected. |
@@ -87,8 +90,11 @@ decision, not only a public benchmark.
 ## Next executable path
 
 - Resolve official GRAM kit/image access and inspect its rights/file schema
-  **read-only**. If unavailable, move to a different source with explicit
-  asset-level terms; do not bypass an access restriction or use a mirror.
+  **read-only**. If it remains unavailable, seek a different source with
+  explicit asset-level terms and *complete labels for the chosen decision*;
+  do not bypass an access restriction or use a mirror. AI City 2021 is a
+  possible count-only question, not an ID/trajectory validation shortcut;
+  CityFlowV2's annotated subset is not complete single-camera truth.
 - When one candidate passes rights and integrity, make a source inventory and
   a small *development-only* annotation audit. Record any ambiguity before
   selecting a tracking variant.
