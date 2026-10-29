@@ -14,8 +14,30 @@ from collections import Counter
 from pathlib import Path
 
 
+def _rectangle_union_area(boxes: list[list[float]]) -> float:
+    """Area covered by one or more axis-aligned rectangles, without double counting."""
+    xs = sorted({edge for x, _, width, _ in boxes for edge in (x, x + width)})
+    area = 0.0
+    for left, right in zip(xs, xs[1:], strict=False):
+        intervals = sorted((y, y + height) for x, y, width, height in boxes
+                           if x < right and x + width > left)
+        if not intervals:
+            continue
+        start, end = intervals[0]
+        covered = 0.0
+        for lower, upper in intervals[1:]:
+            if lower <= end:
+                end = max(end, upper)
+            else:
+                covered += end - start
+                start, end = lower, upper
+        covered += end - start
+        area += (right - left) * covered
+    return area
+
+
 def _audit_occlusions(path: Path, gt_by_frame: dict[int, dict[int, tuple[float, ...]]],
-                      length: int) -> dict:
+                      gt_visibility: dict[tuple[int, int], float], length: int) -> dict:
     """Check annotation cross-references, not the truth of the labels in pixels."""
     if not path.is_file():
         return {"occlusion_annotation_present": False}
@@ -25,6 +47,8 @@ def _audit_occlusions(path: Path, gt_by_frame: dict[int, dict[int, tuple[float, 
     links = 0
     objects = 0
     stopped = 0
+    visibility_mismatches = 0
+    maximum_visibility_error = 0.0
     for expected_frame, entry in enumerate(frames, 1):
         if not isinstance(entry, dict) or entry.get("frame_id") != expected_frame:
             raise ValueError("occlusion frame order mismatch")
@@ -62,7 +86,22 @@ def _audit_occlusions(path: Path, gt_by_frame: dict[int, dict[int, tuple[float, 
                         not (x <= ox and y <= oy and ox + ow <= x + width and
                              oy + oh <= y + height)):
                     raise ValueError("invalid occlusion geometry")
+                cx, cy, cw, ch = gt_by_frame[expected_frame][link["occluder_id"]]
+                intersection = (
+                    max(x, cx), max(y, cy),
+                    min(x + width, cx + cw) - max(x, cx),
+                    min(y + height, cy + ch) - max(y, cy),
+                )
+                if (intersection[2] <= 0 or intersection[3] <= 0 or
+                        tuple(area_box) != intersection):
+                    raise ValueError("occlusion box is not the GT box intersection")
                 links += 1
+            occluded_area = _rectangle_union_area(
+                [link["occlusion_bbox"] for link in obj["occlusions"]])
+            derived_visibility = 1 - occluded_area / (width * height)
+            error = abs(gt_visibility[expected_frame, object_id] - derived_visibility)
+            maximum_visibility_error = max(maximum_visibility_error, error)
+            visibility_mismatches += error > 0.000501
     return {
         "occlusion_annotation_present": True,
         "occlusion_frames": len(frames),
@@ -70,6 +109,10 @@ def _audit_occlusions(path: Path, gt_by_frame: dict[int, dict[int, tuple[float, 
         "occlusion_links": links,
         "stopped_true_rows": stopped,
         "occlusion_gt_structure_matches": True,
+        "occlusion_boxes_match_gt_intersections": True,
+        "visibility_matches_geometric_overlap_to_3dp": visibility_mismatches == 0,
+        "visibility_mismatch_rows": visibility_mismatches,
+        "max_visibility_absolute_error": maximum_visibility_error,
     }
 
 
@@ -112,6 +155,7 @@ def audit_sequence(root: Path, sequence: str, class_count: int) -> dict:
     det_boxes: Counter[tuple[str, ...]] = Counter()
     gt_frames: set[int] = set()
     gt_by_frame: dict[int, dict[int, tuple[float, ...]]] = {}
+    gt_visibility: dict[tuple[int, int], float] = {}
     for row in gt:
         box = _geometry(row, width=width, height=height)
         frame = int(row[0])
@@ -125,6 +169,7 @@ def audit_sequence(root: Path, sequence: str, class_count: int) -> dict:
             raise ValueError(f"duplicate GT frame/ID: {sequence}")
         frame_ids.add((frame, object_id))
         gt_by_frame.setdefault(frame, {})[object_id] = tuple(map(float, row[2:6]))
+        gt_visibility[frame, object_id] = visibility
         gt_frames.add(frame)
         ids.add(object_id)
         classes[category] += 1
@@ -154,7 +199,8 @@ def audit_sequence(root: Path, sequence: str, class_count: int) -> dict:
         "all_gt_boxes_match_det": shared == len(gt),
         "local_sample_images": len(samples),
     }
-    result.update(_audit_occlusions(folder / "occlusion.json", gt_by_frame, length))
+    result.update(_audit_occlusions(folder / "occlusion.json", gt_by_frame,
+                                    gt_visibility, length))
     return result
 
 

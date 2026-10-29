@@ -578,6 +578,13 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       sequences have 30,762 structurally matching occlusion records and 25,607
       valid occluder links; visual spot checks and ROI coverage do not establish
       independent label truth or flow-count utility. See [bounded intake](SVMOT_INTAKE.md).
+- [x] Preselect and visually inspect a bounded SVMOT training occlusion span.
+      The 22-frame severe-overlap event in `seq_04_morning` plausibly preserves a
+      silver sedan's ID, but frame 297 is fully hidden, so identity there is an
+      inference. All 25,607 sampled occlusion links are exact GT-box
+      intersections, and all 30,762 visibility values follow overlap geometry
+      to three decimals. These are correlated annotation fields, not separate
+      quality checks. Source admission remains on hold; see [intake](SVMOT_INTAKE.md).
 - [ ] Admit a separate permitted, independently annotated traffic source only
       after camera provenance, exact asset rights, label quality, integrity and
       a scene-disjoint frozen protocol pass. Resolve the remaining object-level

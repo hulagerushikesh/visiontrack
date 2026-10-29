@@ -110,3 +110,44 @@ question than with the current directed-flow counting question. An ROI-limited
 MOT label set does not supply reviewed crossing events, flows, or customer
 decision truth. Keep SVMOT on hold for comparative tracking and product claims;
 do not use its GT-mirroring `det.txt` as the shared detector input.
+
+## Bounded frame-by-frame label review, 2026-10-29
+
+The [development event selector](../experiments/svmot_occlusion_review.py)
+examined only the same four official training sequences. Its fixed rule requires
+three contiguous frames before and after an occlusion, 5–30 occluded frames,
+and at least 50 pixels of box-center travel. It ranks qualifying events by the
+largest single occluder-box overlap fraction. Among 13 qualifying events, the
+highest was `seq_04_morning`, object 26: onset frame 286, first clear frame 308,
+22 marked occluded frames, and a maximum overlap fraction of 1.0. The selector's
+machine-readable receipt, including the occlusion-file SHA-256, is owner-local
+at `../visiontrack-walkthrough/svmot-intake-v1/selected-occlusion-review.json`.
+The selection uses annotation geometry; it does not establish physical severity.
+
+Publisher byte ranges supplied **only frames 283–311** for this event and
+**frames 6–33** for an earlier, less severe moving event in `seq_17_evening`.
+Each of those JPEG ZIP members passed CRC verification; raw contact sheets and
+GT overlays stay in the owner-local intake folder, outside Git. Frame hashes
+and review notes are recorded in the owner-local `visual-review-receipt.json`.
+The sequential images show a silver sedan (ID 26) moving leftward as a dark
+vehicle (ID 29) passes in front. The same sedan appears to continue on the far
+side, and its label keeps ID 26. This is a plausible visual continuity judgment
+over one short event, not independent proof of identity while the sedan is hidden.
+At frame 297 its reported visibility is **0.000** and its entire annotated box
+overlaps ID 29's box. No image pixels at that instant can verify ID 26's box
+or identity. The annotated center briefly moves **6 px right** from frame
+300 to 301 even though the visible car travels left overall; the box width
+shrinks from 101 px at frame 283 to 56 px at frame 301. This is a concrete
+example of bounding-box geometry changing during occlusion, not a measured
+tracker failure or a verified physical trajectory.
+
+The [source audit](../experiments/svmot_source_audit.py) now checks every
+occlusion rectangle against the exact intersection of the target and occluder
+GT boxes. All **25,607** links in the four selected sequences match. For all
+**30,762** GT object rows, the `visibility` value also agrees to its printed
+three-decimal precision with `1 − union(occlusion rectangles) / box area`.
+This establishes that the visibility field is numerically determined by the
+provided boxes and occlusion rectangles in this sample. It is **not an
+independent visual quality vote**. The review does not settle label
+completeness, camera provenance, annotation process, or whether IDs remain
+correct through unseen intervals. SVMOT remains **on hold** for outcome scoring.
