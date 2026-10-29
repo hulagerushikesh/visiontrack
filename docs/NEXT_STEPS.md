@@ -558,6 +558,11 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       but fails the Kalman distance gate; record the exact values and retained
       receipt in [the bounded diagnosis](HVSD_RAIN_REVIEW.md). Do not treat the
       candidate pairing as verified physical identity or tune defaults on it.
+- [x] Run a one-setting paired replay on the rain clip: lower only the new-track
+      threshold from 0.60 to 0.55 after the frame-57 inspection. It emits one
+      additional near-mark crossing, but also changes public output elsewhere.
+      Keep the default unchanged until independent dense truth and a frozen
+      protocol can measure both gains and errors; see [rain review](HVSD_RAIN_REVIEW.md).
 - [x] Recheck SVMOT's publisher metadata: its record API supplies CC BY-NC 4.0
       despite a blank rendered Rights field. Verify the five small release
       files and the 21/9 scene-disjoint split in a [metadata-only intake](SVMOT_INTAKE.md).

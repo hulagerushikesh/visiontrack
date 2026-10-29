@@ -88,10 +88,9 @@ proposals are the same physical objects in every frame, or that all unmarked
 crossings are true negatives. We therefore retain all five owner marks and do
 not calculate recall or claim a causal tracker defect from this short clip.
 
-No tracker setting is changed. The next controlled question would separate
-detector failure from track initiation/association failure on a different,
-independently labeled source with a frozen protocol. The rain clip remains
-development-only evidence.
+No default tracker setting is changed. A paired threshold replay below tests
+one initiation lead on this development clip. A separate, independently labeled
+source with a frozen protocol is still needed for a decision.
 
 ### Targeted tentative-association trace
 
@@ -115,6 +114,30 @@ that disabling/relaxing the gate would be safe. In the prior controlled
 [box-gate experiment](BOX_GATE_FINDINGS.md), a gate-off variant produced safety
 violations, so this short rain clip does not justify a configuration change.
 
+### One-setting threshold replay
+
+`experiments/hvsd_rain_threshold_replay.py` runs the pinned detector once and
+feeds the same 194 detection lists to two trackers. The baseline reproduces the
+frozen public-output receipt. The only candidate change is the new-track score
+minimum, **0.60 → 0.55**, chosen *after* inspecting the frame-57 miss. The
+private metadata-only result is
+`../visiontrack-walkthrough/traffic-hvsd-v1/rain-threshold-replay.json`.
+
+| Output from this clip | Baseline | 0.55 candidate |
+| --- | ---: | ---: |
+| Public track boxes | 117 | 143 |
+| Unique public track IDs | 4 | 5 |
+| Tentative track births | 21 | 19 |
+| Adjacent-frame public line crossings | 1 (frame 27–28) | 2 (frames 27–28 and 57–58) |
+
+The candidate's extra crossing is near the owner's frame-57 mark, with an
+interpolated center-line crossing at frame 57.85 and y=279.16. No additional
+crossing appears near marks 37, 92, or 160. Counts and track IDs elsewhere
+also change, so this is **not** an isolated repair. The owner marks are sparse
+events, not independent dense identity truth or a complete false-positive
+audit. We cannot estimate accuracy, rule out new bad tracks, or accept 0.55 as
+the default from this post-hoc result.
+
 ## Reproduce privately
 
 ```bash
@@ -128,6 +151,11 @@ python -m experiments.hvsd_rain_gate_trace \
   --video ../visiontrack-walkthrough/traffic-hvsd-v1/video/rain.mp4 \
   --model models/yolox_nano.onnx \
   --output ../visiontrack-walkthrough/traffic-hvsd-v1/rain-gate-trace.json
+
+python -m experiments.hvsd_rain_threshold_replay \
+  --video ../visiontrack-walkthrough/traffic-hvsd-v1/video/rain.mp4 \
+  --model models/yolox_nano.onnx \
+  --output ../visiontrack-walkthrough/traffic-hvsd-v1/rain-threshold-replay.json
 ```
 
 The command fails closed on source/schema mismatches and on a changed
@@ -140,8 +168,9 @@ record the exact file hashes before comparing again.
 The owner has confirmed a full-frame pass, and the four unmatched windows now
 have a focused source and pipeline diagnosis. The white vehicle at frame 160
 remains visually ambiguous between `car` and `van`; the original mark is
-preserved. A tentative pair's gate rejection has been reproduced, while exact
-physical object correspondence and the effect of any alternative gate remain
-open. A future outcome study needs a different permitted source with
-independent truth and a prospectively frozen decision/split before any
-candidate comparison.
+preserved. A tentative pair's gate rejection has been reproduced; the separate
+0.55 threshold candidate emits one additional near-mark crossing but changes
+the rest of the clip too. Exact physical object correspondence and the safety
+of either change remain open. A future outcome study needs a different permitted
+source with independent truth and a prospectively frozen decision/split before
+any candidate comparison.
