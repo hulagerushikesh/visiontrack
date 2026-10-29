@@ -151,3 +151,16 @@ provided boxes and occlusion rectangles in this sample. It is **not an
 independent visual quality vote**. The review does not settle label
 completeness, camera provenance, annotation process, or whether IDs remain
 correct through unseen intervals. SVMOT remains **on hold** for outcome scoring.
+
+## Visibility denominator preflight
+
+The same source audit counts **188 zero-visibility GT rows** (0.61%) and
+**2,795 rows below 0.5 visibility** (9.09%) among the 30,762 sampled rows.
+These are annotation counts, not detector misses or tracker errors. In the
+reviewed event, frame 297 is one of the zero-visibility rows. An image-only
+detector has no visible target pixels to localize there, while a tracker may
+carry an identity hypothesis through the gap. Before any SVMOT comparison,
+freeze separate policies for detector coverage, tracking continuity and
+invisible GT rows, and report the denominator under each policy. Do not choose
+a cutoff after seeing candidate tracker scores or silently transfer MOT17's
+preprocessing rule to this source.

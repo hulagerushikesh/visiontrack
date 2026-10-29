@@ -585,6 +585,10 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       intersections, and all 30,762 visibility values follow overlap geometry
       to three decimals. These are correlated annotation fields, not separate
       quality checks. Source admission remains on hold; see [intake](SVMOT_INTAKE.md).
+- [x] Count the SVMOT visibility-policy denominator before scoring: 188 of
+      30,762 sampled GT rows are fully hidden, and 2,795 have visibility below
+      0.5. A future protocol must state how detector coverage and track
+      continuity treat those rows; no cutoff or outcome was selected here.
 - [ ] Admit a separate permitted, independently annotated traffic source only
       after camera provenance, exact asset rights, label quality, integrity and
       a scene-disjoint frozen protocol pass. Resolve the remaining object-level

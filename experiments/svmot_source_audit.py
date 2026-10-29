@@ -156,6 +156,8 @@ def audit_sequence(root: Path, sequence: str, class_count: int) -> dict:
     gt_frames: set[int] = set()
     gt_by_frame: dict[int, dict[int, tuple[float, ...]]] = {}
     gt_visibility: dict[tuple[int, int], float] = {}
+    zero_visibility_rows = 0
+    below_half_visibility_rows = 0
     for row in gt:
         box = _geometry(row, width=width, height=height)
         frame = int(row[0])
@@ -170,6 +172,8 @@ def audit_sequence(root: Path, sequence: str, class_count: int) -> dict:
         frame_ids.add((frame, object_id))
         gt_by_frame.setdefault(frame, {})[object_id] = tuple(map(float, row[2:6]))
         gt_visibility[frame, object_id] = visibility
+        zero_visibility_rows += visibility == 0
+        below_half_visibility_rows += visibility < 0.5
         gt_frames.add(frame)
         ids.add(object_id)
         classes[category] += 1
@@ -192,6 +196,8 @@ def audit_sequence(root: Path, sequence: str, class_count: int) -> dict:
         "gt_rows": len(gt),
         "gt_nonempty_frames": len(gt_frames),
         "gt_unique_ids": len(ids),
+        "gt_zero_visibility_rows": zero_visibility_rows,
+        "gt_below_half_visibility_rows": below_half_visibility_rows,
         "gt_classes": dict(sorted(classes.items())),
         "det_rows": len(det),
         "exact_gt_det_box_matches": shared,

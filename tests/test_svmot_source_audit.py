@@ -42,6 +42,8 @@ def test_audit_reports_exact_gt_detection_boxes_and_metadata_mismatch(tmp_path: 
     assert row["all_det_boxes_match_gt"] is True
     assert row["declared_name_matches_directory"] is False
     assert row["gt_unique_ids"] == 1
+    assert row["gt_zero_visibility_rows"] == 0
+    assert row["gt_below_half_visibility_rows"] == 0
     assert result["test_labels_opened"] is False
 
 
@@ -62,6 +64,16 @@ def test_audit_rejects_duplicate_ground_truth_id_in_one_frame(tmp_path: Path) ->
         stream.write("2,7,12,20,30,40,1,0,0.8\n")
     with pytest.raises(ValueError, match="duplicate GT frame/ID"):
         audit(root, train, test, ["train_seq"])
+
+
+def test_audit_counts_visibility_policy_rows(tmp_path: Path) -> None:
+    root, train, test = _fixture(tmp_path)
+    gt = root / "data" / "train_seq" / "gt" / "gt.txt"
+    gt.write_text(gt.read_text(encoding="utf-8").replace(",0,0.9", ",0,0.0")
+                  .replace(",0,0.8", ",0,0.4"), encoding="utf-8")
+    row = audit(root, train, test, ["train_seq"])["sequences"][0]
+    assert row["gt_zero_visibility_rows"] == 1
+    assert row["gt_below_half_visibility_rows"] == 2
 
 
 def _occlusion_fixture(root: Path) -> Path:
