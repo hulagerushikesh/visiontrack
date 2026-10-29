@@ -589,6 +589,11 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       30,762 sampled GT rows are fully hidden, and 2,795 have visibility below
       0.5. A future protocol must state how detector coverage and track
       continuity treat those rows; no cutoff or outcome was selected here.
+- [x] Run a [pinned detector-only SVMOT preflight](SVMOT_INTAKE.md) on the 29
+      already reviewed training frames. YOLOX nano emitted 24 car boxes but none
+      overlapped the selected car's box at all, including seven clear boundary
+      frames. This model/input setting cannot test that identity-continuity case;
+      it is not a tracker score or a whole-dataset recall estimate.
 - [ ] Admit a separate permitted, independently annotated traffic source only
       after camera provenance, exact asset rights, label quality, integrity and
       a scene-disjoint frozen protocol pass. Resolve the remaining object-level

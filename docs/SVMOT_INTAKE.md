@@ -164,3 +164,30 @@ freeze separate policies for detector coverage, tracking continuity and
 invisible GT rows, and report the denominator under each policy. Do not choose
 a cutoff after seeing candidate tracker scores or silently transfer MOT17's
 preprocessing rule to this source.
+
+## Pinned independent-detector preflight, 2026-10-29
+
+The [detector-only preflight](../experiments/svmot_detector_preflight.py) read
+the same preselected `seq_04_morning` frames **283–311**. It verified the
+selection's occlusion-file hash and the local YOLOX nano ONNX hash
+`c789161e…b18a0b7d`, then ran the existing 416-pixel model at its existing
+0.25 confidence and 0.45 NMS settings, retaining COCO car class 2. The script
+did not read the publisher's `det.txt`, run a tracker, or open a test scene.
+The owner-local `detector-preflight.json` contains the image and source hashes
+and per-frame diagnostic; no image or derived detector data is committed.
+
+Across **29** frames the model emitted **24 car boxes** in **15 frames**. None
+had any positive overlap with the chosen car's reference box (ID 26), including
+the three clear frames before and four clear frames after the occlusion. The
+fixed IoU 0.5 overlap screen is therefore **0/3 before, 0/22 during, 0/4
+after**; maximum IoU is 0. This is a narrow detector-coverage failure for one
+annotated target under one pinned model, not an estimate of SVMOT-wide recall.
+The 1920×1080 frame is reduced to a 416-pixel-wide detector input: ID 26's
+annotated box is about 22×10 input pixels at frame 283 and 13×6 at frame 308.
+That small size is a plausible limitation, not a proven cause of the miss.
+During occlusion, a box overlap alone would not establish physical identity
+anyway. The result reinforces the **hold**: a ByteTrack result on this window
+would mostly measure missing detector observations, not recovery of the target
+identity. A future independently sourced detector must pass a predeclared
+development coverage screen, with the source rights and label-quality gates
+still unresolved, before any frozen tracker comparison.
