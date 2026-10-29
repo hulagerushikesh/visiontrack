@@ -1,12 +1,11 @@
-# SVMOT v1.0: metadata-only research intake
+# SVMOT v1.0: bounded research intake
 
-Checked **2026-10-29**. This is a release-metadata and split-integrity check,
+Checked **2026-10-29**. This is a release-metadata and development-sample check,
 not an admitted tracking experiment. The [publisher record](https://zenodo.org/records/19468203)
 and [record API](https://zenodo.org/api/records/19468203) identify version
 `v1.0`, DOI `10.5281/zenodo.19468203`, and `cc-by-nc-4.0` in the API license
 field. The rendered record's Rights field is blank, so the API value is the
-explicit metadata evidence used here. The archive and all image/annotation
-content remain unopened. The non-commercial condition limits this lead to
+explicit metadata evidence used here. The non-commercial condition limits this lead to
 research; it is not a basis for commercial product use or publication of source
 images without a separate exact-use review.
 
@@ -38,10 +37,9 @@ mentions.
 
 ## Admission decision
 
-**Hold.** The full archive is **18.3 GB**; only its publisher-listed checksum
+**Hold.** The full archive is **18.3 GB**; its publisher-listed checksum
 `aae153a21a46f9fe37068ee006a65abd58894efaabc4390404eadcc08be8bd7a`
-is known. No archive bytes, frames, detections or ground truth have been opened
-or verified locally. Before download or outcome scoring, determine the precise
+has not been checked against a complete local copy. Before outcome scoring, determine the precise
 camera/site provenance, annotation creation and review process, per-frame ID
 coverage, class and ignore semantics, fixed-camera suitability, and whether
 the chosen research use and derived public aggregate findings fit the terms.
@@ -53,3 +51,31 @@ domain transfer.
 This source could support non-commercial research on occlusion and identity
 continuity if those checks pass. It cannot yet validate VisionTrack's traffic
 counting utility or a product claim.
+
+## Bounded development sample, 2026-10-29
+
+After the metadata screen, the publisher archive's central directory was read
+through HTTP byte ranges. Only `classes.txt` and `seqinfo.ini`, `gt.txt`,
+`det.txt`, and frame `0001.jpg` from one sequence in each of the **four official
+training scenes** were fetched. The four images visually show elevated road
+views; one first frame per sequence does not establish camera stability through
+time. These files and the range probe remain owner-local, outside Git. The
+selected ZIP members passed their CRC checks; this does **not** verify the full
+archive SHA-256 or all frames. No test-scene member was opened.
+
+The repeatable [source audit](../experiments/svmot_source_audit.py) checked
+30,762 sampled GT rows across those four sequences. Each of their 30,762
+supplied `det.txt` rows has an exact GT box coordinate match. This may be a
+deliberate release design, but these detections cannot be used as an
+independent detector stream for a detector-plus-tracker comparison. Three
+`seqinfo.ini` names disagree with their directory/split names:
+`seq_04_morning` declares `seq_02_morning`, `seq_13_evening` declares
+`seq_07_evening`, and `seq_17_evening` declares `seq_15_evening`. Use directory
+names only after resolving this discrepancy; do not silently trust metadata.
+The owner-local machine-readable audit is `development-audit.json` in the
+intake folder. No tracker was run and no performance result was computed.
+
+This evidence narrows the next check: independently review a bounded
+development label span for ID and occlusion quality, then use a separately
+pinned real detector stream if SVMOT is admitted. Keep the publisher test
+scenes unopened until a protocol is frozen. The current `hold` remains.

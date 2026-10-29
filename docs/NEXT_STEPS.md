@@ -568,6 +568,11 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       files and the 21/9 scene-disjoint split in a [metadata-only intake](SVMOT_INTAKE.md).
       Keep it as a non-commercial research candidate; no archive or test labels
       were opened.
+- [x] Read a bounded SVMOT development sample by publisher byte ranges and
+      [audit its labels and supplied detections](SVMOT_INTAKE.md). Four sampled
+      training sequences have 30,762 exact GT/detection box matches and three
+      sequence-name mismatches. This is source triage, not a tracker result;
+      test scenes remain unopened and dataset admission remains on hold.
 - [ ] Admit a separate permitted, independently annotated traffic source only
       after camera provenance, exact asset rights, label quality, integrity and
       a scene-disjoint frozen protocol pass. Resolve the remaining object-level
