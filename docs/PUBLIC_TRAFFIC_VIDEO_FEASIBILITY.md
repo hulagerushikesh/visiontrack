@@ -90,7 +90,8 @@ It shows a marked x=500 line on the lower road and lets the owner record clear
 or uncertain left-to-right vehicle crossings, then explicitly download JSON.
 The line and question were chosen **after** an aggregate pipeline smoke run;
 this is an exploratory development review, not a prospective or untouched test.
-No review marks have been submitted or audited yet. A held-out outcome claim also requires a different
+The owner has now submitted marks; the [rain review audit](HVSD_RAIN_REVIEW.md)
+records the deduplicated events and first unchanged-pipeline comparison. A held-out outcome claim also requires a different
 uninspected clip/site; three short HVSD excerpts from unclear camera provenance
 do not establish target-domain generalization.
 

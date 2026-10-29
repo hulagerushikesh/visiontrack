@@ -20,7 +20,10 @@ The owner cannot record a private traffic clip; public publisher-hosted footage
 is the active path. The [HVSD local feasibility check](PUBLIC_TRAFFIC_VIDEO_FEASIBILITY.md)
 now verifies all three clip bytes and frame timelines and executes one
 unchanged rain-clip pipeline smoke run. Its lack of independent dense truth
-keeps outcome admission closed. No C++ port, default change, product accuracy claim, or public example image
+keeps outcome admission closed. An owner source-only event review now supplies
+five exploratory crossing marks for the rain clip, documented in the
+[rain review audit](HVSD_RAIN_REVIEW.md); those marks are not dense ID truth or
+an untouched outcome test. No C++ port, default change, product accuracy claim, or public example image
 follows from this screen.
 
 ## Source screen
@@ -58,6 +61,9 @@ redistribute, or use it as a benchmark.
 extracted MP4s passed byte correspondence. All decoded timestamps increase;
 the night stream header says 352 frames, but the decoder yields 351. The small
 rain clip completed an unchanged detector/tracker metadata-only smoke run.
+The owner later reviewed all frames and supplied five distinct crossing marks;
+the [bounded rain review](HVSD_RAIN_REVIEW.md) describes the first pipeline
+comparison and its limitations.
 Details and exact receipts are in
 [Public traffic video feasibility](PUBLIC_TRAFFIC_VIDEO_FEASIBILITY.md). This
 replaces the earlier "no video was extracted" status for this local check;
@@ -110,9 +116,10 @@ decision, not only a public benchmark.
 
 ## Next executable path
 
-- Use the admitted *source-only* HVSD clips for a small, predeclared
-  development annotation question; independent truth and task definition are
-  still missing. Do not convert the smoke-run outputs into accuracy metrics.
+- Continue the small HVSD rain *development* question using the owner's
+  source-only crossing marks, while adjudicating exact event timing and object
+  correspondence. Dense independent identity truth is still missing. Do not
+  convert this short inspected clip into a general accuracy claim.
   Investigate a bounded I24V camera/time subset if its official download route
   becomes accessible; its manually corrected GPS subset is recall-oriented,
   not complete per-object single-camera truth. GRAM remains an official

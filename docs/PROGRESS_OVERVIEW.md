@@ -64,8 +64,12 @@ explicit research/commercial data-use agreement and sparse corrected vehicle
 trajectories, but its official download endpoint rejected this machine;
 TrafficMOT has an author-hosted link without clear asset terms. UVH-26 is fixed-camera detection-only data, and one
 advertised dashcam corpus currently has no hosted data files. A private
-source-only rain review page is ready for the owner to mark lower-road crossings;
-no marks or independent event review are complete. This is source
+source-only rain review page yielded five distinct owner crossing marks from six
+downloads (one exact duplicate). The [rain review audit](HVSD_RAIN_REVIEW.md)
+reproduced the unchanged pipeline receipt and found one public-track crossing
+near the first mark, with no rule-defined public crossing near the other four.
+The owner attests a full 194-frame review; a second independent pass and exact
+event timing/object correspondence are still open. This is source
 triage, not a new benchmark or product validation. The Lab's browser import
 checks that a locally chosen report's displayed fingerprint matches its exact
 canonical contents before it can be used as report evidence; the UI now labels

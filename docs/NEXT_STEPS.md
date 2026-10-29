@@ -537,11 +537,21 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       explicit lower-road crossing line, `clear`/`uncertain` event marks and a
       local JSON download. The question was selected after the aggregate smoke
       run and is exploratory development work, not a prospective test.
-- [ ] Obtain and audit the owner's independent event marks, including uncertain
-      cases; only then decide whether this short clip supports a bounded
-      development comparison. Freeze detector, unit and rubric before comparing
-      tracker outcomes. Do not reuse the inspected rain clip as a pristine
-      held-out set or infer dense identity truth from event marks.
+- [x] Audit the owner's six source-only JSON downloads against the pinned rain
+      clip/line and deduplicate the repeated frame-57 mark. Five distinct clear
+      crossing marks remain. Reproduce the unchanged pipeline receipt and
+      compare one precisely defined adjacent-frame public-track crossing rule:
+      one model event near frame 27, none near the other four marks. See
+      [rain review](HVSD_RAIN_REVIEW.md). No accuracy or dense-ID claim follows.
+- [x] Obtain the owner's attestation that all 194 frames were reviewed and
+      inspect ±4-frame detector/public/tentative-track diagnostics around all
+      five marks. The frame-92 window has no retained near-line road-class
+      detection; frame 160 has repeated detector proposals but fragmented
+      tentative tracks. See [rain review](HVSD_RAIN_REVIEW.md).
+- [ ] Adjudicate exact crossing timing/class and object correspondence in the
+      four non-reported windows before naming a causal failure. Keep rain as
+      development data. A new, permitted, independent holdout is needed for
+      outcome claims.
 - [x] Run an [independent metric check](REAL_DATA_METRIC_CHECK.md) on all saved
       scored pairs; retain the discrepancies and three non-tie/history/fragmentation
       counterexamples. This is a completed diagnostic, not a metric-equivalence pass.
