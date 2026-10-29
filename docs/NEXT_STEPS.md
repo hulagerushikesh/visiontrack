@@ -533,10 +533,15 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       unchanged 194-frame rain detector/tracker smoke run. Add I24V and TrafficMOT
       to the rights/task screen (18 candidates total). None supplies an admitted
       complete dense outcome study here; no accuracy or continuity claim follows.
-- [ ] Predeclare one small HVSD development-only event/ID annotation question,
-      independently review the permitted source and uncertainty cases, then
-      freeze the detector, unit and rubric before comparing tracker behavior.
-      Do not reuse the inspected rain smoke clip as a pristine held-out set.
+- [x] Prepare a private source-only, frame-by-frame rain review page with an
+      explicit lower-road crossing line, `clear`/`uncertain` event marks and a
+      local JSON download. The question was selected after the aggregate smoke
+      run and is exploratory development work, not a prospective test.
+- [ ] Obtain and audit the owner's independent event marks, including uncertain
+      cases; only then decide whether this short clip supports a bounded
+      development comparison. Freeze detector, unit and rubric before comparing
+      tracker outcomes. Do not reuse the inspected rain clip as a pristine
+      held-out set or infer dense identity truth from event marks.
 - [x] Run an [independent metric check](REAL_DATA_METRIC_CHECK.md) on all saved
       scored pairs; retain the discrepancies and three non-tie/history/fragmentation
       counterexamples. This is a completed diagnostic, not a metric-equivalence pass.

@@ -63,7 +63,9 @@ independent truth these are pipeline observations, not accuracy. I24V has an
 explicit research/commercial data-use agreement and sparse corrected vehicle
 trajectories, but its official download endpoint rejected this machine;
 TrafficMOT has an author-hosted link without clear asset terms. UVH-26 is fixed-camera detection-only data, and one
-advertised dashcam corpus currently has no hosted data files. This is source
+advertised dashcam corpus currently has no hosted data files. A private
+source-only rain review page is ready for the owner to mark lower-road crossings;
+no marks or independent event review are complete. This is source
 triage, not a new benchmark or product validation. The Lab's browser import
 checks that a locally chosen report's displayed fingerprint matches its exact
 canonical contents before it can be used as report evidence; the UI now labels

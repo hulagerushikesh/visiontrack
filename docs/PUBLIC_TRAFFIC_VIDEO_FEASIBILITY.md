@@ -83,7 +83,14 @@ is reported). Freeze the exact decoded timestamps, vehicle class scope, line,
 detector and review rubric **before** inspecting comparative outcomes. Create
 independent human event/ID labels from the permitted source, retaining
 `uncertain` cases. An assistant-only visual guess is exploratory and cannot
-serve as independent truth. A held-out outcome claim also requires a different
+serve as independent truth. An owner-local, source-only frame review page has
+been prepared for the 194-frame rain clip at
+`../visiontrack-walkthrough/traffic-hvsd-v1/rain-review/index.html`.
+It shows a marked x=500 line on the lower road and lets the owner record clear
+or uncertain left-to-right vehicle crossings, then explicitly download JSON.
+The line and question were chosen **after** an aggregate pipeline smoke run;
+this is an exploratory development review, not a prospective or untouched test.
+No review marks have been submitted or audited yet. A held-out outcome claim also requires a different
 uninspected clip/site; three short HVSD excerpts from unclear camera provenance
 do not establish target-domain generalization.
 
