@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pytest
@@ -60,4 +61,59 @@ def test_audit_rejects_duplicate_ground_truth_id_in_one_frame(tmp_path: Path) ->
     with (root / "data" / "train_seq" / "gt" / "gt.txt").open("a", encoding="utf-8") as stream:
         stream.write("2,7,12,20,30,40,1,0,0.8\n")
     with pytest.raises(ValueError, match="duplicate GT frame/ID"):
+        audit(root, train, test, ["train_seq"])
+
+
+def _occlusion_fixture(root: Path) -> Path:
+    path = root / "data" / "train_seq" / "occlusion.json"
+    frames = [
+        {"frame_id": 1, "objects": [{"object_id": 7, "bbox": [10, 20, 30, 40],
+                                     "stopped": False, "occlusions": []}]},
+        {"frame_id": 2, "objects": [{"object_id": 7, "bbox": [11, 20, 30, 40],
+                                     "stopped": True, "occlusions": []}]},
+    ]
+    path.write_text(json.dumps(frames), encoding="utf-8")
+    return path
+
+
+def test_audit_matches_occlusion_objects_to_ground_truth(tmp_path: Path) -> None:
+    root, train, test = _fixture(tmp_path)
+    _occlusion_fixture(root)
+    row = audit(root, train, test, ["train_seq"])["sequences"][0]
+    assert row["occlusion_annotation_present"] is True
+    assert row["occlusion_gt_structure_matches"] is True
+    assert row["occlusion_frames"] == 2
+    assert row["occlusion_objects"] == 2
+    assert row["stopped_true_rows"] == 1
+
+
+def test_audit_rejects_occlusion_box_or_frame_mismatch(tmp_path: Path) -> None:
+    root, train, test = _fixture(tmp_path)
+    path = _occlusion_fixture(root)
+    frames = json.loads(path.read_text(encoding="utf-8"))
+    frames[1]["objects"][0]["bbox"][0] = 12
+    path.write_text(json.dumps(frames), encoding="utf-8")
+    with pytest.raises(ValueError, match="occlusion/GT box mismatch"):
+        audit(root, train, test, ["train_seq"])
+    frames[1]["objects"][0]["bbox"][0] = 11
+    frames[1]["frame_id"] = 3
+    path.write_text(json.dumps(frames), encoding="utf-8")
+    with pytest.raises(ValueError, match="occlusion frame order mismatch"):
+        audit(root, train, test, ["train_seq"])
+
+
+def test_audit_rejects_self_occlusion_and_duplicate_object(tmp_path: Path) -> None:
+    root, train, test = _fixture(tmp_path)
+    path = _occlusion_fixture(root)
+    frames = json.loads(path.read_text(encoding="utf-8"))
+    frames[0]["objects"][0]["occlusions"] = [
+        {"occluder_id": 7, "occlusion_bbox": [10, 20, 2, 2], "area": 4},
+    ]
+    path.write_text(json.dumps(frames), encoding="utf-8")
+    with pytest.raises(ValueError, match="invalid occluder reference"):
+        audit(root, train, test, ["train_seq"])
+    frames[0]["objects"][0]["occlusions"] = []
+    frames[0]["objects"].append(dict(frames[0]["objects"][0]))
+    path.write_text(json.dumps(frames), encoding="utf-8")
+    with pytest.raises(ValueError, match="occlusion/GT object IDs mismatch"):
         audit(root, train, test, ["train_seq"])

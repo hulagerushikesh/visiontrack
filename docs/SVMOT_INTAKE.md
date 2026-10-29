@@ -79,3 +79,34 @@ This evidence narrows the next check: independently review a bounded
 development label span for ID and occlusion quality, then use a separately
 pinned real detector stream if SVMOT is admitted. Keep the publisher test
 scenes unopened until a protocol is frozen. The current `hold` remains.
+
+## Temporal and occlusion check, 2026-10-29
+
+The owner-local byte-range probe then read frames 300, 600 and the final frame
+for each of the same four training sequences, plus their `roi_mask.png` and
+`occlusion.json`. Each of the 16 selected JPEG members (including the earlier
+first frames), four masks and four occlusion files passed ZIP-member CRC checks.
+The two bounded range passes fetched about 15.6 MB combined; they did not
+download or verify the complete archive. The four views appear camera-fixed
+across these widely separated samples; continuous frame-to-frame stability,
+timestamps and site provenance are not established. No test-scene member was
+opened.
+
+The extended [source audit](../experiments/svmot_source_audit.py) now checks
+that every occlusion record is in frame order, refers to the same GT object ID
+and box, names an occluder present in that frame, and has valid within-object
+occlusion geometry. All **30,762** records and **25,607** occlusion links in
+these four development sequences passed these structural checks. This verifies
+internal consistency, **not** that an identity or occlusion label is physically
+correct. Three owner-local GT overlays at selected frames showed the labeled
+boxes on vehicles, but this is a spot check only. The masks delimit a road
+region; all 30,762 sampled GT box centers fall inside their respective mask.
+Visible vehicles outside the mask must not be called missing labels. Completeness
+inside the mask and ID preservation through particular occlusions still need an
+independent bounded review.
+
+This source is better aligned with a **stationary-vehicle/occlusion continuity**
+question than with the current directed-flow counting question. An ROI-limited
+MOT label set does not supply reviewed crossing events, flows, or customer
+decision truth. Keep SVMOT on hold for comparative tracking and product claims;
+do not use its GT-mirroring `det.txt` as the shared detector input.

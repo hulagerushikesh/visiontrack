@@ -573,6 +573,11 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       training sequences have 30,762 exact GT/detection box matches and three
       sequence-name mismatches. This is source triage, not a tracker result;
       test scenes remain unopened and dataset admission remains on hold.
+- [x] Extend the SVMOT development audit to verify occlusion/GT cross-references
+      and inspect separated camera frames and ROI masks. The four selected
+      sequences have 30,762 structurally matching occlusion records and 25,607
+      valid occluder links; visual spot checks and ROI coverage do not establish
+      independent label truth or flow-count utility. See [bounded intake](SVMOT_INTAKE.md).
 - [ ] Admit a separate permitted, independently annotated traffic source only
       after camera provenance, exact asset rights, label quality, integrity and
       a scene-disjoint frozen protocol pass. Resolve the remaining object-level
