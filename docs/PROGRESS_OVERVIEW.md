@@ -1,6 +1,6 @@
 # VisionTrack and VisionTrack C++ — progress overview
 
-Snapshot: **2026-10-28**. This is a summary of the canonical
+Snapshot: **2026-10-29**. This is a summary of the canonical
 [VisionTrack checklist](NEXT_STEPS.md), [status](STATUS.md) and
 [C++ checklist](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/NEXT_STEPS.md).
 Completed implementation is not the same as validated research or product demand.
@@ -41,8 +41,8 @@ audit. It remains offline; there is no accepted warning feature or real-world
 utility claim.
 
 **Next evidence gate:** the [fixed-camera traffic source screen](REAL_TRAFFIC_EVIDENCE_GATE.md)
-checked sixteen public candidates against rights, dense labels, camera/task fit
-and access. None is admitted yet: GRAM-RTM Urban1 is the first research
+checked eighteen public candidates against rights, dense labels, camera/task fit
+and access. None is admitted to an outcome study yet: GRAM-RTM Urban1 is a research
 candidate, but official kit access still returns HTTP 403 here and its image
 host requires sign-in. UTUAV v2 is a new B/C MOT-label access lead but requires
 researcher contact and credentials; its oblique A set is unmaintained. MEVDT's
@@ -54,7 +54,15 @@ CityFlowV2 only labels multi-camera vehicles and carries restrictive research-us
 terms. UA-DETRAC's official page does not specify asset-level terms.
 Publisher-hosted HVSD archives were privately
 inspected; the supplied videos and sparse images contain no dense independent
-tracking-label files. UVH-26 is fixed-camera detection-only data, and one
+tracking-label files. The owner cannot make a private traffic recording, so
+[public-footage feasibility](PUBLIC_TRAFFIC_VIDEO_FEASIBILITY.md) is now active:
+all three HVSD clip bytes and decoded timestamps passed source checks; the night
+header says 352 frames versus 351 decoded. An unchanged YOLOX nano/ByteTracker
+rain smoke run processed 194 frames and retained 310 detector boxes, but without
+independent truth these are pipeline observations, not accuracy. I24V has an
+explicit research/commercial data-use agreement and sparse corrected vehicle
+trajectories, but its official download endpoint rejected this machine;
+TrafficMOT has an author-hosted link without clear asset terms. UVH-26 is fixed-camera detection-only data, and one
 advertised dashcam corpus currently has no hosted data files. This is source
 triage, not a new benchmark or product validation. The Lab's browser import
 checks that a locally chosen report's displayed fingerprint matches its exact
@@ -203,10 +211,10 @@ See the [recorded feasibility decision](CROSSING_BAND_COUNTER.md#feasibility-dec
 
 ### Research and real data
 
-- [ ] Complete a small permitted recording rehearsal when the owner is ready.
-  Obtain adult consent before recording people, keep footage private/outside Git,
-  and establish independent review. A two-person pilot is a workflow rehearsal,
-  not enough evidence to certify accuracy.
+- [ ] Optional indoor recording rehearsal only if the owner later reopens it.
+  Traffic footage will come from rights-reviewed public sources because the
+  owner cannot privately record road users. An indoor two-person pilot would be
+  a workflow rehearsal, not enough evidence to certify accuracy.
 - [ ] Secure representative rights-reviewed evidence and freeze its labels,
   detector, session/identity splits, controls and evaluation before claims.
 - [ ] For same-session MEVID use, establish original recording/time provenance
@@ -276,7 +284,10 @@ argue against shipping v1 as an ID-continuity alert. The next evidence gate is
 a prospective, representative check of a specific engineer decision, warning
 burden and missed problems, with permitted observations and independent scene/
 reference review. The [traffic evidence admission checklist](REAL_TRAFFIC_EVIDENCE_GATE.md)
-records the first source-level blockers before any new download or run. Do not
+records the source-level blockers. The [HVSD public-footage feasibility screen](PUBLIC_TRAFFIC_VIDEO_FEASIBILITY.md)
+now supplies verified clip bytes, exact frame timelines and one unchanged
+pipeline run. Its first bounded event/ID annotation question and independent
+review are the next gate; do not turn output counts into accuracy. Do not
 reinterpret the already studied MOT17 case as an
 untouched test. No owner action is needed to maintain the research record;
 collecting a consented pilot or practitioner response requires owner coordination.

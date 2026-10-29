@@ -526,6 +526,17 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       metadata lacks dataset rights; eTraM's modalities and license statements
       need resolution; FLUID's derived tracks are not independent truth. This
       selects an access lead, not an admitted benchmark or a tracker result.
+- [x] Replace the owner-recorded traffic-footage dependency with a
+      [public-source feasibility path](PUBLIC_TRAFFIC_VIDEO_FEASIBILITY.md):
+      verify all three HVSD V1 publisher-hosted MP4 bytes and decoded timelines,
+      retain the night header/decoded-frame discrepancy, and reproduce an
+      unchanged 194-frame rain detector/tracker smoke run. Add I24V and TrafficMOT
+      to the rights/task screen (18 candidates total). None supplies an admitted
+      complete dense outcome study here; no accuracy or continuity claim follows.
+- [ ] Predeclare one small HVSD development-only event/ID annotation question,
+      independently review the permitted source and uncertainty cases, then
+      freeze the detector, unit and rubric before comparing tracker behavior.
+      Do not reuse the inspected rain smoke clip as a pristine held-out set.
 - [x] Run an [independent metric check](REAL_DATA_METRIC_CHECK.md) on all saved
       scored pairs; retain the discrepancies and three non-tie/history/fragmentation
       counterexamples. This is a completed diagnostic, not a metric-equivalence pass.

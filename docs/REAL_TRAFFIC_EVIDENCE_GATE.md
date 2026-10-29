@@ -1,6 +1,6 @@
 # Real fixed-camera traffic evidence — admission decision
 
-Checked **2026-10-26–28**. This is a source and task-fit screen, **not** a legal
+Checked **2026-10-26–29**. This is a source and task-fit screen, **not** a legal
 opinion, a new tracking experiment, or evidence that
 VisionTrack works in traffic. The immediate research question is whether a
 local engineer can make a better review or configuration decision using a
@@ -16,7 +16,11 @@ fixed-traffic holdout. The two-adult indoor re-entry rehearsal is a different
 camera/domain/task; it cannot validate road-user flow counts. Keep the failed
 [box-gate intervention](BOX_GATE_FINDINGS.md) and the ineffective
 [continuity-warning triage rule](CONTINUITY_WARNING_MOT17_FINDINGS.md) offline.
-No C++ port, default change, product accuracy claim, or public example image
+The owner cannot record a private traffic clip; public publisher-hosted footage
+is the active path. The [HVSD local feasibility check](PUBLIC_TRAFFIC_VIDEO_FEASIBILITY.md)
+now verifies all three clip bytes and frame timelines and executes one
+unchanged rain-clip pipeline smoke run. Its lack of independent dense truth
+keeps outcome admission closed. No C++ port, default change, product accuracy claim, or public example image
 follows from this screen.
 
 ## Source screen
@@ -32,7 +36,9 @@ follows from this screen.
 | [RoundaboutHD](https://researchdata.bath.ac.uk/1574/) | Four fixed 4K cameras, labeled vehicle trajectories and a single-camera tracking subset. | **Hold on asset-level rights and practicality.** The archive is 8 GB; the catalog's `Software: MIT License` label does not by itself establish the scope for footage, frames or derived public visuals. No files were downloaded or annotations inspected. |
 | [Drive-Thru partial set](https://figshare.com/articles/dataset/Dataset_for_Multicamera_multitarget_tracking_on_Drive_Thru_Areas/29277770) | Figshare's public record and API state CC BY 4.0. | **Not suitable for this dense-tracking gate.** The public manifest lists only 124 dispersed JPEGs across three cameras and three `vehicle0` trajectory CSVs; it is explicitly a partial release. Those are not a complete independently adjudicated dense multi-object sequence or flow truth. No images were downloaded. |
 | [Khan/Kelly vehicle set](https://data.mendeley.com/datasets/5d8k5bkb93/1) | The publisher page states CC BY 4.0, seven videos and 24,700 annotated frames under varied conditions. | **Hold on task fit/provenance.** The page describes DarkLabel annotations and source clips from other Creative-Commons material, but the per-frame ID continuity, clip-level rights chain, fixed-camera metadata and exact file structure were not verified. |
-| [Highway Vehicle Surveillance Dataset V1](https://data.mendeley.com/datasets/zdgmdg7p25/1) | The publisher page states CC BY 4.0 and offers day, night, and rainy highway footage. | **Not suitable as supplied for this dense-tracking gate.** The original archive and four companion ZIPs were downloaded to owner-local storage outside Git on 2026-10-27. The video ZIP contains three MP4s; day/night/rainy experiment ZIPs contain 12/10/12 sparse PNGs; the article ZIP contains TeX and illustration assets. Archive member lists contain no independent dense frame-level IDs or boxes. The first four ZIP SHA-256 digests match the publisher's file information. No image/video was extracted, republished, or used for a tracker score. The page's processed-results description does not substitute for inspectable ground truth. |
+| [Highway Vehicle Surveillance Dataset V1](https://data.mendeley.com/datasets/zdgmdg7p25/1) | The publisher page states CC BY 4.0 and offers day, night, and rainy highway footage. | **Source-only feasibility passed; dense-tracking outcome gate held.** The original archive and four companion ZIPs were downloaded to owner-local storage outside Git on 2026-10-27. The video ZIP contains three MP4s; day/night/rainy experiment ZIPs contain 12/10/12 sparse PNGs; the article ZIP contains TeX and illustration assets. Archive member lists contain no independent dense frame-level IDs or boxes. The first four ZIP SHA-256 digests match the publisher's file information. On 2026-10-29 all three MP4s were extracted privately, byte-checked and decoded; the rain clip had one unchanged metadata-only pipeline smoke run. No pixels were republished or tracker accuracy score computed. The page's processed-results description does not substitute for inspectable ground truth. |
+| [I-24 MOTION I24V](https://github.com/I24-MOTION/i24-video-dataset-utils#data-use-agreement) | Its official data-use agreement allows academic and commercial use and derivative products, with attribution for published academic work, while prohibiting individual re-identification. Fixed roadside cameras, supplied detections and manually corrected GPS trajectories offer a relevant but different task. | **Hold on access, scale and truth coverage.** The official documentation says 234 hours from 234 cameras, but only 270 vehicle passes have manually corrected GPS trajectories; this is not complete dense box/ID truth. The linked publisher download endpoint returned a request rejection here on 2026-10-29. No dataset files were downloaded. Select one camera/time subset and a recall-oriented question only after access and exact terms are rechecked. The code repository's MIT license is separate from the dataset agreement. |
+| [TrafficMOT](https://github.com/lihaoliu-cambridge/trafficmot) | The authors' repository links a fixed-CCTV traffic tracking dataset and paper. | **Hold on media terms and asset inventory.** The small public repository links a Google Drive dataset but does not display an asset license or a verifiable per-file manifest. No download, mirror or inference of permission from the repository's public status. |
 | [UVH-26, IISc AIM](https://huggingface.co/datasets/iisc-aim/UVH-26) | An official CC BY 4.0 release of fixed Bengaluru traffic-camera images with two consensus box-label sets. | **Detection data, not tracking truth.** Its documented COCO annotations have image IDs, class IDs, and boxes but no temporal object IDs; 26,646 frames were sampled from about 2,800 cameras. Useful to consider separately for a future detector-domain study, not as a dense single-camera tracking or flow-count reference. Its 90 GB image set was not downloaded. |
 | [Traffic Surveillance Video Corpus](https://huggingface.co/datasets/thundarstrom/traffic-surveillance-video-corpus) | Its maintainer's card advertises continuous drives and CVAT track annotations under CC BY 4.0. | **Not an available fixed-camera source.** The card describes dashcam drives, not fixed surveillance views, and the host's current file inventory says the dataset is empty (2.34 KB card only). No media or annotations were downloaded. Do not infer data availability from the description alone. |
 | [UTUAV urban traffic v2](https://videodatasets.org/UTUAV/index.html), B/C | The current publisher page documents per-frame `track_id` and MOT-format labels, including stationary vehicles. Its `SequentialGap300` split keeps the evaluation segment later in the same sequence, with 300 dropped frames between partitions. B/C are near-overhead UAV views. | **Best new access lead, not admitted.** The publisher limits use to research and requests contact with identity, institution and purpose; the 17.1 GB image download needs credentials, and the page also says to contact them for tracking IDs. Do not take the annotation link as independent access permission. Confirm terms for VisionTrack's private research, derived metrics and public aggregate findings, then check exact label/image versions and per-frame completeness. The oblique roadside-like A set is explicitly no longer maintained; v1 is historical and may be inaccurate. B/C UAV views are not automatically representative of a mounted angled traffic camera. No contact or file intake was made. |
@@ -44,7 +50,18 @@ These are **source observations**, not a ranking of tracker performance or a
 claim that other datasets are unusable. Terms can change; repeat this check at
 the exact version and file level before handling media. A public webpage, an
 open repository, and a code license are not interchangeable permission for
-video, faces, plates, annotations, publication, or commercial use.
+video, faces, plates, annotations, publication, or commercial use. A YouTube
+watch page is a way to view a clip, not an automatic grant to copy, annotate,
+redistribute, or use it as a benchmark.
+
+**2026-10-29 HVSD update:** the original `Dataset.zip` and three locally
+extracted MP4s passed byte correspondence. All decoded timestamps increase;
+the night stream header says 352 frames, but the decoder yields 351. The small
+rain clip completed an unchanged detector/tracker metadata-only smoke run.
+Details and exact receipts are in
+[Public traffic video feasibility](PUBLIC_TRAFFIC_VIDEO_FEASIBILITY.md). This
+replaces the earlier "no video was extracted" status for this local check;
+there is still no independent dense GT or outcome score.
 
 For the HVSD intake, publisher-listed and locally matched SHA-256 receipts were
 `Dataset.zip` `e32476f77547bf3498835e74b78317794ab1ba78f78023b647f2d02f9a89e9c0`,
@@ -93,23 +110,22 @@ decision, not only a public benchmark.
 
 ## Next executable path
 
-- Resolve official GRAM kit/image access and inspect its rights/file schema
-  **read-only**. The strongest newly identified alternative is UTUAV v2's B/C
-  MOT labels, but the publisher requires researcher contact before access;
-  the owner must decide whether to make that request. Its oblique A set is
-  unmaintained and cannot be presumed suitable. Do not bypass an access
-  restriction or use a mirror. AI City
-  2021 is a possible count-only question, not an ID/trajectory validation
-  shortcut; CityFlowV2's annotated subset is not complete single-camera truth.
+- Use the admitted *source-only* HVSD clips for a small, predeclared
+  development annotation question; independent truth and task definition are
+  still missing. Do not convert the smoke-run outputs into accuracy metrics.
+  Investigate a bounded I24V camera/time subset if its official download route
+  becomes accessible; its manually corrected GPS subset is recall-oriented,
+  not complete per-object single-camera truth. GRAM remains an official
+  research candidate but its kit/image hosts are blocked here. UTUAV v2 B/C
+  requires publisher contact and credentials; do not bypass that gate.
 - When one candidate passes rights and integrity, make a source inventory and
   a small *development-only* annotation audit. Record any ambiguity before
   selecting a tracking variant.
 - Separately ask one relevant engineer to name the costly decision, existing
   evidence workflow and acceptable review burden **before** demonstrating a
   proposed warning. Outreach or data transfer needs a fresh owner decision.
-- Keep the two-person consented indoor rehearsal as an optional pipeline test
-  under its own [recording guide](IDENTITY_CONTINUITY_RECORDING_DAY.md). It is
-  neither a traffic benchmark nor an independent-person holdout.
+- The earlier two-person indoor rehearsal is optional and inactive at the
+  owner's request. It is neither needed for traffic work nor a traffic benchmark.
 
 This gate prevents more speculative tracker code while identifying exactly what
 new evidence would justify implementation. VisionTrack C++ remains at the
