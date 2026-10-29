@@ -548,10 +548,26 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       five marks. The frame-92 window has no retained near-line road-class
       detection; frame 160 has repeated detector proposals but fragmented
       tentative tracks. See [rain review](HVSD_RAIN_REVIEW.md).
-- [ ] Adjudicate exact crossing timing/class and object correspondence in the
-      four non-reported windows before naming a causal failure. Keep rain as
-      development data. A new, permitted, independent holdout is needed for
-      outcome claims.
+- [x] Inspect source frames around the four non-reported rain marks and compare
+      them with frozen detector/public/tentative traces. Record approximate
+      crossing timing, the frame-160 car/van ambiguity, and the stage of each
+      visible gap in [the bounded diagnosis](HVSD_RAIN_REVIEW.md). This is an
+      AI-assisted second look, not independent dense truth or causal proof.
+- [x] Trace tentative association gates on the pinned rain replay without
+      changing tracker output. At frame 162 a near-line candidate passes IoU
+      but fails the Kalman distance gate; record the exact values and retained
+      receipt in [the bounded diagnosis](HVSD_RAIN_REVIEW.md). Do not treat the
+      candidate pairing as verified physical identity or tune defaults on it.
+- [x] Recheck SVMOT's publisher metadata: its record API supplies CC BY-NC 4.0
+      despite a blank rendered Rights field. Verify the five small release
+      files and the 21/9 scene-disjoint split in a [metadata-only intake](SVMOT_INTAKE.md).
+      Keep it as a non-commercial research candidate; no archive or test labels
+      were opened.
+- [ ] Admit a separate permitted, independently annotated traffic source only
+      after camera provenance, exact asset rights, label quality, integrity and
+      a scene-disjoint frozen protocol pass. Resolve the remaining object-level
+      and association-gate questions there, without tuning on the inspected
+      rain clip or calling it a holdout.
 - [x] Run an [independent metric check](REAL_DATA_METRIC_CHECK.md) on all saved
       scored pairs; retain the discrepancies and three non-tie/history/fragmentation
       counterexamples. This is a completed diagnostic, not a metric-equivalence pass.

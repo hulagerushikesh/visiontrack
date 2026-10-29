@@ -51,7 +51,11 @@ and rights are not explicit in DOI metadata. eTraM uses event data and has
 conflicting license statements; FLUID's derived tracks are not independent
 tracking truth. AI City 2021 has relevant counts but not released dense ID truth;
 CityFlowV2 only labels multi-camera vehicles and carries restrictive research-use
-terms. UA-DETRAC's official page does not specify asset-level terms.
+terms. UA-DETRAC's official page does not specify asset-level terms. SVMOT's
+publisher API resolves its previously unclear metadata license to CC BY-NC 4.0,
+and its five small files verify a 21/9 scene-disjoint split. The large archive
+and annotation quality remain unchecked; it is not product-use evidence. See
+the [metadata-only intake](SVMOT_INTAKE.md).
 Publisher-hosted HVSD archives were privately
 inspected; the supplied videos and sparse images contain no dense independent
 tracking-label files. The owner cannot make a private traffic recording, so
@@ -68,8 +72,13 @@ source-only rain review page yielded five distinct owner crossing marks from six
 downloads (one exact duplicate). The [rain review audit](HVSD_RAIN_REVIEW.md)
 reproduced the unchanged pipeline receipt and found one public-track crossing
 near the first mark, with no rule-defined public crossing near the other four.
-The owner attests a full 194-frame review; a second independent pass and exact
-event timing/object correspondence are still open. This is source
+The owner attests a full 194-frame review. A focused AI-assisted second look at
+the four unmatched source windows found one near-line proposal gap, one
+threshold/lifecycle gap, one detector-stage gap, and one tentative-track
+fragmentation gap. A targeted trace shows the frame-162 tentative candidate
+passes IoU but fails the Kalman distance gate, with the unchanged public-output
+receipt. Exact physical object correspondence, the effect of a gate change and an
+independent human pass are still open. This is source
 triage, not a new benchmark or product validation. The Lab's browser import
 checks that a locally chosen report's displayed fingerprint matches its exact
 canonical contents before it can be used as report evidence; the UI now labels
