@@ -1,19 +1,30 @@
 # A five-minute VisionTrack demonstration
 
-Prepared **2026-10-23** using the existing deterministic `lab-demo` workflow.
+Updated **2026-10-30** using the deterministic `lab-demo --with-initiation` workflow.
 This is a **synthetic workflow demonstration**, not a real-camera benchmark,
 accepted tracker change or completed usability study. No footage is needed.
 
 ## Before starting
 
-The prepared local bundle is outside both repositories, under
-`visiontrack-walkthrough/showcase-2026-10-23/`, in experiment directory
-`b71944878b44b25d2f84f263c52a6670c1d93febde9177252bf50655c8270e72`.
-Its `report/index.html` opens without installation; `report/report.json` can be
-selected using **Import report.json** at
-[the Lab](https://visiontrack.hulage.in/lab). Local file links are supplied in
-the chat; the public site does not host this bundle. Importing it reads a local
-file in the browser, not an upload of footage. No camera or email action is needed.
+From the current source checkout, use a new output folder:
+
+```bash
+python -m pip install -e '.[lab]'
+visiontrack lab-demo ./lab-showcase --with-initiation --write
+```
+
+Omit `--write` to preview the output paths. The new option is not in the
+published 0.3.0 wheel yet. Open `lab-showcase/try-in-browser` in your computer's
+file manager. Its three files are `report.json`, `initiation-trace.json` and
+`START_HERE.txt`. The full Lab bundle is in the adjacent fingerprint-named
+directory; the public website does not host it. Files are read into browser
+tab memory, without upload, camera access or a human acceptance decision.
+
+At [the Lab](https://visiontrack.hulage.in/lab), select **Import report.json**
+and choose that folder's report. Follow **Inspect track initiation** near the
+report heading, then **Import initiation trace** and select that folder's trace.
+If the trace controls are unavailable, use the current local app or wait for
+the matching website deployment; deployment is not verified by preparing files.
 
 ## 1. Explain the problem — 30 seconds
 
@@ -24,11 +35,23 @@ Say explicitly: this example contains generated objects, not recorded people.
 The intended first audience is engineers/researchers evaluating tracking
 configurations. Whether this saves them useful work is still to be tested.
 
-## 2. Inspect one mistake — 60 seconds
+## 2. Follow a detection into public output — 60 seconds
 
-In the Lab, find **Explore tracking mistakes**. Select **Inspect** on
-**bytetrack / Misses at frame 0**. In the offline HTML, find that event in the
-failure table instead; it does not have the React screen's interactive controls.
+Use **Next** to compare frames 0, 1 and 2 in the initiation timeline:
+
+| Frame | Internal state of ID 1 | Public output |
+| --- | --- | --- |
+| 0 | Born tentative, one hit | None |
+| 1 | Tentative, two hits | None |
+| 2 | Confirmed, three hits | ID 1 |
+
+The three columns separate proposals, internal tracks and public output.
+“A proposal can create an internal track without producing a public box yet.
+Confirmation does not add boxes to earlier frames.” This explains lifecycle
+state, not object truth or which association gate rejected a pair.
+
+Optionally find **Explore tracking mistakes** and inspect **bytetrack / Misses
+at frame 0**. A report miss does not by itself explain its cause:
 
 The selected event concerns reference object **4** at frame **0**. It has no
 matched public track at the report's IoU-0.5 matching threshold. That is what
@@ -58,49 +81,50 @@ Do not change the seed or select another example just to manufacture a winner.
 
 ## 4. Explain a separate, completed research trade-off — 60 seconds
 
-Open the [box-gate findings](BOX_GATE_FINDINGS.md). This is a **different
-synthetic experiment**, not extra results contained in the onboarding report.
+Open the [initiation-threshold findings](INITIATION_THRESHOLD_FINDINGS.md).
+This is a **different synthetic experiment**, not extra results contained in
+the onboarding report or a second configuration replay in this timeline.
 
-One concrete held-out solo example is enough to explain the issue:
-
-- The reference crossing is at frame **149.5**, inside `[120, 150)`.
-- Gate-off reports the crossing near **165.5654**, inside `[150, 180)`.
-- Event error improves **1 → 0**, but time-window count error worsens **1 → 2**.
-
-“It found the crossing, but put it in the wrong counting window. Improving one
-number was not enough.” The completed study rejected the gate-off intervention
-under its fixed joint requirements; defaults and C++ remain unchanged. These
-are toy scenes, not evidence of improvement or degradation in real traffic.
+“Lowering the birth threshold recovered some true crossings, but also let
+persistent false proposals confirm and create false counts. The change failed
+our no-harm requirement.” All 54 paired cells and 324 repeatability passes are
+retained, including 36 unchanged controls. Defaults and C++ remain unchanged.
+The useful result is a rejected unsafe trade-off on these toy inputs, not
+evidence of an improvement or degradation in real traffic.
 
 ## 5. Close with a supported decision — 30 seconds
 
 “The onboarding scene does not choose a winner. The separate study tells us not
-to adopt that proposed fix. Our next evidence milestone is one permitted real
-clip with checked labels, not a claim that we have the world's best tracker.”
+to adopt that proposed fix. A traffic improvement still needs representative,
+permitted data and independently checked labels.”
 
 Leave **Human review** untouched for this beginner demo. No acceptance/rejection
 record is necessary. Report preparation does not complete the owner's review.
-Ask only: **“Can you explain one mistake and why a better number might still
-be a bad change? Which part was unclear?”** Record the answer, including confusion.
+Ask: **“Why can an internal track have no public box? What does this example
+not prove? Which step was unclear?”** Record the answer, including confusion.
+Do not complete another person's review on their behalf or treat these checks
+as independent physical-label validation.
 
 ## Reproduction and checks
 
-From a configured checkout, use a new output folder:
-
-```bash
-visiontrack lab-demo /absolute/path/to/new-demo --write
-```
-
-This preparation used code checkpoint `bf7f059`; the existing generator uses a
+The current generator uses a
 fixed fixture timestamp and `git_revision: null`, not a recording date or a
-runtime provenance receipt. The prepared report has ID
-`b8b8760c1c6616856577082bcb2e3e96cf3d3ee961ab3dc3c00f3b4dfb109f96`
+runtime provenance receipt. The freshly generated report has ID
+`d37d847100489f7cee7f3f083e9085f7bd2a4c0dbbf140d46f51409c62b2f3fc`
 and byte SHA-256
-`184445099c301764a2f87fcd7793973beb975898e3e88d632105836be6c35837`.
-Rebuilding in an independent temporary directory reproduced these report bytes.
-The Python bundle verifier and actual browser report parser both accepted it.
+`197efc039a63276934f4a2e5d059a26754743f621d0a7c2bea972eb21fadd01e`.
+Rebuilding independently with and without `--with-initiation` preserves every
+bundle byte produced by the current generator. Historical exports are not
+rewritten or assumed byte-identical to today's report. Both easy-to-find import files pass the actual Lab readers,
+including report/trace fingerprints and exact configuration/run binding.
+The trace records the executing Python/NumPy/package source provenance, so its
+fingerprint can change when that implementation/environment changes.
+Preview, existing-path refusal, trace-generation failure and publication rollback
+are exercised without external data, network activity or footage.
 There are 64 displayed failure records, no image artifacts and no chosen variant.
 
 Follow the [daily/weekly delivery plan](WEEKLY_DELIVERY_PLAN.md) next. This
-demonstration is ready locally; participant comprehension and external usefulness
-remain open checks. No new outreach or deployment is implied.
+demonstration is reproducibly prepared; participant comprehension, external
+usefulness and browser interaction/visual QA remain open checks. Browser QA
+was not performed because of the earlier access denial. No new outreach or
+deployment is implied.

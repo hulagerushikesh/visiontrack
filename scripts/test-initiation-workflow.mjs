@@ -178,6 +178,7 @@ const imported = render(Inspector, { report, enabled: true })
 assert.match(imported, /Import initiation trace/)
 assert.match(imported, /--end 10 --json/)
 assert.match(imported, /Nothing is uploaded/)
+assert.match(imported, /No second command is needed/)
 assert.equal(JSON.stringify(trace), before, "Viewing never mutates a trace")
 
 // Fresh producer integration (not just a retained vector), both presets and a
@@ -188,18 +189,27 @@ try {
 import hashlib,json,sys
 from pathlib import Path
 from visiontrack.lab import create_synthetic_lab,build_initiation_trace,canonical_json
-report_path=create_synthetic_lab(Path(sys.argv[1])/'demo')
+report_path=create_synthetic_lab(Path(sys.argv[1])/'demo',with_initiation=True)
 bundle=report_path.parent.parent
+browser=bundle.parent/'try-in-browser'
+assert (browser/'report.json').read_bytes()==report_path.read_bytes()
 snapshot=lambda:{str(p.relative_to(bundle)):hashlib.sha256(p.read_bytes()).hexdigest() for p in bundle.rglob('*') if p.is_file()}
 before=snapshot()
 traces=[canonical_json(build_initiation_trace(bundle,variant=v,start=s,end=e))+'\\n' for v,s,e in [('bytetrack',0,48),('single-stage',0,48),('bytetrack',7,9)]]
 assert before==snapshot()
-print(json.dumps({'report':report_path.read_text(),'traces':traces}))
+print(json.dumps({'report':(browser/'report.json').read_text(),'traces':traces,
+                 'prepared_trace':(browser/'initiation-trace.json').read_text()}))
 `, scratch], { encoding: "utf8", timeout: 60_000 })
   assert.equal(run.status, 0, run.stderr)
   const produced = JSON.parse(run.stdout)
   const result = await new ReportFileReader(parseReportModel).read(asFile(produced.report))
   assert.equal(result.kind, "ready", result.message)
   for (const exported of produced.traces) assert.equal((await reader.read(asFile(exported), result.report)).kind, "ready")
+  const prepared = await reader.read(asFile(produced.prepared_trace), result.report)
+  assert.equal(prepared.kind, "ready", prepared.message)
+  assert.equal(prepared.trace.frames[0].frame_index, 0)
+  assert.equal(prepared.trace.frames[9].frame_index, 9)
+  assert.deepEqual(prepared.trace.frames[0].public_track_ids, [])
+  assert.deepEqual(prepared.trace.frames[2].public_track_ids, [1])
 } finally { await rm(scratch, { recursive: true, force: true }) }
 console.log("Initiation workflow passed: Python vectors, real replay, exact config/run hashing, lineage, lifecycle, bounded reads, cancellation, and rendered controls.")

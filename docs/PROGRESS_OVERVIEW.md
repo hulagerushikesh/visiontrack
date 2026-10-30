@@ -23,8 +23,10 @@ parity and explains score admission, births, confirmation, recovery and deletion
 It exports a separate bounded numeric trace; historical reports remain compatible.
 The Lab now imports that separate trace after its matching report, checks
 fingerprint/configuration/run lineage, and shows an accessible frame timeline
-with separate detection, internal-state and public-output columns. Next product
-checkpoint: usability review and a small reproducible practitioner demonstration.
+with separate detection, internal-state and public-output columns. The guided
+demonstration now needs one opt-in command: matching import files and a short
+walkthrough are prepared together in `try-in-browser`, outside the unchanged
+bundle. Python-to-Lab import checks pass; practitioner comprehension remains open.
 A real traffic improvement claim still requires independently checked domain evidence.
 
 **Current review decision:** the owner delegated technical inspection because no
@@ -331,9 +333,16 @@ configuration/run verification, bounded reads, stale-selection cancellation and
 an accessible three-column frame timeline. The Python/browser workflow covers
 retained conformance vectors and fresh production exports. Visual/browser
 interaction QA remains unverified because browser access was previously denied.
-Next product checkpoint: review the two-file report/trace workflow for usability
-and prepare a small reproducible practitioner demonstration. No new owner
-recording, source hunt or outreach is required for that preparation.
+The [five-minute demonstration](SHOWCASE_DEMO.md) is now prepared by
+`lab-demo --with-initiation`: one `try-in-browser` folder holds the report, trace
+and guide. Preview writes nothing; failed trace preparation leaves no published
+output; repeated output names are refused. The original complete bundle bytes
+are unchanged, and fresh prepared imports pass the real Lab readers.
+This removes manual bundle-path substitution for the demo; it is a code-level
+workflow review, not a completed practitioner usability study. Next: check the
+installable delivery gap (these commands still require current source) before
+choosing a release candidate. Practitioner feedback and browser interaction QA
+remain open; no new recording, source hunt or outreach is required.
 
 For research, retain the [negative threshold finding](INITIATION_THRESHOLD_FINDINGS.md)
 and the rejected warning/gate interventions. Representative traffic evaluation

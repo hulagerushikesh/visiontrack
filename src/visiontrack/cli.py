@@ -573,6 +573,7 @@ def cmd_lab_decision_import(args: argparse.Namespace) -> int:
 def cmd_lab_demo(args: argparse.Namespace) -> int:
     """Preview or create one complete deterministic synthetic Lab bundle."""
     from .lab import create_synthetic_lab, plan_synthetic_lab
+    from .lab.demo import DEMO_BROWSER_DIRECTORY
 
     try:
         plan = plan_synthetic_lab(args.output)
@@ -594,19 +595,29 @@ def cmd_lab_demo(args: argparse.Namespace) -> int:
         f"{plan.ground_truth_count} ground-truth observations"
     )
     print(f"  variants: {', '.join(plan.variants)}")
+    if args.with_initiation:
+        browser_demo = plan.output_root / DEMO_BROWSER_DIRECTORY
+        print(f"  browser report: {browser_demo / 'report.json'}")
+        print(f"  initiation trace: {browser_demo / 'initiation-trace.json'}")
+        print(f"  walkthrough: {browser_demo / 'START_HERE.txt'}")
+        print("  diagnosis: bytetrack frames 0–9; synthetic, not evidence of accuracy")
     if not args.write:
         print("Preview only; nothing was written. Add --write to create this bundle.")
         return 0
 
     try:
-        report_path = create_synthetic_lab(args.output)
+        report_path = create_synthetic_lab(args.output, with_initiation=args.with_initiation)
     except (FileExistsError, OSError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
     print("Created complete synthetic Reliability Lab bundle")
     print(f"  report: {report_path}")
-    print("Next: import report.json at /lab, review the evidence, and draft a decision.")
-    print("Use visiontrack lab-decision with the bundle path to preview or record a choice.")
+    if args.with_initiation:
+        print(f"Next: open {browser_demo / 'START_HERE.txt'} for the two-file walkthrough.")
+        print("Import report.json at /lab first, then the initiation trace from that same folder.")
+    else:
+        print("Next: import report.json at /lab and explore the evidence. A decision is optional.")
+        print("Use visiontrack lab-decision with the bundle path to preview or record a choice.")
     return 0
 
 
@@ -912,6 +923,11 @@ def build_parser() -> argparse.ArgumentParser:
     p_lab_demo.add_argument(
         "output",
         help="new output root; its parent must exist and the path must not exist",
+    )
+    p_lab_demo.add_argument(
+        "--with-initiation",
+        action="store_true",
+        help="also prepare try-in-browser/report.json, initiation-trace.json and START_HERE.txt",
     )
     p_lab_demo.add_argument(
         "--write",

@@ -17,9 +17,15 @@ why a tracking change helps or hurts.
       bounded windows, original detection keys and preserved warm-up history.
 - [x] Optional local trace inspection in the Lab, verified against the
       active report/run/configuration, with a plain-language lifecycle timeline.
-- [ ] Next product checkpoint: review the two-file report/trace workflow for
-      usability and prepare a small reproducible practitioner demonstration.
-      No accuracy or physical-identity claim, new footage hunt or automatic outreach.
+- [x] Simplify demo preparation to one opt-in command: keep the matching report,
+      trace and five-minute guide together outside the unchanged sealed bundle.
+      Check preview/refusal/failure behavior and the actual Python-to-Lab imports.
+- [ ] Validate the walkthrough with a practitioner when available; preparation
+      and rendered-component checks do not establish usability or product demand.
+      Browser interaction QA is still unverified after the earlier access denial.
+- [ ] Check installable delivery for the source-only diagnostic and guided demo
+      before choosing a scoped release candidate. No automatic package release,
+      new footage hunt, public accuracy claim or outreach follows from this list.
 - [ ] Separate research gate: representative permitted traffic event/negative
       labels before accepting a detector+tracker change or proposing a C++ port.
 

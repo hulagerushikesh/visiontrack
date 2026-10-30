@@ -9,7 +9,9 @@ import pytest
 
 from visiontrack.cli import main as cli_main
 from visiontrack.lab import (
+    build_initiation_trace,
     build_report_model,
+    canonical_json,
     create_synthetic_lab,
     plan_synthetic_lab,
     read_failure_jsonl,
@@ -107,4 +109,87 @@ def test_synthetic_lab_publication_race_preserves_foreign_output(
         create_synthetic_lab(output)
 
     assert (output / "foreign.txt").read_text(encoding="utf-8") == "preserve me"
+    assert not any(tmp_path.glob(".visiontrack-lab-demo-*"))
+
+
+def test_initiation_demo_keeps_original_bundle_bytes_and_separate_imports(tmp_path: Path) -> None:
+    original = create_synthetic_lab(tmp_path / "original").parent.parent
+    report = create_synthetic_lab(tmp_path / "guided", with_initiation=True)
+    bundle = report.parent.parent
+    browser = bundle.parent / "try-in-browser"
+    def snapshot(folder):
+        return {
+            str(path.relative_to(folder)): path.read_bytes()
+            for path in folder.rglob("*") if path.is_file()
+        }
+    assert snapshot(original) == snapshot(bundle)
+    assert set(path.name for path in browser.iterdir()) == {
+        "report.json", "initiation-trace.json", "START_HERE.txt",
+    }
+    assert (browser / "report.json").read_bytes() == report.read_bytes()
+    trace = build_initiation_trace(bundle, variant="bytetrack", start=0, end=10)
+    assert (browser / "initiation-trace.json").read_text() == canonical_json(trace) + "\n"
+    assert trace["frames"][0]["public_track_ids"] == []
+    assert trace["frames"][1]["public_track_ids"] == []
+    assert trace["frames"][2]["public_track_ids"] == [1]
+    guide = (browser / "START_HERE.txt").read_text()
+    assert "Frame 0: ID 1: tentative, 1 hit. Public IDs: none." in guide
+    assert "Frame 2: ID 1: confirmed, 3 hits" in guide
+    assert "Skip Human review" in guide
+    assert "not improved accuracy" in guide
+    assert str(tmp_path) not in guide
+
+    another = create_synthetic_lab(tmp_path / "repeat", with_initiation=True)
+    assert snapshot(browser) == snapshot(another.parent.parent.parent / "try-in-browser")
+    assert not (original.parent / "try-in-browser").exists()
+
+
+def test_initiation_demo_cli_preview_lists_imports_without_writing(tmp_path, capsys) -> None:
+    output = tmp_path / "with spaces"
+    args = ["lab-demo", str(output), "--with-initiation"]
+    assert cli_main(args) == 0
+    preview = capsys.readouterr().out
+    for filename in ("report.json", "initiation-trace.json", "START_HERE.txt"):
+        assert str(output / "try-in-browser" / filename) in preview
+    assert "frames 0–9" in preview
+    assert not output.exists()
+    assert cli_main([*args, "--write"]) == 0
+    assert "same folder" in capsys.readouterr().out
+    before = (output / "try-in-browser/initiation-trace.json").read_bytes()
+    assert cli_main([*args, "--write"]) == 2
+    assert "refusing to replace" in capsys.readouterr().err
+    assert (output / "try-in-browser/initiation-trace.json").read_bytes() == before
+
+
+def test_initiation_demo_failure_does_not_publish_partial_output(tmp_path, monkeypatch) -> None:
+    def fail_trace(*args, **kwargs):
+        raise ValueError("injected replay mismatch")
+
+    from visiontrack.lab import initiation
+
+    monkeypatch.setattr(initiation, "build_initiation_trace", fail_trace)
+    output = tmp_path / "failed"
+    with pytest.raises(ValueError, match="replay mismatch"):
+        create_synthetic_lab(output, with_initiation=True)
+    assert not output.exists()
+    assert not any(tmp_path.glob(".visiontrack-lab-demo-*"))
+
+
+def test_initiation_demo_publication_failure_rolls_back_only_own_files(
+    tmp_path, monkeypatch,
+) -> None:
+    output = tmp_path / "failed-publication"
+    original_rename = Path.rename
+
+    def fail_browser_publication(path, target):
+        if path.name == "try-in-browser":
+            (output / "foreign.txt").write_text("preserve me")
+            raise OSError("injected publication failure")
+        return original_rename(path, target)
+
+    monkeypatch.setattr(Path, "rename", fail_browser_publication)
+    with pytest.raises(OSError, match="publication failure"):
+        create_synthetic_lab(output, with_initiation=True)
+    assert list(output.iterdir()) == [output / "foreign.txt"]
+    assert (output / "foreign.txt").read_text() == "preserve me"
     assert not any(tmp_path.glob(".visiontrack-lab-demo-*"))

@@ -94,13 +94,12 @@ def test_sample_explains_how_to_rehearse_full_lab_workflow() -> None:
 
     assert 'origin.kind === "sample" && (' in component
     assert 'aria-label="Try the complete Lab workflow"' in component
-    assert 'visiontrack lab-demo ./lab-onboarding --write' in component
+    assert 'visiontrack lab-demo ./lab-onboarding --with-initiation --write' in component
+    assert 'lab-onboarding/try-in-browser' in component
+    assert 'Skip Human review for this demo' in component
     assert 'python -m pip install -e ".[lab]"' in component
-    assert 'Select the exact <code>report.json</code> path printed by the command' in component
-    assert (
-        'Synthetic results are a workflow rehearsal, not evidence of real-world accuracy.'
-        in component
-    )
+    assert 'Select its <code>report.json</code> using the button above' in component
+    assert 'Synthetic results do not establish real-world accuracy.' in component
     assert '"lab-demo"' in cli
     assert "Developer setup (optional)" in component
     assert "project folder on your computer" in component

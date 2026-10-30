@@ -12,12 +12,26 @@ one synthetic demonstration. Use a new output folder name if you repeat it:
 
 ```bash
 python -m pip install -e '.[lab]'
-visiontrack lab-demo ./lab-initiation-demo --write
+visiontrack lab-demo ./lab-initiation-demo --with-initiation --write
 ```
 
-The command prints a **bundle** path ending in a long fingerprint and a separate
-**report** path. Replace `BUNDLE` below with the printed bundle path, not the
-report file or the GitHub repository URL:
+Open `lab-initiation-demo/try-in-browser` on your computer. It contains just
+`report.json`, `initiation-trace.json` and `START_HERE.txt`. Import the report at
+`/lab`, follow **Inspect track initiation**, then import the trace from that same
+folder. Use **Next** to compare frames 0, 1 and 2: ID 1 is internal/tentative
+before becoming public. No second command or human acceptance decision is needed.
+The [five-minute demonstration](SHOWCASE_DEMO.md) explains what this proves.
+
+`--with-initiation` is opt-in; omit `--write` to preview the exact output paths
+without creating files. The original complete bundle remains in the adjacent
+fingerprint-named directory. Its bytes are unchanged by the optional demo files;
+the easy-to-find report is a byte-identical copy, not another report format.
+Preparation is staged before publication, existing output paths are refused,
+and a failed trace does not publish a partial demonstration.
+
+For a terminal-only explanation, the command also prints a **bundle** path
+ending in a long fingerprint. Replace `BUNDLE` below with that path, not the
+report file, `try-in-browser` folder or GitHub repository URL:
 
 ```bash
 visiontrack lab-initiation BUNDLE --variant bytetrack --start 0 --end 10
@@ -25,9 +39,10 @@ visiontrack lab-initiation BUNDLE --variant bytetrack --start 0 --end 10
 
 This is a terminal diagnostic. It prints frame-by-frame explanations and writes
 nothing. You do not need to import anything into the website or make a human
-acceptance decision to use it. The source command is not yet in the published
-0.3.0 wheel. A completed local bundle using your own detection records works
-the same way; choose a variant declared in that bundle's manifest.
+acceptance decision to use it. The source command and `--with-initiation` option
+are not yet in the published 0.3.0 wheel. A completed local bundle using your
+own detection records works the same way; choose a variant declared in that
+bundle's manifest.
 
 ## Read the stages
 

@@ -151,6 +151,7 @@ visiontrack lab-decision-import BUNDLE ./Downloads/decision.json  # preview only
 visiontrack lab-decision-import BUNDLE ./Downloads/decision.json --write
 visiontrack lab-demo ./lab-onboarding                  # preview only
 visiontrack lab-demo ./lab-onboarding --write          # create verified bundle
+visiontrack lab-demo ./lab-guided --with-initiation --write  # source-only guided demo
 visiontrack lab-playback BUNDLE EVENT_ID --variant appearance  # metadata only
 visiontrack lab-playback BUNDLE EVENT_ID --variant appearance --json > playback.json
 visiontrack lab-initiation BUNDLE --variant bytetrack --start 0 --end 10
@@ -199,8 +200,15 @@ fixed synthetic comparison without writing, then `--write` creates a complete
 verified bundle and prints the `report.json` path to import at `/lab`. The
 output root must be new and is never reused or overwritten.
 
-After importing that report at `/lab`, review the metrics and failure events,
-preview a decision, and download `decision.json`. Save it into the original
+From the current source checkout, add `--with-initiation` to prepare
+`try-in-browser/report.json`, `initiation-trace.json` and `START_HERE.txt` together
+beside the unchanged complete bundle. Import the report, follow **Inspect track
+initiation**, then import that folder's trace to compare frames 0–2. No camera or
+acceptance decision is needed. This option is not in the published 0.3.0 wheel;
+see the [five-minute walkthrough](docs/SHOWCASE_DEMO.md).
+
+After importing a report at `/lab`, optionally review the metrics and failure events,
+preview a decision, and download `decision.json`. Save that choice into the original
 bundle using the bundle path printed by `lab-demo` and your download's full path:
 
 ```bash

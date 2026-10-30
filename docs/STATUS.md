@@ -16,8 +16,13 @@ and separate canonical JSON. A complete synthetic bundle check retained all
 separate trace against its matching report, verifies configuration/run lineage
 and exposes a three-column frame timeline. Python/browser vectors and fresh
 exports are checked; visual/browser interaction QA remains unverified because
-browser access was previously denied. Next: usability review and a reproducible
-demonstration; real-traffic acceptance remains a separate data/label gate. Defaults and C++ stay unchanged. The checkpoints below retain
+browser access was previously denied. The guided synthetic demonstration now
+has an opt-in `lab-demo --with-initiation` path: report, matching trace and a
+short guide are prepared in one `try-in-browser` folder, outside the unchanged
+bundle. Preview/refusal/failed-publication paths and actual Python-to-Lab imports
+are checked. Practitioner usability remains open. Next: inspect source-only
+installable delivery before choosing a release candidate; real-traffic acceptance
+remains a separate data/label gate. Defaults and C++ stay unchanged. The checkpoints below retain
 their historical scope.
 
 **Current checkpoint — 2026-10-26:** the owner delegated technical review because

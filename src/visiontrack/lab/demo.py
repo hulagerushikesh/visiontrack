@@ -10,7 +10,13 @@ from pathlib import Path
 from .. import __version__
 from ..detection.synthetic import SyntheticScene, SyntheticSceneConfig
 from .comparison import create_comparison_summary
-from .contracts import DetectionRecord, ExperimentManifest, GroundTruthRecord, SourceManifest
+from .contracts import (
+    DetectionRecord,
+    ExperimentManifest,
+    GroundTruthRecord,
+    SourceManifest,
+    canonical_json,
+)
 from .failures import calculate_failure_events
 from .metrics import calculate_bundle_metrics
 from .report import generate_local_report
@@ -25,6 +31,7 @@ DEMO_CREATED_AT = "2026-01-01T00:00:00Z"
 DEMO_SEED = 7
 DEMO_FRAMES = 48
 DEMO_OBJECTS = 4
+DEMO_BROWSER_DIRECTORY = "try-in-browser"
 
 
 @dataclass(frozen=True, slots=True)
@@ -155,8 +162,55 @@ def plan_synthetic_lab(output_root: str | Path) -> SyntheticLabPlan:
     )
 
 
-def create_synthetic_lab(output_root: str | Path) -> Path:
-    """Atomically create one complete deterministic onboarding bundle."""
+def _prepare_browser_demo(bundle: Path, destination: Path) -> None:
+    """Stage optional import files beside, never inside, the sealed bundle."""
+    from .initiation import build_initiation_trace
+
+    trace = build_initiation_trace(bundle, variant="bytetrack", start=0, end=10)
+    destination.mkdir()
+    shutil.copyfile(bundle / "report/report.json", destination / "report.json")
+    (destination / "initiation-trace.json").write_text(
+        canonical_json(trace) + "\n", encoding="utf-8"
+    )
+    observations = []
+    for frame in trace["frames"][:3]:
+        states = ", ".join(
+            f"ID {row['track_id']}: {row['state']}, "
+            f"{row['hits']} {'hit' if row['hits'] == 1 else 'hits'}"
+            for row in frame["tracks"]
+        ) or "no internal tracks"
+        public = ", ".join(str(value) for value in frame["public_track_ids"]) or "none"
+        observations.append(f"  Frame {frame['frame_index']}: {states}. Public IDs: {public}.")
+    guide = (
+        "VisionTrack: a five-minute synthetic initiation demonstration\n\n"
+        "These are generated objects, not footage or recorded people. No camera is needed.\n"
+        "1. Open https://visiontrack.hulage.in/lab (or your local /lab development page).\n"
+        "2. Click Import report.json and select report.json from this folder.\n"
+        "3. Follow Inspect track initiation near the report heading.\n"
+        "4. Click Import initiation trace and select initiation-trace.json from this folder.\n"
+        "5. Use Next to compare frames 0, 1 and 2 in the three columns.\n\n"
+        "Expected observations from this generated trace:\n"
+        + "\n".join(observations)
+        + "\n\nA tentative track is internal: it does not yet emit a public box.\n"
+        "Confirmation does not add boxes retrospectively to the earlier frames.\n"
+        "A confident proposal or confirmed ID does not prove a real object or correct identity.\n"
+        "This demonstrates saved-run diagnosis, not improved accuracy or a better tracker.\n\n"
+        "Optional: explore the comparison and failure list. This onboarding comparison is a tie.\n"
+        "Skip Human review: no acceptance decision is needed for this walkthrough.\n"
+        "The browser reads your selected files into tab memory; it does not upload them.\n"
+        "Reloading clears the imports. Import both files again to repeat the demonstration.\n"
+        "If the trace controls are missing, use the current local app or wait for deployment.\n\n"
+        "For feedback: explain why an internal track might have no public box, and name\n"
+        "one thing this example cannot prove. Note any confusing step; do not mark it passed\n"
+        "on someone else's behalf. Preparation alone is not a usability study.\n\n"
+        "The adjacent fingerprint-named directory contains the original complete Lab bundle.\n"
+        "This folder holds only a byte-identical report copy, a separate trace and this guide.\n"
+    )
+    (destination / "START_HERE.txt").write_text(guide, encoding="utf-8")
+
+
+def create_synthetic_lab(output_root: str | Path, *, with_initiation: bool = False) -> Path:
+    """Stage then publish a new bundle, optionally with separate browser-demo files."""
     plan = plan_synthetic_lab(output_root)
     source, experiment, detections, ground_truth = _records()
     parent = plan.output_root.parent
@@ -174,15 +228,26 @@ def create_synthetic_lab(output_root: str | Path) -> Path:
         calculate_failure_events(bundle)
         create_comparison_summary(bundle)
         generate_local_report(bundle)
+        staged_paths = [bundle]
+        if with_initiation:
+            browser_demo = staging / DEMO_BROWSER_DIRECTORY
+            _prepare_browser_demo(bundle, browser_demo)
+            staged_paths.append(browser_demo)
         try:
             plan.output_root.mkdir()
         except FileExistsError:
             raise FileExistsError(
                 f"refusing to replace existing output path: {plan.output_root}"
             ) from None
+        published: list[Path] = []
         try:
-            bundle.rename(plan.bundle_path)
+            for staged in staged_paths:
+                destination = plan.output_root / staged.name
+                staged.rename(destination)
+                published.append(destination)
         except BaseException:
+            for destination in reversed(published):
+                shutil.rmtree(destination)
             try:
                 plan.output_root.rmdir()
             except OSError:
