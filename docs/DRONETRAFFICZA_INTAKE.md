@@ -17,7 +17,7 @@ are kept outside Git at `../visiontrack-walkthrough/dronetrafficza-intake-v1/`.
 The two videos (1,218,331,523 and 2,498,751,479 bytes in the manifest) were
 not downloaded or decoded. The publisher's script was read, not executed.
 
-The [source audit](../experiments/dronetrafficza_source_audit.py) verifies
+The [source audit](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/dronetrafficza_source_audit.py) verifies
 the exact count-file hashes and records:
 
 | Check | Finding |

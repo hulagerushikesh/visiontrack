@@ -131,7 +131,7 @@ scores. A missing answer leaves the source at `hold`:
    the unopened test site or recycle an inspected case as holdout.
 
 For MOT-format sources that supply both GT and detections, run the
-[`numeric geometry screen`](../experiments/mot_detection_provenance.py) on an
+[`numeric geometry screen`](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/mot_detection_provenance.py) on an
 explicit development-only pair before treating the supplied detections as a
 separate detector. It pins file hashes and counts exact frame/box geometry
 with duplicate multiplicity. An all-matching result requires provenance

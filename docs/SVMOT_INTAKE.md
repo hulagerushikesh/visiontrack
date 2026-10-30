@@ -63,7 +63,7 @@ time. These files and the range probe remain owner-local, outside Git. The
 selected ZIP members passed their CRC checks; this does **not** verify the full
 archive SHA-256 or all frames. No test-scene member was opened.
 
-The repeatable [source audit](../experiments/svmot_source_audit.py) checked
+The repeatable [source audit](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/svmot_source_audit.py) checked
 30,762 sampled GT rows across those four sequences. Each of their 30,762
 supplied `det.txt` rows has an exact GT box coordinate match. This may be a
 deliberate release design, but these detections cannot be used as an
@@ -76,7 +76,7 @@ The owner-local machine-readable audit is `development-audit.json` in the
 intake folder. No tracker was run and no performance result was computed.
 
 The source audit now delegates box comparison to the reusable
-[`mot_detection_provenance.py`](../experiments/mot_detection_provenance.py)
+[`mot_detection_provenance.py`](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/mot_detection_provenance.py)
 screen. It compares numeric frame/box multisets, so decimal spelling changes
 such as `10` versus `10.0` cannot hide a match; duplicate rows cannot inflate
 the match count. A fresh owner-local `detection-provenance-v1.json` receipt
@@ -105,7 +105,7 @@ across these widely separated samples; continuous frame-to-frame stability,
 timestamps and site provenance are not established. No test-scene member was
 opened.
 
-The extended [source audit](../experiments/svmot_source_audit.py) now checks
+The extended [source audit](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/svmot_source_audit.py) now checks
 that every occlusion record is in frame order, refers to the same GT object ID
 and box, names an occluder present in that frame, and has valid within-object
 occlusion geometry. All **30,762** records and **25,607** occlusion links in
@@ -126,7 +126,7 @@ do not use its GT-mirroring `det.txt` as the shared detector input.
 
 ## Bounded frame-by-frame label review, 2026-10-29
 
-The [development event selector](../experiments/svmot_occlusion_review.py)
+The [development event selector](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/svmot_occlusion_review.py)
 examined only the same four official training sequences. Its fixed rule requires
 three contiguous frames before and after an occlusion, 5–30 occluded frames,
 and at least 50 pixels of box-center travel. It ranks qualifying events by the
@@ -154,7 +154,7 @@ shrinks from 101 px at frame 283 to 56 px at frame 301. This is a concrete
 example of bounding-box geometry changing during occlusion, not a measured
 tracker failure or a verified physical trajectory.
 
-The [source audit](../experiments/svmot_source_audit.py) now checks every
+The [source audit](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/svmot_source_audit.py) now checks every
 occlusion rectangle against the exact intersection of the target and occluder
 GT boxes. All **25,607** links in the four selected sequences match. For all
 **30,762** GT object rows, the `visibility` value also agrees to its printed
@@ -180,7 +180,7 @@ preprocessing rule to this source.
 
 ## Pinned independent-detector preflight, 2026-10-29
 
-The [detector-only preflight](../experiments/svmot_detector_preflight.py) read
+The [detector-only preflight](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/svmot_detector_preflight.py) read
 the same preselected `seq_04_morning` frames **283–311**. It verified the
 selection's occlusion-file hash and the local YOLOX nano ONNX hash
 `c789161e…b18a0b7d`, then ran the existing 416-pixel model at its existing
