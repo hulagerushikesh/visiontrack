@@ -100,6 +100,8 @@ jobs:
           cache: pip
       - name: Install synthetic Lab workflow dependencies
         run: python -m pip install -e ".[lab]"
+      - name: Verify Python-to-browser initiation workflow
+        run: npm run test:initiation-workflow
       - name: Verify browser-to-Python decision workflow
         run: npm run test:decision-workflow
       - name: Verify playback contract

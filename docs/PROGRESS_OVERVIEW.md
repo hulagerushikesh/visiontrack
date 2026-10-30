@@ -21,9 +21,11 @@ now explains this result separately from the rain observations. The reusable
 implemented: it replays a supplied local Lab run, verifies exact saved-output
 parity and explains score admission, births, confirmation, recovery and deletion.
 It exports a separate bounded numeric trace; historical reports remain compatible.
-Next product delivery: inspect this explicitly selected trace in the Lab with
-verified run lineage and a plain-language frame timeline. A real
-traffic improvement claim still requires independently checked domain evidence.
+The Lab now imports that separate trace after its matching report, checks
+fingerprint/configuration/run lineage, and shows an accessible frame timeline
+with separate detection, internal-state and public-output columns. Next product
+checkpoint: usability review and a small reproducible practitioner demonstration.
+A real traffic improvement claim still requires independently checked domain evidence.
 
 **Current review decision:** the owner delegated technical inspection because no
 second reviewer is available. The [AI-assisted exploratory case note](MOT17_AI_REVIEW_DECISION.md)
@@ -324,11 +326,14 @@ deletion while preserving the tracker algorithm. Complete replay must match
 the saved output hash before a trace is emitted. The 1–200-frame diagnostic is
 separate from `report.json`; old report contracts and imports are unchanged.
 
-Next, add optional local trace inspection to the Lab: verify its fingerprint,
-structure and active report/run lineage before showing an accessible frame
-timeline. Keep detection, tentative/internal state and public output distinct;
-do not interpret score as truth or invent pair-level gate causes. This is a
-product-capability step; it needs no owner recording or new source hunt.
+Optional local trace inspection is implemented in the Lab, including exact
+configuration/run verification, bounded reads, stale-selection cancellation and
+an accessible three-column frame timeline. The Python/browser workflow covers
+retained conformance vectors and fresh production exports. Visual/browser
+interaction QA remains unverified because browser access was previously denied.
+Next product checkpoint: review the two-file report/trace workflow for usability
+and prepare a small reproducible practitioner demonstration. No new owner
+recording, source hunt or outreach is required for that preparation.
 
 For research, retain the [negative threshold finding](INITIATION_THRESHOLD_FINDINGS.md)
 and the rejected warning/gate interventions. Representative traffic evaluation

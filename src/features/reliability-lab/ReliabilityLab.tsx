@@ -28,6 +28,7 @@ import { ReportFileReader } from "./report-import"
 import LabGuide from "./LabGuide"
 import EvidenceProgress from "./EvidenceProgress"
 import MetricComparison from "./MetricComparison"
+import InitiationInspector from "./InitiationInspector"
 import { explainFailure, explanationFor } from "./explanations"
 import {
   parseReportModel,
@@ -764,6 +765,8 @@ function LabReport({ report, origin }: { report: ReliabilityReport; origin: Repo
           <div className="mt-7 grid gap-8 lg:grid-cols-[1.1fr_.9fr] lg:items-end"><div><h1 id="lab-title" className="max-w-4xl text-balance text-5xl font-semibold leading-[.98] tracking-[-.055em] sm:text-7xl">Evidence before <span className="gradient-text">confidence.</span></h1><p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">Compare recorded tracker configurations, inspect reported failures, and follow their declared evidence links before making a decision.</p></div><div className="rounded-3xl border border-white bg-white/85 p-6 shadow-xl shadow-slate-200/60 backdrop-blur"><div className="flex items-start gap-4"><div className="grid size-11 shrink-0 place-items-center rounded-2xl bg-emerald-50 text-emerald-600"><ShieldCheck className="size-5" /></div><div><p className="font-semibold">Read-only {origin.kind === "sample" ? "illustrative sample" : "local report"}</p><p className="mt-1 text-sm leading-6 text-muted-foreground">{origin.kind === "sample" ? "This built-in example teaches the workflow; it is not a verified local experiment." : "The browser checks the report format and content fingerprint. It does not authenticate who produced it or verify the original detections, labels, or accuracy."} This screen does not edit results or choose a winner.</p></div></div></div></div>
         </motion.section>
 
+        {origin.kind === "file" && <a className="mt-6 inline-block rounded-lg font-semibold text-primary underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-indigo-600" href="#initiation-title">Inspect track initiation →</a>}
+
         <section className="mt-14 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Experiment overview">
           {[
             ["Source", report.source.name, Database],
@@ -778,6 +781,8 @@ function LabReport({ report, origin }: { report: ReliabilityReport; origin: Repo
         <section className="mt-20" aria-labelledby="failures-title"><div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Failure taxonomy</p><h2 id="failures-title" className="mt-3 text-4xl font-semibold tracking-[-.04em]">Where tracking breaks.</h2></div><p className="max-w-md text-sm leading-6 text-muted-foreground">Counts use the same correspondence as the published metrics—not a second UI-only calculation.</p></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{failureOrder.map((failure) => <article className="rounded-3xl border border-border bg-white p-6" key={failure}><p className="text-sm font-medium text-muted-foreground">{failureLabels[failure]}</p><div className="mt-5 space-y-3">{report.variants.map((variant) => <div className="flex items-center justify-between" key={variant.name}><span className="text-sm">{variant.name}</span><strong className="text-2xl">{variant.failure_counts[failure]}</strong></div>)}</div></article>)}</div></section>
 
         <FailureExplorer key={report.report_id} report={report} />
+
+        <InitiationInspector key={`initiation:${report.report_id}`} report={report} enabled={origin.kind === "file"} />
 
         <PlaybackInspector key={`playback:${report.report_id}`} report={report} enabled={origin.kind === "file"} />
 

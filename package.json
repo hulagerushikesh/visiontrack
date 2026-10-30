@@ -11,6 +11,7 @@
     "build": "npm run build:app && npm run build:docs",
     "test:decision-contract": "node scripts/test-decision-contract.mjs",
     "test:decision-workflow": "node scripts/test-decision-workflow.mjs",
+    "test:initiation-workflow": "node scripts/test-initiation-workflow.mjs",
     "test:report-import": "node scripts/test-report-import.mjs",
     "test:crossing-diagnosis": "node scripts/test-crossing-diagnosis.mjs",
     "test:lab-guide": "node scripts/test-lab-guide.mjs",

@@ -15,8 +15,11 @@ why a tracking change helps or hurts.
       Lab detections, exact saved-output parity and compatible old reports.
 - [x] Read-only terminal explanation and separate canonical JSON export with
       bounded windows, original detection keys and preserved warm-up history.
-- [ ] Next: optional local trace inspection in the Lab, verified against the
-      active report/run, with a plain-language lifecycle timeline.
+- [x] Optional local trace inspection in the Lab, verified against the
+      active report/run/configuration, with a plain-language lifecycle timeline.
+- [ ] Next product checkpoint: review the two-file report/trace workflow for
+      usability and prepare a small reproducible practitioner demonstration.
+      No accuracy or physical-identity claim, new footage hunt or automatic outreach.
 - [ ] Separate research gate: representative permitted traffic event/negative
       labels before accepting a detector+tracker change or proposing a C++ port.
 

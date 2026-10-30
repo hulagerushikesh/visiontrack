@@ -76,7 +76,7 @@ visiontrack lab-initiation BUNDLE --variant bytetrack --start 0 --end 10 --json
 `--json` emits only canonical JSON to standard output; errors go to standard
 error with exit code 2. Redirect it to a **new file outside the bundle** if you
 want to retain it. This is a separate `visiontrack.initiation-trace/v1` diagnostic,
-not `report.json`, and the website does not import it yet.
+not `report.json`. The Lab can inspect it after you import its matching report.
 
 The exported record includes experiment/source/run IDs, detection and output
 hashes, exact configuration, full replay range, selected range, frame decisions,
@@ -96,6 +96,47 @@ Choose a smaller window if a crowded trace exceeds the row limit.
 Existing manifests, tracks, metrics, reports and decisions remain unchanged.
 Historical report imports require no migration. No optional trace is created
 by ordinary tracking or Lab comparison execution.
+
+## Inspect the trace in the Lab
+
+1. Open `/lab` and import the bundle's `report/report.json`.
+2. Follow **Inspect track initiation** near the report heading, then choose
+   **Import initiation trace**. Select the separate JSON exported above.
+3. Use **Previous**, **Next** or the labelled frame slider. The three columns
+   distinguish detector proposals, internal track states and public IDs.
+   A tentative birth has no public output; an internally coasting confirmed
+   track also has no public box in that frame.
+4. Open **Configuration and provenance** for exact run/trace hashes and settings.
+   **Close trace**, a new selection, report replacement or returning to the
+   sample clears the active inspection. A canceled file-picker dialog keeps
+   the current trace; closing the trace cancels pending reads.
+
+This is optional. No acceptance decision, camera, footage or upload is needed.
+All selected content remains in tab memory. The illustrative sample cannot
+import a trace because it is not an imported, fingerprint-checked local report.
+
+The browser checks structure, unique JSON keys, bounds, contiguous frame and
+track history, cross-links, content fingerprint, experiment/source/run IDs,
+detection/output hashes and full replay range. It reconstructs the saved run ID
+from the exact Python config bytes and the report's saved observation count;
+it does not duplicate Python presets/defaults. Python's `1.0` and `0.0` tokens
+are preserved for these hashes. Reports without that run/count metadata can
+still be viewed normally but cannot establish trace lineage.
+
+Browser checks are **content/lineage checks, not authentication or another
+tracker replay**. The producer's saved-output parity and source hashes are
+recorded declarations here. The browser cannot prove that arbitrary submitted
+metadata describes real detections or that a physical object was correctly
+tracked. It rejects unsupported/oversized/inconsistent files before displaying
+their trace. Report contracts and tracker behavior are unchanged.
+
+The shared Python/browser conformance vectors cover all seven dispositions,
+all seven lifecycle events, a single-stage preset, actual `n_init=1` behavior,
+sparse original detection keys and a warm-up window. The workflow check also
+creates a fresh complete synthetic bundle and imports both production variants
+without modifying any bundle files. Browser interaction/visual QA remains
+unverified in this session because browser access was previously denied;
+component rendering, contracts, type checks and the production build are checked.
 
 ## What this cannot tell you
 

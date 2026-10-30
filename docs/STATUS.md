@@ -12,9 +12,12 @@ The reusable [offline initiation diagnostic](INITIATION_DIAGNOSTIC.md) is now
 implemented through `lab-initiation`: selected local detection/track lifecycle
 rows, full warm-up replay, exact saved-output parity, read-only terminal output
 and separate canonical JSON. A complete synthetic bundle check retained all
-15 files and rebuilt its original report identically. Next is optional verified
-trace inspection in the Lab; real-traffic acceptance remains a separate
-data/label gate. Defaults and C++ stay unchanged. The checkpoints below retain
+15 files and rebuilt its original report identically. The Lab now imports the
+separate trace against its matching report, verifies configuration/run lineage
+and exposes a three-column frame timeline. Python/browser vectors and fresh
+exports are checked; visual/browser interaction QA remains unverified because
+browser access was previously denied. Next: usability review and a reproducible
+demonstration; real-traffic acceptance remains a separate data/label gate. Defaults and C++ stay unchanged. The checkpoints below retain
 their historical scope.
 
 **Current checkpoint — 2026-10-26:** the owner delegated technical review because

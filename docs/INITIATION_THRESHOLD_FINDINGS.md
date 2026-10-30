@@ -90,7 +90,8 @@ hosted deployment; the linked route is available after its deployment succeeds.
   [offline initiation diagnostic](INITIATION_DIAGNOSTIC.md) now explains saved
   Lab runs with exact public-output parity and a separate bounded trace.
   It preserves old report compatibility and distinguishes observed lifecycle
-  decisions from truth/accuracy claims. Optional Lab trace inspection is next.
+  decisions from truth/accuracy claims. Optional Lab trace inspection is now
+  implemented with fingerprint, configuration/run lineage and frame-history checks.
 - [ ] Research acceptance remains a separate gate: permitted representative
   traffic evidence with independently checked event/negative labels, frozen
   detector+tracker comparison and false-count/miss costs. Do not repeatedly

@@ -3,15 +3,15 @@ import type { ReportLoadResult } from "./types"
 export const maxReportBytes = 16 * 1024 * 1024
 
 /**
- * Python hashes its sorted, compact JSON before adding report_id. Verify the
+ * Python hashes its sorted, compact JSON before adding its fingerprint field. Verify the
  * original text rather than JSON.stringify(JSON.parse(text)): JavaScript turns
  * Python's 1.0 into 1 and would reject an otherwise valid report.
  */
-export async function verifyReportFingerprint(text: string, reportId: string): Promise<boolean> {
+export async function verifyContentFingerprint(text: string, contentId: string, field: "report_id" | "trace_id"): Promise<boolean> {
   const document = text.endsWith("\n") ? text.slice(0, -1) : text
   if (!document.startsWith("{") || !document.endsWith("}")) return false
-  const key = ',"report_id":'
-  const member = `${key}"${reportId}"`
+  const key = `,"${field}":`
+  const member = `${key}"${contentId}"`
   let depth = 0
   let inString = false
   let escaped = false
@@ -39,8 +39,11 @@ export async function verifyReportFingerprint(text: string, reportId: string): P
   const content = document.slice(0, position) + document.slice(position + member.length)
   const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(content))
   const actual = Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("")
-  return actual === reportId
+  return actual === contentId
 }
+
+export const verifyReportFingerprint = (text: string, reportId: string) =>
+  verifyContentFingerprint(text, reportId, "report_id")
 
 /** Read the latest explicit file selection; canceled reads never publish results. */
 export class ReportFileReader {
