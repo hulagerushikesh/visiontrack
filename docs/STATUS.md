@@ -2,6 +2,16 @@
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
 
+**Latest checkpoint — 2026-10-30:** the curated `/lab/crossings` diagnosis is
+implemented. The [committed-method initiation study](INITIATION_THRESHOLD_FINDINGS.md)
+completed all 54 synthetic pairs / 324 passes: earlier births recover true
+crossings but also confirm persistent false proposals. The candidate fails
+the no-harm gate; all 36 controls are exact, and defaults/C++ remain unchanged.
+The UI explains the negative result separately from the rain evidence. Next
+is reusable offline birth/confirmation diagnosis with unchanged public output
+and historical report compatibility; real-traffic acceptance remains a separate
+data/label gate. The checkpoints below retain their historical scope.
+
 **Current checkpoint — 2026-10-26:** the owner delegated technical review because
 no separate reviewer is available. The [AI-assisted exploratory case note](MOT17_AI_REVIEW_DECISION.md)
 records a bounded reinspection and no-change recommendation. Independent

@@ -4,6 +4,18 @@ VisionTrack is the NumPy reference, research platform, and learning product.
 Work here must protect readability, reproducibility, and the ability to explain
 why a tracking change helps or hurts.
 
+**Current delivery — 2026-10-30:** the Lab crossing diagnosis and its
+[bounded threshold follow-up](INITIATION_THRESHOLD_FINDINGS.md) are complete.
+
+- [x] Freeze and run 54 synthetic threshold pairs / 324 repeatability passes.
+- [x] Retain recovered true crossings, false-count costs and all 36 exact controls.
+- [x] Keep defaults unchanged after the no-harm gate fails; explain the result
+      in `/lab/crossings` without presenting it as traffic accuracy.
+- [ ] Next: reusable opt-in offline birth/confirmation diagnosis on supplied
+      local detections, unchanged public output and compatible old reports.
+- [ ] Separate research gate: representative permitted traffic event/negative
+      labels before accepting a detector+tracker change or proposing a C++ port.
+
 For a short two-project snapshot of finished work, the current experiment's
 eight milestone groups and remaining gates, see [Progress overview](PROGRESS_OVERVIEW.md).
 

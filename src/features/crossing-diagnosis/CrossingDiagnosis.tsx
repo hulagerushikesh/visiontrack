@@ -1,5 +1,6 @@
 import { useState } from "react"
 import rain from "./rain.json"
+import thresholdStudy from "../../../experiments/initiation_threshold_v1_results.json"
 
 const evidenceUrl = "https://github.com/hulagerushikesh/visiontrack/blob/main/docs/HVSD_RAIN_REVIEW.md"
 const stages = ["Detector", "Association", "Confirmation", "Counting"]
@@ -20,7 +21,7 @@ const notes: Record<number, { title: string; summary: string; stages: string[]; 
     title: "Detection alone does not guarantee a counted track",
     summary: "Proposals bracket the line at frames 57–58, but no public track spans that crossing. This is the clearest threshold lead in the saved evidence.",
     stages: ["Proposal centers move from x=494.8 to x=500.3. Their scores, 0.577 and 0.597, are below the baseline's 0.60 new-track threshold.", "The probe does not record a tentative match at frames 57–58. That alone cannot establish why every possible association was absent.", "Tentative ID 10 starts at frame 59, beyond the line. New tracks need three consecutive matches before entering the public output.", "The baseline emits no nearby crossing. The exploratory 0.55 threshold replay emits one at approximately frame 57.85, but its wider effects remain unvalidated."],
-    next: "Evaluate the benefit and cost of earlier initiation on fresh controlled inputs, including misleading detections.",
+    next: "Read the controlled threshold check below. Earlier initiation can recover counts and create false ones; representative traffic evidence is still needed before changing defaults.",
   },
   92: {
     title: "No retained detector proposal near the line",
@@ -66,6 +67,34 @@ export function CaseExplanation({ mark, stage }: { mark: number; stage: number }
     <h3 className="font-semibold">{stages[stage]}: what the saved evidence tells us</h3>
     <p className="mt-1">{note.stages[stage]}</p>
   </div>
+}
+
+export function ThresholdFindings() {
+  const examples = [
+    { id: "steady_true", title: "A genuine passage", detail: "Earlier confirmation recovers this crossing.", kind: "tp", label: "correct count" },
+    { id: "persistent_false", title: "A persistent false detection", detail: "The same confidence and motion also create a false count.", kind: "fp", label: "false count" },
+    { id: "confirmed_gap", title: "Missing detections across the line", detail: "Earlier confirmation cannot fill the missing crossing frames.", kind: "tp", label: "correct count" },
+  ] as const
+  return <section className="mt-8 rounded-3xl border border-indigo-100 bg-white p-6 sm:p-8" aria-labelledby="controlled-threshold">
+    <p className="text-xs font-semibold uppercase tracking-widest text-primary">Completed controlled experiment · synthetic data</p>
+    <h2 id="controlled-threshold" className="mt-3 text-2xl font-semibold tracking-tight">Earlier is not always better</h2>
+    <p className="mt-3 max-w-4xl text-sm leading-7 text-slate-700">We followed the rain lead with {thresholdStudy.paired_cells} fixed synthetic comparisons. Only the birth threshold changed; the three-match confirmation rule stayed the same. These are scripted mechanisms, not measured traffic accuracy.</p>
+    <div className="mt-5 grid gap-4 lg:grid-cols-3">{examples.map(example => {
+      const row = thresholdStudy.cells.find(c => c.case === example.id && c.score === 0.57 && c.speed === 2)!
+      return <article key={example.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+        <h3 className="font-semibold">{example.title}</h3>
+        <p className="mt-4 text-xl font-semibold text-indigo-700">{row.baseline.crossings[example.kind]} → {row.candidate.crossings[example.kind]} <span className="text-sm font-medium">{example.label}</span></p>
+        <p className="mt-3 text-sm leading-6 text-muted-foreground">{example.detail}</p>
+      </article>
+    })}</div>
+    <p className="mt-3 text-xs leading-6 text-muted-foreground">Examples above: proposal score 0.57; baseline 0.60 → candidate 0.55. Each example has the same count outcome at both tested speeds, 2 and 6 pixels per frame. The first two examples have identical detector inputs and different scripted truth.</p>
+    <div className="mt-5 rounded-2xl bg-amber-50 p-5 text-sm leading-7 text-amber-950">
+      <h3 className="font-semibold">Decision: keep the current defaults</h3>
+      <p className="mt-1">The lower threshold produces 10 false public boxes and one false crossing in each persistent-noise case at score 0.57. Two-frame noise never confirms, but persistent noise can. A score alone cannot establish that an object is real.</p>
+      <p className="mt-2">The 36 control comparisons at scores 0.54 and 0.61 have identical output under both settings. Long absence still gives a new ID after expiry. This experiment does not solve person re-identification or establish an improved traffic tracker.</p>
+    </div>
+    <a href="https://github.com/hulagerushikesh/visiontrack/blob/main/docs/INITIATION_THRESHOLD_FINDINGS.md" className="mt-5 inline-block text-sm font-semibold text-primary underline underline-offset-4">Read all nine cases, confirmation costs and the next research decision →</a>
+  </section>
 }
 
 export default function CrossingDiagnosis() {
@@ -129,8 +158,10 @@ export default function CrossingDiagnosis() {
         ["Unique public IDs", rain.baseline.unique_public_track_ids, rain.candidate.unique_public_track_ids],
         ["Tentative births", rain.baseline.tentative_births, rain.candidate.tentative_births],
       ]).map(([label, baseline, candidate]) => <tr key={label} className="border-b border-amber-100"><th scope="row" className="py-3 pr-4 font-medium">{label}</th><td className="p-3">{baseline}</td><td className="p-3">{candidate}</td></tr>)}</tbody></table></div>
-      <p className="mt-5 text-sm font-semibold leading-7 text-amber-950">The candidate was chosen after seeing this clip. These results cannot establish accuracy or justify a default change. Fresh evaluation must examine misleading detections and changes elsewhere as well as recovered crossings.</p>
+      <p className="mt-5 text-sm font-semibold leading-7 text-amber-950">The candidate was chosen after seeing this clip. These results cannot establish accuracy or justify a default change. The separate controlled experiment below examines misleading detections; representative traffic evaluation remains open.</p>
     </section>
+
+    <ThresholdFindings />
 
     <details className="mt-8 rounded-2xl border border-slate-200 bg-white p-5">
       <summary className="cursor-pointer font-semibold">Evidence source, scope and reproduction</summary>

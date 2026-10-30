@@ -11,9 +11,15 @@ existing rain diagnosis into an interactive four-stage explanation. All five
 owner marks, 45 saved baseline frame observations and the exploratory 0.60/0.55
 threshold trade-off are accessible from the Lab. Its numeric schematics contain
 no footage and do not establish physical identity, accuracy or an accepted fix.
-The next research delivery is a bounded fresh-input initiation-threshold
-feasibility comparison, with misleading detections and confirmation costs as
-controls, before further representative traffic evaluation or C++ adoption.
+The [fresh-input initiation-threshold comparison](INITIATION_THRESHOLD_FINDINGS.md)
+is now complete: 54 paired synthetic cells / 324 passes. Earlier births recover
+true crossings but also confirm persistent false proposals and create false
+counts. All 36 below-both/above-both controls are byte-identical. The candidate
+fails the registered no-harm gate; defaults and C++ remain unchanged. The Lab
+now explains this result separately from the rain observations. Next product
+delivery: reusable offline birth/confirmation diagnosis for a local detection
+stream, preserving public output and historical report compatibility. A real
+traffic improvement claim still requires independently checked domain evidence.
 
 **Current review decision:** the owner delegated technical inspection because no
 second reviewer is available. The [AI-assisted exploratory case note](MOT17_AI_REVIEW_DECISION.md)
@@ -307,20 +313,20 @@ no GPU path or weakened parity is justified by the current plan.
 
 ## Immediate next action
 
-The [completed warning findings](CONTINUITY_WARNING_FINDINGS.md) and
-[known-case exploratory triage check](CONTINUITY_WARNING_MOT17_FINDINGS.md)
-argue against shipping v1 as an ID-continuity alert. The next evidence gate is
-a prospective, representative check of a specific engineer decision, warning
-burden and missed problems, with permitted observations and independent scene/
-reference review. The [traffic evidence admission checklist](REAL_TRAFFIC_EVIDENCE_GATE.md)
-records the source-level blockers. The [HVSD public-footage feasibility screen](PUBLIC_TRAFFIC_VIDEO_FEASIBILITY.md)
-now supplies verified clip bytes, exact frame timelines and one unchanged
-pipeline run. Its first bounded event/ID annotation question and independent
-review are the next gate; do not turn output counts into accuracy. Do not
-reinterpret the already studied MOT17 case as an
-untouched test. No owner action is needed to maintain the research record;
-collecting a consented pilot or practitioner response requires owner coordination.
-C++ stays unchanged until useful accepted reference behavior warrants a port.
+The curated `/lab/crossings` case and its controlled threshold follow-up are
+complete. Build a reusable, opt-in **offline initiation diagnostic** for supplied
+local detections: record birth rejection, tentative confirmation/miss and public
+output without modifying the tracker algorithm or interpreting score as truth.
+First check the existing report contract and protect historical imports. This
+is a product-capability step; it needs no owner recording or new source hunt.
+
+For research, retain the [negative threshold finding](INITIATION_THRESHOLD_FINDINGS.md)
+and the rejected warning/gate interventions. Representative traffic evaluation
+still needs admitted data and independently checked labels; the
+[traffic evidence gate](REAL_TRAFFIC_EVIDENCE_GATE.md) records the blockers.
+The reviewed rain/MOT17 cases are not untouched tests. Neither a more polished
+diagnosis nor this toy study establishes an improved tracker. C++ stays in
+maintenance until accepted reference behavior warrants a parity handoff.
 
 ### Historical sequence — preserved, not the current task
 

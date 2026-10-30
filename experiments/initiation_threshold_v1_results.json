@@ -1,0 +1,3891 @@
+{
+  "cells": [
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 12,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 12,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "case": "steady_true",
+      "detector_sha256": "82014936191e2c2bd31d639209b641aa7cb2582cf25f57da53e7714e8869da40",
+      "input_sha256": "585fa34cd37eb046373e75ebe742b30e254d99595556adb1a63977863324cf46",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d"
+      },
+      "score": 0.54,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 12,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 12,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "case": "steady_true",
+      "detector_sha256": "3408d5e4346b2846ff356aca4c3c95ee0fe6c49c0b654ab096fc06e972dc95c4",
+      "input_sha256": "01ff2a8f8cdd010e4539b3435d88cc23f45a6ae3c7991c2400fe46a4e7c9bb2c",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d"
+      },
+      "score": 0.54,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 12,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "steady_true",
+      "detector_sha256": "c823d3a7a6d7873d36457130d2997b27d4a96acf4e5bd1b39bcdac2861be329e",
+      "input_sha256": "10bcb97da2d779fbbecca87be9dc558b4e7c53f874ba27a9493f34bbb7bc2f37",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "365f28d05679c4fc3f25014a51fbffa6fd2887161a1b6f62f81d67049e68b1fa"
+      },
+      "score": 0.57,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 12,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "steady_true",
+      "detector_sha256": "52ae1d52be5e92cc821d2d885fb97836473ed4390b68ad58db8e2b02d0cf8687",
+      "input_sha256": "1a3699b1da91590a3d5007f5845401269377de285f0ab7c0a93ba8adfd81d85a",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "456aa12c15d44223e2d41a305c48f6f3743190fbdb228078e87dda799846214f"
+      },
+      "score": 0.57,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "steady_true",
+      "detector_sha256": "b59dcf6b153d11e17bec21b1bf4df9e8acccde6d639ddcfc0a6955c6ce6128d9",
+      "input_sha256": "0793222fa233d25bdabf3b722f7c37ee805482f8696ab9e4d66574d8f6a17003",
+      "output_sha256": {
+        "baseline": "0d5941eaf0ff04a283136e57111f5316879e617e7cf610605e0dc97e8c8928c4",
+        "candidate": "0d5941eaf0ff04a283136e57111f5316879e617e7cf610605e0dc97e8c8928c4"
+      },
+      "score": 0.61,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "steady_true",
+      "detector_sha256": "5b3fb502d50339d3d7f9ca1217a1d6685b011a4c76c180a5d108f7a4232bdac2",
+      "input_sha256": "dae209dedf9e6b1bd6c6379ee863943255b70f762e4535eab2ba46ee174e7483",
+      "output_sha256": {
+        "baseline": "ffea9384b8a0be17cd423d951abd98b1626e80eb40e0b26234624d5607b6e82d",
+        "candidate": "ffea9384b8a0be17cd423d951abd98b1626e80eb40e0b26234624d5607b6e82d"
+      },
+      "score": 0.61,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 6,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 6,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 6
+        },
+        "public_boxes": 6,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 6,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 6,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 6
+        },
+        "public_boxes": 6,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "late_strong",
+      "detector_sha256": "4d5093c46d2322eb9d52f9e2eb8aff0d9a213d2832a53d9ee8990130df782fc9",
+      "input_sha256": "d72a418cd73af313c747aa56832ea6320fc8ec0f483351486c020d4170ee7b26",
+      "output_sha256": {
+        "baseline": "86df842ee010ad8703d493d0f9b743509a5a6725566ffec035d971d70231388f",
+        "candidate": "86df842ee010ad8703d493d0f9b743509a5a6725566ffec035d971d70231388f"
+      },
+      "score": 0.54,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 6,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 6,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 6
+        },
+        "public_boxes": 6,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 6,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 6,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 6
+        },
+        "public_boxes": 6,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "late_strong",
+      "detector_sha256": "39810e293a3e313575492a8fb22549391f14e10803f4e432871f90cc699bdfd9",
+      "input_sha256": "2456483ee128b0386d7243e2aa5b3175b1fa9210c500972f934f459f175eaaf1",
+      "output_sha256": {
+        "baseline": "6fb11d591923f940b439b5be6e4a97b15769387edf35c63811b6ee3536d6451a",
+        "candidate": "6fb11d591923f940b439b5be6e4a97b15769387edf35c63811b6ee3536d6451a"
+      },
+      "score": 0.54,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 6,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 6,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 6
+        },
+        "public_boxes": 6,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "late_strong",
+      "detector_sha256": "a955efcec5675ef59afa8c26c7d5a79bd58e263d1649ec0e50fd159287682d3b",
+      "input_sha256": "6d83b7c795d6ae67aaf85e9ea6a9aa2bc259a059db4490e98bbe41abeac65c3c",
+      "output_sha256": {
+        "baseline": "86df842ee010ad8703d493d0f9b743509a5a6725566ffec035d971d70231388f",
+        "candidate": "846031c21486ca266d8e3a1f10cb7f5948beeffb99c71b3bf981d681e6086245"
+      },
+      "score": 0.57,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 6,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 6,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 6
+        },
+        "public_boxes": 6,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "late_strong",
+      "detector_sha256": "a617adc854a04ea982d9b70d759c04fea9da5478ffdfa2e80db4059cb2e8dcbe",
+      "input_sha256": "859e269023aded9634b6e0fedf5139b562da53bef5b35874bf5ef81909c2d6ce",
+      "output_sha256": {
+        "baseline": "6fb11d591923f940b439b5be6e4a97b15769387edf35c63811b6ee3536d6451a",
+        "candidate": "3341955eb626ad92a3281e2a33add82327a9d6d49f17fb649a45a53826c87bfa"
+      },
+      "score": 0.57,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "late_strong",
+      "detector_sha256": "98b3ca3172c2e7aa5a3ce06e855b666d62b0028dfdf3690244ffb75fcde4cb8b",
+      "input_sha256": "25edabafb41681cc52c9a9497fb59cae9214fa5f2168dc16e29a24876ada3730",
+      "output_sha256": {
+        "baseline": "fa124007e2419bd6e026b4246d20e547acd85acf0abc71883824852790bcdd5b",
+        "candidate": "fa124007e2419bd6e026b4246d20e547acd85acf0abc71883824852790bcdd5b"
+      },
+      "score": 0.61,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "late_strong",
+      "detector_sha256": "dcc0f26e7fd0bd1d7f8b0e313821222b36aaa8da369707f5884842d4f6231e41",
+      "input_sha256": "cce780713ffbfe773d195995fbb55e8048f937dd805a48c147b0516b0260948d",
+      "output_sha256": {
+        "baseline": "96bf59844ed5481fec4c0bb57360fe8cb9a15a1033ad1e72bcde8e7288b1a8ee",
+        "candidate": "96bf59844ed5481fec4c0bb57360fe8cb9a15a1033ad1e72bcde8e7288b1a8ee"
+      },
+      "score": 0.61,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 4,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 4,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "case": "short_true",
+      "detector_sha256": "d43e64a60183e591444d02f67f725ea395458f15e872da5728b83bb27bbb1eb9",
+      "input_sha256": "6ce551614faa936bd11a57b769cf33cd6b56b15fe7640e6f47985ab4f681d5c5",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d"
+      },
+      "score": 0.54,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 4,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 4,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "case": "short_true",
+      "detector_sha256": "ee7f6309e87e9dcf74a59ca9b33dd4d3d4a6fc6d08508e2a5a39f75d6d25c25b",
+      "input_sha256": "d419c7b1265a700e40fd38c4b7edf15593fad24ae7be146bd8ea3dd48e3d7bf5",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d"
+      },
+      "score": 0.54,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 4,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 4,
+          "true_positives": 2
+        },
+        "public_boxes": 2,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "short_true",
+      "detector_sha256": "48091de5e64a2b14a59b14b693c19a181f215ba0f29a22066af3761eef084cb3",
+      "input_sha256": "d05c60dd2fda692bba18d9703ceb4e81329a2629f1e2b7fc6b62797d149c4398",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "28fe57882fb2570fcf30574b2c3304fb4a1ef29729cc5bc53f497408c71d70a7"
+      },
+      "score": 0.57,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 4,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 4,
+          "true_positives": 2
+        },
+        "public_boxes": 2,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "short_true",
+      "detector_sha256": "d954bd7175074912efd53a5bfbff6802c5cb49b9c09570c00c6e363e0e23c9e0",
+      "input_sha256": "9736f57023288ce3a2f0e3e727a2f06c9c90889813c18aecf5129fc6404b4cfb",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "2dc091d08d7b4a13a111ca160e56ec346aac3e81d952678d98bf2b8d3b07e83f"
+      },
+      "score": 0.57,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 4,
+          "true_positives": 2
+        },
+        "public_boxes": 2,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 4,
+          "true_positives": 2
+        },
+        "public_boxes": 2,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "short_true",
+      "detector_sha256": "1d972de7602b0b9f5be861743ef2e01fbc83154feb86c736a616bdf73ca731cc",
+      "input_sha256": "3676fb5b76e9ead934ec1f020f4e159d71d49eb8b8770587a2d633ec6c095968",
+      "output_sha256": {
+        "baseline": "5af341250bb308efd3edb80b933b458f24e68eb74cb1790cb19520de0486f54d",
+        "candidate": "5af341250bb308efd3edb80b933b458f24e68eb74cb1790cb19520de0486f54d"
+      },
+      "score": 0.61,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 4,
+          "true_positives": 2
+        },
+        "public_boxes": 2,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 4,
+          "true_positives": 2
+        },
+        "public_boxes": 2,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "short_true",
+      "detector_sha256": "af0809ff9c1d637cefd3b1a37d91991c982f3cf80bbe073775b1b41dcace2e3c",
+      "input_sha256": "5bcbed53c4477acf8fd54d3a2f04e6f3552e4dfbe24db96b9348bbedee308bf7",
+      "output_sha256": {
+        "baseline": "69ac0dae1e588aaa8146c897859a42f0066ea5b29309edc0c8435737215742d6",
+        "candidate": "69ac0dae1e588aaa8146c897859a42f0066ea5b29309edc0c8435737215742d6"
+      },
+      "score": 0.61,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 12,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 12,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "case": "confirmation_gap",
+      "detector_sha256": "ff9c247a1315b55dd4fe7fde7359c60245ba65609736c84fc3de9a87ec939007",
+      "input_sha256": "c29900dd840d2391cfa97baaae00eff310c825b90156e44a81cd7bba42c274d4",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d"
+      },
+      "score": 0.54,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 12,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 12,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "case": "confirmation_gap",
+      "detector_sha256": "e034280cff84ea3df22b2410f3015fe55373a87c78d8cd4d69720f0dd92b33d2",
+      "input_sha256": "7c014a477272aaa35772cd37d4fe3f9a4e7293be44d52feb266978dc69ff04b1",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d"
+      },
+      "score": 0.54,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 12,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 2,
+        "confirmation_delays": [
+          {
+            "delay_frames": 4,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 8
+        },
+        "public_boxes": 8,
+        "public_ids": 1,
+        "unconfirmed_births": 1
+      },
+      "case": "confirmation_gap",
+      "detector_sha256": "7298c10155d6ac5fd6893f0023e70a864d5ca5e833a03c5217f182de3250e9d2",
+      "input_sha256": "abffb2a183694cfbc307d3a4b25fff249efb1f8f15beefaf1d01de0b85cb4338",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "46ce918cfdd5f7deb15ecde08ada01875ba0f32fd50e15dedff7f0cc9fe28c45"
+      },
+      "score": 0.57,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 12,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 2,
+        "confirmation_delays": [
+          {
+            "delay_frames": 4,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 8
+        },
+        "public_boxes": 8,
+        "public_ids": 1,
+        "unconfirmed_births": 1
+      },
+      "case": "confirmation_gap",
+      "detector_sha256": "75448c62d1b5077bd96c670248bce346bb4c0204f1f8e30c2d491ff59c7cbd82",
+      "input_sha256": "387eea3c2eff9291a424fdf6b36221b2ccab6b66c97872c1c5c48b79bfd8a2fa",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "6f8a9f4ec1a47e8c7c6483bb58779b83a839f303eed3b5fd79bcdbc722a07065"
+      },
+      "score": 0.57,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 2,
+        "confirmation_delays": [
+          {
+            "delay_frames": 4,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 8
+        },
+        "public_boxes": 8,
+        "public_ids": 1,
+        "unconfirmed_births": 1
+      },
+      "candidate": {
+        "births": 2,
+        "confirmation_delays": [
+          {
+            "delay_frames": 4,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 8
+        },
+        "public_boxes": 8,
+        "public_ids": 1,
+        "unconfirmed_births": 1
+      },
+      "case": "confirmation_gap",
+      "detector_sha256": "3cf4d56595f43fd94928fa3e864dc2b69a18eaa0a1c38bcbb09c5888b42fe23e",
+      "input_sha256": "3b6f4704c2d7cef4536098d11b48c5e4dab5e66b038ef68676432440278b61f0",
+      "output_sha256": {
+        "baseline": "6557a7c921fc3314fdf601cbb9438596cc29a78a10b231d79815b132988f7831",
+        "candidate": "6557a7c921fc3314fdf601cbb9438596cc29a78a10b231d79815b132988f7831"
+      },
+      "score": 0.61,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 2,
+        "confirmation_delays": [
+          {
+            "delay_frames": 4,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 8
+        },
+        "public_boxes": 8,
+        "public_ids": 1,
+        "unconfirmed_births": 1
+      },
+      "candidate": {
+        "births": 2,
+        "confirmation_delays": [
+          {
+            "delay_frames": 4,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 8
+        },
+        "public_boxes": 8,
+        "public_ids": 1,
+        "unconfirmed_births": 1
+      },
+      "case": "confirmation_gap",
+      "detector_sha256": "babd5fdb28bbc9f46a3b0ebfbb6540bd6a99500dba86e7d7a305c1e6e38bc431",
+      "input_sha256": "d8860bd036f4031607dcce79cecbaf6cfdfb60d7ea002f0a9ac4813568952fad",
+      "output_sha256": {
+        "baseline": "417e7022dc8f22379aec404b51982405fa83aefcdb9c915a3867b8fd0e4a4abf",
+        "candidate": "417e7022dc8f22379aec404b51982405fa83aefcdb9c915a3867b8fd0e4a4abf"
+      },
+      "score": 0.61,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 12,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 12,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "case": "confirmed_gap",
+      "detector_sha256": "7dd6d57e8c93a98ad8d3062a4142d4741dda0fa4a28545616c824ea674fec53b",
+      "input_sha256": "a3fdcdae47552f56f853bf642b1c139e5ad6e63d9c9e895ecbd8a27f4e28523a",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d"
+      },
+      "score": 0.54,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 12,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 12,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "case": "confirmed_gap",
+      "detector_sha256": "7743ef9599bb5ff49fc67c73501c94a1357f4eefbe1d5743ae41b54f19efd41d",
+      "input_sha256": "1617023e9f55eb39020fdc1b3185f4fc72201c6efebe17861897f17a87f86e53",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d"
+      },
+      "score": 0.54,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 12,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 8
+        },
+        "public_boxes": 8,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "confirmed_gap",
+      "detector_sha256": "efccd4416925a7bbe33010838d0f25108720e51a05b7beabeb0df0f21522b6b0",
+      "input_sha256": "fd30e56b6d5d7b81b86a9d3e07cc70f1cd8364edec611c5502d6653e0db14ef6",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "46684e20251fb44f60d69182a96ae768d8b75172b0e0397ad0e4b8279b4a02c5"
+      },
+      "score": 0.57,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 12,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 8
+        },
+        "public_boxes": 8,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "confirmed_gap",
+      "detector_sha256": "e361b465b8392dbc32cb6e8c6162de7a67fc55e0c5b738bc6a344e2995fda4a0",
+      "input_sha256": "4cba5f28eb9839acbf5f6ecced6c6f6046dfe98aa0118f4f4ebcd815cbcde166",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "662a69a172da10b0052854bbdf652f741bf436d6625dd3667d22c7a44865423a"
+      },
+      "score": 0.57,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 8
+        },
+        "public_boxes": 8,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 8
+        },
+        "public_boxes": 8,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "confirmed_gap",
+      "detector_sha256": "b647ce562276620905b2b11356c21790471228cebaeba48713d0ede3ff5bf733",
+      "input_sha256": "8d76ac0633839aa2a500447d50f2d5fa1ddaf9631c665ba22db49f2219446d86",
+      "output_sha256": {
+        "baseline": "91c14260db9d8164bfeb5e6f491c0afdca8cbda01291800dcad1763cc7daacd3",
+        "candidate": "91c14260db9d8164bfeb5e6f491c0afdca8cbda01291800dcad1763cc7daacd3"
+      },
+      "score": 0.61,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 8
+        },
+        "public_boxes": 8,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 1,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 8
+        },
+        "public_boxes": 8,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "confirmed_gap",
+      "detector_sha256": "239cdfa14dbdcdc48829142055228a428ee26d002dbee4a7d7a6ba454d1f4ee8",
+      "input_sha256": "436c46a9606f253cd3498d8d650302f0af69c46be6446442a7166f40a1244c46",
+      "output_sha256": {
+        "baseline": "4c28f562de2f51df67d83cf274f360e961c000b91c18ca59c6bb0d610ad60324",
+        "candidate": "4c28f562de2f51df67d83cf274f360e961c000b91c18ca59c6bb0d610ad60324"
+      },
+      "score": 0.61,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 0,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "case": "brief_false",
+      "detector_sha256": "c4973363cbd3fd7ee20fa9b29cc2d63fd4430db8dd157b82b71837c087dea13b",
+      "input_sha256": "95e10d864812d31ddc9aaf6c7729977a7756c9117030c2b71b8eba2092b2d59b",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d"
+      },
+      "score": 0.54,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 0,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "case": "brief_false",
+      "detector_sha256": "61545d08c8841b3ae3eec26d10d77bc5e08ca954b01847d420d2ba5f23f218c6",
+      "input_sha256": "ab5faf3540ad4b7459dca3d3ad24807ef5e00fa8e53a8931accf203637865bf1",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d"
+      },
+      "score": 0.54,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 1
+      },
+      "case": "brief_false",
+      "detector_sha256": "bb2a61c0021c2749107ac83e81bfda5b96585ffdc65ef9b3d0f01be25d8dafde",
+      "input_sha256": "7b985fe77331e2ac7057f5d84693a607085d12ae4b760a9f06a7af826cf2b523",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "5c206412610ea48c946cfed98b6024337f951436bcded867a6424cfdc5238043"
+      },
+      "score": 0.57,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 1
+      },
+      "case": "brief_false",
+      "detector_sha256": "4cbc33e3c4e268dbc9369fcb758a9eb9ca5b803ed8d1ebc4d5038fa1da728a0b",
+      "input_sha256": "580654d79473f49445d658c1edcef6117226c32f87dab745432507cfdf09e6d2",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "5c206412610ea48c946cfed98b6024337f951436bcded867a6424cfdc5238043"
+      },
+      "score": 0.57,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 1
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 1
+      },
+      "case": "brief_false",
+      "detector_sha256": "1a88e00677606a9ccd7ede88b70a66eeb3751796322de1b4fa082b0be6619f0b",
+      "input_sha256": "00a540186ad737353ce5fe4d424fded3eeab4aad56440efcf81123f354e7e6f9",
+      "output_sha256": {
+        "baseline": "5c206412610ea48c946cfed98b6024337f951436bcded867a6424cfdc5238043",
+        "candidate": "5c206412610ea48c946cfed98b6024337f951436bcded867a6424cfdc5238043"
+      },
+      "score": 0.61,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 1
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 1
+      },
+      "case": "brief_false",
+      "detector_sha256": "a6f6c3a845986dfa2b36b358e73cfdbb37cd594c48c64d56cfaec15ae212a153",
+      "input_sha256": "09b49a98d913c67a32157f80d0202ecb560e66ac489469feaa98f5d638165a7b",
+      "output_sha256": {
+        "baseline": "5c206412610ea48c946cfed98b6024337f951436bcded867a6424cfdc5238043",
+        "candidate": "5c206412610ea48c946cfed98b6024337f951436bcded867a6424cfdc5238043"
+      },
+      "score": 0.61,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 0,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "case": "persistent_false",
+      "detector_sha256": "82014936191e2c2bd31d639209b641aa7cb2582cf25f57da53e7714e8869da40",
+      "input_sha256": "5b8a4f484b16b9525a94c50d7524722e3fb238a2a894a4cffde6086445434acd",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d"
+      },
+      "score": 0.54,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 0,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "case": "persistent_false",
+      "detector_sha256": "3408d5e4346b2846ff356aca4c3c95ee0fe6c49c0b654ab096fc06e972dc95c4",
+      "input_sha256": "4a98b93b524b755db9d13a0b7b6eac7d1f0b5cba796e4d0be78849b8daa472d2",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d"
+      },
+      "score": 0.54,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 1,
+          "predicted_events": 1,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 1,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 10,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "persistent_false",
+      "detector_sha256": "c823d3a7a6d7873d36457130d2997b27d4a96acf4e5bd1b39bcdac2861be329e",
+      "input_sha256": "5ea82c65e646900d8407f5ba8dbfd0d3f6bd5930d869d7dd2bae8f0f7792a693",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "365f28d05679c4fc3f25014a51fbffa6fd2887161a1b6f62f81d67049e68b1fa"
+      },
+      "score": 0.57,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 1,
+          "predicted_events": 1,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 1,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 10,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "persistent_false",
+      "detector_sha256": "52ae1d52be5e92cc821d2d885fb97836473ed4390b68ad58db8e2b02d0cf8687",
+      "input_sha256": "cb2de0f558697b10fca72f7d7b02a1d5f1fb2cce65bce753528c0f44ae4282ad",
+      "output_sha256": {
+        "baseline": "56f5abfa97071bfa00068fbec1e47be1eeaa7658dfcc1aa43943fb7b86d7870d",
+        "candidate": "456aa12c15d44223e2d41a305c48f6f3743190fbdb228078e87dda799846214f"
+      },
+      "score": 0.57,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 1,
+          "predicted_events": 1,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 1,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 10,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 1,
+          "predicted_events": 1,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 1,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 10,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "persistent_false",
+      "detector_sha256": "b59dcf6b153d11e17bec21b1bf4df9e8acccde6d639ddcfc0a6955c6ce6128d9",
+      "input_sha256": "7b1fc5643ef56ba7817f66b030c1de9aeccf1dad8f023f327d9ddd0bd7b9383a",
+      "output_sha256": {
+        "baseline": "0d5941eaf0ff04a283136e57111f5316879e617e7cf610605e0dc97e8c8928c4",
+        "candidate": "0d5941eaf0ff04a283136e57111f5316879e617e7cf610605e0dc97e8c8928c4"
+      },
+      "score": 0.61,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 1,
+          "predicted_events": 1,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 1,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 10,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [],
+        "crossings": {
+          "fn": 0,
+          "fp": 1,
+          "predicted_events": 1,
+          "tp": 0,
+          "true_events": 0
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 1,
+        "mot": {
+          "false_negatives": 0,
+          "false_positives": 10,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 0,
+          "true_positives": 0
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "persistent_false",
+      "detector_sha256": "5b3fb502d50339d3d7f9ca1217a1d6685b011a4c76c180a5d108f7a4232bdac2",
+      "input_sha256": "04ed6d32d1e29ff0a3e96d09ca6b324b4b59fdc94d0c5fdd3e53e766813469ac",
+      "output_sha256": {
+        "baseline": "ffea9384b8a0be17cd423d951abd98b1626e80eb40e0b26234624d5607b6e82d",
+        "candidate": "ffea9384b8a0be17cd423d951abd98b1626e80eb40e0b26234624d5607b6e82d"
+      },
+      "score": 0.61,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "true_and_clutter",
+      "detector_sha256": "3e817751f8ce2918cb816b76a943ef42467d45d51aa04bbe3f69c07e20cb6e41",
+      "input_sha256": "5593e162e62a180f00898dc9d5194278bf808c2aa8e2b314b944738cbd04f4a6",
+      "output_sha256": {
+        "baseline": "9636180cf1d3e8337731a71b8bd5d306cf74784f6c0a0290c34d3412e8abb3f8",
+        "candidate": "9636180cf1d3e8337731a71b8bd5d306cf74784f6c0a0290c34d3412e8abb3f8"
+      },
+      "score": 0.54,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "case": "true_and_clutter",
+      "detector_sha256": "6e0b32c556496cdda67a640355105e7378285d58a7e52c2d9354f80ea0f79ed2",
+      "input_sha256": "e3dda32f2af9499c91754d9acca3960f683a627bc69d4cd205e9a416ac74bbc3",
+      "output_sha256": {
+        "baseline": "5430e4f10df209bec68bebda35ccc0e711254456a14a8398bfad072fc3d4ffdf",
+        "candidate": "5430e4f10df209bec68bebda35ccc0e711254456a14a8398bfad072fc3d4ffdf"
+      },
+      "score": 0.54,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 2,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 1,
+          "predicted_events": 2,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 1,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 10,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 20,
+        "public_ids": 2,
+        "unconfirmed_births": 0
+      },
+      "case": "true_and_clutter",
+      "detector_sha256": "fe9622bfaa755142ba5e0796855e5ffdf8ee474b1d61c57f318fb24e023e73ee",
+      "input_sha256": "b55999e42d3b901cbeb749c6ebb14e5d49e473ba3dec6bf4aa6da2341540314b",
+      "output_sha256": {
+        "baseline": "9636180cf1d3e8337731a71b8bd5d306cf74784f6c0a0290c34d3412e8abb3f8",
+        "candidate": "6e6cd433fbebd9860853ec0fabc8b73f1403574579aaeecf4e6a4439f24a83c6"
+      },
+      "score": 0.57,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 1,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 1,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 10,
+        "public_ids": 1,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 2,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 1,
+          "predicted_events": 2,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 1,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 10,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 20,
+        "public_ids": 2,
+        "unconfirmed_births": 0
+      },
+      "case": "true_and_clutter",
+      "detector_sha256": "5c9f1eb6d85e70698d6ab5d9600c15469de0137f5cfc939133c1bac93a0f2253",
+      "input_sha256": "33f5967e7c2633d1dea8eee8a5138d6659ca9e9cb990d43eeefab9d64cdb995c",
+      "output_sha256": {
+        "baseline": "5430e4f10df209bec68bebda35ccc0e711254456a14a8398bfad072fc3d4ffdf",
+        "candidate": "80be4d961ff56db7ae9a8e357650d8c18eeff9128883c1b3bddb697729d99493"
+      },
+      "score": 0.57,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 2,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 1,
+          "predicted_events": 2,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 1,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 10,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 20,
+        "public_ids": 2,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 2,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 1,
+          "predicted_events": 2,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 1,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 10,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 20,
+        "public_ids": 2,
+        "unconfirmed_births": 0
+      },
+      "case": "true_and_clutter",
+      "detector_sha256": "043e0ee59c5b9650f7fbbd83fd81794afee77e6f2f262c1cb26da6ce695daf84",
+      "input_sha256": "584a8ff498cba86c1006596b73293b579ede71600798346d000d414229e07c6a",
+      "output_sha256": {
+        "baseline": "6f46201a61d01fc111b85dcca9bf3c1a0d440724c91db6d9ec7ccd2ffdbe5d5f",
+        "candidate": "6f46201a61d01fc111b85dcca9bf3c1a0d440724c91db6d9ec7ccd2ffdbe5d5f"
+      },
+      "score": 0.61,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 2,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 1,
+          "predicted_events": 2,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 1,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 10,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 20,
+        "public_ids": 2,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 2,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 1,
+          "predicted_events": 2,
+          "tp": 1,
+          "true_events": 1
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 1,
+        "mot": {
+          "false_negatives": 2,
+          "false_positives": 10,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 12,
+          "true_positives": 10
+        },
+        "public_boxes": 20,
+        "public_ids": 2,
+        "unconfirmed_births": 0
+      },
+      "case": "true_and_clutter",
+      "detector_sha256": "203e2cf5e2722efdf0ce797188402749816751ca7ed99dc92ff58969f6370e78",
+      "input_sha256": "e57e195a6c74b41bc35530ce23b6e3652f9e9ab2ba2865eb9538dcdaa6520e88",
+      "output_sha256": {
+        "baseline": "d018965c57be75ace8e53566d4b4e13b77d496b2630a54c8ba7c554ef3814e0c",
+        "candidate": "d018965c57be75ace8e53566d4b4e13b77d496b2630a54c8ba7c554ef3814e0c"
+      },
+      "score": 0.61,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          },
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 40
+          }
+        ],
+        "crossings": {
+          "fn": 2,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 2
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 16,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 16,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          },
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 40
+          }
+        ],
+        "crossings": {
+          "fn": 2,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 2
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 16,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 16,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "case": "long_absence",
+      "detector_sha256": "3dd54f27db954dfbfeb70819c96175dfddc15c0679816dcfe28904f5d5c0ec45",
+      "input_sha256": "5f539849dfc65e0a6970e02a5d79ff0a9de6d6d92e1da6f64cd72ad4f68c35da",
+      "output_sha256": {
+        "baseline": "639caca7ee2ee2cc9115975d696a749577b45e0626b6c4054d2d5cdd498c0364",
+        "candidate": "639caca7ee2ee2cc9115975d696a749577b45e0626b6c4054d2d5cdd498c0364"
+      },
+      "score": 0.54,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          },
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 40
+          }
+        ],
+        "crossings": {
+          "fn": 2,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 2
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 16,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 16,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          },
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 40
+          }
+        ],
+        "crossings": {
+          "fn": 2,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 2
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 16,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 16,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "case": "long_absence",
+      "detector_sha256": "0fb8c4333c0996337e4d9cbfe2f0bea9a133bc6576baa5cf25d0f21b951e24ef",
+      "input_sha256": "62edecee6d7a0f8377b2a69b6fbe17926dba6bdb8bcd3b65dacc2b900a67099f",
+      "output_sha256": {
+        "baseline": "639caca7ee2ee2cc9115975d696a749577b45e0626b6c4054d2d5cdd498c0364",
+        "candidate": "639caca7ee2ee2cc9115975d696a749577b45e0626b6c4054d2d5cdd498c0364"
+      },
+      "score": 0.54,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          },
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 40
+          }
+        ],
+        "crossings": {
+          "fn": 2,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 2
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 16,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 16,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 2,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          },
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 40
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 2,
+          "tp": 2,
+          "true_events": 2
+        },
+        "extra_matched_ids": 1,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 1,
+          "num_gt": 16,
+          "true_positives": 12
+        },
+        "public_boxes": 12,
+        "public_ids": 2,
+        "unconfirmed_births": 0
+      },
+      "case": "long_absence",
+      "detector_sha256": "d478a0db3a5275d10b652cacb1689b2a653aef5d7a3dacbdc1c2134af441a64a",
+      "input_sha256": "7ec16d60add8f7f86b627b0ac73e48d3690639ab26afe2f9199fbae3adb0f459",
+      "output_sha256": {
+        "baseline": "639caca7ee2ee2cc9115975d696a749577b45e0626b6c4054d2d5cdd498c0364",
+        "candidate": "93b7897bf40e5aafa0dc3e2aba553b00ffca92a38bbb44894175b983a21739e8"
+      },
+      "score": 0.57,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 0,
+        "confirmation_delays": [
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 0
+          },
+          {
+            "delay_frames": null,
+            "reference_id": 1,
+            "start_frame": 40
+          }
+        ],
+        "crossings": {
+          "fn": 2,
+          "fp": 0,
+          "predicted_events": 0,
+          "tp": 0,
+          "true_events": 2
+        },
+        "extra_matched_ids": 0,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 16,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 0,
+          "num_gt": 16,
+          "true_positives": 0
+        },
+        "public_boxes": 0,
+        "public_ids": 0,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 2,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          },
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 40
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 2,
+          "tp": 2,
+          "true_events": 2
+        },
+        "extra_matched_ids": 1,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 1,
+          "num_gt": 16,
+          "true_positives": 12
+        },
+        "public_boxes": 12,
+        "public_ids": 2,
+        "unconfirmed_births": 0
+      },
+      "case": "long_absence",
+      "detector_sha256": "96c4f5815b591167cbf877a4b859c5a82572f28925e0f54093b3d6e19d7fcebd",
+      "input_sha256": "24d4ca5a045fe1d8200aa1b48593ae0055077a789689058d51e4bb75d033f818",
+      "output_sha256": {
+        "baseline": "639caca7ee2ee2cc9115975d696a749577b45e0626b6c4054d2d5cdd498c0364",
+        "candidate": "8e24433b9c6b069d488ea5d2f9446afbf5bbde4001c21528a12a69c0b75b9405"
+      },
+      "score": 0.57,
+      "speed": 6
+    },
+    {
+      "baseline": {
+        "births": 2,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          },
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 40
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 2,
+          "tp": 2,
+          "true_events": 2
+        },
+        "extra_matched_ids": 1,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 1,
+          "num_gt": 16,
+          "true_positives": 12
+        },
+        "public_boxes": 12,
+        "public_ids": 2,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 2,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          },
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 40
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 2,
+          "tp": 2,
+          "true_events": 2
+        },
+        "extra_matched_ids": 1,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 1,
+          "num_gt": 16,
+          "true_positives": 12
+        },
+        "public_boxes": 12,
+        "public_ids": 2,
+        "unconfirmed_births": 0
+      },
+      "case": "long_absence",
+      "detector_sha256": "2b523d062e09ac4502382f1707d2e932252f4de576c2076d32077d25b0dfe6cb",
+      "input_sha256": "176b039f113c2515154a56fcabbee0afc1e4915c64aa88e44c1f9842dd5daab2",
+      "output_sha256": {
+        "baseline": "9f71a15b9507ce8e11bd99e5ef8f10e4c1e683ff3e33b84933b017338d98540c",
+        "candidate": "9f71a15b9507ce8e11bd99e5ef8f10e4c1e683ff3e33b84933b017338d98540c"
+      },
+      "score": 0.61,
+      "speed": 2
+    },
+    {
+      "baseline": {
+        "births": 2,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          },
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 40
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 2,
+          "tp": 2,
+          "true_events": 2
+        },
+        "extra_matched_ids": 1,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 1,
+          "num_gt": 16,
+          "true_positives": 12
+        },
+        "public_boxes": 12,
+        "public_ids": 2,
+        "unconfirmed_births": 0
+      },
+      "candidate": {
+        "births": 2,
+        "confirmation_delays": [
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 0
+          },
+          {
+            "delay_frames": 2,
+            "reference_id": 1,
+            "start_frame": 40
+          }
+        ],
+        "crossings": {
+          "fn": 0,
+          "fp": 0,
+          "predicted_events": 2,
+          "tp": 2,
+          "true_events": 2
+        },
+        "extra_matched_ids": 1,
+        "ids_with_false_positive_boxes": 0,
+        "mot": {
+          "false_negatives": 4,
+          "false_positives": 0,
+          "fragmentations": 0,
+          "id_switches": 1,
+          "num_gt": 16,
+          "true_positives": 12
+        },
+        "public_boxes": 12,
+        "public_ids": 2,
+        "unconfirmed_births": 0
+      },
+      "case": "long_absence",
+      "detector_sha256": "ae5456c85cd3d8def89462ab98dd6ca063ca786587c734981af0bafc4e809af3",
+      "input_sha256": "c02319fdb6088c322dfbae2e9b27eb227424d3d10d5b68cf80632c4157dbdc5a",
+      "output_sha256": {
+        "baseline": "d1e119f3f34e64ccb8eaba0440a2ed63501b117c08c3c45599010e1bbdf748e0",
+        "candidate": "d1e119f3f34e64ccb8eaba0440a2ed63501b117c08c3c45599010e1bbdf748e0"
+      },
+      "score": 0.61,
+      "speed": 6
+    }
+  ],
+  "method": {
+    "baseline_config": {
+      "appearance_ema_alpha": 0.9,
+      "class_aware": true,
+      "high_score_thresh": 0.5,
+      "kf_noise_scale": 1.0,
+      "low_score_thresh": 0.1,
+      "match_iou_thresh": 0.3,
+      "max_age": 30,
+      "motion_residual_path": null,
+      "n_init": 3,
+      "new_track_thresh": 0.6,
+      "ocm_delta_t": 3,
+      "recovery_iou_thresh": 0.5,
+      "use_giou": false,
+      "use_gmc": false,
+      "use_mahalanobis_gating": true,
+      "use_oru": false,
+      "w_app": 0.0,
+      "w_iou": 1.0,
+      "w_ocm": 0.0,
+      "w_unc": 0.0
+    },
+    "cases": [
+      "steady_true",
+      "late_strong",
+      "short_true",
+      "confirmation_gap",
+      "confirmed_gap",
+      "brief_false",
+      "persistent_false",
+      "true_and_clutter",
+      "long_absence"
+    ],
+    "changed_setting": {
+      "new_track_thresh": 0.55
+    },
+    "development_only": true,
+    "environment": {
+      "byteorder": "little",
+      "machine": "arm64",
+      "numpy": "2.5.4",
+      "python": "3.12.9",
+      "system": "Darwin"
+    },
+    "package": {
+      "files": {
+        "src/visiontrack/__init__.py": "a9839ae1b7ee268b5601d68eba042202435998fd57d1782047deb6cbc3e7d157",
+        "src/visiontrack/appearance/__init__.py": "24bb721c8f8910bff56395b4ec3e295f24f9a52fd468b0dfa0b56d0cd0f1bee9",
+        "src/visiontrack/appearance/embedder.py": "43f138ffd8de0999cf214ad0113836c0744b2216f21235e4a6d2bba2fd1e2afa",
+        "src/visiontrack/appearance/gallery.py": "a996d1db3d0448f396d75c05572b75a13c50de31e2d83882b4f473067e17e461",
+        "src/visiontrack/appearance/reid_onnx.py": "e798a74880344a3725c2ab152c685b8a6e54df266c883631de79b860aad1c391",
+        "src/visiontrack/benchmark_report.py": "64e841a404723d85a779c8953757ba0c6e72ac02bd69922b61d989d2f3d155f1",
+        "src/visiontrack/cli.py": "8a8e4b8899b2f7ea883a256d6596d6312ec6a8fb87d1bb0b78ef384ecd122077",
+        "src/visiontrack/core/__init__.py": "a7abf634b9fe31be4a85038ff484d39b772c04349f8c0b1361b59e9a9d6b968d",
+        "src/visiontrack/core/assignment.py": "76556d72f986a60c2c5da85884c78ff7ac9753c8ab3c9f07575bd7d3e00111c7",
+        "src/visiontrack/core/geometry.py": "c4fe9a5339ed8a069366d046f48fb3ae9fe781f2e7f5cfece3f05e273d45857b",
+        "src/visiontrack/core/kalman.py": "0c3b52825916143b4abf1523a3af55fde7fdf26be44b2d6d652d0f1de423535f",
+        "src/visiontrack/datasets/__init__.py": "e575617edaa2f26f625c70f5cb612f788870661f84dc6302a866433bb0f4e5de",
+        "src/visiontrack/datasets/cache.py": "60712c2f6d86fd1327089445656c212400a89e98a00286ee3d63a1b5e7430eda",
+        "src/visiontrack/datasets/splits.py": "7ba22c47cd0631692393dd425afde72cf01d7c0ccf98eda2d7ce79ec8f387942",
+        "src/visiontrack/detection/__init__.py": "8093cc1234f92585419bc4d822bcf332a67972ce6a7361e8f43ce8701a7c4ad8",
+        "src/visiontrack/detection/base.py": "63519f3fe3b6bdfeff68894059775cfcf14b05da318dd6269a68405e007924ac",
+        "src/visiontrack/detection/cached.py": "64b634ceebbd2a47249d1d551c362a6d3ca7d8a1ba8b75905a043e52b03f97f2",
+        "src/visiontrack/detection/dancetrack_loader.py": "19bbbe1320255f0b718e64afd226c76863fc0048afe5210f3a16b91beda38fbc",
+        "src/visiontrack/detection/mot_loader.py": "53e3b25ef30f45c775e16910e67d5f18c0fe2d35fcb4455f570e25a63777d6a5",
+        "src/visiontrack/detection/noise.py": "e19f13cdf6c7e9b1c7f59d814af5e036fad3e9a759e7cb426e14f1592f8ad138",
+        "src/visiontrack/detection/onnx_yolo.py": "a1a8f02b34118b78dd887f12d1c3b17eaea96d41ce5af87dfc264114c6741f2f",
+        "src/visiontrack/detection/synthetic.py": "7e693d5039f83d49f5280e7b55c7ca368a2fc28875c85a6bcb5eca5b055808aa",
+        "src/visiontrack/detection/yolox_onnx.py": "baf2c4220fa244dbb8e6413f919b93814a136fe37c7766cacf52892c0d496773",
+        "src/visiontrack/eval/__init__.py": "681b831830a65b280aad541787a571c4f3cd2d2e30814a7de1186939c3c3a1ec",
+        "src/visiontrack/eval/_legacy_hota.py": "82da0e461ed5cb616cbe715b29027a4f7d87749685c18aed1ba2dabce2ad3785",
+        "src/visiontrack/eval/_legacy_mot.py": "809f893b9e9d81350a95b941cd705dc8851137eb33c4b5c8571d316a05f1720d",
+        "src/visiontrack/eval/calibration.py": "973cbcc1c822bdcc83117aadf7167d89e3c71e0597df4d988b6013ce05832157",
+        "src/visiontrack/eval/definitions.py": "e8c368062fa7f13e962f19a606602ca129ff207b703f329158d17485b8027e8d",
+        "src/visiontrack/eval/geometry.py": "3c0114d8891ffe959c7daf978f60956612d85c632242683b1f4db9e84711501e",
+        "src/visiontrack/eval/hota.py": "12da1afd72d3630578ce9171b93896eae2d49091e81b9a33373d7b27f0784c67",
+        "src/visiontrack/eval/mot.py": "7e9fe4b8a23c5ba1c3aa747ef939e9581ebf3a6afd84f5ee8dc8c764fdaaec85",
+        "src/visiontrack/eval/mot17.py": "a2c7a7c047b4655665c37d86e73dd43ecaed759b21c248e0f2639d7219cafae2",
+        "src/visiontrack/eval/selective_identity.py": "70df6e9300f183f50926f46a33cadc1066f83ca2205157c6694acef2b1b2c2df",
+        "src/visiontrack/eval/stats.py": "ca9b2c56c15b73793e35f8678b9d2cded37197fb9349d4b4d38b264e4389a4d2",
+        "src/visiontrack/lab/__init__.py": "003ce195b75271b65934ec724fc033dcc541def101096fbe790435ff9a0100b3",
+        "src/visiontrack/lab/comparison.py": "823a26de0296926184f16b7d81f185ecce0d00beab653e51d7beb4425f53e09c",
+        "src/visiontrack/lab/contracts.py": "a5affaf8de43bed1d87bfb64b89a5e8eb3798cd2f8501aa46c1f8bfe9c806f34",
+        "src/visiontrack/lab/decision.py": "959119654792eaaedf368dad53b46923de1744c256eb4405a34bd32461c7f09f",
+        "src/visiontrack/lab/demo.py": "c35e19a50eecac79d0263d3ee593bc652024842a9a590335711e0b1c14d34584",
+        "src/visiontrack/lab/evaluation_policy.py": "83f6ab1db18ce01108057862f7f03883b7fe592c6fed95aa5a1e2df2e1185e7d",
+        "src/visiontrack/lab/evidence.py": "5740ffa4561e5758083fb764f3b1704ac0b17b68204bd61cc3f05757fa0c16fe",
+        "src/visiontrack/lab/failures.py": "e09c18853b5faeab42c1916bb923c03f036693b26a537937e9f8ae9be599eacb",
+        "src/visiontrack/lab/metrics.py": "dc647ad36c321a4ccc7067c795e4bfdbe057daeb9e0c200d6b58b2f17f52065c",
+        "src/visiontrack/lab/mot.py": "7bc463d989fadbc6b29c944f227839edbefc91c53920eb18baeba02ede541860",
+        "src/visiontrack/lab/playback.py": "14f30c50ee70038410c0318d1c0d90610a64c4dc49e7bad40fa952fa3af5887e",
+        "src/visiontrack/lab/report.py": "a7c6bf9421bed15db7c74c74a0029690866a62ff21dc48ecf125c2ec7280fb62",
+        "src/visiontrack/lab/runner.py": "75bb8b11846b6b01f9948859bc538f969f76a87efbec3039cf773ac2629bbcd8",
+        "src/visiontrack/lab/storage.py": "759cfebe6b1d0db8e7457900e2697e2cf211122122861b580db346a1d8b1d0fb",
+        "src/visiontrack/parity_contract.py": "ea5c1d3ba8ea2cdfd0fe041378f101b87636617e96cf0afdec9d182af59285fd",
+        "src/visiontrack/tracking/__init__.py": "f8ad7c84b5c8d51f0a819d0957d75e578dca42f5cfa479dcc3daea19454521fc",
+        "src/visiontrack/tracking/config.py": "74a1d4d20752de91e55a8e174eda94dad501b78be1d4366bb974acb232b8a430",
+        "src/visiontrack/tracking/cost.py": "838c7db930e53fc4c62ef48dd29f03760c808ed40f7faa7d8cacae4be13ff29d",
+        "src/visiontrack/tracking/motion/__init__.py": "4c5f01d120dc9367b48ab31ce85fcc268a0b898fc43da21edcf16c9b99dd1113",
+        "src/visiontrack/tracking/motion/gmc.py": "463313a07117d53019b9d62d7f18567d5faa6d931efeb12477a31f80f0397532",
+        "src/visiontrack/tracking/motion/oc.py": "8910fb6fc8d52bff3491d86da4fb5834c7b081a3c47d1499c11ba973dc9a83f7",
+        "src/visiontrack/tracking/motion/residual.py": "92510d5f752858dfd3b4123154d5c0671fcfa187ef8ff6acbfc4ddf785043da7",
+        "src/visiontrack/tracking/presets.py": "dffe81d1b7424d12d36c5e09a377a397ec4e3951b260b7a2a290397f3468d28e",
+        "src/visiontrack/tracking/track.py": "8d32f97785bf78ca2f88fec159d4209637551087eb1c14bd1bb3d612299040ba",
+        "src/visiontrack/tracking/tracker.py": "308726066720a3431a40ae45e10095ef46b29250a308ba7a034ea57f8491f04e",
+        "src/visiontrack/video.py": "fe1041860d6ac2d36579fc9f8835a9b572c0e0da7b2c82d4208416db0ac3d414",
+        "src/visiontrack/viz/__init__.py": "56e24b51f47910e793c179b6443119a14605c46791eebbfc5f6f28cbf3762e34",
+        "src/visiontrack/viz/draw.py": "183876d1140d440cf1723e0d3971d22f8efd288cdc40cd5d72ade3ea823b94a0"
+      },
+      "revision": "6ca1d9f54a5376b090e5d7b40dbb2b271138d4ae",
+      "sha256": "cf38d6b275bf184c235efb0adb8c5b72dac52e22e6c6d9a143cb8bd7ba626f8d"
+    },
+    "real_world_accuracy_claim": false,
+    "revision": "7cf2be7dcbf0457df32417dd1dae764531c06522",
+    "scores": [
+      0.54,
+      0.57,
+      0.61
+    ],
+    "sources": {
+      "docs/INITIATION_THRESHOLD_PROTOCOL.md": "cb318b06f765c3b5ae061f185d911a50ea0dab3c3c2380ebcdccb4558234917e",
+      "experiments/hvsd_rain_review.py": "fd53002e10c8c2a2b2d2ff1a885b0d7f9fe89ccd61b41d97a3003a0083f10424",
+      "experiments/initiation_threshold.py": "a2f1b85c48f1610bd407da648265113ec8ab63c69e531db148ff68f518a5d5ac",
+      "experiments/traffic_runner.py": "e09435777d831e02d597d69f7e11dc4b4d3b4b89fea50f144f062b9edb8eeb74",
+      "tests/test_initiation_threshold.py": "f356e5981c6ef13d109c2aba2c693b9b19c564fdb86d9caedc8dbac81ae4ddf7"
+    },
+    "speeds": [
+      2,
+      6
+    ]
+  },
+  "paired_cells": 54,
+  "real_world_accuracy_claim": false,
+  "recommend_default_change": false,
+  "schema": "visiontrack.initiation-threshold/v1",
+  "tracker_passes": 324
+}
