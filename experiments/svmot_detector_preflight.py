@@ -15,7 +15,16 @@ import numpy as np
 
 from visiontrack.detection.yolox_onnx import YoloxDetector
 
-MODEL_SHA256 = "c789161ed43c8269fcd4e67c67eeeb4e80c622da2eb296a20bc6007bd18a0b7d"
+MODEL_SPECS = {
+    "nano": (
+        "c789161ed43c8269fcd4e67c67eeeb4e80c622da2eb296a20bc6007bd18a0b7d",
+        416,
+    ),
+    "x": (
+        "c892d7aaf1c4746d8a4d675bec669a4db4f434b4ee1efb654bc9b353379c7c55",
+        640,
+    ),
+}
 COCO_CAR = 2
 SVMOT_CAR = 1
 IOU_SCREEN = 0.5
@@ -37,7 +46,11 @@ def _iou(a: tuple[float, ...], b: tuple[float, ...]) -> float:
 
 
 def preflight(root: Path, train_file: Path, test_file: Path, selection_file: Path,
-              model_path: Path, detector_factory=YoloxDetector) -> dict:
+              model_path: Path, detector_factory=YoloxDetector,
+              model_key: str = "nano") -> dict:
+    if model_key not in MODEL_SPECS:
+        raise ValueError("unknown pinned detector model")
+    expected_hash, input_size = MODEL_SPECS[model_key]
     train = set(train_file.read_text(encoding="utf-8").split())
     test = set(test_file.read_text(encoding="utf-8").split())
     selection = json.loads(selection_file.read_text(encoding="utf-8"))
@@ -64,7 +77,7 @@ def preflight(root: Path, train_file: Path, test_file: Path, selection_file: Pat
     if _sha256(folder / "occlusion.json") != event["occlusion_sha256"]:
         raise ValueError("occlusion source differs from selection receipt")
     model_hash = _sha256(model_path)
-    if model_hash != MODEL_SHA256:
+    if model_hash != expected_hash:
         raise ValueError("detector model fingerprint mismatch")
 
     gt_path = folder / "gt" / "gt.txt"
@@ -83,7 +96,8 @@ def preflight(root: Path, train_file: Path, test_file: Path, selection_file: Pat
 
     from PIL import Image
 
-    detector = detector_factory(str(model_path), class_filter={COCO_CAR})
+    detector = detector_factory(str(model_path), input_size=input_size,
+                                class_filter={COCO_CAR})
     rows = []
     for frame in range(start, end + 1):
         image_path = folder / "img" / f"{frame:04d}.jpg"
@@ -122,7 +136,8 @@ def preflight(root: Path, train_file: Path, test_file: Path, selection_file: Pat
         "selection_sha256": _sha256(selection_file),
         "gt_sha256": _sha256(gt_path),
         "model_sha256": model_hash,
-        "detector": "YOLOX nano ONNX; 416 px; score >= 0.25; NMS IoU 0.45; COCO car only",
+        "detector": (f"YOLOX {model_key} ONNX; {input_size} px; score >= 0.25; "
+                     "NMS IoU 0.45; COCO car only"),
         "box_overlap_screen_iou": IOU_SCREEN,
         "phases": phases,
         "frames": rows,
@@ -140,10 +155,11 @@ def main() -> None:
     parser.add_argument("--test-file", required=True, type=Path)
     parser.add_argument("--selection", required=True, type=Path)
     parser.add_argument("--model", required=True, type=Path)
+    parser.add_argument("--model-key", choices=sorted(MODEL_SPECS), default="nano")
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
     result = preflight(args.root, args.train_file, args.test_file,
-                       args.selection, args.model)
+                       args.selection, args.model, model_key=args.model_key)
     args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n",
                            encoding="utf-8")
     print(f"Wrote {args.output}")

@@ -191,3 +191,23 @@ would mostly measure missing detector observations, not recovery of the target
 identity. A future independently sourced detector must pass a predeclared
 development coverage screen, with the source rights and label-quality gates
 still unresolved, before any frozen tracker comparison.
+
+## Second detector feasibility screen (method frozen before execution)
+
+To check whether the same selected case is observable with a stronger
+independent detector, run the existing local YOLOX-X ONNX file (SHA-256
+`c892d7aaf1c4746d8a4d675bec669a4db4f434b4ee1efb654bc9b353379c7c55`)
+once on the **same 29 training frames**, at its fixed 640-pixel input,
+confidence 0.25, NMS IoU 0.45 and COCO car class 2. Use
+`svmot_detector_preflight.py --model-key x`; do not run a tracker or use the
+publisher's `det.txt`. A viable boundary requires a box with IoU at least 0.5
+against ID 26 in **at least two of three clear frames before** and **two of
+four clear frames after** the occlusion. If either side fails, stop this event
+as a tracker-comparison candidate. Report matches inside the occlusion, but
+do not change the rule; the fully hidden car cannot supply visible evidence.
+
+This is an exploratory feasibility screen, selected after YOLOX nano failed.
+Model capacity and input resolution both change, so any difference cannot be
+attributed to either factor. Passing only makes this one development event
+potentially testable. SVMOT remains on hold until source rights, provenance,
+annotation quality, full integrity and a frozen scene-disjoint protocol pass.

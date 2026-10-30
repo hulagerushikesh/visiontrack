@@ -45,8 +45,10 @@ def _sample(tmp_path: Path) -> tuple[Path, Path, Path, Path, Path]:
 
 
 class _Detector:
-    def __init__(self, model_path: str, *, class_filter: set[int]) -> None:
+    def __init__(self, model_path: str, *, input_size: int,
+                 class_filter: set[int]) -> None:
         assert class_filter == {2}
+        assert input_size in {416, 640}
         self.count = 0
 
     def detect(self, image: np.ndarray) -> list[Detection]:
@@ -61,7 +63,8 @@ def test_preflight_runs_only_bounded_detector_and_reports_phases(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     root, train, test, selection, model = _sample(tmp_path)
-    monkeypatch.setattr(study, "MODEL_SHA256", hashlib.sha256(model.read_bytes()).hexdigest())
+    monkeypatch.setitem(study.MODEL_SPECS, "nano",
+                        (hashlib.sha256(model.read_bytes()).hexdigest(), 416))
     result = study.preflight(root, train, test, selection, model, _Detector)
     json.dumps(result)  # The owner-local CLI receipt must be serializable.
     assert result["phases"] == {
@@ -81,7 +84,8 @@ def test_preflight_rejects_heldout_or_changed_source(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     root, train, test, selection, model = _sample(tmp_path)
-    monkeypatch.setattr(study, "MODEL_SHA256", hashlib.sha256(model.read_bytes()).hexdigest())
+    monkeypatch.setitem(study.MODEL_SPECS, "nano",
+                        (hashlib.sha256(model.read_bytes()).hexdigest(), 416))
     receipt = json.loads(selection.read_text(encoding="utf-8"))
     receipt["selected_event"]["sequence"] = "heldout_scene"
     selection.write_text(json.dumps(receipt), encoding="utf-8")
@@ -98,6 +102,20 @@ def test_preflight_rejects_unpinned_model(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     root, train, test, selection, model = _sample(tmp_path)
-    monkeypatch.setattr(study, "MODEL_SHA256", "0" * 64)
+    monkeypatch.setitem(study.MODEL_SPECS, "nano", ("0" * 64, 416))
     with pytest.raises(ValueError, match="model fingerprint"):
         study.preflight(root, train, test, selection, model, _Detector)
+
+
+def test_preflight_uses_pinned_x_input_and_rejects_unknown_model(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    root, train, test, selection, model = _sample(tmp_path)
+    monkeypatch.setitem(study.MODEL_SPECS, "x",
+                        (hashlib.sha256(model.read_bytes()).hexdigest(), 640))
+    result = study.preflight(root, train, test, selection, model, _Detector,
+                             model_key="x")
+    assert result["detector"].startswith("YOLOX x ONNX; 640 px")
+    with pytest.raises(ValueError, match="unknown pinned"):
+        study.preflight(root, train, test, selection, model, _Detector,
+                        model_key="unregistered")
