@@ -7,10 +7,15 @@ implemented. The [committed-method initiation study](INITIATION_THRESHOLD_FINDIN
 completed all 54 synthetic pairs / 324 passes: earlier births recover true
 crossings but also confirm persistent false proposals. The candidate fails
 the no-harm gate; all 36 controls are exact, and defaults/C++ remain unchanged.
-The UI explains the negative result separately from the rain evidence. Next
-is reusable offline birth/confirmation diagnosis with unchanged public output
-and historical report compatibility; real-traffic acceptance remains a separate
-data/label gate. The checkpoints below retain their historical scope.
+The UI explains the negative result separately from the rain evidence.
+The reusable [offline initiation diagnostic](INITIATION_DIAGNOSTIC.md) is now
+implemented through `lab-initiation`: selected local detection/track lifecycle
+rows, full warm-up replay, exact saved-output parity, read-only terminal output
+and separate canonical JSON. A complete synthetic bundle check retained all
+15 files and rebuilt its original report identically. Next is optional verified
+trace inspection in the Lab; real-traffic acceptance remains a separate
+data/label gate. Defaults and C++ stay unchanged. The checkpoints below retain
+their historical scope.
 
 **Current checkpoint — 2026-10-26:** the owner delegated technical review because
 no separate reviewer is available. The [AI-assisted exploratory case note](MOT17_AI_REVIEW_DECISION.md)

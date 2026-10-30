@@ -89,7 +89,17 @@ visiontrack lab-demo ./lab-onboarding              # preview only
 visiontrack lab-demo ./lab-onboarding --write      # create complete bundle
 visiontrack lab-playback BUNDLE EVENT_ID --variant appearance
 visiontrack lab-playback BUNDLE EVENT_ID --variant appearance --json > playback.json
+visiontrack lab-initiation BUNDLE --variant bytetrack --start 0 --end 10
+visiontrack lab-initiation BUNDLE --variant bytetrack --start 0 --end 10 --json
 ```
+
+`lab-initiation` is a read-only offline lifecycle diagnostic available in the
+current source checkout. It replays an existing saved run with exact public-output
+parity and explains detection disposition, tentative birth, confirmation, missed
+updates and expiry. Its separate JSON trace does not alter the report contract.
+See the [walkthrough and limits](INITIATION_DIAGNOSTIC.md). The Python entry point
+is `visiontrack.lab.build_initiation_trace(bundle, variant=..., start=..., end=...)`;
+it returns the same content-addressed dictionary without writing files.
 
 `lab-evidence` accepts only explicit `FRAME=PNG_PATH` inputs and prints the
 resolved crop, output dimensions, privacy class, and limits without reading the

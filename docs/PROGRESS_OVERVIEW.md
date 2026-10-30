@@ -16,9 +16,13 @@ is now complete: 54 paired synthetic cells / 324 passes. Earlier births recover
 true crossings but also confirm persistent false proposals and create false
 counts. All 36 below-both/above-both controls are byte-identical. The candidate
 fails the registered no-harm gate; defaults and C++ remain unchanged. The Lab
-now explains this result separately from the rain observations. Next product
-delivery: reusable offline birth/confirmation diagnosis for a local detection
-stream, preserving public output and historical report compatibility. A real
+now explains this result separately from the rain observations. The reusable
+[offline birth/confirmation diagnostic](INITIATION_DIAGNOSTIC.md) is also
+implemented: it replays a supplied local Lab run, verifies exact saved-output
+parity and explains score admission, births, confirmation, recovery and deletion.
+It exports a separate bounded numeric trace; historical reports remain compatible.
+Next product delivery: inspect this explicitly selected trace in the Lab with
+verified run lineage and a plain-language frame timeline. A real
 traffic improvement claim still requires independently checked domain evidence.
 
 **Current review decision:** the owner delegated technical inspection because no
@@ -313,12 +317,18 @@ no GPU path or weakened parity is justified by the current plan.
 
 ## Immediate next action
 
-The curated `/lab/crossings` case and its controlled threshold follow-up are
-complete. Build a reusable, opt-in **offline initiation diagnostic** for supplied
-local detections: record birth rejection, tentative confirmation/miss and public
-output without modifying the tracker algorithm or interpreting score as truth.
-First check the existing report contract and protect historical imports. This
-is a product-capability step; it needs no owner recording or new source hunt.
+The curated `/lab/crossings` case, controlled threshold follow-up and reusable
+**offline initiation diagnostic** are complete. The new `lab-initiation` command
+records score admission, births, tentative confirmation/miss, public output and
+deletion while preserving the tracker algorithm. Complete replay must match
+the saved output hash before a trace is emitted. The 1–200-frame diagnostic is
+separate from `report.json`; old report contracts and imports are unchanged.
+
+Next, add optional local trace inspection to the Lab: verify its fingerprint,
+structure and active report/run lineage before showing an accessible frame
+timeline. Keep detection, tentative/internal state and public output distinct;
+do not interpret score as truth or invent pair-level gate causes. This is a
+product-capability step; it needs no owner recording or new source hunt.
 
 For research, retain the [negative threshold finding](INITIATION_THRESHOLD_FINDINGS.md)
 and the rejected warning/gate interventions. Representative traffic evaluation

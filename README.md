@@ -153,15 +153,24 @@ visiontrack lab-demo ./lab-onboarding                  # preview only
 visiontrack lab-demo ./lab-onboarding --write          # create verified bundle
 visiontrack lab-playback BUNDLE EVENT_ID --variant appearance  # metadata only
 visiontrack lab-playback BUNDLE EVENT_ID --variant appearance --json > playback.json
+visiontrack lab-initiation BUNDLE --variant bytetrack --start 0 --end 10
 ```
 
 `lab-evidence` previews only by default; add `--write` after checking its crop,
 privacy class, and limits. `lab-decision` likewise previews the exact choice and
 verified lineage before `--write` creates `decision.json`. CLI subcommands:
 `demo`, `eval`, `ablate`, `track`, `webcam`, `lab-evidence`, `lab-decision`,
-`lab-decision-import`, `lab-demo`, `lab-playback`.
+`lab-decision-import`, `lab-demo`, `lab-playback`, `lab-initiation`.
 Full public API: [docs/API.md](docs/API.md) ·
 packaging/release: [docs/RELEASE.md](docs/RELEASE.md).
+
+`lab-initiation` explains why detections do or do not start tracks, when tentative
+tracks confirm, and when tracks survive or expire without public boxes. It
+replays an existing local Lab run and requires its public output to match the
+saved output exactly. It writes nothing; `--json` emits a separate numeric trace.
+See the [short diagnostic walkthrough](docs/INITIATION_DIAGNOSTIC.md). This command
+is available from the current source checkout; it is not part of the published
+0.3.0 package yet.
 
 The private, client-side Reliability Lab at `/lab` can inspect an explicitly
 selected `decision.json`. It verifies the decision fingerprint and full report

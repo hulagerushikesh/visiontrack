@@ -15,7 +15,7 @@ was no threshold search, change of confirmation/gating, held-out test or replay
 on a new traffic video. The previous rain clip motivated this candidate and
 remains exploratory.
 
-The [complete result](../experiments/initiation_threshold_v1_results.json)
+The [complete result](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/initiation_threshold_v1_results.json)
 retains every cell, configurations, input/output digests, environment and source
 hashes. Its file SHA-256 is
 `fb947930ba3b1a2bf73596a5ffcdb5f76b1d56372edbb4ef47c93e7dbd20fc8d`.
@@ -85,11 +85,12 @@ hosted deployment; the linked route is available after its deployment succeeds.
 
 - [x] Finish the bounded mechanism study and retain negative findings.
 - [x] Make its benefit/cost explanation accessible from the existing Lab UI.
-- [ ] Next product delivery: make birth/confirmation diagnosis reusable for a
-  local detection stream rather than limited to this curated rain example.
-  Start with an opt-in offline trace, keep tracking output exactly unchanged,
-  and distinguish observed stage reasons from truth/accuracy claims. Check the
-  current report contract before extending it; preserve old report compatibility.
+- [x] Make birth/confirmation diagnosis reusable for a local detection stream
+  rather than limited to this curated rain example. The opt-in
+  [offline initiation diagnostic](INITIATION_DIAGNOSTIC.md) now explains saved
+  Lab runs with exact public-output parity and a separate bounded trace.
+  It preserves old report compatibility and distinguishes observed lifecycle
+  decisions from truth/accuracy claims. Optional Lab trace inspection is next.
 - [ ] Research acceptance remains a separate gate: permitted representative
   traffic evidence with independently checked event/negative labels, frozen
   detector+tracker comparison and false-count/miss costs. Do not repeatedly

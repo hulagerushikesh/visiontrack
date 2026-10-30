@@ -21,6 +21,8 @@ Subcommands
     Preview or create a complete deterministic synthetic Lab bundle.
 ``lab-playback``
     Preview synchronized failure-playback metadata without revealing pixels.
+``lab-initiation``
+    Explain detection admission and track lifecycle in a saved local Lab run.
 ``parity-contract``
     Verify the canonical dataset-free Python/C++ tracker contract fixture.
 
@@ -661,6 +663,59 @@ def cmd_lab_playback(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_lab_initiation(args: argparse.Namespace) -> int:
+    """Print an opt-in, exact-output-checked offline lifecycle trace."""
+    from .lab.contracts import canonical_json
+    from .lab.initiation import build_initiation_trace
+
+    try:
+        trace = build_initiation_trace(
+            args.bundle, variant=args.variant, start=args.start, end=args.end,
+        )
+    except (OSError, ValueError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    if args.json:
+        print(canonical_json(trace))
+        return 0
+
+    meanings = {
+        "below_low_score": "ignored: below recovery score",
+        "unmatched_low_score": "unmatched recovery proposal; cannot start a new track",
+        "below_birth_score": "unmatched high proposal; below new-track score",
+        "spawned_tentative": "started a tentative track; not public yet",
+        "matched_confirmed_high": "matched an existing confirmed track (high-score stage)",
+        "matched_confirmed_low": "recovered an existing confirmed track (low-score stage)",
+        "matched_tentative_high": "matched a tentative track",
+    }
+    print("Offline track initiation diagnosis — saved public output matches exactly")
+    print(f"  variant: {trace['variant']}; run: {trace['run_id']}")
+    print(f"  trace: {trace['trace_id']}")
+    print(f"  replay: {trace['replay_frame_range']}; selected: {trace['trace_frame_range']}")
+    cfg = trace["config"]
+    print(f"  scores: recovery >= {cfg['low_score_thresh']}, high >= "
+          f"{cfg['high_score_thresh']}, new track >= {cfg['new_track_thresh']}")
+    print(f"  confirmation setting: {cfg['n_init']} hits; expiry after "
+          f"more than {cfg['max_age']} missed frames")
+    for frame in trace["frames"]:
+        print(f"Frame {frame['frame_index']}: {len(frame['detections'])} detections; "
+              f"public IDs {frame['public_track_ids']}")
+        for detection in frame["detections"]:
+            track = ("" if detection["track_id"] is None
+                     else f" -> track {detection['track_id']}")
+            print(f"  detection {detection['detection_index']} "
+                  f"(score {detection['score']}): "
+                  f"{meanings[detection['disposition']]}{track}")
+        for track in frame["tracks"]:
+            print(f"  track {track['track_id']}: {track['event']}, "
+                  f"{track['hits']} hits, {track['time_since_update']} missed; "
+                  f"public={'yes' if track['public'] else 'no'}")
+    for limit in trace["limits"]:
+        print(f"  {limit}")
+    print("Read-only: nothing was written. Use --json for the complete numeric trace.")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="visiontrack", description="Online multi-object tracking demo & evaluation"
@@ -882,6 +937,20 @@ def build_parser() -> argparse.ArgumentParser:
         help="emit only canonical playback JSON to standard output",
     )
     p_lab_playback.set_defaults(func=cmd_lab_playback)
+
+    p_initiation = sub.add_parser(
+        "lab-initiation", help="diagnose a saved run's detection admission and track lifecycle",
+    )
+    p_initiation.add_argument("bundle", help="existing local Lab bundle with a completed run")
+    p_initiation.add_argument("--variant", required=True, help="declared saved variant name")
+    p_initiation.add_argument(
+        "--start", required=True, type=int, help="first source frame (inclusive)",
+    )
+    p_initiation.add_argument(
+        "--end", required=True, type=int, help="last source frame (exclusive)",
+    )
+    p_initiation.add_argument("--json", action="store_true", help="emit only canonical trace JSON")
+    p_initiation.set_defaults(func=cmd_lab_initiation)
 
     return parser
 

@@ -28,6 +28,7 @@ from .decision import (
 from .demo import SyntheticLabPlan, create_synthetic_lab, plan_synthetic_lab
 from .evidence import EvidenceProductionPlan, plan_failure_evidence, produce_failure_evidence
 from .failures import calculate_failure_events
+from .initiation import build_initiation_trace
 from .metrics import calculate_bundle_metrics
 from .mot import import_mot_ground_truth
 from .playback import build_failure_playback
@@ -100,6 +101,7 @@ __all__ = [
     "calculate_failure_events",
     "build_report_model",
     "build_failure_playback",
+    "build_initiation_trace",
     "generate_local_report",
     "render_report_html",
     "read_detection_jsonl",

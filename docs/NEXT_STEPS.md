@@ -11,8 +11,12 @@ why a tracking change helps or hurts.
 - [x] Retain recovered true crossings, false-count costs and all 36 exact controls.
 - [x] Keep defaults unchanged after the no-harm gate fails; explain the result
       in `/lab/crossings` without presenting it as traffic accuracy.
-- [ ] Next: reusable opt-in offline birth/confirmation diagnosis on supplied
-      local detections, unchanged public output and compatible old reports.
+- [x] Reusable opt-in offline birth/confirmation diagnosis on supplied local
+      Lab detections, exact saved-output parity and compatible old reports.
+- [x] Read-only terminal explanation and separate canonical JSON export with
+      bounded windows, original detection keys and preserved warm-up history.
+- [ ] Next: optional local trace inspection in the Lab, verified against the
+      active report/run, with a plain-language lifecycle timeline.
 - [ ] Separate research gate: representative permitted traffic event/negative
       labels before accepting a detector+tracker change or proposing a C++ port.
 
