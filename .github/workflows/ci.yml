@@ -97,7 +97,7 @@ jobs:
       - name: Install ruff
         run: pip install ruff
       - name: Ruff check
-        run: ruff check src tests experiments data scripts/check_installed_package.py
+        run: ruff check src tests experiments data scripts/check_installed_package.py scripts/check_release.py
 
   web:
     name: web contract + build

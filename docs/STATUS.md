@@ -25,8 +25,11 @@ Lab-extra guided demo, exact installed-source/replay checks and the existing
 Python-to-TypeScript initiation contract. Normal CI and release builds enforce
 the installed-artifact check and retain receipts. These are local builds, not a
 new publication; the public wheel remains 0.3.0. Practitioner usability remains
-open. Next: freeze a scoped release candidate and version using the
-[readiness checklist](RELEASE_READINESS.md); real-traffic acceptance
+open. The [0.4.0 scope and migration](RELEASE_NOTES_0.4.0.md) are now frozen;
+source metadata/public PyPI remain 0.3.0 until candidate preparation. Release
+builds now require a matching tag/version and latest successful main-push CI
+for that exact SHA. Next: prepare candidate metadata/current fixtures and run
+the final [readiness gates](RELEASE_READINESS.md); real-traffic acceptance
 remains a separate data/label gate. Defaults and C++ stay unchanged. The checkpoints below retain
 their historical scope.
 

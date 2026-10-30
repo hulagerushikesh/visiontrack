@@ -27,8 +27,12 @@ why a tracking change helps or hurts.
       separate wheel/sdist clean installs, core-only and Lab-extra commands,
       exact source/replay checks and actual Python-to-TypeScript imports. Retain
       the receipt and enforce the check in normal CI and the release build.
-- [ ] Freeze the next release scope and version using the
-      [current readiness checklist](RELEASE_READINESS.md). No automatic package release,
+- [x] Freeze the [0.4.0 release scope and migration](RELEASE_NOTES_0.4.0.md),
+      separating measurement corrections, optional tooling and the deployed site.
+      Add an exact-tag/version/CI guard before the release build.
+- [ ] Prepare 0.4.0 metadata and current version-dependent fixtures, then run
+      final local/hosted gates using the [readiness checklist](RELEASE_READINESS.md).
+      No automatic package release,
       new footage hunt, public accuracy claim or outreach follows from this list.
 - [ ] Separate research gate: representative permitted traffic event/negative
       labels before accepting a detector+tracker change or proposing a C++ port.

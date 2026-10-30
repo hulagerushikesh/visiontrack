@@ -19,8 +19,9 @@ optional extras, and a build that produces a valid sdist + wheel
 ## Cut a release
 
 `0.3.0` is already published; its [notes](RELEASE_NOTES_0.3.0.md) are historical.
-For the next release, first freeze scope, choose a new version and complete the
-current [readiness gates](RELEASE_READINESS.md). Freezing scope or checking a
+The next [0.4.0 scope](RELEASE_NOTES_0.4.0.md) is frozen but unpublished. Prepare
+its metadata and complete the current [readiness gates](RELEASE_READINESS.md).
+Freezing scope or checking a
 local artifact does not authorize a version bump or tag by itself. Replace
 `X.Y.Z` below with that chosen version; never reuse an existing release tag.
 
@@ -38,6 +39,15 @@ Pushing the `v*` tag triggers [`.github/workflows/release.yml`](https://github.c
 which builds the distributions, runs `twine check`, verifies both exact
 distributions in clean installations, and publishes to PyPI via OIDC. Watch
 the Actions tab and verify the published version and artifacts afterward.
+
+Before building, `scripts/check_release.py` requires a stable `vX.Y.Z` tag
+matching both version declarations, version-specific notes, the checked-out
+GitHub SHA and the newest successful **main-push CI** run for that exact commit.
+A branch-based manual dispatch is refused. Dispatching on a valid tag can
+publish; it is not a dry run. If CI is still pending or a newer run failed,
+resolve it and retry the release workflow after CI succeeds. The read-only
+GitHub Actions token needs `actions: read`; a network/API failure blocks release.
+Use the installed-delivery command below for a non-publishing rehearsal.
 
 ## Check installed delivery
 

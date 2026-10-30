@@ -31,8 +31,12 @@ The installable delivery check now passes separate clean wheel and source-archiv
 installs, first core-only and then with the Lab extra. Both generate and replay
 the same report/trace, match the actual package source, and pass the TypeScript
 initiation workflow. This is enforced in CI and before release artifact upload.
-It does not publish a package: scope/version selection and final release gates
-are the next delivery step, tracked in [release readiness](RELEASE_READINESS.md).
+The [0.4.0 scope and migration](RELEASE_NOTES_0.4.0.md) are now frozen, including
+corrected measurement semantics and optional diagnostics without tracker changes.
+A publication guard requires matching tag/version metadata and latest successful
+main-push CI for the exact commit. Nothing is published: source metadata remains
+0.3.0. Candidate metadata/current fixture preparation and final release gates
+are next, tracked in [release readiness](RELEASE_READINESS.md).
 A real traffic improvement claim still requires independently checked domain evidence.
 
 **Current review decision:** the owner delegated technical inspection because no

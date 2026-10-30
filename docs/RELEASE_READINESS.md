@@ -23,14 +23,22 @@ metadata for testing only: they are not a new release or replacements on PyPI.
       This does not constitute browser interaction or practitioner usability QA.
 - [x] Add this clean-install check to normal CI and to the release build job
       before artifact upload/publication; retain a machine-readable receipt.
-- [ ] Freeze the next release scope and choose a new version, distinguishing
+- [x] Freeze the [0.4.0 scope and migration](RELEASE_NOTES_0.4.0.md), distinguishing
       tracking behavior, corrected metric semantics, optional diagnostics and
-      separately deployed website features. Do not reuse the published version.
+      separately deployed website features. Metadata remains 0.3.0 until candidate
+      preparation; the selected release is not yet tagged or published.
+- [x] Guard publication against branch dispatch, tag/metadata mismatch and
+      missing, failed or pending latest main-push CI for the exact release commit.
+- [ ] Prepare 0.4.0 metadata and version-dependent current fixtures without
+      rewriting historical evidence or changing the tracker.
 - [ ] Re-run the chosen release's full gates at its final revision and verify
       hosted CI before any tag/publication. Broader platform support is not
       established by this local macOS/Python 3.12 checkpoint alone.
 
 Reproduce with the command in [Release to PyPI](RELEASE.md#check-installed-delivery).
+Hosted CI for the installed-delivery checkpoint `7ddd18d` is
+[successful](https://github.com/hulagerushikesh/visiontrack/actions/runs/41047232224).
+That success does not substitute for CI on the final 0.4.0 candidate revision.
 The receipt records artifact digests, installed source hashes, report/trace IDs,
 core checks and whether the TypeScript contract was run. It contains local
 installation paths and stays local or in the CI artifact; it is not a dataset,
