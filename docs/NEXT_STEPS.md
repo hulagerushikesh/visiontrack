@@ -613,6 +613,10 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       question before its 7.9 GB archive. The publisher-hash-matched file says
       some video uses a moving dashboard camera and describes detection labels,
       so reject it as fixed-camera MOT truth without opening the archive.
+- [x] Run a [bounded DroneTrafficZA2020 count-source audit](DRONETRAFFICZA_INTAKE.md)
+      on publisher-hash-verified small files. A malformed reference row,
+      mismatched entry/crossing semantics and unverified output interval hold
+      a count comparison; the drone scene has no dense ID truth for the main gate.
 - [ ] Admit a separate permitted, independently annotated traffic source only
       after camera provenance, exact asset rights, label quality, integrity and
       a scene-disjoint frozen protocol pass. Resolve the remaining object-level
