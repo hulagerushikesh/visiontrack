@@ -604,6 +604,11 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       semantics. Recheck the four bounded SVMOT training pairs: all 30,762
       supplied detections mirror GT box geometry. The private receipt is
       source triage, not a tracker outcome or proof of annotation quality.
+- [x] Inspect the official RoundaboutHD ZIP64 index and small README by bounded
+      byte ranges. Four single-camera GT members and manually checked detection
+      labels are declared; no media or tracking labels were opened. Its media
+      licence and full archive checksum remain unresolved, so admission stays
+      on hold despite stronger annotation-format fit.
 - [ ] Admit a separate permitted, independently annotated traffic source only
       after camera provenance, exact asset rights, label quality, integrity and
       a scene-disjoint frozen protocol pass. Resolve the remaining object-level
