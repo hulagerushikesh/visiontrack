@@ -26,6 +26,15 @@ jobs:
           python -m pip install --upgrade build twine
           python -m build
           python -m twine check dist/*
+      - name: Verify these exact distributions in separate clean installations
+        run: |
+          python scripts/check_installed_package.py --dist-dir dist \
+            --output "$RUNNER_TEMP/release-install-check"
+      - name: Retain installed-distribution verification receipt
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-install-receipt
+          path: ${{ runner.temp }}/release-install-check/receipt.json
       - uses: actions/upload-artifact@v7
         with:
           name: dist

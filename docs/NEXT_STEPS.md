@@ -23,8 +23,12 @@ why a tracking change helps or hurts.
 - [ ] Validate the walkthrough with a practitioner when available; preparation
       and rendered-component checks do not establish usability or product demand.
       Browser interaction QA is still unverified after the earlier access denial.
-- [ ] Check installable delivery for the source-only diagnostic and guided demo
-      before choosing a scoped release candidate. No automatic package release,
+- [x] Check installable delivery for the source-only diagnostic and guided demo:
+      separate wheel/sdist clean installs, core-only and Lab-extra commands,
+      exact source/replay checks and actual Python-to-TypeScript imports. Retain
+      the receipt and enforce the check in normal CI and the release build.
+- [ ] Freeze the next release scope and version using the
+      [current readiness checklist](RELEASE_READINESS.md). No automatic package release,
       new footage hunt, public accuracy claim or outreach follows from this list.
 - [ ] Separate research gate: representative permitted traffic event/negative
       labels before accepting a detector+tracker change or proposing a C++ port.

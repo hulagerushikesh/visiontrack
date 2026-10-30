@@ -27,6 +27,12 @@ with separate detection, internal-state and public-output columns. The guided
 demonstration now needs one opt-in command: matching import files and a short
 walkthrough are prepared together in `try-in-browser`, outside the unchanged
 bundle. Python-to-Lab import checks pass; practitioner comprehension remains open.
+The installable delivery check now passes separate clean wheel and source-archive
+installs, first core-only and then with the Lab extra. Both generate and replay
+the same report/trace, match the actual package source, and pass the TypeScript
+initiation workflow. This is enforced in CI and before release artifact upload.
+It does not publish a package: scope/version selection and final release gates
+are the next delivery step, tracked in [release readiness](RELEASE_READINESS.md).
 A real traffic improvement claim still requires independently checked domain evidence.
 
 **Current review decision:** the owner delegated technical inspection because no

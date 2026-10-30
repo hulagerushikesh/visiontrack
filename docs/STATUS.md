@@ -20,8 +20,13 @@ browser access was previously denied. The guided synthetic demonstration now
 has an opt-in `lab-demo --with-initiation` path: report, matching trace and a
 short guide are prepared in one `try-in-browser` folder, outside the unchanged
 bundle. Preview/refusal/failed-publication paths and actual Python-to-Lab imports
-are checked. Practitioner usability remains open. Next: inspect source-only
-installable delivery before choosing a release candidate; real-traffic acceptance
+are checked. Separate clean wheel/sdist installations now pass the core CLI,
+Lab-extra guided demo, exact installed-source/replay checks and the existing
+Python-to-TypeScript initiation contract. Normal CI and release builds enforce
+the installed-artifact check and retain receipts. These are local builds, not a
+new publication; the public wheel remains 0.3.0. Practitioner usability remains
+open. Next: freeze a scoped release candidate and version using the
+[readiness checklist](RELEASE_READINESS.md); real-traffic acceptance
 remains a separate data/label gate. Defaults and C++ stay unchanged. The checkpoints below retain
 their historical scope.
 

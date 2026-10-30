@@ -18,23 +18,51 @@ optional extras, and a build that produces a valid sdist + wheel
 
 ## Cut a release
 
-For `0.3.0`, first verify every remaining gate in
-[`RELEASE_NOTES_0.3.0.md`](RELEASE_NOTES_0.3.0.md). Freezing scope does not
-authorize a version bump or tag by itself.
+`0.3.0` is already published; its [notes](RELEASE_NOTES_0.3.0.md) are historical.
+For the next release, first freeze scope, choose a new version and complete the
+current [readiness gates](RELEASE_READINESS.md). Freezing scope or checking a
+local artifact does not authorize a version bump or tag by itself. Replace
+`X.Y.Z` below with that chosen version; never reuse an existing release tag.
 
 ```bash
 # 1. bump the version in BOTH places (they must match):
 #    - pyproject.toml  [project] version
 #    - src/visiontrack/__init__.py  __version__
 # 2. commit, then tag and push the tag:
-git commit -am "release: v0.3.0"
-git tag v0.3.0
-git push origin main --tags
+git commit -am "release: vX.Y.Z"
+git tag vX.Y.Z
+git push origin main vX.Y.Z
 ```
 
 Pushing the `v*` tag triggers [`.github/workflows/release.yml`](https://github.com/hulagerushikesh/visiontrack/blob/main/.github/workflows/release.yml),
-which builds the distributions, runs `twine check`, and publishes to PyPI via
-OIDC. Watch the Actions tab; on success `pip install visiontrack-mot` works.
+which builds the distributions, runs `twine check`, verifies both exact
+distributions in clean installations, and publishes to PyPI via OIDC. Watch
+the Actions tab and verify the published version and artifacts afterward.
+
+## Check installed delivery
+
+From a current source checkout, using a Python with pip available:
+
+```bash
+python -m pip install build twine
+# Use a new output path; all retained files and environments are local.
+python scripts/check_installed_package.py --output ../visiontrack-install-check
+```
+
+This builds both distributions and installs each into a separate virtual
+environment outside the checkout's import path, first with core dependencies
+and then the Lab extra. It verifies the real console entry point, guided demo,
+read-only initiation replay, exact installed source and report/trace agreement.
+It writes `receipt.json` only after all checks pass; failed runs remain available
+for inspection. An existing output directory is refused. Package dependencies
+and build tools are downloaded; no videos, detectors or datasets are downloaded.
+
+After `npm ci`, add `--with-web-contract` to run the existing Python-to-TypeScript
+initiation workflow against each installed environment. This is the normal CI
+gate, not an interactive browser test. For an already built release pair, pass
+`--dist-dir dist`; exactly one wheel and one `.tar.gz` source archive are required.
+The release workflow checks that exact pair before uploading it for publication.
+Normal CI and this command do not publish anything or change version declarations.
 
 ## Manual fallback
 
