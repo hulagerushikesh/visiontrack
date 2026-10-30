@@ -599,6 +599,11 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       box in 1/3 clear frames before and 3/4 after, failing the predeclared
       two-on-each-side rule. Stop this event as a tracker-comparison candidate;
       the mid-occlusion overlaps do not prove physical identity.
+- [x] Add a reusable numeric MOT GT/detection geometry screen with exact input
+      hashes, duplicate-aware counts and explicit unverified-independence
+      semantics. Recheck the four bounded SVMOT training pairs: all 30,762
+      supplied detections mirror GT box geometry. The private receipt is
+      source triage, not a tracker outcome or proof of annotation quality.
 - [ ] Admit a separate permitted, independently annotated traffic source only
       after camera provenance, exact asset rights, label quality, integrity and
       a scene-disjoint frozen protocol pass. Resolve the remaining object-level

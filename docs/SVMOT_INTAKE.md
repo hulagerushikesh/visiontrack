@@ -75,6 +75,19 @@ names only after resolving this discrepancy; do not silently trust metadata.
 The owner-local machine-readable audit is `development-audit.json` in the
 intake folder. No tracker was run and no performance result was computed.
 
+The source audit now delegates box comparison to the reusable
+[`mot_detection_provenance.py`](../experiments/mot_detection_provenance.py)
+screen. It compares numeric frame/box multisets, so decimal spelling changes
+such as `10` versus `10.0` cannot hide a match; duplicate rows cannot inflate
+the match count. A fresh owner-local `detection-provenance-v1.json` receipt
+pins the exact GT and detection file SHA-256 hashes for all four sampled
+training sequences. Its per-sequence exact matches are **10,026/10,026**,
+**5,638/5,638**, **8,004/8,004** and **7,094/7,094** detection rows. This
+strengthens the GT-geometry-mirror observation. It does not establish how the
+publisher generated its detections, validate the boxes in pixels, or prove
+that a different-looking detection stream is independent. No media, tracker,
+or official test scene was read by this screen.
+
 This evidence narrows the next check: independently review a bounded
 development label span for ID and occlusion quality, then use a separately
 pinned real detector stream if SVMOT is admitted. Keep the publisher test

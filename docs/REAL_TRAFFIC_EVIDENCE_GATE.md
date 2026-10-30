@@ -107,6 +107,14 @@ scores. A missing answer leaves the source at `hold`:
    rules. Distinguish detector misses from association failures. Never tune on
    the unopened test site or recycle an inspected case as holdout.
 
+For MOT-format sources that supply both GT and detections, run the
+[`numeric geometry screen`](../experiments/mot_detection_provenance.py) on an
+explicit development-only pair before treating the supplied detections as a
+separate detector. It pins file hashes and counts exact frame/box geometry
+with duplicate multiplicity. An all-matching result requires provenance
+review; a non-matching result still does **not** prove detector independence.
+The screen does not check asset rights, labels against pixels, or test scenes.
+
 Only after all five pass should we freeze a narrow protocol in Git **before**
 the first comparative run. The first admitted source may support a useful
 *external-domain research screen* without representing the blurred, angled

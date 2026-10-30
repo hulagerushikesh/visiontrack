@@ -58,6 +58,19 @@ def test_audit_detects_independent_box_and_rejects_test_selection(tmp_path: Path
         audit(root, train, test, ["../train_seq"])
 
 
+def test_audit_detects_numeric_gt_clone_with_different_text(tmp_path: Path) -> None:
+    root, train, test = _fixture(tmp_path)
+    det = root / "data" / "train_seq" / "det" / "det.txt"
+    det.write_text(det.read_text(encoding="utf-8").replace(",10,20,30,40,",
+                                                            ",10.0,20,30,40,"),
+                   encoding="utf-8")
+    row = audit(root, train, test, ["train_seq"])["sequences"][0]
+    assert row["all_det_boxes_match_gt"] is True
+    assert row["numeric_geometry_compared"] is True
+    assert row["det_gt_geometry_screen"] == "review_gt_geometry_mirror"
+    assert row["independent_detector_verified"] is False
+
+
 def test_audit_rejects_duplicate_ground_truth_id_in_one_frame(tmp_path: Path) -> None:
     root, train, test = _fixture(tmp_path)
     with (root / "data" / "train_seq" / "gt" / "gt.txt").open("a", encoding="utf-8") as stream:

@@ -13,6 +13,8 @@ import json
 from collections import Counter
 from pathlib import Path
 
+from experiments.mot_detection_provenance import audit_rows
+
 
 def _rectangle_union_area(boxes: list[list[float]]) -> float:
     """Area covered by one or more axis-aligned rectangles, without double counting."""
@@ -151,15 +153,13 @@ def audit_sequence(root: Path, sequence: str, class_count: int) -> dict:
     ids: set[int] = set()
     frame_ids: set[tuple[int, int]] = set()
     classes: Counter[int] = Counter()
-    gt_boxes: Counter[tuple[str, ...]] = Counter()
-    det_boxes: Counter[tuple[str, ...]] = Counter()
     gt_frames: set[int] = set()
     gt_by_frame: dict[int, dict[int, tuple[float, ...]]] = {}
     gt_visibility: dict[tuple[int, int], float] = {}
     zero_visibility_rows = 0
     below_half_visibility_rows = 0
     for row in gt:
-        box = _geometry(row, width=width, height=height)
+        _geometry(row, width=width, height=height)
         frame = int(row[0])
         object_id = int(row[1])
         category = int(row[7])
@@ -177,17 +177,16 @@ def audit_sequence(root: Path, sequence: str, class_count: int) -> dict:
         gt_frames.add(frame)
         ids.add(object_id)
         classes[category] += 1
-        gt_boxes[box] += 1
     for row in det:
-        box = _geometry(row, width=width, height=height)
+        _geometry(row, width=width, height=height)
         if int(row[0]) > length or not 0 <= float(row[6]) <= 1:
             raise ValueError(f"invalid detection: {sequence}")
-        det_boxes[box] += 1
     samples = sorted((folder / "img").glob("*.jpg"))
     for image in samples:
         if not image.stem.isdigit() or not 1 <= int(image.stem) <= length:
             raise ValueError(f"invalid sample image frame: {image}")
-    shared = sum((gt_boxes & det_boxes).values())
+    geometry_audit = audit_rows(gt, det)
+    shared = geometry_audit["exact_numeric_gt_det_box_matches"]
     result = {
         "sequence": sequence,
         "declared_sequence_name": section.get("name"),
@@ -203,6 +202,9 @@ def audit_sequence(root: Path, sequence: str, class_count: int) -> dict:
         "exact_gt_det_box_matches": shared,
         "all_det_boxes_match_gt": shared == len(det),
         "all_gt_boxes_match_det": shared == len(gt),
+        "numeric_geometry_compared": True,
+        "det_gt_geometry_screen": geometry_audit["geometry_screen"],
+        "independent_detector_verified": False,
         "local_sample_images": len(samples),
     }
     result.update(_audit_occlusions(folder / "occlusion.json", gt_by_frame,
