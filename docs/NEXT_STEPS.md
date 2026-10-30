@@ -594,6 +594,11 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       overlapped the selected car's box at all, including seven clear boundary
       frames. This model/input setting cannot test that identity-continuity case;
       it is not a tracker score or a whole-dataset recall estimate.
+- [x] Freeze and run a [second detector feasibility screen](SVMOT_INTAKE.md)
+      on the same SVMOT development event. YOLOX-X overlaps the selected car's
+      box in 1/3 clear frames before and 3/4 after, failing the predeclared
+      two-on-each-side rule. Stop this event as a tracker-comparison candidate;
+      the mid-occlusion overlaps do not prove physical identity.
 - [ ] Admit a separate permitted, independently annotated traffic source only
       after camera provenance, exact asset rights, label quality, integrity and
       a scene-disjoint frozen protocol pass. Resolve the remaining object-level

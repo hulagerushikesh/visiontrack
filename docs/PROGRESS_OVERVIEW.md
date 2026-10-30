@@ -1,6 +1,6 @@
 # VisionTrack and VisionTrack C++ — progress overview
 
-Snapshot: **2026-10-29**. This is a summary of the canonical
+Snapshot: **2026-10-30**. This is a summary of the canonical
 [VisionTrack checklist](NEXT_STEPS.md), [status](STATUS.md) and
 [C++ checklist](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/NEXT_STEPS.md).
 Completed implementation is not the same as validated research or product demand.
@@ -55,7 +55,12 @@ terms. UA-DETRAC's official page does not specify asset-level terms. SVMOT's
 publisher API resolves its previously unclear metadata license to CC BY-NC 4.0,
 and its five small files verify a 21/9 scene-disjoint split. The large archive
 and annotation quality remain unchecked; it is not product-use evidence. See
-the [metadata-only intake](SVMOT_INTAKE.md).
+the [bounded intake](SVMOT_INTAKE.md). A selected 29-frame training occlusion
+now has two independent-detector feasibility screens: YOLOX nano misses the
+selected car in all clear boundary frames; YOLOX-X detects a matching box in
+only one of three clear frames before it, below the frozen two-frame minimum.
+That event is stopped as a tracker-comparison candidate. No SVMOT tracker score
+or held-out test-scene result exists.
 Publisher-hosted HVSD archives were privately
 inspected; the supplied videos and sparse images contain no dense independent
 tracking-label files. The owner cannot make a private traffic recording, so

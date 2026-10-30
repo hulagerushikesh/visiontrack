@@ -211,3 +211,17 @@ Model capacity and input resolution both change, so any difference cannot be
 attributed to either factor. Passing only makes this one development event
 potentially testable. SVMOT remains on hold until source rights, provenance,
 annotation quality, full integrity and a frozen scene-disjoint protocol pass.
+
+### Result, 2026-10-30
+
+The frozen method was committed as `fe7509f` before this pass. The owner-local
+`detector-preflight-x.json` records source, model and per-frame image hashes.
+YOLOX-X emitted **162 car boxes** across all 29 frames. ID 26 box overlap at
+IoU ≥ 0.5 occurred in **1/3 clear frames before**, **11/22 annotated occlusion
+frames**, and **3/4 clear frames after**. The predeclared boundary rule **fails
+on the before side**, so stop this selected event as a tracker-comparison
+candidate. The 11 mid-event overlaps do not establish that the detections are
+the same physical car; an occluder can overlap the target's annotated box. At
+fully hidden frame 297, for example, the best detector box overlaps the target
+box at IoU 0.415 despite zero annotated visibility. No tracker ran, and no test
+scene was opened. This is a detector-coverage diagnostic, not tracker accuracy.
