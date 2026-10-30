@@ -609,6 +609,10 @@ See the [showcase milestone, audience and conditional effort estimates](SHOWCASE
       labels are declared; no media or tracking labels were opened. Its media
       licence and full archive checksum remain unresolved, so admission stays
       on hold despite stronger annotation-format fit.
+- [x] Screen the small official Khan/Kelly V2 description against the traffic
+      question before its 7.9 GB archive. The publisher-hash-matched file says
+      some video uses a moving dashboard camera and describes detection labels,
+      so reject it as fixed-camera MOT truth without opening the archive.
 - [ ] Admit a separate permitted, independently annotated traffic source only
       after camera provenance, exact asset rights, label quality, integrity and
       a scene-disjoint frozen protocol pass. Resolve the remaining object-level
