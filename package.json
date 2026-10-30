@@ -12,12 +12,13 @@
     "test:decision-contract": "node scripts/test-decision-contract.mjs",
     "test:decision-workflow": "node scripts/test-decision-workflow.mjs",
     "test:report-import": "node scripts/test-report-import.mjs",
+    "test:crossing-diagnosis": "node scripts/test-crossing-diagnosis.mjs",
     "test:lab-guide": "node scripts/test-lab-guide.mjs",
     "test:playback-contract": "node scripts/test-playback-contract.mjs",
     "test:playback-workflow": "node scripts/test-playback-workflow.mjs",
     "test:benchmark-contract": "node scripts/test-benchmark-contract.mjs",
     "test:live-contract": "node scripts/test-live-contract.mjs",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit",
     "preview": "vite preview"
   },
   "dependencies": {

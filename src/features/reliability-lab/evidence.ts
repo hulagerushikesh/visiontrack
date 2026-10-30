@@ -143,7 +143,7 @@ function canonicalJson(value: unknown): string {
 
 async function sha256(payload: ArrayBuffer | Uint8Array | string) {
   const bytes = typeof payload === "string" ? new TextEncoder().encode(payload) : payload
-  const digest = await crypto.subtle.digest("SHA-256", bytes)
+  const digest = await crypto.subtle.digest("SHA-256", bytes instanceof Uint8Array ? new Uint8Array(bytes).buffer : bytes)
   return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("")
 }
 

@@ -6,6 +6,15 @@ Snapshot: **2026-10-30**. This is a summary of the canonical
 Completed implementation is not the same as validated research or product demand.
 This document does not claim the latest local work is already pushed or deployed.
 
+**Product delivery (2026-10-30):** the new `/lab/crossings` workflow turns the
+existing rain diagnosis into an interactive four-stage explanation. All five
+owner marks, 45 saved baseline frame observations and the exploratory 0.60/0.55
+threshold trade-off are accessible from the Lab. Its numeric schematics contain
+no footage and do not establish physical identity, accuracy or an accepted fix.
+The next research delivery is a bounded fresh-input initiation-threshold
+feasibility comparison, with misleading detections and confirmation costs as
+controls, before further representative traffic evaluation or C++ adoption.
+
 **Current review decision:** the owner delegated technical inspection because no
 second reviewer is available. The [AI-assisted exploratory case note](MOT17_AI_REVIEW_DECISION.md)
 retains the unchanged tracker and records the reason: 19 remains updated/public,

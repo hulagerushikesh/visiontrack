@@ -41,8 +41,8 @@ function ErrorState({message,filename,onSelect,onSample}:{message:string;filenam
 
 export default function BenchmarkExplorer() {
   const [state,setState]=useState<ReportState>(bundledState)
-  const [metricFocus,setMetricFocus]=useState(ALL_BENCHMARK_METRICS)
-  const [variantFocus,setVariantFocus]=useState(ALL_BENCHMARK_VARIANTS)
+  const [metricFocus,setMetricFocus]=useState<string>(ALL_BENCHMARK_METRICS)
+  const [variantFocus,setVariantFocus]=useState<string>(ALL_BENCHMARK_VARIANTS)
   const loadId=useRef(0)
 
   const resetView=()=>{setMetricFocus(ALL_BENCHMARK_METRICS);setVariantFocus(ALL_BENCHMARK_VARIANTS)}

@@ -197,13 +197,15 @@ export function parseReportModel(value: unknown): ReportLoadResult {
   let metricKeys: string[] | null = null
   let failureSetTotal = 0
   for (const variant of value.variants) {
+    if (!isRecord(variant)) return missing("One or more variants lack complete, verified evidence.")
+    const failureCounts = variant.failure_counts
     if (
-      !isRecord(variant) || !isNonEmptyString(variant.name) || variantNames.has(variant.name) ||
+      !isNonEmptyString(variant.name) || variantNames.has(variant.name) ||
       typeof variant.baseline !== "boolean" || !isRecord(variant.configuration) || !isHash(variant.run_id) ||
       !isNumericRecord(variant.diagnostics, true) || !isNumericRecord(variant.diagnostic_deltas) ||
       !isNumericRecord(variant.metrics) || !isNumericRecord(variant.metric_deltas) ||
-      !hasSameKeys(variant.metrics, variant.metric_deltas) || !isRecord(variant.failure_counts) ||
-      !failureTypes.every((type) => isNonNegativeInteger(variant.failure_counts[type])) ||
+      !hasSameKeys(variant.metrics, variant.metric_deltas) || !isRecord(failureCounts) ||
+      !failureTypes.every((type) => isNonNegativeInteger(failureCounts[type])) ||
       !isRecord(variant.failure_set)
     ) return missing("One or more variants lack complete, verified evidence.")
     const keys = Object.keys(variant.metrics).sort()
@@ -212,7 +214,7 @@ export function parseReportModel(value: unknown): ReportLoadResult {
     }
     metricKeys = keys
     const failureSet = variant.failure_set
-    const variantFailureTotal = failureTypes.reduce((total, type) => total + Number(variant.failure_counts[type]), 0)
+    const variantFailureTotal = failureTypes.reduce((total, type) => total + Number(failureCounts[type]), 0)
     if (
       !isNonNegativeInteger(failureSet.event_count) || failureSet.event_count !== variantFailureTotal ||
       !isHash(failureSet.failure_sha256) || failureSet.run_id !== variant.run_id ||
@@ -275,6 +277,7 @@ export function parseReportModel(value: unknown): ReportLoadResult {
 
   if (value.media_evidence !== undefined) {
     const media = value.media_evidence
+    const privacyCounts = isRecord(media) ? media.privacy_counts : undefined
     let displayedManifests = 0
     let displayedArtifacts = 0
     const displayedPrivacyMinimums = { ...privacyCountShape }
@@ -287,13 +290,13 @@ export function parseReportModel(value: unknown): ReportLoadResult {
     }
     if (
       !isRecord(media) || !isNonNegativeInteger(media.event_manifests) ||
-      !isNonNegativeInteger(media.image_artifacts) || !isRecord(media.privacy_counts) ||
-      !hasSameKeys(media.privacy_counts, privacyCountShape) ||
-      !privacyClasses.every((item) => isNonNegativeInteger(media.privacy_counts[item])) ||
+      !isNonNegativeInteger(media.image_artifacts) || !isRecord(privacyCounts) ||
+      !hasSameKeys(privacyCounts, privacyCountShape) ||
+      !privacyClasses.every((item) => isNonNegativeInteger(privacyCounts[item])) ||
       media.images_embedded !== false || media.event_manifests > value.failure_event_total ||
       media.event_manifests < displayedManifests || media.image_artifacts < displayedArtifacts ||
-      privacyClasses.some((item) => Number(media.privacy_counts[item]) < displayedPrivacyMinimums[item]) ||
-      privacyClasses.reduce((count, item) => count + Number(media.privacy_counts[item]), 0) !== media.image_artifacts ||
+      privacyClasses.some((item) => Number(privacyCounts[item]) < displayedPrivacyMinimums[item]) ||
+      privacyClasses.reduce((count, item) => count + Number(privacyCounts[item]), 0) !== media.image_artifacts ||
       failures.some((failure) => failure.media_evidence === undefined)
     ) return missing("The report media-evidence summary is invalid.")
   }

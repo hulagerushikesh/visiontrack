@@ -25,6 +25,7 @@
     { "src": "/teaching/?", "dest": "/app/index.html" },
     { "src": "/learn/zero-to-hero/?", "dest": "/app/index.html" },
     { "src": "/learn/research-lead/?", "dest": "/app/index.html" },
+    { "src": "/lab/crossings/?", "dest": "/app/index.html" },
     { "src": "/lab/?", "dest": "/app/index.html" },
     { "src": "/study/?", "dest": "/learning/LEARNING_PATH.html" },
     { "src": "/roadmap/?", "dest": "/learning/CV_ROADMAP.html" },

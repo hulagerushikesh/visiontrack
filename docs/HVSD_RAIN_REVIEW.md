@@ -140,6 +140,29 @@ the default from this post-hoc result.
 
 ## Reproduce privately
 
+### Explore the saved diagnosis in the Lab
+
+The React route `/lab/crossings`, linked from `/lab`, presents all five marks
+through detection, association, confirmation and counting. It includes 45 saved
+baseline frame observations and the whole-clip exploratory threshold comparison.
+Plots are numeric schematics, not footage or physical object matches. The page
+is separate from imported Lab reports; no tracker runs or defaults change.
+
+Regenerate its metadata-only snapshot from the three existing pinned records:
+
+```bash
+python -m experiments.hvsd_rain_diagnosis \
+  ../visiontrack-walkthrough/traffic-hvsd-v1 \
+  --output src/features/crossing-diagnosis/rain.json
+```
+
+The exporter rejects changed source-record hashes and conflicting receipts,
+retains every selected diagnostic frame, and excludes original review downloads,
+private paths and footage. The written explanations interpret these observations;
+the export is not a new evaluation or proof of accuracy.
+
+### Original observations and exploratory replay
+
 ```bash
 python -m experiments.hvsd_rain_review ~/Downloads/hvsd-rain-review*.json \
   --owner-attested-full-frame-pass \

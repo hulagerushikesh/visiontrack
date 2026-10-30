@@ -1,0 +1,1450 @@
+{
+  "baseline": {
+    "crossings_near_owner_marks": {
+      "160": [],
+      "27": [
+        {
+          "between_frames": [
+            27,
+            28
+          ],
+          "crossing_y": 278.5065433372912,
+          "estimated_frame": 27.66374081475669,
+          "track_id": 3
+        }
+      ],
+      "37": [],
+      "57": [],
+      "92": []
+    },
+    "public_crossings": [
+      {
+        "between_frames": [
+          27,
+          28
+        ],
+        "crossing_y": 278.5065433372912,
+        "estimated_frame": 27.66374081475669,
+        "track_id": 3
+      }
+    ],
+    "public_track_boxes": 117,
+    "tentative_births": 21,
+    "unique_public_track_ids": 4
+  },
+  "baseline_receipt": "0125e1e9644e0df9fb36d3c1353c8e328dd7fc1e03d8117299af0e0afe4f49c6",
+  "candidate": {
+    "crossings_near_owner_marks": {
+      "160": [],
+      "27": [
+        {
+          "between_frames": [
+            27,
+            28
+          ],
+          "crossing_y": 278.5065433372912,
+          "estimated_frame": 27.66374081475669,
+          "track_id": 4
+        }
+      ],
+      "37": [],
+      "57": [
+        {
+          "between_frames": [
+            57,
+            58
+          ],
+          "crossing_y": 279.16153013263545,
+          "estimated_frame": 57.846625138384766,
+          "track_id": 8
+        }
+      ],
+      "92": []
+    },
+    "public_crossings": [
+      {
+        "between_frames": [
+          27,
+          28
+        ],
+        "crossing_y": 278.5065433372912,
+        "estimated_frame": 27.66374081475669,
+        "track_id": 4
+      },
+      {
+        "between_frames": [
+          57,
+          58
+        ],
+        "crossing_y": 279.16153013263545,
+        "estimated_frame": 57.846625138384766,
+        "track_id": 8
+      }
+    ],
+    "public_track_boxes": 143,
+    "tentative_births": 19,
+    "unique_public_track_ids": 5
+  },
+  "candidate_changed_setting_only": {
+    "new_track_thresh": 0.55
+  },
+  "cases": [
+    {
+      "association_pairs": [],
+      "baseline_crossings": [
+        {
+          "between_frames": [
+            27,
+            28
+          ],
+          "crossing_y": 278.5065433372912,
+          "estimated_frame": 27.66374081475669,
+          "track_id": 3
+        }
+      ],
+      "candidate_crossings": [
+        {
+          "between_frames": [
+            27,
+            28
+          ],
+          "crossing_y": 278.5065433372912,
+          "estimated_frame": 27.66374081475669,
+          "track_id": 4
+        }
+      ],
+      "frames": [
+        {
+          "frame": 23,
+          "near_line_detections": [
+            {
+              "center_x": 467.7,
+              "center_y": 298.2,
+              "class_id": 2,
+              "score": 0.625
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 467.9,
+              "hits": 14,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 3
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 467.9,
+              "track_id": 3
+            }
+          ]
+        },
+        {
+          "frame": 24,
+          "near_line_detections": [
+            {
+              "center_x": 473.5,
+              "center_y": 292.0,
+              "class_id": 2,
+              "score": 0.668
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 474.4,
+              "hits": 15,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 3
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 474.4,
+              "track_id": 3
+            }
+          ]
+        },
+        {
+          "frame": 25,
+          "near_line_detections": [
+            {
+              "center_x": 481.4,
+              "center_y": 287.2,
+              "class_id": 2,
+              "score": 0.638
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 481.8,
+              "hits": 16,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 3
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 481.8,
+              "track_id": 3
+            }
+          ]
+        },
+        {
+          "frame": 26,
+          "near_line_detections": [
+            {
+              "center_x": 485.6,
+              "center_y": 284.9,
+              "class_id": 2,
+              "score": 0.657
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 486.9,
+              "hits": 17,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 3
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 486.9,
+              "track_id": 3
+            }
+          ]
+        },
+        {
+          "frame": 27,
+          "near_line_detections": [
+            {
+              "center_x": 495.1,
+              "center_y": 281.0,
+              "class_id": 2,
+              "score": 0.665
+            },
+            {
+              "center_x": 404.8,
+              "center_y": 399.5,
+              "class_id": 2,
+              "score": 0.463
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 495.0,
+              "hits": 18,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 3
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 495.0,
+              "track_id": 3
+            }
+          ]
+        },
+        {
+          "frame": 28,
+          "near_line_detections": [
+            {
+              "center_x": 502.5,
+              "center_y": 278.4,
+              "class_id": 2,
+              "score": 0.743
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 502.5,
+              "hits": 19,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 3
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 502.5,
+              "track_id": 3
+            }
+          ]
+        },
+        {
+          "frame": 29,
+          "near_line_detections": [
+            {
+              "center_x": 507.6,
+              "center_y": 276.5,
+              "class_id": 2,
+              "score": 0.74
+            },
+            {
+              "center_x": 428.6,
+              "center_y": 394.3,
+              "class_id": 2,
+              "score": 0.516
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 508.5,
+              "hits": 20,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 3
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 508.5,
+              "track_id": 3
+            }
+          ]
+        },
+        {
+          "frame": 30,
+          "near_line_detections": [
+            {
+              "center_x": 512.9,
+              "center_y": 271.3,
+              "class_id": 2,
+              "score": 0.666
+            },
+            {
+              "center_x": 438.4,
+              "center_y": 390.5,
+              "class_id": 2,
+              "score": 0.521
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 514.0,
+              "hits": 21,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 3
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 514.0,
+              "track_id": 3
+            }
+          ]
+        },
+        {
+          "frame": 31,
+          "near_line_detections": [
+            {
+              "center_x": 519.7,
+              "center_y": 268.3,
+              "class_id": 2,
+              "score": 0.695
+            },
+            {
+              "center_x": 446.5,
+              "center_y": 387.5,
+              "class_id": 2,
+              "score": 0.494
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 520.3,
+              "hits": 22,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 3
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 520.3,
+              "track_id": 3
+            }
+          ]
+        }
+      ],
+      "mark_frame": 27
+    },
+    {
+      "association_pairs": [
+        {
+          "class_gate_pass": true,
+          "detection_center_x": 511.7,
+          "detection_class_id": 2,
+          "detection_score": 0.603,
+          "frame": 40,
+          "iou": 0.75,
+          "iou_gate_pass": true,
+          "mahalanobis_d2": 1.518,
+          "mahalanobis_gate_pass": true,
+          "matched": true,
+          "predicted_track_center_x": 504.6,
+          "tentative_track_id": 4,
+          "track_class_id": 2,
+          "track_hits_before_match": 1
+        }
+      ],
+      "baseline_crossings": [],
+      "candidate_crossings": [],
+      "frames": [
+        {
+          "frame": 33,
+          "near_line_detections": [
+            {
+              "center_x": 530.2,
+              "center_y": 260.2,
+              "class_id": 2,
+              "score": 0.617
+            },
+            {
+              "center_x": 462.6,
+              "center_y": 371.4,
+              "class_id": 2,
+              "score": 0.419
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 531.5,
+              "hits": 24,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 3
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 531.5,
+              "track_id": 3
+            }
+          ]
+        },
+        {
+          "frame": 34,
+          "near_line_detections": [
+            {
+              "center_x": 537.0,
+              "center_y": 255.7,
+              "class_id": 2,
+              "score": 0.596
+            },
+            {
+              "center_x": 469.8,
+              "center_y": 358.6,
+              "class_id": 2,
+              "score": 0.292
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 537.4,
+              "hits": 25,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 3
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 537.4,
+              "track_id": 3
+            }
+          ]
+        },
+        {
+          "frame": 35,
+          "near_line_detections": [
+            {
+              "center_x": 542.9,
+              "center_y": 252.6,
+              "class_id": 2,
+              "score": 0.628
+            },
+            {
+              "center_x": 478.9,
+              "center_y": 355.7,
+              "class_id": 2,
+              "score": 0.495
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 543.3,
+              "hits": 26,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 3
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 543.3,
+              "track_id": 3
+            }
+          ]
+        },
+        {
+          "frame": 36,
+          "near_line_detections": [
+            {
+              "center_x": 549.0,
+              "center_y": 248.8,
+              "class_id": 2,
+              "score": 0.632
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 549.3,
+              "hits": 27,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 3
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 549.3,
+              "track_id": 3
+            }
+          ]
+        },
+        {
+          "frame": 37,
+          "near_line_detections": [
+            {
+              "center_x": 554.4,
+              "center_y": 246.6,
+              "class_id": 2,
+              "score": 0.612
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 554.9,
+              "hits": 28,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 3
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 554.9,
+              "track_id": 3
+            }
+          ]
+        },
+        {
+          "frame": 38,
+          "near_line_detections": [
+            {
+              "center_x": 559.6,
+              "center_y": 242.1,
+              "class_id": 2,
+              "score": 0.679
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 560.2,
+              "hits": 29,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 3
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 560.2,
+              "track_id": 3
+            }
+          ]
+        },
+        {
+          "frame": 39,
+          "near_line_detections": [
+            {
+              "center_x": 563.7,
+              "center_y": 241.3,
+              "class_id": 2,
+              "score": 0.632
+            },
+            {
+              "center_x": 504.6,
+              "center_y": 333.0,
+              "class_id": 2,
+              "score": 0.603
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 564.6,
+              "hits": 30,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 3
+            },
+            {
+              "center_x": 504.6,
+              "hits": 1,
+              "state": "TENTATIVE",
+              "time_since_update": 0,
+              "track_id": 4
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 564.6,
+              "track_id": 3
+            }
+          ]
+        },
+        {
+          "frame": 40,
+          "near_line_detections": [
+            {
+              "center_x": 511.7,
+              "center_y": 329.5,
+              "class_id": 2,
+              "score": 0.603
+            },
+            {
+              "center_x": 569.1,
+              "center_y": 235.2,
+              "class_id": 2,
+              "score": 0.567
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 569.6,
+              "hits": 31,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 3
+            },
+            {
+              "center_x": 510.7,
+              "hits": 2,
+              "state": "TENTATIVE",
+              "time_since_update": 0,
+              "track_id": 4
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 569.6,
+              "track_id": 3
+            }
+          ]
+        },
+        {
+          "frame": 41,
+          "near_line_detections": [
+            {
+              "center_x": 572.6,
+              "center_y": 233.4,
+              "class_id": 2,
+              "score": 0.625
+            },
+            {
+              "center_x": 518.0,
+              "center_y": 324.7,
+              "class_id": 2,
+              "score": 0.395
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 573.6,
+              "hits": 32,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 3
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 573.6,
+              "track_id": 3
+            }
+          ]
+        }
+      ],
+      "mark_frame": 37
+    },
+    {
+      "association_pairs": [
+        {
+          "class_gate_pass": true,
+          "detection_center_x": 468.2,
+          "detection_class_id": 2,
+          "detection_score": 0.641,
+          "frame": 53,
+          "iou": 0.8175,
+          "iou_gate_pass": true,
+          "mahalanobis_d2": 2.26,
+          "mahalanobis_gate_pass": true,
+          "matched": true,
+          "predicted_track_center_x": 463.4,
+          "tentative_track_id": 9,
+          "track_class_id": 2,
+          "track_hits_before_match": 1
+        },
+        {
+          "class_gate_pass": true,
+          "detection_center_x": 509.8,
+          "detection_class_id": 2,
+          "detection_score": 0.597,
+          "frame": 60,
+          "iou": 0.6744,
+          "iou_gate_pass": true,
+          "mahalanobis_d2": 2.385,
+          "mahalanobis_gate_pass": true,
+          "matched": true,
+          "predicted_track_center_x": 507.1,
+          "tentative_track_id": 10,
+          "track_class_id": 2,
+          "track_hits_before_match": 1
+        }
+      ],
+      "baseline_crossings": [],
+      "candidate_crossings": [
+        {
+          "between_frames": [
+            57,
+            58
+          ],
+          "crossing_y": 279.16153013263545,
+          "estimated_frame": 57.846625138384766,
+          "track_id": 8
+        }
+      ],
+      "frames": [
+        {
+          "frame": 53,
+          "near_line_detections": [
+            {
+              "center_x": 468.2,
+              "center_y": 304.9,
+              "class_id": 2,
+              "score": 0.641
+            },
+            {
+              "center_x": 584.3,
+              "center_y": 277.7,
+              "class_id": 2,
+              "score": 0.633
+            },
+            {
+              "center_x": 453.8,
+              "center_y": 302.1,
+              "class_id": 2,
+              "score": 0.43
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 584.3,
+              "hits": 11,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 6
+            },
+            {
+              "center_x": 467.5,
+              "hits": 2,
+              "state": "TENTATIVE",
+              "time_since_update": 0,
+              "track_id": 9
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 584.3,
+              "track_id": 6
+            }
+          ]
+        },
+        {
+          "frame": 54,
+          "near_line_detections": [
+            {
+              "center_x": 588.3,
+              "center_y": 274.0,
+              "class_id": 2,
+              "score": 0.587
+            },
+            {
+              "center_x": 474.8,
+              "center_y": 297.1,
+              "class_id": 2,
+              "score": 0.363
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 588.6,
+              "hits": 12,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 6
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 588.6,
+              "track_id": 6
+            }
+          ]
+        },
+        {
+          "frame": 55,
+          "near_line_detections": [
+            {
+              "center_x": 479.8,
+              "center_y": 291.3,
+              "class_id": 2,
+              "score": 0.479
+            },
+            {
+              "center_x": 594.1,
+              "center_y": 269.2,
+              "class_id": 2,
+              "score": 0.266
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 593.9,
+              "hits": 13,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 6
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 593.9,
+              "track_id": 6
+            }
+          ]
+        },
+        {
+          "frame": 56,
+          "near_line_detections": [
+            {
+              "center_x": 488.3,
+              "center_y": 286.7,
+              "class_id": 2,
+              "score": 0.531
+            },
+            {
+              "center_x": 597.5,
+              "center_y": 267.5,
+              "class_id": 2,
+              "score": 0.317
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 598.0,
+              "hits": 14,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 6
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 598.0,
+              "track_id": 6
+            }
+          ]
+        },
+        {
+          "frame": 57,
+          "near_line_detections": [
+            {
+              "center_x": 601.4,
+              "center_y": 260.1,
+              "class_id": 2,
+              "score": 0.581
+            },
+            {
+              "center_x": 494.8,
+              "center_y": 282.2,
+              "class_id": 2,
+              "score": 0.577
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 601.9,
+              "hits": 15,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 6
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 601.9,
+              "track_id": 6
+            }
+          ]
+        },
+        {
+          "frame": 58,
+          "near_line_detections": [
+            {
+              "center_x": 500.3,
+              "center_y": 279.0,
+              "class_id": 2,
+              "score": 0.597
+            },
+            {
+              "center_x": 605.9,
+              "center_y": 256.6,
+              "class_id": 2,
+              "score": 0.539
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 606.1,
+              "hits": 16,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 6
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 606.1,
+              "track_id": 6
+            }
+          ]
+        },
+        {
+          "frame": 59,
+          "near_line_detections": [
+            {
+              "center_x": 507.1,
+              "center_y": 276.5,
+              "class_id": 2,
+              "score": 0.658
+            },
+            {
+              "center_x": 610.1,
+              "center_y": 254.9,
+              "class_id": 2,
+              "score": 0.545
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 610.3,
+              "hits": 17,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 6
+            },
+            {
+              "center_x": 507.1,
+              "hits": 1,
+              "state": "TENTATIVE",
+              "time_since_update": 0,
+              "track_id": 10
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 610.3,
+              "track_id": 6
+            }
+          ]
+        },
+        {
+          "frame": 60,
+          "near_line_detections": [
+            {
+              "center_x": 509.8,
+              "center_y": 273.3,
+              "class_id": 2,
+              "score": 0.597
+            },
+            {
+              "center_x": 613.5,
+              "center_y": 252.2,
+              "class_id": 2,
+              "score": 0.465
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 613.9,
+              "hits": 18,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 6
+            },
+            {
+              "center_x": 509.5,
+              "hits": 2,
+              "state": "TENTATIVE",
+              "time_since_update": 0,
+              "track_id": 10
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 613.9,
+              "track_id": 6
+            }
+          ]
+        },
+        {
+          "frame": 61,
+          "near_line_detections": [
+            {
+              "center_x": 517.7,
+              "center_y": 270.3,
+              "class_id": 2,
+              "score": 0.399
+            },
+            {
+              "center_x": 619.1,
+              "center_y": 249.2,
+              "class_id": 2,
+              "score": 0.294
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 618.9,
+              "hits": 19,
+              "state": "CONFIRMED",
+              "time_since_update": 0,
+              "track_id": 6
+            }
+          ],
+          "near_line_public_tracks": [
+            {
+              "center_x": 618.9,
+              "track_id": 6
+            }
+          ]
+        }
+      ],
+      "mark_frame": 57
+    },
+    {
+      "association_pairs": [],
+      "baseline_crossings": [],
+      "candidate_crossings": [],
+      "frames": [
+        {
+          "frame": 88,
+          "near_line_detections": [],
+          "near_line_internal_tracks": [],
+          "near_line_public_tracks": []
+        },
+        {
+          "frame": 89,
+          "near_line_detections": [],
+          "near_line_internal_tracks": [],
+          "near_line_public_tracks": []
+        },
+        {
+          "frame": 90,
+          "near_line_detections": [],
+          "near_line_internal_tracks": [],
+          "near_line_public_tracks": []
+        },
+        {
+          "frame": 91,
+          "near_line_detections": [],
+          "near_line_internal_tracks": [],
+          "near_line_public_tracks": []
+        },
+        {
+          "frame": 92,
+          "near_line_detections": [],
+          "near_line_internal_tracks": [],
+          "near_line_public_tracks": []
+        },
+        {
+          "frame": 93,
+          "near_line_detections": [],
+          "near_line_internal_tracks": [],
+          "near_line_public_tracks": []
+        },
+        {
+          "frame": 94,
+          "near_line_detections": [],
+          "near_line_internal_tracks": [],
+          "near_line_public_tracks": []
+        },
+        {
+          "frame": 95,
+          "near_line_detections": [],
+          "near_line_internal_tracks": [],
+          "near_line_public_tracks": []
+        },
+        {
+          "frame": 96,
+          "near_line_detections": [],
+          "near_line_internal_tracks": [],
+          "near_line_public_tracks": []
+        }
+      ],
+      "mark_frame": 92
+    },
+    {
+      "association_pairs": [
+        {
+          "class_gate_pass": true,
+          "detection_center_x": 465.0,
+          "detection_class_id": 2,
+          "detection_score": 0.724,
+          "frame": 157,
+          "iou": 0.7102,
+          "iou_gate_pass": true,
+          "mahalanobis_d2": 3.642,
+          "mahalanobis_gate_pass": true,
+          "matched": true,
+          "predicted_track_center_x": 456.0,
+          "tentative_track_id": 13,
+          "track_class_id": 2,
+          "track_hits_before_match": 1
+        },
+        {
+          "class_gate_pass": true,
+          "detection_center_x": 471.9,
+          "detection_class_id": 2,
+          "detection_score": 0.66,
+          "frame": 158,
+          "iou": 0.5227,
+          "iou_gate_pass": true,
+          "mahalanobis_d2": 35.227,
+          "mahalanobis_gate_pass": false,
+          "matched": false,
+          "predicted_track_center_x": 465.6,
+          "tentative_track_id": 13,
+          "track_class_id": 2,
+          "track_hits_before_match": 2
+        },
+        {
+          "class_gate_pass": true,
+          "detection_center_x": 479.3,
+          "detection_class_id": 2,
+          "detection_score": 0.675,
+          "frame": 159,
+          "iou": 0.6645,
+          "iou_gate_pass": true,
+          "mahalanobis_d2": 15.672,
+          "mahalanobis_gate_pass": false,
+          "matched": false,
+          "predicted_track_center_x": 471.9,
+          "tentative_track_id": 14,
+          "track_class_id": 2,
+          "track_hits_before_match": 1
+        },
+        {
+          "class_gate_pass": true,
+          "detection_center_x": 486.7,
+          "detection_class_id": 2,
+          "detection_score": 0.559,
+          "frame": 160,
+          "iou": 0.5109,
+          "iou_gate_pass": true,
+          "mahalanobis_d2": 14.461,
+          "mahalanobis_gate_pass": false,
+          "matched": false,
+          "predicted_track_center_x": 479.3,
+          "tentative_track_id": 15,
+          "track_class_id": 2,
+          "track_hits_before_match": 1
+        },
+        {
+          "class_gate_pass": true,
+          "detection_center_x": 501.4,
+          "detection_class_id": 2,
+          "detection_score": 0.692,
+          "frame": 162,
+          "iou": 0.5561,
+          "iou_gate_pass": true,
+          "mahalanobis_d2": 33.107,
+          "mahalanobis_gate_pass": false,
+          "matched": false,
+          "predicted_track_center_x": 493.9,
+          "tentative_track_id": 16,
+          "track_class_id": 2,
+          "track_hits_before_match": 1
+        },
+        {
+          "class_gate_pass": true,
+          "detection_center_x": 509.9,
+          "detection_class_id": 2,
+          "detection_score": 0.668,
+          "frame": 163,
+          "iou": 0.5048,
+          "iou_gate_pass": true,
+          "mahalanobis_d2": 39.136,
+          "mahalanobis_gate_pass": false,
+          "matched": false,
+          "predicted_track_center_x": 501.4,
+          "tentative_track_id": 17,
+          "track_class_id": 2,
+          "track_hits_before_match": 1
+        },
+        {
+          "class_gate_pass": true,
+          "detection_center_x": 515.6,
+          "detection_class_id": 2,
+          "detection_score": 0.619,
+          "frame": 164,
+          "iou": 0.7638,
+          "iou_gate_pass": true,
+          "mahalanobis_d2": 8.563,
+          "mahalanobis_gate_pass": true,
+          "matched": true,
+          "predicted_track_center_x": 509.9,
+          "tentative_track_id": 18,
+          "track_class_id": 2,
+          "track_hits_before_match": 1
+        }
+      ],
+      "baseline_crossings": [],
+      "candidate_crossings": [],
+      "frames": [
+        {
+          "frame": 156,
+          "near_line_detections": [
+            {
+              "center_x": 456.0,
+              "center_y": 349.0,
+              "class_id": 2,
+              "score": 0.716
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 456.0,
+              "hits": 1,
+              "state": "TENTATIVE",
+              "time_since_update": 0,
+              "track_id": 13
+            }
+          ],
+          "near_line_public_tracks": []
+        },
+        {
+          "frame": 157,
+          "near_line_detections": [
+            {
+              "center_x": 465.0,
+              "center_y": 342.1,
+              "class_id": 2,
+              "score": 0.724
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 463.8,
+              "hits": 2,
+              "state": "TENTATIVE",
+              "time_since_update": 0,
+              "track_id": 13
+            }
+          ],
+          "near_line_public_tracks": []
+        },
+        {
+          "frame": 158,
+          "near_line_detections": [
+            {
+              "center_x": 471.9,
+              "center_y": 325.7,
+              "class_id": 2,
+              "score": 0.66
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 471.9,
+              "hits": 1,
+              "state": "TENTATIVE",
+              "time_since_update": 0,
+              "track_id": 14
+            }
+          ],
+          "near_line_public_tracks": []
+        },
+        {
+          "frame": 159,
+          "near_line_detections": [
+            {
+              "center_x": 479.3,
+              "center_y": 329.9,
+              "class_id": 2,
+              "score": 0.675
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 479.3,
+              "hits": 1,
+              "state": "TENTATIVE",
+              "time_since_update": 0,
+              "track_id": 15
+            }
+          ],
+          "near_line_public_tracks": []
+        },
+        {
+          "frame": 160,
+          "near_line_detections": [
+            {
+              "center_x": 486.7,
+              "center_y": 315.0,
+              "class_id": 2,
+              "score": 0.559
+            }
+          ],
+          "near_line_internal_tracks": [],
+          "near_line_public_tracks": []
+        },
+        {
+          "frame": 161,
+          "near_line_detections": [
+            {
+              "center_x": 493.9,
+              "center_y": 308.3,
+              "class_id": 2,
+              "score": 0.609
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 493.9,
+              "hits": 1,
+              "state": "TENTATIVE",
+              "time_since_update": 0,
+              "track_id": 16
+            }
+          ],
+          "near_line_public_tracks": []
+        },
+        {
+          "frame": 162,
+          "near_line_detections": [
+            {
+              "center_x": 501.4,
+              "center_y": 316.4,
+              "class_id": 2,
+              "score": 0.692
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 501.4,
+              "hits": 1,
+              "state": "TENTATIVE",
+              "time_since_update": 0,
+              "track_id": 17
+            }
+          ],
+          "near_line_public_tracks": []
+        },
+        {
+          "frame": 163,
+          "near_line_detections": [
+            {
+              "center_x": 509.9,
+              "center_y": 301.4,
+              "class_id": 2,
+              "score": 0.668
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 509.9,
+              "hits": 1,
+              "state": "TENTATIVE",
+              "time_since_update": 0,
+              "track_id": 18
+            }
+          ],
+          "near_line_public_tracks": []
+        },
+        {
+          "frame": 164,
+          "near_line_detections": [
+            {
+              "center_x": 515.6,
+              "center_y": 297.9,
+              "class_id": 2,
+              "score": 0.619
+            }
+          ],
+          "near_line_internal_tracks": [
+            {
+              "center_x": 514.8,
+              "hits": 2,
+              "state": "TENTATIVE",
+              "time_since_update": 0,
+              "track_id": 18
+            }
+          ],
+          "near_line_public_tracks": []
+        }
+      ],
+      "mark_frame": 160
+    }
+  ],
+  "crossing_rule": "adjacent frames, same public ID, box center x < 500 then >= 500; interpolated y 205..432",
+  "diagnostic_window_rule": "marked frame +/- 4; centers within 125 px of line and y >= 205",
+  "frame_count": 194,
+  "limits": {
+    "accuracy_claim": false,
+    "dense_identity_truth": false,
+    "owner_attested_all_frames_reviewed": true,
+    "physical_object_correspondence_verified": false,
+    "post_hoc_development_only": true,
+    "recommend_default_change": false
+  },
+  "line": {
+    "direction": "left-to-right",
+    "region": "near road",
+    "x": 500,
+    "y_max": 432,
+    "y_min": 205
+  },
+  "model_sha256": "c789161ed43c8269fcd4e67c67eeeb4e80c622da2eb296a20bc6007bd18a0b7d",
+  "schema": "visiontrack.rain-diagnosis/v1",
+  "settings": {
+    "confirmation_hits": 3,
+    "iou_min": 0.3,
+    "mahalanobis_d2_max": 9.4877,
+    "new_track_score_min": 0.6
+  },
+  "source_record_sha256": {
+    "rain-gate-trace.json": "3270841e737c98eb148350ac416e2b574a6c3883dc632d1e3f91319888df5508",
+    "rain-review-audit.json": "859df63a7fbec9ed7975c2af35a13cdf139188e42c9183c17a490a66593551c4",
+    "rain-threshold-replay.json": "0b4a4e3231d929eca1214c17b69e37ddc258732097fd27c43628025eabeab4bc"
+  },
+  "source_video_sha256": "efd4ea6e3548b9894caefc59df1d9914c1861f88fc93e7fb9114cb44acb78a9b"
+}

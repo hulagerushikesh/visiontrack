@@ -92,6 +92,8 @@ jobs:
         run: npm run test:report-import
       - name: Verify beginner Lab lesson and failure explanations
         run: npm run test:lab-guide
+      - name: Verify crossing diagnosis observations and explanations
+        run: npm run test:crossing-diagnosis
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"

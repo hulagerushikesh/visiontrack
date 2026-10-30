@@ -819,6 +819,7 @@ export default function ReliabilityLab() {
   return (
     <div>
       <div className="relative z-10 mx-auto max-w-7xl px-5 pt-28 lg:px-8">
+        <aside className="mb-6 rounded-3xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-6"><p className="text-xs font-semibold uppercase tracking-wide text-primary">From our research · separate from your report</p><h2 className="mt-2 text-xl font-semibold">A visible vehicle. A missing count. Where is the gap?</h2><p className="mt-2 text-sm leading-7 text-muted-foreground">Explore five crossing marks from the rain case through detector proposals, association, track confirmation and counting. Saved numeric evidence, with plain-language explanations.</p><a href="/lab/crossings" className="mt-4 inline-block rounded-lg font-semibold text-primary underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-indigo-600">Explore the crossing diagnosis →</a></aside>
         <LabGuide />
         <ImportControls origin={origin} reportId={state.kind === "ready" ? state.report.report_id : undefined} onImport={importReport} onSample={loadSample} />
       </div>
