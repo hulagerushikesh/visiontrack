@@ -19,8 +19,8 @@ optional extras, and a build that produces a valid sdist + wheel
 ## Cut a release
 
 `0.3.0` is already published; its [notes](RELEASE_NOTES_0.3.0.md) are historical.
-The next [0.4.0 scope](RELEASE_NOTES_0.4.0.md) is frozen but unpublished. Prepare
-its metadata and complete the current [readiness gates](RELEASE_READINESS.md).
+The next [0.4.0 scope](RELEASE_NOTES_0.4.0.md) is frozen, with candidate metadata
+prepared but unpublished. Complete the current [readiness gates](RELEASE_READINESS.md).
 Freezing scope or checking a
 local artifact does not authorize a version bump or tag by itself. Replace
 `X.Y.Z` below with that chosen version; never reuse an existing release tag.

@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 
+from visiontrack import __version__
 from visiontrack.cli import main as cli_main
 from visiontrack.lab import (
     build_initiation_trace,
@@ -44,6 +45,7 @@ def test_synthetic_lab_creation_produces_complete_verified_bundle(tmp_path: Path
     report_path = create_synthetic_lab(output)
     report = json.loads(report_path.read_text(encoding="utf-8"))
 
+    assert report["experiment"]["visiontrack_version"] == __version__
     assert report_path == plan.report_path
     assert build_report_model(plan.bundle_path) == report
     assert (plan.bundle_path / "manifest.json").is_file()

@@ -8,9 +8,10 @@ from pathlib import Path
 import pytest
 
 from experiments.benchmark import BenchmarkReport
+from visiontrack import __version__
 from visiontrack.benchmark_report import BenchmarkReportRecord, BenchmarkValue
 
-_FIXTURE = Path("tests/fixtures/benchmark_report_v1.json")
+_FIXTURE = Path("tests/fixtures/benchmark_report_0_4_0.json")
 
 
 def _structured_result() -> BenchmarkReport:
@@ -45,11 +46,19 @@ def test_structured_result_matches_shared_browser_fixture() -> None:
     expected = json.loads(_FIXTURE.read_text(encoding="utf-8"))
 
     assert isinstance(record, BenchmarkReportRecord)
+    assert record.provenance.visiontrack_version == __version__
     assert json.loads(record.to_json()) == expected
     expected_canonical = json.dumps(
         expected, allow_nan=False, ensure_ascii=False, separators=(",", ":"), sort_keys=True
     )
     assert record.to_bytes() == (expected_canonical + "\n").encode("utf-8")
+
+
+def test_historical_shared_fixture_remains_reproducible(monkeypatch) -> None:
+    # This is a declared hand fixture, not a new run attributed to an old release.
+    monkeypatch.setattr("experiments.benchmark.__version__", "0.3.0")
+    expected = json.loads(Path("tests/fixtures/benchmark_report_v1.json").read_text())
+    assert json.loads(_structured_result().to_json()) == expected
 
 
 def test_export_preserves_full_paired_statistics() -> None:

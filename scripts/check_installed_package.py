@@ -59,6 +59,8 @@ assert (bundle / 'report/report.json').read_bytes() == (browser / 'report.json')
 before = snapshot(out)
 trace_text = (browser / 'initiation-trace.json').read_text()
 trace = json.loads(trace_text)
+assert report['experiment']['visiontrack_version'] == visiontrack.__version__
+assert trace['producer']['visiontrack'] == visiontrack.__version__
 assert trace_text == canonical_json(build_initiation_trace(
     bundle, variant='bytetrack', start=0, end=10)) + '\n'
 assert command('lab-initiation', bundle, '--variant', 'bytetrack', '--start', 0,

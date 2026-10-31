@@ -1,11 +1,13 @@
 # VisionTrack release-readiness audit
 
-## Current source delivery checkpoint — 2026-10-30
+## Current 0.4.0 candidate checkpoint — 2026-10-31
 
 The historical `0.3.0` publication audit below remains unchanged. The current
 source adds `lab-initiation` and `lab-demo --with-initiation`; neither command
-addition is in the published `0.3.0` wheel. Local artifacts still carry `0.3.0`
-metadata for testing only: they are not a new release or replacements on PyPI.
+addition is in the published `0.3.0` wheel. Both source version declarations now
+select `0.4.0`; local candidate artifacts are not a publication or replacements
+on PyPI. Historical reports and conformance fixtures retain their recorded
+versions. Fresh demo/report/trace checks bind their version to the producing package.
 
 - [x] Build the current wheel and source archive, then pass `twine check`.
 - [x] Install each artifact in its own clean, non-editable Python 3.12 environment
@@ -25,20 +27,37 @@ metadata for testing only: they are not a new release or replacements on PyPI.
       before artifact upload/publication; retain a machine-readable receipt.
 - [x] Freeze the [0.4.0 scope and migration](RELEASE_NOTES_0.4.0.md), distinguishing
       tracking behavior, corrected metric semantics, optional diagnostics and
-      separately deployed website features. Metadata remains 0.3.0 until candidate
-      preparation; the selected release is not yet tagged or published.
+      separately deployed website features. Candidate metadata is 0.4.0; the selected
+      release is not yet tagged or published.
 - [x] Guard publication against branch dispatch, tag/metadata mismatch and
       missing, failed or pending latest main-push CI for the exact release commit.
-- [ ] Prepare 0.4.0 metadata and version-dependent current fixtures without
+- [x] Prepare 0.4.0 metadata and version-dependent current fixtures without
       rewriting historical evidence or changing the tracker.
-- [ ] Re-run the chosen release's full gates at its final revision and verify
-      hosted CI before any tag/publication. Broader platform support is not
-      established by this local macOS/Python 3.12 checkpoint alone.
+- [x] Complete local candidate gates: **1,256 Python tests pass**, 3 skip and one
+      slow test is deselected, with the pinned TrackEval reference installed.
+      The original 22-file regression suite also runs in its restored clone.
+      Canonical Python/C++ fixture parity and deterministic reset, all web
+      contracts/workflows, TypeScript, the production app, Ruff and strict docs pass.
+- [ ] Verify hosted CI for the exact final candidate commit before tagging.
+      Broader platform support is not established by this local macOS/Python 3.12
+      checkpoint alone.
+- [ ] Publish the release tag, then verify public package files and digests.
 
 Reproduce with the command in [Release to PyPI](RELEASE.md#check-installed-delivery).
-Hosted CI for the installed-delivery checkpoint `7ddd18d` is
-[successful](https://github.com/hulagerushikesh/visiontrack/actions/runs/41047232224).
-That success does not substitute for CI on the final 0.4.0 candidate revision.
+The rewritten main history exposed a fresh-checkout regression: three tests
+needed original commit objects that no longer arrived with a clone. A sealed
+archive now retains 221 original commit headers (no alternate source/results).
+Their original Git identities are verified; all referenced source trees already
+exist unchanged in current main. Only a disposable regression clone restores
+those objects and executes the exact 22-file historical suite. The legacy
+preprocessing/body and current-source-drift tests use the same original tree
+identities. No study record, source lock, result or default is rewritten.
+A transport clone excludes unreachable local objects, exercising the CI failure
+condition rather than relying on leftovers in the developer checkout.
+
+The previous [main CI](https://github.com/hulagerushikesh/visiontrack/actions/runs/41188547359)
+failed those historical-reference tests; its install/web checks passed. Older CI
+success at another SHA does not substitute for CI on this candidate revision.
 The receipt records artifact digests, installed source hashes, report/trace IDs,
 core checks and whether the TypeScript contract was run. It contains local
 installation paths and stays local or in the CI artifact; it is not a dataset,

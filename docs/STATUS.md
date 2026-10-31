@@ -2,7 +2,7 @@
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
 
-**Latest checkpoint — 2026-10-30:** the curated `/lab/crossings` diagnosis is
+**Latest checkpoint — 2026-10-31:** the curated `/lab/crossings` diagnosis is
 implemented. The [committed-method initiation study](INITIATION_THRESHOLD_FINDINGS.md)
 completed all 54 synthetic pairs / 324 passes: earlier births recover true
 crossings but also confirm persistent false proposals. The candidate fails
@@ -26,12 +26,18 @@ Python-to-TypeScript initiation contract. Normal CI and release builds enforce
 the installed-artifact check and retain receipts. These are local builds, not a
 new publication; the public wheel remains 0.3.0. Practitioner usability remains
 open. The [0.4.0 scope and migration](RELEASE_NOTES_0.4.0.md) are now frozen;
-source metadata/public PyPI remain 0.3.0 until candidate preparation. Release
+source metadata is now 0.4.0; the public package remains 0.3.0. Release
 builds now require a matching tag/version and latest successful main-push CI
-for that exact SHA. Next: prepare candidate metadata/current fixtures and run
-the final [readiness gates](RELEASE_READINESS.md); real-traffic acceptance
-remains a separate data/label gate. Defaults and C++ stay unchanged. The checkpoints below retain
-their historical scope.
+for that exact SHA. Candidate preparation preserves historical reports/fixtures;
+fresh generated artifacts declare their producer version. A fresh-clone CI
+blocker is repaired by restoring verified original commit metadata in the isolated
+historical regression clone, without changing frozen evidence. All local candidate
+gates now pass, including 1,256 Python tests with the pinned metric reference,
+parity/reset, web workflows, app/types/docs/lint and clean wheel/sdist installs.
+Next: verify hosted CI for the final candidate commit, then the separate
+publication action in [release readiness](RELEASE_READINESS.md). Real-traffic
+acceptance remains a separate data/label gate. Defaults and C++ stay unchanged.
+The checkpoints below retain their historical scope.
 
 **Current checkpoint — 2026-10-26:** the owner delegated technical review because
 no separate reviewer is available. The [AI-assisted exploratory case note](MOT17_AI_REVIEW_DECISION.md)

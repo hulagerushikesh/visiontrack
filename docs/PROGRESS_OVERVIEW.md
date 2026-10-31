@@ -1,6 +1,6 @@
 # VisionTrack and VisionTrack C++ — progress overview
 
-Snapshot: **2026-10-30**. This is a summary of the canonical
+Snapshot: **2026-10-31**. This is a summary of the canonical
 [VisionTrack checklist](NEXT_STEPS.md), [status](STATUS.md) and
 [C++ checklist](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/NEXT_STEPS.md).
 Completed implementation is not the same as validated research or product demand.
@@ -34,9 +34,13 @@ initiation workflow. This is enforced in CI and before release artifact upload.
 The [0.4.0 scope and migration](RELEASE_NOTES_0.4.0.md) are now frozen, including
 corrected measurement semantics and optional diagnostics without tracker changes.
 A publication guard requires matching tag/version metadata and latest successful
-main-push CI for the exact commit. Nothing is published: source metadata remains
-0.3.0. Candidate metadata/current fixture preparation and final release gates
-are next, tracked in [release readiness](RELEASE_READINESS.md).
+main-push CI for the exact commit. Source metadata now selects 0.4.0; PyPI remains
+0.3.0. Historical fixture versions are preserved, fresh artifacts check their
+producer version, and exact historical Git identities are restored only in an
+isolated regression clone to repair fresh-checkout CI. All local candidate gates
+pass: 1,256 Python tests with the pinned metric reference, parity/reset, web
+workflows, app/types/docs/lint and clean wheel/sdist installs. Exact-commit hosted
+CI and the separate publication action remain in [release readiness](RELEASE_READINESS.md).
 A real traffic improvement claim still requires independently checked domain evidence.
 
 **Current review decision:** the owner delegated technical inspection because no

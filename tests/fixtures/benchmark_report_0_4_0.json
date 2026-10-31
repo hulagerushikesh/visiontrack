@@ -1,0 +1,83 @@
+{
+  "baseline": "bytetrack",
+  "dataset": {
+    "detector": "Deterministic synthetic detections",
+    "name": "synthetic",
+    "pair_count": 2,
+    "protocol": "Paired Wilcoxon comparison over sequence × seed units",
+    "runs_per_variant": 2,
+    "split": "1 sequences × 2 seeds"
+  },
+  "limitations": [
+    "Results are valid only for the declared dataset, detector, variants, and paired protocol.",
+    "Statistical significance does not by itself establish practical importance or transfer.",
+    "Track IDs are run-local associations and are not persistent person identities."
+  ],
+  "metrics": [
+    {
+      "direction": "higher",
+      "format": "score",
+      "key": "MOTA",
+      "label": "MOTA"
+    },
+    {
+      "direction": "lower",
+      "format": "count",
+      "key": "IDSW",
+      "label": "ID switches"
+    }
+  ],
+  "provenance": {
+    "config_hash": "abcdef123456",
+    "git_revision": null,
+    "source_document": "experiments/benchmark.py",
+    "source_kind": "structured_experiment_result",
+    "visiontrack_version": "0.4.0"
+  },
+  "report_id": "benchmark-synthetic-abcdef123456-v1",
+  "schema_version": 1,
+  "summary": "2 tracking variants replayed over 2 identical paired units.",
+  "title": "Tracker benchmark · synthetic",
+  "variants": [
+    {
+      "baseline": true,
+      "name": "bytetrack",
+      "values": {
+        "IDSW": {
+          "delta": 0.0,
+          "mean": 8.0,
+          "p_value": 1.0,
+          "significant": false,
+          "std": 1.0
+        },
+        "MOTA": {
+          "delta": 0.0,
+          "mean": 0.7,
+          "p_value": 1.0,
+          "significant": false,
+          "std": 0.02
+        }
+      }
+    },
+    {
+      "baseline": false,
+      "name": "candidate",
+      "values": {
+        "IDSW": {
+          "delta": -1.5,
+          "mean": 6.5,
+          "p_value": 0.125,
+          "significant": false,
+          "std": 0.5
+        },
+        "MOTA": {
+          "delta": 0.03,
+          "mean": 0.73,
+          "p_value": 0.03125,
+          "significant": true,
+          "std": 0.01
+        }
+      }
+    }
+  ]
+}

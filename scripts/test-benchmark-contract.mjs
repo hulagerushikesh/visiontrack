@@ -17,6 +17,13 @@ assert.equal(sample.variants.find((variant) => variant.name === "bytetrack_reid"
 assert.deepEqual(validateBenchmarkReport(pythonFixture), { valid: true })
 assert.equal(pythonFixture.provenance.source_kind, "structured_experiment_result")
 assert.equal(pythonFixture.variants[1].values.MOTA.p_value, 0.03125)
+// Retain the historical fixture and verify the current producer separately.
+const currentFixture = JSON.parse(await readFile(new URL("../tests/fixtures/benchmark_report_0_4_0.json", import.meta.url), "utf8"))
+assert.deepEqual(validateBenchmarkReport(currentFixture), { valid: true })
+assert.equal(currentFixture.provenance.visiontrack_version, "0.4.0")
+const sameStatistics = structuredClone(currentFixture)
+sameStatistics.provenance.visiontrack_version = pythonFixture.provenance.visiontrack_version
+assert.deepEqual(sameStatistics, pythonFixture)
 
 const fullView = benchmarkView(sample, ALL_BENCHMARK_METRICS, ALL_BENCHMARK_VARIANTS)
 assert.equal(fullView.metrics.length, sample.metrics.length)

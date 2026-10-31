@@ -8,6 +8,7 @@ import pytest
 
 from experiments.mot17_metric_crosscheck import reference_api
 from experiments.mot17_preprocessing_audit import local_row, reference_rows
+from tests.frozen_suite import frozen_tree
 from tests.test_mot17_preprocessing_audit import BOX, row
 from visiontrack.eval import mot17
 
@@ -62,7 +63,8 @@ def test_unknown_policy_rejected():
 def test_legacy_body_is_structurally_identical_to_pre_correction_source():
     root = Path(__file__).resolve().parents[1]
     old = subprocess.check_output(
-        ["git", "show", "69f319c:src/visiontrack/eval/mot17.py"], cwd=root, text=True)
+        ["git", "show", f"{frozen_tree('69f319c72d3ef3083934af90f29b1cada30ff75b')}:"
+         "src/visiontrack/eval/mot17.py"], cwd=root, text=True)
     new = (root / "src/visiontrack/eval/mot17.py").read_text()
 
     def body(source, name):

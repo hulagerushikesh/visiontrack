@@ -4,16 +4,30 @@ import subprocess
 import sys
 from pathlib import Path
 
-from tests.frozen_suite import FILES, REVISION
+from tests.frozen_suite import FILES, REVISION, frozen_tree, restore_frozen_metadata
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_frozen_git_metadata_rejects_modified_archive(tmp_path):
+    import pytest
+
+    from tests.frozen_suite import METADATA, frozen_metadata
+
+    changed = tmp_path / "changed.json"
+    changed.write_bytes(METADATA.read_bytes() + b"\n")
+    with pytest.raises(ValueError, match="metadata changed"):
+        frozen_metadata(changed)
+
+
 def test_frozen_v1_studies_in_isolated_original_revision(tmp_path):
     checkout = tmp_path / "frozen-v1"
-    # Local object sharing only, no network or new worktree on the user's branch.
-    subprocess.run(["git", "clone", "--shared", "--no-checkout", "--quiet",
-                    str(ROOT), str(checkout)], check=True, capture_output=True, text=True)
+    # A transport clone excludes unreachable local objects, like a fresh CI checkout.
+    subprocess.run(["git", "clone", "--no-local", "--single-branch",
+                    "--no-checkout", "--quiet",
+                    str(ROOT), str(checkout)], check=True, capture_output=True, text=True,
+                   timeout=120)
+    restore_frozen_metadata(checkout)
     subprocess.run(["git", "-c", "core.hooksPath=/dev/null", "-C", str(checkout),
                     "checkout", "--detach", "--quiet", REVISION],
                    check=True, capture_output=True, text=True)
@@ -36,4 +50,4 @@ def test_frozen_runner_still_rejects_changed_current_source():
 
     registration, _ = load_frozen_protocol()
     with pytest.raises(ValueError, match="source drift|unexpected package"):
-        _verify_tree(ROOT, registration["baseline_revision"])
+        _verify_tree(ROOT, frozen_tree(registration["baseline_revision"]))

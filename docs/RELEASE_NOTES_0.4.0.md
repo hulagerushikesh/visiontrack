@@ -2,12 +2,12 @@
 
 Scope status: **frozen on 2026-10-30**
 
-Release status: **planned; not tagged or published**
+Release status: **candidate prepared; not tagged or published**
 
-Selected next package version: **0.4.0**. Current source metadata and the public
-package remain **0.3.0** until candidate preparation. The audit baseline is
-`v0.3.0`; installed delivery at `7ddd18d` passed hosted CI. Subsequent release
-preparation must pass its own gates at its final revision.
+Candidate package version: **0.4.0** in both source declarations. The public
+package remains **0.3.0**; these local artifacts are not a PyPI publication.
+The audit baseline is `v0.3.0`. The candidate must pass its own local and hosted
+gates at its final revision.
 
 This release makes tracking failures easier to explain and measurements more
 trustworthy. Its audience is computer-vision developers comparing local,
@@ -89,12 +89,13 @@ public accuracy claim are outside this release. Track IDs remain local labels.
 ## Candidate and publication checklist
 
 - [x] Audit changes since `v0.3.0`, select `0.4.0`, freeze this scope and migration.
-- [x] Verify installed source delivery and its hosted CI at `7ddd18d`.
+- [x] Verify the earlier installed-delivery checkpoint; candidate delivery is
+      checked again below rather than inheriting that checkpoint's CI result.
 - [x] Implement a release guard requiring matching tag/project/import versions,
       version-specific notes and latest successful main-push CI for the exact SHA.
-- [ ] Prepare `0.4.0` metadata and refresh only the version-dependent current
+- [x] Prepare `0.4.0` metadata and refresh only the version-dependent current
       demo/contracts; preserve historical evidence and its recorded versions.
-- [ ] Run complete Python, reference/parity, TypeScript/workflow, production app,
+- [x] Run complete Python, reference/parity, TypeScript/workflow, production app,
       strict docs and isolated distribution gates at the candidate revision.
 - [ ] Verify hosted CI at that exact revision; retain artifact verification receipts.
 - [ ] Create/push the release tag as the publication action, then verify PyPI

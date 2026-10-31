@@ -4,7 +4,7 @@ VisionTrack is the NumPy reference, research platform, and learning product.
 Work here must protect readability, reproducibility, and the ability to explain
 why a tracking change helps or hurts.
 
-**Current delivery — 2026-10-30:** the Lab crossing diagnosis and its
+**Current delivery — 2026-10-31:** the Lab crossing diagnosis and its
 [bounded threshold follow-up](INITIATION_THRESHOLD_FINDINGS.md) are complete.
 
 - [x] Freeze and run 54 synthetic threshold pairs / 324 repeatability passes.
@@ -30,8 +30,14 @@ why a tracking change helps or hurts.
 - [x] Freeze the [0.4.0 release scope and migration](RELEASE_NOTES_0.4.0.md),
       separating measurement corrections, optional tooling and the deployed site.
       Add an exact-tag/version/CI guard before the release build.
-- [ ] Prepare 0.4.0 metadata and current version-dependent fixtures, then run
-      final local/hosted gates using the [readiness checklist](RELEASE_READINESS.md).
+- [x] Prepare both 0.4.0 source declarations; preserve historical versioned
+      fixtures and check fresh demo/report/trace producer versions. Restore exact
+      frozen regression Git metadata only inside a disposable clone.
+- [x] Pass local 0.4.0 candidate gates: 1,256 Python tests with the pinned metric
+      reference, frozen historical regressions, parity/reset, web workflows,
+      app/types/docs/lint and separate clean wheel/sdist installs.
+- [ ] Verify exact-commit hosted CI and then the separate publication action
+      using the [readiness checklist](RELEASE_READINESS.md).
       No automatic package release,
       new footage hunt, public accuracy claim or outreach follows from this list.
 - [ ] Separate research gate: representative permitted traffic event/negative
