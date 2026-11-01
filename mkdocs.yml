@@ -77,7 +77,7 @@ nav:
       - Five-minute demonstration: SHOWCASE_DEMO.md
       - Public API: API.md
       - Run on your own video: VIDEO.md
-      - Candidate 0.5.0 scope (not published): RELEASE_NOTES_0.5.0.md
+      - Published 0.5.0 release notes: RELEASE_NOTES_0.5.0.md
       - Published 0.4.0 release notes: RELEASE_NOTES_0.4.0.md
       - Published 0.3.0 release notes: RELEASE_NOTES_0.3.0.md
       - Release to PyPI: RELEASE.md
@@ -93,7 +93,7 @@ nav:
       - Your recording-day checklist: IDENTITY_CONTINUITY_RECORDING_DAY.md
       - Reliability Lab — first slice: RELIABILITY_LAB.md
       - Track initiation diagnosis: INITIATION_DIAGNOSTIC.md
-      - Pair association diagnosis (unreleased): ASSOCIATION_DIAGNOSTIC.md
+      - Pair association diagnosis: ASSOCIATION_DIAGNOSTIC.md
       - Practitioner discovery playbook: PRACTITIONER_DISCOVERY.md
       - Traffic reliability probe plan: TRAFFIC_RELIABILITY_PLAN.md
       - Real fixed-camera traffic evidence gate: REAL_TRAFFIC_EVIDENCE_GATE.md

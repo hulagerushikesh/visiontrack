@@ -1,15 +1,20 @@
-# VisionTrack 0.5.0 candidate scope
+# VisionTrack 0.5.0 release notes
 
 Scope status: **frozen on 2026-11-01**
 
-Release status: **candidate; not published**
+Release status: **published on 2026-11-01**
 
-The public package remains **0.4.0**. Version 0.5.0 is prepared in this checkout
-to deliver the already implemented selected-pair diagnostic through an ordinary
-package installation. No release tag or PyPI publication is implied by this
-document. The comparison baseline is the immutable `v0.4.0` tag.
+Public package **0.5.0** was released from
+`324c9135989537448b07244c982f246d39295399`, after
+[exact-commit CI](https://github.com/hulagerushikesh/visiontrack/actions/runs/41325567170)
+and the [publishing workflow](https://github.com/hulagerushikesh/visiontrack/actions/runs/41325995049)
+passed. Public wheel/source bytes match the workflow artifacts; a fresh public
+PyPI core/Lab installation passes both diagnostic and browser-import workflows.
+[PyPI](https://pypi.org/project/visiontrack-mot/0.5.0/) ·
+[GitHub release](https://github.com/hulagerushikesh/visiontrack/releases/tag/v0.5.0).
+The comparison baseline is the immutable `v0.4.0` tag.
 
-## What this candidate delivers
+## What this release delivers
 
 | Surface | Change since 0.4.0 | Boundary |
 | --- | --- | --- |
@@ -25,15 +30,15 @@ actual stage inputs, numeric limits and returned partners; it does not determine
 physical identity or prove a counterfactual improvement. See the
 [association walkthrough and limits](ASSOCIATION_DIAGNOSTIC.md).
 
-This is a pre-1.0 **minor release candidate** because it adds an optional public
+This is a pre-1.0 **minor release** because it adds an optional public
 diagnostic command/API. It is not an accuracy upgrade. Core dependencies remain
 NumPy-only; the existing Lab extra and Python support are unchanged.
 
 ## Migration and compatibility
 
 1. Existing 0.4.0 installations keep `lab-initiation` and the guided demo. They
-   do **not** gain `lab-association` from a website update. Until publication,
-   use `python -m pip install -e ".[lab]"` from this checkout for that command.
+   do **not** gain `lab-association` from a website update. Install the released
+   tools with `python -m pip install --upgrade "visiontrack-mot[lab]==0.5.0"`.
 2. Preserve existing bundles. The diagnostic reads a saved run and writes no
    files. Save `--json` output to a new file **outside** the sealed bundle.
 3. Select a track that existed before the chosen frame's association and an
@@ -50,7 +55,7 @@ Python 3.10, 3.11 and 3.12 are the normal CI matrix. Schema validation and stati
 React checks are engineering gates, not browser interaction QA or practitioner
 comprehension validation. C++ 0.1.1 retains its accepted Python 0.3.0 oracle;
 the completed public Python 0.4.0 compatibility evidence is not silently
-promoted to 0.5.0 acceptance. A new C++ release is outside this candidate.
+promoted to 0.5.0 acceptance. A new C++ release is outside this release scope.
 
 ## Website delivery is separate
 
@@ -73,7 +78,7 @@ No representative traffic accuracy gain, new research method, practitioner
 adoption or commercial demand is claimed. The
 [real-traffic evidence gate](REAL_TRAFFIC_EVIDENCE_GATE.md) stays open.
 
-## Candidate gates
+## Candidate and publication gates
 
 - [x] Freeze the existing feature scope and migration; separate candidate,
       published package, website and research claims.
@@ -86,7 +91,7 @@ adoption or commercial demand is claimed. The
 - [x] Verify successful hosted main CI for candidate `a898b74`: all seven jobs
       pass in [run 41325219952](https://github.com/hulagerushikesh/visiontrack/actions/runs/41325219952).
       A read-only simulated-tag guard also passes; no tag was created.
-- [ ] With a separate publication decision, create/push a matching release tag;
+- [x] With the owner's separate publication approval, create/push the matching release tag;
       verify public files, clean public installation and release provenance.
 
 The release guard still refuses branch publication and mismatched tags, and
@@ -94,3 +99,5 @@ requires successful main CI at the exact tagged SHA. A green candidate is a
 reviewable delivery result, not publication authorization or research acceptance.
 If later documentation or source commits are selected for the tag, their own
 exact-commit CI must pass; the checkpoint above does not substitute for it.
+The published tag and files are now immutable. See the
+[publication audit](RELEASE_READINESS.md) for exact file digests and limits.

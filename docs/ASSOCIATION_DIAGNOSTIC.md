@@ -4,10 +4,10 @@
 `lab-association` command answers the next, narrower engineering question:
 **was this particular track/detection pair offered, blocked, or not selected?**
 
-This is an unreleased checkout feature, scoped in the [0.5.0 candidate](RELEASE_NOTES_0.5.0.md),
-added after the published 0.4.0 package.
-Use a current source checkout (`python -m pip install -e ".[lab]"`); installing
-0.4.0 from PyPI alone does not provide this command. No new release is claimed.
+This command/API is available in [published 0.5.0](RELEASE_NOTES_0.5.0.md).
+Install with `python -m pip install --upgrade "visiontrack-mot[lab]==0.5.0"`.
+An existing 0.4.0 installation does not provide it; a website update alone does
+not upgrade your local package. A source checkout remains an optional dev route.
 
 ## Use it on an existing saved run
 
@@ -26,8 +26,8 @@ synthetic demo's keys can differ. Add `--json` to emit only canonical
 standard error with exit code 2 and no partial JSON. No `--write` mode exists.
 Shell redirection can save the separate explanation outside the sealed bundle.
 The Lab can now import this separate explanation alongside a checked initiation
-trace. The command remains checkout-only; this website feature does not add it
-to the already published 0.4.0 wheel.
+trace. Package and website delivery remain separate; this does not change the
+already published 0.4.0 wheel.
 
 ## Inspect the explanation in the Lab
 
@@ -50,7 +50,7 @@ For your own saved run:
 3. Select **Why did this pair match or fail?**. Choose a track that already
    existed before this frame's association and an original detection key.
    Newly born tracks are excluded; a frame without a usable pair explains why.
-4. Run the displayed command from your current local checkout. Replace
+4. Run the displayed command using your local 0.5.0 installation. Replace
    `BUNDLE_PATH` with the original saved experiment folder, and redirect to a
    new `association.json` outside that sealed bundle.
 5. Select **Import association explanation** and choose that file. Read the

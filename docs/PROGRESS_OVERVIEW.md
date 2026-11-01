@@ -14,10 +14,11 @@ C++ stays in maintenance. No overall completion percentage or accuracy gain is
 claimed. The older weekly session sequence is now explicitly historical.
 
 **Installable handoff (2026-11-01):** the existing association command is now
-scoped as an [unpublished 0.5.0 candidate](RELEASE_NOTES_0.5.0.md), with full
+delivered in [published 0.5.0](RELEASE_NOTES_0.5.0.md), with full
 local checks and matching wheel/source report, trace and explanation IDs.
-Published 0.4.0 remains unchanged. Exact-commit hosted CI and publication are
-separate gates. The bounded RoundaboutHD recheck also found label-interpolation
+Historical 0.4.0 artifacts remain unchanged. Exact-tag CI, publication, public
+artifact verification and a fresh public installation pass. The bounded
+RoundaboutHD recheck also found label-interpolation
 questions and produced one owner-approved clarification email; the
 [traffic admission gate](REAL_TRAFFIC_EVIDENCE_GATE.md) remains open pending
 precise rights and reference-label answers. Neither result is a tracking gain.

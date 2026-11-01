@@ -19,11 +19,11 @@ interaction and practitioner understanding have not been verified by code checks
 
 ## Optional: reproduce with the released package
 
-Use the published 0.4.0 package and a new output folder. No repository checkout
+Use the published 0.5.0 package and a new output folder. No repository checkout
 is required; Python 3.10–3.12 is the tested setup:
 
 ```bash
-python -m pip install --upgrade "visiontrack-mot[lab]==0.4.0"
+python -m pip install --upgrade "visiontrack-mot[lab]==0.5.0"
 visiontrack lab-demo ./lab-showcase --with-initiation --write
 ```
 
@@ -124,12 +124,15 @@ as independent physical-label validation.
 The current generator uses a
 fixed fixture timestamp and `git_revision: null`, not a recording date or a
 runtime provenance receipt. The freshly generated report has ID
-`512a7a79db0535b4c26321def12cb8be514581d7a9f48c73206c5ebb147f2d17`
+`5d64f4943bf0603674f42b91703457a12f515e421fa70f00f070968bf3f84ae2`
 and byte SHA-256
-`8d4551ee789687bdab3126b5ac6e1e9ee2df7545a234006467cc7869548c007a`.
-These identifiers were checked from a fresh public-PyPI 0.4.0 installation;
-producer version is part of the report, so the earlier 0.3.0-labelled source
-export has a different fingerprint. Its historical bytes are retained.
+`9c13ca5c31f3f3c99ae470099baf25fb1eef5eaca3c98310a8f9f4a4b5397ad0`.
+These identifiers were checked from a fresh public-PyPI 0.5.0 installation.
+The browser-only confirmation demo deliberately retains the original 0.4.0
+report ID `512a7a79db0535b4c26321def12cb8be514581d7a9f48c73206c5ebb147f2d17`
+and file SHA `8d4551ee789687bdab3126b5ac6e1e9ee2df7545a234006467cc7869548c007a`.
+Producer version is part of the report; historical 0.3.0 and 0.4.0 exports are
+not rewritten to look like 0.5.0 results.
 Rebuilding independently with and without `--with-initiation` preserves every
 bundle byte produced by the current generator. Historical exports are not
 rewritten or assumed byte-identical to today's report. Both easy-to-find import files pass the actual Lab readers,

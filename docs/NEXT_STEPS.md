@@ -7,14 +7,15 @@ why a tracking change helps or hurts.
 **Current delivery — 2026-11-01:** the Lab crossing diagnosis and its
 [bounded threshold follow-up](INITIATION_THRESHOLD_FINDINGS.md) are complete.
 
-- [x] Prepare the [0.5.0 installable diagnostic candidate](RELEASE_NOTES_0.5.0.md)
+- [x] Prepare the [0.5.0 installable diagnostic release](RELEASE_NOTES_0.5.0.md)
       with isolated wheel/source association receipts, exact three-record
       fingerprint agreement, invalid-selector refusal and complete local gates.
-      Published 0.4.0 and historical evidence remain unchanged.
+      Historical 0.4.0 artifacts and research evidence remain unchanged.
 - [x] Pass all seven hosted candidate CI jobs at `a898b74`, plus the read-only
       matching-tag guard; no release tag or publication was created.
-- [ ] Take a separate publication decision; require CI at the actual tag commit,
-      then audit public artifacts and installation.
+- [x] Publish 0.5.0 with separate owner approval and successful exact-tag CI;
+      verify public wheel/source bytes, publisher/subject metadata, GitHub release
+      and a fresh public core/Lab installation with both import workflows.
 - [x] Finish the bounded RoundaboutHD documentation recheck and send one
       owner-approved clarification request. See the
       [rights/label checkpoint](REAL_TRAFFIC_EVIDENCE_GATE.md#roundabouthd-bounded-clarification-checkpoint-2026-11-01).

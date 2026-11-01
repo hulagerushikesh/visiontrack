@@ -17,9 +17,9 @@ best reported by milestones below, not one percentage mixing these goals.
 
 | Work package | Delivered and checked | What remains outside that result |
 | --- | --- | --- |
-| Installable Python delivery | [0.4.0 publication](RELEASE_READINESS.md), exact artifact checks, clean wheel/source installs and release CI gates | Later association tooling is in the checkout, not the published 0.4.0 package |
+| Installable Python delivery | [0.4.0 and 0.5.0 publication](RELEASE_READINESS.md), exact artifact checks, clean wheel/source installs and release CI gates | Association requires 0.5.0; older installed packages are not upgraded by a website update |
 | Lifecycle diagnosis | [Offline initiation command](INITIATION_DIAGNOSTIC.md), matching Lab timeline and one-command prepared demo | Explaining a saved run does not improve its detections or tracking |
-| Association diagnosis | [Actual gate/assignment explanation](ASSOCIATION_DIAGNOSTIC.md), verified local import and optional numeric detail | No accepted gate/default change or new package release |
+| Association diagnosis | [Actual gate/assignment explanation](ASSOCIATION_DIAGNOSTIC.md), published command/API, verified local import and optional numeric detail | No accepted gate/default change or proven tracking gain |
 | Easier onboarding | No-install confirmation demo and separate three-step match-failure lesson in `/lab` | Browser interaction/visual QA and practitioner comprehension remain unverified |
 | Controlled research | [54 paired initiation-threshold cells / 324 passes](INITIATION_THRESHOLD_FINDINGS.md), retained failures and unchanged controls | Candidate rejected: more true crossings also came with false counts; no traffic-accuracy claim |
 | C++ compatibility | [Public Python 0.4.0 / C++ 0.1.1 evidence](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/compatibility/prospective_oracle_0.4.0_evidence.json): twelve platform/Python jobs and 35,387 exact cached observations locally | Accepted release oracle remains Python 0.3.0; no runtime port or new C++ release |
@@ -53,10 +53,10 @@ cannot be resolved, finish with a precise unresolved requirement and stop that
 route, rather than count more synthetic/UI work as completion of this aim.
 
 **Additional delivery checkpoint — 2026-11-01:** the existing association
-diagnostic has an [unpublished 0.5.0 package candidate](RELEASE_NOTES_0.5.0.md)
-with complete local and isolated-install gates. This finishes an engineering
-handoff gap while the main research outcome remains open; publication needs
-exact-commit hosted CI and a separate decision. The single RoundaboutHD recheck
+diagnostic is now in [published 0.5.0](RELEASE_NOTES_0.5.0.md), after complete
+local/hosted/install gates and a separate owner publication approval. Public
+files and a fresh core/Lab installation are verified. This finishes an engineering
+handoff gap while the main research outcome remains open. The single RoundaboutHD recheck
 is complete and one clarification email was sent with owner approval. Resume
 that route when the requested rights/label answers are available, rather than
 repeat screening while waiting.

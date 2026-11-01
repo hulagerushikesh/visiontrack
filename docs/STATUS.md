@@ -2,14 +2,23 @@
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
 
-**Installable diagnosis candidate — 2026-11-01:** [0.5.0 is prepared, not published](RELEASE_NOTES_0.5.0.md).
+**Published diagnosis tools — 2026-11-01:** [0.5.0 is released](RELEASE_NOTES_0.5.0.md)
+from `324c913`. The actual tag passed exact-commit CI and the publishing guard;
+public wheel/source bytes match the workflow files and clean-install receipt.
+A fresh public core/Lab install passes the association command/API, read-only
+and selector-refusal checks, exact installed sources and both browser-import
+workflows. Current setup instructions use the released tools; original teaching
+exports retain their recorded 0.4.0 producers. No tracker/default/C++ oracle
+change, representative accuracy gain or completed browser/practitioner review.
+
+**Earlier candidate checkpoint — 2026-11-01:** 0.5.0 preparation and gates follow.
 It packages the existing selected-pair explanation without a new tracker/default
 change. All local candidate gates pass: 1,288 Python tests, exact parity, web
 contracts/workflows, app/types/lint/docs and clean wheel/source installation.
 Installed association CLI/API, producer/source hashes, selector refusals,
 read-only behavior and matching report/trace/explanation IDs are retained.
-Exact-commit hosted CI and publication remain separate gates; public 0.4.0 stays
-unchanged. The bounded RoundaboutHD source route now has one owner-approved
+Those publication gates are now completed above; public 0.4.0 artifacts stay
+unchanged. The bounded RoundaboutHD source route has one owner-approved
 clarification email sent, with data admission still on hold. No C++ oracle or
 runtime change, representative traffic gain or practitioner validation is claimed.
 

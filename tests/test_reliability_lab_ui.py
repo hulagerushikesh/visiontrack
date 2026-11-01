@@ -97,7 +97,7 @@ def test_sample_explains_how_to_rehearse_full_lab_workflow() -> None:
     assert 'visiontrack lab-demo ./lab-onboarding --with-initiation --write' in component
     assert 'lab-onboarding/try-in-browser' in component
     assert 'Skip Human review for this demo' in component
-    assert 'python -m pip install --upgrade "visiontrack-mot[lab]==0.4.0"' in component
+    assert 'python -m pip install --upgrade "visiontrack-mot[lab]==0.5.0"' in component
     assert 'Select its <code>report.json</code> using the button above' in component
     assert 'Synthetic results do not establish real-world accuracy.' in component
     assert '"lab-demo"' in cli

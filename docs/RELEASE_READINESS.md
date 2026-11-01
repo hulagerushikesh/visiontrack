@@ -1,11 +1,16 @@
 # VisionTrack release-readiness audit
 
-## Unpublished 0.5.0 candidate — 2026-11-01
+## Published 0.5.0 verification — 2026-11-01
 
-The [0.5.0 scope](RELEASE_NOTES_0.5.0.md) is frozen around the already implemented
-selected-pair diagnostic. The public release remains 0.4.0; no new tag or
-publication is claimed. This closes an installable-delivery gap, not the
-representative-traffic research gate.
+The [0.5.0 scope](RELEASE_NOTES_0.5.0.md) is frozen around the selected-pair
+diagnostic. With explicit owner approval, `v0.5.0` was published from
+`324c9135989537448b07244c982f246d39295399`. Its
+[seven-job exact-commit CI](https://github.com/hulagerushikesh/visiontrack/actions/runs/41325567170)
+and [trusted-publishing workflow](https://github.com/hulagerushikesh/visiontrack/actions/runs/41325995049)
+pass. [PyPI 0.5.0](https://pypi.org/project/visiontrack-mot/0.5.0/) and the
+[GitHub release](https://github.com/hulagerushikesh/visiontrack/releases/tag/v0.5.0)
+are verified. This closes an installable-delivery gap, not the representative
+traffic research gate. Older tags, artifacts and evidence remain unchanged.
 
 - [x] Project/import metadata agree at 0.5.0; historical 0.3.0/0.4.0 evidence and
       both prepared lesson asset sets remain unchanged.
@@ -25,7 +30,28 @@ representative-traffic research gate.
       [run 41325219952](https://github.com/hulagerushikesh/visiontrack/actions/runs/41325219952).
       The read-only release guard passes in a simulated matching-tag context;
       this creates no tag. A later selected tag commit requires its own CI.
-- [ ] Separate publication decision, matching tag and public artifact/install audit.
+- [x] Separate publication approval, matching tag and successful publication.
+- [x] Both downloaded public files match the workflow distributions and its
+      isolated-install receipt byte for byte. Their PyPI provenance metadata
+      identifies this repository, `release.yml`, `pypi` environment and exact
+      subject digests. No offline cryptographic signature verification is claimed.
+- [x] Fresh public-index installation outside the checkout: core first, then Lab
+      extras, actual CLI/API replay and invalid-selector refusal, all 64 installed
+      Python sources and both Python-to-TypeScript diagnostic workflows agree.
+      An initial simple-index propagation delay was retained and resolved; the
+      ordinary pinned install succeeds without a direct-file workaround.
+
+| Published file | SHA-256 |
+| --- | --- |
+| `visiontrack_mot-0.5.0-py3-none-any.whl` | `13aa43fcf576af5c12ba97bdd88469570fe550602c9037bd3abdb3bfa64d49ad` |
+| `visiontrack_mot-0.5.0.tar.gz` | `8de36a680a7206f853f1c68ebba404374e3d5b54d082f6700510375fcbecccab` |
+
+A separate fresh macOS ARM64 / Python 3.12.9 installed candidate-wheel and
+public C++ 0.1.1 pairing passes all 279 tests with no skips and 35,387 exact
+observations over 2,625 cached frames using NumPy 2.2.6. Its SciPy 1.15.3 test
+reference failed to load locally; that first skipped run is retained, and the
+complete pass uses the already working 1.16.2 reference. This is a local pairing
+check, not the twelve-platform 0.4.0 matrix or accepted C++ oracle promotion.
 
 The local receipt records artifact digests, installed versions/source identities,
 all three fingerprints and explicit association/refusal checks. No C++ oracle

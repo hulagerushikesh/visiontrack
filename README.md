@@ -161,7 +161,7 @@ visiontrack lab-initiation BUNDLE --variant bytetrack --start 0 --end 10
 privacy class, and limits. `lab-decision` likewise previews the exact choice and
 verified lineage before `--write` creates `decision.json`. CLI subcommands:
 `demo`, `eval`, `ablate`, `track`, `webcam`, `lab-evidence`, `lab-decision`,
-`lab-decision-import`, `lab-demo`, `lab-playback`, `lab-initiation`.
+`lab-decision-import`, `lab-demo`, `lab-playback`, `lab-initiation`, `lab-association`.
 Full public API: [docs/API.md](docs/API.md) ·
 packaging/release: [docs/RELEASE.md](docs/RELEASE.md).
 
@@ -170,8 +170,8 @@ tracks confirm, and when tracks survive or expire without public boxes. It
 replays an existing local Lab run and requires its public output to match the
 saved output exactly. It writes nothing; `--json` emits a separate numeric trace.
 See the [short diagnostic walkthrough](docs/INITIATION_DIAGNOSTIC.md). This command
-is available in the published 0.4.0 package. Install the Lab tools with
-`python -m pip install --upgrade "visiontrack-mot[lab]==0.4.0"`.
+was introduced in 0.4.0. Install the current released Lab tools with
+`python -m pip install --upgrade "visiontrack-mot[lab]==0.5.0"`.
 
 **Added after 0.4.0:** `lab-association` (0.5.0 or a current source checkout)
 explains one selected track/detection pair's actual gates and solver outcome,
@@ -226,7 +226,7 @@ fixed synthetic comparison without writing, then `--write` creates a complete
 verified bundle and prints the `report.json` path to import at `/lab`. The
 output root must be new and is never reused or overwritten.
 
-With `visiontrack-mot[lab]==0.4.0` installed, add `--with-initiation` to prepare
+With `visiontrack-mot[lab]==0.5.0` installed, add `--with-initiation` to prepare
 `try-in-browser/report.json`, `initiation-trace.json` and `START_HERE.txt` together
 beside the unchanged complete bundle. Import the report, follow **Inspect track
 initiation**, then import that folder's trace to compare frames 0–2. No camera or
