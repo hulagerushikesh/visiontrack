@@ -59,6 +59,12 @@ why a tracking change helps or hurts.
       gate/cost matrices and solver partners, distinct unoffered inputs, full
       replay/parity, bounded export, refusal checks and installed-artifact tests.
       This is unreleased checkout tooling; initiation v1 and defaults are preserved.
+- [x] Bring selected-pair diagnosis into the Lab's local trace timeline: optional
+      frame/pair selectors, exact report/trace/run checks, all three stage results,
+      numeric gate/cost comparisons and returned partners. Clear stale state on
+      frame/pair changes; test real Python exports, re-signed invalid records,
+      canceled reads and rendered controls, including clean wheel/sdist delivery.
+      The beginner demo stays unchanged; the export command remains checkout-only.
 
 For a short two-project snapshot of finished work, the current experiment's
 eight milestone groups and remaining gates, see [Progress overview](PROGRESS_OVERVIEW.md).

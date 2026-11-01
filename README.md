@@ -178,6 +178,10 @@ explains one selected track/detection pair's actual gates and solver outcome,
 after an exact saved-output replay check. It distinguishes unoffered inputs,
 gate rejection and eligible-but-unselected pairs. See the
 [association diagnostic](docs/ASSOCIATION_DIAGNOSTIC.md) for setup and selectors.
+The Lab's local initiation timeline can now import that explanation for the
+selected frame/pair and show actual gate values, cost limits and returned
+partners. Its file checks tie the explanation to the active report and trace;
+the beginner guided demo keeps its simpler confirmation lesson.
 
 For a no-install introduction, open [the Reliability Lab](https://visiontrack.hulage.in/lab)
 and choose **Try guided demo**. It checks and loads a prepared public-package

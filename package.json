@@ -12,6 +12,7 @@
     "test:decision-contract": "node scripts/test-decision-contract.mjs",
     "test:decision-workflow": "node scripts/test-decision-workflow.mjs",
     "test:initiation-workflow": "node scripts/test-initiation-workflow.mjs",
+    "test:association-workflow": "node scripts/test-association-workflow.mjs",
     "test:guided-demo": "node scripts/test-guided-demo.mjs",
     "test:report-import": "node scripts/test-report-import.mjs",
     "test:crossing-diagnosis": "node scripts/test-crossing-diagnosis.mjs",

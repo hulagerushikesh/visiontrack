@@ -2,6 +2,17 @@
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
 
+**Lab pair explanation — 2026-11-01:** checked local initiation traces now offer
+an optional selected-pair panel. It imports the separate association explanation,
+ties it to the active report/run/frame/track/detection and displays the actual
+stage admission, gate comparisons, cost eligibility and returned partners.
+Unselected, blocked and never-offered inputs remain distinct. Frame/pair changes
+discard old imports; reads are bounded and cancelable. Fourteen fresh Python
+exports, invalid/contradictory records and rendered controls are checked, including
+the installed-artifact workflow. No tracker settings, C++ behavior or published
+package version changes. The beginner demo stays focused on confirmation.
+Browser interaction/visual QA and practitioner comprehension are still open.
+
 **Selected-pair diagnosis — 2026-11-01:** the unreleased
 [`lab-association` command](ASSOCIATION_DIAGNOSTIC.md) observes actual production
 gates, costs and one-to-one assignment partners for one frame/track/detection.

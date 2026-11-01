@@ -10,7 +10,13 @@ Error.stackTraceLimit = 0
 const urls = new Map()
 async function moduleUrl(name, extension = "ts") {
   if (urls.has(name)) return urls.get(name)
-  const source = await readFile(new URL(`../src/features/reliability-lab/${name}.${extension}`, import.meta.url), "utf8")
+  let source
+  try { source = await readFile(new URL(`../src/features/reliability-lab/${name}.${extension}`, import.meta.url), "utf8") }
+  catch (error) {
+    if (extension !== "ts" || error.code !== "ENOENT") throw error
+    extension = "tsx"
+    source = await readFile(new URL(`../src/features/reliability-lab/${name}.${extension}`, import.meta.url), "utf8")
+  }
   let code = ts.transpileModule(source, { fileName: `${name}.${extension}`, compilerOptions: {
     module: ts.ModuleKind.ES2022, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX,
   } }).outputText

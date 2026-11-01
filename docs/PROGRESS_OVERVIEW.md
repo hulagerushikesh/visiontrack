@@ -16,8 +16,13 @@ Local validation: 1,287 Python tests pass (3 skipped, 1 deselected); the C++ sui
 passes 279 tests against this checkout, and 35,387 cached observations across
 2,625 frames remain byte-exact against published C++ 0.1.1 on macOS ARM64.
 Clean wheel/source installs exercise the new API/CLI. This is useful failure
-inspection, not a research improvement or a new PyPI release. The browser does
-not yet import this separate contract. Practitioner comprehension and independent
+inspection, not a research improvement or a new PyPI release. The browser
+now imports this separate contract in an optional local trace panel, with exact
+report/run/pair checks, numeric comparisons and stale-state cancellation. Fourteen
+fresh Python cases and rendered controls cover the new workflow, including clean
+wheel/source delivery. The command remains newer than the public 0.4.0 package;
+the beginner guided demo is unchanged. Browser interaction/visual QA remains
+unverified after the earlier access denial. Practitioner comprehension and independent
 representative traffic labels remain distinct, unfinished validation gates.
 
 **Product delivery (2026-10-30):** the new `/lab/crossings` workflow turns the

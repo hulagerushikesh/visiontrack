@@ -55,7 +55,7 @@ const same = (a: unknown, b: unknown) => canonicalJson(a) === canonicalJson(b)
 const digest = async (text: string) => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text))), b => b.toString(16).padStart(2, "0")).join("")
 
 /** Reject duplicate keys at every depth; retain exact numeric bytes for Python hashes. */
-function parseDocument(text: string): { value: any; raw: Map<string, string> } {
+export function parseDiagnosticDocument(text: string): { value: any; raw: Map<string, string> } {
   const value: unknown = JSON.parse(text)
   const raw = new Map<string, string>()
   const stack: Array<{ keys: Set<string>; key: boolean } | null> = []
@@ -87,14 +87,11 @@ function parseDocument(text: string): { value: any; raw: Map<string, string> } {
   return { value, raw }
 }
 
-function validateShape(t: any): asserts t is InitiationTrace {
-  keys(t, "schema trace_id experiment_id source_id variant run_id detection_sha256 track_sha256 replay_frame_range trace_frame_range config frames producer public_output_parity accuracy_claim physical_identity_verified limits")
-  require(t.schema === "visiontrack.initiation-trace/v1", "Unsupported initiation trace version.")
-  for (const key of ["trace_id", "experiment_id", "source_id", "run_id", "detection_sha256", "track_sha256"]) require(hash(t[key]), "Invalid trace identifier.")
+/** Shared numeric-only producer/configuration boundary for saved-run diagnostics. */
+export function validateDiagnosticMetadata(t: any) {
+  for (const key of ["experiment_id", "source_id", "run_id", "detection_sha256", "track_sha256"]) require(hash(t[key]), "Invalid trace identifier.")
   require(typeof t.variant === "string" && /^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/.test(t.variant), "Invalid trace variant.")
-  require(range(t.replay_frame_range) && range(t.trace_frame_range), "Invalid trace frame range.")
-  const { start, end } = t.trace_frame_range
-  require(start >= t.replay_frame_range.start && end <= t.replay_frame_range.end && end - start <= 200, "Trace window must contain 1–200 frames inside the original run.")
+  require(range(t.replay_frame_range), "Invalid replay frame range.")
   require(t.public_output_parity === "exact_sha256_match" && t.accuracy_claim === false && t.physical_identity_verified === false, "Trace must retain its diagnostic-only boundaries.")
   require(Array.isArray(t.limits) && t.limits.length > 0 && t.limits.length <= 16 && t.limits.every((s: unknown) => typeof s === "string" && s.length > 0 && s.length <= 1024), "Invalid diagnostic limitations.")
   keys(t.producer, "visiontrack python numpy implementation_sha256")
@@ -108,6 +105,17 @@ function validateShape(t: any): asserts t is InitiationTrace {
   for (const key of ["high_score_thresh", "low_score_thresh", "new_track_thresh", "match_iou_thresh", "recovery_iou_thresh", "appearance_ema_alpha", "kf_noise_scale", "w_iou", "w_app", "w_unc", "w_ocm"]) require(number(c[key]), "Invalid numeric tracker configuration.")
   require(c.low_score_thresh >= 0 && c.low_score_thresh <= c.high_score_thresh && c.high_score_thresh <= 1 && positive(c.n_init) && positive(c.max_age) && positive(c.ocm_delta_t), "Invalid tracker thresholds or lifecycle settings.")
   require(c.motion_residual_path === null && c.w_app === 0 && c.use_gmc === false, "Trace requires unsupported external features.")
+}
+
+function validateShape(t: any): asserts t is InitiationTrace {
+  keys(t, "schema trace_id experiment_id source_id variant run_id detection_sha256 track_sha256 replay_frame_range trace_frame_range config frames producer public_output_parity accuracy_claim physical_identity_verified limits")
+  require(t.schema === "visiontrack.initiation-trace/v1", "Unsupported initiation trace version.")
+  require(hash(t.trace_id), "Invalid trace identifier.")
+  validateDiagnosticMetadata(t)
+  require(range(t.trace_frame_range), "Invalid trace frame range.")
+  const { start, end } = t.trace_frame_range
+  require(start >= t.replay_frame_range.start && end <= t.replay_frame_range.end && end - start <= 200, "Trace window must contain 1–200 frames inside the original run.")
+  const c = t.config
   require(Array.isArray(t.frames) && t.frames.length === end - start, "Trace frames do not cover the selected window.")
   let rows = 0
   let previous: Map<number, InitiationTrack> | null = null
@@ -168,21 +176,25 @@ function validateShape(t: any): asserts t is InitiationTrace {
   }
 }
 
-/** Checks content and declared lineage, not the truth or authenticity of a submitted record. */
-export async function verifyInitiationTrace(text: string, report: ReliabilityReport): Promise<InitiationTrace> {
-  const { value: trace, raw } = parseDocument(text)
-  validateShape(trace)
-  require(await verifyContentFingerprint(text, trace.trace_id, "trace_id"), "Trace fingerprint does not match its contents. Export the original canonical JSON again.")
+/** Reproduce the saved run ID using Python's original config number tokens. */
+export async function verifyDiagnosticLineage(trace: Pick<InitiationTrace, "variant" | "experiment_id" | "source_id" | "detection_sha256" | "run_id" | "track_sha256" | "replay_frame_range" | "config">, rawConfig: string, report: ReliabilityReport) {
   const variant = report.variants.find(v => v.name === trace.variant)
   require(variant && trace.experiment_id === report.experiment.experiment_id && trace.source_id === report.source.source_id && trace.detection_sha256 === report.source.detection_sha256 && trace.run_id === variant.run_id && trace.track_sha256 === variant.failure_set.track_sha256 && same(trace.replay_frame_range, report.experiment.frame_range), "This trace does not belong to the active report/run. Import its matching report.json first.")
   const count = variant.diagnostics.observation_count
   require(integer(count), "This report lacks the saved observation count needed to verify the trace configuration.")
-  const rawConfig = raw.get("config")!
   const configHash = await digest(rawConfig)
   const content = { schema_version: 1, experiment_id: trace.experiment_id, source_id: trace.source_id, variant: trace.variant, config: trace.config, config_sha256: configHash, detection_sha256: trace.detection_sha256, frame_range: trace.replay_frame_range, track_sha256: trace.track_sha256, observation_count: count }
   // Preserve Python's exact 1.0/0.0 numeric tokens instead of reserializing them as JS integers.
   const runBytes = canonicalJson(content).replace(`"config":${canonicalJson(trace.config)},`, `"config":${rawConfig},`)
   require(await digest(runBytes) === trace.run_id, "Trace configuration does not reproduce the active report's run ID.")
+}
+
+/** Checks content and declared lineage, not the truth or authenticity of a submitted record. */
+export async function verifyInitiationTrace(text: string, report: ReliabilityReport): Promise<InitiationTrace> {
+  const { value: trace, raw } = parseDiagnosticDocument(text)
+  validateShape(trace)
+  require(await verifyContentFingerprint(text, trace.trace_id, "trace_id"), "Trace fingerprint does not match its contents. Export the original canonical JSON again.")
+  await verifyDiagnosticLineage(trace, raw.get("config")!, report)
   return trace
 }
 

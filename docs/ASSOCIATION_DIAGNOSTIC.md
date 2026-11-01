@@ -24,7 +24,40 @@ synthetic demo's keys can differ. Add `--json` to emit only canonical
 `visiontrack.association-explanation/v1` JSON to standard output. Errors go to
 standard error with exit code 2 and no partial JSON. No `--write` mode exists.
 Shell redirection can save the separate explanation outside the sealed bundle.
-The Lab browser does not import this new contract yet.
+The Lab can now import this separate explanation alongside a checked initiation
+trace. The command remains checkout-only; this website feature does not add it
+to the already published 0.4.0 wheel.
+
+## Inspect the explanation in the Lab
+
+1. Open `/lab` and import the saved run's `report.json`.
+2. Under **Why did a detection become a track?**, import its matching
+   `initiation-trace.json`. Select the frame you want to understand.
+3. Select **Why did this pair match or fail?**. Choose a track that already
+   existed before this frame's association and an original detection key.
+   Newly born tracks are excluded; a frame without a usable pair explains why.
+4. Run the displayed command from your current local checkout. Replace
+   `BUNDLE_PATH` with the original saved experiment folder, and redirect to a
+   new `association.json` outside that sealed bundle.
+5. Select **Import association explanation** and choose that file. Read the
+   three stage results and actual numeric gate/cost comparisons. Equality passes
+   the bounds. Full precision is retained so rounding cannot hide a failure.
+
+The panel starts closed and is optional. The beginner **Try guided demo** stays
+focused on its three confirmation steps; it does not require this export.
+Changing the frame, trace, report or selected pair discards the previous panel
+or import session. Closing/clearing the panel cancels pending reads. Rejected
+and superseded imports cannot leave an old successful explanation visible.
+
+The browser accepts at most 1 MiB of numeric explanation JSON. It checks strict
+versioned structure, duplicate keys, nesting, fingerprint, exact report/run
+lineage and Python configuration bytes, selected frame/pair, matching detection,
+stage input counts/admission, gate/outcome consistency and actual partners
+against the already checked initiation trace. It does not recompute Kalman
+matrices, run an assignment solver, authenticate the producer or judge physical
+identity. A newer producer may inspect an older saved run; producer hashes need
+not match the trace exporter, but run/input/output/settings and the selected
+detection must agree. Files stay in tab memory; there is no upload or persistence.
 
 ## Read the result
 
@@ -90,4 +123,11 @@ Observer/plain-tracker runs compare exact outputs, input bytes, solver call
 counts and actual cost bytes across seven settings. Existing initiation v1
 conformance bytes remain unchanged apart from honest executing-source provenance.
 Clean wheel and source installs exercise both the API and console command;
-normal CI retains those install checks.
+normal CI retains those install checks. The Python-to-browser association check
+also generates fourteen small hand-authored synthetic cases, covering all four
+offered-pair outcomes, unoffered/below-score inputs, recovery with/without soft
+distance, class-agnostic/disabled gates and inclusive IoU/cost bounds. Re-signed
+invalid records check semantic refusals independently of content hashes.
+Cancellation during reads/hashing, bounded input and rendered React controls
+are checked. These are code/static-render checks; browser interaction/visual QA
+and practitioner comprehension remain unverified after the earlier access denial.

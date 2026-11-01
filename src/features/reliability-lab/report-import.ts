@@ -7,7 +7,7 @@ export const maxReportBytes = 16 * 1024 * 1024
  * original text rather than JSON.stringify(JSON.parse(text)): JavaScript turns
  * Python's 1.0 into 1 and would reject an otherwise valid report.
  */
-export async function verifyContentFingerprint(text: string, contentId: string, field: "report_id" | "trace_id"): Promise<boolean> {
+export async function verifyContentFingerprint(text: string, contentId: string, field: "report_id" | "trace_id" | "explanation_id"): Promise<boolean> {
   const document = text.endsWith("\n") ? text.slice(0, -1) : text
   if (!document.startsWith("{") || !document.endsWith("}")) return false
   const key = `,"${field}":`

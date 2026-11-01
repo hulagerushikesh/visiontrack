@@ -152,6 +152,8 @@ def main() -> None:
         if args.with_web_contract:
             run(['npm', 'run', 'test:initiation-workflow'], cwd=ROOT,
                 env={**env, 'VISIONTRACK_PYTHON': str(python)})
+            run(['npm', 'run', 'test:association-workflow'], cwd=ROOT,
+                env={**env, 'VISIONTRACK_PYTHON': str(python)})
         result.update(kind=kind, artifact=artifact.name,
                       artifact_sha256=hashlib.sha256(artifact.read_bytes()).hexdigest(),
                       core=core, web_contract=args.with_web_contract)
