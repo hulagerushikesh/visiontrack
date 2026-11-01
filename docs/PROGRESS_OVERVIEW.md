@@ -6,6 +6,13 @@ Snapshot: **2026-11-01**. This is a summary of the canonical
 Completed implementation is not the same as validated research or product demand.
 This document does not claim the latest local work is already pushed or deployed.
 
+**Weekly close (2026-11-01):** the [current weekly checklist](WEEKLY_DELIVERY_PLAN.md)
+separates six delivered engineering/research packages from the unfinished traffic
+validation and practitioner-usefulness gates. Next week's main goal is one
+admissible, narrowly scoped comparison, conditional on rights and checked labels;
+C++ stays in maintenance. No overall completion percentage or accuracy gain is
+claimed. The older weekly session sequence is now explicitly historical.
+
 **Latest product step (2026-11-01):** an optional **Explain a match failure**
 lesson in `/lab` now opens a checked, fixed synthetic report/trace/pair triple
 without installation or files. It explains how overlap can pass while the motion

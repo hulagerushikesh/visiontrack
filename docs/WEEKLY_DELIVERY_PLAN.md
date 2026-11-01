@@ -1,5 +1,98 @@
 # Daily checkpoints and the next weekly goal
 
+## Current checkpoint — week ending 2026-11-01
+
+This section supersedes the historical session sequence below. It summarizes
+**2026-10-26 through 2026-11-01**, with next-week priorities for **November 2–8**.
+Work happens during active sessions; the dates are planning windows, not a
+scheduled job or a promise that external dependencies will resolve this week.
+
+**Where we are:** a released tracking/reference engine, a verified C++ pairing
+and an implemented Reliability Lab for explaining saved failures. We have not
+yet demonstrated a better tracker for a representative traffic domain, validated
+commercial demand or established a novel research contribution. Completion is
+best reported by milestones below, not one percentage mixing these goals.
+
+### This week's completed work
+
+| Work package | Delivered and checked | What remains outside that result |
+| --- | --- | --- |
+| Installable Python delivery | [0.4.0 publication](RELEASE_READINESS.md), exact artifact checks, clean wheel/source installs and release CI gates | Later association tooling is in the checkout, not the published 0.4.0 package |
+| Lifecycle diagnosis | [Offline initiation command](INITIATION_DIAGNOSTIC.md), matching Lab timeline and one-command prepared demo | Explaining a saved run does not improve its detections or tracking |
+| Association diagnosis | [Actual gate/assignment explanation](ASSOCIATION_DIAGNOSTIC.md), verified local import and optional numeric detail | No accepted gate/default change or new package release |
+| Easier onboarding | No-install confirmation demo and separate three-step match-failure lesson in `/lab` | Browser interaction/visual QA and practitioner comprehension remain unverified |
+| Controlled research | [54 paired initiation-threshold cells / 324 passes](INITIATION_THRESHOLD_FINDINGS.md), retained failures and unchanged controls | Candidate rejected: more true crossings also came with false counts; no traffic-accuracy claim |
+| C++ compatibility | [Public Python 0.4.0 / C++ 0.1.1 evidence](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/compatibility/prospective_oracle_0.4.0_evidence.json): twelve platform/Python jobs and 35,387 exact cached observations locally | Accepted release oracle remains Python 0.3.0; no runtime port or new C++ release |
+
+The [rain review](HVSD_RAIN_REVIEW.md), [source screen](REAL_TRAFFIC_EVIDENCE_GATE.md)
+and stopped SVMOT detector case narrowed what we can responsibly test. They did
+not supply the missing representative, independently checked traffic benchmark.
+The latest delivered lesson passed 18 local checks and all seven hosted CI jobs;
+those are engineering checks, not a substitute for that research evidence.
+
+### Wins, setbacks and what changes
+
+- **Win:** users can now try a small explanation without installing Python or
+  finding files. Engineers can inspect actual saved admission/gate/assignment
+  decisions instead of inferring them from a box animation.
+- **Win:** the released reference and C++ wheels have reproducible delivery and
+  compatibility evidence. Historical reports and accepted defaults are retained.
+- **Useful negative result:** lowering the birth threshold is not a generally
+  safe fix. The controlled study exposed false-count costs before adopting it.
+- **Missed outcome:** no admitted representative traffic comparison, proven
+  accuracy gain, accepted new method or validated customer workflow this week.
+- **Efficiency loss:** multiple dataset/video screens consumed effort without
+  producing an admissible outcome study. Next week gets one bounded evidence
+  route, with a stop decision; another broad source hunt is not the default.
+
+### Next week — one main research outcome, with separate usability work
+
+**Main aim:** get one narrowly scoped traffic comparison ready to execute on
+permitted data with independently checked labels. If the evidence dependency
+cannot be resolved, finish with a precise unresolved requirement and stop that
+route, rather than count more synthetic/UI work as completion of this aim.
+
+- [ ] **Check comprehension of the shipped lessons.** Walk through confirmation
+      and match failure; record where the explanation is unclear and make only
+      demonstrated corrections. Browser QA remains open while access is denied;
+      static rendering and green CI cannot close it. The owner's comprehension
+      is useful feedback, separate from target-practitioner validation.
+- [ ] **Resolve one evidence route.** RoundaboutHD remains a rights-clarification
+      lead, not admitted data. Reuse the [existing source gate](REAL_TRAFFIC_EVIDENCE_GATE.md)
+      and spend at most one focused screening session on this route. Exact media
+      rights, access, task fit and label provenance must be established before
+      intake. No restricted download or outreach is authorized by this checklist.
+      If permission needs an owner decision, prepare the concrete request first;
+      waiting for a reply does not justify another speculative tracker feature.
+- [ ] **Only after admission, audit a small development subset.** Fix the camera,
+      frame range, label visibility/ambiguity rules and source versions; check
+      labels independently of tracker output. Previously inspected rain/MOT17
+      cases remain development material, not untouched validation.
+- [ ] **Only after that audit, freeze one justified comparison before running it.**
+      Keep detector inputs fixed for a tracker-only comparison; if the detector
+      changes, name that separate factor explicitly. Retain baseline, controls,
+      count misses/extras, identity errors, confirmation delay and compute costs.
+      Choose no candidate solely because a known clip looks better.
+- [ ] **Publish a bounded finding only when supported.** Report unchanged,
+      harmful and ambiguous outcomes as well as gains. A lawful, reproducible
+      diagnosis can be shown honestly; a better-tracker claim needs the relevant
+      prospective evaluation. Public outreach remains a separate owner decision.
+- [ ] **Keep C++ in maintenance.** Reuse the existing compatibility gates. Start
+      another synchronization only when useful accepted Python behavior, frozen
+      fixtures/API and an explicit handoff justify it. Lab lessons alone do not.
+
+After usable data and labels are ready, the existing case-study estimate remains
+**4–5 focused working days**; permission, annotation and external review time are
+additional and currently unknown. A full research/product completion date cannot
+be inferred from this estimate. There is no recording or setup task for the
+owner now. Later, a short lesson review or a specific permission decision may
+help; neither is silently treated as independent scene truth.
+
+## Historical checkpoint — retained for provenance
+
+The older plan below records how we reached this point. Its pending wording is
+historical where the current checkpoint above records a completed delivery.
+
 Planning checkpoint: **2026-10-26**. Days below mean focused work sessions, not
 automatic work while the chat is idle or promised calendar dates. No reminder,
 scheduled job, email, publication or new tracking study is authorized by this plan.
