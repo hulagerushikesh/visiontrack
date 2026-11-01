@@ -78,6 +78,7 @@ nav:
       - Public API: API.md
       - Run on your own video: VIDEO.md
       - Published 0.5.0 release notes: RELEASE_NOTES_0.5.0.md
+      - Candidate 0.5.1 patch notes: RELEASE_NOTES_0.5.1.md
       - Published 0.4.0 release notes: RELEASE_NOTES_0.4.0.md
       - Published 0.3.0 release notes: RELEASE_NOTES_0.3.0.md
       - Release to PyPI: RELEASE.md

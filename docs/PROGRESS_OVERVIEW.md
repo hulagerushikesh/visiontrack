@@ -1,10 +1,17 @@
 # VisionTrack and VisionTrack C++ — progress overview
 
-Snapshot: **2026-11-01**. This is a summary of the canonical
+Snapshot: **2026-11-02**. This is a summary of the canonical
 [VisionTrack checklist](NEXT_STEPS.md), [status](STATUS.md) and
 [C++ checklist](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/NEXT_STEPS.md).
 Completed implementation is not the same as validated research or product demand.
 This document does not claim the latest local work is already pushed or deployed.
+
+**Current delivery task (2026-11-02):** prepare the [0.5.1 patch candidate](RELEASE_NOTES_0.5.1.md)
+from the already verified JSON-reader and streaming-replay corrections. No new
+tracker behavior is proposed. Public 0.5.0 and C++ 0.1.1 remain unchanged; release
+approval and public verification are later gates. Bath has acknowledged ticket
+I26-0309891 but has not yet answered the rights/label questions. The main traffic
+comparison remains conditional on those answers and independently checked labels.
 
 **Published Python/C++ pairing (2026-11-01):** Python 0.5.0 and C++ 0.1.1 now
 pass the separate twelve-job public-wheel matrix across Linux, macOS ARM64 and

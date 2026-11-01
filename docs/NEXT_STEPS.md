@@ -4,6 +4,14 @@ VisionTrack is the NumPy reference, research platform, and learning product.
 Work here must protect readability, reproducibility, and the ability to explain
 why a tracking change helps or hurts.
 
+**Patch delivery preparation — 2026-11-02:** the
+[0.5.1 candidate](RELEASE_NOTES_0.5.1.md) packages the existing unambiguous JSON
+reader correction and streaming diagnostic replay. Current metadata identifies
+the candidate; released 0.5.0, teaching exports and tracker defaults remain
+unchanged. Local/hosted candidate checks precede a separate publication decision.
+This is a bounded delivery task while Bath's rights/label clarification remains
+pending, not completion of the representative-traffic research milestone.
+
 **Input-reader correction — 2026-11-01:** repeated JSON object fields are now
 refused throughout the unreleased Lab readers, including nested and escaped
 names. The former last-field-wins interpretation could accept two different

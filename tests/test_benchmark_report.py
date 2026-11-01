@@ -11,7 +11,7 @@ from experiments.benchmark import BenchmarkReport
 from visiontrack import __version__
 from visiontrack.benchmark_report import BenchmarkReportRecord, BenchmarkValue
 
-_FIXTURE = Path("tests/fixtures/benchmark_report_0_5_0.json")
+_FIXTURE = Path("tests/fixtures/benchmark_report_0_5_1.json")
 
 
 def _structured_result() -> BenchmarkReport:
@@ -57,6 +57,7 @@ def test_structured_result_matches_shared_browser_fixture() -> None:
 @pytest.mark.parametrize("version,filename", [
     ("0.3.0", "benchmark_report_v1.json"),
     ("0.4.0", "benchmark_report_0_4_0.json"),
+    ("0.5.0", "benchmark_report_0_5_0.json"),
 ])
 def test_historical_shared_fixture_remains_reproducible(monkeypatch, version, filename) -> None:
     # This is a declared hand fixture, not a new run attributed to an old release.

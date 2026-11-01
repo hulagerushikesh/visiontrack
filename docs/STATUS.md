@@ -2,6 +2,11 @@
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
 
+**Patch candidate — 2026-11-02:** [0.5.1](RELEASE_NOTES_0.5.1.md) prepares the
+two existing corrections below for installable delivery. It is not published;
+public 0.5.0 and C++ 0.1.1 remain the released pair. This is maintenance while
+the dataset rights/labels answer is pending, not a new tracking method or gain.
+
 **Unambiguous evidence reads — 2026-11-01:** the unreleased checkout refuses
 repeated decoded JSON fields instead of silently keeping the final value. This
 applies to all persisted Lab record/metadata readers, including nested fields;

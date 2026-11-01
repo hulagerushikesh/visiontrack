@@ -1,5 +1,13 @@
 # VisionTrack release-readiness audit
 
+## Candidate 0.5.1 — 2026-11-02
+
+The [patch scope](RELEASE_NOTES_0.5.1.md) packages the existing streaming replay
+and unambiguous persisted-JSON reader corrections. Candidate metadata identifies
+0.5.1; no publication or tag is authorized by preparation. Public 0.5.0 and all
+historical evidence below remain unchanged. Candidate-specific gate results are
+recorded in the patch notes, separately from the earlier implementation checks.
+
 ## Published 0.5.0 verification — 2026-11-01
 
 The [0.5.0 scope](RELEASE_NOTES_0.5.0.md) is frozen around the selected-pair
