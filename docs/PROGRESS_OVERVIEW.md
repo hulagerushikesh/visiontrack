@@ -165,7 +165,7 @@ abstention and measured error limits. A useful product vertical is not yet chose
 | Area | Completed scope | Important limit |
 | --- | --- | --- |
 | Tracking foundations | Kalman filter, assignment, ByteTrack lifecycle, evaluation, controlled RQ1–RQ4 research | Not a claim of universal best accuracy |
-| Usable Python package | Published `visiontrack-mot 0.3.0`, video/webcam workflows and release gates | Detector quality and domain still matter |
+| Usable Python package | Published `visiontrack-mot 0.4.0`, video/webcam workflows, initiation diagnostic and release gates | Detector quality and domain still matter |
 | Website and learning | React design, learning paths, research/results access and beginner explanations | No new UI redesign is needed for the current experiment |
 | Reliability Lab alpha | Local reports, failures, optional verified images/playback, explicit decision drafting/import and shared contracts | Owner walkthrough is partial; practitioner usability remains unvalidated |
 | Original traffic mechanism probe | All 120 development and 120 held-out cases retained; scoped findings and independent saved-record checks | Toy geometry/imposed box errors, not a real traffic benchmark |
@@ -368,7 +368,12 @@ This removes manual bundle-path substitution for the demo; it is a code-level
 workflow review, not a completed practitioner usability study. Installable
 delivery and the public 0.4.0 release are now verified. The demonstration and Lab
 instructions install `visiontrack-mot[lab]==0.4.0` directly, without a checkout;
-the fresh report fingerprint is recorded in the guide. Next: use this released
+the fresh report fingerprint is recorded in the guide. **Try guided demo** now
+offers the same fixed released numeric example directly in the Lab: no Python,
+terminal or files. Both artifacts pass the existing readers before display;
+frames 0–2 explain confirmation, and decision drafting stays disabled in demo
+mode. Invalid pairs and interrupted loads are tested. This closes an onboarding
+barrier, not the usability gate. Next: use this released
 walkthrough to assess comprehension and useful next engineering work. Practitioner
 feedback and browser interaction QA remain open; no new recording, source hunt
 or outreach is required.

@@ -4,7 +4,20 @@ Updated **2026-11-01** using the deterministic `lab-demo --with-initiation` work
 This is a **synthetic workflow demonstration**, not a real-camera benchmark,
 accepted tracker change or completed usability study. No footage is needed.
 
-## Before starting
+## Fastest route — browser only
+
+Open [the Lab](https://visiontrack.hulage.in/lab) and choose **Try guided demo**
+under **Report source**. This loads the original public 0.4.0 synthetic report
+and matching trace, after the normal content/lineage checks. No installation,
+terminal, checkout or file selection is needed. Frames 0–2 now include short
+explanations, followed by a link to the tied comparison. Decision drafting is
+disabled in this mode. **Return to sample** or import a local report to leave.
+
+This shortcut needs the matching website deployment. It downloads the prepared
+numeric example, not a model or footage, and does not run inference. Browser
+interaction and practitioner understanding have not been verified by code checks.
+
+## Optional: reproduce with the released package
 
 Use the published 0.4.0 package and a new output folder. No repository checkout
 is required; Python 3.10–3.12 is the tested setup:

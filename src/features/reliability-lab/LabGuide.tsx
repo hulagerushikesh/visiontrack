@@ -63,7 +63,7 @@ export default function LabGuide() {
       </div>
       <TrackingLesson step={step} />
       <ol className="mt-6 grid gap-4 border-t border-slate-200 pt-6 text-sm leading-6 md:grid-cols-3">
-        <li><strong className="block text-slate-900">1. Open a report</strong>Explore the sample below, or import a prepared report.json. No installation is needed to explore the sample.</li>
+        <li><strong className="block text-slate-900">1. Open a report</strong>Choose Try guided demo below to follow a complete synthetic example without installation or files. You can also explore the illustrative sample or import your own report.json.</li>
         <li><strong className="block text-slate-900">2. Understand one mistake</strong>In “Explore tracking mistakes,” choose Inspect. Read the explanation first; technical details are optional.</li>
         <li><strong className="block text-slate-900">3. Review only when ready</strong>A researcher can record a choice after reviewing evidence against agreed criteria. You do not need to make a decision to explore.</li>
       </ol>

@@ -42,6 +42,17 @@ fingerprint. Next: validate comprehension/usefulness of this released workflow. 
 acceptance remains a separate data/label gate. Defaults and C++ stay unchanged.
 The checkpoints below retain their historical scope.
 
+**No-install onboarding — 2026-11-01:** **Try guided demo** loads the original
+published 0.4.0 synthetic report/trace only after explicit selection, through
+the same bounded content/lineage readers as local imports. A short frame 0–2
+lesson explains internal tentative tracks versus public output, then links to
+the tied comparison. The demo is a separate labelled origin; its decision
+drafting is disabled, and returning to sample/importing a file cancels pending
+loads. Retained bytes, damaged/mismatched inputs, cancellation during asset/hash
+work and rendered lifecycle explanations are checked. No inference, recording,
+new tracker behavior or C++ port. Browser interaction QA and actual participant
+comprehension remain open, and the feature requires its website deployment.
+
 **C++ compatibility — 2026-11-01:** published C++ 0.1.1 and Python 0.4.0
 pass all twelve Linux/macOS ARM64/Windows, CPython 3.10–3.13 wheel jobs with
 NumPy 2.2.6. Each job passes 268 tests and reports ten unavailable-cache skips;

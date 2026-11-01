@@ -173,6 +173,13 @@ See the [short diagnostic walkthrough](docs/INITIATION_DIAGNOSTIC.md). This comm
 is available in the published 0.4.0 package. Install the Lab tools with
 `python -m pip install --upgrade "visiontrack-mot[lab]==0.4.0"`.
 
+For a no-install introduction, open [the Reliability Lab](https://visiontrack.hulage.in/lab)
+and choose **Try guided demo**. It checks and loads a prepared public-package
+0.4.0 synthetic report and matching trace. Follow ID 1 through frames 0–2,
+then read the tied comparison. No terminal, files, camera or research decision
+is needed. This reads saved numeric states; it does not run inference or
+establish real-world accuracy. The shortcut requires its website deployment.
+
 The private, client-side Reliability Lab at `/lab` can inspect an explicitly
 selected `decision.json`. It verifies the decision fingerprint and full report
 lineage in browser memory, then displays the audit record without editing it.

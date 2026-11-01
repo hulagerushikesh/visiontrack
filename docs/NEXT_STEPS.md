@@ -46,6 +46,12 @@ why a tracking change helps or hurts.
       cached observations locally. Retain the
       [prospective synchronization evidence](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/compatibility/prospective_oracle_0.4.0_evidence.json);
       keep the historical release oracle and tracker defaults unchanged.
+- [x] Remove the beginner demo's installation/file-selection barrier: explicitly
+      load the fixed released synthetic report/trace in the Lab, through the
+      existing readers, with cancellation and a three-step confirmation lesson.
+      Keep sample/local/demo origins separate and demo decision drafting disabled.
+      Test damaged/mismatched assets, lifecycle facts and interrupted selection.
+      This is delivered onboarding code, not a completed usability study.
 - [ ] Separate research gate: representative permitted traffic event/negative
       labels before accepting a detector+tracker change or proposing a C++ port.
 

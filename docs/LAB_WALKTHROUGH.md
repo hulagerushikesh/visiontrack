@@ -38,6 +38,27 @@ and only later decide whether a change meets agreed research criteria.
 - [ ] Tell us in your own words what you think the event means, or what is
       still confusing. You do not need to understand every metric.
 
+## Follow a complete example — 2 minutes, no setup
+
+- [ ] At **Report source**, choose **Try guided demo**. You do not need Python,
+      the terminal, a GitHub checkout or any files. This loads the prepared
+      public-package 0.4.0 synthetic report and its checked matching trace.
+- [ ] Check that the source says **Guided synthetic demo**. The pillar lesson
+      and illustrative sample are separate from this generated example.
+- [ ] Start at **Why did a detection become a track?** Use **Next** twice.
+      ID 1 has one hit at frame 0, two at frame 1, and becomes confirmed/public
+      with three hits at frame 2. A tentative track is internal bookkeeping;
+      it does not necessarily produce a public box yet.
+- [ ] Follow **Next: read the comparison**. Both configurations tie on this
+      example. Zero ID switches does not mean zero misses or fragmentation.
+- [ ] Stop here if you like. No Human review decision is needed or enabled
+      for the guided demo. Use **Return to sample** to leave, or import your
+      own report to switch modes. Pending demo loads cannot replace that choice.
+
+The site downloads a small prepared example as part of its code. It does not
+run Python, open your camera, upload footage or establish tracking accuracy.
+Participant comprehension and browser interaction QA remain separate checks.
+
 ## Optional: understand the whole-report comparison — 3 minutes
 
 - [ ] Find **Same evidence. Controlled change.** Read **How to read this

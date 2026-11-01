@@ -29,6 +29,8 @@ import LabGuide from "./LabGuide"
 import EvidenceProgress from "./EvidenceProgress"
 import MetricComparison from "./MetricComparison"
 import InitiationInspector from "./InitiationInspector"
+import { GuidedDemoReader } from "./guided-demo"
+import type { InitiationTrace } from "./initiation"
 import { explainFailure, explanationFor } from "./explanations"
 import {
   parseReportModel,
@@ -85,6 +87,7 @@ function mediaEvidence(failure: ReliabilityReport["failures"][number]): ReportMe
 
 type ReportOrigin =
   | { kind: "sample" }
+  | { kind: "demo"; trace: InitiationTrace }
   | { kind: "file"; filename: string }
 
 function short(value: string) {
@@ -104,16 +107,20 @@ function LoadingState() {
   )
 }
 
-function ImportControls({
+export function ImportControls({
   origin,
   reportId,
   onImport,
   onSample,
+  onDemo,
+  loading,
 }: {
   origin: ReportOrigin
   reportId?: string
   onImport: (event: ChangeEvent<HTMLInputElement>) => void
   onSample: () => void
+  onDemo: () => void
+  loading: boolean
 }) {
   return (
     <section className="rounded-3xl border border-indigo-100 bg-white/90 p-5 shadow-lg shadow-slate-200/50 backdrop-blur sm:p-6" aria-label="Report source">
@@ -121,20 +128,21 @@ function ImportControls({
         <div className="flex min-w-0 items-start gap-3">
           <div className="grid size-10 shrink-0 place-items-center rounded-2xl bg-indigo-50 text-primary"><FileJson2 className="size-5" /></div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold">{origin.kind === "sample" ? "Illustrative sample report" : origin.filename}</p>
+            <p className="text-sm font-semibold">{origin.kind === "sample" ? "Illustrative sample report" : origin.kind === "demo" ? "Guided synthetic demo · VisionTrack 0.4.0" : origin.filename}</p>
             <p className="mt-1 text-xs leading-5 text-muted-foreground">
               {reportId ? `Report ${short(reportId)} · ` : ""}Processed only in this browser tab. Nothing is uploaded.
             </p>
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
-          {origin.kind === "file" && <Button type="button" variant="outline" onClick={onSample}><RotateCcw className="size-4" />Return to sample</Button>}
+          {(origin.kind !== "sample" || loading) && <Button type="button" variant="outline" onClick={onSample}><RotateCcw className="size-4" />Return to sample</Button>}
           <label className="inline-flex h-9 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-xs transition hover:bg-primary/90 focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
             <Upload className="size-4" />Import report.json
             <input className="sr-only" type="file" accept="application/json,.json" onChange={onImport} />
           </label>
         </div>
       </div>
+      {origin.kind === "sample" && <div className="mt-5 rounded-2xl border border-indigo-100 bg-indigo-50/60 p-5"><h2 className="font-semibold">See how a detection becomes a track</h2><p className="mt-2 max-w-3xl text-sm leading-6 text-slate-700">Open a complete synthetic report and its matching timeline. No Python, terminal, camera or file selection needed. The website loads a prepared example; it does not run the tracker or use your footage.</p><Button type="button" className="mt-4" onClick={onDemo} disabled={loading}>{loading ? "Checking guided demo…" : "Try guided demo"}</Button><p className="mt-3 text-xs leading-5 text-muted-foreground">Synthetic results do not establish real-world accuracy. Skip Human review for this demo.</p></div>}
       {origin.kind === "sample" && (
         <details className="mt-6 rounded-2xl border border-indigo-100 bg-indigo-50/60 p-5" aria-label="Try the complete Lab workflow">
           <summary className="cursor-pointer text-sm font-semibold text-slate-900">Optional: generate your own practice report</summary>
@@ -753,7 +761,7 @@ function FailureExplorer({ report }: { report: ReliabilityReport }) {
   )
 }
 
-function LabReport({ report, origin }: { report: ReliabilityReport; origin: ReportOrigin }) {
+export function LabReport({ report, origin }: { report: ReliabilityReport; origin: ReportOrigin }) {
   const reduce = useReducedMotion()
   const frameCount = report.experiment.frame_range.end - report.experiment.frame_range.start
   return (
@@ -761,11 +769,13 @@ function LabReport({ report, origin }: { report: ReliabilityReport; origin: Repo
       <div className="orb -left-56 -top-32 bg-indigo-300/30" /><div className="orb -right-64 top-72 bg-emerald-200/30" />
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <motion.section initial={reduce ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .5 }} aria-labelledby="lab-title">
-          <div className="flex flex-wrap items-center gap-3"><span className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1.5 font-mono text-[10px] font-semibold uppercase tracking-[.16em] text-primary"><FlaskConical className="size-3" />Reliability Lab</span><span className={origin.kind === "sample" ? "rounded-full bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700" : "rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700"}>{origin.kind === "sample" ? "Demonstration fixture · illustrative data" : "Private local import · content fingerprint checked"}</span></div>
-          <div className="mt-7 grid gap-8 lg:grid-cols-[1.1fr_.9fr] lg:items-end"><div><h1 id="lab-title" className="max-w-4xl text-balance text-5xl font-semibold leading-[.98] tracking-[-.055em] sm:text-7xl">Evidence before <span className="gradient-text">confidence.</span></h1><p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">Compare recorded tracker configurations, inspect reported failures, and follow their declared evidence links before making a decision.</p></div><div className="rounded-3xl border border-white bg-white/85 p-6 shadow-xl shadow-slate-200/60 backdrop-blur"><div className="flex items-start gap-4"><div className="grid size-11 shrink-0 place-items-center rounded-2xl bg-emerald-50 text-emerald-600"><ShieldCheck className="size-5" /></div><div><p className="font-semibold">Read-only {origin.kind === "sample" ? "illustrative sample" : "local report"}</p><p className="mt-1 text-sm leading-6 text-muted-foreground">{origin.kind === "sample" ? "This built-in example teaches the workflow; it is not a verified local experiment." : "The browser checks the report format and content fingerprint. It does not authenticate who produced it or verify the original detections, labels, or accuracy."} This screen does not edit results or choose a winner.</p></div></div></div></div>
+          <div className="flex flex-wrap items-center gap-3"><span className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1.5 font-mono text-[10px] font-semibold uppercase tracking-[.16em] text-primary"><FlaskConical className="size-3" />Reliability Lab</span><span className={origin.kind === "sample" ? "rounded-full bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700" : "rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700"}>{origin.kind === "sample" ? "Demonstration fixture · illustrative data" : origin.kind === "demo" ? "Guided demo · synthetic data" : "Private local import · content fingerprint checked"}</span></div>
+          <div className="mt-7 grid gap-8 lg:grid-cols-[1.1fr_.9fr] lg:items-end"><div><h1 id="lab-title" className="max-w-4xl text-balance text-5xl font-semibold leading-[.98] tracking-[-.055em] sm:text-7xl">Evidence before <span className="gradient-text">confidence.</span></h1><p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">Compare recorded tracker configurations, inspect reported failures, and follow their declared evidence links before making a decision.</p></div><div className="rounded-3xl border border-white bg-white/85 p-6 shadow-xl shadow-slate-200/60 backdrop-blur"><div className="flex items-start gap-4"><div className="grid size-11 shrink-0 place-items-center rounded-2xl bg-emerald-50 text-emerald-600"><ShieldCheck className="size-5" /></div><div><p className="font-semibold">Read-only {origin.kind === "sample" ? "illustrative sample" : origin.kind === "demo" ? "synthetic demo" : "local report"}</p><p className="mt-1 text-sm leading-6 text-muted-foreground">{origin.kind === "sample" ? "This built-in example teaches the workflow; it is not a verified local experiment." : "The browser checks the report format and content fingerprint. It does not authenticate who produced it or verify the original detections, labels, or accuracy."} This screen does not edit results or choose a winner.</p></div></div></div></div>
         </motion.section>
 
         {origin.kind === "file" && <a className="mt-6 inline-block rounded-lg font-semibold text-primary underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-indigo-600" href="#initiation-title">Inspect track initiation →</a>}
+
+        {origin.kind === "demo" && <><p className="mt-6 rounded-2xl border border-indigo-100 bg-indigo-50 p-5 text-sm leading-7 text-indigo-950">Start here: compare frames 0, 1 and 2 using Next. Follow ID 1 from an internal tentative track to a public box. Then <a className="font-semibold underline underline-offset-4" href="#metrics-title">read the comparison</a>: both configurations tie on this synthetic input. No winner or Human review decision is needed.</p><InitiationInspector report={report} enabled initialTrace={origin.trace} /></>}
 
         <section className="mt-14 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Experiment overview">
           {[
@@ -782,11 +792,9 @@ function LabReport({ report, origin }: { report: ReliabilityReport; origin: Repo
 
         <FailureExplorer key={report.report_id} report={report} />
 
-        <InitiationInspector key={`initiation:${report.report_id}`} report={report} enabled={origin.kind === "file"} />
+        {origin.kind !== "demo" && <InitiationInspector key={`initiation:${report.report_id}`} report={report} enabled={origin.kind === "file"} />}
 
-        <PlaybackInspector key={`playback:${report.report_id}`} report={report} enabled={origin.kind === "file"} />
-
-        <DecisionInspector key={`decision:${report.report_id}`} report={report} canDraft={origin.kind === "file"} />
+        {origin.kind === "demo" ? <section className="mt-20 rounded-3xl border border-indigo-100 bg-indigo-50 p-6" aria-label="Guided demo completion"><h2 className="text-xl font-semibold">You can finish here</h2><p className="mt-3 text-sm leading-7 text-slate-700">This example explains confirmation and a tied comparison. It has no footage to play and needs no Human review decision. To inspect your own experiment or record a research choice, use Import report.json above. Tell us which step was useful or unclear; completing the demo does not establish accuracy or product demand.</p></section> : <><PlaybackInspector key={`playback:${report.report_id}`} report={report} enabled={origin.kind === "file"} /><DecisionInspector key={`decision:${report.report_id}`} report={report} canDraft={origin.kind === "file"} /></>}
 
         <section className="mt-20 grid gap-5 lg:grid-cols-[1.1fr_.9fr]" aria-label="Evidence provenance and limitations"><div className="rounded-[1.75rem] bg-slate-950 p-7 text-white sm:p-9"><Fingerprint className="size-6 text-cyan-300" /><h2 className="mt-7 text-3xl font-semibold tracking-tight">Declared evidence identifiers</h2><p className="mt-3 text-sm leading-6 text-white/65">These identifiers help match a report to its local bundle. This browser has not opened or rehashed the source files listed below.</p><dl className="mt-7 grid gap-5 text-sm"><div><dt className="text-white/45">Report</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.report_id)}</dd></div><div><dt className="text-white/45">Experiment</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.experiment.experiment_id)}</dd></div><div><dt className="text-white/45">Detections</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.source.detection_sha256)}</dd></div><div><dt className="text-white/45">Ground truth</dt><dd className="mt-1 break-all font-mono text-white/80">{short(report.source.ground_truth_sha256)}</dd></div></dl></div><div className="rounded-[1.75rem] border border-indigo-100 bg-indigo-50/70 p-7 sm:p-9"><Info className="size-6 text-indigo-600" /><h2 className="mt-7 text-3xl font-semibold tracking-tight">Boundaries stay visible</h2><ul className="mt-6 space-y-4">{report.limitations.map((limitation) => <li className="flex gap-3 text-sm leading-6 text-slate-700" key={limitation}><CheckCircle2 className="mt-1 size-4 shrink-0 text-indigo-500" />{limitation}</li>)}</ul><Button disabled className="mt-8 w-full">Automatic selection is not enabled</Button><p className="mt-3 text-center text-xs text-muted-foreground">Every outcome requires a deliberate human choice and an auditable rationale.</p></div></section>
       </div>
@@ -798,23 +806,37 @@ export default function ReliabilityLab() {
   const [state, setState] = useState<ReportLoadResult | { kind: "loading" }>({ kind: "loading" })
   const [origin, setOrigin] = useState<ReportOrigin>({ kind: "sample" })
   const reportReader = useRef(new ReportFileReader(parseReportModel))
+  const demoReader = useRef(new GuidedDemoReader())
   useEffect(() => {
     let active = true
     const reader = reportReader.current
+    const demo = demoReader.current
     queueMicrotask(() => { if (active) setState(parseReportModel(reliabilityReportFixture)) })
-    return () => { active = false; reader.cancel() }
+    return () => { active = false; reader.cancel(); demo.cancel() }
   }, [])
 
   const loadSample = () => {
     reportReader.current.cancel()
+    demoReader.current.cancel()
     setOrigin({ kind: "sample" })
     setState(parseReportModel(reliabilityReportFixture))
+  }
+  const loadDemo = async () => {
+    reportReader.current.cancel()
+    setState({ kind: "loading" })
+    const result = await demoReader.current.read(() => import("./guided-demo-assets"))
+    if (!result) return
+    if (result.kind === "ready") {
+      setOrigin({ kind: "demo", trace: result.demo.trace })
+      setState({ kind: "ready", report: result.demo.report })
+    } else setState({ kind: "missing", message: result.message })
   }
   const importReport = async (event: ChangeEvent<HTMLInputElement>) => {
     const input = event.currentTarget
     const file = input.files?.[0]
     if (!file) return
     input.value = ""
+    demoReader.current.cancel()
     setOrigin({ kind: "file", filename: file.name })
     setState({ kind: "loading" })
     const result = await reportReader.current.read(file)
@@ -825,10 +847,10 @@ export default function ReliabilityLab() {
     <div>
       <div className="relative z-10 mx-auto max-w-7xl px-5 pt-28 lg:px-8">
         <aside className="mb-6 rounded-3xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-6"><p className="text-xs font-semibold uppercase tracking-wide text-primary">From our research · separate from your report</p><h2 className="mt-2 text-xl font-semibold">A visible vehicle. A missing count. Where is the gap?</h2><p className="mt-2 text-sm leading-7 text-muted-foreground">Explore five crossing marks from the rain case through detector proposals, association, track confirmation and counting. Saved numeric evidence, with plain-language explanations.</p><a href="/lab/crossings" className="mt-4 inline-block rounded-lg font-semibold text-primary underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-indigo-600">Explore the crossing diagnosis →</a></aside>
-        <LabGuide />
-        <ImportControls origin={origin} reportId={state.kind === "ready" ? state.report.report_id : undefined} onImport={importReport} onSample={loadSample} />
+        {origin.kind !== "demo" && <LabGuide />}
+        <ImportControls origin={origin} reportId={state.kind === "ready" ? state.report.report_id : undefined} onImport={importReport} onSample={loadSample} onDemo={loadDemo} loading={state.kind === "loading"} />
       </div>
-      {state.kind === "loading" ? <LoadingState /> : state.kind === "ready" ? <LabReport report={state.report} origin={origin} /> : <ReportError state={state} />}
+      {state.kind === "loading" ? <LoadingState /> : state.kind === "ready" ? <LabReport key={`${origin.kind}:${state.report.report_id}`} report={state.report} origin={origin} /> : <ReportError state={state} />}
     </div>
   )
 }
