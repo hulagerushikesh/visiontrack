@@ -21,7 +21,10 @@ representative-traffic research gate.
 - [x] Wheel/source report, initiation trace and association explanation IDs all
       agree. Each installation's actual Python-to-TypeScript initiation and
       fourteen-case association workflows pass.
-- [ ] Successful hosted main CI for the exact pushed candidate SHA.
+- [x] All seven hosted jobs pass for candidate `a898b74` in
+      [run 41325219952](https://github.com/hulagerushikesh/visiontrack/actions/runs/41325219952).
+      The read-only release guard passes in a simulated matching-tag context;
+      this creates no tag. A later selected tag commit requires its own CI.
 - [ ] Separate publication decision, matching tag and public artifact/install audit.
 
 The local receipt records artifact digests, installed versions/source identities,

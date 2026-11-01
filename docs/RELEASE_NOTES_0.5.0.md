@@ -83,10 +83,14 @@ adoption or commercial demand is claimed. The
       type/app, lint and strict documentation checks on this candidate.
 - [x] Verify isolated wheel/source installs and retain matching report, trace
       and association IDs, artifact hashes and installed source identities.
-- [ ] Verify successful hosted main CI for the exact candidate commit.
+- [x] Verify successful hosted main CI for candidate `a898b74`: all seven jobs
+      pass in [run 41325219952](https://github.com/hulagerushikesh/visiontrack/actions/runs/41325219952).
+      A read-only simulated-tag guard also passes; no tag was created.
 - [ ] With a separate publication decision, create/push a matching release tag;
       verify public files, clean public installation and release provenance.
 
 The release guard still refuses branch publication and mismatched tags, and
 requires successful main CI at the exact tagged SHA. A green candidate is a
 reviewable delivery result, not publication authorization or research acceptance.
+If later documentation or source commits are selected for the tag, their own
+exact-commit CI must pass; the checkpoint above does not substitute for it.

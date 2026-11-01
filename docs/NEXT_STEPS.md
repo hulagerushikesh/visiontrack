@@ -11,7 +11,10 @@ why a tracking change helps or hurts.
       with isolated wheel/source association receipts, exact three-record
       fingerprint agreement, invalid-selector refusal and complete local gates.
       Published 0.4.0 and historical evidence remain unchanged.
-- [ ] Complete exact-commit hosted CI, then take a separate publication decision.
+- [x] Pass all seven hosted candidate CI jobs at `a898b74`, plus the read-only
+      matching-tag guard; no release tag or publication was created.
+- [ ] Take a separate publication decision; require CI at the actual tag commit,
+      then audit public artifacts and installation.
 - [x] Finish the bounded RoundaboutHD documentation recheck and send one
       owner-approved clarification request. See the
       [rights/label checkpoint](REAL_TRAFFIC_EVIDENCE_GATE.md#roundabouthd-bounded-clarification-checkpoint-2026-11-01).
