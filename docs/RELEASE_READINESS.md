@@ -55,6 +55,10 @@ Fresh demo/report/trace checks bind their version to the producing package.
 | `visiontrack_mot-0.4.0.tar.gz` | `c10d7fcccc6a8c0e1da8e05304974ea744f7bc2daa014fd1b2085bc9f5f32a38` |
 
 The tag and public package files are unchanged by this post-publication audit.
+The README embedded in those immutable files retains pre-publication source-only
+setup wording. The commands are present and verified in public 0.4.0; use the
+corrected [five-minute guide](SHOWCASE_DEMO.md) and current Lab instructions.
+Corrected embedded README wording will accompany a future package release.
 Website deployment, browser interaction QA and practitioner usability are separate
 checks; publication does not establish tracking accuracy.
 
