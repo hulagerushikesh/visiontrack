@@ -150,6 +150,14 @@ def build_initiation_trace(
     Replay always starts at the experiment boundary, never at the trace window.
     Nothing is written and no pixels, models or external feature files are read.
     """
+    trace, _ = _replay_initiation(bundle, variant=variant, start=start, end=end)
+    return trace
+
+
+def _replay_initiation(
+    bundle, *, variant, start, end, observer_type=_InitiationObserver, observer_options=None,
+):
+    """Shared exact-output replay for the two opt-in diagnostic producers."""
     if (type(start) is not int or type(end) is not int
             or not 0 <= start < end or end - start > MAX_TRACE_FRAMES):
         raise ValueError(f"require an integer trace window of 1–{MAX_TRACE_FRAMES} frames")
@@ -168,10 +176,13 @@ def build_initiation_trace(
         frame_count=source.frame_count,
     )
     implementation = _implementation_hashes()
-    observer = _InitiationObserver(config, offset=run_start, start=start, end=end)
+    observer = observer_type(
+        config, offset=run_start, start=start, end=end, **(observer_options or {}),
+    )
     frames = _group_detections(records, start=run_start, end=run_end)
     observations = []
     for offset, frame_records in enumerate(frames):
+        observer._detection_keys = tuple(record.detection_index for record in frame_records)
         for observation in observer.update(_as_detections(frame_records)):
             observations.append(TrackObservationRecord(
                 frame_index=run_start + offset, track_id=int(observation.track_id),
@@ -213,4 +224,4 @@ def build_initiation_trace(
         ],
     }
     result["trace_id"] = sha256_json(result)
-    return result
+    return result, observer

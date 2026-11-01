@@ -1,5 +1,6 @@
 """Versioned, local-first contracts for the VisionTrack Reliability Lab."""
 
+from .association import build_association_explanation
 from .comparison import create_comparison_summary
 from .contracts import (
     DecisionRecord,
@@ -64,6 +65,7 @@ from .storage import (
 )
 
 __all__ = [
+    "build_association_explanation",
     "DetectionRecord",
     "DecisionRecord",
     "DecisionImportPlan",

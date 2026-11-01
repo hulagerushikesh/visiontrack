@@ -173,6 +173,12 @@ See the [short diagnostic walkthrough](docs/INITIATION_DIAGNOSTIC.md). This comm
 is available in the published 0.4.0 package. Install the Lab tools with
 `python -m pip install --upgrade "visiontrack-mot[lab]==0.4.0"`.
 
+**New in the current checkout, not published in 0.4.0:** `lab-association`
+explains one selected track/detection pair's actual gates and solver outcome,
+after an exact saved-output replay check. It distinguishes unoffered inputs,
+gate rejection and eligible-but-unselected pairs. See the
+[association diagnostic](docs/ASSOCIATION_DIAGNOSTIC.md) for setup and selectors.
+
 For a no-install introduction, open [the Reliability Lab](https://visiontrack.hulage.in/lab)
 and choose **Try guided demo**. It checks and loads a prepared public-package
 0.4.0 synthetic report and matching trace. Follow ID 1 through frames 0–2,

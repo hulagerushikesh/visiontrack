@@ -159,7 +159,9 @@ component rendering, contracts, type checks and the production build are checked
   correctly. False proposals can also confirm.
 - An unmatched proposal does not establish whether an IoU, class, Kalman gate
   or competing assignment caused rejection. Pair-level gate explanations are
-  not part of this first diagnostic.
+  not part of this v1 trace. The separate, unreleased
+  [association diagnostic](ASSOCIATION_DIAGNOSTIC.md) can inspect one selected
+  pair from a saved run using the current source checkout.
 - IDs are local to one run. Internal survival, public boxes and physical
   identity are different things.
 - This metadata-only command does not open footage or run a detector. It

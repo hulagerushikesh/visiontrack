@@ -62,6 +62,10 @@ class ByteTracker:
             observations = tracker.update(detections)
     """
 
+    # Private, opt-in offline observer. The default path allocates no diagnostic
+    # context. Keep associate() directly inside _match for historical profilers.
+    _association_observer = None
+
     def __init__(self, config: TrackerConfig | None = None) -> None:
         self.cfg = config or TrackerConfig()
         scale = self.cfg.kf_noise_scale
@@ -288,7 +292,13 @@ class ByteTracker:
             uncertainty=uncertainty,
             momentum=momentum,
         )
-        return associate(cost, max_cost)
+        result = associate(cost, max_cost)
+        if self._association_observer is not None:
+            self._association_observer(
+                cost, max_cost, tracks, dets, ious, iou_thresh,
+                class_mismatch, gating_d2, gate_thresh, result,
+            )
+        return result
 
     def _appearance_matrix(self, tracks, dets):
         """Appearance cost hook. Returns ``(T, D)`` cosine distances if both

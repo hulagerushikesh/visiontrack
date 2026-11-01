@@ -6,6 +6,20 @@ Snapshot: **2026-11-01**. This is a summary of the canonical
 Completed implementation is not the same as validated research or product demand.
 This document does not claim the latest local work is already pushed or deployed.
 
+**Selected-pair engineering checkpoint (2026-11-01):** the unreleased
+[`lab-association` diagnostic](ASSOCIATION_DIAGNOSTIC.md) closes the initiation
+trace's gate/assignment blind spot. For one original detection key and existing
+track, it reports actual production stage admission, all failed gates, cost
+eligibility and returned partners after exact full-run replay. It preserves the
+older research tracer and initiation v1 rather than rewriting historical records.
+Local validation: 1,287 Python tests pass (3 skipped, 1 deselected); the C++ suite
+passes 279 tests against this checkout, and 35,387 cached observations across
+2,625 frames remain byte-exact against published C++ 0.1.1 on macOS ARM64.
+Clean wheel/source installs exercise the new API/CLI. This is useful failure
+inspection, not a research improvement or a new PyPI release. The browser does
+not yet import this separate contract. Practitioner comprehension and independent
+representative traffic labels remain distinct, unfinished validation gates.
+
 **Product delivery (2026-10-30):** the new `/lab/crossings` workflow turns the
 existing rain diagnosis into an interactive four-stage explanation. All five
 owner marks, 45 saved baseline frame observations and the exploratory 0.60/0.55

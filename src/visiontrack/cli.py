@@ -23,6 +23,8 @@ Subcommands
     Preview synchronized failure-playback metadata without revealing pixels.
 ``lab-initiation``
     Explain detection admission and track lifecycle in a saved local Lab run.
+``lab-association``
+    Explain actual gates and assignment for one track/detection pair in a saved run.
 ``parity-contract``
     Verify the canonical dataset-free Python/C++ tracker contract fixture.
 
@@ -727,6 +729,50 @@ def cmd_lab_initiation(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_lab_association(args: argparse.Namespace) -> int:
+    """Explain one actual association pair without changing a saved run."""
+    from .lab.association import build_association_explanation
+    from .lab.contracts import canonical_json
+
+    try:
+        result = build_association_explanation(
+            args.bundle, variant=args.variant, frame=args.frame,
+            track_id=args.track_id, detection_index=args.detection_index,
+        )
+    except (OSError, ValueError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    if args.json:
+        print(canonical_json(result))
+        return 0
+    print("Offline association explanation — saved public output matches exactly")
+    print(f"  frame {args.frame}; track {args.track_id}; detection {args.detection_index}")
+    print(f"  variant: {result['variant']}; run: {result['run_id']}")
+    print(f"  explanation: {result['explanation_id']}")
+    detection = result["detection"]
+    print(f"  detection score {detection['score']}: {detection['disposition']}")
+    for stage in result["stages"]:
+        print(f"  {stage['stage']}: {stage['track_count']} tracks / "
+              f"{stage['detection_count']} detections")
+        pair = stage["pair"]
+        if pair is None:
+            print(f"    pair not offered: track={'yes' if stage['track_offered'] else 'no'}, "
+                  f"detection={'yes' if stage['detection_offered'] else 'no'}")
+            continue
+        print(f"    {pair['outcome']}; failed gates: {pair['failed_gates']}")
+        print(f"    IoU {pair['iou']} >= {pair['minimum_iou']}; "
+              f"class mismatch: {pair['class_mismatch']}")
+        print(f"    Kalman squared distance: {pair['mahalanobis_squared']}; "
+              f"hard limit: {pair['mahalanobis_limit']} (None means disabled)")
+        print(f"    solver cost {pair['solver_cost']} <= {pair['maximum_cost']}")
+        print(f"    track matched detection {pair['track_matched_detection_index']}; "
+              f"detection matched track {pair['detection_matched_track_id']}")
+    for limit in result["limits"]:
+        print(f"  {limit}")
+    print("Read-only: nothing was written. Use --json for the complete numeric explanation.")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="visiontrack", description="Online multi-object tracking demo & evaluation"
@@ -967,6 +1013,19 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_initiation.add_argument("--json", action="store_true", help="emit only canonical trace JSON")
     p_initiation.set_defaults(func=cmd_lab_initiation)
+
+    p_association = sub.add_parser(
+        "lab-association", help="explain actual gates and assignment for one saved-run pair",
+    )
+    p_association.add_argument("bundle", help="existing local Lab bundle with a completed run")
+    p_association.add_argument("--variant", required=True, help="declared saved variant name")
+    p_association.add_argument("--frame", required=True, type=int, help="source frame index")
+    p_association.add_argument("--track-id", required=True, type=int, help="pre-existing local ID")
+    p_association.add_argument(
+        "--detection-index", required=True, type=int, help="original detection key in that frame",
+    )
+    p_association.add_argument("--json", action="store_true", help="emit only canonical JSON")
+    p_association.set_defaults(func=cmd_lab_association)
 
     return parser
 

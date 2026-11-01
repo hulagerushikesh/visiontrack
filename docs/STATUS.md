@@ -2,6 +2,14 @@
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
 
+**Selected-pair diagnosis — 2026-11-01:** the unreleased
+[`lab-association` command](ASSOCIATION_DIAGNOSTIC.md) observes actual production
+gates, costs and one-to-one assignment partners for one frame/track/detection.
+It separates inputs never offered to a stage from gate failure, cost rejection
+and eligible-but-unselected pairs. Full saved-run parity, immutable inputs and
+source hashes are required; existing initiation v1 remains compatible. This is
+failure-inspection capability, not a tracker improvement. C++ remains in maintenance.
+
 **Latest checkpoint — 2026-11-01:** the curated `/lab/crossings` diagnosis is
 implemented. The [committed-method initiation study](INITIATION_THRESHOLD_FINDINGS.md)
 completed all 54 synthetic pairs / 324 passes: earlier births recover true

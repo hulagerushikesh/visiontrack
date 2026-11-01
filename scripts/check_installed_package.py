@@ -46,7 +46,7 @@ if sys.argv[1] == 'core':
     print(json.dumps({'version': visiontrack.__version__, 'core_cli': 'passed'}))
     sys.exit()
 
-from visiontrack.lab import build_initiation_trace, canonical_json
+from visiontrack.lab import build_association_explanation, build_initiation_trace, canonical_json
 out = Path.cwd() / 'demo with spaces'
 command('lab-demo', out, '--with-initiation')
 assert not out.exists(), 'preview wrote files'
@@ -66,6 +66,16 @@ assert trace_text == canonical_json(build_initiation_trace(
 assert command('lab-initiation', bundle, '--variant', 'bytetrack', '--start', 0,
                '--end', 10, '--json').stdout == trace_text
 command('lab-initiation', bundle, '--variant', 'bytetrack', '--start', 0, '--end', 10)
+key = trace['frames'][1]['tracks'][0]['detection_index']
+association = build_association_explanation(
+    bundle, variant='bytetrack', frame=1, track_id=1, detection_index=key)
+assert command('lab-association', bundle, '--variant', 'bytetrack', '--frame', 1,
+               '--track-id', 1, '--detection-index', key, '--json').stdout == (
+                   canonical_json(association) + '\n')
+assert association['public_output_parity'] == 'exact_sha256_match'
+assert association['stages'][2]['pair']['outcome'] == 'selected'
+command('lab-association', bundle, '--variant', 'bytetrack', '--frame', 1,
+        '--track-id', 1, '--detection-index', key)
 command('lab-demo', out, '--with-initiation', '--write', success=False)
 assert before == snapshot(out), 'read-only diagnosis or refusal mutated output'
 assert [row['public_track_ids'] for row in trace['frames'][:3]] == [[], [], [1]]

@@ -54,6 +54,11 @@ why a tracking change helps or hurts.
       This is delivered onboarding code, not a completed usability study.
 - [ ] Separate research gate: representative permitted traffic event/negative
       labels before accepting a detector+tracker change or proposing a C++ port.
+- [x] Close the next inspectability gap with a separate, read-only selected-pair
+      [association explanation](ASSOCIATION_DIAGNOSTIC.md): actual production
+      gate/cost matrices and solver partners, distinct unoffered inputs, full
+      replay/parity, bounded export, refusal checks and installed-artifact tests.
+      This is unreleased checkout tooling; initiation v1 and defaults are preserved.
 
 For a short two-project snapshot of finished work, the current experiment's
 eight milestone groups and remaining gates, see [Progress overview](PROGRESS_OVERVIEW.md).
