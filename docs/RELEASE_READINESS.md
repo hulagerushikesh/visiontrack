@@ -8,6 +8,15 @@ and unambiguous persisted-JSON reader corrections. Candidate metadata identifies
 historical evidence below remain unchanged. Candidate-specific gate results are
 recorded in the patch notes, separately from the earlier implementation checks.
 
+All seven hosted jobs pass at candidate `9aa1416` in
+[run 41355666403](https://github.com/hulagerushikesh/visiontrack/actions/runs/41355666403).
+Local checks pass 1,369 Python tests, all thirteen web workflows, exact tracker
+parity/reset, strict docs/lint and separate wheel/source core/Lab installs.
+A further clean local candidate/C++ 0.1.1 pairing passes all 288 C++ tests.
+The matching-tag guard is checked read-only, with no tag or publication. A later
+selected commit must pass its own exact-head gates before any release approval
+is used. The public twelve-platform evidence remains for Python 0.5.0.
+
 ## Published 0.5.0 verification — 2026-11-01
 
 The [0.5.0 scope](RELEASE_NOTES_0.5.0.md) is frozen around the selected-pair

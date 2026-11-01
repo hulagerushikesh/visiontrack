@@ -61,7 +61,7 @@ and [streaming measurements and limits](DIAGNOSTIC_REPLAY_SCALING.md).
 - [x] Build and check wheel/source artifacts in separate clean core/Lab installs;
       verify source identities, CLI/API fingerprints, ambiguity refusals and both
       Python-to-TypeScript diagnostic import workflows.
-- [ ] Pass all seven hosted CI jobs at the exact candidate commit, then exercise
+- [x] Pass all seven hosted CI jobs at the exact candidate commit, then exercise
       the matching-tag release guard read-only without creating a tag.
 - [ ] Obtain separate publication approval for the verified commit; only then
       tag/publish and verify public artifact bytes and a fresh public installation.
@@ -92,7 +92,22 @@ try to install 0.5.1 from PyPI or interpret this candidate as a released package
   association falls from 13,995,755 to 2,951,548 bytes. All four 600/6,000-frame
   diagnostic pairs retain exact non-producer content and unchanged input files.
   Single-run `tracemalloc` allocation is not a statistical speed/RSS benchmark.
+- A further clean local macOS ARM64 / Python 3.12.9 pairing installs this
+  unpublished candidate wheel beside public C++ 0.1.1, with NumPy 2.2.6 and
+  SciPy 1.16.2. All **288 C++ tests pass without skips**, and installed RECORD
+  hashes agree for 65 Python sources and the C++ extension. The Eigen 3.4.0
+  binary has floating-point contraction off. This is a local candidate check;
+  it does not replace the public twelve-platform matrix or adopt a new oracle.
 
 The local build hashes remain in the retained install receipt. A release workflow
 will rebuild at the separately approved tag and verify those exact distributions;
 it must not assume a local build's archive bytes equal the final public files.
+
+## Hosted candidate checkpoint
+
+All seven jobs pass for candidate `9aa14162dd98548cbdb943cfccfae8cf94bd7783`
+in [run 41355666403](https://github.com/hulagerushikesh/visiontrack/actions/runs/41355666403),
+including Python 3.10–3.12, isolated wheel/source delivery and actual web workflows.
+The read-only guard accepts that SHA in a simulated `v0.5.1` tag context and
+records `publication_performed: false`; no tag was created. If a later commit
+is chosen for publication, its own exact-commit CI and guard must pass too.
