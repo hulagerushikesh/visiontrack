@@ -1,6 +1,6 @@
 # VisionTrack and VisionTrack C++ — progress overview
 
-Snapshot: **2026-10-31**. This is a summary of the canonical
+Snapshot: **2026-11-01**. This is a summary of the canonical
 [VisionTrack checklist](NEXT_STEPS.md), [status](STATUS.md) and
 [C++ checklist](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/NEXT_STEPS.md).
 Completed implementation is not the same as validated research or product demand.
@@ -34,13 +34,15 @@ initiation workflow. This is enforced in CI and before release artifact upload.
 The [0.4.0 scope and migration](RELEASE_NOTES_0.4.0.md) are now frozen, including
 corrected measurement semantics and optional diagnostics without tracker changes.
 A publication guard requires matching tag/version metadata and latest successful
-main-push CI for the exact commit. Source metadata now selects 0.4.0; PyPI remains
-0.3.0. Historical fixture versions are preserved, fresh artifacts check their
-producer version, and exact historical Git identities are restored only in an
-isolated regression clone to repair fresh-checkout CI. All local candidate gates
+main-push CI for the exact commit. **0.4.0 is published and verified** from
+`5df99d6`: both PyPI files match the workflow build; a new public-PyPI core/Lab
+installation and actual Lab imports pass. Historical fixtures retain their
+recorded versions; fresh artifacts check their producer version. Exact historical
+Git identities are restored only in an isolated regression clone to repair fresh-checkout CI. All local candidate gates
 pass: 1,256 Python tests with the pinned metric reference, parity/reset, web
-workflows, app/types/docs/lint and clean wheel/sdist installs. Exact-commit hosted
-CI and the separate publication action remain in [release readiness](RELEASE_READINESS.md).
+workflows, app/types/docs/lint and clean wheel/sdist installs. All seven hosted
+CI jobs and the publishing workflow succeed; evidence is in the
+[publication audit](RELEASE_READINESS.md).
 A real traffic improvement claim still requires independently checked domain evidence.
 
 **Current review decision:** the owner delegated technical inspection because no
@@ -353,10 +355,13 @@ and guide. Preview writes nothing; failed trace preparation leaves no published
 output; repeated output names are refused. The original complete bundle bytes
 are unchanged, and fresh prepared imports pass the real Lab readers.
 This removes manual bundle-path substitution for the demo; it is a code-level
-workflow review, not a completed practitioner usability study. Next: check the
-installable delivery gap (these commands still require current source) before
-choosing a release candidate. Practitioner feedback and browser interaction QA
-remain open; no new recording, source hunt or outreach is required.
+workflow review, not a completed practitioner usability study. Installable
+delivery and the public 0.4.0 release are now verified. The demonstration and Lab
+instructions install `visiontrack-mot[lab]==0.4.0` directly, without a checkout;
+the fresh report fingerprint is recorded in the guide. Next: use this released
+walkthrough to assess comprehension and useful next engineering work. Practitioner
+feedback and browser interaction QA remain open; no new recording, source hunt
+or outreach is required.
 
 For research, retain the [negative threshold finding](INITIATION_THRESHOLD_FINDINGS.md)
 and the rejected warning/gate interventions. Representative traffic evaluation

@@ -1,13 +1,17 @@
-# VisionTrack 0.4.0 release scope
+# VisionTrack 0.4.0 release notes
 
 Scope status: **frozen on 2026-10-30**
 
-Release status: **candidate prepared; not tagged or published**
+Release status: **published on 2026-11-01**
 
-Candidate package version: **0.4.0** in both source declarations. The public
-package remains **0.3.0**; these local artifacts are not a PyPI publication.
-The audit baseline is `v0.3.0`. The candidate must pass its own local and hosted
-gates at its final revision.
+Public package version: **0.4.0**, released from
+`5df99d6013f15c43d3f73e62db0867c9d5fe7146`. The audit baseline is `v0.3.0`.
+[Exact-commit CI](https://github.com/hulagerushikesh/visiontrack/actions/runs/41201526847)
+and the [publishing workflow](https://github.com/hulagerushikesh/visiontrack/actions/runs/41273860817)
+succeeded. The public wheel/source digests match the verified release build;
+a fresh PyPI install passes core CLI, guided replay and Lab import checks.
+[PyPI](https://pypi.org/project/visiontrack-mot/0.4.0/) ·
+[GitHub release](https://github.com/hulagerushikesh/visiontrack/releases/tag/v0.4.0).
 
 This release makes tracking failures easier to explain and measurements more
 trustworthy. Its audience is computer-vision developers comparing local,
@@ -97,9 +101,9 @@ public accuracy claim are outside this release. Track IDs remain local labels.
       demo/contracts; preserve historical evidence and its recorded versions.
 - [x] Run complete Python, reference/parity, TypeScript/workflow, production app,
       strict docs and isolated distribution gates at the candidate revision.
-- [ ] Verify hosted CI at that exact revision; retain artifact verification receipts.
-- [ ] Create/push the release tag as the publication action, then verify PyPI
+- [x] Verify hosted CI at that exact revision; retain artifact verification receipts.
+- [x] Create/push the release tag as the publication action, then verify PyPI
       files/digests/version and the GitHub release record.
 
-Freezing this scope does not publish anything. If implementation scope changes,
-update these notes and repeat affected gates before tagging.
+The tag and published files are retained unchanged. Future implementation
+changes need their own version, gates and publication audit.

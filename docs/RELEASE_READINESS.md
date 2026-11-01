@@ -1,13 +1,12 @@
 # VisionTrack release-readiness audit
 
-## Current 0.4.0 candidate checkpoint — 2026-10-31
+## Published 0.4.0 verification — 2026-11-01
 
 The historical `0.3.0` publication audit below remains unchanged. The current
-source adds `lab-initiation` and `lab-demo --with-initiation`; neither command
-addition is in the published `0.3.0` wheel. Both source version declarations now
-select `0.4.0`; local candidate artifacts are not a publication or replacements
-on PyPI. Historical reports and conformance fixtures retain their recorded
-versions. Fresh demo/report/trace checks bind their version to the producing package.
+release adds `lab-initiation` and `lab-demo --with-initiation` in public
+`visiontrack-mot 0.4.0`, tagged at `5df99d6013f15c43d3f73e62db0867c9d5fe7146`.
+Historical reports and conformance fixtures retain their recorded versions.
+Fresh demo/report/trace checks bind their version to the producing package.
 
 - [x] Build the current wheel and source archive, then pass `twine check`.
 - [x] Install each artifact in its own clean, non-editable Python 3.12 environment
@@ -27,8 +26,8 @@ versions. Fresh demo/report/trace checks bind their version to the producing pac
       before artifact upload/publication; retain a machine-readable receipt.
 - [x] Freeze the [0.4.0 scope and migration](RELEASE_NOTES_0.4.0.md), distinguishing
       tracking behavior, corrected metric semantics, optional diagnostics and
-      separately deployed website features. Candidate metadata is 0.4.0; the selected
-      release is not yet tagged or published.
+      separately deployed website features. Both package declarations and the public
+      release identify 0.4.0.
 - [x] Guard publication against branch dispatch, tag/metadata mismatch and
       missing, failed or pending latest main-push CI for the exact release commit.
 - [x] Prepare 0.4.0 metadata and version-dependent current fixtures without
@@ -38,10 +37,26 @@ versions. Fresh demo/report/trace checks bind their version to the producing pac
       The original 22-file regression suite also runs in its restored clone.
       Canonical Python/C++ fixture parity and deterministic reset, all web
       contracts/workflows, TypeScript, the production app, Ruff and strict docs pass.
-- [ ] Verify hosted CI for the exact final candidate commit before tagging.
-      Broader platform support is not established by this local macOS/Python 3.12
-      checkpoint alone.
-- [ ] Publish the release tag, then verify public package files and digests.
+- [x] Verify [exact-commit CI](https://github.com/hulagerushikesh/visiontrack/actions/runs/41201526847):
+      all seven jobs succeed, including Python 3.10, 3.11 and 3.12.
+- [x] Publish `v0.4.0` through the
+      [successful trusted-publishing workflow](https://github.com/hulagerushikesh/visiontrack/actions/runs/41273860817).
+- [x] Verify both PyPI files byte-for-byte against the release workflow artifacts
+      and its clean-install receipt. Retain PyPI provenance records and check
+      publisher repository/workflow/environment and attestation subject digests.
+- [x] Install core and then Lab extras from public PyPI in a new environment
+      outside the checkout. Core CLI, guided replay, every installed source hash
+      and actual Python-to-Lab imports pass.
+- [x] Verify the public [GitHub release](https://github.com/hulagerushikesh/visiontrack/releases/tag/v0.4.0).
+
+| Published file | SHA-256 |
+| --- | --- |
+| `visiontrack_mot-0.4.0-py3-none-any.whl` | `a14d0cbbc6a233b38be32e2c2048348d42303f4c524711634cbea437c9d21495` |
+| `visiontrack_mot-0.4.0.tar.gz` | `c10d7fcccc6a8c0e1da8e05304974ea744f7bc2daa014fd1b2085bc9f5f32a38` |
+
+The tag and public package files are unchanged by this post-publication audit.
+Website deployment, browser interaction QA and practitioner usability are separate
+checks; publication does not establish tracking accuracy.
 
 Reproduce with the command in [Release to PyPI](RELEASE.md#check-installed-delivery).
 The rewritten main history exposed a fresh-checkout regression: three tests

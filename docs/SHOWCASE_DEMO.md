@@ -1,20 +1,21 @@
 # A five-minute VisionTrack demonstration
 
-Updated **2026-10-30** using the deterministic `lab-demo --with-initiation` workflow.
+Updated **2026-11-01** using the deterministic `lab-demo --with-initiation` workflow.
 This is a **synthetic workflow demonstration**, not a real-camera benchmark,
 accepted tracker change or completed usability study. No footage is needed.
 
 ## Before starting
 
-From the current source checkout, use a new output folder:
+Use the published 0.4.0 package and a new output folder. No repository checkout
+is required; Python 3.10–3.12 is the tested setup:
 
 ```bash
-python -m pip install -e '.[lab]'
+python -m pip install --upgrade "visiontrack-mot[lab]==0.4.0"
 visiontrack lab-demo ./lab-showcase --with-initiation --write
 ```
 
-Omit `--write` to preview the output paths. The new option is not in the
-published 0.3.0 wheel yet. Open `lab-showcase/try-in-browser` in your computer's
+Omit `--write` to preview the output paths. Open
+`lab-showcase/try-in-browser` in your computer's
 file manager. Its three files are `report.json`, `initiation-trace.json` and
 `START_HERE.txt`. The full Lab bundle is in the adjacent fingerprint-named
 directory; the public website does not host it. Files are read into browser
@@ -110,9 +111,12 @@ as independent physical-label validation.
 The current generator uses a
 fixed fixture timestamp and `git_revision: null`, not a recording date or a
 runtime provenance receipt. The freshly generated report has ID
-`d37d847100489f7cee7f3f083e9085f7bd2a4c0dbbf140d46f51409c62b2f3fc`
+`512a7a79db0535b4c26321def12cb8be514581d7a9f48c73206c5ebb147f2d17`
 and byte SHA-256
-`197efc039a63276934f4a2e5d059a26754743f621d0a7c2bea972eb21fadd01e`.
+`8d4551ee789687bdab3126b5ac6e1e9ee2df7545a234006467cc7869548c007a`.
+These identifiers were checked from a fresh public-PyPI 0.4.0 installation;
+producer version is part of the report, so the earlier 0.3.0-labelled source
+export has a different fingerprint. Its historical bytes are retained.
 Rebuilding independently with and without `--with-initiation` preserves every
 bundle byte produced by the current generator. Historical exports are not
 rewritten or assumed byte-identical to today's report. Both easy-to-find import files pass the actual Lab readers,

@@ -151,7 +151,7 @@ visiontrack lab-decision-import BUNDLE ./Downloads/decision.json  # preview only
 visiontrack lab-decision-import BUNDLE ./Downloads/decision.json --write
 visiontrack lab-demo ./lab-onboarding                  # preview only
 visiontrack lab-demo ./lab-onboarding --write          # create verified bundle
-visiontrack lab-demo ./lab-guided --with-initiation --write  # source-only guided demo
+visiontrack lab-demo ./lab-guided --with-initiation --write  # guided demo (0.4.0+)
 visiontrack lab-playback BUNDLE EVENT_ID --variant appearance  # metadata only
 visiontrack lab-playback BUNDLE EVENT_ID --variant appearance --json > playback.json
 visiontrack lab-initiation BUNDLE --variant bytetrack --start 0 --end 10
@@ -170,8 +170,8 @@ tracks confirm, and when tracks survive or expire without public boxes. It
 replays an existing local Lab run and requires its public output to match the
 saved output exactly. It writes nothing; `--json` emits a separate numeric trace.
 See the [short diagnostic walkthrough](docs/INITIATION_DIAGNOSTIC.md). This command
-is available from the current source checkout; it is not part of the published
-0.3.0 package yet.
+is available in the published 0.4.0 package. Install the Lab tools with
+`python -m pip install --upgrade "visiontrack-mot[lab]==0.4.0"`.
 
 The private, client-side Reliability Lab at `/lab` can inspect an explicitly
 selected `decision.json`. It verifies the decision fingerprint and full report
@@ -200,12 +200,12 @@ fixed synthetic comparison without writing, then `--write` creates a complete
 verified bundle and prints the `report.json` path to import at `/lab`. The
 output root must be new and is never reused or overwritten.
 
-From the current source checkout, add `--with-initiation` to prepare
+With `visiontrack-mot[lab]==0.4.0` installed, add `--with-initiation` to prepare
 `try-in-browser/report.json`, `initiation-trace.json` and `START_HERE.txt` together
 beside the unchanged complete bundle. Import the report, follow **Inspect track
 initiation**, then import that folder's trace to compare frames 0–2. No camera or
-acceptance decision is needed. This option is not in the published 0.3.0 wheel;
-see the [five-minute walkthrough](docs/SHOWCASE_DEMO.md).
+acceptance decision is needed. No repository checkout is required; see the
+[five-minute walkthrough](docs/SHOWCASE_DEMO.md).
 
 After importing a report at `/lab`, optionally review the metrics and failure events,
 preview a decision, and download `decision.json`. Save that choice into the original

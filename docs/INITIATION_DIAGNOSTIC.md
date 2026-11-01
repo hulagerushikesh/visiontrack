@@ -7,11 +7,11 @@ It does not change the tracker or recommend a new configuration.
 
 ## Try it without a camera or dataset
 
-From the current VisionTrack source checkout, install the Lab extra and create
-one synthetic demonstration. Use a new output folder name if you repeat it:
+Install the published 0.4.0 Lab tools and create one synthetic demonstration.
+No repository checkout is required. Use a new output folder name if you repeat it:
 
 ```bash
-python -m pip install -e '.[lab]'
+python -m pip install --upgrade "visiontrack-mot[lab]==0.4.0"
 visiontrack lab-demo ./lab-initiation-demo --with-initiation --write
 ```
 
@@ -39,8 +39,8 @@ visiontrack lab-initiation BUNDLE --variant bytetrack --start 0 --end 10
 
 This is a terminal diagnostic. It prints frame-by-frame explanations and writes
 nothing. You do not need to import anything into the website or make a human
-acceptance decision to use it. The source command and `--with-initiation` option
-are not yet in the published 0.3.0 wheel. A completed local bundle using your
+acceptance decision to use it. Both commands are included in published 0.4.0.
+A completed local bundle using your
 own detection records works the same way; choose a variant declared in that
 bundle's manifest.
 

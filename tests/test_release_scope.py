@@ -24,7 +24,7 @@ def test_historical_release_scope_remains_linked_and_published() -> None:
     assert "RELEASE_NOTES_0.3.0.md" in navigation
 
 
-def test_current_candidate_versions_agree_with_frozen_unpublished_scope() -> None:
+def test_current_release_versions_agree_with_frozen_published_scope() -> None:
     from scripts.check_release import validate_tag
 
     project = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
@@ -34,7 +34,7 @@ def test_current_candidate_versions_agree_with_frozen_unpublished_scope() -> Non
     assert package_version.group(1) == visiontrack.__version__ == "0.4.0"
     assert validate_tag(ROOT, "refs/tags/v0.4.0") == "0.4.0"
     assert "Scope status: **frozen" in notes
-    assert "not tagged or published" in notes
+    assert "Release status: **published on 2026-11-01**" in notes
 
 
 def test_release_scope_names_stable_surfaces_and_remaining_gates() -> None:

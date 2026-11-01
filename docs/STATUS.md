@@ -2,7 +2,7 @@
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
 
-**Latest checkpoint — 2026-10-31:** the curated `/lab/crossings` diagnosis is
+**Latest checkpoint — 2026-11-01:** the curated `/lab/crossings` diagnosis is
 implemented. The [committed-method initiation study](INITIATION_THRESHOLD_FINDINGS.md)
 completed all 54 synthetic pairs / 324 passes: earlier births recover true
 crossings but also confirm persistent false proposals. The candidate fails
@@ -23,10 +23,11 @@ bundle. Preview/refusal/failed-publication paths and actual Python-to-Lab import
 are checked. Separate clean wheel/sdist installations now pass the core CLI,
 Lab-extra guided demo, exact installed-source/replay checks and the existing
 Python-to-TypeScript initiation contract. Normal CI and release builds enforce
-the installed-artifact check and retain receipts. These are local builds, not a
-new publication; the public wheel remains 0.3.0. Practitioner usability remains
-open. The [0.4.0 scope and migration](RELEASE_NOTES_0.4.0.md) are now frozen;
-source metadata is now 0.4.0; the public package remains 0.3.0. Release
+the installed-artifact check and retain receipts. **0.4.0 is now published and
+verified** from `5df99d6`; both public files match the workflow artifacts and a
+fresh PyPI core/Lab install passes replay and browser-import contracts. The
+[scope and migration](RELEASE_NOTES_0.4.0.md) remain frozen. Practitioner usability
+is open. Release
 builds now require a matching tag/version and latest successful main-push CI
 for that exact SHA. Candidate preparation preserves historical reports/fixtures;
 fresh generated artifacts declare their producer version. A fresh-clone CI
@@ -34,8 +35,10 @@ blocker is repaired by restoring verified original commit metadata in the isolat
 historical regression clone, without changing frozen evidence. All local candidate
 gates now pass, including 1,256 Python tests with the pinned metric reference,
 parity/reset, web workflows, app/types/docs/lint and clean wheel/sdist installs.
-Next: verify hosted CI for the final candidate commit, then the separate
-publication action in [release readiness](RELEASE_READINESS.md). Real-traffic
+All seven exact-commit CI jobs and the publishing workflow succeed, recorded
+in the [publication audit](RELEASE_READINESS.md). Lab/README/demo instructions
+now install the released tools directly; the guide records its new report
+fingerprint. Next: validate comprehension/usefulness of this released workflow. Real-traffic
 acceptance remains a separate data/label gate. Defaults and C++ stay unchanged.
 The checkpoints below retain their historical scope.
 
@@ -385,8 +388,9 @@ issues without reading identity results or claiming constant frame timing.
 A separate, plain-language recording-day guide is ready for the proposed
 volunteer pilot. No recording or real-data RQ5 comparison has been performed.
 The zero-to-hero and research-lead learning paths are surfaced in the React
-site. `visiontrack-mot 0.3.0` remains the
-published Reliability Lab technical alpha with a versioned Python/C++
+site. `visiontrack-mot 0.4.0` is the current published package, adding local
+initiation diagnostics and versioned measurement corrections to the Reliability
+Lab technical alpha with a versioned Python/C++
 synchronization boundary; the two earlier research extensions remain
 **compute-blocked with measured numbers**. Previously:
 2026-09-07, SportsMOT oracle numbers landed (45 val sequences, `/benchmark/sportsmot`
@@ -428,8 +432,8 @@ published to PyPI).
 - [x] H2.1 — real-footage annotated demo (+ YOLOX raw-grid decode fix)
 - [x] H2.2 — throughput/FPS profiling
 - [x] H2.3 — pip-installable + stable public API + release automation
-- [x] **Published to PyPI** — `pip install visiontrack-mot` (**0.3.0** live;
-      Reliability Lab release, with 0.2.0 and 0.1.0 preserved in history)
+- [x] **Published to PyPI** — `pip install visiontrack-mot` (**0.4.0** live;
+      initiation diagnostics and versioned evaluation, with earlier releases preserved)
       via tag-triggered Trusted-Publishing Action; GitHub Release page per tag
 
 ### Horizon 3 — product

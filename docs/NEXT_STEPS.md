@@ -4,7 +4,7 @@ VisionTrack is the NumPy reference, research platform, and learning product.
 Work here must protect readability, reproducibility, and the ability to explain
 why a tracking change helps or hurts.
 
-**Current delivery — 2026-10-31:** the Lab crossing diagnosis and its
+**Current delivery — 2026-11-01:** the Lab crossing diagnosis and its
 [bounded threshold follow-up](INITIATION_THRESHOLD_FINDINGS.md) are complete.
 
 - [x] Freeze and run 54 synthetic threshold pairs / 324 repeatability passes.
@@ -20,10 +20,10 @@ why a tracking change helps or hurts.
 - [x] Simplify demo preparation to one opt-in command: keep the matching report,
       trace and five-minute guide together outside the unchanged sealed bundle.
       Check preview/refusal/failure behavior and the actual Python-to-Lab imports.
-- [ ] Validate the walkthrough with a practitioner when available; preparation
+- [ ] Validate the released walkthrough with a practitioner when available; preparation
       and rendered-component checks do not establish usability or product demand.
       Browser interaction QA is still unverified after the earlier access denial.
-- [x] Check installable delivery for the source-only diagnostic and guided demo:
+- [x] Check installable delivery for the diagnostic and guided demo:
       separate wheel/sdist clean installs, core-only and Lab-extra commands,
       exact source/replay checks and actual Python-to-TypeScript imports. Retain
       the receipt and enforce the check in normal CI and the release build.
@@ -36,10 +36,11 @@ why a tracking change helps or hurts.
 - [x] Pass local 0.4.0 candidate gates: 1,256 Python tests with the pinned metric
       reference, frozen historical regressions, parity/reset, web workflows,
       app/types/docs/lint and separate clean wheel/sdist installs.
-- [ ] Verify exact-commit hosted CI and then the separate publication action
-      using the [readiness checklist](RELEASE_READINESS.md).
-      No automatic package release,
-      new footage hunt, public accuracy claim or outreach follows from this list.
+- [x] Publish 0.4.0 after exact-commit hosted CI; verify public wheel/source bytes,
+      release-workflow receipts, provenance metadata, GitHub release and a fresh
+      PyPI core/Lab installation. See the [publication audit](RELEASE_READINESS.md).
+- [x] Use the released package in the Lab/README/five-minute demonstration;
+      preserve historical exports and record the fresh 0.4.0 report fingerprint.
 - [ ] Separate research gate: representative permitted traffic event/negative
       labels before accepting a detector+tracker change or proposing a C++ port.
 
