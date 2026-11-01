@@ -6,6 +6,20 @@ Snapshot: **2026-11-01**. This is a summary of the canonical
 Completed implementation is not the same as validated research or product demand.
 This document does not claim the latest local work is already pushed or deployed.
 
+**Published Python/C++ pairing (2026-11-01):** Python 0.5.0 and C++ 0.1.1 now
+pass the separate twelve-job public-wheel matrix across Linux, macOS ARM64 and
+Windows, CPython 3.10–3.13, NumPy 2.2.6. Each job passes 278 tests and reports
+ten absent-cache skips. A clean local installation passes 288 tests without
+skips and matches 35,387 cached observations over 2,625 frames exactly.
+The [joined C++ receipt](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/compatibility/prospective_oracle_0.5.0_evidence.json)
+also records the successful migration of all 43 hosted checks to supported
+macOS runners after a retirement brownout. The new Python diagnostic observer
+is explicitly reviewed; source identity is not assumed. C++ remains 0.1.1,
+its accepted release oracle remains 0.3.0, and the Lab is not automatically
+using C++. This closes a compatibility step, not a research-accuracy gate.
+The next research milestone still requires precise dataset terms/version,
+checked reference labels and a frozen detector/tracker comparison.
+
 **Longer-run diagnostics (2026-11-01):** the unreleased checkout now
 [streams evidence and replay output hashes](DIAGNOSTIC_REPLAY_SCALING.md).
 A 6,000-frame synthetic probe drops peak Python allocation from 14.0 MB to 2.9 MB
