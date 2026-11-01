@@ -1,5 +1,33 @@
 # VisionTrack release-readiness audit
 
+## Unpublished 0.5.0 candidate — 2026-11-01
+
+The [0.5.0 scope](RELEASE_NOTES_0.5.0.md) is frozen around the already implemented
+selected-pair diagnostic. The public release remains 0.4.0; no new tag or
+publication is claimed. This closes an installable-delivery gap, not the
+representative-traffic research gate.
+
+- [x] Project/import metadata agree at 0.5.0; historical 0.3.0/0.4.0 evidence and
+      both prepared lesson asset sets remain unchanged.
+- [x] Full local Python suite: **1,288 passed, 3 skipped, 1 slow test deselected**,
+      including the pinned evaluator and frozen historical regression checks.
+- [x] All thirteen npm contracts/workflows, private-review control check,
+      TypeScript, production app, Ruff, strict docs and canonical tracker parity pass.
+- [x] Wheel and source archive pass `twine check` and separate clean core/Lab
+      installations outside the checkout; installed source bytes match.
+- [x] Installed CLI/API association output agrees, records the candidate producer
+      and actual source hashes, refuses two invalid selectors without partial
+      JSON, and leaves the existing bundle/demo unchanged.
+- [x] Wheel/source report, initiation trace and association explanation IDs all
+      agree. Each installation's actual Python-to-TypeScript initiation and
+      fourteen-case association workflows pass.
+- [ ] Successful hosted main CI for the exact pushed candidate SHA.
+- [ ] Separate publication decision, matching tag and public artifact/install audit.
+
+The local receipt records artifact digests, installed versions/source identities,
+all three fingerprints and explicit association/refusal checks. No C++ oracle
+adoption, new accuracy result, browser QA or practitioner validation follows.
+
 ## Published 0.4.0 verification — 2026-11-01
 
 The historical `0.3.0` publication audit below remains unchanged. The current

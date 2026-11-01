@@ -173,11 +173,13 @@ See the [short diagnostic walkthrough](docs/INITIATION_DIAGNOSTIC.md). This comm
 is available in the published 0.4.0 package. Install the Lab tools with
 `python -m pip install --upgrade "visiontrack-mot[lab]==0.4.0"`.
 
-**New in the current checkout, not published in 0.4.0:** `lab-association`
+**Prepared for 0.5.0, not yet published; public 0.4.0 is unchanged:** `lab-association`
 explains one selected track/detection pair's actual gates and solver outcome,
 after an exact saved-output replay check. It distinguishes unoffered inputs,
 gate rejection and eligible-but-unselected pairs. See the
 [association diagnostic](docs/ASSOCIATION_DIAGNOSTIC.md) for setup and selectors.
+The [candidate scope and migration](docs/RELEASE_NOTES_0.5.0.md) describe what
+is being verified before a separate publication decision.
 The Lab's local initiation timeline can now import that explanation for the
 selected frame/pair and show actual gate values, cost limits and returned
 partners. Its file checks tie the explanation to the active report and trace;

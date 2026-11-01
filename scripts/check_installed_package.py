@@ -69,6 +69,8 @@ command('lab-initiation', bundle, '--variant', 'bytetrack', '--start', 0, '--end
 key = trace['frames'][1]['tracks'][0]['detection_index']
 association = build_association_explanation(
     bundle, variant='bytetrack', frame=1, track_id=1, detection_index=key)
+assert association['schema'] == 'visiontrack.association-explanation/v1'
+assert association['producer']['visiontrack'] == visiontrack.__version__
 assert command('lab-association', bundle, '--variant', 'bytetrack', '--frame', 1,
                '--track-id', 1, '--detection-index', key, '--json').stdout == (
                    canonical_json(association) + '\n')
@@ -76,6 +78,11 @@ assert association['public_output_parity'] == 'exact_sha256_match'
 assert association['stages'][2]['pair']['outcome'] == 'selected'
 command('lab-association', bundle, '--variant', 'bytetrack', '--frame', 1,
         '--track-id', 1, '--detection-index', key)
+for bad_track, bad_key in ((999999, key), (1, 999999)):
+    refused = command('lab-association', bundle, '--variant', 'bytetrack', '--frame', 1,
+                      '--track-id', bad_track, '--detection-index', bad_key,
+                      '--json', success=False)
+    assert refused.returncode == 2 and refused.stdout == '' and refused.stderr
 command('lab-demo', out, '--with-initiation', '--write', success=False)
 assert before == snapshot(out), 'read-only diagnosis or refusal mutated output'
 assert [row['public_track_ids'] for row in trace['frames'][:3]] == [[], [], [1]]
@@ -85,10 +92,14 @@ assert trace['accuracy_claim'] is False and trace['physical_identity_verified'] 
 hashes = {p.relative_to(root).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
           for p in root.rglob('*.py')}
 assert trace['producer']['implementation_sha256'] == hashes
+assert association['producer']['implementation_sha256'] == hashes
 assert 'Frame 2:' in (browser / 'START_HERE.txt').read_text()
 print(json.dumps({'version': visiontrack.__version__, 'report_id': report['report_id'],
-                 'trace_id': trace['trace_id'], 'implementation_sha256': hashes,
-                 'installed_module': str(root), 'guided_demo_and_readonly_replay': 'passed'}))
+                 'trace_id': trace['trace_id'], 'association_id': association['explanation_id'],
+                 'implementation_sha256': hashes, 'installed_module': str(root),
+                 'guided_demo_and_readonly_replay': 'passed',
+                 'association_cli_api_and_readonly_replay': 'passed',
+                 'association_invalid_selector_refusals': 2}))
 '''
 
 
@@ -158,11 +169,10 @@ def main() -> None:
                       artifact_sha256=hashlib.sha256(artifact.read_bytes()).hexdigest(),
                       core=core, web_contract=args.with_web_contract)
         results.append(result)
-        print(f'{kind}: isolated core + Lab installation and initiation replay passed', flush=True)
-    if results[0]['report_id'] != results[1]['report_id']:
-        raise ValueError('wheel and sdist generated different reports')
-    if results[0]['trace_id'] != results[1]['trace_id']:
-        raise ValueError('wheel and sdist generated different traces')
+        print(f'{kind}: isolated core + Lab install, initiation and association passed', flush=True)
+    for key in ('report_id', 'trace_id', 'association_id'):
+        if results[0][key] != results[1][key]:
+            raise ValueError(f'wheel and sdist generated different {key} values')
     receipt = {'schema': 'visiontrack.installed-package-check/v1', 'publication_performed': False,
                'results': results}
     path = output / 'receipt.json'

@@ -7,6 +7,17 @@ why a tracking change helps or hurts.
 **Current delivery — 2026-11-01:** the Lab crossing diagnosis and its
 [bounded threshold follow-up](INITIATION_THRESHOLD_FINDINGS.md) are complete.
 
+- [x] Prepare the [0.5.0 installable diagnostic candidate](RELEASE_NOTES_0.5.0.md)
+      with isolated wheel/source association receipts, exact three-record
+      fingerprint agreement, invalid-selector refusal and complete local gates.
+      Published 0.4.0 and historical evidence remain unchanged.
+- [ ] Complete exact-commit hosted CI, then take a separate publication decision.
+- [x] Finish the bounded RoundaboutHD documentation recheck and send one
+      owner-approved clarification request. See the
+      [rights/label checkpoint](REAL_TRAFFIC_EVIDENCE_GATE.md#roundabouthd-bounded-clarification-checkpoint-2026-11-01).
+      Permission and observed/generated label semantics remain unresolved;
+      no data admission, outcome run or automatic follow-up is implied.
+
 - [x] Freeze and run 54 synthetic threshold pairs / 324 repeatability passes.
 - [x] Retain recovered true crossings, false-count costs and all 36 exact controls.
 - [x] Keep defaults unchanged after the no-harm gate fails; explain the result

@@ -80,6 +80,47 @@ This is **partial archive metadata integrity**, not a whole-archive digest or
 an audit of the labels against images. Rights clarification comes before any
 large download, tracking outcome, or public visual.
 
+### RoundaboutHD bounded clarification checkpoint — 2026-11-01
+
+The planned single-route recheck is complete at the documentation level;
+**admission remains on hold**. The [Bath version-1 record](https://researchdata.bath.ac.uk/1574/)
+still attaches a software MIT label to the archive without separate media or
+annotation terms. Its listed first contact is the Research Data Service. One
+owner-approved written request has been sent for asset terms, label coverage,
+interpolation, a development/evaluation split and archive/version integrity.
+The sent-message receipt stays owner-local. No automatic follow-up is authorized.
+
+Two additional questions came from pinned primary code/documentation, not data:
+
+- The [labeling toolkit README](https://github.com/siri-rouser/multi_camera_tracking_labelling_tool/blob/8a8d416b65486a43a2d2641876f585095912f5ac/README.md)
+  describes manually correcting detector/tracker proposals and interpolating
+  short gaps. Its [postprocessor](https://github.com/siri-rouser/multi_camera_tracking_labelling_tool/blob/8a8d416b65486a43a2d2641876f585095912f5ac/sct_tracklet_post_process.py)
+  actually fills every positive gap larger than one frame without a maximum-gap
+  test, and omits tracks with fewer than six rows from its output. This does
+  **not** prove that the distributed SCT labels went through that code; ask
+  which rows are observed/reviewed, generated or omitted before using them as truth.
+- The [dataset README](https://github.com/siri-rouser/RoundaboutHD/blob/a8590cfcb54d97d3d4200fe0e766f54c5fdba9c5/README.md)
+  maps SCT evaluation to `eval_det.py` and describes six-column SCT rows. The
+  [toolkit's `eval_sct.py`](https://github.com/siri-rouser/multi_camera_tracking_labelling_tool/blob/8a8d416b65486a43a2d2641876f585095912f5ac/eval_sct.py)
+  instead implements tracking evaluation with a seven-column reader. Verify the
+  released file's actual convention after permission; do not silently infer an
+  adapter or claim its scores reproduce the paper.
+
+No new archive bytes, label rows, videos or evaluation outcomes were opened for
+this recheck. Existing partial archive metadata is not a complete checksum.
+The [paper's shared cross-camera identities](https://arxiv.org/html/2507.08729v2)
+also mean that a camera split alone must not be called independent identity
+validation without a task-specific justification.
+
+**Resume conditions:** obtain the precise terms/version and answers above;
+then inventory one preselected development slice, verify timing/coordinates,
+audit completeness/visibility and generated rows against permitted pixels, and
+freeze the actual comparison before executing outcomes. Do not require the
+publisher to supply a new benchmark or adopt their reference labels uncritically.
+If those answers are unavailable, report the unresolved requirement and stop
+this route; another broad source hunt or speculative tracker change is not its
+substitute. The candidate package delivery is a separate engineering milestone.
+
 **2026-10-30 Khan/Kelly V2 small-file screen:** the official
 [versioned record](https://data.mendeley.com/datasets/5d8k5bkb93/2) and
 [public file API](https://data.mendeley.com/public-api/datasets/5d8k5bkb93/files?folder_id=root&version=2)

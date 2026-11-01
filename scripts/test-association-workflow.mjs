@@ -46,6 +46,7 @@ try {
   const run = spawnSync(process.env.VISIONTRACK_PYTHON || "python", ["-c", `
 import hashlib,json,sys
 from pathlib import Path
+from visiontrack import __version__
 from visiontrack.lab import (DetectionRecord,GroundTruthRecord,ExperimentManifest,SourceManifest,
     create_experiment_bundle,detection_payload_sha256,run_comparison,canonical_json,
     build_report_model,build_initiation_trace,build_association_explanation,
@@ -80,7 +81,7 @@ for name,rows,overrides,frame,track,key in cases:
         frame_count=len(rows),width=300,height=300,fps=30.,coordinate_space='pixel_xyxy',created_at=now)
     experiment=ExperimentManifest.create(source_id=source.source_id,baseline='baseline',
         variants=({'name':'baseline','overrides':overrides},),metrics=('track_count',),
-        frame_range={'start':0,'end':len(rows)},visiontrack_version='0.4.0',git_revision=None,
+        frame_range={'start':0,'end':len(rows)},visiontrack_version=__version__,git_revision=None,
         environment={'python':'fixture'},created_at=now)
     bundle=create_experiment_bundle(root/name,experiment,source,records,ground_truth)
     run_comparison(bundle)

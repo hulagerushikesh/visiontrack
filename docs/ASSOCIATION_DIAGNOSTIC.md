@@ -4,7 +4,8 @@
 `lab-association` command answers the next, narrower engineering question:
 **was this particular track/detection pair offered, blocked, or not selected?**
 
-This is an unreleased checkout feature, added after the published 0.4.0 package.
+This is an unreleased checkout feature, scoped in the [0.5.0 candidate](RELEASE_NOTES_0.5.0.md),
+added after the published 0.4.0 package.
 Use a current source checkout (`python -m pip install -e ".[lab]"`); installing
 0.4.0 from PyPI alone does not provide this command. No new release is claimed.
 

@@ -52,6 +52,15 @@ permitted data with independently checked labels. If the evidence dependency
 cannot be resolved, finish with a precise unresolved requirement and stop that
 route, rather than count more synthetic/UI work as completion of this aim.
 
+**Additional delivery checkpoint — 2026-11-01:** the existing association
+diagnostic has an [unpublished 0.5.0 package candidate](RELEASE_NOTES_0.5.0.md)
+with complete local and isolated-install gates. This finishes an engineering
+handoff gap while the main research outcome remains open; publication needs
+exact-commit hosted CI and a separate decision. The single RoundaboutHD recheck
+is complete and one clarification email was sent with owner approval. Resume
+that route when the requested rights/label answers are available, rather than
+repeat screening while waiting.
+
 - [ ] **Check comprehension of the shipped lessons.** Walk through confirmation
       and match failure; record where the explanation is unclear and make only
       demonstrated corrections. Browser QA remains open while access is denied;

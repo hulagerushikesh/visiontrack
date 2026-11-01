@@ -2,6 +2,17 @@
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
 
+**Installable diagnosis candidate — 2026-11-01:** [0.5.0 is prepared, not published](RELEASE_NOTES_0.5.0.md).
+It packages the existing selected-pair explanation without a new tracker/default
+change. All local candidate gates pass: 1,288 Python tests, exact parity, web
+contracts/workflows, app/types/lint/docs and clean wheel/source installation.
+Installed association CLI/API, producer/source hashes, selector refusals,
+read-only behavior and matching report/trace/explanation IDs are retained.
+Exact-commit hosted CI and publication remain separate gates; public 0.4.0 stays
+unchanged. The bounded RoundaboutHD source route now has one owner-approved
+clarification email sent, with data admission still on hold. No C++ oracle or
+runtime change, representative traffic gain or practitioner validation is claimed.
+
 **No-install match-failure lesson — 2026-11-01:** `/lab` now has an optional
 **Explain a match failure** lesson, separate from the selected report and beginner
 confirmation demo. Original synthetic Python exports are loaded on explicit
