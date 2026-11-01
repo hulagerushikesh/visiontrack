@@ -33,6 +33,11 @@ async function moduleUrl(name, extension = "ts") {
   return url
 }
 const api = await import(await moduleUrl("initiation"))
+// The Python evidence readers and browser diagnostics must both reject repeated
+// decoded keys, including nested/escaped keys, without rejecting separate objects.
+const jsonBoundary = JSON.parse(await readFile(new URL("../tests/fixtures/lab_json_boundary.json", import.meta.url), "utf8"))
+for (const text of jsonBoundary.accepted) assert.deepEqual(api.parseDiagnosticDocument(text).value, JSON.parse(text))
+for (const text of jsonBoundary.rejected) assert.throws(() => api.parseDiagnosticDocument(text))
 const { ReportFileReader } = await import(await moduleUrl("report-import"))
 const { parseReportModel } = await import(await moduleUrl("types"))
 const { canonicalJson } = await import("../src/features/reliability-lab/decision-contract.mjs")

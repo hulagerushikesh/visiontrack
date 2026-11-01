@@ -2,11 +2,10 @@
 
 from __future__ import annotations
 
-import json
 from dataclasses import dataclass
 from pathlib import Path
 
-from .contracts import DecisionRecord, canonical_json
+from .contracts import DecisionRecord, _parse_json, canonical_json
 from .report import build_report_model
 from .storage import _write_decision_record
 
@@ -29,9 +28,9 @@ def _verified_report(bundle: Path) -> dict:
         raise ValueError("a local report/report.json is required before recording a decision")
     try:
         payload = report_path.read_bytes()
-        stored = json.loads(payload)
-    except (OSError, json.JSONDecodeError) as exc:
-        raise ValueError("stored report.json is not valid JSON") from exc
+        stored = _parse_json(payload)
+    except (OSError, ValueError) as exc:
+        raise ValueError(f"stored report.json is not valid JSON: {exc}") from exc
     expected = build_report_model(bundle)
     if not isinstance(stored, dict) or payload != (canonical_json(expected) + "\n").encode():
         raise ValueError("stored report.json does not match revalidated bundle evidence")

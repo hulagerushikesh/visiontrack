@@ -273,6 +273,26 @@ portable report must still work without that video.
 5. Preserve deterministic ordering by frame, then record index or track ID.
 6. Never overwrite an existing experiment directory with different content.
 7. Record missing optional evidence explicitly rather than substituting zero.
+8. Reject repeated JSON object fields at every nesting level, comparing decoded
+   names (`score` and `sc\u006fre` are the same key). Reject `NaN` and `Infinity`
+   tokens; these are not standard JSON numbers. Ordinary whitespace, field order
+   and the same name in separate objects remain valid.
+
+**Reader correction — 2026-11-01 (unreleased checkout):** Python previously
+silently used the last repeated field: a detector row containing
+`"score":0.05,"score":0.9` became score 0.9. A matching raw-file hash or
+content-derived identifier cannot resolve that ambiguous input. All persisted
+Lab JSON readers now use one strict parser, including manifests, JSONL records,
+run/metric metadata, image-evidence run metadata and stored decision reports.
+Diagnostic CLI failures produce no partial JSON and do not alter the bundle.
+The browser's existing diagnostic duplicate-field refusal is checked against
+shared syntax vectors; report/decision/diagnostic integration tests use otherwise
+valid evidence with matching hashes. Separate wheel/source installations check
+both CLI refusals too. Canonical bytes and identifiers for valid records,
+tracker arithmetic/defaults and historical lesson exports are unchanged.
+Executing diagnostic producer-source hashes and their dependent IDs legitimately
+change. This is an input-reader correction, not a new tracking method, accuracy
+result or update to the already published 0.5.0 package.
 
 ## First implementation increment — complete
 

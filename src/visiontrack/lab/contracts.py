@@ -24,6 +24,27 @@ _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _T = TypeVar("_T", bound="ContractRecord")
 
 
+def _parse_json(value: str | bytes) -> Any:
+    """Read evidence without silently choosing between repeated object fields.
+
+    Keys are compared after JSON escape decoding, at every nesting level. Keep
+    serialization separate: accepted input may still use ordinary whitespace or
+    field order, and existing canonical evidence bytes are unchanged.
+    """
+    def unique_object(pairs):
+        result = {}
+        for key, item in pairs:
+            if key in result:
+                raise ValueError(f"duplicate JSON object key: {key!r}")
+            result[key] = item
+        return result
+
+    def invalid_constant(token):
+        raise ValueError(f"non-standard JSON numeric constant: {token}")
+
+    return json.loads(value, object_pairs_hook=unique_object, parse_constant=invalid_constant)
+
+
 def canonical_json(value: Any) -> str:
     """Serialize JSON deterministically and reject non-finite numbers."""
     return json.dumps(
@@ -101,9 +122,9 @@ class ContractRecord:
     @classmethod
     def from_json(cls: type[_T], value: str) -> _T:
         try:
-            parsed = json.loads(value)
-        except json.JSONDecodeError as exc:
-            raise ValueError(f"invalid {cls.__name__} JSON") from exc
+            parsed = _parse_json(value)
+        except ValueError as exc:
+            raise ValueError(f"invalid {cls.__name__} JSON: {exc}") from exc
         return cls.from_dict(parsed)
 
 

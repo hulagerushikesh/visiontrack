@@ -2,14 +2,13 @@
 from __future__ import annotations
 
 import hashlib
-import json
 import math
 from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
 from ..eval.definitions import EVALUATOR, LEGACY_EVALUATOR
-from .contracts import FailureEvent, TrackObservationRecord, sha256_json
+from .contracts import FailureEvent, TrackObservationRecord, _parse_json, sha256_json
 from .evaluation_policy import preprocessing_for
 from .runner import load_experiment_bundle, resolve_variant_config
 from .storage import read_failure_jsonl, read_track_jsonl, write_comparison_summary
@@ -48,9 +47,9 @@ _FAILURE_TYPES = ("id_switch", "fragmentation", "miss", "false_positive")
 
 def _read_run_metadata(path: Path) -> dict[str, Any]:
     try:
-        metadata = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
-        raise ValueError(f"cannot read run metadata: {path}") from exc
+        metadata = _parse_json(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise ValueError(f"cannot read run metadata: {path}: {exc}") from exc
     if not isinstance(metadata, dict):
         raise ValueError(f"run metadata must be an object: {path}")
     unknown = set(metadata) - _RUN_FIELDS
@@ -144,9 +143,9 @@ def load_variant_metrics(
     if not path.exists():
         return None
     try:
-        artifact = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
-        raise ValueError(f"cannot read metric artifact: {path}") from exc
+        artifact = _parse_json(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise ValueError(f"cannot read metric artifact: {path}: {exc}") from exc
     if not isinstance(artifact, dict):
         raise ValueError("metric artifact must be an object")
     version = artifact.get("schema_version")

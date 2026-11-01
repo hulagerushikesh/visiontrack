@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import hashlib
 import io
-import json
 import re
 import shutil
 import struct
@@ -24,6 +23,7 @@ from .contracts import (
     GroundTruthRecord,
     SourceManifest,
     TrackObservationRecord,
+    _parse_json,
     canonical_json,
 )
 
@@ -411,9 +411,9 @@ def write_evidence_manifest(
         raise ValueError("source, run, and failure artifacts are required before image evidence")
     source = SourceManifest.from_json(source_path.read_text(encoding="utf-8"))
     try:
-        run_metadata = json.loads(run_metadata_path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as exc:
-        raise ValueError("run metadata is not valid JSON") from exc
+        run_metadata = _parse_json(run_metadata_path.read_text(encoding="utf-8"))
+    except ValueError as exc:
+        raise ValueError(f"run metadata is not valid JSON: {exc}") from exc
     if not isinstance(run_metadata, dict):
         raise ValueError("run metadata must be a JSON object")
     if run_metadata.get("source_id") != source.source_id:

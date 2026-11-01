@@ -4,6 +4,15 @@ VisionTrack is the NumPy reference, research platform, and learning product.
 Work here must protect readability, reproducibility, and the ability to explain
 why a tracking change helps or hurts.
 
+**Input-reader correction — 2026-11-01:** repeated JSON object fields are now
+refused throughout the unreleased Lab readers, including nested and escaped
+names. The former last-field-wins interpretation could accept two different
+scores even with matching content hashes. Shared Python/browser syntax vectors,
+otherwise valid sealed-bundle regressions and clean installed CLI checks cover
+the [correction](RELIABILITY_LAB.md#validation-rules-for-the-first-implementation).
+This closes an evidence interpretation defect; it does not close the pending
+representative-data or practitioner-usefulness gates or change tracker defaults.
+
 **Engineering checkpoint — 2026-11-01:** read-only diagnostics now
 [stream saved evidence](DIAGNOSTIC_REPLAY_SCALING.md) in the unreleased checkout.
 On a 6,000-frame synthetic probe, Python allocation peak falls from 14.0 MB to

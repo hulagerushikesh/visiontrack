@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "accepted": [
+    "{\"score\":0.9,\"nested\":{\"score\":0.05}}",
+    "[{\"id\":1},{\"id\":2}]",
+    " { \"name\" : \"score, score: NaN\", \"empty\" : {} }\n",
+    "{\"é\":1,\"e\":2,\"__proto__\":3}",
+    "{\"negative_zero\":-0.0,\"exponent\":1e-6}",
+    "{\"quote\\\"\":\"brace } and slash \\\\\",\"null\":null}"
+  ],
+  "rejected": [
+    "{\"score\":0.05,\"score\":0.9}",
+    "{\"score\":0.9,\"score\":0.9}",
+    "{\"nested\":{\"id\":1,\"id\":2}}",
+    "{\"rows\":[{\"id\":1,\"id\":2}]}",
+    "{\"score\":0.05,\"sc\\u006fre\":0.9}",
+    "{\"é\":1,\"\\u00e9\":2}",
+    "{\"quote\\\"\":1,\"quote\\u0022\":2}",
+    "{\"__proto__\":1,\"__proto__\":2}",
+    "{\"value\":NaN}",
+    "{\"value\":Infinity}",
+    "{\"nested\":[-Infinity]}",
+    "{\"score\":0.9,}",
+    "{\"score\":0.9} trailing"
+  ]
+}

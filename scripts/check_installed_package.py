@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # Executed with -I from an empty directory. This exercises the installed console
 # entry point as well as the public API, not a pytest import from src/.
 PROBE = r'''
-import hashlib, importlib.metadata, importlib.util, json, subprocess, sys
+import hashlib, importlib.metadata, importlib.util, json, shutil, subprocess, sys
 from pathlib import Path
 import visiontrack
 from visiontrack.tracking.tracker import ByteTracker
@@ -85,6 +85,23 @@ for bad_track, bad_key in ((999999, key), (1, 999999)):
     assert refused.returncode == 2 and refused.stdout == '' and refused.stderr
 command('lab-demo', out, '--with-initiation', '--write', success=False)
 assert before == snapshot(out), 'read-only diagnosis or refusal mutated output'
+# Exercise the delivered reader through both real commands, with an otherwise
+# valid run whose repeated field used to be silently collapsed by json.loads.
+ambiguous = Path.cwd() / 'ambiguous' / bundle.name
+shutil.copytree(bundle, ambiguous)
+run_file = ambiguous / 'runs' / 'bytetrack' / 'run.json'
+run_file.write_text(run_file.read_text().replace(
+    '"observation_count":', '"observation_count":null,"observation_count":', 1))
+ambiguous_before = snapshot(ambiguous)
+for args in (
+    ('lab-initiation', '--start', 0, '--end', 10),
+    ('lab-association', '--frame', 1, '--track-id', 1, '--detection-index', key),
+):
+    refused = command(args[0], ambiguous, '--variant', 'bytetrack', *args[1:],
+                      '--json', success=False)
+    assert refused.returncode == 2 and refused.stdout == ''
+    assert 'duplicate JSON object key' in refused.stderr
+assert snapshot(ambiguous) == ambiguous_before
 assert [row['public_track_ids'] for row in trace['frames'][:3]] == [[], [], [1]]
 assert len(trace['frames']) == 10
 assert trace['run_id'] == next(v for v in report['variants'] if v['name'] == 'bytetrack')['run_id']
@@ -99,7 +116,8 @@ print(json.dumps({'version': visiontrack.__version__, 'report_id': report['repor
                  'implementation_sha256': hashes, 'installed_module': str(root),
                  'guided_demo_and_readonly_replay': 'passed',
                  'association_cli_api_and_readonly_replay': 'passed',
-                 'association_invalid_selector_refusals': 2}))
+                 'association_invalid_selector_refusals': 2,
+                 'duplicate_field_cli_refusals': 2}))
 '''
 
 

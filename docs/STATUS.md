@@ -2,6 +2,15 @@
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
 
+**Unambiguous evidence reads — 2026-11-01:** the unreleased checkout refuses
+repeated decoded JSON fields instead of silently keeping the final value. This
+applies to all persisted Lab record/metadata readers, including nested fields;
+the diagnostic browser parser shares accepted/refused syntax vectors. Exact
+hashes alone cannot disambiguate two scores in one row. CLI refusal preserves
+the bundle and emits no partial JSON. Valid canonical records, tracker behavior
+and public 0.5.0 stay unchanged. See the [reader correction](RELIABILITY_LAB.md#validation-rules-for-the-first-implementation).
+The substantive traffic-data reply and practitioner-validation gates remain open.
+
 **Streaming diagnostic replay — 2026-11-01:** the unreleased checkout now
 [reads saved evidence incrementally](DIAGNOSTIC_REPLAY_SCALING.md), rather than
 materializing all detection/GT/track rows and replay outputs for one explanation.
