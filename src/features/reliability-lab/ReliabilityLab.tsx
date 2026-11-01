@@ -30,6 +30,7 @@ import EvidenceProgress from "./EvidenceProgress"
 import MetricComparison from "./MetricComparison"
 import InitiationInspector from "./InitiationInspector"
 import { GuidedDemoReader } from "./guided-demo"
+import AssociationLesson from "./AssociationLesson"
 import type { InitiationTrace } from "./initiation"
 import { explainFailure, explanationFor } from "./explanations"
 import {
@@ -849,6 +850,7 @@ export default function ReliabilityLab() {
         <aside className="mb-6 rounded-3xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-6"><p className="text-xs font-semibold uppercase tracking-wide text-primary">From our research · separate from your report</p><h2 className="mt-2 text-xl font-semibold">A visible vehicle. A missing count. Where is the gap?</h2><p className="mt-2 text-sm leading-7 text-muted-foreground">Explore five crossing marks from the rain case through detector proposals, association, track confirmation and counting. Saved numeric evidence, with plain-language explanations.</p><a href="/lab/crossings" className="mt-4 inline-block rounded-lg font-semibold text-primary underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-indigo-600">Explore the crossing diagnosis →</a></aside>
         {origin.kind !== "demo" && <LabGuide />}
         <ImportControls origin={origin} reportId={state.kind === "ready" ? state.report.report_id : undefined} onImport={importReport} onSample={loadSample} onDemo={loadDemo} loading={state.kind === "loading"} />
+        {origin.kind !== "demo" && <div className="mt-6"><AssociationLesson key={`${origin.kind}:${state.kind === "ready" ? state.report.report_id : "pending"}`} /></div>}
       </div>
       {state.kind === "loading" ? <LoadingState /> : state.kind === "ready" ? <LabReport key={`${origin.kind}:${state.report.report_id}`} report={state.report} origin={origin} /> : <ReportError state={state} />}
     </div>

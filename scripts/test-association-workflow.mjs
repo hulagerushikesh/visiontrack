@@ -122,7 +122,15 @@ print(json.dumps(out))
       outcomes.add(stage.pair.outcome)
       assert.ok(html.includes(api.outcomeLabels[stage.pair.outcome]))
     }
-    if (vector.name === "kalman") { assert.match(html, /Motion consistency/); assert.match(html, /Failed/); assert.match(html, /9.4877/); assert.match(html, /132231.4049586777/) }
+    if (vector.name === "kalman") {
+      assert.match(html, /Motion consistency/); assert.match(html, /Failed/); assert.match(html, /9.4877/); assert.match(html, /132231.4049586777/)
+      // Keep the no-install teaching records tied to fresh production replay,
+      // without rewriting their original producer/source fingerprints.
+      const asset = async name => JSON.parse(await readFile(new URL(`../src/features/reliability-lab/association-demo/${name}`, import.meta.url), "utf8"))
+      const fixedTrace = await asset("initiation-trace.json"), fixedPair = await asset("association.json")
+      assert.deepEqual(trace.frames, fixedTrace.frames)
+      for (const key of ["config", "detection", "stages", "detection_sha256", "track_sha256"]) assert.deepEqual(explanation[key], fixedPair[key], key)
+    }
     if (vector.name === "soft-recovery") assert.match(html, /recorded for the soft uncertainty cost/)
     if (vector.name === "not-offered") { assert.equal(explanation.stages.every(s => s.pair === null), true); assert.doesNotMatch(html, /Pair blocked by a gate/) }
     const frame = trace.frames[0]

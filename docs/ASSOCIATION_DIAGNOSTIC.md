@@ -30,6 +30,19 @@ to the already published 0.4.0 wheel.
 
 ## Inspect the explanation in the Lab
 
+For a no-install introduction, open `/lab` and select **Explain a match failure**.
+This optional prepared lesson checks a fixed synthetic report, timeline and
+association explanation together, then explains overlap, motion rejection and
+the resulting new tentative ID in three short steps. It uses an intentionally
+small Kalman noise scale (0.001), not the default setting. Full-precision saved
+stage results and the frame's lifecycle rows are available under an optional
+details section. There is no camera, inference, file selection or Human review
+decision. Closing or changing the selected report discards the lesson; it never
+replaces or adds evidence to that report. **Try guided demo** remains the separate
+confirmation lesson. These teaching examples do not establish real-world accuracy.
+
+For your own saved run:
+
 1. Open `/lab` and import the saved run's `report.json`.
 2. Under **Why did a detection become a track?**, import its matching
    `initiation-trace.json`. Select the frame you want to understand.
@@ -131,3 +144,11 @@ invalid records check semantic refusals independently of content hashes.
 Cancellation during reads/hashing, bounded input and rendered React controls
 are checked. These are code/static-render checks; browser interaction/visual QA
 and practitioner comprehension remain unverified after the earlier access denial.
+
+The prepared lesson also pins all three original exports and checks real
+report/trace/pair validation, damaged or mismatched records, late failures,
+restart/close cancellation through all seven hashing calls, rendered teaching
+steps and application composition. Fresh Python replay must continue to match
+its declared numeric stages and lifecycle facts. Its assets are lazy-loaded only
+on explicit selection. Code and static rendering checks are not visual or
+interaction QA.

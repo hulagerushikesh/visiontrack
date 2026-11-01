@@ -65,6 +65,12 @@ why a tracking change helps or hurts.
       frame/pair changes; test real Python exports, re-signed invalid records,
       canceled reads and rendered controls, including clean wheel/sdist delivery.
       The beginner demo stays unchanged; the export command remains checkout-only.
+- [x] Remove the setup barrier for learning association failure: a separate optional
+      three-step prepared synthetic lesson in `/lab`, using checked fixed report,
+      trace and pair records. Explain passing overlap, failed motion and a new
+      internal ID, with optional complete numeric details. Pin original exports,
+      compare their facts with fresh production replay, and cancel stale loads.
+      This delivers explanation, not a completed usability/accuracy study.
 
 For a short two-project snapshot of finished work, the current experiment's
 eight milestone groups and remaining gates, see [Progress overview](PROGRESS_OVERVIEW.md).

@@ -2,6 +2,19 @@
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
 
+**No-install match-failure lesson — 2026-11-01:** `/lab` now has an optional
+**Explain a match failure** lesson, separate from the selected report and beginner
+confirmation demo. Original synthetic Python exports are loaded on explicit
+selection and checked as one report/trace/explanation triple before display.
+Three steps show passing box overlap, a deliberately strict motion-gate rejection
+and deleted/tentative internal IDs without public boxes. Complete saved numbers
+and lifecycle rows remain optional. Closing, restarting, report changes and
+unmounting cancel/discard the old lesson. Fixed byte checks, all seven in-flight
+hash boundaries, invalid inputs, static React composition and fresh Python
+numeric/lifecycle replay are covered. No tracker/default/C++ or public package
+version change. Visual/browser QA, practitioner comprehension and independent
+representative traffic labels remain open.
+
 **Lab pair explanation — 2026-11-01:** checked local initiation traces now offer
 an optional selected-pair panel. It imports the separate association explanation,
 ties it to the active report/run/frame/track/detection and displays the actual

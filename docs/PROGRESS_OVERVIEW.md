@@ -6,6 +6,17 @@ Snapshot: **2026-11-01**. This is a summary of the canonical
 Completed implementation is not the same as validated research or product demand.
 This document does not claim the latest local work is already pushed or deployed.
 
+**Latest product step (2026-11-01):** an optional **Explain a match failure**
+lesson in `/lab` now opens a checked, fixed synthetic report/trace/pair triple
+without installation or files. It explains how overlap can pass while the motion
+gate fails, leading to a new internal tentative ID rather than a verified new
+person. Complete numeric details remain optional; the normal report selection
+and beginner confirmation lesson stay separate. Fixed exports, canceled loads,
+invalid records, rendered components and matching fresh production replay are
+checked. This reduces the explanation/setup burden; it does not complete
+practitioner usability or representative traffic validation. There is still no
+accepted accuracy change to port to C++.
+
 **Selected-pair engineering checkpoint (2026-11-01):** the unreleased
 [`lab-association` diagnostic](ASSOCIATION_DIAGNOSTIC.md) closes the initiation
 trace's gate/assignment blind spot. For one original detection key and existing
@@ -392,8 +403,9 @@ offers the same fixed released numeric example directly in the Lab: no Python,
 terminal or files. Both artifacts pass the existing readers before display;
 frames 0–2 explain confirmation, and decision drafting stays disabled in demo
 mode. Invalid pairs and interrupted loads are tested. This closes an onboarding
-barrier, not the usability gate. Next: use this released
-walkthrough to assess comprehension and useful next engineering work. Practitioner
+barrier, not the usability gate. The separate prepared association lesson now
+explains one gate failure without an export/setup step. Next: assess whether
+these short lessons make a concrete saved diagnosis understandable. Practitioner
 feedback and browser interaction QA remain open; no new recording, source hunt
 or outreach is required.
 

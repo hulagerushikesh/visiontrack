@@ -190,6 +190,12 @@ then read the tied comparison. No terminal, files, camera or research decision
 is needed. This reads saved numeric states; it does not run inference or
 establish real-world accuracy. The shortcut requires its website deployment.
 
+For the next concept, select **Explain a match failure** in the Lab. This
+separate, optional three-step synthetic lesson shows passing overlap, failed
+motion consistency and a new tentative ID, using original checked Python
+records. It uses a deliberately strict noise setting, needs no setup and does
+not replace your selected report. Full saved numbers remain optional.
+
 The private, client-side Reliability Lab at `/lab` can inspect an explicitly
 selected `decision.json`. It verifies the decision fingerprint and full report
 lineage in browser memory, then displays the audit record without editing it.

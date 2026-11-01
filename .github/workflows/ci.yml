@@ -118,6 +118,8 @@ jobs:
         run: npm run test:lab-guide
       - name: Verify bundled guided demo and canceled selections
         run: npm run test:guided-demo
+      - name: Verify prepared association lesson and canceled selections
+        run: npm run test:association-demo
       - name: Verify crossing diagnosis observations and explanations
         run: npm run test:crossing-diagnosis
       - uses: actions/setup-python@v7
