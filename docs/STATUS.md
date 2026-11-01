@@ -42,6 +42,16 @@ fingerprint. Next: validate comprehension/usefulness of this released workflow. 
 acceptance remains a separate data/label gate. Defaults and C++ stay unchanged.
 The checkpoints below retain their historical scope.
 
+**C++ compatibility — 2026-11-01:** published C++ 0.1.1 and Python 0.4.0
+pass all twelve Linux/macOS ARM64/Windows, CPython 3.10–3.13 wheel jobs with
+NumPy 2.2.6. Each job passes 268 tests and reports ten unavailable-cache skips;
+the clean local macOS check passes all 278 tests and matches 35,387 MOT17
+observations exactly. The
+[prospective record](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/compatibility/prospective_oracle_0.4.0_evidence.json)
+joins exact revisions, release/normal CI, source identity and receipts. This
+verifies compatible existing behavior; the accepted C++ release oracle remains
+0.3.0, with no runtime port, new C++ release or accuracy claim.
+
 **Current checkpoint — 2026-10-26:** the owner delegated technical review because
 no separate reviewer is available. The [AI-assisted exploratory case note](MOT17_AI_REVIEW_DECISION.md)
 records a bounded reinspection and no-change recommendation. Independent

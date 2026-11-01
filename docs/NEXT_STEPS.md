@@ -41,6 +41,11 @@ why a tracking change helps or hurts.
       PyPI core/Lab installation. See the [publication audit](RELEASE_READINESS.md).
 - [x] Use the released package in the Lab/README/five-minute demonstration;
       preserve historical exports and record the fresh 0.4.0 report fingerprint.
+- [x] Verify published C++ 0.1.1 against the public Python 0.4.0 reference:
+      all twelve OS/Python wheel jobs pass with NumPy 2.2.6, plus 35,387 exact
+      cached observations locally. Retain the
+      [prospective synchronization evidence](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/compatibility/prospective_oracle_0.4.0_evidence.json);
+      keep the historical release oracle and tracker defaults unchanged.
 - [ ] Separate research gate: representative permitted traffic event/negative
       labels before accepting a detector+tracker change or proposing a C++ port.
 

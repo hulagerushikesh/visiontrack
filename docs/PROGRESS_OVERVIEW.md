@@ -310,6 +310,16 @@ that does not change the release's Eigen 3.4.0 pin.
 C++ is therefore in **maintenance**, not an unfinished duplicate of this study.
 Ongoing work is deliberate toolchain testing and protection of existing parity.
 
+On **2026-11-01**, published C++ 0.1.1 also passed prospective compatibility
+with published Python 0.4.0 on all twelve OS/Python combinations, NumPy 2.2.6:
+268 tests passed per job, with ten absent-cache skips. Local macOS verification
+passed all 278 tests and matched 35,387 real-sequence observations exactly.
+The [joined evidence](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/compatibility/prospective_oracle_0.4.0_evidence.json)
+records the exact released Python revision, C++ verification revision, CI,
+fixture, source identities and receipts. The tracking sources are unchanged
+from 0.3.0, so this needs no new C++ implementation or binary release. The
+accepted 0.1.1 release oracle remains 0.3.0; 0.4.0 is checked separately.
+
 The [2026-10-25 C++ parity-tool maintenance](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/PARITY_GUARDS.md)
 now checks output classes and signed-zero bits and fails when requested tests
 fail. In a clean environment the published 0.1.1 wheel matches this reference
