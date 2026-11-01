@@ -122,6 +122,12 @@ row limit still applies to that frame. Replay cost is **not** bounded to one
 frame: full saved-run replay and its input/output memory are still required.
 No footage, detector, network input, camera or external model is accessed.
 
+The **unreleased checkout** now [streams diagnostic replay](DIAGNOSTIC_REPLAY_SCALING.md)
+instead of retaining all saved input/output rows. Public 0.5.0 retains the memory
+behavior above. The new path preserves full-run history and exact output checks;
+it also rechecks evidence files before return. Active-track histories still
+grow, so this is not a constant-memory tracker or a speed/accuracy claim.
+
 The explanation carries run/input/output fingerprints, settings and executing
 source hashes. These are reproducibility records, not publisher authentication.
 Run-local track IDs do not identify people. No accuracy, accepted tracker fix,

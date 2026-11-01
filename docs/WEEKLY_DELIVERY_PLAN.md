@@ -30,6 +30,14 @@ not supply the missing representative, independently checked traffic benchmark.
 The latest delivered lesson passed 18 local checks and all seven hosted CI jobs;
 those are engineering checks, not a substitute for that research evidence.
 
+**Additional engineering capacity checkpoint:** unreleased
+[streaming diagnostics](DIAGNOSTIC_REPLAY_SCALING.md) remove full-file input and
+output lists while retaining full replay and changed-evidence checks. A fixed
+6,000-frame synthetic probe uses about 79% less peak Python-traced memory than
+public 0.5.0, with matching explanation content. Active-track histories remain
+a growth limit. This supports longer saved runs; it does not close the main
+traffic comparison or usability outcome below.
+
 ### Wins, setbacks and what changes
 
 - **Win:** users can now try a small explanation without installing Python or

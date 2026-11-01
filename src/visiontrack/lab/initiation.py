@@ -15,14 +15,15 @@ import numpy as np
 
 from .. import __version__
 from ..tracking.tracker import ByteTracker
-from .comparison import load_variant_result
+from .comparison import _load_variant_metadata
 from .contracts import TrackObservationRecord, sha256_json
-from .runner import (
-    _as_detections,
-    _group_detections,
-    load_experiment_bundle,
-    resolve_variant_config,
+from .replay import (
+    _file_sha256,
+    _iter_replay_frames,
+    _verify_replay_files,
+    _verify_replay_records,
 )
+from .runner import _as_detections, _load_experiment_manifests, resolve_variant_config
 from .storage import serialize_track_jsonl
 
 MAX_TRACE_FRAMES = 200
@@ -162,7 +163,9 @@ def _replay_initiation(
             or not 0 <= start < end or end - start > MAX_TRACE_FRAMES):
         raise ValueError(f"require an integer trace window of 1–{MAX_TRACE_FRAMES} frames")
     path = Path(bundle)
-    experiment, source, records = load_experiment_bundle(path)
+    # Capture the manifests before parsing; check again before emitting anything.
+    unchanged = {p: _file_sha256(p) for p in (path / "manifest.json", path / "source.json")}
+    experiment, source = _load_experiment_manifests(path)
     declared = next((item for item in experiment.variants if item["name"] == variant), None)
     if declared is None:
         raise ValueError("variant is not declared in this experiment")
@@ -170,40 +173,53 @@ def _replay_initiation(
     if not run_start <= start < end <= run_end:
         raise ValueError("trace window must be inside the experiment frame_range")
     config = resolve_variant_config(declared)
-    metadata, _ = load_variant_result(
+    run_path = path / "runs" / declared["name"]
+    unchanged[run_path / "run.json"] = _file_sha256(run_path / "run.json")
+    metadata = _load_variant_metadata(
         path, declared, experiment_id=experiment.experiment_id, source_id=source.source_id,
         detection_sha256=source.detection_sha256, frame_range=experiment.frame_range,
-        frame_count=source.frame_count,
     )
+    unchanged[path / "inputs" / "detections.jsonl"] = source.detection_sha256
+    unchanged[run_path / "tracks.jsonl"] = metadata["track_sha256"]
+    if source.ground_truth_sha256 is not None:
+        unchanged[path / "inputs" / "ground_truth.jsonl"] = source.ground_truth_sha256
+    _verify_replay_files(unchanged)
+    _verify_replay_records(path, source, metadata)
     implementation = _implementation_hashes()
     observer = observer_type(
         config, offset=run_start, start=start, end=end, **(observer_options or {}),
     )
-    frames = _group_detections(records, start=run_start, end=run_end)
-    observations = []
+    frames = _iter_replay_frames(path, source, start=run_start, end=run_end)
+    output_digest = hashlib.sha256()
     for offset, frame_records in enumerate(frames):
         observer._detection_keys = tuple(record.detection_index for record in frame_records)
-        for observation in observer.update(_as_detections(frame_records)):
-            observations.append(TrackObservationRecord(
+        observations = [
+            TrackObservationRecord(
                 frame_index=run_start + offset, track_id=int(observation.track_id),
                 xyxy=tuple(float(value) for value in observation.xyxy),
                 score=float(observation.score), class_id=int(observation.class_id),
-            ))
-    digest = hashlib.sha256(serialize_track_jsonl(
-        observations, frame_count=source.frame_count,
-    )).hexdigest()
+            ) for observation in observer.update(_as_detections(frame_records))
+        ]
+        # Canonical ordering is (frame, track ID). Sorting/hashing one frame at
+        # a time is byte-identical to serializing the complete run at once.
+        output_digest.update(serialize_track_jsonl(observations, frame_count=source.frame_count))
+        if start <= run_start + offset < end:
+            row = observer.frames[-1]
+            for detection in row["detections"]:
+                detection["detection_index"] = frame_records[
+                    detection.pop("input_offset")
+                ].detection_index
+            for track in row["tracks"]:
+                index = track.pop("input_offset")
+                track["detection_index"] = (
+                    None if index is None else frame_records[index].detection_index
+                )
+    digest = output_digest.hexdigest()
     if digest != metadata["track_sha256"]:
         raise ValueError("diagnostic replay differs from saved public output; no trace emitted")
     if implementation != _implementation_hashes():
         raise ValueError("implementation changed during diagnostic replay")
-    # Use stable input keys rather than ambiguous detection positions in the export.
-    for row in observer.frames:
-        selected = frames[row["frame_index"] - run_start]
-        for detection in row["detections"]:
-            detection["detection_index"] = selected[detection.pop("input_offset")].detection_index
-        for track in row["tracks"]:
-            index = track.pop("input_offset")
-            track["detection_index"] = None if index is None else selected[index].detection_index
+    _verify_replay_files(unchanged)
     result = {
         "schema": "visiontrack.initiation-trace/v1",
         "experiment_id": experiment.experiment_id, "source_id": source.source_id,

@@ -41,10 +41,10 @@ def _read_manifest(path: Path, record_type):
         raise ValueError(f"cannot read bundle manifest: {path}") from exc
 
 
-def load_experiment_bundle(
+def _load_experiment_manifests(
     bundle: str | Path,
-) -> tuple[ExperimentManifest, SourceManifest, tuple[DetectionRecord, ...]]:
-    """Load and verify the immutable evidence needed by every variant."""
+) -> tuple[ExperimentManifest, SourceManifest]:
+    """Shared manifest/lineage validation for materialized and streaming reads."""
     bundle_path = Path(bundle)
     experiment = _read_manifest(bundle_path / "manifest.json", ExperimentManifest)
     source = _read_manifest(bundle_path / "source.json", SourceManifest)
@@ -54,6 +54,15 @@ def load_experiment_bundle(
         raise ValueError("experiment source_id does not match source manifest")
     if experiment.frame_range["end"] > source.frame_count:
         raise ValueError("experiment frame_range exceeds source frame_count")
+    return experiment, source
+
+
+def load_experiment_bundle(
+    bundle: str | Path,
+) -> tuple[ExperimentManifest, SourceManifest, tuple[DetectionRecord, ...]]:
+    """Load and verify the immutable evidence needed by every variant."""
+    bundle_path = Path(bundle)
+    experiment, source = _load_experiment_manifests(bundle_path)
 
     detection_path = bundle_path / "inputs" / "detections.jsonl"
     try:

@@ -89,6 +89,8 @@ annotation terms. Its listed first contact is the Research Data Service. One
 owner-approved written request has been sent for asset terms, label coverage,
 interpolation, a development/evaluation split and archive/version integrity.
 The sent-message receipt stays owner-local. No automatic follow-up is authorized.
+The owner reports an automated receipt acknowledgement; no substantive rights,
+version or annotation answer is established by that acknowledgement.
 
 Two additional questions came from pinned primary code/documentation, not data:
 

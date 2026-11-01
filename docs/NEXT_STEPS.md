@@ -4,6 +4,22 @@ VisionTrack is the NumPy reference, research platform, and learning product.
 Work here must protect readability, reproducibility, and the ability to explain
 why a tracking change helps or hurts.
 
+**Engineering checkpoint — 2026-11-01:** read-only diagnostics now
+[stream saved evidence](DIAGNOSTIC_REPLAY_SCALING.md) in the unreleased checkout.
+On a 6,000-frame synthetic probe, Python allocation peak falls from 14.0 MB to
+2.9 MB with matching diagnostic content. Full replay/parity and changed-file
+refusal remain required. Active-track history is still unbounded; no tracker
+change, new PyPI release, C++ port or research-accuracy gain is implied.
+
+- [x] Remove complete JSONL lists and full-run output accumulation from both
+      diagnostic producers; preserve sparse keys, source ranges and empty frames.
+- [x] Validate every source row and saved track count/range, hash consumed bytes
+      and recheck all evidence before return; reject changed/corrupt input.
+- [x] Compare with isolated public 0.5.0, retain exact semantic agreement and
+      memory receipts, and add normal-CI memory/late-corruption regressions.
+- [ ] Close the separate real-traffic and practitioner gates below. An automated
+      receipt of the dataset email is not a rights or label-quality answer.
+
 **Current delivery — 2026-11-01:** the Lab crossing diagnosis and its
 [bounded threshold follow-up](INITIATION_THRESHOLD_FINDINGS.md) are complete.
 

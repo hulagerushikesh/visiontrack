@@ -2,13 +2,14 @@
 from __future__ import annotations
 
 import hashlib
+import io
 import json
 import re
 import shutil
 import struct
 import tempfile
 import zlib
-from collections.abc import Callable, Iterable, Mapping
+from collections.abc import Callable, Iterable, Iterator, Mapping
 from pathlib import Path
 from typing import Any, TypeVar
 
@@ -28,6 +29,22 @@ from .contracts import (
 
 _R = TypeVar("_R", bound=ContractRecord)
 _RUN_NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
+
+
+class _HashingReader(io.RawIOBase):
+    """Hash raw bytes beneath text newline/UTF-8 decoding, in bounded blocks."""
+
+    def __init__(self, stream, digest):
+        self.stream, self.digest = stream, digest
+
+    def readable(self):
+        return True
+
+    def readinto(self, buffer):
+        count = self.stream.readinto(buffer)
+        if count:
+            self.digest.update(memoryview(buffer)[:count])
+        return count
 
 
 def _sha256(payload: bytes) -> str:
@@ -188,37 +205,55 @@ def write_failure_jsonl(
     return _write_immutable(Path(path), payload)
 
 
-def _read_jsonl(
+def _iter_jsonl(
     path: str | Path,
     *,
     record_type: type[_R],
     key: Callable[[_R], tuple[Any, ...]],
     label: str,
     frame_count: int | None,
-) -> list[_R]:
-    records: list[_R] = []
+    expected_sha256: str | None = None,
+) -> Iterator[_R]:
+    """Validate ordered rows without retaining the file; exhaust to verify SHA.
+
+    Hash the exact bytes being parsed, including line endings and the final
+    newline. Consumers must not treat a prefix as a verified payload.
+    """
     previous: tuple[Any, ...] | None = None
-    text = Path(path).read_text(encoding="utf-8")
-    for line_number, line in enumerate(text.splitlines(), start=1):
-        if not line.strip():
-            raise ValueError(f"blank line in {label} JSONL at line {line_number}")
-        try:
-            record = record_type.from_json(line)
-        except ValueError as exc:
-            raise ValueError(
-                f"invalid {label} JSONL record at line {line_number}: {exc}"
-            ) from exc
-        record_key = key(record)
-        if previous is not None and record_key <= previous:
-            reason = "duplicate" if record_key == previous else "out-of-order"
-            raise ValueError(f"{reason} {label} key at line {line_number}: {record_key}")
-        if frame_count is not None and record_key[0] >= frame_count:
-            raise ValueError(
-                f"{label} frame_index {record_key[0]} is outside frame_count {frame_count}"
-            )
-        records.append(record)
-        previous = record_key
-    return records
+    digest = hashlib.sha256()
+    line_number = 0
+    with Path(path).open("rb") as raw, io.TextIOWrapper(
+        io.BufferedReader(_HashingReader(raw, digest)), encoding="utf-8",
+    ) as stream:
+        for text_line in stream:
+            # Match the existing reader's splitlines semantics, including CRLF,
+            # a final row without a newline, and rejection of internal blanks.
+            for line in text_line.splitlines():
+                line_number += 1
+                if not line.strip():
+                    raise ValueError(f"blank line in {label} JSONL at line {line_number}")
+                try:
+                    record = record_type.from_json(line)
+                except (TypeError, ValueError) as exc:
+                    raise ValueError(
+                        f"invalid {label} JSONL record at line {line_number}: {exc}"
+                    ) from exc
+                record_key = key(record)
+                if previous is not None and record_key <= previous:
+                    reason = "duplicate" if record_key == previous else "out-of-order"
+                    raise ValueError(f"{reason} {label} key at line {line_number}: {record_key}")
+                if frame_count is not None and record_key[0] >= frame_count:
+                    raise ValueError(
+                        f"{label} frame_index {record_key[0]} is outside frame_count {frame_count}"
+                    )
+                previous = record_key
+                yield record
+    if expected_sha256 is not None and digest.hexdigest() != expected_sha256:
+        raise ValueError(f"{label} payload SHA-256 does not match verified evidence")
+
+
+def _read_jsonl(path: str | Path, **kwargs) -> list[_R]:
+    return list(_iter_jsonl(path, **kwargs))
 
 
 def read_detection_jsonl(

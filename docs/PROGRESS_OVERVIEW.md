@@ -6,6 +6,14 @@ Snapshot: **2026-11-01**. This is a summary of the canonical
 Completed implementation is not the same as validated research or product demand.
 This document does not claim the latest local work is already pushed or deployed.
 
+**Longer-run diagnostics (2026-11-01):** the unreleased checkout now
+[streams evidence and replay output hashes](DIAGNOSTIC_REPLAY_SCALING.md).
+A 6,000-frame synthetic probe drops peak Python allocation from 14.0 MB to 2.9 MB
+while preserving explanation content against public 0.5.0. Corrupt/changed files
+refuse the result; complete warm-up and replay are retained. Active-track
+histories and ordinary comparison/evaluation memory remain separate limits.
+No representative traffic result or C++ behavior change follows.
+
 **Weekly close (2026-11-01):** the [current weekly checklist](WEEKLY_DELIVERY_PLAN.md)
 separates six delivered engineering/research packages from the unfinished traffic
 validation and practitioner-usefulness gates. Next week's main goal is one

@@ -7,11 +7,11 @@ It does not change the tracker or recommend a new configuration.
 
 ## Try it without a camera or dataset
 
-Install the published 0.4.0 Lab tools and create one synthetic demonstration.
+Install the published 0.5.0 Lab tools and create one synthetic demonstration.
 No repository checkout is required. Use a new output folder name if you repeat it:
 
 ```bash
-python -m pip install --upgrade "visiontrack-mot[lab]==0.4.0"
+python -m pip install --upgrade "visiontrack-mot[lab]==0.5.0"
 visiontrack lab-demo ./lab-initiation-demo --with-initiation --write
 ```
 
@@ -42,7 +42,7 @@ nothing. You do not need to import anything into the website or make a human
 acceptance decision to use it. Both commands are included in published 0.4.0.
 A completed local bundle using your
 own detection records works the same way; choose a variant declared in that
-bundle's manifest.
+bundle's manifest. The commands were introduced in 0.4.0 and remain in 0.5.0.
 
 ## Read the stages
 
@@ -108,6 +108,11 @@ second matcher. Bounds are 1–200 selected frames and at most 20,000 combined
 detection/track rows. They bound the retained trace, not full-run replay time.
 Choose a smaller window if a crowded trace exceeds the row limit.
 
+In the **unreleased checkout**, [streaming replay](DIAGNOSTIC_REPLAY_SCALING.md)
+removes full-file detection/reference/observation lists and hashes public output
+one frame at a time. Complete replay and changed-evidence refusal are retained.
+Active-track histories still grow; public 0.5.0 keeps the earlier memory behavior.
+
 Existing manifests, tracks, metrics, reports and decisions remain unchanged.
 Historical report imports require no migration. No optional trace is created
 by ordinary tracking or Lab comparison execution.
@@ -159,9 +164,9 @@ component rendering, contracts, type checks and the production build are checked
   correctly. False proposals can also confirm.
 - An unmatched proposal does not establish whether an IoU, class, Kalman gate
   or competing assignment caused rejection. Pair-level gate explanations are
-  not part of this v1 trace. The separate, unreleased
-  [association diagnostic](ASSOCIATION_DIAGNOSTIC.md) can inspect one selected
-  pair from a saved run using the current source checkout.
+  not part of this v1 trace. The separate
+  [association diagnostic](ASSOCIATION_DIAGNOSTIC.md), published in 0.5.0, can
+  inspect one selected pair from a saved run.
 - IDs are local to one run. Internal survival, public boxes and physical
   identity are different things.
 - This metadata-only command does not open footage or run a detector. It

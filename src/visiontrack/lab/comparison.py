@@ -70,7 +70,7 @@ def _read_run_metadata(path: Path) -> dict[str, Any]:
     return metadata
 
 
-def load_variant_result(
+def _load_variant_metadata(
     bundle: Path,
     variant: dict[str, Any],
     *,
@@ -78,8 +78,7 @@ def load_variant_result(
     source_id: str,
     detection_sha256: str,
     frame_range: dict[str, int],
-    frame_count: int,
-) -> tuple[dict[str, Any], tuple[TrackObservationRecord, ...]]:
+) -> dict[str, Any]:
     name = variant["name"]
     run_path = bundle / "runs" / name
     metadata = _read_run_metadata(run_path / "run.json")
@@ -96,6 +95,25 @@ def load_variant_result(
     for field, value in expected.items():
         if metadata[field] != value:
             raise ValueError(f"run metadata {field} does not match experiment evidence")
+    return metadata
+
+
+def load_variant_result(
+    bundle: Path,
+    variant: dict[str, Any],
+    *,
+    experiment_id: str,
+    source_id: str,
+    detection_sha256: str,
+    frame_range: dict[str, int],
+    frame_count: int,
+) -> tuple[dict[str, Any], tuple[TrackObservationRecord, ...]]:
+    metadata = _load_variant_metadata(
+        bundle, variant, experiment_id=experiment_id, source_id=source_id,
+        detection_sha256=detection_sha256, frame_range=frame_range,
+    )
+    name = variant["name"]
+    run_path = bundle / "runs" / name
 
     track_path = run_path / "tracks.jsonl"
     try:

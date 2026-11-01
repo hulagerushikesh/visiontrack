@@ -2,6 +2,16 @@
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
 
+**Streaming diagnostic replay — 2026-11-01:** the unreleased checkout now
+[reads saved evidence incrementally](DIAGNOSTIC_REPLAY_SCALING.md), rather than
+materializing all detection/GT/track rows and replay outputs for one explanation.
+The 6,000-frame synthetic comparison with public 0.5.0 lowers peak Python-traced
+allocation from about 14.0 MB to 2.9 MB, retaining every non-producer diagnostic
+field exactly. Complete run replay, byte parity, source-tail validation and
+changed-evidence refusal remain required. Active-track history still grows;
+ordinary comparison/evaluation and the published package are unchanged.
+This is an engineering capacity improvement, not a traffic-accuracy finding.
+
 **Published diagnosis tools — 2026-11-01:** [0.5.0 is released](RELEASE_NOTES_0.5.0.md)
 from `324c913`. The actual tag passed exact-commit CI and the publishing guard;
 public wheel/source bytes match the workflow files and clean-install receipt.
