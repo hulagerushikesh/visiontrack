@@ -278,7 +278,7 @@ portable report must still work without that video.
    tokens; these are not standard JSON numbers. Ordinary whitespace, field order
    and the same name in separate objects remain valid.
 
-**Reader correction — 2026-11-01 (unreleased checkout):** Python previously
+**Reader correction — implemented 2026-11-01, released in 0.5.1 on 2026-11-02:** Python previously
 silently used the last repeated field: a detector row containing
 `"score":0.05,"score":0.9` became score 0.9. A matching raw-file hash or
 content-derived identifier cannot resolve that ambiguous input. All persisted
@@ -292,7 +292,8 @@ both CLI refusals too. Canonical bytes and identifiers for valid records,
 tracker arithmetic/defaults and historical lesson exports are unchanged.
 Executing diagnostic producer-source hashes and their dependent IDs legitimately
 change. This is an input-reader correction, not a new tracking method, accuracy
-result or update to the already published 0.5.0 package.
+result. It is delivered by [0.5.1](RELEASE_NOTES_0.5.1.md); historical 0.5.0
+artifacts remain unchanged.
 
 ## First implementation increment — complete
 

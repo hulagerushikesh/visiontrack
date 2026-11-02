@@ -171,7 +171,7 @@ replays an existing local Lab run and requires its public output to match the
 saved output exactly. It writes nothing; `--json` emits a separate numeric trace.
 See the [short diagnostic walkthrough](docs/INITIATION_DIAGNOSTIC.md). This command
 was introduced in 0.4.0. Install the current released Lab tools with
-`python -m pip install --upgrade "visiontrack-mot[lab]==0.5.0"`.
+`python -m pip install --upgrade "visiontrack-mot[lab]==0.5.1"`.
 
 **Added after 0.4.0:** `lab-association` (0.5.0 or a current source checkout)
 explains one selected track/detection pair's actual gates and solver outcome,
@@ -179,7 +179,7 @@ after an exact saved-output replay check. It distinguishes unoffered inputs,
 gate rejection and eligible-but-unselected pairs. See the
 [association diagnostic](docs/ASSOCIATION_DIAGNOSTIC.md) for setup and selectors.
 Public 0.4.0 installations do not include this command. Check the
-[0.5.0 delivery status and migration](docs/RELEASE_NOTES_0.5.0.md) before choosing
+[0.5.1 patch delivery and compatibility](docs/RELEASE_NOTES_0.5.1.md) before choosing
 an installation route.
 The Lab's local initiation timeline can now import that explanation for the
 selected frame/pair and show actual gate values, cost limits and returned
@@ -226,7 +226,7 @@ fixed synthetic comparison without writing, then `--write` creates a complete
 verified bundle and prints the `report.json` path to import at `/lab`. The
 output root must be new and is never reused or overwritten.
 
-With `visiontrack-mot[lab]==0.5.0` installed, add `--with-initiation` to prepare
+With `visiontrack-mot[lab]==0.5.1` installed, add `--with-initiation` to prepare
 `try-in-browser/report.json`, `initiation-trace.json` and `START_HERE.txt` together
 beside the unchanged complete bundle. Import the report, follow **Inspect track
 initiation**, then import that folder's trace to compare frames 0–2. No camera or

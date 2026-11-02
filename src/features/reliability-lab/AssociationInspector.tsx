@@ -49,8 +49,8 @@ function AssociationImport({ report, trace, selection }: { report: ReliabilityRe
     if (result) setState(result)
   }
   return <div className="mt-5">
-    <p className="text-sm leading-6 text-muted-foreground">Using VisionTrack 0.5.0, export this exact pair from the original bundle. Save to a new file outside the sealed bundle, then select that file below.</p>
-    <p className="mt-3 text-xs leading-6 text-muted-foreground">Need the released tools? In your terminal, run <code>python -m pip install --upgrade "visiontrack-mot[lab]==0.5.0"</code>. A website update does not upgrade an older local installation.</p>
+    <p className="text-sm leading-6 text-muted-foreground">Using VisionTrack 0.5.1, export this exact pair from the original bundle. Save to a new file outside the sealed bundle, then select that file below.</p>
+    <p className="mt-3 text-xs leading-6 text-muted-foreground">Need the released tools? In your terminal, run <code>python -m pip install --upgrade "visiontrack-mot[lab]==0.5.1"</code>. A website update does not upgrade an older local installation.</p>
     <pre className="mt-3 overflow-x-auto rounded-xl bg-slate-950 p-4 text-xs leading-6 text-slate-100"><code>{associationCommand(trace.variant, selection)}</code></pre>
     <p className="mt-3 text-xs leading-6 text-muted-foreground">Replace BUNDLE_PATH with your local saved experiment folder. The command replays the full saved run read-only; it does not use a camera or footage.</p>
     <div className="mt-4 flex flex-wrap gap-3"><label className={`${control} cursor-pointer focus-within:ring-2 focus-within:ring-indigo-600`}>Import association explanation<input className="sr-only" type="file" accept="application/json,.json" onChange={select} /></label>{state.kind !== "idle" && <button type="button" className={control} onClick={() => { reader.current.cancel(); setState({ kind: "idle" }) }}>Clear explanation</button>}</div>

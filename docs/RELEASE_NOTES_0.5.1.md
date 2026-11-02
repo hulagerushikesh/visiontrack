@@ -1,12 +1,15 @@
-# VisionTrack 0.5.1 patch candidate
+# VisionTrack 0.5.1 patch release
 
 Scope status: **frozen on 2026-11-02**
 
-Release status: **candidate; not published**
+Release status: **published on 2026-11-02**
 
-This candidate packages two already verified checkout corrections since public
-0.5.0. It adds no tracker feature or diagnostic command. Public 0.5.0 files and
-tags remain unchanged; preparing this candidate does not authorize publication.
+This release packages two verified corrections since public 0.5.0. It adds no
+tracker feature or diagnostic command. With explicit owner approval, `v0.5.1`
+was published from `4a6b89254ea739afb10c8dd0a17f4f328f032abf`. Public 0.5.0
+files and tags remain unchanged.
+
+Install with `python -m pip install --upgrade "visiontrack-mot[lab]==0.5.1"`.
 
 ## What changes
 
@@ -14,10 +17,10 @@ tags remain unchanged; preparing this candidate does not authorize publication.
 | --- | --- | --- |
 | Persisted Lab JSON readers | Reject repeated object fields, including nested and escaped spellings, and nonstandard nonfinite constants | An evidence file cannot silently choose the last of two conflicting scores or metadata values |
 | Read-only initiation and association replay | Stream saved JSONL inputs and hash complete replay output incrementally | Avoid retaining whole-recording input/output lists just to explain a selected frame |
-| Current producer metadata | Project/import version 0.5.1 and a separate hand-built benchmark contract fixture | Fresh exports identify the executing candidate; historical evidence keeps its original identity |
+| Current producer metadata | Project/import version 0.5.1 and a separate hand-built benchmark contract fixture | Fresh exports identify the executing release; historical evidence keeps its original identity |
 
 An otherwise valid, rehashed file containing repeated fields can be accepted
-by public 0.5.0 with the last value winning. This candidate refuses it. Correct
+by public 0.5.0 with the last value winning. This release refuses it. Correct
 bundles do not need migration. If a file is refused, resolve its ambiguity from
 the original evidence rather than delete one value arbitrarily or rewrite hashes
 to force acceptance. This is an input interpretation correction, not a blanket
@@ -46,8 +49,8 @@ and [streaming measurements and limits](DIAGNOSTIC_REPLAY_SCALING.md).
   recording length. Comparison/evaluation and browser import limits are unchanged.
 - C++ 0.1.1 and its accepted Python oracle are unchanged. The verified public
   Python 0.5.0 pairing does not automatically establish a published 0.5.1 pairing.
-- Website instructions continue to name released 0.5.0 until a separately
-  authorized publication. Package preparation is not deployment or browser QA.
+- Website setup instructions now name released 0.5.1. Package publication is
+  separate from website deployment and browser interaction QA.
 - Representative permitted traffic data, independently checked labels and
   practitioner usefulness remain open research gates. No accuracy gain is claimed.
 
@@ -63,11 +66,11 @@ and [streaming measurements and limits](DIAGNOSTIC_REPLAY_SCALING.md).
       Python-to-TypeScript diagnostic import workflows.
 - [x] Pass all seven hosted CI jobs at the exact candidate commit, then exercise
       the matching-tag release guard read-only without creating a tag.
-- [ ] Obtain separate publication approval for the verified commit; only then
-      tag/publish and verify public artifact bytes and a fresh public installation.
+- [x] Obtain separate publication approval for the verified commit; publish
+      the matching tag and verify public artifacts and a fresh public installation.
 
-Until the last gate is complete, use the checkout for these corrections. Do not
-try to install 0.5.1 from PyPI or interpret this candidate as a released package.
+The candidate gates are complete. Historical verification below describes the
+pre-publication checks; the public receipt records the actual tag and files.
 
 ## Local candidate receipt — 2026-11-02
 
@@ -111,3 +114,33 @@ including Python 3.10–3.12, isolated wheel/source delivery and actual web work
 The read-only guard accepts that SHA in a simulated `v0.5.1` tag context and
 records `publication_performed: false`; no tag was created. If a later commit
 is chosen for publication, its own exact-commit CI and guard must pass too.
+
+## Public verification — 2026-11-02
+
+The approved tag points to `4a6b89254ea739afb10c8dd0a17f4f328f032abf`.
+All seven exact-head CI jobs passed in
+[run 41355876067](https://github.com/hulagerushikesh/visiontrack/actions/runs/41355876067).
+Both build and publication jobs passed in
+[release run 41384120228](https://github.com/hulagerushikesh/visiontrack/actions/runs/41384120228).
+[PyPI 0.5.1](https://pypi.org/project/visiontrack-mot/0.5.1/) and the
+[GitHub release](https://github.com/hulagerushikesh/visiontrack/releases/tag/v0.5.1)
+are public.
+
+| Public artifact | SHA-256 |
+| --- | --- |
+| `visiontrack_mot-0.5.1-py3-none-any.whl` | `ea615c1cb8e9980a9f5f9329c6a5a9b424f593afbc024c6f51aa36c6ce872ae2` |
+| `visiontrack_mot-0.5.1.tar.gz` | `825f7ff889faafb75e77923e53927e3203b3e813c3816294fcd738a041e37bfc` |
+
+Public bytes match the exact workflow distributions and their separate clean
+wheel/source install receipt. PyPI provenance metadata names the configured
+GitHub repository, `release.yml` workflow and `pypi` environment, with matching
+file names/digests. This is metadata/subject verification, not independent
+offline cryptographic signature verification.
+
+A fresh, non-editable public-index installation outside the checkout passes
+core-first and Lab-extra dependency checks, the real initiation/association
+CLI/API, exact output parity, read-only behavior, invalid-selector and duplicate
+field refusals, and both Python-to-TypeScript import workflows. All 65 installed
+Python source hashes agree with the approved source and both hosted artifacts.
+The first index-install attempt preceded index propagation; the retained retry
+passes. This receipt is neither browser interaction QA nor new traffic evidence.

@@ -6,11 +6,13 @@ Snapshot: **2026-11-02**. This is a summary of the canonical
 Completed implementation is not the same as validated research or product demand.
 This document does not claim the latest local work is already pushed or deployed.
 
-**Current delivery task (2026-11-02):** prepare the [0.5.1 patch candidate](RELEASE_NOTES_0.5.1.md)
-from the already verified JSON-reader and streaming-replay corrections. No new
-tracker behavior is proposed. Public 0.5.0 and C++ 0.1.1 remain unchanged; release
-approval and public verification are later gates. Bath has acknowledged ticket
-I26-0309891 but has not yet answered the rights/label questions. The main traffic
+**Patch delivered (2026-11-02):** [0.5.1 is published](RELEASE_NOTES_0.5.1.md)
+from approved `4a6b892`, packaging the verified JSON-reader and streaming-replay
+corrections. Exact-head CI, tag publication, public artifact identity and a fresh
+public core/Lab installation pass. No tracker behavior changes. C++ 0.1.1,
+historical releases and the accepted C++ oracle stay unchanged; public platform
+pairing evidence remains for Python 0.5.0. Bath has acknowledged ticket
+I26-0309891 but has not answered the rights/label questions. The main traffic
 comparison remains conditional on those answers and independently checked labels.
 
 **Published Python/C++ pairing (2026-11-01):** Python 0.5.0 and C++ 0.1.1 now
@@ -27,7 +29,7 @@ using C++. This closes a compatibility step, not a research-accuracy gate.
 The next research milestone still requires precise dataset terms/version,
 checked reference labels and a frozen detector/tracker comparison.
 
-**Longer-run diagnostics (2026-11-01):** the unreleased checkout now
+**Longer-run diagnostics (2026-11-01):** 0.5.1 now
 [streams evidence and replay output hashes](DIAGNOSTIC_REPLAY_SCALING.md).
 A 6,000-frame synthetic probe drops peak Python allocation from 14.0 MB to 2.9 MB
 while preserving explanation content against public 0.5.0. Corrupt/changed files

@@ -5,7 +5,7 @@
 **was this particular track/detection pair offered, blocked, or not selected?**
 
 This command/API is available in [published 0.5.0](RELEASE_NOTES_0.5.0.md).
-Install with `python -m pip install --upgrade "visiontrack-mot[lab]==0.5.0"`.
+Install the current patch with `python -m pip install --upgrade "visiontrack-mot[lab]==0.5.1"`.
 An existing 0.4.0 installation does not provide it; a website update alone does
 not upgrade your local package. A source checkout remains an optional dev route.
 
@@ -50,7 +50,7 @@ For your own saved run:
 3. Select **Why did this pair match or fail?**. Choose a track that already
    existed before this frame's association and an original detection key.
    Newly born tracks are excluded; a frame without a usable pair explains why.
-4. Run the displayed command using your local 0.5.0 installation. Replace
+4. Run the displayed command using your local 0.5.1 installation. Replace
    `BUNDLE_PATH` with the original saved experiment folder, and redirect to a
    new `association.json` outside that sealed bundle.
 5. Select **Import association explanation** and choose that file. Read the
@@ -119,12 +119,13 @@ observation hook or differing output causes refusal.
 Only one source frame, three stage summaries and at most one offered pair are
 exported. No quadratic matrix is retained. The existing 20,000 detection/track
 row limit still applies to that frame. Replay cost is **not** bounded to one
-frame: full saved-run replay and its input/output memory are still required.
+frame: full saved-run replay is still required.
 No footage, detector, network input, camera or external model is accessed.
 
-The **unreleased checkout** now [streams diagnostic replay](DIAGNOSTIC_REPLAY_SCALING.md)
-instead of retaining all saved input/output rows. Public 0.5.0 retains the memory
-behavior above. The new path preserves full-run history and exact output checks;
+[Published 0.5.1](RELEASE_NOTES_0.5.1.md)
+[streams diagnostic replay](DIAGNOSTIC_REPLAY_SCALING.md) instead of retaining
+all saved input/output rows. Public 0.5.0 retains materialized replay.
+The new path preserves full-run history and exact output checks;
 it also rechecks evidence files before return. Active-track histories still
 grow, so this is not a constant-memory tracker or a speed/accuracy claim.
 

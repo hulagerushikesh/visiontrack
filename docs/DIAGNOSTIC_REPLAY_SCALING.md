@@ -1,9 +1,10 @@
 # Inspect longer recordings without loading every saved row
 
-The **unreleased checkout** now streams the saved inputs used by `lab-initiation`
-and `lab-association`. Public 0.5.0 still uses the earlier materialized replay.
+[Published 0.5.1](RELEASE_NOTES_0.5.1.md) streams the saved inputs used by
+`lab-initiation` and `lab-association`. Public 0.5.0 retains the earlier
+materialized replay.
 Commands, v1 JSON structures, tracker settings and arithmetic are unchanged.
-No new package version or C++ behavior is introduced by this work.
+The correction is delivered in 0.5.1; C++ behavior is unchanged.
 
 Previously, explaining even one frame loaded all detections, optional reference
 labels and saved observations, grouped the complete recording, and accumulated

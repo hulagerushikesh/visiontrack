@@ -2,12 +2,16 @@
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
 
-**Patch candidate — 2026-11-02:** [0.5.1](RELEASE_NOTES_0.5.1.md) prepares the
-two existing corrections below for installable delivery. It is not published;
-public 0.5.0 and C++ 0.1.1 remain the released pair. This is maintenance while
-the dataset rights/labels answer is pending, not a new tracking method or gain.
+**Patch published — 2026-11-02:** [0.5.1](RELEASE_NOTES_0.5.1.md) delivers the
+two existing corrections below from approved `4a6b892`. Exact-head CI and both
+release jobs pass; public artifact bytes and a fresh public core/Lab install
+are verified, including all 65 source hashes and both diagnostic imports.
+C++ 0.1.1 and its accepted oracle are unchanged. The public multi-platform
+pairing remains Python 0.5.0; local candidate 0.5.1 pairing passed 288 tests.
+This is maintenance, not a new tracking method or accuracy gain. Dataset
+rights/labels and practitioner usefulness remain open gates.
 
-**Unambiguous evidence reads — 2026-11-01:** the unreleased checkout refuses
+**Unambiguous evidence reads — 2026-11-01:** 0.5.1 refuses
 repeated decoded JSON fields instead of silently keeping the final value. This
 applies to all persisted Lab record/metadata readers, including nested fields;
 the diagnostic browser parser shares accepted/refused syntax vectors. Exact
@@ -16,14 +20,14 @@ the bundle and emits no partial JSON. Valid canonical records, tracker behavior
 and public 0.5.0 stay unchanged. See the [reader correction](RELIABILITY_LAB.md#validation-rules-for-the-first-implementation).
 The substantive traffic-data reply and practitioner-validation gates remain open.
 
-**Streaming diagnostic replay — 2026-11-01:** the unreleased checkout now
+**Streaming diagnostic replay — 2026-11-01:** 0.5.1 now
 [reads saved evidence incrementally](DIAGNOSTIC_REPLAY_SCALING.md), rather than
 materializing all detection/GT/track rows and replay outputs for one explanation.
 The 6,000-frame synthetic comparison with public 0.5.0 lowers peak Python-traced
 allocation from about 14.0 MB to 2.9 MB, retaining every non-producer diagnostic
 field exactly. Complete run replay, byte parity, source-tail validation and
 changed-evidence refusal remain required. Active-track history still grows;
-ordinary comparison/evaluation and the published package are unchanged.
+ordinary comparison/evaluation is unchanged; 0.5.0 artifacts remain historical.
 This is an engineering capacity improvement, not a traffic-accuracy finding.
 
 **Published diagnosis tools — 2026-11-01:** [0.5.0 is released](RELEASE_NOTES_0.5.0.md)

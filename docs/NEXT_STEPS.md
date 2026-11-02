@@ -4,16 +4,16 @@ VisionTrack is the NumPy reference, research platform, and learning product.
 Work here must protect readability, reproducibility, and the ability to explain
 why a tracking change helps or hurts.
 
-**Patch delivery preparation — 2026-11-02:** the
-[0.5.1 candidate](RELEASE_NOTES_0.5.1.md) packages the existing unambiguous JSON
-reader correction and streaming diagnostic replay. Current metadata identifies
-the candidate; released 0.5.0, teaching exports and tracker defaults remain
-unchanged. Local/hosted candidate checks precede a separate publication decision.
-This is a bounded delivery task while Bath's rights/label clarification remains
-pending, not completion of the representative-traffic research milestone.
+**Patch delivered — 2026-11-02:** [0.5.1 is published](RELEASE_NOTES_0.5.1.md)
+from verified `4a6b892`, with explicit owner approval. Exact-tag publication,
+public artifact identity and a fresh public core/Lab install pass, including
+both diagnostic imports and all 65 source hashes. Setup instructions use 0.5.1.
+The patch delivers strict JSON readers and streaming replay; tracker defaults,
+teaching exports and historical public files remain unchanged. Bath's rights/
+label clarification and representative-traffic research gates remain pending.
 
 **Input-reader correction — 2026-11-01:** repeated JSON object fields are now
-refused throughout the unreleased Lab readers, including nested and escaped
+refused throughout the Lab readers (delivered in 0.5.1), including nested and escaped
 names. The former last-field-wins interpretation could accept two different
 scores even with matching content hashes. Shared Python/browser syntax vectors,
 otherwise valid sealed-bundle regressions and clean installed CLI checks cover
@@ -22,7 +22,7 @@ This closes an evidence interpretation defect; it does not close the pending
 representative-data or practitioner-usefulness gates or change tracker defaults.
 
 **Engineering checkpoint — 2026-11-01:** read-only diagnostics now
-[stream saved evidence](DIAGNOSTIC_REPLAY_SCALING.md) in the unreleased checkout.
+[stream saved evidence](DIAGNOSTIC_REPLAY_SCALING.md), delivered in 0.5.1.
 On a 6,000-frame synthetic probe, Python allocation peak falls from 14.0 MB to
 2.9 MB with matching diagnostic content. Full replay/parity and changed-file
 refusal remain required. Active-track history is still unbounded; no tracker

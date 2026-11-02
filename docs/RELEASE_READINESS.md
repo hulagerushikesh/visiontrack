@@ -1,21 +1,31 @@
 # VisionTrack release-readiness audit
 
-## Candidate 0.5.1 — 2026-11-02
+## Published 0.5.1 verification — 2026-11-02
 
-The [patch scope](RELEASE_NOTES_0.5.1.md) packages the existing streaming replay
-and unambiguous persisted-JSON reader corrections. Candidate metadata identifies
-0.5.1; no publication or tag is authorized by preparation. Public 0.5.0 and all
-historical evidence below remain unchanged. Candidate-specific gate results are
-recorded in the patch notes, separately from the earlier implementation checks.
+With explicit owner approval, the [patch scope](RELEASE_NOTES_0.5.1.md) was
+published from `4a6b89254ea739afb10c8dd0a17f4f328f032abf`. Its seven-job
+[exact-head CI](https://github.com/hulagerushikesh/visiontrack/actions/runs/41355876067)
+and both [release jobs](https://github.com/hulagerushikesh/visiontrack/actions/runs/41384120228)
+pass. The matching release guard was successful. [PyPI](https://pypi.org/project/visiontrack-mot/0.5.1/)
+and the [GitHub release](https://github.com/hulagerushikesh/visiontrack/releases/tag/v0.5.1)
+are public; the exact public wheel/source hashes are retained in the patch notes.
 
-All seven hosted jobs pass at candidate `9aa1416` in
-[run 41355666403](https://github.com/hulagerushikesh/visiontrack/actions/runs/41355666403).
-Local checks pass 1,369 Python tests, all thirteen web workflows, exact tracker
-parity/reset, strict docs/lint and separate wheel/source core/Lab installs.
-A further clean local candidate/C++ 0.1.1 pairing passes all 288 C++ tests.
-The matching-tag guard is checked read-only, with no tag or publication. A later
-selected commit must pass its own exact-head gates before any release approval
-is used. The public twelve-platform evidence remains for Python 0.5.0.
+- [x] Local candidate checks: 1,369 Python tests, thirteen web workflows, exact
+      tracker parity/reset, strict docs/lint and separate wheel/source installs.
+- [x] Explicit approval, tag at the verified commit, trusted publication and
+      public artifact bytes matching both verified workflow distributions.
+- [x] PyPI publisher/subject metadata matches repository/workflow/environment
+      and file digests; no independent offline signature verification claimed.
+- [x] Fresh public-index core-first/Lab-extra install outside the checkout;
+      actual CLI/API parity, read-only and refusal checks, all 65 source hashes
+      matching source and hosted artifacts, both Python-to-TypeScript workflows.
+- [x] Setup instructions updated to released 0.5.1, fixed teaching exports kept.
+
+A clean local candidate/C++ 0.1.1 pairing passed all 288 C++ tests. Public
+multi-platform compatibility evidence remains for Python 0.5.0; this release
+neither establishes that matrix for 0.5.1 nor adopts a new C++ oracle. Historical
+0.5.0 artifacts remain unchanged. Browser interaction, representative traffic
+accuracy and practitioner usefulness are separate open gates.
 
 ## Published 0.5.0 verification — 2026-11-01
 

@@ -1,4 +1,4 @@
-"""Current candidate metadata and historical publication claims stay separate."""
+"""Current release metadata and historical publication claims stay separate."""
 
 from __future__ import annotations
 
@@ -24,7 +24,7 @@ def test_historical_release_scope_remains_linked_and_published() -> None:
     assert "RELEASE_NOTES_0.3.0.md" in navigation
 
 
-def test_current_candidate_versions_agree_with_frozen_unpublished_scope() -> None:
+def test_current_release_versions_agree_with_frozen_published_scope() -> None:
     from scripts.check_release import validate_tag
 
     project = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
@@ -34,7 +34,7 @@ def test_current_candidate_versions_agree_with_frozen_unpublished_scope() -> Non
     assert package_version.group(1) == visiontrack.__version__ == "0.5.1"
     assert validate_tag(ROOT, "refs/tags/v0.5.1") == "0.5.1"
     assert "Scope status: **frozen" in notes
-    assert "Release status: **candidate; not published**" in notes
+    assert "Release status: **published on 2026-11-02**" in notes
     for version in ("0.4.0", "0.5.0"):
         published = (ROOT / f"docs/RELEASE_NOTES_{version}.md").read_text(encoding="utf-8")
         assert "Release status: **published on 2026-11-01**" in published
