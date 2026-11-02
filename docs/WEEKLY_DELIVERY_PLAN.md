@@ -1,5 +1,16 @@
 # Daily checkpoints and the next weekly goal
 
+## Delivery update — 2026-11-02
+
+[Python 0.5.1 is published](RELEASE_NOTES_0.5.1.md), with verified public
+archives, fresh installs and both diagnostic workflows. The
+[C++ 0.1.1 / Python 0.5.1 pairing](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/compatibility/prospective_oracle_0.5.1_evidence.json)
+passes twelve platform/Python jobs, a fresh local suite and 35,387 exact cached
+observations. This closes release-maintenance work, without changing tracking
+defaults or the accepted C++ oracle. Bath's acknowledgement is still not a
+rights/label answer. The main research outcome and conditional sequence below
+remain open; no owner recording/setup task is required now.
+
 ## Current checkpoint — week ending 2026-11-01
 
 This section supersedes the historical session sequence below. It summarizes
@@ -30,7 +41,7 @@ not supply the missing representative, independently checked traffic benchmark.
 The latest delivered lesson passed 18 local checks and all seven hosted CI jobs;
 those are engineering checks, not a substitute for that research evidence.
 
-**Additional engineering capacity checkpoint:** unreleased
+**Additional engineering capacity checkpoint (at the weekly close, now delivered in 0.5.1):**
 [streaming diagnostics](DIAGNOSTIC_REPLAY_SCALING.md) remove full-file input and
 output lists while retaining full replay and changed-evidence checks. A fixed
 6,000-frame synthetic probe uses about 79% less peak Python-traced memory than

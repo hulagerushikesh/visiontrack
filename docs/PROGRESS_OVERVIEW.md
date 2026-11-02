@@ -10,8 +10,12 @@ This document does not claim the latest local work is already pushed or deployed
 from approved `4a6b892`, packaging the verified JSON-reader and streaming-replay
 corrections. Exact-head CI, tag publication, public artifact identity and a fresh
 public core/Lab installation pass. No tracker behavior changes. C++ 0.1.1,
-historical releases and the accepted C++ oracle stay unchanged; public platform
-pairing evidence remains for Python 0.5.0. Bath has acknowledged ticket
+historical releases and the accepted C++ oracle stay unchanged. A separate
+[public 0.5.1/C++ 0.1.1 pairing check](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/compatibility/prospective_oracle_0.5.1_evidence.json)
+now passes twelve platform/Python jobs (286 tests and ten absent-cache skips
+each), a fresh local install (296 tests, no skips) and all 35,387 cached
+observations exactly. It adds compatibility evidence, not a new C++ release
+or research result. Bath has acknowledged ticket
 I26-0309891 but has not answered the rights/label questions. The main traffic
 comparison remains conditional on those answers and independently checked labels.
 
