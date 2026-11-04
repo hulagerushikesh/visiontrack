@@ -128,6 +128,8 @@ nav:
       - Daily checkpoints and weekly goal: WEEKLY_DELIVERY_PLAN.md
       - Localization research — prior art and next decision: LOCALIZATION_RESEARCH_DECISION.md
       - YOLOX proposal capture — API and limits: YOLOX_PROPOSAL_CAPTURE.md
+      - YOLOX proposal capture — measured cost and coverage: YOLOX_CAPTURE_COST.md
+      - Localization signal — offline audit design: LOCALIZATION_SIGNAL_AUDIT.md
       - Real-data case — annotation intake: REAL_DATA_CASE_INTAKE.md
       - Real-data baseline and first scored identity switch: REAL_DATA_BASELINE.md
       - Real-data missed-box coverage diagnosis: REAL_DATA_COVERAGE.md

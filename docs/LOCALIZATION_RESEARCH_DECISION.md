@@ -149,6 +149,12 @@ in the checkout (2026-11-04), with opt-in bounded records, explicit incomplete
 groups and exact on/off detection/tracker checks. This closes the engineering
 seam above; the localization-signal gate below remains open.
 
+The next [generated-input cost/coverage check](YOLOX_CAPTURE_COST.md) is also
+complete. It shows that prefix retention can miss all winners despite unchanged
+detections. The [offline signal audit design](LOCALIZATION_SIGNAL_AUDIT.md)
+requires complete groups and records unsupported cases. It is not a real-data
+result; the research gate below remains open.
+
 ## Research gate after capture
 
 First audit the signal offline, outside association; do not change production

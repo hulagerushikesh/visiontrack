@@ -5,6 +5,10 @@ Implemented **2026-11-04 in the checkout**, after the
 not in published `visiontrack-mot` 0.5.1. No tracker, Kalman, browser or C++ behavior
 is changed, and no new release is implied.
 
+The subsequent [cost and coverage measurement](YOLOX_CAPTURE_COST.md) found
+that the default prefix can miss every returned winner in a fixed generated
+case. Use full-frame capture or report abstention for offline group analysis.
+
 ## What we built and why
 
 A detector can propose several overlapping rectangles, then discard all but one.

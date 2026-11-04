@@ -32,6 +32,15 @@ Next: measure capture storage/compute and prepare the offline signal audit befor
 any association method is proposed. No Bath response or owner setup is needed
 for generated-input cost checks. C++ stays in maintenance.
 
+**Capture cost and audit design completed — 2026-11-04 (checkout):** the
+[generated-input measurement](YOLOX_CAPTURE_COST.md) exposes significant
+serialization cost and row-order-dependent loss of complete groups at the
+default cap. Counts-only and serialization bookkeeping are improved with exact
+old/new output checks. The [offline signal design](LOCALIZATION_SIGNAL_AUDIT.md)
+now fixes a spread feature, abstention and comparison baselines. Next implement
+its small feature/control probe; real signal conclusions still need admitted
+inputs and checked reference labels. C++ remains unchanged.
+
 **Patch delivered — 2026-11-02:** [0.5.1 is published](RELEASE_NOTES_0.5.1.md)
 from verified `4a6b892`, with explicit owner approval. Exact-tag publication,
 public artifact identity and a fresh public core/Lab install pass, including

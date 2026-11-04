@@ -254,6 +254,40 @@ def test_prefix_winner_does_not_make_truncated_group_complete():
     assert c.records[0].score == .9
 
 
+@pytest.mark.parametrize("limit", [0, 1, 3])
+def test_vectorized_membership_preserves_nan_overlap_suppression(limit):
+    raw = raw_rows([(10, 10, 4, 4, .9, 1., 0),
+                    (10, 10, float("nan"), 4, .8, 1., 0),
+                    (25, 25, 4, 4, .7, 1., 0)])
+    det = make(raw)
+    actual, capture = det.detect_with_proposals(np.zeros((32, 32, 3)), max_proposals=limit)
+    assert signature(actual) == signature(det.detect(np.zeros((32, 32, 3))))
+    assert capture.returned_count == 2 and capture.nms_suppressed_count == 1
+    if limit:
+        assert capture.records[0].group_size == 2
+        assert capture.records[0].captured_group_size == (2 if limit == 3 else 1)
+    if limit == 3:
+        assert capture.records[1].status == "nms_suppressed"
+        assert capture.records[1].group_winner_index == 0
+        with pytest.raises(ValueError):
+            json.dumps(capture.to_dict(), allow_nan=False)
+
+
+def test_export_still_matches_recursive_dataclass_values_with_independent_copies():
+    raw = raw_rows([(10, 10, 4, 4, .9, 1., 0), (10, 10, 4, 4, .8, 1., 0)])
+    _, capture = make(raw).detect_with_proposals(np.zeros((32, 32, 3)))
+    expected = asdict(capture)
+    expected.update(truncated=False, omitted_count=0)
+    expected["records"] = [dict(asdict(r), group_complete=r.group_complete)
+                           for r in capture.records]
+    exported = capture.to_dict()
+    assert exported == expected
+    assert json.dumps(exported, sort_keys=True) == json.dumps(expected, sort_keys=True)
+    exported["records"].clear()
+    exported["raw_shape"] = ()
+    assert len(capture.records) == 2 and capture.raw_shape == (2, 7)
+
+
 def test_groups_are_direct_suppression_not_transitive_object_clusters():
     raw = raw_rows([(10, 10, 4, 4, .9, 1., 0), (12, 10, 4, 4, .8, 1., 0),
                     (14, 10, 4, 4, .7, 1., 0)])

@@ -61,9 +61,18 @@ No substantive reply has been newly verified for this planning update.
       association change. Authored tensors cover both layouts, grid decode, ties,
       class interactions and truncated groups; multi-frame tracking/reset matches
       exactly with capture off/on. See the [API and limits](YOLOX_PROPOSAL_CAPTURE.md).
-- [ ] Measure capture storage/compute on fixed permitted inputs, then prepare
-      a fixed offline localization-signal audit against size/class/score baselines. Proposal dispersion is a known
-      approach, not a new method or a trustworthy covariance merely by construction.
+- [x] Measure generated-input capture storage/compute and prefix coverage;
+      optimize counts-only/group bookkeeping and JSON conversion with exact
+      old/new output parity. See [cost and limits](YOLOX_CAPTURE_COST.md).
+      The default prefix misses all returned winners in one authored case, so
+      offline research must require complete groups or explicitly abstain.
+- [x] Prepare the [offline localization-signal audit design](LOCALIZATION_SIGNAL_AUDIT.md)
+      against size/class/score baselines. Proposal dispersion is a known
+      approach, not a new method or trustworthy covariance by construction.
+      No real-data outcome has been run.
+- [ ] Implement the small offline feature extractor and disconfirming controls,
+      then pursue an independently checked, admitted input route for outcome
+      comparison. Do not feed this signal into association yet.
       See the [acceptance and stop rules](LOCALIZATION_RESEARCH_DECISION.md#research-gate-after-capture).
       Real-domain conclusions require permitted inputs, independently checked
       labels and a frozen evaluation; the Bath route remains on hold.

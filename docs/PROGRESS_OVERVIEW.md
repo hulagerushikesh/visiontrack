@@ -24,6 +24,14 @@ groups. Next: measure capture cost, then check whether that added information
 predicts localization error beyond score/class/size. This is feasibility work;
 no new tracking gain, novelty claim or accepted C++ method follows.
 
+**Follow-on 2026-11-04:** [generated-input capture cost and coverage](YOLOX_CAPTURE_COST.md)
+are measured. The 4,096-row prefix misses all four returned winners in one
+authored 640-input case; reverse row order preserves detections but changes
+which groups are visible. Counts-only and JSON bookkeeping improve with exact
+old/new records. The [offline signal audit](LOCALIZATION_SIGNAL_AUDIT.md) is
+specified, but has no independently checked outcome yet. The next code step is
+its compact feature extractor and failure controls, not a tracker or C++ port.
+
 **Patch delivered (2026-11-02):** [0.5.1 is published](RELEASE_NOTES_0.5.1.md)
 from approved `4a6b892`, packaging the verified JSON-reader and streaming-replay
 corrections. Exact-head CI, tag publication, public artifact identity and a fresh

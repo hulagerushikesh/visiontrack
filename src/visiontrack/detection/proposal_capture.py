@@ -5,7 +5,7 @@ object. No covariance, calibrated probability or localization truth is inferred.
 """
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, replace
+from dataclasses import asdict, dataclass, fields, replace
 from typing import Literal
 
 import numpy as np
@@ -82,7 +82,9 @@ class ProposalCapture:
         No file is written. As with raw detector output, non-finite model values
         are not sanitized; use ``json.dumps(..., allow_nan=False)`` to refuse them.
         """
-        result = asdict(self)
+        # Metadata is immutable scalar/tuple data. Do not recursively convert all
+        # records here only to discard and convert them again immediately below.
+        result = {f.name: getattr(self, f.name) for f in fields(self) if f.name != "records"}
         result["omitted_count"] = self.omitted_count
         result["truncated"] = self.truncated
         result["records"] = [dict(asdict(r), group_complete=r.group_complete) for r in self.records]
@@ -133,12 +135,17 @@ class _ProposalRecorder:
         # Exactly the decoder's predicate: NaN overlap also fails <= threshold.
         suppressed = ~(ious <= threshold)
         size = 1 + int(np.count_nonzero(suppressed))
+        self.nms_kept_count += 1
+        self.nms_suppressed_count += size - 1
+        if not self.records:
+            return  # counts-only: no membership/index bookkeeping is needed
         original_winner = int(self.eligible_indices[winner])
         members = [original_winner] if original_winner < len(self.records) else []
-        for local, removed in zip(remaining, suppressed, strict=True):
-            original = int(self.eligible_indices[local])
-            if removed and original < len(self.records):
-                members.append(original)
+        if size > 1:
+            # Index only actual victims, rather than a Python scan of every
+            # remaining candidate on every NMS iteration (including singletons).
+            victims = self.eligible_indices[np.asarray(remaining, dtype=np.intp)[suppressed]]
+            members.extend(victims[victims < len(self.records)].tolist())
         for original in members:
             self.records[original] = replace(
                 self.records[original],
@@ -146,8 +153,6 @@ class _ProposalRecorder:
                 group_winner_index=original_winner, group_size=size,
                 captured_group_size=len(members),
             )
-        self.nms_kept_count += 1
-        self.nms_suppressed_count += size - 1
 
     def output(self, local: int, output_index: int | None) -> None:
         original = int(self.eligible_indices[local])
