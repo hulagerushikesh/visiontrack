@@ -70,8 +70,10 @@ No substantive reply has been newly verified for this planning update.
       against size/class/score baselines. Proposal dispersion is a known
       approach, not a new method or trustworthy covariance by construction.
       No real-data outcome has been run.
-- [ ] Implement the small offline feature extractor and disconfirming controls,
-      then pursue an independently checked, admitted input route for outcome
+- [x] Implement the small offline feature extractor and disconfirming controls.
+      Arithmetic, abstention and counterexamples now run on authored captures;
+      actual decoder output is also checked against ordinary detections.
+- [ ] Pursue an independently checked, admitted input route for outcome
       comparison. Do not feed this signal into association yet.
       See the [acceptance and stop rules](LOCALIZATION_RESEARCH_DECISION.md#research-gate-after-capture).
       Real-domain conclusions require permitted inputs, independently checked

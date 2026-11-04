@@ -41,6 +41,14 @@ now fixes a spread feature, abstention and comparison baselines. Next implement
 its small feature/control probe; real signal conclusions still need admitted
 inputs and checked reference labels. C++ remains unchanged.
 
+**Offline feature and controls completed — 2026-11-04 (checkout):** the
+[localization audit](LOCALIZATION_SIGNAL_AUDIT.md) now has a compact spread
+extractor, explicit refusal reasons and generated counterexamples. An actual
+decoder capture is checked against ordinary detection output. No localization
+outcome, real-domain accuracy or association benefit has been measured. Next:
+admit a permitted input and independently check its reference labels before
+freezing a comparison manifest. Bath remains a dependency only for its route.
+
 **Patch delivered — 2026-11-02:** [0.5.1 is published](RELEASE_NOTES_0.5.1.md)
 from verified `4a6b892`, with explicit owner approval. Exact-tag publication,
 public artifact identity and a fresh public core/Lab install pass, including

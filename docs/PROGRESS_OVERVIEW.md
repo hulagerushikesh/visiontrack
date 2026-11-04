@@ -32,6 +32,14 @@ old/new records. The [offline signal audit](LOCALIZATION_SIGNAL_AUDIT.md) is
 specified, but has no independently checked outcome yet. The next code step is
 its compact feature extractor and failure controls, not a tracker or C++ port.
 
+**Offline feature/control checkpoint (2026-11-04):** the
+[localization audit](LOCALIZATION_SIGNAL_AUDIT.md) now has an executable
+proposal-spread extractor with complete-frame refusal, direct-group checks and
+generated disconfirming examples. Its compact output deliberately omits raw
+boxes. The result is a testable inference feature, not evidence that it predicts
+error or improves tracking. The next gate is permitted input plus independently
+checked reference boxes; Bath's answer is needed only for RoundaboutHD.
+
 **Patch delivered (2026-11-02):** [0.5.1 is published](RELEASE_NOTES_0.5.1.md)
 from approved `4a6b892`, packaging the verified JSON-reader and streaming-replay
 corrections. Exact-head CI, tag publication, public artifact identity and a fresh

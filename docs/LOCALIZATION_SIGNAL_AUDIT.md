@@ -1,10 +1,14 @@
-# Offline localization-signal audit: design v1
+# Offline localization-signal audit: feature v1
 
-**Design checkpoint, 2026-11-04; not an executed accuracy study.** The
+**Offline feature and authored controls, 2026-11-04; not an accuracy study.** The
 [research decision](LOCALIZATION_RESEARCH_DECISION.md) selected detector
 proposals as an additional observable. The [cost/coverage probe](YOLOX_CAPTURE_COST.md)
-now shows why the 4,096-row prefix cannot be assumed sufficient. Next we build
-offline arithmetic and its disconfirming controls, before selecting outcome data.
+shows why the 4,096-row prefix cannot be assumed sufficient. The
+[`audit_capture` implementation](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/localization_signal.py) now
+calculates the fixed spread and returns explicit refusal reasons. The
+[authored controls](https://github.com/hulagerushikesh/visiontrack/blob/main/tests/test_localization_signal.py) check arithmetic,
+capture completeness, invalid boxes and counterexamples using generated inputs.
+This does not select outcome data or establish a real-world signal.
 
 Question: **does proposal spread help rank localization error beyond detection
 score, class and box size?** This is a known information source, not a novelty
@@ -27,6 +31,19 @@ replace missing/one-member groups with zero spread, fill an incomplete group,
 or reinterpret different-object proposals as independent repeated measurements.
 Mixed-class fraction and member count are diagnostics, not additional tuned
 features in v1. Non-finite/invalid boxes cause an explicit unsupported reason.
+The compact returned row contains the ordinary detection output index, winner
+proposal index, status, spread when supported, group size, same-class count and
+mixed-class fraction. It contains no boxes, images or raw proposal records.
+
+The code refuses an entire truncated frame, even if one visible group looks
+complete. For complete frames it refuses missing winners, inconsistent direct
+groups, singleton groups, groups with fewer than three same-class members, and
+invalid geometry. The controlled three-row example has anchor distances
+`0, 2, 4` pixels and winner height `10` pixels, giving spread `0.2`. Translating
+all three boxes 100 pixels preserves `0.2` even when the reference or previous
+position remains at the original location. Likewise, adjacent objects can
+appear within one suppression group. These are explicit limits on interpretation,
+not a demonstrated localization predictor.
 
 For an offline pilot, choose a full-frame row cap from the pinned model shape
 and refuse the frame's feature extraction if capture is truncated. Hash raw
@@ -103,6 +120,6 @@ separately frozen association/count experiment. Calibration is a separate task
 if we ever define an actual predictive distribution.
 
 No dataset, split manifest, outcome table or accepted method exists for this
-audit yet. The next deliverable is the small offline feature/control implementation.
-Then an admitted-input manifest and independent label check precede outcome
-execution. RoundaboutHD remains conditional on Bath; C++ stays in maintenance.
+audit yet. The next deliverable is an admitted-input manifest and independent
+label check before any outcome execution. RoundaboutHD remains conditional on
+Bath; C++ stays in maintenance.
