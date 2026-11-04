@@ -19,8 +19,16 @@ default full history remains available. Both read-only Lab diagnostics use
 limited history internally. Exact comparison against published 0.5.1 preserves
 diagnostic content and reduces the 6,000-frame probe's peak traced allocation by
 about 57%. See [measurements and limits](DIAGNOSTIC_REPLAY_SCALING.md).
-Next is the narrow observation-quality research decision in the work package,
-not another release or a speculative C++ port. Dataset admission remains separate.
+The narrow research decision below is now complete. Dataset admission remains separate.
+
+**Research decision completed — 2026-11-04:** the
+[prior-art review and executable ambiguity check](LOCALIZATION_RESEARCH_DECISION.md)
+reject an unconditional jitter/motion classifier from current boxes. Two generated
+pairs have identical inference and tracker output but different reference anchor
+crossings. This is a logical counterexample, not traffic accuracy or novelty.
+Next: opt-in bounded YOLOX proposal/suppression capture with exact unchanged
+detections, then an offline signal audit before any association method is proposed.
+The capture step needs no Bath response or owner setup. C++ stays in maintenance.
 
 **Patch delivered — 2026-11-02:** [0.5.1 is published](RELEASE_NOTES_0.5.1.md)
 from verified `4a6b892`, with explicit owner approval. Exact-tag publication,

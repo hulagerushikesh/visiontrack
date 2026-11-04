@@ -12,7 +12,7 @@ No substantive reply has been newly verified for this planning update.
 | --- | --- | --- |
 | RoundaboutHD media/annotation intake and outcome evaluation | Precise reuse terms, annotation semantics and then a small independent label audit | Keep this route on hold; silence or an automatic receipt cannot admit it |
 | Long-running reference execution | Repository code, generated inputs and existing parity fixtures | Investigate active-track history growth and design an explicitly compatible bounded option |
-| Next research question | Existing findings and primary literature | Select one unanswered question before building another experiment |
+| Next research question | Existing findings and primary literature | Decision complete; preserve detector proposal information before testing whether it adds localization evidence |
 | Practitioner usefulness | A willing practitioner | Keep open without treating internal checks as external validation |
 | C++ | An accepted, useful reference change and explicit handoff | Maintain current compatibility; avoid a speculative port |
 
@@ -33,7 +33,7 @@ No substantive reply has been newly verified for this planning update.
       output hashes agree exactly; both 6,000-frame diagnostic probes use about
       57% less peak traced allocation than published 0.5.1 with exact diagnostic
       content agreement. See [measurements and limits](DIAGNOSTIC_REPLAY_SCALING.md).
-- [ ] **Research next: narrow the observation-quality question.** Compare the
+- [x] **Research next: narrow the observation-quality question.** Compare the
       completed box-gate, initiation and observation-availability findings with
       prior work. Ask whether localization uncertainty can be distinguished from
       actual motion well enough to improve association without the false-count
@@ -42,11 +42,29 @@ No substantive reply has been newly verified for this planning update.
       closest baselines, disconfirming cases and acceptance measures first.
       If existing work answers it or the distinction is not identifiable, reject
       or narrow it instead of running another broad synthetic grid.
-- [ ] **Decision checkpoint:** finish with one scoped implementation result and
+      The [completed decision](LOCALIZATION_RESEARCH_DECISION.md) reviews eight
+      primary sources (three at abstract level), verifies two identical-input/
+      different-reference constructions, rejects a guaranteed box-only cause
+      classifier and selects a capture-only detector feasibility step. Existing
+      uncertainty methods are acknowledged; no novelty or accuracy gain is claimed.
+- [x] **Decision checkpoint:** finish with one scoped implementation result and
       one go/no-go research proposal. Generated-data findings remain engineering
       or controlled-mechanism evidence; representative traffic claims still
       require admitted data and checked labels. Do not count more planning
       documents, release checks or another known-video replay as that outcome.
+
+### Next independent step: preserve detector proposals
+
+- [ ] Add opt-in, bounded per-frame proposal/suppression capture to the YOLOX
+      decoder, with exact default detection/tracker-output parity. Keep current
+      suppression/class semantics explicit; no automatic covariance or runtime
+      association change. Use fake model tensors first, without new data access.
+- [ ] Only after capture passes, prepare a fixed offline localization-signal
+      audit against size/class/score baselines. Proposal dispersion is a known
+      approach, not a new method or a trustworthy covariance merely by construction.
+      See the [acceptance and stop rules](LOCALIZATION_RESEARCH_DECISION.md#research-gate-after-capture).
+      Real-domain conclusions require permitted inputs, independently checked
+      labels and a frozen evaluation; the Bath route remains on hold.
 
 The initial literature check identifies relevant existing approaches:
 [ByteTrack](https://arxiv.org/abs/2110.06864) recovers associations using low-score

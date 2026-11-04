@@ -14,8 +14,13 @@ Default public histories remain complete. Both 6,000-frame diagnostics use about
 content agreement; generated direct tracker output also matches exactly.
 This is a checkout engineering improvement, not a new package release, accuracy
 result or C++ change. The [measurement limits](DIAGNOSTIC_REPLAY_SCALING.md) keep
-total-memory and real-domain validation claims separate. Next: decide one
-observation-quality research question against prior art and existing negatives.
+total-memory and real-domain validation claims separate. The
+[observation-quality research decision](LOCALIZATION_RESEARCH_DECISION.md) is
+also complete: eight primary sources screened, two executable ambiguity pairs
+verified, no guaranteed box-only jitter/motion classifier justified. Next is
+bounded detector proposal capture, then checking whether that added information
+predicts localization error beyond score/class/size. This is feasibility work;
+no new tracking gain, novelty claim or accepted C++ method follows.
 
 **Patch delivered (2026-11-02):** [0.5.1 is published](RELEASE_NOTES_0.5.1.md)
 from approved `4a6b892`, packaging the verified JSON-reader and streaming-replay
