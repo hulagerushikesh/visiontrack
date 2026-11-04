@@ -60,14 +60,25 @@ class ByteTracker:
         tracker = ByteTracker()
         for detections in stream:
             observations = tracker.update(detections)
+
+    ``history_limit=None`` retains every matched box in each active track's
+    public ``history`` list. An explicit limit retains only its recent tail;
+    it must cover both the residual's six boxes and ``ocm_delta_t + 1`` boxes.
+    This execution policy is separate from the association configuration.
     """
 
     # Private, opt-in offline observer. The default path allocates no diagnostic
     # context. Keep associate() directly inside _match for historical profilers.
     _association_observer = None
 
-    def __init__(self, config: TrackerConfig | None = None) -> None:
+    def __init__(
+        self, config: TrackerConfig | None = None, *, history_limit: int | None = None,
+    ) -> None:
         self.cfg = config or TrackerConfig()
+        if history_limit is not None and type(history_limit) is not int:
+            raise ValueError("history_limit must be an integer or None")
+        self._history_limit = history_limit
+        self._check_history_limit()
         scale = self.cfg.kf_noise_scale
         self.kf = KalmanBoxTracker(
             std_weight_position=(1.0 / 20.0) * scale,
@@ -82,6 +93,20 @@ class ByteTracker:
         from .motion.residual import MotionResidual
 
         self._residual = MotionResidual.from_path(self.cfg.motion_residual_path)
+
+    @property
+    def history_limit(self) -> int | None:
+        """Matched boxes retained per active track; ``None`` means full history."""
+        return self._history_limit
+
+    def _check_history_limit(self) -> None:
+        if self._history_limit is None:
+            return
+        from .motion.residual import WINDOW
+
+        minimum = max(WINDOW + 1, self.cfg.ocm_delta_t + 1)
+        if self._history_limit < minimum:
+            raise ValueError(f"history_limit must be >= {minimum} for this configuration")
 
     def _predict_all(self) -> None:
         """Advance every track's Kalman state one step in a single batched call.
@@ -112,8 +137,12 @@ class ByteTracker:
         """
         if self._residual.model is None or len(track.history) < 2:
             return
+        from .motion.residual import WINDOW
+
+        # The feature builder uses only WINDOW velocities. Avoid constructing
+        # and differencing the entire trajectory on every prediction.
         centers = np.array([[(b[0] + b[2]) / 2.0, (b[1] + b[3]) / 2.0]
-                            for b in track.history])
+                            for b in track.history[-(WINDOW + 1):]])
         corr = self._residual.correct(centers, float(track.mean[3]))
         track.mean[0] += corr[0]
         track.mean[1] += corr[1]
@@ -138,6 +167,9 @@ class ByteTracker:
         this frame (RQ4 GMC); applied to every track's prediction when
         ``use_gmc`` is set. ``None`` keeps the static-camera behaviour.
         """
+        # Config is public and mutable. Refuse an enlarged OCM span before
+        # advancing state if its required observations have been discarded.
+        self._check_history_limit()
         self._frame += 1
 
         do_gmc = self.cfg.use_gmc and camera_shift is not None
@@ -347,6 +379,7 @@ class ByteTracker:
                 start_frame=self._frame,
                 feature=det.feature,
                 ema_alpha=self.cfg.appearance_ema_alpha,
+                history_limit=self._history_limit,
             )
         )
         self._next_id += 1

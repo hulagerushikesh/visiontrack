@@ -4,6 +4,24 @@ VisionTrack is the NumPy reference, research platform, and learning product.
 Work here must protect readability, reproducibility, and the ability to explain
 why a tracking change helps or hurts.
 
+**Work resumed — 2026-11-04:** the owner has lifted the project-wide wait.
+Bath's clarification blocks the RoundaboutHD route, not independent work.
+The [current work package](WEEKLY_DELIVERY_PLAN.md#work-resumes-alongside-the-bath-enquiry-2026-11-04)
+prioritizes a measured active-history memory investigation, then a narrow
+observation-quality research decision informed by completed negative results
+and prior art. It does not imply a new accuracy result, dataset admission,
+release or C++ port. On "go next", continue that package while reporting the
+specific unresolved evidence dependency.
+
+**History engineering completed — 2026-11-04 (checkout):** an explicit
+`ByteTracker(history_limit=...)` option preserves the required motion window;
+default full history remains available. Both read-only Lab diagnostics use
+limited history internally. Exact comparison against published 0.5.1 preserves
+diagnostic content and reduces the 6,000-frame probe's peak traced allocation by
+about 57%. See [measurements and limits](DIAGNOSTIC_REPLAY_SCALING.md).
+Next is the narrow observation-quality research decision in the work package,
+not another release or a speculative C++ port. Dataset admission remains separate.
+
 **Patch delivered — 2026-11-02:** [0.5.1 is published](RELEASE_NOTES_0.5.1.md)
 from verified `4a6b892`, with explicit owner approval. Exact-tag publication,
 public artifact identity and a fresh public core/Lab install pass, including

@@ -1,4 +1,4 @@
-"""Compare checkout diagnostic memory with an isolated published 0.5.0 install.
+"""Compare checkout diagnostic memory with an isolated published baseline.
 
 Synthetic fixed boxes only; no camera, dataset, inference or accuracy result.
 Run with --baseline-python PATH --output NEW_DIRECTORY. The receipt retains
@@ -20,7 +20,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def worker(output: Path, mode: str, sizes: list[int]) -> None:
+def worker(output: Path, mode: str, sizes: list[int], baseline_version: str) -> None:
     if mode == "checkout":
         sys.path.insert(0, str(ROOT / "src"))
     import numpy as np
@@ -42,8 +42,11 @@ def worker(output: Path, mode: str, sizes: list[int]) -> None:
 
     module = Path(visiontrack.__file__).resolve()
     if mode == "baseline":
-        if visiontrack.__version__ != "0.5.0" or not module.is_relative_to(Path(sys.prefix)):
-            raise ValueError("baseline must be a non-editable published 0.5.0 installation")
+        if (visiontrack.__version__ != baseline_version
+                or not module.is_relative_to(Path(sys.prefix))):
+            raise ValueError(
+                f"baseline must be a non-editable published {baseline_version} install"
+            )
     elif not module.is_relative_to(ROOT / "src"):
         raise ValueError("checkout worker did not import the repository source")
     results = []
@@ -64,7 +67,7 @@ def worker(output: Path, mode: str, sizes: list[int]) -> None:
             experiment = ExperimentManifest.create(
                 source_id=source.source_id, baseline="baseline", variants=({"name": "baseline"},),
                 metrics=("track_count",), frame_range={"start": 0, "end": size},
-                visiontrack_version="0.5.0", git_revision=None,
+                visiontrack_version=baseline_version, git_revision=None,
                 environment={"python": "fixed synthetic fixture"},
                 created_at="2026-11-01T00:00:00Z",
             )
@@ -129,6 +132,7 @@ def snapshot(bundle: Path) -> dict[str, str]:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--baseline-python", type=Path)
+    parser.add_argument("--baseline-version", choices=("0.5.0", "0.5.1"), default="0.5.0")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--frames", type=int, nargs="+", default=[600, 6000])
     parser.add_argument("--worker", choices=("baseline", "checkout"), help=argparse.SUPPRESS)
@@ -137,7 +141,7 @@ def main() -> None:
             or any(not 10 <= size <= 100_000 for size in args.frames)):
         parser.error("choose 1–4 distinct frame counts between 10 and 100000")
     if args.worker:
-        worker(args.output, args.worker, args.frames)
+        worker(args.output, args.worker, args.frames, args.baseline_version)
         return
     if args.baseline_python is None:
         parser.error("--baseline-python is required")
@@ -150,6 +154,7 @@ def main() -> None:
         subprocess.run([
             str(python), "-I", str(Path(__file__).resolve()), "--worker", mode,
             "--output", str(output), "--frames", *map(str, args.frames),
+            "--baseline-version", args.baseline_version,
         ], check=True, cwd=output, timeout=600)
     old = json.loads((output / "baseline-receipt.json").read_text())
     new = json.loads((output / "checkout-receipt.json").read_text())

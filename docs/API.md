@@ -20,13 +20,40 @@ for frame_detections in stream:                    # list[Detection]
         print(o.track_id, o.xyxy, o.score)
 ```
 
-- **`ByteTracker(config=None)`** — the online tracker. `.update(detections,
+- **`ByteTracker(config=None, *, history_limit=None)`** — the online tracker. `.update(detections,
   camera_shift=None) -> list[TrackObservation]`; `.reset()`.
 - **`TrackerConfig`** — every knob in one typed dataclass: association thresholds,
   lifecycle (`n_init`, `max_age`), the cost weights `w_iou/w_app/w_unc/w_ocm`,
   `use_giou`, `use_oru`, `use_gmc`, `kf_noise_scale`, `motion_residual_path`.
 - **`TrackObservation`** — one confirmed box: `frame, track_id, xyxy, score, class_id`.
 - **`Detection`** — one input box: `xyxy, score, class_id, feature=None`.
+
+### Optional history retention (checkout only; not published in 0.5.1)
+
+```python
+tracker = ByteTracker(history_limit=6)
+```
+
+This retains the last six **matched-update boxes** in each active track's
+`history` list, including the birth box until it falls outside that tail.
+Unmatched frames do not add history entries. The limit must be a Python integer
+at least `max(6, config.ocm_delta_t + 1)`, even when the optional motion terms
+are disabled. Smaller limits are refused to preserve every observation the
+built-in residual and momentum features can read. Enlarging `ocm_delta_t` beyond
+that capacity later is refused before the next update advances state.
+
+The default `None` retains complete history as before. The read-only
+`tracker.history_limit` property exposes the chosen policy; `reset()` clears
+tracks and keeps the policy. Consumers or subclasses needing the full trajectory
+should retain the default. With a limit, stream returned observations to your own
+trajectory sink if you need a complete record; discarded history cannot be
+recovered from the tracker.
+
+This is a storage policy outside `TrackerConfig`; association settings and
+serialized configurations are unchanged. The built-in Lab initiation/association
+replays now choose a sufficient bounded tail internally. Public video, comparison
+and evaluation entry points retain their existing policies. See the
+[measurement and limits](DIAGNOSTIC_REPLAY_SCALING.md#bounded-active-history-checkout-2026-11-04).
 
 ### Tracker presets
 

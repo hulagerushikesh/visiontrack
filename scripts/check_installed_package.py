@@ -22,6 +22,7 @@ PROBE = r'''
 import hashlib, importlib.metadata, importlib.util, json, shutil, subprocess, sys
 from pathlib import Path
 import visiontrack
+from visiontrack import Detection
 from visiontrack.tracking.tracker import ByteTracker
 
 root = Path(visiontrack.__file__).resolve().parent
@@ -41,9 +42,19 @@ def snapshot(path):
             for p in path.rglob('*') if p.is_file()}
 
 command('eval', '--json')
+full, bounded = ByteTracker(), ByteTracker(history_limit=6)
+for _ in range(30):
+    dets = [Detection([10., 20., 30., 60.], .9, 1)]
+    left, right = full.update(dets), bounded.update(dets)
+    assert [(o.frame, o.track_id, o.score, o.class_id, o.xyxy.tobytes()) for o in left] == [
+        (o.frame, o.track_id, o.score, o.class_id, o.xyxy.tobytes()) for o in right]
+assert len(full.tracks[0].history) == 30 and len(bounded.tracks[0].history) == 6
+bounded.reset()
+assert bounded.history_limit == 6 and bounded.frame_index == -1
 if sys.argv[1] == 'core':
     assert importlib.util.find_spec('PIL') is None
-    print(json.dumps({'version': visiontrack.__version__, 'core_cli': 'passed'}))
+    print(json.dumps({'version': visiontrack.__version__, 'core_cli': 'passed',
+                     'bounded_history_api': 'passed'}))
     sys.exit()
 
 from visiontrack.lab import build_association_explanation, build_initiation_trace, canonical_json

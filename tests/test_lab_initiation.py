@@ -203,6 +203,7 @@ def test_cli_text_json_and_errors_leave_bundle_unchanged(tmp_path, capsys):
     {}, {"n_init": 1}, {"max_age": 1}, {"use_mahalanobis_gating": False},
     {"use_giou": True}, {"w_unc": .2}, {"w_ocm": .2}, {"use_oru": True},
     {"class_aware": False},
+    {"w_ocm": .2, "ocm_delta_t": 9, "use_oru": True},
 ])
 def test_observer_exact_output_and_input_parity_with_competing_tracks(overrides):
     config = replace(TrackerConfig(), **overrides)
@@ -229,3 +230,5 @@ def test_observer_exact_output_and_input_parity_with_competing_tracks(overrides)
             assert left.xyxy.tobytes() == right.xyxy.tobytes()
         for det, box in zip(dets, before, strict=True):
             assert det.xyxy.tobytes() == box.tobytes()
+        assert observed.history_limit == max(6, config.ocm_delta_t + 1)
+        assert all(len(t.history) <= observed.history_limit for t in observed.tracks)

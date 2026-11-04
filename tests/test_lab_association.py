@@ -269,6 +269,7 @@ def test_missing_production_hook_or_changed_implementation_fails_closed(tmp_path
 @pytest.mark.parametrize("overrides", [
     {}, {"use_giou": True}, {"w_unc": .2}, {"w_ocm": .2, "use_oru": True},
     {"class_aware": False}, {"n_init": 1}, {"use_mahalanobis_gating": False},
+    {"w_ocm": .2, "ocm_delta_t": 9, "use_oru": True},
 ])
 def test_observation_is_exact_and_calls_production_solver_once_per_nonempty_stage(
     overrides, monkeypatch,

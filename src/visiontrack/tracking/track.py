@@ -46,6 +46,7 @@ class Track:
         "max_age",
         "start_frame",
         "history",
+        "_history_limit",
         "last_observation",
         "last_obs_state",
         "feature",
@@ -64,7 +65,12 @@ class Track:
         start_frame: int = 0,
         feature: np.ndarray | None = None,
         ema_alpha: float = 0.9,
+        *,
+        history_limit: int | None = None,
     ) -> None:
+        if history_limit is not None and (type(history_limit) is not int or history_limit < 1):
+            raise ValueError("history_limit must be a positive integer or None")
+        self._history_limit = history_limit
         self.track_id = track_id
         self.kf = kf
         self.mean, self.covariance = kf.initiate(xyxy_to_xyah(detection_xyxy))
@@ -140,6 +146,8 @@ class Track:
         self.hits += 1
         self.time_since_update = 0
         self.history.append(self.to_xyxy())
+        if self._history_limit is not None:
+            del self.history[:-self._history_limit]
 
         if feature is not None:
             from ..appearance.gallery import update_gallery

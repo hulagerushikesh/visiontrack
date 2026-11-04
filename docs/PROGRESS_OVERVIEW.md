@@ -1,10 +1,21 @@
 # VisionTrack and VisionTrack C++ — progress overview
 
-Snapshot: **2026-11-02**. This is a summary of the canonical
+Snapshot: **2026-11-04**. This is a summary of the canonical
 [VisionTrack checklist](NEXT_STEPS.md), [status](STATUS.md) and
 [C++ checklist](https://github.com/hulagerushikesh/visiontrack-cpp/blob/main/NEXT_STEPS.md).
 Completed implementation is not the same as validated research or product demand.
 This document does not claim the latest local work is already pushed or deployed.
+
+**Independent work resumed (2026-11-04):** Bath blocks the RoundaboutHD route,
+not the project. The first [resumed work package](WEEKLY_DELIVERY_PLAN.md)
+delivers optional limited track history and uses it in read-only Lab replay.
+Default public histories remain complete. Both 6,000-frame diagnostics use about
+57% less peak traced allocation than published 0.5.1 with exact diagnostic
+content agreement; generated direct tracker output also matches exactly.
+This is a checkout engineering improvement, not a new package release, accuracy
+result or C++ change. The [measurement limits](DIAGNOSTIC_REPLAY_SCALING.md) keep
+total-memory and real-domain validation claims separate. Next: decide one
+observation-quality research question against prior art and existing negatives.
 
 **Patch delivered (2026-11-02):** [0.5.1 is published](RELEASE_NOTES_0.5.1.md)
 from approved `4a6b892`, packaging the verified JSON-reader and streaming-replay

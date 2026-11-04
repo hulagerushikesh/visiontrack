@@ -14,6 +14,7 @@ from typing import Any
 import numpy as np
 
 from .. import __version__
+from ..tracking.motion.residual import WINDOW
 from ..tracking.tracker import ByteTracker
 from .comparison import _load_variant_metadata
 from .contracts import TrackObservationRecord, sha256_json
@@ -35,7 +36,10 @@ class _InitiationObserver(ByteTracker):
     """Observe a bounded window while keeping the entire run's warm-up."""
 
     def __init__(self, config, *, offset: int, start: int, end: int):
-        super().__init__(config)
+        # Replay exports observations and selected diagnostic rows, not public
+        # Track.history. Retain every box the built-in motion terms can read;
+        # saved public-output hashing still checks the entire replay exactly.
+        super().__init__(config, history_limit=max(WINDOW + 1, config.ocm_delta_t + 1))
         self.offset, self.start, self.end = offset, start, end
         self.frames: list[dict[str, Any]] = []
         self.row_count = 0

@@ -1,5 +1,71 @@
 # Inspect longer recordings without loading every saved row
 
+## Bounded active history — checkout, 2026-11-04
+
+The next engineering step removes the remaining per-match history growth from
+the **Lab diagnostic replay**. This is implemented in the checkout, not in the
+published 0.5.1 artifacts described below. The ordinary `ByteTracker()` still
+keeps full public history; callers can explicitly select
+[`history_limit`](API.md#optional-history-retention-checkout-only-not-published-in-051).
+
+The history audit found two built-in consumers: momentum reads the last box and
+the box `ocm_delta_t` matched observations earlier; the learned residual uses five
+velocities, requiring six boxes. Replays retain `max(6, ocm_delta_t + 1)` boxes
+per active track. Residual inference also constructs centers only from its six
+required boxes, including when full history is retained. Matching, Kalman
+arithmetic, lifecycle and returned observations are unchanged. This preserves
+the existing matched-observation semantics; it does not reinterpret gaps as
+equally spaced video frames or change the motion method.
+
+Two generated probes use Python 3.12.9 / NumPy 2.5.4 on macOS ARM64:
+
+| Probe | Full-history peak | Limited-history peak | Evidence |
+| --- | --- | --- | --- |
+| Direct tracker, 1,000 frames | 307,456 bytes | 28,624 bytes | 998 returned observations, exact SHA |
+| Direct tracker, 10,000 frames | 2,831,776 bytes | 28,624 bytes | 9,998 returned observations, exact SHA |
+| Initiation replay, 6,000 frames | 2,950,096 bytes | 1,266,508 bytes | Exact diagnostic content against published 0.5.1 |
+| Association replay, 6,000 frames | 2,951,346 bytes | 1,267,186 bytes | Exact diagnostic content against published 0.5.1 |
+
+These are single-run Python `tracemalloc` peaks, **not total RSS, speed or
+accuracy claims**. The direct probe streams one continuously matched generated
+object without accumulating output; the bounded track retains six boxes at both
+lengths. Replays use the same fixed-box input construction as the historical
+probe, check the entire saved output SHA, keep bundles byte-identical and
+compare all diagnostic content except actual producer metadata and its dependent
+ID. Producer hashes remain intact. Both 600-frame replay checks also pass.
+At 6,000 frames, the complete diagnostics use approximately **57% less peak
+traced allocation than published 0.5.1**. Fixed producer hashing and serialization
+costs remain in this end-to-end figure.
+
+Per-track retained history is bounded by the selected limit. Total memory still
+depends on active-track count, feature dimensions, input-frame size and the
+selected diagnostic window. Ordinary comparison/metric runners still
+materialize their data. This does not solve arbitrary-scale storage or establish
+representative traffic accuracy. Default histories, schemas, historical exports,
+accepted C++ behavior and published packages are unchanged.
+
+Reproduce with a fresh output directory for each command. Use an isolated public
+0.5.1 installation and a checkout interpreter with matching Python/NumPy; the
+replay probe refuses a version mismatch rather than reporting a comparison:
+
+```bash
+python experiments/track_history_memory.py \
+  --output ../visiontrack-walkthrough/my-history-probe
+python experiments/diagnostic_replay_memory.py \
+  --baseline-python /path/to/public-051/bin/python \
+  --baseline-version 0.5.1 \
+  --output ../visiontrack-walkthrough/my-history-replay-probe
+```
+
+Both scripts retain allocation counts, environment/source identity and exact
+output hashes outside Git. Regression checks cover all six presets, combined
+appearance/uncertainty/momentum/re-update/camera/residual options, longer momentum
+windows, short histories, gaps, expiry, reset, full-history inspection and
+refusal of insufficient retention. A full-history residual reference preserves
+the pre-optimization calculation for exact numerical comparison.
+
+## Published streaming implementation — 0.5.1
+
 [Published 0.5.1](RELEASE_NOTES_0.5.1.md) streams the saved inputs used by
 `lab-initiation` and `lab-association`. Public 0.5.0 retains the earlier
 materialized replay.

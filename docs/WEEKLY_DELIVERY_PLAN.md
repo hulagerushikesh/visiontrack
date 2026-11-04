@@ -1,5 +1,65 @@
 # Daily checkpoints and the next weekly goal
 
+## Work resumes alongside the Bath enquiry — 2026-11-04
+
+The owner's latest direction supersedes a project-wide pause: **wait for Bath
+on RoundaboutHD, while continuing independent work.** The traffic comparison
+below remains the main external-validation goal; it is not the only useful
+work the project can do. A reply may resolve only some admission questions.
+No substantive reply has been newly verified for this planning update.
+
+| Work | Current dependency | Action |
+| --- | --- | --- |
+| RoundaboutHD media/annotation intake and outcome evaluation | Precise reuse terms, annotation semantics and then a small independent label audit | Keep this route on hold; silence or an automatic receipt cannot admit it |
+| Long-running reference execution | Repository code, generated inputs and existing parity fixtures | Investigate active-track history growth and design an explicitly compatible bounded option |
+| Next research question | Existing findings and primary literature | Select one unanswered question before building another experiment |
+| Practitioner usefulness | A willing practitioner | Keep open without treating internal checks as external validation |
+| C++ | An accepted, useful reference change and explicit handoff | Maintain current compatibility; avoid a speculative port |
+
+### Next work package and completion checks
+
+- [x] Recheck the repository plans and distinguish the dataset dependency from
+      independent engineering and research work. Both repositories are clean
+      and locally synchronized with their tracked remote branches at this check.
+- [x] **Engineering first: assess bounded track history.** Inventory all history
+      consumers, including optional motion models and public inspection APIs;
+      measure growth on generated long-lived tracks. Specify compatibility and
+      retention semantics before changing storage. Success is a measured,
+      reproducible improvement with unchanged supported tracking output, or an
+      explicit incompatibility finding. Do not silently truncate default/public
+      histories or claim bounded total memory from one component.
+      Implemented an optional retention policy and applied it inside read-only
+      Lab replay. Default full history remains available. Generated direct
+      output hashes agree exactly; both 6,000-frame diagnostic probes use about
+      57% less peak traced allocation than published 0.5.1 with exact diagnostic
+      content agreement. See [measurements and limits](DIAGNOSTIC_REPLAY_SCALING.md).
+- [ ] **Research next: narrow the observation-quality question.** Compare the
+      completed box-gate, initiation and observation-availability findings with
+      prior work. Ask whether localization uncertainty can be distinguished from
+      actual motion well enough to improve association without the false-count
+      costs already observed. This is a candidate question, not a novel method
+      or an approved improvement. Define observables available at inference,
+      closest baselines, disconfirming cases and acceptance measures first.
+      If existing work answers it or the distinction is not identifiable, reject
+      or narrow it instead of running another broad synthetic grid.
+- [ ] **Decision checkpoint:** finish with one scoped implementation result and
+      one go/no-go research proposal. Generated-data findings remain engineering
+      or controlled-mechanism evidence; representative traffic claims still
+      require admitted data and checked labels. Do not count more planning
+      documents, release checks or another known-video replay as that outcome.
+
+The initial literature check identifies relevant existing approaches:
+[ByteTrack](https://arxiv.org/abs/2110.06864) recovers associations using low-score
+detections; [OC-SORT](https://arxiv.org/abs/2203.14360) addresses motion-estimation
+error accumulated during occlusion; [UCMCTrack](https://arxiv.org/abs/2312.08952)
+models motion and projected uncertainty on the ground plane. These establish
+prior art to examine, not a comprehensive novelty review or proof of a gap.
+
+No dataset download, external follow-up, new package release or change to the
+accepted C++ oracle is authorized merely by this work package. There is no
+recording/setup task for the owner now. If the owner says "go next", proceed
+with independent work and identify only the specific remaining dependency.
+
 ## Delivery update — 2026-11-02
 
 [Python 0.5.1 is published](RELEASE_NOTES_0.5.1.md), with verified public
