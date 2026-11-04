@@ -144,6 +144,11 @@ Completion checks for that next engineering step:
    download, recording or Bath response. Measure additional storage and compute
    later on fixed permitted inputs before any real-time claim.
 
+The capture-only step is now [implemented and documented](YOLOX_PROPOSAL_CAPTURE.md)
+in the checkout (2026-11-04), with opt-in bounded records, explicit incomplete
+groups and exact on/off detection/tracker checks. This closes the engineering
+seam above; the localization-signal gate below remains open.
+
 ## Research gate after capture
 
 First audit the signal offline, outside association; do not change production

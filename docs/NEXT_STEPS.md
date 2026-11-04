@@ -26,9 +26,11 @@ The narrow research decision below is now complete. Dataset admission remains se
 reject an unconditional jitter/motion classifier from current boxes. Two generated
 pairs have identical inference and tracker output but different reference anchor
 crossings. This is a logical counterexample, not traffic accuracy or novelty.
-Next: opt-in bounded YOLOX proposal/suppression capture with exact unchanged
-detections, then an offline signal audit before any association method is proposed.
-The capture step needs no Bath response or owner setup. C++ stays in maintenance.
+[Opt-in bounded YOLOX proposal/suppression capture](YOLOX_PROPOSAL_CAPTURE.md) is
+now implemented in the checkout with exact on/off detection/tracker checks.
+Next: measure capture storage/compute and prepare the offline signal audit before
+any association method is proposed. No Bath response or owner setup is needed
+for generated-input cost checks. C++ stays in maintenance.
 
 **Patch delivered — 2026-11-02:** [0.5.1 is published](RELEASE_NOTES_0.5.1.md)
 from verified `4a6b892`, with explicit owner approval. Exact-tag publication,

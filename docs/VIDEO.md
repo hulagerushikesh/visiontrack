@@ -110,3 +110,10 @@ the OpenCV window need physical hardware.
 - Output is H.264 mp4 via imageio-ffmpeg; fps is copied from the source.
 - This is the first Horizon-2 piece (study → tool); see
   [`HORIZONS.md`](HORIZONS.md).
+
+## Optional research diagnostics (checkout only)
+
+The [bounded proposal-capture API](YOLOX_PROPOSAL_CAPTURE.md) preserves the
+rectangles and suppression decisions behind YOLOX detections, without changing
+the ordinary video pipeline. It is not in published 0.5.1 and does not estimate
+localization uncertainty or improve tracking by itself.

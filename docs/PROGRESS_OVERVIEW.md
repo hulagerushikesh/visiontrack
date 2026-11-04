@@ -17,8 +17,10 @@ result or C++ change. The [measurement limits](DIAGNOSTIC_REPLAY_SCALING.md) kee
 total-memory and real-domain validation claims separate. The
 [observation-quality research decision](LOCALIZATION_RESEARCH_DECISION.md) is
 also complete: eight primary sources screened, two executable ambiguity pairs
-verified, no guaranteed box-only jitter/motion classifier justified. Next is
-bounded detector proposal capture, then checking whether that added information
+verified, no guaranteed box-only jitter/motion classifier justified.
+[Bounded detector proposal capture](YOLOX_PROPOSAL_CAPTURE.md) is also implemented
+in the checkout with exact on/off detection/tracker checks and explicit truncated
+groups. Next: measure capture cost, then check whether that added information
 predicts localization error beyond score/class/size. This is feasibility work;
 no new tracking gain, novelty claim or accepted C++ method follows.
 

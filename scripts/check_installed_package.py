@@ -51,10 +51,29 @@ for _ in range(30):
 assert len(full.tracks[0].history) == 30 and len(bounded.tracks[0].history) == 6
 bounded.reset()
 assert bounded.history_limit == 6 and bounded.frame_index == -1
+# The optional capture is delivered without requiring ONNX Runtime or a model.
+import numpy as np
+from types import SimpleNamespace
+from visiontrack.detection.yolox_onnx import YoloxDetector
+class Session:
+    def get_inputs(self):
+        return [SimpleNamespace(name='images')]
+    def run(self, *_):
+        return [np.array([[10.,10.,4.,4.,.9,1.,0.],
+                          [10.,10.,4.,4.,.8,0.,1.]])]
+detector = YoloxDetector('unused', input_size=32, session=Session(), class_filter={1})
+frame = np.zeros((32,32,3), dtype=np.uint8)
+assert detector.detect(frame) == []  # class 0 suppresses 1, then gets filtered
+normal, capture = detector.detect_with_proposals(frame, max_proposals=1)
+assert normal == [] and capture.truncated and capture.omitted_count == 1
+assert capture.nms_suppressed_count == capture.class_filtered_count == 1
+assert capture.records[0].status == 'class_filtered'
+assert capture.records[0].group_size == 2 and not capture.records[0].group_complete
+assert capture.to_dict()['truncated'] is True
 if sys.argv[1] == 'core':
     assert importlib.util.find_spec('PIL') is None
     print(json.dumps({'version': visiontrack.__version__, 'core_cli': 'passed',
-                     'bounded_history_api': 'passed'}))
+                     'bounded_history_api': 'passed', 'yolox_proposal_capture_api': 'passed'}))
     sys.exit()
 
 from visiontrack.lab import build_association_explanation, build_initiation_trace, canonical_json

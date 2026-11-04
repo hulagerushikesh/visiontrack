@@ -12,7 +12,7 @@ No substantive reply has been newly verified for this planning update.
 | --- | --- | --- |
 | RoundaboutHD media/annotation intake and outcome evaluation | Precise reuse terms, annotation semantics and then a small independent label audit | Keep this route on hold; silence or an automatic receipt cannot admit it |
 | Long-running reference execution | Repository code, generated inputs and existing parity fixtures | Investigate active-track history growth and design an explicitly compatible bounded option |
-| Next research question | Existing findings and primary literature | Decision complete; preserve detector proposal information before testing whether it adds localization evidence |
+| Next research question | Existing findings and primary literature | Decision and opt-in capture complete; measure capture cost and audit added localization information |
 | Practitioner usefulness | A willing practitioner | Keep open without treating internal checks as external validation |
 | C++ | An accepted, useful reference change and explicit handoff | Maintain current compatibility; avoid a speculative port |
 
@@ -55,12 +55,14 @@ No substantive reply has been newly verified for this planning update.
 
 ### Next independent step: preserve detector proposals
 
-- [ ] Add opt-in, bounded per-frame proposal/suppression capture to the YOLOX
+- [x] Add opt-in, bounded per-frame proposal/suppression capture to the YOLOX
       decoder, with exact default detection/tracker-output parity. Keep current
       suppression/class semantics explicit; no automatic covariance or runtime
-      association change. Use fake model tensors first, without new data access.
-- [ ] Only after capture passes, prepare a fixed offline localization-signal
-      audit against size/class/score baselines. Proposal dispersion is a known
+      association change. Authored tensors cover both layouts, grid decode, ties,
+      class interactions and truncated groups; multi-frame tracking/reset matches
+      exactly with capture off/on. See the [API and limits](YOLOX_PROPOSAL_CAPTURE.md).
+- [ ] Measure capture storage/compute on fixed permitted inputs, then prepare
+      a fixed offline localization-signal audit against size/class/score baselines. Proposal dispersion is a known
       approach, not a new method or a trustworthy covariance merely by construction.
       See the [acceptance and stop rules](LOCALIZATION_RESEARCH_DECISION.md#research-gate-after-capture).
       Real-domain conclusions require permitted inputs, independently checked

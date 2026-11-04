@@ -29,8 +29,9 @@ import numpy as np
 
 from ..core.geometry import iou_matrix
 from .base import Detection
+from .proposal_capture import ProposalCapture, _ProposalRecorder, _validate_limit
 
-__all__ = ["YoloxDetector"]
+__all__ = ["YoloxDetector", "ProposalCapture"]
 
 
 class YoloxDetector:
@@ -111,33 +112,64 @@ class YoloxDetector:
 
     # -- inference + decode ----------------------------------------------
     def detect(self, frame: np.ndarray) -> list[Detection]:
+        raw, scale = self._infer(frame)
+        return self._decode(raw, scale)
+
+    def detect_with_proposals(
+        self, frame: np.ndarray, *, max_proposals: int = 4096,
+    ) -> tuple[list[Detection], ProposalCapture]:
+        """Run once; return normal detections plus bounded research diagnostics.
+
+        Keeps the first ``max_proposals`` original rows (zero means counts only).
+        Suppression is class-agnostic; class filtering happens afterwards, just
+        as in :meth:`detect`. The detector never stores the returned capture.
+        No uncertainty/covariance is estimated. See ``ProposalCapture`` for limits.
+        """
+        _validate_limit(max_proposals)  # reject before model execution
+        raw, scale = self._infer(frame)
+        detections, capture = self._decode_frame(raw, scale, max_proposals)
+        assert capture is not None
+        return detections, capture
+
+    def _infer(self, frame: np.ndarray) -> tuple[np.ndarray, float]:
         canvas, scale = self._letterbox(np.asarray(frame)[:, :, :3])
         # YOLOX: raw pixels, CHW, no /255. Channel order matches the export.
         blob = canvas.transpose(2, 0, 1)[None].astype(np.float32)
         raw = self._session.run(None, {self._input_name: blob})[0]
-        return self._decode(raw, scale)
+        return raw, scale
 
     def _decode(self, raw: np.ndarray, scale: float) -> list[Detection]:
         """Turn raw YOLOX output ``(1, N, 5+nc)`` into image-space detections."""
+        return self._decode_frame(raw, scale)[0]
+
+    def _decode_frame(
+        self, raw: np.ndarray, scale: float, max_proposals: int | None = None,
+    ) -> tuple[list[Detection], ProposalCapture | None]:
         pred = np.asarray(raw, dtype=np.float64)
+        transposed = False
         if pred.ndim == 3:
             pred = pred[0]
         if pred.shape[0] < pred.shape[1] and pred.shape[0] in (5 + 80, 6):
             pred = pred.T  # tolerate (5+nc, N) layout
+            transposed = True
         boxes = pred[:, :4]
         # Raw (non-decode-baked) exports emit per-cell offsets whose magnitude is
         # ≪ the input size; decode-baked exports emit pixel coords. Auto-detect.
+        grid_decode_applied = False
         if boxes.shape[0] and boxes[:, :2].max() < self.input_size / 8:
-            boxes = self._grid_decode(boxes)
+            decoded = self._grid_decode(boxes)
+            grid_decode_applied = decoded is not boxes
+            boxes = decoded
         objectness = pred[:, 4]
         class_scores = pred[:, 5:]
         class_ids = class_scores.argmax(axis=1)
         confidences = objectness * class_scores.max(axis=1)
 
         keep = confidences >= self.conf_threshold
+        recorder = None if max_proposals is None else _ProposalRecorder(
+            boxes, objectness, class_scores, class_ids, confidences, keep, scale, max_proposals,
+        )
         boxes, class_ids, confidences = boxes[keep], class_ids[keep], confidences[keep]
-        if boxes.shape[0] == 0:
-            return []
 
         # cxcywh (network px) -> xyxy, then undo the letterbox scale.
         xyxy = np.empty_like(boxes)
@@ -147,24 +179,49 @@ class YoloxDetector:
         xyxy[:, 3] = (boxes[:, 1] + boxes[:, 3] / 2) / scale
 
         detections: list[Detection] = []
-        for i in self._nms(xyxy, confidences):
+        for i in self._nms(xyxy, confidences, recorder=recorder):
             cid = int(class_ids[i])
             if self.class_filter is not None and cid not in self.class_filter:
+                if recorder is not None:
+                    recorder.output(i, None)
                 continue
+            if recorder is not None:
+                recorder.output(i, len(detections))
             detections.append(
                 Detection(xyxy=xyxy[i], score=float(confidences[i]), class_id=cid)
             )
-        return detections
+        if recorder is None:
+            return detections, None
+        capture = ProposalCapture(
+            max_proposals=max_proposals, total_proposals=len(pred),
+            raw_shape=tuple(raw.shape), transposed=transposed,
+            grid_decode_applied=grid_decode_applied, input_size=self.input_size,
+            strides=tuple(self.strides), scale=float(scale),
+            conf_threshold=float(self.conf_threshold), iou_threshold=float(self.iou_threshold),
+            class_filter=None if self.class_filter is None else tuple(sorted(self.class_filter)),
+            confidence_filtered_count=len(pred) - len(boxes),
+            nms_suppressed_count=recorder.nms_suppressed_count,
+            nms_kept_count=recorder.nms_kept_count,
+            class_filtered_count=recorder.class_filtered_count,
+            returned_count=len(detections), records=tuple(recorder.records),
+        )
+        return detections, capture
 
-    def _nms(self, boxes: np.ndarray, scores: np.ndarray) -> list[int]:
+    def _nms(
+        self, boxes: np.ndarray, scores: np.ndarray, *, recorder: _ProposalRecorder | None = None,
+    ) -> list[int]:
         order = list(scores.argsort()[::-1])
         keep: list[int] = []
         while order:
             i = order.pop(0)
             keep.append(i)
             if not order:
+                if recorder is not None:
+                    recorder.selection(i, [], np.empty(0), self.iou_threshold)
                 break
             ious = iou_matrix(boxes[i][None], boxes[order])[0]
+            if recorder is not None:
+                recorder.selection(i, order, ious, self.iou_threshold)
             order = [j for j, iou in zip(order, ious, strict=False)
                      if iou <= self.iou_threshold]
         return keep
