@@ -63,6 +63,7 @@ class MatchedRow:
     iou_error: float
     visibility: str = "unknown"
     group_size: int | None = None
+    match_ambiguous: bool = False
 
 
 def _box(box: tuple[float, ...]) -> None:
@@ -132,7 +133,7 @@ def _frame_rows(frame: Frame) -> tuple[list[MatchedRow], Counter[str]]:
     # An equally good assignment may attach a detection to another reference
     # (or leave it unmatched). Keep the fixed solver result for the target, but
     # expose that ambiguity rather than implying its reference is certain.
-    ambiguous = 0
+    ambiguous_indices: set[int] = set()
     for i, j in zip(assigned_rows, assigned_cols, strict=True):
         if i >= n or j >= m or overlaps[i, j] < MIN_IOU:
             continue
@@ -144,9 +145,9 @@ def _frame_rows(frame: Frame) -> tuple[list[MatchedRow], Counter[str]]:
         other_rows, other_cols = linear_sum_assignment(alternative)
         if math.isclose(float(alternative[other_rows, other_cols].sum()),
                         optimum, rel_tol=0.0, abs_tol=1e-12):
-            ambiguous += 1
-    totals["ambiguous_matches"] = ambiguous
-    totals["ambiguous_frames"] = int(ambiguous > 0)
+            ambiguous_indices.add(int(i))
+    totals["ambiguous_matches"] = len(ambiguous_indices)
+    totals["ambiguous_frames"] = int(bool(ambiguous_indices))
     matched: list[MatchedRow] = []
     for i, j in zip(assigned_rows, assigned_cols, strict=True):
         if i >= n or j >= m or overlaps[i, j] < MIN_IOU:
@@ -160,6 +161,7 @@ def _frame_rows(frame: Frame) -> tuple[list[MatchedRow], Counter[str]]:
             det.xyxy[2] - det.xyxy[0], det.xyxy[3] - det.xyxy[1],
             det.score, det.spread, pixel_error / (ref.xyxy[3] - ref.xyxy[1]),
             pixel_error, 1.0 - float(overlaps[i, j]), ref.visibility, det.group_size,
+            int(i) in ambiguous_indices,
         ))
     totals["matched"] = len(matched)
     totals["unmatched_detections"] = n - len(matched)
@@ -269,6 +271,43 @@ def _group_size_bin(size: int | None) -> str:
     return "8+"
 
 
+def _ambiguity_sensitivity(
+    train: list[MatchedRow], test: list[MatchedRow], resamples: int, seed: int,
+) -> dict:
+    """Refit and compare on the same unambiguous supported population."""
+    clean_train = [row for row in train if not row.match_ambiguous]
+    clean_classes = {row.class_id for row in clean_train}
+    clean_test = [row for row in test if not row.match_ambiguous
+                  and row.class_id in clean_classes]
+    result: dict = {
+        "development_matches": len(clean_train),
+        "test_matches": len(clean_test),
+        "test_scenes": len({row.scene for row in clean_test}),
+        "excluded_ambiguous_development_matches": len(train) - len(clean_train),
+        "excluded_ambiguous_test_matches": sum(row.match_ambiguous for row in test),
+        "excluded_unseen_class_test_matches": sum(
+            not row.match_ambiguous and row.class_id not in clean_classes for row in test
+        ),
+    }
+    if not clean_train or not clean_test:
+        result["status"] = "unavailable: no supported unambiguous matches in both splits"
+        return result
+    b2 = _predict(clean_train, clean_test, 2)
+    b3 = _predict(clean_train, clean_test, 3)
+    area2, _ = _area(clean_test, b2)
+    area3, _ = _area(clean_test, b3)
+    _, scene_mean, interval = _scene_contrast(clean_test, b2, b3, resamples, seed)
+    result.update({
+        "status": "scene-clustered" if interval is not None else "descriptive",
+        "B2_area": area2,
+        "B3_area": area3,
+        "pooled_delta": area3 - area2,
+        "scene_mean_delta": scene_mean,
+        "scene_bootstrap_95pct": interval,
+    })
+    return result
+
+
 def compare(frames: list[Frame], *, resamples: int = 10_000,
             seed: int = 20261104) -> dict:
     """Frozen B0-B3 comparison. Output is descriptive until source is admitted."""
@@ -300,6 +339,8 @@ def compare(frames: list[Frame], *, resamples: int = 10_000,
                          "risk_at_coverage": points}
     scene_deltas, scene_mean, interval = _scene_contrast(
         supported, b2, b3, resamples, seed)
+    ambiguity_sensitivity = _ambiguity_sensitivity(
+        supported_train, supported, resamples, seed)
     # Height boundaries are fitted on supported development detections only.
     # Duplicate boundaries may leave an empty bin; report the populated bins.
     height_cuts = np.quantile([row.height for row in supported_train], [.25, .5, .75])
@@ -349,6 +390,7 @@ def compare(frames: list[Frame], *, resamples: int = 10_000,
         "per_scene_paired_delta": scene_deltas,
         "paired_scene_mean_delta": scene_mean,
         "paired_scene_bootstrap_95pct": interval,
+        "unambiguous_paired_sensitivity": ambiguity_sensitivity,
         "interval_status": "descriptive" if interval is None else "scene-clustered",
         "predicted_height_development_quartile_cuts": [float(v) for v in height_cuts],
         "paired_strata": strata,

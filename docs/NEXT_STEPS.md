@@ -20,7 +20,9 @@ class/height/visibility/group-size subgroup reporting on authored inputs; it has
 no real outcome or admitted data. C++ remains on its accepted oracle.
 The runner now also counts equal-optimum detection/reference assignment ambiguity;
 future reports must disclose those counts rather than treating a chosen match
-as uniquely determined. A fresh [DRTD v2.0 source screen](REAL_TRAFFIC_EVIDENCE_GATE.md)
+as uniquely determined. The runner also refits B2/B3 after excluding ambiguous
+matches as a separate sensitivity check, with explicit remaining cohort and
+scene counts. A fresh [DRTD v2.0 source screen](REAL_TRAFFIC_EVIDENCE_GATE.md)
 found clear data terms but model-assisted labels and no verified camera/session
 units, so it remains a development-only candidate and does not close admission.
 

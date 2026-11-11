@@ -63,6 +63,14 @@ permits the same optimum total IoU (within `1e-12`), count that pair and frame
 as assignment-ambiguous; the selected target remains in the analysis, so report
 these counts alongside every outcome. Fix ignore-region handling in the dataset
 manifest before running.
+As a sensitivity check, refit B2 and B3 using only unambiguous supported
+development matches and compare them on the same unambiguous supported test
+matches. Report excluded ambiguous rows, any classes absent after the exclusion,
+the remaining scene count and the paired area/scene interval. If either split
+has no such rows, report the sensitivity as unavailable. This check probes
+dependence on the fixed reference assignment; it does not make the remaining
+labels independent or resolve ambiguous object identity.
+
 This is independent of tracker association and does not reuse accepted matches.
 
 Primary error is Euclidean bottom-anchor error divided by reference box height;
@@ -138,7 +146,7 @@ unmatched/missed/excluded and equal-optimum assignment-ambiguity counts, B0–B3
 ridge fits with an unpenalized intercept,
 training-only numeric standardization, matched-population B2/B3 comparison,
 risk-versus-coverage area, fixed-key ranking ties, paired scene-level bootstrap,
-and the declared subgroup display.
+an unambiguous-match sensitivity refit, and the declared subgroup display.
 It rejects a scene shared by development and test. Generated-input tests check
 the arithmetic, leakage, refusal paths and scene-unit resampling. The interval
 is the bootstrap of the **mean of per-scene paired areas**; the pooled paired

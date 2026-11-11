@@ -66,6 +66,7 @@ def test_equal_optimum_box_matches_are_counted_as_ambiguous():
     assert len(rows) == 2
     assert counts["ambiguous_matches"] == 2
     assert counts["ambiguous_frames"] == 1
+    assert all(row.match_ambiguous for row in rows)
     assert {row.key for row in rows} == {
         ("site-1", "001", 0), ("site-1", "001", 1),
     }
@@ -76,7 +77,49 @@ def test_equal_optimum_box_matches_are_counted_as_ambiguous():
          DetectionRow("car", (8, 0, 18, 10), .8, "supported", .1)),
         (ReferenceRow("car", same_box), ReferenceRow("car", (8, 0, 18, 10))),
     )
-    assert _frame_rows(separated)[1]["ambiguous_matches"] == 0
+    separated_rows, separated_counts = _frame_rows(separated)
+    assert separated_counts["ambiguous_matches"] == 0
+    assert all(not row.match_ambiguous for row in separated_rows)
+
+
+def test_unambiguous_sensitivity_refits_on_clean_matches_only():
+    duplicate = (0, 0, 10, 10)
+    frames = []
+    for split in ("development", "test"):
+        frames.append(_frame(f"{split}-clean", split, shift=1))
+        frames.append(Frame(
+            split, f"{split}-ties", "1",
+            tuple(DetectionRow("car", duplicate, .8, "supported", .1)
+                  for _ in range(2)),
+            tuple(ReferenceRow("car", duplicate) for _ in range(2)),
+        ))
+    result = compare(frames, resamples=10)
+    sensitivity = result["unambiguous_paired_sensitivity"]
+    assert result["counts"]["test"]["ambiguous_matches"] == 2
+    assert result["results"]["B2_paired"]["matches"] == 3
+    assert sensitivity["development_matches"] == 1
+    assert sensitivity["test_matches"] == 1
+    assert sensitivity["test_scenes"] == 1
+    assert sensitivity["excluded_ambiguous_development_matches"] == 2
+    assert sensitivity["excluded_ambiguous_test_matches"] == 2
+    assert sensitivity["excluded_unseen_class_test_matches"] == 0
+    assert sensitivity["status"] == "descriptive"
+    assert sensitivity["B2_area"] == sensitivity["B3_area"] == pytest.approx(.1)
+
+
+def test_unambiguous_sensitivity_reports_when_no_clean_matches_remain():
+    duplicate = (0, 0, 10, 10)
+    frames = [Frame(
+        split, split, "1",
+        tuple(DetectionRow("car", duplicate, .8, "supported", .1)
+              for _ in range(2)),
+        tuple(ReferenceRow("car", duplicate) for _ in range(2)),
+    ) for split in ("development", "test")]
+    result = compare(frames, resamples=10)
+    sensitivity = result["unambiguous_paired_sensitivity"]
+    assert sensitivity["development_matches"] == sensitivity["test_matches"] == 0
+    assert sensitivity["status"].startswith("unavailable")
+    assert "B3_area" not in sensitivity
 
 
 def test_preparation_rejects_scene_leak_and_duplicate_frame():
