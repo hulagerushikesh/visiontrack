@@ -165,6 +165,29 @@ def test_constant_spread_does_not_create_apparent_gain():
     assert result["paired_scene_bootstrap_95pct"] is None  # fewer than 50 matches
 
 
+def test_paired_report_keeps_scenes_with_no_detection_or_supported_match():
+    missing = _frame("test-no-detections", "test")
+    missing = Frame(missing.split, missing.scene, missing.key, (), missing.references)
+    unmatched = _frame("test-unmatched", "test", shift=4)
+    unsupported = _frame("test-unsupported", "test", spread=None)
+    result = compare([
+        _frame(), _frame("test-paired", "test"), missing, unmatched, unsupported,
+    ], resamples=10)
+    scenes = result["paired_scene_coverage"]
+    assert len(scenes) == result["counts"]["test"]["scenes"] == 4
+    assert scenes["test-no-detections"]["status"] == "no_detections"
+    assert scenes["test-no-detections"]["eligible_references"] == 1
+    assert scenes["test-unmatched"]["detections"] == 1
+    assert scenes["test-unmatched"]["matched"] == 0
+    assert scenes["test-unsupported"]["matched"] == 1
+    assert scenes["test-unsupported"]["paired_matches"] == 0
+    assert scenes["test-paired"]["paired_matches"] == 1
+    assert result["test_scenes_without_paired_matches"] == [
+        "test-no-detections", "test-unmatched", "test-unsupported",
+    ]
+    assert set(result["per_scene_paired_delta"]) == {"test-paired"}
+
+
 def test_bootstrap_uses_scene_units_and_is_reproducible():
     frames = []
     for i in range(8):

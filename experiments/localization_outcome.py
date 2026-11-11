@@ -323,6 +323,42 @@ def compare(frames: list[Frame], *, resamples: int = 10_000,
                  if row.spread is not None and row.class_id in supported_classes]
     if not supported_train or not supported or not broad:
         raise ValueError("need supported matched boxes in both splits")
+    # Preserve every declared test scene, including those with no detections or
+    # matches. The paired cohort alone would silently drop those cameras.
+    scene_coverage: dict[str, Counter[str]] = {}
+    for frame in frames:
+        if frame.split != "test":
+            continue
+        scene = scene_coverage.setdefault(frame.scene, Counter())
+        scene["frames"] += 1
+        scene["detections"] += len(frame.detections)
+        scene["eligible_references"] += sum(ref.eligible for ref in frame.references)
+        scene["supported_detections"] += sum(
+            det.spread_status == "supported" for det in frame.detections
+        )
+    for row in test:
+        scene_coverage[row.scene]["matched"] += 1
+        scene_coverage[row.scene]["supported_matches"] += row.spread is not None
+    for row in supported:
+        scene_coverage[row.scene]["paired_matches"] += 1
+    missing_paired_scenes = sorted(
+        scene for scene, inventory in scene_coverage.items()
+        if not inventory["paired_matches"]
+    )
+    scene_coverage_report = {
+        scene: {
+            **{name: inventory[name] for name in (
+                "frames", "detections", "eligible_references", "supported_detections",
+                "matched", "supported_matches", "paired_matches",
+            )},
+            "status": (
+                "no_detections" if not inventory["detections"]
+                else "no_paired_matches" if not inventory["paired_matches"]
+                else "paired"
+            ),
+        }
+        for scene, inventory in sorted(scene_coverage.items())
+    }
     results: dict[str, dict] = {}
     for level in range(3):
         prediction = _predict(train, broad, level)
@@ -385,6 +421,8 @@ def compare(frames: list[Frame], *, resamples: int = 10_000,
         "counts": counts,
         "unseen_test_class_matches": len(test) - len(broad),
         "paired_coverage_of_all_test_detections": len(supported) / counts["test"]["detections"],
+        "paired_scene_coverage": scene_coverage_report,
+        "test_scenes_without_paired_matches": missing_paired_scenes,
         "results": results,
         "target_descriptions": descriptions,
         "per_scene_paired_delta": scene_deltas,

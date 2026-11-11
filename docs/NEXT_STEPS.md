@@ -33,6 +33,9 @@ comparison. Its teacher-assisted validation labels are not an independent test.
 Offline proposal extraction was reduced from repeated full-capture scans to one
 group index per frame, with exact generated-output agreement; neither result
 changes tracker behavior or authorizes a C++ port.
+The offline comparison now reports coverage for **every** declared test scene,
+including those with no detections or no supported matched boxes, so a future
+paired interval cannot silently stand in for a missing camera.
 
 **History engineering completed — 2026-11-04 (checkout):** an explicit
 `ByteTracker(history_limit=...)` option preserves the required motion window;

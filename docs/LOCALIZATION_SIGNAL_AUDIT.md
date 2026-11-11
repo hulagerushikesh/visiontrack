@@ -156,6 +156,11 @@ ridge fits with an unpenalized intercept,
 training-only numeric standardization, matched-population B2/B3 comparison,
 risk-versus-coverage area, fixed-key ranking ties, paired scene-level bootstrap,
 an unambiguous-match sensitivity refit, and the declared subgroup display.
+The report now retains every declared test scene in a separate coverage table,
+including cameras with zero detections, no matches or no supported paired
+matches, and lists omitted scenes explicitly. Paired scene intervals still
+describe only scenes with paired matches and must be read with that coverage
+table; an interval cannot validate a camera that contributed no pair.
 It rejects a scene shared by development and test. Generated-input tests check
 the arithmetic, leakage, refusal paths and scene-unit resampling. The interval
 is the bootstrap of the **mean of per-scene paired areas**; the pooled paired
