@@ -119,8 +119,21 @@ practical effect size and an application-specific no-harm margin need a later,
 separately frozen association/count experiment. Calibration is a separate task
 if we ever define an actual predictive distribution.
 
-No scene-separated dataset, split manifest, outcome table or accepted method
-exists for this audit yet. A [one-image UVH-26 preflight](UVH26_LOCALIZATION_PREFLIGHT.md)
+The dataset-agnostic [offline comparison runner](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/localization_outcome.py)
+now implements eligible same-class IoU-0.5 box matching, bottom-anchor targets,
+unmatched/missed/excluded counts, B0–B3 ridge fits with an unpenalized intercept,
+training-only numeric standardization, matched-population B2/B3 comparison,
+risk-versus-coverage area, fixed-key tie order, and paired scene-level bootstrap.
+It rejects a scene shared by development and test. Generated-input tests check
+the arithmetic, leakage, refusal paths and scene-unit resampling. The interval
+is the bootstrap of the **mean of per-scene paired areas**; the pooled paired
+areas are also shown and must not be confused with that equal-scene estimate.
+The runner cannot certify label independence, scene provenance, media rights,
+class/ignore mapping or image quality. A source-specific adapter and declared
+visibility/group-size strata are still required before an outcome study.
+
+No admitted scene-separated dataset, split manifest, real outcome table or
+accepted method exists for this audit yet. A [one-image UVH-26 preflight](UVH26_LOCALIZATION_PREFLIGHT.md)
 checks real-image capture feasibility and exposes missing camera IDs and an
 edge-box area-field inconsistency; it is not an outcome run. The next deliverable
 is an admitted-input manifest and independent label check before any outcome

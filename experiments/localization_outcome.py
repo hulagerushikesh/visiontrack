@@ -1,0 +1,276 @@
+"""Offline, dataset-agnostic localization comparison; never changes tracking.
+
+Call only after source rights, scene units, class mapping and independent box
+review are recorded separately. The inputs here are already mapped classes and
+explicitly eligible references. Synthetic tests exercise mechanics, not accuracy.
+"""
+
+from __future__ import annotations
+
+import math
+from collections import Counter
+from dataclasses import dataclass
+
+import numpy as np
+from scipy.optimize import linear_sum_assignment
+
+MIN_IOU = 0.5
+COVERAGES = (0.10, 0.25, 0.50, 0.75, 1.0)
+SPREAD_STATUSES = {
+    "supported", "frame_truncated", "missing_winner", "incomplete_group",
+    "singleton_group", "few_same_class", "invalid_geometry",
+}
+
+
+@dataclass(frozen=True)
+class DetectionRow:
+    class_id: str
+    xyxy: tuple[float, float, float, float]
+    score: float
+    spread_status: str
+    spread: float | None
+
+
+@dataclass(frozen=True)
+class ReferenceRow:
+    class_id: str
+    xyxy: tuple[float, float, float, float]
+    eligible: bool = True
+
+
+@dataclass(frozen=True)
+class Frame:
+    split: str  # "development" or "test"; never mix one scene across splits.
+    scene: str
+    key: str
+    detections: tuple[DetectionRow, ...]
+    references: tuple[ReferenceRow, ...]
+
+
+@dataclass(frozen=True)
+class MatchedRow:
+    scene: str
+    key: tuple[str, str, int]
+    class_id: str
+    width: float
+    height: float
+    score: float
+    spread: float | None
+    error: float
+    pixel_error: float
+    iou_error: float
+
+
+def _box(box: tuple[float, ...]) -> None:
+    if len(box) != 4 or not all(math.isfinite(v) for v in box):
+        raise ValueError("box must have four finite coordinates")
+    if box[2] <= box[0] or box[3] <= box[1]:
+        raise ValueError("box must have positive width and height")
+
+
+def _iou(a: tuple[float, ...], b: tuple[float, ...]) -> float:
+    x1, y1 = max(a[0], b[0]), max(a[1], b[1])
+    x2, y2 = min(a[2], b[2]), min(a[3], b[3])
+    intersection = max(0.0, x2 - x1) * max(0.0, y2 - y1)
+    area_a = (a[2] - a[0]) * (a[3] - a[1])
+    area_b = (b[2] - b[0]) * (b[3] - b[1])
+    return intersection / (area_a + area_b - intersection)
+
+
+def _frame_rows(frame: Frame) -> tuple[list[MatchedRow], Counter[str]]:
+    if frame.split not in {"development", "test"} or not frame.scene or not frame.key:
+        raise ValueError("frame needs a declared split, scene and key")
+    for det in frame.detections:
+        _box(det.xyxy)
+        if not det.class_id or not math.isfinite(det.score) or not 0 <= det.score <= 1:
+            raise ValueError("invalid detection class or score")
+        if det.spread_status not in SPREAD_STATUSES:
+            raise ValueError("unknown proposal spread status")
+        if det.spread_status == "supported":
+            if det.spread is None or not math.isfinite(det.spread) or det.spread < 0:
+                raise ValueError("supported spread must be finite and nonnegative")
+        elif det.spread is not None:
+            raise ValueError("unsupported spread must be absent")
+    for ref in frame.references:
+        _box(ref.xyxy)
+        if not ref.class_id:
+            raise ValueError("reference class is empty")
+    eligible = [ref for ref in frame.references if ref.eligible]
+    n, m = len(frame.detections), len(eligible)
+    totals: Counter[str] = Counter({
+        "detections": n, "eligible_references": m,
+        "excluded_references": len(frame.references) - m,
+        "supported_detections": sum(d.spread_status == "supported" for d in frame.detections),
+    })
+    totals.update(f"spread_status_{d.spread_status}" for d in frame.detections)
+    if not n or not m:
+        totals["unmatched_detections"] = n
+        totals["missed_references"] = m
+        return [], totals
+    overlaps = np.zeros((n, m), dtype=np.float64)
+    for i, det in enumerate(frame.detections):
+        for j, ref in enumerate(eligible):
+            if det.class_id == ref.class_id:
+                overlaps[i, j] = _iou(det.xyxy, ref.xyxy)
+    # Dummy rows/columns allow unmatched items. Ineligible edges cost more than
+    # unmatched; eligible pairs maximize total IoU, not tracker associations.
+    cost = np.zeros((n + m, n + m), dtype=np.float64)
+    cost[:n, :m] = np.where(overlaps >= MIN_IOU, -overlaps, 1.0)
+    assigned_rows, assigned_cols = linear_sum_assignment(cost)
+    matched: list[MatchedRow] = []
+    for i, j in zip(assigned_rows, assigned_cols, strict=True):
+        if i >= n or j >= m or overlaps[i, j] < MIN_IOU:
+            continue
+        det, ref = frame.detections[i], eligible[j]
+        dx = (det.xyxy[0] + det.xyxy[2] - ref.xyxy[0] - ref.xyxy[2]) / 2
+        dy = det.xyxy[3] - ref.xyxy[3]
+        pixel_error = math.hypot(dx, dy)
+        matched.append(MatchedRow(
+            frame.scene, (frame.scene, frame.key, int(i)), det.class_id,
+            det.xyxy[2] - det.xyxy[0], det.xyxy[3] - det.xyxy[1],
+            det.score, det.spread, pixel_error / (ref.xyxy[3] - ref.xyxy[1]),
+            pixel_error, 1.0 - float(overlaps[i, j]),
+        ))
+    totals["matched"] = len(matched)
+    totals["unmatched_detections"] = n - len(matched)
+    totals["missed_references"] = m - len(matched)
+    totals["supported_matches"] = sum(row.spread is not None for row in matched)
+    return matched, totals
+
+
+def prepare(frames: list[Frame]) -> tuple[dict[str, list[MatchedRow]], dict[str, dict]]:
+    """Check split isolation, then derive matched targets and coverage counts."""
+    seen: set[tuple[str, str]] = set()
+    scene_split: dict[str, str] = {}
+    rows: dict[str, list[MatchedRow]] = {"development": [], "test": []}
+    counts = {"development": Counter(), "test": Counter()}
+    for frame in frames:
+        key = (frame.scene, frame.key)
+        if key in seen:
+            raise ValueError("duplicate scene/frame key")
+        seen.add(key)
+        if frame.scene in scene_split and scene_split[frame.scene] != frame.split:
+            raise ValueError("scene leaks across development and test")
+        scene_split[frame.scene] = frame.split
+        matched, inventory = _frame_rows(frame)
+        rows[frame.split].extend(matched)
+        counts[frame.split].update(inventory)
+        counts[frame.split]["frames"] += 1
+    if not rows["development"] or not rows["test"]:
+        raise ValueError("both splits need matched boxes")
+    for split in counts:
+        counts[split]["scenes"] = sum(s == split for s in scene_split.values())
+    return rows, {split: dict(count) for split, count in counts.items()}
+
+
+def _features(rows: list[MatchedRow], classes: tuple[str, ...], level: int) -> np.ndarray:
+    class_columns = [[float(row.class_id == name) for name in classes[1:]] for row in rows]
+    numeric = [[math.log(row.width), math.log(row.height)] for row in rows]
+    if level >= 2:
+        for row, features in zip(rows, numeric, strict=True):
+            features.append(row.score)
+    if level >= 3:
+        for row, features in zip(rows, numeric, strict=True):
+            assert row.spread is not None
+            features.append(row.spread)
+    return np.asarray([cat + num for cat, num in zip(class_columns, numeric, strict=True)])
+
+
+def _predict(train: list[MatchedRow], test: list[MatchedRow], level: int) -> np.ndarray:
+    if level == 0:
+        return np.full(len(test), np.mean([r.error for r in train]))
+    classes = tuple(sorted({row.class_id for row in train}))
+    x_train = _features(train, classes, level)
+    x_test = _features(test, classes, level)
+    # Only numeric columns are standardized. One-hot indicators remain 0/1.
+    ncat = len(classes) - 1
+    mean = x_train[:, ncat:].mean(axis=0)
+    scale = x_train[:, ncat:].std(axis=0)
+    scale[scale == 0] = 1.0
+    x_train[:, ncat:] = (x_train[:, ncat:] - mean) / scale
+    x_test[:, ncat:] = (x_test[:, ncat:] - mean) / scale
+    target = np.log1p([row.error for row in train])
+    # Center every feature when fitting so the intercept is truly unpenalized,
+    # including the non-standardized class indicators.
+    feature_mean = x_train.mean(axis=0)
+    centered_x = x_train - feature_mean
+    coef = np.linalg.solve(centered_x.T @ centered_x + np.eye(x_train.shape[1]),
+                           centered_x.T @ (target - target.mean()))
+    intercept = target.mean() - feature_mean @ coef
+    return np.maximum(np.expm1(intercept + x_test @ coef), 0.0)
+
+
+def _area(rows: list[MatchedRow], predictions: np.ndarray) -> tuple[float, dict[str, float]]:
+    order = sorted(range(len(rows)), key=lambda i: (float(predictions[i]), rows[i].key))
+    errors = np.asarray([rows[i].error for i in order])
+    curve = np.cumsum(errors) / np.arange(1, len(errors) + 1)
+    samples = {f"{int(fraction * 100)}%": float(curve[max(0, math.ceil(len(rows) * fraction) - 1)])
+               for fraction in COVERAGES}
+    return float(curve.mean()), samples
+
+
+def compare(frames: list[Frame], *, resamples: int = 10_000,
+            seed: int = 20261104) -> dict:
+    """Frozen B0-B3 comparison. Output is descriptive until source is admitted."""
+    if resamples <= 0:
+        raise ValueError("resamples must be positive")
+    split_rows, counts = prepare(frames)
+    train, test = split_rows["development"], split_rows["test"]
+    trained_classes = {row.class_id for row in train}
+    broad = [row for row in test if row.class_id in trained_classes]
+    supported_train = [row for row in train if row.spread is not None]
+    supported_classes = {row.class_id for row in supported_train}
+    supported = [row for row in broad
+                 if row.spread is not None and row.class_id in supported_classes]
+    if not supported_train or not supported or not broad:
+        raise ValueError("need supported matched boxes in both splits")
+    results: dict[str, dict] = {}
+    for level in range(3):
+        prediction = _predict(train, broad, level)
+        area, points = _area(broad, prediction)
+        results[f"B{level}_broad"] = {"matches": len(broad), "area": area,
+                                     "risk_at_coverage": points}
+    # For a fair paired comparison, B2 and B3 fit on the same development
+    # subset and rank the identical supported test detections.
+    b2 = _predict(supported_train, supported, 2)
+    b3 = _predict(supported_train, supported, 3)
+    scene_deltas = []
+    for scene in sorted({row.scene for row in supported}):
+        indices = [i for i, row in enumerate(supported) if row.scene == scene]
+        group = [supported[i] for i in indices]
+        a2, _ = _area(group, b2[indices])
+        a3, _ = _area(group, b3[indices])
+        scene_deltas.append((scene, a3 - a2))
+    for name, prediction in (("B2_paired", b2), ("B3_paired", b3)):
+        area, points = _area(supported, prediction)
+        results[name] = {"matches": len(supported), "area": area,
+                         "risk_at_coverage": points}
+    interval = None
+    if len(scene_deltas) >= 8 and len(supported) >= 50:
+        rng = np.random.default_rng(seed)
+        values = np.asarray([value for _, value in scene_deltas])
+        sampled = rng.integers(0, len(values), size=(resamples, len(values)))
+        interval = [float(v) for v in np.quantile(values[sampled].mean(axis=1),
+                                                 [0.025, 0.975])]
+    descriptions = {}
+    for name, cohort in (("broad", broad), ("paired", supported)):
+        descriptions[name] = {
+            "mean_pixel_error": float(np.mean([row.pixel_error for row in cohort])),
+            "median_pixel_error": float(np.median([row.pixel_error for row in cohort])),
+            "mean_one_minus_iou": float(np.mean([row.iou_error for row in cohort])),
+        }
+    return {
+        "schema": "visiontrack.localization-outcome/v1",
+        "matching": "same-class max total IoU, one-to-one, IoU >= 0.5; eligible refs only",
+        "metric": "mean normalized bottom-anchor error versus retained coverage; lower is better",
+        "counts": counts,
+        "unseen_test_class_matches": len(test) - len(broad),
+        "paired_coverage_of_all_test_detections": len(supported) / counts["test"]["detections"],
+        "results": results,
+        "target_descriptions": descriptions,
+        "per_scene_paired_delta": dict(scene_deltas),
+        "paired_scene_mean_delta": float(np.mean([value for _, value in scene_deltas])),
+        "paired_scene_bootstrap_95pct": interval,
+        "interval_status": "descriptive" if interval is None else "scene-clustered",
+        "independent_truth_verified_by_this_code": False,
+    }

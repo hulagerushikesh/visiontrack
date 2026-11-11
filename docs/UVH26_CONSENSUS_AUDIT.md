@@ -9,12 +9,12 @@ coordinates were left unchanged by annotators. The expert-labeled gold set is
 not public. Thus, comparing MV with ST diagnoses *consensus stability*, not
 localization accuracy or independent truth.
 
-The [pinned audit code](../experiments/uvh26_consensus_audit.py) read only the
+The [pinned audit code](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/uvh26_consensus_audit.py) read only the
 two official validation COCO JSON files, checked both SHA-256 digests and box
 geometry, aligned images by filename, then matched boxes within shared images
 without using class. It maximized eligible match count then total IoU at a
 fixed 0.5 threshold. Raw JSON stayed outside Git; the
-[compact receipt](../experiments/uvh26_consensus_audit_v1_result.json) contains
+[compact receipt](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/uvh26_consensus_audit_v1_result.json) contains
 aggregates and source hashes. No image pixels or detector outputs were opened.
 
 | Check | Observed in the released validation files |

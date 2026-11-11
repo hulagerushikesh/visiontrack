@@ -12,11 +12,11 @@ This source therefore supports a bounded image-level feasibility probe, but
 metadata alone. It also has no temporal IDs or flow counts, so it cannot test
 tracking, identity continuity or the intended traffic-counting product outcome.
 
-The [offline preflight](../experiments/uvh26_localization_preflight.py) checks
+The [offline preflight](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/uvh26_localization_preflight.py) checks
 the publisher's validation-annotation SHA-256, the local YOLOX nano model hash,
 COCO references and box geometry, selected image dimensions, full-frame proposal
 capture, `detect()` parity, and spread-feature abstention. The
-[small receipt](../experiments/uvh26_localization_preflight_v1_result.json) uses
+[small receipt](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/uvh26_localization_preflight_v1_result.json) uses
 one publisher image, `UVH-26-Val/data/000/100341.png`, retained outside Git.
 The annotation file contains 5,297 images and 63,497 boxes; all referenced
 images/classes and box boundaries passed this preflight. In 2,387 rows the
