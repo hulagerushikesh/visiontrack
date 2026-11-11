@@ -55,6 +55,30 @@ def test_same_class_and_iou_gate():
     assert _frame_rows(_frame(shift=3))[1]["matched"] == 1
 
 
+def test_equal_optimum_box_matches_are_counted_as_ambiguous():
+    same_box = (0, 0, 10, 10)
+    frame = Frame(
+        "development", "site-1", "001",
+        tuple(DetectionRow("car", same_box, .8, "supported", .1) for _ in range(2)),
+        tuple(ReferenceRow("car", same_box) for _ in range(2)),
+    )
+    rows, counts = _frame_rows(frame)
+    assert len(rows) == 2
+    assert counts["ambiguous_matches"] == 2
+    assert counts["ambiguous_frames"] == 1
+    assert {row.key for row in rows} == {
+        ("site-1", "001", 0), ("site-1", "001", 1),
+    }
+
+    separated = Frame(
+        "development", "site-1", "002",
+        (DetectionRow("car", same_box, .8, "supported", .1),
+         DetectionRow("car", (8, 0, 18, 10), .8, "supported", .1)),
+        (ReferenceRow("car", same_box), ReferenceRow("car", (8, 0, 18, 10))),
+    )
+    assert _frame_rows(separated)[1]["ambiguous_matches"] == 0
+
+
 def test_preparation_rejects_scene_leak_and_duplicate_frame():
     with pytest.raises(ValueError, match="leaks"):
         prepare([_frame(), _frame(scene="dev-a", split="test", key="2")])

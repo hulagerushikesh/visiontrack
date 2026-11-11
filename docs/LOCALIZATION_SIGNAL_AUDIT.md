@@ -57,8 +57,12 @@ The existing API/default and all ordinary `Detection` objects remain unchanged.
 Use independently checked reference boxes and visibility/ignore status. Map
 classes explicitly before any outcomes. Per frame, match returned detections
 to eligible same-class references using maximum total IoU, with pairs below
-**0.5** forbidden and one-to-one assignment; use deterministic original-index
-tie handling. Fix ignore-region handling in the dataset manifest before running.
+**0.5** forbidden and one-to-one assignment. Preserve original input order and
+pin the solver version for reproducibility. If forbidding a selected pair still
+permits the same optimum total IoU (within `1e-12`), count that pair and frame
+as assignment-ambiguous; the selected target remains in the analysis, so report
+these counts alongside every outcome. Fix ignore-region handling in the dataset
+manifest before running.
 This is independent of tracker association and does not reuse accepted matches.
 
 Primary error is Euclidean bottom-anchor error divided by reference box height;
@@ -130,7 +134,8 @@ if we ever define an actual predictive distribution.
 
 The dataset-agnostic [offline comparison runner](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/localization_outcome.py)
 now implements eligible same-class IoU-0.5 box matching, bottom-anchor targets,
-unmatched/missed/excluded counts, B0–B3 ridge fits with an unpenalized intercept,
+unmatched/missed/excluded and equal-optimum assignment-ambiguity counts, B0–B3
+ridge fits with an unpenalized intercept,
 training-only numeric standardization, matched-population B2/B3 comparison,
 risk-versus-coverage area, fixed-key ranking ties, paired scene-level bootstrap,
 and the declared subgroup display.

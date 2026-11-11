@@ -111,6 +111,7 @@ def _frame_rows(frame: Frame) -> tuple[list[MatchedRow], Counter[str]]:
         "detections": n, "eligible_references": m,
         "excluded_references": len(frame.references) - m,
         "supported_detections": sum(d.spread_status == "supported" for d in frame.detections),
+        "ambiguous_matches": 0, "ambiguous_frames": 0,
     })
     totals.update(f"spread_status_{d.spread_status}" for d in frame.detections)
     if not n or not m:
@@ -127,6 +128,25 @@ def _frame_rows(frame: Frame) -> tuple[list[MatchedRow], Counter[str]]:
     cost = np.zeros((n + m, n + m), dtype=np.float64)
     cost[:n, :m] = np.where(overlaps >= MIN_IOU, -overlaps, 1.0)
     assigned_rows, assigned_cols = linear_sum_assignment(cost)
+    optimum = float(cost[assigned_rows, assigned_cols].sum())
+    # An equally good assignment may attach a detection to another reference
+    # (or leave it unmatched). Keep the fixed solver result for the target, but
+    # expose that ambiguity rather than implying its reference is certain.
+    ambiguous = 0
+    for i, j in zip(assigned_rows, assigned_cols, strict=True):
+        if i >= n or j >= m or overlaps[i, j] < MIN_IOU:
+            continue
+        if np.count_nonzero(overlaps[i] >= MIN_IOU) == 1 and np.count_nonzero(
+            overlaps[:, j] >= MIN_IOU) == 1:
+            continue
+        alternative = cost.copy()
+        alternative[i, j] = 1.0
+        other_rows, other_cols = linear_sum_assignment(alternative)
+        if math.isclose(float(alternative[other_rows, other_cols].sum()),
+                        optimum, rel_tol=0.0, abs_tol=1e-12):
+            ambiguous += 1
+    totals["ambiguous_matches"] = ambiguous
+    totals["ambiguous_frames"] = int(ambiguous > 0)
     matched: list[MatchedRow] = []
     for i, j in zip(assigned_rows, assigned_cols, strict=True):
         if i >= n or j >= m or overlaps[i, j] < MIN_IOU:
