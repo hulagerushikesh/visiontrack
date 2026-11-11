@@ -101,6 +101,15 @@ supported matches in a declared stratum yields a descriptive pilot/insufficient
 evidence for that conclusion, not an acceptance. These operational floors are
 not a power calculation or proof of representativeness.
 
+For the fixed subgroup display, predicted-height quartile boundaries come only
+from supported development matches (25th, 50th and 75th percentiles; ties go to
+the lower bin). Complete suppression-group sizes are binned as 3, 4–7 and 8+;
+missing sizes remain `undeclared`. A source adapter must supply a declared
+visibility mapping. The default `unknown` is displayed honestly and cannot
+stand in for a reviewed visibility stratum. Each populated subgroup reports its
+own B2/B3 pooled area, equal-scene mean difference and interval status. No
+subgroup interval is emitted below the eight-scene/50-match floors.
+
 ## Required controls and stop rules
 
 Authored checks must include: a tightly grouped but coherently biased box set;
@@ -123,14 +132,17 @@ The dataset-agnostic [offline comparison runner](https://github.com/hulagerushik
 now implements eligible same-class IoU-0.5 box matching, bottom-anchor targets,
 unmatched/missed/excluded counts, B0–B3 ridge fits with an unpenalized intercept,
 training-only numeric standardization, matched-population B2/B3 comparison,
-risk-versus-coverage area, fixed-key tie order, and paired scene-level bootstrap.
+risk-versus-coverage area, fixed-key ranking ties, paired scene-level bootstrap,
+and the declared subgroup display.
 It rejects a scene shared by development and test. Generated-input tests check
 the arithmetic, leakage, refusal paths and scene-unit resampling. The interval
 is the bootstrap of the **mean of per-scene paired areas**; the pooled paired
 areas are also shown and must not be confused with that equal-scene estimate.
 The runner cannot certify label independence, scene provenance, media rights,
-class/ignore mapping or image quality. A source-specific adapter and declared
-visibility/group-size strata are still required before an outcome study.
+class/ignore mapping, visibility semantics or image quality. A source-specific
+adapter and independently checked labels are still required before an outcome
+study. Missing group-size and visibility metadata remain visible as undeclared
+or unknown; they are not silently filled.
 
 No admitted scene-separated dataset, split manifest, real outcome table or
 accepted method exists for this audit yet. A [one-image UVH-26 preflight](UVH26_LOCALIZATION_PREFLIGHT.md)

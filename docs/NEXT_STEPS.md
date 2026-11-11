@@ -15,8 +15,9 @@ and label-instability limits, not accuracy or dataset admission. The next main
 research action is an independently checked input with verifiable scene units
 for the frozen localization comparison. The
 [offline comparison runner](LOCALIZATION_SIGNAL_AUDIT.md#same-population-comparisons)
-now implements matching, fixed baselines and scene-level analysis on authored
-inputs; it has no real outcome or admitted data. C++ remains on its accepted oracle.
+now implements matching, fixed baselines, scene-level analysis and declared
+class/height/visibility/group-size subgroup reporting on authored inputs; it has
+no real outcome or admitted data. C++ remains on its accepted oracle.
 
 **History engineering completed — 2026-11-04 (checkout):** an explicit
 `ByteTracker(history_limit=...)` option preserves the required motion window;

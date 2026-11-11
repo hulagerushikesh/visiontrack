@@ -129,3 +129,39 @@ def test_test_reference_error_never_enters_prediction():
                               row.height, row.score, row.spread, 100.0,
                               1000.0, row.iou_error)
     assert _predict(train, test, 3) == _predict(train, [changed_truth], 3)
+
+
+def test_declared_strata_use_development_height_cuts_and_scene_units():
+    frames = []
+    for scene in range(8):
+        for index in range(14):
+            for split in ("development", "test"):
+                height = (8, 10, 12, 14)[index % 4]
+                shift = (scene + index + (split == "test")) % 4
+                frames.append(Frame(
+                    split, f"{split}-{scene}", str(index),
+                    (DetectionRow("car", (shift, 0, 10 + shift, height), .8,
+                                  "supported", index / 100, 3 if index % 2 else 8),),
+                    (ReferenceRow("car", (0, 0, 10, height), True,
+                                  "clear" if index % 2 else "partial"),),
+                ))
+    result = compare(frames, resamples=50, seed=17)
+    assert result["predicted_height_development_quartile_cuts"] == [8, 10, 12]
+    assert set(result["paired_strata"]) == {
+        "class", "predicted_height_quartile", "visibility", "group_size"}
+    assert result["paired_strata"]["visibility"]["clear"]["matches"] == 56
+    assert result["paired_strata"]["visibility"]["partial"]["scenes"] == 8
+    assert result["paired_strata"]["group_size"]["3"]["status"] == "scene-clustered"
+    assert len(result["paired_strata"]["group_size"]["8+"]["scene_bootstrap_95pct"]) == 2
+    assert sum(item["matches"] for item in result["paired_strata"]["group_size"].values()) == 112
+
+
+def test_invalid_group_size_and_visibility_are_refused():
+    frame = _frame()
+    with pytest.raises(ValueError, match="group members"):
+        _frame_rows(Frame(frame.split, frame.scene, frame.key,
+                          (DetectionRow("car", (0, 0, 10, 10), .8, "supported", .1, 2),),
+                          frame.references))
+    with pytest.raises(ValueError, match="visibility"):
+        _frame_rows(Frame(frame.split, frame.scene, frame.key, frame.detections,
+                          (ReferenceRow("car", (0, 0, 10, 10), True, ""),)))

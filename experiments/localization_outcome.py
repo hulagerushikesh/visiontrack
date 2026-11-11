@@ -29,6 +29,7 @@ class DetectionRow:
     score: float
     spread_status: str
     spread: float | None
+    group_size: int | None = None  # Complete suppression group, when recorded.
 
 
 @dataclass(frozen=True)
@@ -36,6 +37,7 @@ class ReferenceRow:
     class_id: str
     xyxy: tuple[float, float, float, float]
     eligible: bool = True
+    visibility: str = "unknown"  # Dataset mapping is declared by the source adapter.
 
 
 @dataclass(frozen=True)
@@ -59,6 +61,8 @@ class MatchedRow:
     error: float
     pixel_error: float
     iou_error: float
+    visibility: str = "unknown"
+    group_size: int | None = None
 
 
 def _box(box: tuple[float, ...]) -> None:
@@ -91,10 +95,16 @@ def _frame_rows(frame: Frame) -> tuple[list[MatchedRow], Counter[str]]:
                 raise ValueError("supported spread must be finite and nonnegative")
         elif det.spread is not None:
             raise ValueError("unsupported spread must be absent")
+        if det.group_size is not None and (type(det.group_size) is not int or det.group_size < 1):
+            raise ValueError("group size must be a positive integer when declared")
+        if det.spread_status == "supported" and det.group_size is not None and det.group_size < 3:
+            raise ValueError("supported spread needs at least three group members")
     for ref in frame.references:
         _box(ref.xyxy)
         if not ref.class_id:
             raise ValueError("reference class is empty")
+        if not ref.visibility or not isinstance(ref.visibility, str):
+            raise ValueError("reference visibility must be a nonempty label")
     eligible = [ref for ref in frame.references if ref.eligible]
     n, m = len(frame.detections), len(eligible)
     totals: Counter[str] = Counter({
@@ -129,7 +139,7 @@ def _frame_rows(frame: Frame) -> tuple[list[MatchedRow], Counter[str]]:
             frame.scene, (frame.scene, frame.key, int(i)), det.class_id,
             det.xyxy[2] - det.xyxy[0], det.xyxy[3] - det.xyxy[1],
             det.score, det.spread, pixel_error / (ref.xyxy[3] - ref.xyxy[1]),
-            pixel_error, 1.0 - float(overlaps[i, j]),
+            pixel_error, 1.0 - float(overlaps[i, j]), ref.visibility, det.group_size,
         ))
     totals["matched"] = len(matched)
     totals["unmatched_detections"] = n - len(matched)
@@ -209,6 +219,36 @@ def _area(rows: list[MatchedRow], predictions: np.ndarray) -> tuple[float, dict[
     return float(curve.mean()), samples
 
 
+def _scene_contrast(
+    rows: list[MatchedRow], b2: np.ndarray, b3: np.ndarray, resamples: int, seed: int,
+) -> tuple[dict[str, float], float, list[float] | None]:
+    deltas: dict[str, float] = {}
+    for scene in sorted({row.scene for row in rows}):
+        indices = [i for i, row in enumerate(rows) if row.scene == scene]
+        group = [rows[i] for i in indices]
+        a2, _ = _area(group, b2[indices])
+        a3, _ = _area(group, b3[indices])
+        deltas[scene] = a3 - a2
+    values = np.asarray(list(deltas.values()))
+    interval = None
+    if len(deltas) >= 8 and len(rows) >= 50:
+        rng = np.random.default_rng(seed)
+        sampled = rng.integers(0, len(values), size=(resamples, len(values)))
+        interval = [float(v) for v in np.quantile(values[sampled].mean(axis=1),
+                                                 [0.025, 0.975])]
+    return deltas, float(values.mean()), interval
+
+
+def _group_size_bin(size: int | None) -> str:
+    if size is None:
+        return "undeclared"
+    if size == 3:
+        return "3"
+    if size <= 7:
+        return "4-7"
+    return "8+"
+
+
 def compare(frames: list[Frame], *, resamples: int = 10_000,
             seed: int = 20261104) -> dict:
     """Frozen B0-B3 comparison. Output is descriptive until source is admitted."""
@@ -234,24 +274,42 @@ def compare(frames: list[Frame], *, resamples: int = 10_000,
     # subset and rank the identical supported test detections.
     b2 = _predict(supported_train, supported, 2)
     b3 = _predict(supported_train, supported, 3)
-    scene_deltas = []
-    for scene in sorted({row.scene for row in supported}):
-        indices = [i for i, row in enumerate(supported) if row.scene == scene]
-        group = [supported[i] for i in indices]
-        a2, _ = _area(group, b2[indices])
-        a3, _ = _area(group, b3[indices])
-        scene_deltas.append((scene, a3 - a2))
     for name, prediction in (("B2_paired", b2), ("B3_paired", b3)):
         area, points = _area(supported, prediction)
         results[name] = {"matches": len(supported), "area": area,
                          "risk_at_coverage": points}
-    interval = None
-    if len(scene_deltas) >= 8 and len(supported) >= 50:
-        rng = np.random.default_rng(seed)
-        values = np.asarray([value for _, value in scene_deltas])
-        sampled = rng.integers(0, len(values), size=(resamples, len(values)))
-        interval = [float(v) for v in np.quantile(values[sampled].mean(axis=1),
-                                                 [0.025, 0.975])]
+    scene_deltas, scene_mean, interval = _scene_contrast(
+        supported, b2, b3, resamples, seed)
+    # Height boundaries are fitted on supported development detections only.
+    # Duplicate boundaries may leave an empty bin; report the populated bins.
+    height_cuts = np.quantile([row.height for row in supported_train], [.25, .5, .75])
+    strata: dict[str, dict[str, dict]] = {}
+    dimensions = {
+        "class": [row.class_id for row in supported],
+        "predicted_height_quartile": [
+            f"Q{int(np.searchsorted(height_cuts, row.height, side='left')) + 1}"
+            for row in supported
+        ],
+        "visibility": [row.visibility for row in supported],
+        "group_size": [_group_size_bin(row.group_size) for row in supported],
+    }
+    for dimension, labels in dimensions.items():
+        strata[dimension] = {}
+        for label in sorted(set(labels)):
+            indices = [i for i, value in enumerate(labels) if value == label]
+            group = [supported[i] for i in indices]
+            area2, _ = _area(group, b2[indices])
+            area3, _ = _area(group, b3[indices])
+            _, mean_delta, group_interval = _scene_contrast(
+                group, b2[indices], b3[indices], resamples, seed)
+            strata[dimension][label] = {
+                "matches": len(group), "scenes": len({row.scene for row in group}),
+                "B2_area": area2, "B3_area": area3,
+                "pooled_delta": area3 - area2,
+                "scene_mean_delta": mean_delta,
+                "scene_bootstrap_95pct": group_interval,
+                "status": "scene-clustered" if group_interval is not None else "descriptive",
+            }
     descriptions = {}
     for name, cohort in (("broad", broad), ("paired", supported)):
         descriptions[name] = {
@@ -268,9 +326,11 @@ def compare(frames: list[Frame], *, resamples: int = 10_000,
         "paired_coverage_of_all_test_detections": len(supported) / counts["test"]["detections"],
         "results": results,
         "target_descriptions": descriptions,
-        "per_scene_paired_delta": dict(scene_deltas),
-        "paired_scene_mean_delta": float(np.mean([value for _, value in scene_deltas])),
+        "per_scene_paired_delta": scene_deltas,
+        "paired_scene_mean_delta": scene_mean,
         "paired_scene_bootstrap_95pct": interval,
         "interval_status": "descriptive" if interval is None else "scene-clustered",
+        "predicted_height_development_quartile_cuts": [float(v) for v in height_cuts],
+        "paired_strata": strata,
         "independent_truth_verified_by_this_code": False,
     }
