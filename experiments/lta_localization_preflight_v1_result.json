@@ -1,0 +1,154 @@
+{
+  "accuracy_claim": false,
+  "annotations_sha256": "b5e9ba3e38616028b5f50561475369cea05846d6195a2c3b8484fccf5db4758c",
+  "by_camera": {
+    "2701": {
+      "class_filtered_proposals": 4,
+      "confidence_filtered_proposals": 24833,
+      "images": 7,
+      "night_images": 3,
+      "nms_suppressed_proposals": 6,
+      "reference_boxes": 268,
+      "returned_detections": 0,
+      "supported_detections": 0
+    },
+    "2702": {
+      "class_filtered_proposals": 0,
+      "confidence_filtered_proposals": 10603,
+      "images": 3,
+      "night_images": 2,
+      "nms_suppressed_proposals": 32,
+      "reference_boxes": 168,
+      "returned_detections": 12,
+      "supported_detections": 6
+    },
+    "2704": {
+      "class_filtered_proposals": 6,
+      "confidence_filtered_proposals": 28322,
+      "images": 8,
+      "night_images": 4,
+      "nms_suppressed_proposals": 58,
+      "reference_boxes": 105,
+      "returned_detections": 6,
+      "supported_detections": 6
+    },
+    "4703": {
+      "class_filtered_proposals": 5,
+      "confidence_filtered_proposals": 35412,
+      "images": 10,
+      "night_images": 5,
+      "nms_suppressed_proposals": 61,
+      "reference_boxes": 283,
+      "returned_detections": 12,
+      "supported_detections": 10
+    },
+    "4712": {
+      "class_filtered_proposals": 13,
+      "confidence_filtered_proposals": 35321,
+      "images": 10,
+      "night_images": 5,
+      "nms_suppressed_proposals": 133,
+      "reference_boxes": 114,
+      "returned_detections": 23,
+      "supported_detections": 19
+    },
+    "4713": {
+      "class_filtered_proposals": 10,
+      "confidence_filtered_proposals": 28300,
+      "images": 8,
+      "night_images": 5,
+      "nms_suppressed_proposals": 76,
+      "reference_boxes": 99,
+      "returned_detections": 6,
+      "supported_detections": 5
+    },
+    "4798": {
+      "class_filtered_proposals": 1,
+      "confidence_filtered_proposals": 28361,
+      "images": 8,
+      "night_images": 3,
+      "nms_suppressed_proposals": 25,
+      "reference_boxes": 51,
+      "returned_detections": 5,
+      "supported_detections": 5
+    },
+    "4799": {
+      "class_filtered_proposals": 0,
+      "confidence_filtered_proposals": 31765,
+      "images": 9,
+      "night_images": 0,
+      "nms_suppressed_proposals": 153,
+      "reference_boxes": 109,
+      "returned_detections": 23,
+      "supported_detections": 20
+    }
+  },
+  "camera_units": 8,
+  "detector_confidence_threshold": 0.25,
+  "detector_nms_iou_threshold": 0.45,
+  "images_verified": 63,
+  "independent_truth_verified": false,
+  "manifest_sha256": "50262b0d2f52743317f065534cebcfd21b9176b38a9b95423a1505cbe1391360",
+  "model_input_size": 416,
+  "model_sha256": "c789161ed43c8269fcd4e67c67eeeb4e80c622da2eb296a20bc6007bd18a0b7d",
+  "ordinary_detection_parity": true,
+  "reference_box_input_height_by_camera": {
+    "2701": {
+      "boxes": 268,
+      "median_pixels": 5.540166666666667,
+      "under_10_pixels": 246
+    },
+    "2702": {
+      "boxes": 168,
+      "median_pixels": 5.581333333333333,
+      "under_10_pixels": 143
+    },
+    "2704": {
+      "boxes": 105,
+      "median_pixels": 6.569333333333334,
+      "under_10_pixels": 78
+    },
+    "4703": {
+      "boxes": 283,
+      "median_pixels": 10.356666666666666,
+      "under_10_pixels": 137
+    },
+    "4712": {
+      "boxes": 114,
+      "median_pixels": 6.374333333333333,
+      "under_10_pixels": 79
+    },
+    "4713": {
+      "boxes": 99,
+      "median_pixels": 7.2215,
+      "under_10_pixels": 63
+    },
+    "4798": {
+      "boxes": 51,
+      "median_pixels": 6.937666666666668,
+      "under_10_pixels": 36
+    },
+    "4799": {
+      "boxes": 109,
+      "median_pixels": 7.535666666666667,
+      "under_10_pixels": 68
+    }
+  },
+  "reference_class_counts": {
+    "bus": 30,
+    "car": 611,
+    "motorcycle": 459,
+    "truck": 97
+  },
+  "reference_matching_ran": false,
+  "schema": "visiontrack.lta-localization-preflight/v1",
+  "scope": "real-image detector/proposal feasibility; no reference matching or accuracy claim",
+  "source_revision": "78428468834612d7fdd77e7cd097e8311c2754fe",
+  "source_url": "https://huggingface.co/datasets/LOVEIII486/isy5002-lta-traffic-images",
+  "spread_status_counts": {
+    "few_same_class": 10,
+    "singleton_group": 6,
+    "supported": 71
+  },
+  "total_proposals": 223587
+}

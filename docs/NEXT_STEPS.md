@@ -25,6 +25,14 @@ matches as a separate sensitivity check, with explicit remaining cohort and
 scene counts. A fresh [DRTD v2.0 source screen](REAL_TRAFFIC_EVIDENCE_GATE.md)
 found clear data terms but model-assisted labels and no verified camera/session
 units, so it remains a development-only candidate and does not close admission.
+The [Singapore LTA fixed-camera preflight](LTA_LOCALIZATION_PREFLIGHT.md) now
+verifies 63 real images and the unchanged detector/proposal output. The fixed
+416-pixel YOLOX nano returned only 87 road-class detections, with one camera
+returning none, so this pairing does not support the planned B2/B3 outcome
+comparison. Its teacher-assisted validation labels are not an independent test.
+Offline proposal extraction was reduced from repeated full-capture scans to one
+group index per frame, with exact generated-output agreement; neither result
+changes tracker behavior or authorizes a C++ port.
 
 **History engineering completed — 2026-11-04 (checkout):** an explicit
 `ByteTracker(history_limit=...)` option preserves the required motion window;

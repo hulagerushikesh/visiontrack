@@ -9,6 +9,15 @@ calculates the fixed spread and returns explicit refusal reasons. The
 [authored controls](https://github.com/hulagerushikesh/visiontrack/blob/main/tests/test_localization_signal.py) check arithmetic,
 capture completeness, invalid boxes and counterexamples using generated inputs.
 This does not select outcome data or establish a real-world signal.
+The extractor now indexes complete suppression groups once per frame rather
+than scanning all proposals for every returned box. Exact output agrees with
+the previous implementation across four generated capture shapes and four
+retention limits. On the generated 8,400-proposal/256-detection case, local
+median audit time fell from 34.3 ms to 0.9 ms over 20 runs each; this excludes
+model inference and is not a deployment-latency claim. The separate
+[Singapore LTA preflight](LTA_LOCALIZATION_PREFLIGHT.md) checks all 63 retained
+real images and shows that detector coverage, not spread computation, is the
+immediate obstacle for that fixed model/source pairing.
 
 Question: **does proposal spread help rank localization error beyond detection
 score, class and box size?** This is a known information source, not a novelty

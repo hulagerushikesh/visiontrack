@@ -130,6 +130,26 @@ def test_missing_winner_and_incomplete_group_refuse():
     assert audit_capture(capture(records)).rows[0].status == "incomplete_group"
 
 
+def test_interleaved_groups_keep_each_winner_and_refusal_separate():
+    first = group()
+    second = [
+        record(3, (20, 0, 30, 10), winner=3, output=1),
+        record(4, (22, 0, 32, 10), winner=3),
+        record(5, (24, 0, 34, 10), winner=3),
+    ]
+    second[2] = replace(second[2], group_winner_index=None)
+    single = record(6, (40, 0, 50, 10), winner=6, size=1, output=2)
+    records = [first[0], second[0], first[1], second[1], first[2], second[2], single]
+    rows = audit_capture(capture(records, returned=3)).rows
+    assert [row.status for row in rows] == [
+        "supported",
+        "incomplete_group",
+        "singleton_group",
+    ]
+    assert rows[0].spread == pytest.approx(0.2)
+    assert rows[1].spread is None and rows[2].spread is None
+
+
 @pytest.mark.parametrize("box", [(0, 0, 10, 0), (0, 0, float("nan"), 10), (0, 0, float("inf"), 10)])
 def test_invalid_geometry_refuses_without_nonfinite_receipt(box):
     records = group()

@@ -61,7 +61,7 @@ def _anchor(record: ProposalRecord) -> tuple[float, float] | None:
 def _row(
     output_index: int,
     winner: ProposalRecord | None,
-    records: tuple[ProposalRecord, ...],
+    members: tuple[ProposalRecord, ...],
 ) -> SpreadRow:
     def refused(
         reason: Refusal,
@@ -83,7 +83,6 @@ def _row(
     if winner is None:
         return refused("missing_winner")
     size = winner.group_size
-    members = tuple(r for r in records if r.group_winner_index == winner.proposal_index)
     # A claimed complete group must still agree with the actual captured rows.
     if (
         winner.group_winner_index != winner.proposal_index
@@ -181,7 +180,18 @@ def audit_capture(capture: ProposalCapture) -> FrameSpreadAudit:
             if record.output_index in winners:
                 raise ValueError("duplicate returned output index")
             winners[record.output_index] = record
-        rows = tuple(_row(i, winners.get(i), records) for i in range(capture.returned_count))
+        # Index once: scanning every proposal for each returned detection made
+        # full-frame audits quadratic when a frame contained many small groups.
+        grouped: dict[int, list[ProposalRecord]] = {}
+        for record in records:
+            if record.group_winner_index is not None:
+                grouped.setdefault(record.group_winner_index, []).append(record)
+        audited = []
+        for i in range(capture.returned_count):
+            winner = winners.get(i)
+            members = tuple(grouped.get(winner.proposal_index, ())) if winner else ()
+            audited.append(_row(i, winner, members))
+        rows = tuple(audited)
     return FrameSpreadAudit(
         "visiontrack.localization-spread/v1",
         "frame_truncated" if truncated else "complete",
