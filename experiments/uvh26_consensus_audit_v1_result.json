@@ -1,0 +1,62 @@
+{
+  "accuracy_claim": false,
+  "dependencies": {
+    "numpy": "2.3.1",
+    "scipy": "1.16.2"
+  },
+  "detector_ran": false,
+  "image_pixels_opened": false,
+  "input_sha256": {
+    "MV": "9d279f48589e653d7749b9636c945a8763b457c067f23ea79def3fa70c8e8ab4",
+    "ST": "ced5798e3f4d8babf95f463a1490b0b6251d634c37400c250edf2d656f26b811"
+  },
+  "matched_anchor_gap_over_mv_height_quantiles": {
+    "median": 0.0,
+    "p10": 0.0,
+    "p90": 0.0
+  },
+  "matched_iou_quantiles": {
+    "median": 1.0,
+    "p10": 1.0,
+    "p90": 1.0
+  },
+  "matching": "per shared image, maximum eligible pair count then total IoU; class blind; IoU >= 0.5",
+  "mv_annotations": 63497,
+  "mv_boxes_on_mv_only_images": 9793,
+  "mv_images": 5297,
+  "mv_only_images": 958,
+  "schema": "visiontrack.uvh26-consensus-audit/v1",
+  "scope": "annotation-only stability diagnostic; neither consensus is independent truth",
+  "shared_image_comparison": {
+    "both_coco_comparable": 14811,
+    "coco_coarse_class_disagreement": 299,
+    "images_with_box_count_difference": 2382,
+    "images_with_unmatched_box": 2526,
+    "matched_anchor_gap_nonzero": 4150,
+    "matched_boxes": 53187,
+    "matched_class_disagreement": 2866,
+    "matched_identical_boxes": 43752,
+    "matched_iou_below_0_9": 1271,
+    "mv_boxes_shared": 53704,
+    "mv_boxes_unmatched": 517,
+    "st_boxes_shared": 57163,
+    "st_boxes_unmatched": 3976
+  },
+  "shared_images": 4339,
+  "source": "iisc-aim/UVH-26@v1.0, validation MV and ST consensus",
+  "st_annotations": 57163,
+  "st_images": 4339,
+  "st_only_images": 0,
+  "top_class_disagreement_pairs_by_id": {
+    "1->2": 315,
+    "1->3": 232,
+    "1->4": 155,
+    "2->1": 128,
+    "3->1": 127,
+    "3->4": 101,
+    "6->9": 111,
+    "7->9": 84,
+    "8->12": 125,
+    "9->6": 134
+  }
+}

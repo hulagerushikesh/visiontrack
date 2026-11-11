@@ -7,11 +7,13 @@ why a tracking change helps or hurts.
 **Work resumed — 2026-11-04:** the owner has lifted the project-wide wait.
 Bath's clarification blocks the RoundaboutHD route, not independent work.
 The [current work package](WEEKLY_DELIVERY_PLAN.md#work-resumes-alongside-the-bath-enquiry-2026-11-04)
-prioritizes a measured active-history memory investigation, then a narrow
-observation-quality research decision informed by completed negative results
-and prior art. It does not imply a new accuracy result, dataset admission,
-release or C++ port. On "go next", continue that package while reporting the
-specific unresolved evidence dependency.
+has completed the active-history investigation, observation-quality decision,
+proposal capture and offline feature controls. The
+[UVH-26 preflight](UVH26_LOCALIZATION_PREFLIGHT.md) and
+[consensus audit](UVH26_CONSENSUS_AUDIT.md) establish development feasibility
+and label-instability limits, not accuracy or dataset admission. The next main
+research action is an independently checked input with verifiable scene units
+for the frozen localization comparison. C++ remains on its accepted oracle.
 
 **History engineering completed — 2026-11-04 (checkout):** an explicit
 `ByteTracker(history_limit=...)` option preserves the required motion window;

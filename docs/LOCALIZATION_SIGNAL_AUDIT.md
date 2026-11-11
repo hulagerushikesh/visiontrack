@@ -125,3 +125,9 @@ checks real-image capture feasibility and exposes missing camera IDs and an
 edge-box area-field inconsistency; it is not an outcome run. The next deliverable
 is an admitted-input manifest and independent label check before any outcome
 execution. RoundaboutHD remains conditional on Bath; C++ stays in maintenance.
+
+The [UVH-26 MV/ST consensus audit](UVH26_CONSENSUS_AUDIT.md) additionally found
+that the ST validation file is a strict subset by image filename and the two
+consensus labels disagree on some shared boxes/classes. Since both derive from
+the same model-assisted crowdsourced annotations, agreement cannot substitute
+for independent reference inspection. This keeps the outcome gate open.

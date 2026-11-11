@@ -54,3 +54,8 @@ mapping and ignore policy, then use the predeclared B0–B3 comparison in the
 split cannot stand in for independent camera/session units. Bath's RoundaboutHD
 clarification remains a separate possible route; it does not hold this
 exploratory work.
+
+The subsequent [MV/ST label-stability audit](UVH26_CONSENSUS_AUDIT.md) found that
+ST omits 958 validation images listed by MV and that the two correlated consensus
+files disagree on some boxes and classes. Neither file independently validates
+the other or closes the localization-outcome gate.

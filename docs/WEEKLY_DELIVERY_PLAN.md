@@ -81,6 +81,9 @@ No substantive reply has been newly verified for this planning update.
       [2026-11-11 UVH-26 image preflight](UVH26_LOCALIZATION_PREFLIGHT.md) proves
       capture works on one real permitted image, but the released annotations
       lack camera IDs for the required scene split and no outcome was scored.
+      The [MV/ST label-stability audit](UVH26_CONSENSUS_AUDIT.md) now measures
+      their overlapping image/box coverage; their shared annotation origin
+      prevents either from acting as independent truth.
 
 The initial literature check identifies relevant existing approaches:
 [ByteTrack](https://arxiv.org/abs/2110.06864) recovers associations using low-score
