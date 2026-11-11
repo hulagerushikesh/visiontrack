@@ -1,0 +1,29 @@
+{
+  "accuracy_claim": false,
+  "annotation_inventory": {
+    "annotations": 63497,
+    "area_differs_from_box": 2387,
+    "area_differs_over_1pct": 217,
+    "over_1pct_and_touches_edge": 217
+  },
+  "annotation_sha256": "9d279f48589e653d7749b9636c945a8763b457c067f23ea79def3fa70c8e8ab4",
+  "full_frame_cap": 3549,
+  "image_count_in_annotation_file": 5297,
+  "image_name": "100341.png",
+  "image_sha256": "0ce3e3ebda8e66c252318b91bc918279b4ecd27717cbb07927de781676de3810",
+  "model_input_size": 416,
+  "model_sha256": "c789161ed43c8269fcd4e67c67eeeb4e80c622da2eb296a20bc6007bd18a0b7d",
+  "ordinary_detection_parity": true,
+  "proposal_count": 3549,
+  "reference_matching_ran": false,
+  "returned_detections": 3,
+  "scene_ids_in_annotation_file": false,
+  "schema": "visiontrack.uvh26-localization-preflight/v1",
+  "scope": "one-image detector/capture feasibility; not an outcome study",
+  "selected_image_annotation_count": 11,
+  "source": "iisc-aim/UVH-26@v1.0, UVH-26-MV-Val",
+  "spread_status_counts": {
+    "supported": 3
+  },
+  "tracker_ran": false
+}

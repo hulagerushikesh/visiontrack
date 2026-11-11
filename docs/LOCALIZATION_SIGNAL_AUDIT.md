@@ -119,7 +119,9 @@ practical effect size and an application-specific no-harm margin need a later,
 separately frozen association/count experiment. Calibration is a separate task
 if we ever define an actual predictive distribution.
 
-No dataset, split manifest, outcome table or accepted method exists for this
-audit yet. The next deliverable is an admitted-input manifest and independent
-label check before any outcome execution. RoundaboutHD remains conditional on
-Bath; C++ stays in maintenance.
+No scene-separated dataset, split manifest, outcome table or accepted method
+exists for this audit yet. A [one-image UVH-26 preflight](UVH26_LOCALIZATION_PREFLIGHT.md)
+checks real-image capture feasibility and exposes missing camera IDs and an
+edge-box area-field inconsistency; it is not an outcome run. The next deliverable
+is an admitted-input manifest and independent label check before any outcome
+execution. RoundaboutHD remains conditional on Bath; C++ stays in maintenance.

@@ -77,7 +77,10 @@ No substantive reply has been newly verified for this planning update.
       comparison. Do not feed this signal into association yet.
       See the [acceptance and stop rules](LOCALIZATION_RESEARCH_DECISION.md#research-gate-after-capture).
       Real-domain conclusions require permitted inputs, independently checked
-      labels and a frozen evaluation; the Bath route remains on hold.
+      labels and a frozen evaluation; the Bath route remains on hold. A
+      [2026-11-11 UVH-26 image preflight](UVH26_LOCALIZATION_PREFLIGHT.md) proves
+      capture works on one real permitted image, but the released annotations
+      lack camera IDs for the required scene split and no outcome was scored.
 
 The initial literature check identifies relevant existing approaches:
 [ByteTrack](https://arxiv.org/abs/2110.06864) recovers associations using low-score
