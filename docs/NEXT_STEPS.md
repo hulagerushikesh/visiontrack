@@ -56,6 +56,10 @@ Its optional source-image hash field now refuses identical supplied image bytes
 across development/test scene names; an admitted-source adapter must hash every
 input image and require that check. This protects one leakage path but does not
 verify source rights, camera identity or independent labels.
+The local manifest loader now computes those hashes from image bytes and checks
+dimensions, box bounds, duplicate fields, and cross-split scene/image leakage.
+It prepares inputs only; source rights, complete frame inventory, detector
+provenance, camera units and independent labels still need separate review.
 
 **History engineering completed — 2026-11-04 (checkout):** an explicit
 `ByteTracker(history_limit=...)` option preserves the required motion window;

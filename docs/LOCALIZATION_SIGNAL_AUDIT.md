@@ -186,6 +186,39 @@ images, authenticate supplied hashes, detect visually identical re-encodings,
 or establish that differently named scenes are different cameras; source
 provenance still needs separate review.
 
+The checkout now includes `experiments.localization_input.load_frames` for a
+small, local `visiontrack.localization-input/v1` manifest. It reads each exact
+image file, checks its declared SHA-256 and dimensions, keeps paths inside the
+manifest directory, checks detection/reference boxes against image bounds,
+and refuses duplicate JSON fields or scene/image leakage across splits. It
+returns `Frame` inputs and a receipt with the manifest hash. The loader does
+not infer missing frames or verify that the detector actually produced the
+declared boxes, that the labels were independently drawn, that scene names are
+distinct cameras, or that media can be used for this study. The caller still
+must document those checks before treating any `compare` output as research
+evidence. Example manifest shape (the two real splits need separate scenes and
+image files):
+
+```json
+{
+  "schema": "visiontrack.localization-input/v1",
+  "source_id": "reviewed-source-and-version",
+  "frames": [{
+    "split": "development", "scene": "camera-session-a", "key": "000001",
+    "image": "images/000001.png", "image_sha256": "<64 lowercase hex digits>",
+    "width": 1920, "height": 1080,
+    "detections": [{
+      "class_id": "car", "xyxy": [10, 20, 110, 120], "score": 0.8,
+      "spread_status": "supported", "spread": 0.1, "group_size": 3
+    }],
+    "references": [{
+      "class_id": "car", "xyxy": [11, 21, 111, 121],
+      "eligible": true, "visibility": "visible"
+    }]
+  }]
+}
+```
+
 No admitted scene-separated dataset, split manifest, real outcome table or
 accepted method exists for this audit yet. A [one-image UVH-26 preflight](UVH26_LOCALIZATION_PREFLIGHT.md)
 checks real-image capture feasibility and exposes missing camera IDs and an
