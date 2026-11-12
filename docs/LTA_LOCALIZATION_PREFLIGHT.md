@@ -60,6 +60,27 @@ scene-separated evaluation images, and independently checked reference boxes.
 Bath's RoundaboutHD rights/label clarification remains a separate route. The
 C++ tracker has no new accepted behavior to port.
 
+There is a further design limit: eight cameras total cannot provide eight
+test camera units **and** a separate camera-disjoint development set. The
+existing scene-level interval floor is eight test scenes. These 63 frames
+therefore cannot become the frozen B2/B3 result even if box coverage improves.
+
+## Predeclared development-only overlap screen
+
+Before opening another detector result, use the same pinned 63 images and
+supplied boxes in a bounded engineering diagnostic. Compare the already used
+YOLOX nano at 416 input with the existing local YOLOX-X at its fixed 640 input;
+both use confidence 0.25, NMS IoU 0.45 and the same four COCO road classes.
+Verify both model hashes, every image hash and proposal-capture parity with
+ordinary detections. Count, by camera, supplied class and projected box height,
+how many supplied boxes have *any* same-class returned box at IoU ≥ 0.5 and
+how many have a supported proposal-spread box. This is not one-to-one matching:
+one detection can overlap multiple supplied boxes. Keep images and annotation
+rows outside Git; commit only aggregate counts. The comparison is an
+engineering coverage check, not recall, accuracy, causal evidence about input
+size or a new model choice for held-out work. Nano and X differ in both weights
+and input size. No threshold will be tuned based on these 63 validation frames.
+
 To reproduce privately from the pinned derivative stored outside Git:
 
 ```bash
