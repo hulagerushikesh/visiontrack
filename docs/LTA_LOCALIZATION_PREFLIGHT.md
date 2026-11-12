@@ -100,6 +100,16 @@ counts is recall, precision, a held-out score or evidence that X improves
 tracking. The result only supports seeking a better detector/source pairing;
 it cannot make these frames a self-contained independent-scene split.
 
+**Configuration limit checked 2026-11-12.** The released ONNX exports are
+static: nano accepts `1×3×416×416` and X accepts `1×3×640×640`. A proposed
+four-cell model/input-size screen stopped at the first mismatched inference;
+it produced no result. A valid controlled resolution comparison would require
+re-exporting and verifying both models at both sizes from the same weights.
+That work cannot turn these already inspected labels into independent truth,
+so the LTA source is closed for this research question. The detector now
+rejects a mismatched static input size during construction with an actionable
+error. The earlier two-cell receipt remains the only LTA overlap result.
+
 To reproduce privately from the pinned derivative stored outside Git:
 
 ```bash

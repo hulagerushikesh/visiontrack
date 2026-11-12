@@ -59,7 +59,21 @@ class YoloxDetector:
             self._session = ort.InferenceSession(
                 model_path, providers=["CPUExecutionProvider"]
             )
-        self._input_name = self._session.get_inputs()[0].name
+        model_input = self._session.get_inputs()[0]
+        self._input_name = model_input.name
+        # The official ONNX exports use a fixed square input. Refuse a
+        # mismatched caller size before the first frame, rather than letting
+        # ONNX Runtime fail deep inside inference after video setup.
+        shape = getattr(model_input, "shape", None)
+        if shape is not None and len(shape) == 4:
+            height, width = shape[2:]
+            if isinstance(height, int) and isinstance(width, int) and (
+                height != input_size or width != input_size
+            ):
+                raise ValueError(
+                    f"YOLOX ONNX input is {height}x{width}, but input_size="
+                    f"{input_size}; use the model's exported size"
+                )
         self.input_size = input_size
         self.conf_threshold = conf_threshold
         self.iou_threshold = iou_threshold

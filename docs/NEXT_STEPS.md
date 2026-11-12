@@ -44,6 +44,11 @@ untouched test data. Stop treating
 this source as a potential confirmatory B2/B3 split; use it only for engineering
 diagnostics. Seek permitted, independently reviewed box labels and enough
 camera-separated scenes before a real outcome comparison.
+The existing ONNX files have fixed 416/640 inputs respectively; a proposed
+cross-size check stopped before yielding data. The LTA route is closed here.
+The detector now refuses static model/input-size mismatches at construction,
+instead of failing during frame inference. This is an engineering guard, not
+new localization evidence.
 The offline comparison now reports coverage for **every** declared test scene,
 including those with no detections or no supported matched boxes, so a future
 paired interval cannot silently stand in for a missing camera.
