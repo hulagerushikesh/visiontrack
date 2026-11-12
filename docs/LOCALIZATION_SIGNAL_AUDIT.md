@@ -177,6 +177,15 @@ adapter and independently checked labels are still required before an outcome
 study. Missing group-size and visibility metadata remain visible as undeclared
 or unknown; they are not silently filled.
 
+For an admitted source, the adapter must calculate `image_sha256` from each
+exact input image and call `compare(..., require_image_hashes=True)`. The runner
+then refuses missing/malformed hashes and identical image bytes appearing in
+both development and test under different scene names. The report states
+whether this supplied-hash split check ran. It does not independently reopen
+images, authenticate supplied hashes, detect visually identical re-encodings,
+or establish that differently named scenes are different cameras; source
+provenance still needs separate review.
+
 No admitted scene-separated dataset, split manifest, real outcome table or
 accepted method exists for this audit yet. A [one-image UVH-26 preflight](UVH26_LOCALIZATION_PREFLIGHT.md)
 checks real-image capture feasibility and exposes missing camera IDs and an

@@ -52,6 +52,10 @@ new localization evidence.
 The offline comparison now reports coverage for **every** declared test scene,
 including those with no detections or no supported matched boxes, so a future
 paired interval cannot silently stand in for a missing camera.
+Its optional source-image hash field now refuses identical supplied image bytes
+across development/test scene names; an admitted-source adapter must hash every
+input image and require that check. This protects one leakage path but does not
+verify source rights, camera identity or independent labels.
 
 **History engineering completed — 2026-11-04 (checkout):** an explicit
 `ByteTracker(history_limit=...)` option preserves the required motion window;

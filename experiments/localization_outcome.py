@@ -8,6 +8,7 @@ explicitly eligible references. Synthetic tests exercise mechanics, not accuracy
 from __future__ import annotations
 
 import math
+import re
 from collections import Counter
 from dataclasses import dataclass
 
@@ -47,6 +48,7 @@ class Frame:
     key: str
     detections: tuple[DetectionRow, ...]
     references: tuple[ReferenceRow, ...]
+    image_sha256: str | None = None  # Supplied hash of exact source-image bytes.
 
 
 @dataclass(frozen=True)
@@ -170,10 +172,18 @@ def _frame_rows(frame: Frame) -> tuple[list[MatchedRow], Counter[str]]:
     return matched, totals
 
 
-def prepare(frames: list[Frame]) -> tuple[dict[str, list[MatchedRow]], dict[str, dict]]:
-    """Check split isolation, then derive matched targets and coverage counts."""
+def prepare(frames: list[Frame], *, require_image_hashes: bool = False,
+            ) -> tuple[dict[str, list[MatchedRow]], dict[str, dict]]:
+    """Check scene and supplied source-image isolation before deriving targets."""
     seen: set[tuple[str, str]] = set()
     scene_split: dict[str, str] = {}
+    image_split: dict[str, tuple[str, str, str]] = {}
+    if require_image_hashes and any(frame.image_sha256 is None for frame in frames):
+        raise ValueError("every frame needs an image SHA-256 for source admission")
+    if any(frame.image_sha256 is not None for frame in frames) and any(
+        frame.image_sha256 is None for frame in frames
+    ):
+        raise ValueError("image SHA-256 must be supplied for every frame or none")
     rows: dict[str, list[MatchedRow]] = {"development": [], "test": []}
     counts = {"development": Counter(), "test": Counter()}
     for frame in frames:
@@ -184,6 +194,18 @@ def prepare(frames: list[Frame]) -> tuple[dict[str, list[MatchedRow]], dict[str,
         if frame.scene in scene_split and scene_split[frame.scene] != frame.split:
             raise ValueError("scene leaks across development and test")
         scene_split[frame.scene] = frame.split
+        if frame.image_sha256 is not None:
+            if not isinstance(frame.image_sha256, str) or re.fullmatch(
+                r"[0-9a-f]{64}", frame.image_sha256
+            ) is None:
+                raise ValueError("image SHA-256 must be 64 lowercase hex digits")
+            previous = image_split.get(frame.image_sha256)
+            if previous is not None and previous[0] != frame.split:
+                raise ValueError(
+                    "source image leaks across development and test: "
+                    f"{previous[1]}/{previous[2]} and {frame.scene}/{frame.key}"
+                )
+            image_split[frame.image_sha256] = (frame.split, frame.scene, frame.key)
         matched, inventory = _frame_rows(frame)
         rows[frame.split].extend(matched)
         counts[frame.split].update(inventory)
@@ -309,11 +331,11 @@ def _ambiguity_sensitivity(
 
 
 def compare(frames: list[Frame], *, resamples: int = 10_000,
-            seed: int = 20261104) -> dict:
+            seed: int = 20261104, require_image_hashes: bool = False) -> dict:
     """Frozen B0-B3 comparison. Output is descriptive until source is admitted."""
     if resamples <= 0:
         raise ValueError("resamples must be positive")
-    split_rows, counts = prepare(frames)
+    split_rows, counts = prepare(frames, require_image_hashes=require_image_hashes)
     train, test = split_rows["development"], split_rows["test"]
     trained_classes = {row.class_id for row in train}
     broad = [row for row in test if row.class_id in trained_classes]
@@ -433,4 +455,7 @@ def compare(frames: list[Frame], *, resamples: int = 10_000,
         "predicted_height_development_quartile_cuts": [float(v) for v in height_cuts],
         "paired_strata": strata,
         "independent_truth_verified_by_this_code": False,
+        "supplied_image_hash_split_checked": bool(
+            frames and frames[0].image_sha256 is not None
+        ),
     }

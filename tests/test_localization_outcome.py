@@ -129,6 +129,48 @@ def test_preparation_rejects_scene_leak_and_duplicate_frame():
         prepare([_frame(), _frame()])
 
 
+def test_source_image_hashes_refuse_cross_split_duplicate_content():
+    image_hash = "a" * 64
+    dev = _frame()
+    test = _frame("test-a", "test")
+    dev = Frame(dev.split, dev.scene, dev.key, dev.detections, dev.references,
+                image_hash)
+    test = Frame(test.split, test.scene, test.key, test.detections, test.references,
+                 image_hash)
+    with pytest.raises(ValueError, match="source image leaks"):
+        compare([dev, test], resamples=10, require_image_hashes=True)
+
+
+def test_source_image_hashes_must_be_complete_and_well_formed_when_used():
+    dev = _frame()
+    test = _frame("test-a", "test")
+    hashed = Frame(dev.split, dev.scene, dev.key, dev.detections, dev.references,
+                   "a" * 64)
+    with pytest.raises(ValueError, match="every frame needs"):
+        prepare([dev, test], require_image_hashes=True)
+    with pytest.raises(ValueError, match="every frame or none"):
+        prepare([hashed, test])
+    malformed = Frame(dev.split, dev.scene, dev.key, dev.detections,
+                      dev.references, "A" * 64)
+    with pytest.raises(ValueError, match="64 lowercase hex"):
+        prepare([malformed, Frame(test.split, test.scene, test.key,
+                                  test.detections, test.references, "b" * 64)])
+
+
+def test_source_hashes_allow_distinct_frames_and_report_check_scope():
+    dev = _frame()
+    test = _frame("test-a", "test")
+    frames = [
+        Frame(dev.split, dev.scene, dev.key, dev.detections, dev.references,
+              "a" * 64),
+        Frame(test.split, test.scene, test.key, test.detections, test.references,
+              "b" * 64),
+    ]
+    result = compare(frames, resamples=10, require_image_hashes=True)
+    assert result["supplied_image_hash_split_checked"] is True
+    assert compare([dev, test], resamples=10)["supplied_image_hash_split_checked"] is False
+
+
 def test_invalid_feature_and_geometry_refused():
     with pytest.raises(ValueError, match="supported spread"):
         _frame_rows(_frame(spread=math.nan))
