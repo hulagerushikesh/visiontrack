@@ -21,7 +21,8 @@ immediate obstacle for that fixed model/source pairing.
 The subsequent [development-only detector comparison](LTA_LOCALIZATION_PREFLIGHT.md#predeclared-development-only-overlap-screen)
 shows substantially more supplied-box overlap with the existing X/640 model,
 but weights and input resolution change together, and the eight-camera source
-cannot meet the eight-test-scene floor with a separate development set. This
+cannot meet the eight-test-scene floor with an internal separate development
+set. These already-inspected validation frames are not untouched test data. This
 does not advance the frozen outcome comparison or change the C++ handoff.
 
 Question: **does proposal spread help rank localization error beyond detection

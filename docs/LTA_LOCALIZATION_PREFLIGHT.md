@@ -60,10 +60,11 @@ scene-separated evaluation images, and independently checked reference boxes.
 Bath's RoundaboutHD rights/label clarification remains a separate route. The
 C++ tracker has no new accepted behavior to port.
 
-There is a further design limit: eight cameras total cannot provide eight
-test camera units **and** a separate camera-disjoint development set. The
-existing scene-level interval floor is eight test scenes. These 63 frames
-therefore cannot become the frozen B2/B3 result even if box coverage improves.
+There is a further self-contained-split limit: eight cameras total cannot
+provide eight test camera units **and** a separate camera-disjoint development
+set from this source. The existing scene-level interval floor is eight test
+scenes. An external development source could supply training scenes, but these
+already-inspected validation frames would still not become untouched test data.
 
 ## Predeclared development-only overlap screen
 
@@ -97,7 +98,7 @@ controlled effects. One detection can overlap multiple supplied boxes, and
 those annotations are model-assisted and single-annotator. None of these
 counts is recall, precision, a held-out score or evidence that X improves
 tracking. The result only supports seeking a better detector/source pairing;
-it cannot make the eight-camera source meet the independent-scene protocol.
+it cannot make these frames a self-contained independent-scene split.
 
 To reproduce privately from the pinned derivative stored outside Git:
 
