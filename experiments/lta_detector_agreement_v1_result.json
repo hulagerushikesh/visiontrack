@@ -1,0 +1,285 @@
+{
+  "accuracy_claim": false,
+  "images": 63,
+  "independent_truth_verified": false,
+  "iou_gate": 0.5,
+  "one_to_one_assignment": false,
+  "results": {
+    "nano_416": {
+      "by_camera": {
+        "2701": {
+          "boxes_with_overlap": 0,
+          "boxes_with_supported_overlap": 0,
+          "images": 7,
+          "images_without_detections": 7,
+          "images_without_supported_overlap": 7,
+          "returned_detections": 0,
+          "supplied_boxes": 268,
+          "supported_detections": 0
+        },
+        "2702": {
+          "boxes_with_overlap": 1,
+          "boxes_with_supported_overlap": 1,
+          "images": 3,
+          "images_without_detections": 0,
+          "images_without_supported_overlap": 2,
+          "returned_detections": 12,
+          "supplied_boxes": 168,
+          "supported_detections": 6
+        },
+        "2704": {
+          "boxes_with_overlap": 5,
+          "boxes_with_supported_overlap": 5,
+          "images": 8,
+          "images_without_detections": 4,
+          "images_without_supported_overlap": 5,
+          "returned_detections": 6,
+          "supplied_boxes": 105,
+          "supported_detections": 6
+        },
+        "4703": {
+          "boxes_with_overlap": 10,
+          "boxes_with_supported_overlap": 8,
+          "images": 10,
+          "images_without_detections": 5,
+          "images_without_supported_overlap": 6,
+          "returned_detections": 12,
+          "supplied_boxes": 283,
+          "supported_detections": 10
+        },
+        "4712": {
+          "boxes_with_overlap": 9,
+          "boxes_with_supported_overlap": 8,
+          "images": 10,
+          "images_without_detections": 1,
+          "images_without_supported_overlap": 6,
+          "returned_detections": 23,
+          "supplied_boxes": 114,
+          "supported_detections": 19
+        },
+        "4713": {
+          "boxes_with_overlap": 4,
+          "boxes_with_supported_overlap": 3,
+          "images": 8,
+          "images_without_detections": 3,
+          "images_without_supported_overlap": 6,
+          "returned_detections": 6,
+          "supplied_boxes": 99,
+          "supported_detections": 5
+        },
+        "4798": {
+          "boxes_with_overlap": 4,
+          "boxes_with_supported_overlap": 4,
+          "images": 8,
+          "images_without_detections": 5,
+          "images_without_supported_overlap": 6,
+          "returned_detections": 5,
+          "supplied_boxes": 51,
+          "supported_detections": 5
+        },
+        "4799": {
+          "boxes_with_overlap": 18,
+          "boxes_with_supported_overlap": 16,
+          "images": 9,
+          "images_without_detections": 2,
+          "images_without_supported_overlap": 2,
+          "returned_detections": 23,
+          "supplied_boxes": 109,
+          "supported_detections": 20
+        }
+      },
+      "by_group": {
+        "all": {
+          "boxes_with_overlap": 51,
+          "boxes_with_supported_overlap": 45,
+          "images": 63,
+          "images_without_detections": 27,
+          "images_without_supported_overlap": 40,
+          "returned_detections": 87,
+          "supplied_boxes": 1197,
+          "supported_detections": 71
+        },
+        "class:bus": {
+          "boxes_with_overlap": 1,
+          "boxes_with_supported_overlap": 1,
+          "supplied_boxes": 30
+        },
+        "class:car": {
+          "boxes_with_overlap": 49,
+          "boxes_with_supported_overlap": 43,
+          "supplied_boxes": 611
+        },
+        "class:motorcycle": {
+          "boxes_with_overlap": 1,
+          "boxes_with_supported_overlap": 1,
+          "supplied_boxes": 459
+        },
+        "class:truck": {
+          "boxes_with_overlap": 0,
+          "boxes_with_supported_overlap": 0,
+          "supplied_boxes": 97
+        },
+        "height:10_to_under_20px": {
+          "boxes_with_overlap": 33,
+          "boxes_with_supported_overlap": 28,
+          "supplied_boxes": 281
+        },
+        "height:20px_or_more": {
+          "boxes_with_overlap": 16,
+          "boxes_with_supported_overlap": 16,
+          "supplied_boxes": 66
+        },
+        "height:under_10px": {
+          "boxes_with_overlap": 2,
+          "boxes_with_supported_overlap": 1,
+          "supplied_boxes": 850
+        }
+      },
+      "confidence_threshold": 0.25,
+      "input_size": 416,
+      "model_sha256": "c789161ed43c8269fcd4e67c67eeeb4e80c622da2eb296a20bc6007bd18a0b7d",
+      "nms_iou_threshold": 0.45,
+      "ordinary_detection_parity": true
+    },
+    "x_640": {
+      "by_camera": {
+        "2701": {
+          "boxes_with_overlap": 60,
+          "boxes_with_supported_overlap": 54,
+          "images": 7,
+          "images_without_detections": 0,
+          "images_without_supported_overlap": 0,
+          "returned_detections": 81,
+          "supplied_boxes": 268,
+          "supported_detections": 72
+        },
+        "2702": {
+          "boxes_with_overlap": 17,
+          "boxes_with_supported_overlap": 13,
+          "images": 3,
+          "images_without_detections": 0,
+          "images_without_supported_overlap": 0,
+          "returned_detections": 30,
+          "supplied_boxes": 168,
+          "supported_detections": 23
+        },
+        "2704": {
+          "boxes_with_overlap": 30,
+          "boxes_with_supported_overlap": 24,
+          "images": 8,
+          "images_without_detections": 1,
+          "images_without_supported_overlap": 1,
+          "returned_detections": 33,
+          "supplied_boxes": 105,
+          "supported_detections": 26
+        },
+        "4703": {
+          "boxes_with_overlap": 72,
+          "boxes_with_supported_overlap": 66,
+          "images": 10,
+          "images_without_detections": 2,
+          "images_without_supported_overlap": 3,
+          "returned_detections": 97,
+          "supplied_boxes": 283,
+          "supported_detections": 85
+        },
+        "4712": {
+          "boxes_with_overlap": 31,
+          "boxes_with_supported_overlap": 29,
+          "images": 10,
+          "images_without_detections": 1,
+          "images_without_supported_overlap": 2,
+          "returned_detections": 41,
+          "supplied_boxes": 114,
+          "supported_detections": 38
+        },
+        "4713": {
+          "boxes_with_overlap": 31,
+          "boxes_with_supported_overlap": 26,
+          "images": 8,
+          "images_without_detections": 3,
+          "images_without_supported_overlap": 3,
+          "returned_detections": 39,
+          "supplied_boxes": 99,
+          "supported_detections": 31
+        },
+        "4798": {
+          "boxes_with_overlap": 17,
+          "boxes_with_supported_overlap": 17,
+          "images": 8,
+          "images_without_detections": 3,
+          "images_without_supported_overlap": 4,
+          "returned_detections": 25,
+          "supplied_boxes": 51,
+          "supported_detections": 22
+        },
+        "4799": {
+          "boxes_with_overlap": 44,
+          "boxes_with_supported_overlap": 44,
+          "images": 9,
+          "images_without_detections": 0,
+          "images_without_supported_overlap": 0,
+          "returned_detections": 60,
+          "supplied_boxes": 109,
+          "supported_detections": 58
+        }
+      },
+      "by_group": {
+        "all": {
+          "boxes_with_overlap": 302,
+          "boxes_with_supported_overlap": 273,
+          "images": 63,
+          "images_without_detections": 10,
+          "images_without_supported_overlap": 13,
+          "returned_detections": 406,
+          "supplied_boxes": 1197,
+          "supported_detections": 355
+        },
+        "class:bus": {
+          "boxes_with_overlap": 9,
+          "boxes_with_supported_overlap": 9,
+          "supplied_boxes": 30
+        },
+        "class:car": {
+          "boxes_with_overlap": 228,
+          "boxes_with_supported_overlap": 208,
+          "supplied_boxes": 611
+        },
+        "class:motorcycle": {
+          "boxes_with_overlap": 35,
+          "boxes_with_supported_overlap": 29,
+          "supplied_boxes": 459
+        },
+        "class:truck": {
+          "boxes_with_overlap": 30,
+          "boxes_with_supported_overlap": 27,
+          "supplied_boxes": 97
+        },
+        "height:10_to_under_20px": {
+          "boxes_with_overlap": 146,
+          "boxes_with_supported_overlap": 130,
+          "supplied_boxes": 423
+        },
+        "height:20px_or_more": {
+          "boxes_with_overlap": 108,
+          "boxes_with_supported_overlap": 104,
+          "supplied_boxes": 223
+        },
+        "height:under_10px": {
+          "boxes_with_overlap": 48,
+          "boxes_with_supported_overlap": 39,
+          "supplied_boxes": 551
+        }
+      },
+      "confidence_threshold": 0.25,
+      "input_size": 640,
+      "model_sha256": "c892d7aaf1c4746d8a4d675bec669a4db4f434b4ee1efb654bc9b353379c7c55",
+      "nms_iou_threshold": 0.45,
+      "ordinary_detection_parity": true
+    }
+  },
+  "schema": "visiontrack.lta-detector-agreement/v1",
+  "scope": "development-only any-box overlap against supplied validation annotations",
+  "source_annotations_sha256": "b5e9ba3e38616028b5f50561475369cea05846d6195a2c3b8484fccf5db4758c",
+  "source_manifest_sha256": "50262b0d2f52743317f065534cebcfd21b9176b38a9b95423a1505cbe1391360"
+}

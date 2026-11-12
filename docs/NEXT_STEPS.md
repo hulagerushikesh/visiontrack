@@ -33,6 +33,15 @@ comparison. Its teacher-assisted validation labels are not an independent test.
 Offline proposal extraction was reduced from repeated full-capture scans to one
 group index per frame, with exact generated-output agreement; neither result
 changes tracker behavior or authorizes a C++ port.
+The [predeclared LTA development overlap screen](LTA_LOCALIZATION_PREFLIGHT.md#predeclared-development-only-overlap-screen)
+now compares the pinned nano/416 and X/640 detector pairs on all 63 images.
+YOLOX-X gives 273 supplied boxes with a supported same-class overlap versus
+45 for nano, but this is neither an independent accuracy score nor a controlled
+model-size effect. The source has only eight camera units total, below the
+eight-test-scene floor once development and test are separated. Stop treating
+this source as a potential confirmatory B2/B3 split; use it only for engineering
+diagnostics. Seek permitted, independently reviewed box labels and enough
+camera-separated scenes before a real outcome comparison.
 The offline comparison now reports coverage for **every** declared test scene,
 including those with no detections or no supported matched boxes, so a future
 paired interval cannot silently stand in for a missing camera.

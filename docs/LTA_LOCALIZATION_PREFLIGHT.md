@@ -81,6 +81,24 @@ engineering coverage check, not recall, accuracy, causal evidence about input
 size or a new model choice for held-out work. Nano and X differ in both weights
 and input size. No threshold will be tuned based on these 63 validation frames.
 
+**Result, 2026-11-12.** The predeclared [development screen](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/lta_detector_agreement.py)
+passed pinned source/model hashes and exact ordinary-detection parity for both
+models. The [aggregate receipt](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/lta_detector_agreement_v1_result.json)
+contains no image or annotation rows. Nano returned 87 road-class detections;
+51 supplied boxes had any same-class IoU ≥ 0.5 overlap and 45 had overlap with
+a supported-spread detection. YOLOX-X returned 406 road-class detections; the
+corresponding counts were 302 and 273. Nano had no returned box at camera
+2701; X returned 81 there, with 54 supported-overlap supplied boxes. Across all
+images, nano had no returned detections in 27 of 63 images versus 10 for X.
+The under-10-pixel projected-box bins contained 850 supplied boxes at 416 and
+551 at 640; only 2 and 48 respectively had any overlap. Size bins differ
+because the models' input resolutions differ, so bin comparisons are not
+controlled effects. One detection can overlap multiple supplied boxes, and
+those annotations are model-assisted and single-annotator. None of these
+counts is recall, precision, a held-out score or evidence that X improves
+tracking. The result only supports seeking a better detector/source pairing;
+it cannot make the eight-camera source meet the independent-scene protocol.
+
 To reproduce privately from the pinned derivative stored outside Git:
 
 ```bash
