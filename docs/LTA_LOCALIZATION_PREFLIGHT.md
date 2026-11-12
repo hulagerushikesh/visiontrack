@@ -108,3 +108,20 @@ PYTHONPATH=src:. python -m experiments.lta_localization_preflight \
   --model models/yolox_nano.onnx \
   --output /private/lta-localization-preflight/receipt.json
 ```
+
+## Frozen follow-up: model weights and input size
+
+The two configurations above changed both ONNX weights and input size. Before
+running a follow-up, fix a 2 × 2 **development-only** screen: the same pinned
+63 images, annotation bytes, model hashes, four road classes, confidence 0.25,
+NMS IoU 0.45, proposal-completeness rule and any-box IoU ≥ 0.5 overlap. Run
+YOLOX nano and YOLOX-X each at 416 and 640 pixels. Report returned detections,
+supported detections, supplied-box overlap and supported overlap for every
+cell and camera; check that the original nano/416 and X/640 aggregate cells
+match the v1 receipt exactly. Projected-height bins change with input size, so
+compare those only within the same input-size column. Show fixed-model input
+differences and fixed-input model differences as descriptive contrasts. This
+does not isolate architecture from training weights, produce independent truth,
+justify a detector choice for an untouched test, or validate tracking. Stop
+using this inspected source after this diagnostic; the next outcome step needs
+a new source with independent labels and scene-separated units.

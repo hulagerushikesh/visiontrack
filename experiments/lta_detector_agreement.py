@@ -1,7 +1,7 @@
 """Development-only LTA detector/box-overlap screen; never an accuracy score.
 
 The 63 teacher-assisted validation images have already been inspected. This
-fixed two-model screen asks whether enough returned boxes overlap the supplied
+fixed development screen asks whether enough returned boxes overlap the supplied
 boxes to justify seeking *independent* localization labels. It does not select
 a detector for a confirmatory study or tune thresholds on these frames.
 """
@@ -29,6 +29,12 @@ from visiontrack.detection.yolox_onnx import YoloxDetector
 MODELS = {
     "nano_416": ("c789161ed43c8269fcd4e67c67eeeb4e80c622da2eb296a20bc6007bd18a0b7d", 416),
     "x_640": ("c892d7aaf1c4746d8a4d675bec669a4db4f434b4ee1efb654bc9b353379c7c55", 640),
+}
+FACTORIAL_MODELS = {
+    "nano_416": MODELS["nano_416"],
+    "nano_640": (MODELS["nano_416"][0], 640),
+    "x_416": (MODELS["x_640"][0], 416),
+    "x_640": MODELS["x_640"],
 }
 CLASS_ID = {"car": 2, "motorcycle": 3, "bus": 5, "truck": 7}
 IOU_GATE = 0.5
@@ -72,7 +78,7 @@ def _frame_agreement(
     return output
 
 
-def screen(root: Path, model_paths: dict[str, Path]) -> dict:
+def screen(root: Path, model_paths: dict[str, Path], *, factorial: bool = False) -> dict:
     images, _, _ = _annotation_inventory(root)  # also validates pinned annotation bytes.
     labels_path = root / "annotations/lta_human_v1/annotations/annotations.jsonl"
     with labels_path.open(encoding="utf-8") as stream:
@@ -81,9 +87,10 @@ def screen(root: Path, model_paths: dict[str, Path]) -> dict:
         raise ValueError("annotation image inventory changed")
     from PIL import Image
 
+    configurations = FACTORIAL_MODELS if factorial else MODELS
     results = {}
-    for key, (expected_digest, input_size) in MODELS.items():
-        path = model_paths[key]
+    for key, (expected_digest, input_size) in configurations.items():
+        path = model_paths["nano" if key.startswith("nano") else "x"]
         if _sha256(path) != expected_digest:
             raise ValueError(f"{key} model fingerprint mismatch")
         detector = YoloxDetector(str(path), input_size=input_size, class_filter=ROAD_CLASSES)
@@ -131,7 +138,7 @@ def screen(root: Path, model_paths: dict[str, Path]) -> dict:
             "ordinary_detection_parity": True,
         }
     return {
-        "schema": "visiontrack.lta-detector-agreement/v1",
+        "schema": f"visiontrack.lta-detector-agreement/v{2 if factorial else 1}",
         "scope": "development-only any-box overlap against supplied validation annotations",
         "iou_gate": IOU_GATE,
         "one_to_one_assignment": False,
@@ -149,9 +156,12 @@ def main() -> None:
     parser.add_argument("--root", required=True, type=Path)
     parser.add_argument("--nano-model", required=True, type=Path)
     parser.add_argument("--x-model", required=True, type=Path)
+    parser.add_argument("--factorial", action="store_true",
+                        help="run both pinned models at 416 and 640 input sizes")
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
-    result = screen(args.root, {"nano_416": args.nano_model, "x_640": args.x_model})
+    result = screen(args.root, {"nano": args.nano_model, "x": args.x_model},
+                    factorial=args.factorial)
     args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(f"Wrote {args.output}")
 
