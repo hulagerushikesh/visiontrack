@@ -85,6 +85,14 @@ No substantive reply has been newly verified for this planning update.
       their overlapping image/box coverage; their shared annotation origin
       prevents either from acting as independent truth.
 
+**2026-11-13 development checkpoint:** the already-inspected LTA subset now has
+an [eight-camera leave-one-camera-out spread pilot](LTA_LOCALIZATION_PREFLIGHT.md#development-only-spread-pilot--2026-11-13)
+using X/640. Of 271 supported matched boxes, B3 beat B2 on four cameras and
+lost on four; the equal-camera mean difference slightly favored B2. Do not
+advance spread into tracker association from this result. Single-annotator,
+model-assisted labels and prior detector selection keep the real-domain gate
+open; this is a bounded negative development signal, not a held-out claim.
+
 The initial literature check identifies relevant existing approaches:
 [ByteTrack](https://arxiv.org/abs/2110.06864) recovers associations using low-score
 detections; [OC-SORT](https://arxiv.org/abs/2203.14360) addresses motion-estimation

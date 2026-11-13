@@ -118,3 +118,43 @@ PYTHONPATH=src:. python -m experiments.lta_localization_preflight \
   --model models/yolox_nano.onnx \
   --output /private/lta-localization-preflight/receipt.json
 ```
+
+## Development-only spread pilot — 2026-11-13
+
+The [cross-camera pilot](../experiments/lta_spread_pilot.py) ran the already
+chosen X/640 model on the same 63 local images. It checked the pinned source,
+annotation and model hashes and exact ordinary/captured detection parity. It
+used one-to-one same-class IoU-0.5 matches, then fitted B2 (class, predicted
+box size and score) and B3 (B2 plus proposal spread) on seven cameras and
+ranked supported matches on the omitted camera. Each camera was omitted once.
+The [aggregate receipt](../experiments/lta_spread_pilot_v1_result.json) contains
+no image or annotation rows.
+
+There were 406 returned road-class detections, 300 one-to-one matches to the
+supplied boxes, and 271 matched detections with supported spread. Across the
+eight camera folds, B3 had lower error-versus-coverage area on four and higher
+area on four. The equal-camera mean B3-minus-B2 area was **+0.00104** (lower is
+better); the match-weighted camera mean was **+0.00024**. Camera 2704 worsened
+most (+0.00631), while 2701 improved most (-0.00192). Some cameras have only
+13–17 paired matches. No confidence interval or confirmatory significance
+claim is attached to these descriptive folds.
+
+**Decision:** this source/model pairing provides no consistent development
+signal to justify putting proposal spread into association. Keep that tracker
+change on hold. This is useful disconfirmation, not a general rejection of
+localization uncertainty: the 63 images and X configuration were already
+inspected, one annotator corrected model-assisted labels, hard images were
+excluded, and 897 supplied boxes remained unmatched. The pilot measures only
+conditional localization ranking among matched boxes; it cannot test road-user
+recovery, counts, temporal identity or safety. Independent labels and a fresh
+camera-separated evaluation would be needed for a broader claim. We will not
+tune a new spread formula on these same frames and relabel it validation.
+
+Reproduce with the owner-local source files and model:
+
+```bash
+PYTHONPATH=src:. python -m experiments.lta_spread_pilot \
+  --root /private/lta-localization-preflight \
+  --model models/yolox_x.onnx \
+  --output /private/lta-localization-preflight/new-spread-pilot.json
+```
