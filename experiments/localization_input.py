@@ -62,7 +62,7 @@ def _box(value: object, width: int, height: int, context: str) -> tuple[float, .
 
 
 def _image(path: Path, root: Path, expected_hash: object, width: object,
-           height: object) -> str:
+           height: object) -> tuple[str, str]:
     if path.is_absolute() or ".." in path.parts:
         raise ValueError("image path must stay relative to the manifest directory")
     resolved = (root / path).resolve(strict=True)
@@ -83,11 +83,16 @@ def _image(path: Path, root: Path, expected_hash: object, width: object,
             image.verify()
         with Image.open(io.BytesIO(data)) as image:
             actual_size = image.size
+            rgb_pixels = image.convert("RGB")
+            pixel_digest = hashlib.sha256(
+                f"{actual_size[0]}x{actual_size[1]}:".encode("ascii")
+                + rgb_pixels.tobytes()
+            ).hexdigest()
     except (OSError, ValueError) as exc:
         raise ValueError(f"invalid image: {path}") from exc
     if actual_size != (width, height):
         raise ValueError(f"image dimensions disagree: {path}")
-    return digest
+    return digest, pixel_digest
 
 
 def load_frames(manifest_path: Path) -> tuple[list[Frame], dict]:
@@ -112,6 +117,7 @@ def load_frames(manifest_path: Path) -> tuple[list[Frame], dict]:
     seen: set[tuple[str, str]] = set()
     scene_splits: dict[str, str] = {}
     hashes: dict[str, str] = {}
+    pixel_hashes: dict[str, str] = {}
     for index, raw in enumerate(records):
         context = f"frame {index}"
         row = _fields(raw, {"split", "scene", "key", "image", "image_sha256",
@@ -128,11 +134,14 @@ def load_frames(manifest_path: Path) -> tuple[list[Frame], dict]:
             raise ValueError(f"{context}: scene leaks across splits")
         scene_splits[scene] = split
         relative = Path(_string(row["image"], f"{context} image"))
-        digest = _image(relative, root, row["image_sha256"], row["width"],
-                        row["height"])
+        digest, pixel_digest = _image(relative, root, row["image_sha256"],
+                                      row["width"], row["height"])
         if digest in hashes and hashes[digest] != split:
             raise ValueError(f"{context}: source image leaks across splits")
         hashes[digest] = split
+        if pixel_digest in pixel_hashes and pixel_hashes[pixel_digest] != split:
+            raise ValueError(f"{context}: decoded image pixels leak across splits")
+        pixel_hashes[pixel_digest] = split
         if not isinstance(row["detections"], list) or not isinstance(row["references"], list):
             raise ValueError(f"{context}: detections and references must be lists")
         detections = []
@@ -180,6 +189,7 @@ def load_frames(manifest_path: Path) -> tuple[list[Frame], dict]:
         "frames": len(frames),
         "scenes": len(scene_splits),
         "verified_image_files": len(frames),
+        "decoded_rgb_split_checked": True,
         "independent_labels_verified_by_this_loader": False,
         "source_rights_verified_by_this_loader": False,
         "camera_units_verified_by_this_loader": False,

@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 from PIL import Image
+from PIL.PngImagePlugin import PngInfo
 
 from experiments.localization_input import load_frames
 from experiments.localization_outcome import compare
@@ -43,6 +44,7 @@ def test_local_images_bind_to_frames_and_run_existing_comparison(tmp_path):
     manifest = _manifest(tmp_path)
     frames, receipt = load_frames(manifest)
     assert receipt["verified_image_files"] == 2
+    assert receipt["decoded_rgb_split_checked"] is True
     assert receipt["scenes"] == 2
     assert receipt["independent_labels_verified_by_this_loader"] is False
     assert all(frame.image_sha256 == hashlib.sha256(
@@ -72,6 +74,22 @@ def test_split_image_leak_is_refused_even_under_different_names(tmp_path):
         image_sha256=hashlib.sha256(duplicate.read_bytes()).hexdigest(),
     ))
     with pytest.raises(ValueError, match="source image leaks"):
+        load_frames(manifest)
+
+
+def test_split_reencoded_image_leak_is_refused_by_decoded_pixels(tmp_path):
+    manifest = _manifest(tmp_path)
+    duplicate = tmp_path / "same-pixels-new-bytes.png"
+    metadata = PngInfo()
+    metadata.add_text("comment", "different container bytes, identical RGB pixels")
+    with Image.open(tmp_path / "development.png") as original:
+        original.save(duplicate, pnginfo=metadata)
+    assert duplicate.read_bytes() != (tmp_path / "development.png").read_bytes()
+    _edit(manifest, lambda data: data["frames"][1].update(
+        image=duplicate.name,
+        image_sha256=hashlib.sha256(duplicate.read_bytes()).hexdigest(),
+    ))
+    with pytest.raises(ValueError, match="decoded image pixels leak"):
         load_frames(manifest)
 
 

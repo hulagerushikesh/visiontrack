@@ -181,16 +181,19 @@ For an admitted source, the adapter must calculate `image_sha256` from each
 exact input image and call `compare(..., require_image_hashes=True)`. The runner
 then refuses missing/malformed hashes and identical image bytes appearing in
 both development and test under different scene names. The report states
-whether this supplied-hash split check ran. It does not independently reopen
-images, authenticate supplied hashes, detect visually identical re-encodings,
-or establish that differently named scenes are different cameras; source
-provenance still needs separate review.
+whether this supplied-hash split check ran. The runner does not independently
+reopen images, authenticate supplied hashes, detect visually identical
+re-encodings, or establish that differently named scenes are different cameras;
+source provenance still needs separate review.
 
 The checkout now includes `experiments.localization_input.load_frames` for a
 small, local `visiontrack.localization-input/v1` manifest. It reads each exact
 image file, checks its declared SHA-256 and dimensions, keeps paths inside the
 manifest directory, checks detection/reference boxes against image bounds,
-and refuses duplicate JSON fields or scene/image leakage across splits. It
+and refuses duplicate JSON fields or scene/image leakage across splits. It also
+rejects identical decoded RGB pixels across splits even when file bytes differ
+through lossless re-encoding or metadata. It cannot identify near-duplicate
+frames, different crops of one scene, or differently named cameras. It
 returns `Frame` inputs and a receipt with the manifest hash. The loader does
 not infer missing frames or verify that the detector actually produced the
 declared boxes, that the labels were independently drawn, that scene names are
