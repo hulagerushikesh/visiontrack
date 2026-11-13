@@ -11,6 +11,7 @@ import pytest
 from PIL import Image
 
 from experiments import localization_detector_replay as replay
+from experiments import localization_study as study
 from experiments.localization_signal import audit_capture
 from visiontrack.detection.yolox_onnx import YoloxDetector
 
@@ -123,6 +124,35 @@ def test_command_path_populates_and_verifies(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(sys, "argv", arguments[:2] + [str(output)] + arguments[3:])
     replay.main()
     assert json.loads(capsys.readouterr().out)["declared_detector_rows_verified"] is True
+
+
+def test_study_binds_replay_and_outcome_and_writes_new_report(tmp_path, monkeypatch, capsys):
+    manifest, model, digest = _fixture(tmp_path, monkeypatch)
+    output = tmp_path / "study.json"
+    monkeypatch.setattr(sys, "argv", [
+        "localization_study", "--manifest", str(manifest), "--model", str(model),
+        "--model-sha256", digest, "--class-map", "0:car", "--input-size", "32",
+        "--resamples", "10", "--output", str(output),
+    ])
+    study.main()
+    receipt = json.loads(capsys.readouterr().out)
+    result = json.loads(output.read_text())
+    assert receipt["sha256"] == hashlib.sha256(output.read_bytes()).hexdigest()
+    assert result["input_receipt"]["manifest_sha256"] == result[
+        "detector_replay"]["manifest_sha256"]
+    assert result["detector_replay"]["declared_detector_rows_verified"] is True
+    assert result["outcome"]["results"]["B3_paired"]["matches"] == 1
+    assert result["source_admitted_by_this_command"] is False
+    with pytest.raises(SystemExit):
+        study.main()
+
+
+def test_study_refuses_to_score_unverified_detector_rows(tmp_path, monkeypatch):
+    manifest, model, digest = _fixture(tmp_path, monkeypatch)
+    _edit(manifest, lambda data: data["frames"][0]["detections"][0].update(score=0.5))
+    with pytest.raises(ValueError, match="differs from replay"):
+        study.run_study(manifest, model, digest, {0: "car"}, input_size=32,
+                        resamples=10)
 
 
 @pytest.mark.parametrize("field,value", [

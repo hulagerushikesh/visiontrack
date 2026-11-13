@@ -254,6 +254,26 @@ or invalid detector boxes are refused rather than clipped. A replay receipt
 does **not** certify reference labels, scene-camera identity, source rights,
 image completeness or generalization. Those independent gates remain open.
 
+Once a manifest has detector rows, the local `localization_study` command runs
+that exact replay check and the frozen B0–B3 comparison in one operation. It
+writes a new JSON report with the input receipt, pinned detector receipt and
+comparison under one manifest hash; it will not overwrite an existing report:
+
+```bash
+PYTHONPATH=src:. python -m experiments.localization_study \
+  --manifest /path/to/with-detections.json \
+  --model models/yolox_nano.onnx \
+  --model-sha256 c789161ed43c8269fcd4e67c67eeeb4e80c622da2eb296a20bc6007bd18a0b7d \
+  --input-size 416 --class-map 2:car,3:motorcycle,5:bus,7:truck \
+  --output /path/to/new-localization-study.json
+```
+
+This is a local descriptive workflow. The command refuses a changed detector
+row, missing proposal support for the paired comparison, or an input/model
+change during the run. It cannot turn unreviewed reference boxes, ambiguous
+camera names or unconfirmed media rights into admitted evidence. A reviewer
+must still complete those gates before any real-domain conclusion is made.
+
 No admitted scene-separated dataset, split manifest, real outcome table or
 accepted method exists for this audit yet. A [one-image UVH-26 preflight](UVH26_LOCALIZATION_PREFLIGHT.md)
 checks real-image capture feasibility and exposes missing camera IDs and an
