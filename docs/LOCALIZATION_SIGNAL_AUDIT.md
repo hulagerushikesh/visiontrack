@@ -219,6 +219,33 @@ image files):
 }
 ```
 
+The local [detector replay tool](../experiments/localization_detector_replay.py)
+closes the declared-box/proposal-provenance gap for a pinned YOLOX model. Start
+with the same manifest shape, but empty `detections` lists. Keep the images and
+manifest outside Git. Pin the model's SHA-256 independently, then run:
+
+```bash
+python -m experiments.localization_detector_replay \
+  --manifest /path/to/reference-only.json \
+  --populate-output /path/to/with-detections.json \
+  --model /path/to/model.onnx --model-sha256 <pinned-64-hex-sha256> \
+  --input-size 640 --class-map 2:car,3:motorcycle,5:bus,7:truck
+python -m experiments.localization_detector_replay \
+  --manifest /path/to/with-detections.json \
+  --model /path/to/model.onnx --model-sha256 <same-pinned-sha256> \
+  --input-size 640 --class-map 2:car,3:motorcycle,5:bus,7:truck
+```
+
+The first command writes a new manifest beside the input and will not replace
+an existing file; the second replays inference and checks exact detection order,
+classes, boxes, scores, spread status/value/group size, complete proposal capture
+and ordinary-detection parity. It rereads image bytes and checks their hashes,
+and rechecks the manifest and model hashes after replay. Explicit threshold and
+capture-cap flags must match any nondefault frozen configuration. Out-of-image
+or invalid detector boxes are refused rather than clipped. A replay receipt
+does **not** certify reference labels, scene-camera identity, source rights,
+image completeness or generalization. Those independent gates remain open.
+
 No admitted scene-separated dataset, split manifest, real outcome table or
 accepted method exists for this audit yet. A [one-image UVH-26 preflight](UVH26_LOCALIZATION_PREFLIGHT.md)
 checks real-image capture feasibility and exposes missing camera IDs and an

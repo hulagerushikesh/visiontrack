@@ -60,6 +60,11 @@ The local manifest loader now computes those hashes from image bytes and checks
 dimensions, box bounds, duplicate fields, and cross-split scene/image leakage.
 It prepares inputs only; source rights, complete frame inventory, detector
 provenance, camera units and independent labels still need separate review.
+The local YOLOX replay command now fills detection rows from a reference-only
+manifest or verifies existing rows against a pinned ONNX hash and exact images.
+It checks complete proposal capture, spread values and ordinary detection parity.
+This closes a detector-row provenance gap for that workflow; source permission,
+camera/session units, complete inventory and independent labels remain open.
 
 **History engineering completed — 2026-11-04 (checkout):** an explicit
 `ByteTracker(history_limit=...)` option preserves the required motion window;
