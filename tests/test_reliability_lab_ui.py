@@ -107,9 +107,10 @@ def test_sample_explains_how_to_rehearse_full_lab_workflow() -> None:
     assert ">local VisionTrack checkout</a>" not in component
 
 
-def test_lab_explains_the_task_before_import_and_keeps_review_optional() -> None:
+def test_lab_surfaces_report_controls_before_lessons_and_keeps_review_optional() -> None:
     component = (ROOT / "src/features/reliability-lab/ReliabilityLab.tsx").read_text()
-    assert component.index("<LabGuide />") < component.index("<ImportControls origin=")
+    assert component.index("<ImportControls origin=") < component.index("<LabGuide />")
+    assert 'href="#events-title"' in component
     assert "Explore tracking mistakes." in component
     assert "What this mistake means" in component
     assert ">What this mistake means</p>" in component
@@ -155,7 +156,7 @@ def test_failure_explorer_exposes_accessible_read_only_detail() -> None:
 
     assert 'aria-live="polite"' in component
     assert 'aria-controls="failure-event-detail"' in component
-    assert 'aria-pressed={selectedEventId === failure.event_id}' in component
+    assert 'aria-pressed={selected}' in component
     assert 'id="failure-event-detail"' in component
     assert "Recorded context" in component
     assert "Event fingerprint" in component

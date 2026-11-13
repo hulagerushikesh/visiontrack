@@ -3,7 +3,7 @@ import { AssociationDemoReader, type AssociationDemo } from "./association-demo"
 import { AssociationExplanationView } from "./AssociationInspector"
 import { InitiationFrameView } from "./InitiationInspector"
 
-const control = "inline-flex min-h-11 items-center justify-center rounded-xl border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-indigo-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
+const control = "inline-flex min-h-11 items-center justify-center rounded-xl border border-indigo-200 bg-white px-4 py-2 text-sm font-semibold text-indigo-700 shadow-sm hover:bg-indigo-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
 
 export function AssociationLessonStep({ demo, step }: { demo: AssociationDemo; step: number }) {
   const p = demo.explanation.stages[2].pair!
@@ -39,21 +39,28 @@ export function AssociationLessonContent({ demo }: { demo: AssociationDemo }) {
 export default function AssociationLesson() {
   const [state, setState] = useState<{ kind: "closed" | "loading" } | { kind: "error"; message: string } | { kind: "ready"; demo: AssociationDemo }>({ kind: "closed" })
   const reader = useRef(new AssociationDemoReader())
+  const trigger = useRef<HTMLButtonElement>(null)
+  const content = useRef<HTMLDivElement>(null)
   useEffect(() => { const current = reader.current; return () => current.cancel() }, [])
+  useEffect(() => {
+    if (state.kind !== "ready") return
+    content.current?.focus({ preventScroll: true })
+    content.current?.scrollIntoView({ block: "start" })
+  }, [state])
   const open = async () => {
     setState({ kind: "loading" })
     const result = await reader.current.read(() => import("./association-demo-assets"))
     if (result) setState(result)
   }
   const expanded = state.kind !== "closed"
-  return <section className="mb-6 rounded-3xl border border-indigo-100 bg-indigo-50/60 p-5 sm:p-6" aria-label="Optional prepared match failure lesson">
+  return <section className="rounded-3xl border border-indigo-100 bg-indigo-50/60 p-5 sm:p-6" aria-label="Optional prepared match failure lesson">
     <h2 className="text-lg font-semibold">Why can overlapping boxes fail to match?</h2>
     <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-700">An optional three-step synthetic lesson. See the saved overlap test, motion rejection and new internal ID. No install, files or camera needed; this does not change your selected report or show real-world accuracy.</p>
-    <div className="mt-4 flex flex-wrap gap-3"><button type="button" className={control} aria-expanded={expanded} aria-controls="association-lesson-content" disabled={state.kind === "loading"} onClick={open}>{state.kind === "loading" ? "Checking prepared lesson…" : state.kind === "closed" ? "Explain a match failure" : "Restart lesson"}</button>{expanded && <button type="button" className={control} onClick={() => { reader.current.cancel(); setState({ kind: "closed" }) }}>Close lesson</button>}</div>
+    <div className="mt-4 flex flex-wrap gap-3"><button ref={trigger} type="button" className={control} aria-expanded={expanded} aria-controls="association-lesson-content" aria-disabled={state.kind === "loading"} onClick={() => { if (state.kind !== "loading") void open() }}>{state.kind === "loading" ? "Checking prepared lesson…" : state.kind === "closed" ? "Explain a match failure" : "Restart lesson"}</button>{expanded && <button type="button" className={control} onClick={() => { reader.current.cancel(); setState({ kind: "closed" }); trigger.current?.focus() }}>Close lesson</button>}</div>
     <div id="association-lesson-content">
       {state.kind === "loading" && <p role="status" className="mt-4 text-sm">Checking the three prepared records…</p>}
       {state.kind === "error" && <p role="alert" className="mt-4 rounded-xl bg-amber-50 p-4 text-sm text-amber-900">Lesson unavailable: {state.message} Your selected report is unchanged. You can retry or close this lesson.</p>}
-      {state.kind === "ready" && <AssociationLessonContent demo={state.demo} />}
+      {state.kind === "ready" && <div ref={content} tabIndex={-1} role="region" aria-label="Match failure lesson" className="scroll-mt-24 rounded-2xl focus-visible:outline-2 focus-visible:outline-indigo-600"><AssociationLessonContent demo={state.demo} /></div>}
     </div>
   </section>
 }

@@ -50,25 +50,24 @@ export function TrackingLesson({ step }: { step: number }) {
 export default function LabGuide() {
   const [step, setStep] = useState(0)
   return (
-    <details open className="mb-6 rounded-3xl border border-indigo-100 bg-white p-5 shadow-sm sm:p-7">
+    <details className="rounded-3xl border border-indigo-100 bg-white p-5 shadow-sm sm:p-7">
       <summary className="cursor-pointer text-xl font-semibold tracking-tight">New here? Start with one simple example.</summary>
       <div className="mt-5 max-w-3xl text-sm leading-7 text-slate-700">
         <p>The Lab helps us test a tracker before trusting a change. It opens saved experiment results; it does not start your webcam or fix the tracker.</p>
         <p className="mt-2">We compare <strong>what should happen</strong> (reference labels, also called ground truth) with <strong>what the tracker outputs</strong>. A variant is one tracker version or settings choice. A frame is one picture in a sequence.</p>
       </div>
-      <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-indigo-700">Teaching example · separate from the report below</p>
+      <p className="mt-6 text-xs font-semibold uppercase tracking-wide text-indigo-700">Teaching example · separate from the active report</p>
       <p className="mt-2 text-sm leading-6 text-slate-700">A person walks behind a pillar and comes back. Click each step to see what an ID switch means.</p>
       <div className="mt-4 flex flex-wrap gap-2" role="group" aria-label="Teaching example steps">
         {lessonSteps.map((item, index) => <button key={item.label} type="button" aria-pressed={step === index} aria-controls="tracking-lesson-panel" onClick={() => setStep(index)} className={`rounded-xl border px-4 py-3 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2 ${step === index ? "border-indigo-600 bg-indigo-600 text-white" : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"}`}>{index + 1}. {item.label}</button>)}
       </div>
       <TrackingLesson step={step} />
       <ol className="mt-6 grid gap-4 border-t border-slate-200 pt-6 text-sm leading-6 md:grid-cols-3">
-        <li><strong className="block text-slate-900">1. Open a report</strong>Choose Try guided demo below to follow a complete synthetic example without installation or files. You can also explore the illustrative sample or import your own report.json.</li>
+        <li><strong className="block text-slate-900">1. Open a report</strong>Choose Try guided demo above to follow a synthetic example without installation or files. You can also explore the illustrative sample or import your own report.json.</li>
         <li><strong className="block text-slate-900">2. Understand one mistake</strong>In “Explore tracking mistakes,” choose Inspect. Read the explanation first; technical details are optional.</li>
         <li><strong className="block text-slate-900">3. Review only when ready</strong>A researcher can record a choice after reviewing evidence against agreed criteria. You do not need to make a decision to explore.</li>
       </ol>
       <p className="mt-5 rounded-xl bg-indigo-50 p-4 text-sm leading-6 text-indigo-950">Your first task: explore one mistake and tell us what is unclear. It is fine to stop there. Missing images mean you may not have enough evidence to explain the cause.</p>
-      <a href="#lab-title" className="mt-5 inline-block rounded-lg font-semibold text-primary underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600">Explore the report below ↓</a>
     </details>
   )
 }

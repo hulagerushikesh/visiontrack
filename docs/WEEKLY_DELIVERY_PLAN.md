@@ -185,11 +185,13 @@ is complete and one clarification email was sent with owner approval. Resume
 that route when the requested rights/label answers are available, rather than
 repeat screening while waiting.
 
-- [ ] **Check comprehension of the shipped lessons.** Walk through confirmation
-      and match failure; record where the explanation is unclear and make only
-      demonstrated corrections. Browser QA remains open while access is denied;
-      static rendering and green CI cannot close it. The owner's comprehension
-      is useful feedback, separate from target-practitioner validation.
+- [x] **Check browser interaction for the shipped lessons.** Local Chrome at
+      1440 px and 390 px exercised the ID-switch illustration, confirmation and
+      match-failure lessons, failure details, and valid and malformed imports.
+      Report controls now come first and the illustration is optional. Opening
+      and closing the match lesson or failure details moves keyboard focus to
+      the relevant content or its trigger. Practitioner comprehension remains
+      open.
 - [ ] **Resolve one evidence route.** RoundaboutHD remains a rights-clarification
       lead, not admitted data. Reuse the [existing source gate](REAL_TRAFFIC_EVIDENCE_GATE.md)
       and spend at most one focused screening session on this route. Exact media

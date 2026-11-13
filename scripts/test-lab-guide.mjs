@@ -15,14 +15,13 @@ async function browserModule(name, extension) {
 
 const { default: LabGuide, lessonSteps, TrackingLesson } = await browserModule("LabGuide", "tsx")
 const guide = renderToStaticMarkup(createElement(LabGuide))
-assert.match(guide, /<details open=""/)
+assert.doesNotMatch(guide, /<details open/)
 assert.match(guide, /it does not start your webcam or fix the tracker/)
-assert.match(guide, /separate from the report below/)
+assert.match(guide, /separate from the active report/)
 assert.match(guide, /You do not need to make a decision to explore/)
 assert.match(guide, /aria-controls="tracking-lesson-panel"/)
 assert.equal((guide.match(/aria-pressed="true"/g) ?? []).length, 1)
 assert.equal((guide.match(/aria-pressed="false"/g) ?? []).length, 2)
-assert.match(guide, /href="#lab-title"/)
 assert.doesNotMatch(guide, /<input|<video|<iframe|<img|<form|https:\/\//)
 
 for (const [step, item] of lessonSteps.entries()) {

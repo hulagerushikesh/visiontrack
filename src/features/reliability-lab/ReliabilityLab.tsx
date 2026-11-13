@@ -123,6 +123,7 @@ export function ImportControls({
   onDemo: () => void
   loading: boolean
 }) {
+  const fileInput = useRef<HTMLInputElement>(null)
   return (
     <section className="rounded-3xl border border-indigo-100 bg-white/90 p-5 shadow-lg shadow-slate-200/50 backdrop-blur sm:p-6" aria-label="Report source">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
@@ -130,25 +131,24 @@ export function ImportControls({
           <div className="grid size-10 shrink-0 place-items-center rounded-2xl bg-indigo-50 text-primary"><FileJson2 className="size-5" /></div>
           <div className="min-w-0">
             <p className="text-sm font-semibold">{origin.kind === "sample" ? "Illustrative sample report" : origin.kind === "demo" ? "Guided synthetic demo · VisionTrack 0.4.0" : origin.filename}</p>
-            <p className="mt-1 text-xs leading-5 text-muted-foreground">
+            <p className="mt-1 text-xs leading-5 text-muted-foreground" role="status">
               {reportId ? `Report ${short(reportId)} · ` : ""}Processed only in this browser tab. Nothing is uploaded.
             </p>
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
-          {(origin.kind !== "sample" || loading) && <Button type="button" variant="outline" onClick={onSample}><RotateCcw className="size-4" />Return to sample</Button>}
+          {(origin.kind !== "sample" || loading) && <Button type="button" variant="outline" onClick={() => { onSample(); fileInput.current?.focus() }}><RotateCcw className="size-4" />Return to sample</Button>}
           <label className="inline-flex h-9 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow-xs transition hover:bg-primary/90 focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
             <Upload className="size-4" />Import report.json
-            <input className="sr-only" type="file" accept="application/json,.json" onChange={onImport} />
+            <input ref={fileInput} className="sr-only" type="file" accept="application/json,.json" onChange={onImport} />
           </label>
         </div>
       </div>
-      {origin.kind === "sample" && <div className="mt-5 rounded-2xl border border-indigo-100 bg-indigo-50/60 p-5"><h2 className="font-semibold">See how a detection becomes a track</h2><p className="mt-2 max-w-3xl text-sm leading-6 text-slate-700">Open a complete synthetic report and its matching timeline. No Python, terminal, camera or file selection needed. The website loads a prepared example; it does not run the tracker or use your footage.</p><Button type="button" className="mt-4" onClick={onDemo} disabled={loading}>{loading ? "Checking guided demo…" : "Try guided demo"}</Button><p className="mt-3 text-xs leading-5 text-muted-foreground">Synthetic results do not establish real-world accuracy. Skip Human review for this demo.</p></div>}
+      {origin.kind === "sample" && <div className="mt-5 rounded-2xl border border-indigo-100 bg-indigo-50/60 p-5"><h2 className="font-semibold">See how a detection becomes a track</h2><p className="mt-2 max-w-3xl text-sm leading-6 text-slate-700">Follow a saved synthetic timeline in your browser. No install, files or camera needed.</p><Button type="button" className="mt-4" onClick={onDemo} disabled={loading}>{loading ? "Checking guided demo…" : "Try guided demo"}</Button><p className="mt-3 text-xs leading-5 text-muted-foreground">Synthetic results do not establish real-world accuracy. Skip Human review for this demo.</p></div>}
       {origin.kind === "sample" && (
         <details className="mt-6 rounded-2xl border border-indigo-100 bg-indigo-50/60 p-5" aria-label="Try the complete Lab workflow">
           <summary className="cursor-pointer text-sm font-semibold text-slate-900">Optional: generate your own practice report</summary>
-          <p className="text-sm font-semibold text-slate-900">Want to try the complete Lab workflow?</p>
-          <p className="mt-2 text-sm leading-6 text-slate-700">This illustrative sample is for exploring the screen. Generate a local, synthetic report and matching initiation trace to follow how detections become public tracks. No camera, dataset, upload or acceptance decision is needed.</p>
+          <p className="mt-3 text-sm leading-6 text-slate-700">This illustrative sample is for exploring the screen. Generate a local, synthetic report and matching initiation trace to follow how detections become public tracks. No camera, dataset, upload or acceptance decision is needed.</p>
           <ol className="mt-4 grid gap-4 text-sm leading-6 text-slate-700 md:grid-cols-3">
             <li><strong className="block text-slate-900">1. Generate</strong>In a terminal on your computer, install the released Lab tools and run:<code className="mt-2 block overflow-x-auto rounded-lg bg-slate-950 px-3 py-2 font-mono text-xs leading-5 text-slate-100">python -m pip install --upgrade "visiontrack-mot[lab]==0.5.1"<br />visiontrack lab-demo ./lab-onboarding --with-initiation --write</code><span className="mt-2 block text-xs">Use a new output folder name if you repeat the exercise. Python 3.10–3.12 is the tested setup. No repository download is needed. Optional source code: <a className="text-primary underline underline-offset-2" href="https://github.com/hulagerushikesh/visiontrack">View the repository on GitHub</a> (this link does not run the command).</span></li>
             <li><strong className="block text-slate-900">2. Import</strong>Open <code>lab-onboarding/try-in-browser</code> on your computer. Select its <code>report.json</code> using the button above. Then follow <strong>Inspect track initiation</strong> and import <code>initiation-trace.json</code> from the same folder.</li>
@@ -646,6 +646,8 @@ function FailureExplorer({ report }: { report: ReliabilityReport }) {
   const [failureType, setFailureType] = useState<FailureType | "all">("all")
   const [frame, setFrame] = useState("")
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null)
+  const detailHeading = useRef<HTMLHeadingElement>(null)
+  const inspectButton = useRef<HTMLButtonElement | null>(null)
   const frameNumber = frame === "" ? null : Number(frame)
   const filteredFailures = report.failures.filter((failure) =>
     (variant === "all" || failure.variant === variant) &&
@@ -655,6 +657,13 @@ function FailureExplorer({ report }: { report: ReliabilityReport }) {
   const selectedEvent = report.failures.find((failure) => failure.event_id === selectedEventId) ?? null
   const filtersActive = variant !== "all" || failureType !== "all" || frame !== ""
   const clearSelection = () => setSelectedEventId(null)
+  const closeDetails = () => {
+    clearSelection()
+    inspectButton.current?.focus()
+  }
+  useEffect(() => {
+    if (selectedEventId) detailHeading.current?.focus()
+  }, [selectedEventId])
   const resetFilters = () => {
     setVariant("all")
     setFailureType("all")
@@ -666,7 +675,7 @@ function FailureExplorer({ report }: { report: ReliabilityReport }) {
     <section className="mt-20" aria-labelledby="events-title">
       <div className="mb-8">
         <p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Frame-level evidence</p>
-        <h2 id="events-title" className="mt-3 text-4xl font-semibold tracking-[-.04em]">Explore tracking mistakes.</h2>
+        <h2 id="events-title" tabIndex={-1} className="mt-3 scroll-mt-24 rounded-lg text-4xl font-semibold tracking-[-.04em]">Explore tracking mistakes.</h2>
         <p className="mt-4 max-w-3xl leading-7 text-slate-700">These are the mistakes recorded by the experiment, also called the failure set. Choose Inspect to understand one event. A recorded mismatch shows what the evaluation found, not why it happened.</p>
         <p className="mt-4 max-w-3xl leading-7 text-muted-foreground">Filter the events already present in this verified report. These controls never recalculate metrics or change the source artifacts.</p>
       </div>
@@ -717,8 +726,41 @@ function FailureExplorer({ report }: { report: ReliabilityReport }) {
             <div className="overflow-x-auto rounded-3xl border border-border bg-white">
               <table className="w-full min-w-[860px] border-collapse text-left">
                 <caption className="px-6 py-5 text-left text-sm text-muted-foreground">Read-only failure events from the active report</caption>
-                <thead className="border-y border-border bg-slate-50/80 text-xs uppercase tracking-[.12em] text-muted-foreground"><tr><th scope="col" className="px-6 py-4">Type</th><th scope="col" className="px-6 py-4">Variant</th><th scope="col" className="px-6 py-4">Frame</th><th scope="col" className="px-6 py-4">Tracks</th><th scope="col" className="px-6 py-4">Ground truth</th><th scope="col" className="px-6 py-4">Evidence range</th><th scope="col" className="px-6 py-4">Media</th><th scope="col" className="px-6 py-4"><span className="sr-only">Inspect</span></th></tr></thead>
-                <tbody>{filteredFailures.map((failure) => { const media = mediaEvidence(failure); return <tr className="border-b border-border last:border-0" key={failure.event_id}><td className="px-6 py-4"><span className="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold capitalize text-indigo-700">{failure.event_type.replace("_", " ")}</span></td><td className="px-6 py-4 text-sm">{failure.variant}</td><td className="px-6 py-4 font-mono text-sm">{failure.frame_index}</td><td className="px-6 py-4 text-sm">{failure.track_ids.join(", ") || "—"}</td><td className="px-6 py-4 text-sm">{failure.ground_truth_ids.join(", ") || "—"}</td><td className="px-6 py-4 text-sm">{failure.evidence_frames.start}–{failure.evidence_frames.end - 1}</td><td className="px-6 py-4 text-sm"><span className={media.status === "available" ? "rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700" : "rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600"}>{mediaLabels[media.status]}</span></td><td className="px-6 py-4 text-right"><Button type="button" size="sm" variant={selectedEventId === failure.event_id ? "default" : "outline"} aria-pressed={selectedEventId === failure.event_id} aria-controls="failure-event-detail" onClick={() => setSelectedEventId(failure.event_id)}>Inspect</Button></td></tr> })}</tbody>
+                <thead className="border-y border-border bg-slate-50/80 text-xs uppercase tracking-[.12em] text-muted-foreground"><tr><th scope="col" className="px-6 py-4"><span className="sr-only">Inspect</span></th><th scope="col" className="px-6 py-4">Type</th><th scope="col" className="px-6 py-4">Variant</th><th scope="col" className="px-6 py-4">Frame</th><th scope="col" className="px-6 py-4">Tracks</th><th scope="col" className="px-6 py-4">Ground truth</th><th scope="col" className="px-6 py-4">Evidence range</th><th scope="col" className="px-6 py-4">Media</th></tr></thead>
+                <tbody>
+                  {filteredFailures.map((failure) => {
+                    const media = mediaEvidence(failure)
+                    const selected = selectedEventId === failure.event_id
+                    return (
+                      <tr className="border-b border-border last:border-0" key={failure.event_id}>
+                        <td className="px-6 py-4">
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant={selected ? "default" : "outline"}
+                            aria-pressed={selected}
+                            aria-controls="failure-event-detail"
+                            aria-label={`Inspect ${failureLabels[failure.event_type].toLowerCase()} at frame ${failure.frame_index}, ${failure.variant}`}
+                            onClick={(event) => {
+                              inspectButton.current = event.currentTarget
+                              if (selected) detailHeading.current?.focus()
+                              else setSelectedEventId(failure.event_id)
+                            }}
+                          >
+                            Inspect
+                          </Button>
+                        </td>
+                        <td className="px-6 py-4"><span className="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold capitalize text-indigo-700">{failure.event_type.replace("_", " ")}</span></td>
+                        <td className="px-6 py-4 text-sm">{failure.variant}</td>
+                        <td className="px-6 py-4 font-mono text-sm">{failure.frame_index}</td>
+                        <td className="px-6 py-4 text-sm">{failure.track_ids.join(", ") || "—"}</td>
+                        <td className="px-6 py-4 text-sm">{failure.ground_truth_ids.join(", ") || "—"}</td>
+                        <td className="px-6 py-4 text-sm">{failure.evidence_frames.start}–{failure.evidence_frames.end - 1}</td>
+                        <td className="px-6 py-4 text-sm"><span className={media.status === "available" ? "rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700" : "rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600"}>{mediaLabels[media.status]}</span></td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
               </table>
             </div>
           )}
@@ -726,8 +768,8 @@ function FailureExplorer({ report }: { report: ReliabilityReport }) {
           {selectedEvent && (
             <aside id="failure-event-detail" className="rounded-[1.75rem] border border-indigo-100 bg-indigo-50/70 p-6 sm:p-8" aria-labelledby="failure-detail-title">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div><p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Selected evidence</p><h3 id="failure-detail-title" className="mt-2 text-2xl font-semibold tracking-tight">{failureLabels[selectedEvent.event_type]} at frame {selectedEvent.frame_index}</h3></div>
-                <Button type="button" variant="outline" onClick={clearSelection}>Close details</Button>
+                <div><p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Selected evidence</p><h3 id="failure-detail-title" ref={detailHeading} tabIndex={-1} className="mt-2 scroll-mt-24 rounded-lg text-2xl font-semibold tracking-tight">{failureLabels[selectedEvent.event_type]} at frame {selectedEvent.frame_index}</h3></div>
+                <Button type="button" variant="outline" onClick={closeDetails}>Close details</Button>
               </div>
               <div className="mt-6 rounded-2xl border border-indigo-100 bg-white p-5" aria-label="What this mistake means">
                 <p className="text-xs font-medium uppercase tracking-wide text-primary">What this mistake means</p>
@@ -771,7 +813,7 @@ export function LabReport({ report, origin }: { report: ReliabilityReport; origi
       <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
         <motion.section initial={reduce ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .5 }} aria-labelledby="lab-title">
           <div className="flex flex-wrap items-center gap-3"><span className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1.5 font-mono text-[10px] font-semibold uppercase tracking-[.16em] text-primary"><FlaskConical className="size-3" />Reliability Lab</span><span className={origin.kind === "sample" ? "rounded-full bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700" : "rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700"}>{origin.kind === "sample" ? "Demonstration fixture · illustrative data" : origin.kind === "demo" ? "Guided demo · synthetic data" : "Private local import · content fingerprint checked"}</span></div>
-          <div className="mt-7 grid gap-8 lg:grid-cols-[1.1fr_.9fr] lg:items-end"><div><h1 id="lab-title" className="max-w-4xl text-balance text-5xl font-semibold leading-[.98] tracking-[-.055em] sm:text-7xl">Evidence before <span className="gradient-text">confidence.</span></h1><p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">Compare recorded tracker configurations, inspect reported failures, and follow their declared evidence links before making a decision.</p></div><div className="rounded-3xl border border-white bg-white/85 p-6 shadow-xl shadow-slate-200/60 backdrop-blur"><div className="flex items-start gap-4"><div className="grid size-11 shrink-0 place-items-center rounded-2xl bg-emerald-50 text-emerald-600"><ShieldCheck className="size-5" /></div><div><p className="font-semibold">Read-only {origin.kind === "sample" ? "illustrative sample" : origin.kind === "demo" ? "synthetic demo" : "local report"}</p><p className="mt-1 text-sm leading-6 text-muted-foreground">{origin.kind === "sample" ? "This built-in example teaches the workflow; it is not a verified local experiment." : "The browser checks the report format and content fingerprint. It does not authenticate who produced it or verify the original detections, labels, or accuracy."} This screen does not edit results or choose a winner.</p></div></div></div></div>
+          <div className="mt-7 grid gap-8 lg:grid-cols-[1.1fr_.9fr] lg:items-end"><div><h2 id="lab-title" className="max-w-4xl text-balance text-5xl font-semibold leading-[.98] tracking-[-.055em] sm:text-7xl">Evidence before <span className="gradient-text">confidence.</span></h2><p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">Compare recorded tracker configurations, inspect reported failures, and follow their declared evidence links before making a decision.</p></div><div className="rounded-3xl border border-white bg-white/85 p-6 shadow-xl shadow-slate-200/60 backdrop-blur"><div className="flex items-start gap-4"><div className="grid size-11 shrink-0 place-items-center rounded-2xl bg-emerald-50 text-emerald-600"><ShieldCheck className="size-5" /></div><div><p className="font-semibold">Read-only {origin.kind === "sample" ? "illustrative sample" : origin.kind === "demo" ? "synthetic demo" : "local report"}</p><p className="mt-1 text-sm leading-6 text-muted-foreground">{origin.kind === "sample" ? "This built-in example teaches the workflow; it is not a verified local experiment." : "The browser checks the report format and content fingerprint. It does not authenticate who produced it or verify the original detections, labels, or accuracy."} This screen does not edit results or choose a winner.</p></div></div></div></div>
         </motion.section>
 
         {origin.kind === "file" && <a className="mt-6 inline-block rounded-lg font-semibold text-primary underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-indigo-600" href="#initiation-title">Inspect track initiation →</a>}
@@ -787,7 +829,7 @@ export function LabReport({ report, origin }: { report: ReliabilityReport; origi
           ].map(([label, value, Icon]) => <div className="rounded-3xl border border-white bg-white/90 p-6 shadow-[0_18px_55px_-38px_rgba(30,41,59,.45)] ring-1 ring-slate-200/70" key={String(label)}><Icon className="size-5 text-primary" /><p className="mt-8 font-mono text-[10px] font-semibold uppercase tracking-[.16em] text-muted-foreground">{String(label)}</p><p className="mt-2 font-semibold">{String(value)}</p></div>)}
         </section>
 
-        <section className="mt-20" aria-labelledby="metrics-title"><div className="mb-8 max-w-3xl"><p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Paired measurement</p><h2 id="metrics-title" className="mt-3 text-4xl font-semibold tracking-[-.04em]">Same evidence. Controlled change.</h2><p className="mt-4 leading-7 text-muted-foreground">The report records a shared detection stream and frame range for its variants. Compare the recorded results without changing them or choosing a winner; check the original local bundle before relying on an imported report.</p></div><MetricComparison report={report} /></section>
+        <section className="mt-20" aria-labelledby="metrics-title"><div className="mb-8 max-w-3xl"><p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Paired measurement</p><h2 id="metrics-title" tabIndex={-1} className="mt-3 scroll-mt-24 text-4xl font-semibold tracking-[-.04em]">Same evidence. Controlled change.</h2><p className="mt-4 leading-7 text-muted-foreground">The report records a shared detection stream and frame range for its variants. Compare the recorded results without changing them or choosing a winner; check the original local bundle before relying on an imported report.</p></div><MetricComparison report={report} /></section>
 
         <section className="mt-20" aria-labelledby="failures-title"><div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><div><p className="font-mono text-xs font-semibold uppercase tracking-[.16em] text-primary">Failure taxonomy</p><h2 id="failures-title" className="mt-3 text-4xl font-semibold tracking-[-.04em]">Where tracking breaks.</h2></div><p className="max-w-md text-sm leading-6 text-muted-foreground">Counts use the same correspondence as the published metrics—not a second UI-only calculation.</p></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{failureOrder.map((failure) => <article className="rounded-3xl border border-border bg-white p-6" key={failure}><p className="text-sm font-medium text-muted-foreground">{failureLabels[failure]}</p><div className="mt-5 space-y-3">{report.variants.map((variant) => <div className="flex items-center justify-between" key={variant.name}><span className="text-sm">{variant.name}</span><strong className="text-2xl">{variant.failure_counts[failure]}</strong></div>)}</div></article>)}</div></section>
 
@@ -847,10 +889,21 @@ export default function ReliabilityLab() {
   return (
     <div>
       <div className="relative z-10 mx-auto max-w-7xl px-5 pt-28 lg:px-8">
-        <aside className="mb-6 rounded-3xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-6"><p className="text-xs font-semibold uppercase tracking-wide text-primary">From our research · separate from your report</p><h2 className="mt-2 text-xl font-semibold">A visible vehicle. A missing count. Where is the gap?</h2><p className="mt-2 text-sm leading-7 text-muted-foreground">Explore five crossing marks from the rain case through detector proposals, association, track confirmation and counting. Saved numeric evidence, with plain-language explanations.</p><a href="/lab/crossings" className="mt-4 inline-block rounded-lg font-semibold text-primary underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-indigo-600">Explore the crossing diagnosis →</a></aside>
-        {origin.kind !== "demo" && <LabGuide />}
+        <h1 className="mb-5 text-3xl font-semibold tracking-tight sm:text-4xl">Reliability Lab</h1>
         <ImportControls origin={origin} reportId={state.kind === "ready" ? state.report.report_id : undefined} onImport={importReport} onSample={loadSample} onDemo={loadDemo} loading={state.kind === "loading"} />
-        {origin.kind !== "demo" && <div className="mt-6"><AssociationLesson key={`${origin.kind}:${state.kind === "ready" ? state.report.report_id : "pending"}`} /></div>}
+        {state.kind === "ready" && origin.kind !== "demo" && (
+          <nav aria-label="Explore Lab evidence" className="mt-5 flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold text-primary">
+            <a href="#metrics-title" className="underline underline-offset-4">Compare configurations</a>
+            <a href="#events-title" className="underline underline-offset-4">Inspect tracking mistakes</a>
+            <a href="/lab/crossings" className="underline underline-offset-4">Explore the rain case study</a>
+          </nav>
+        )}
+        {origin.kind !== "demo" && (
+          <div className="mt-6 space-y-4">
+            <LabGuide />
+            <AssociationLesson key={`${origin.kind}:${state.kind === "ready" ? state.report.report_id : "pending"}`} />
+          </div>
+        )}
       </div>
       {state.kind === "loading" ? <LoadingState /> : state.kind === "ready" ? <LabReport key={`${origin.kind}:${state.report.report_id}`} report={state.report} origin={origin} /> : <ReportError state={state} />}
     </div>
