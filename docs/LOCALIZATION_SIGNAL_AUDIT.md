@@ -222,18 +222,23 @@ image files):
 The local [detector replay tool](../experiments/localization_detector_replay.py)
 closes the declared-box/proposal-provenance gap for a pinned YOLOX model. Start
 with the same manifest shape, but empty `detections` lists. Keep the images and
-manifest outside Git. Pin the model's SHA-256 independently, then run:
+manifest outside Git. From the repository root, use an environment with the
+`video` and `experiments` extras installed. Pin the model's SHA-256
+independently, then run (this example uses the already-pinned YOLOX nano/416
+model; replace the model, hash and size together for another frozen model):
 
 ```bash
-python -m experiments.localization_detector_replay \
+PYTHONPATH=src:. python -m experiments.localization_detector_replay \
   --manifest /path/to/reference-only.json \
   --populate-output /path/to/with-detections.json \
-  --model /path/to/model.onnx --model-sha256 <pinned-64-hex-sha256> \
-  --input-size 640 --class-map 2:car,3:motorcycle,5:bus,7:truck
-python -m experiments.localization_detector_replay \
+  --model models/yolox_nano.onnx \
+  --model-sha256 c789161ed43c8269fcd4e67c67eeeb4e80c622da2eb296a20bc6007bd18a0b7d \
+  --input-size 416 --class-map 2:car,3:motorcycle,5:bus,7:truck
+PYTHONPATH=src:. python -m experiments.localization_detector_replay \
   --manifest /path/to/with-detections.json \
-  --model /path/to/model.onnx --model-sha256 <same-pinned-sha256> \
-  --input-size 640 --class-map 2:car,3:motorcycle,5:bus,7:truck
+  --model models/yolox_nano.onnx \
+  --model-sha256 c789161ed43c8269fcd4e67c67eeeb4e80c622da2eb296a20bc6007bd18a0b7d \
+  --input-size 416 --class-map 2:car,3:motorcycle,5:bus,7:truck
 ```
 
 The first command writes a new manifest beside the input and will not replace
