@@ -101,3 +101,35 @@ hosted deployment; the linked route is available after its deployment succeeds.
 
 No owner recording, interview, new email or manual review task is required for
 the next offline diagnostic implementation. No outreach is sent by this study.
+
+## Reproduce the study and figure
+
+From a full VisionTrack Git clone containing this page and the companion scripts,
+use Python 3.12.9, NumPy 2.5.4 and Matplotlib 3.10.9. The commands below run in
+macOS and Linux shells. The study generates its own scripted detections and
+reference labels. It needs no footage, model weights or VisionTrack installation.
+
+```sh
+artifact_dir=$(mktemp -d)
+python3.12 -m venv "$artifact_dir/venv"
+artifact_python="$artifact_dir/venv/bin/python"
+"$artifact_python" -m pip install numpy==2.5.4 matplotlib==3.10.9
+"$artifact_python" -m experiments.reproduce_initiation_threshold --output "$artifact_dir/replay"
+PYTHONPATH=src "$artifact_python" -m experiments.plot_initiation_threshold \
+  "$artifact_dir/replay" "$artifact_dir/initiation-threshold.svg"
+```
+
+The replay command checks out the frozen [public method revision](https://github.com/hulagerushikesh/visiontrack/commit/4b44af0abb0c7448f6baf796e5cfa1062d52f6a6)
+in a temporary Git worktree and compares all 54 pairs to the saved summary,
+including exact input and output hashes. It checks the public method and
+baseline Git IDs before excluding those two fields and the execution environment
+from the summary comparison. The full per-case inputs, outputs and scores are
+retained in the requested output directory.
+
+The plotter validates the selected inputs, outputs and scores before drawing.
+It also accepts a `.pdf` output path for a vector PDF. The reference
+[figure SVG](figures/initiation-threshold.svg) has SHA-256
+`0c19f5f439bfa521a1a57b0cd9b5f81e81b5e5f947fecbb696eb3bf71a416786`.
+With the versions above, native macOS ARM64 and Debian Linux ARM64 and x86-64
+containers produced the same SVG and all 216 per-case JSON files byte for byte.
+The Linux containers ran on the same Apple Silicon host, with x86-64 emulated.
