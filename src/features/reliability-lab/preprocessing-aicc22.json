@@ -1,0 +1,16 @@
+{
+  "frames": 200,
+  "fps": 10,
+  "referenceCrossings": 5,
+  "legacy": {
+    "detectionBoxes": 1222,
+    "matched": 1,
+    "unmatched": 0
+  },
+  "upstream": {
+    "detectionBoxes": 2533,
+    "matched": 1,
+    "unmatched": 0
+  },
+  "missedReferenceFrames": [132, 145, 168, 199]
+}

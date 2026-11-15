@@ -1,4 +1,5 @@
 import data from "./preprocessing-hanoi.json"
+import secondCamera from "./preprocessing-aicc22.json"
 
 export default function PreprocessingCaseStudy() {
   const total = data.crossings.length
@@ -76,6 +77,32 @@ export default function PreprocessingCaseStudy() {
         <p>The alternate input still missed {total - upstreamMatches} crossings at this gate.
           The table contains numeric results from the VnTraffic subset of the{" "}
           <a className="font-semibold text-primary underline underline-offset-4" href="https://zenodo.org/records/18195750">Vehicle Tracking Dataset</a>.</p>
+        <section className="rounded-xl border border-amber-200 bg-amber-50 p-4" aria-labelledby="second-camera-heading">
+          <h3 id="second-camera-heading" className="font-semibold text-slate-950">Second camera: no counting gain</h3>
+          <p className="mt-2">On the separate AICC22-Custom camera, both inputs matched{" "}
+            <strong>{secondCamera.legacy.matched} of {secondCamera.referenceCrossings}</strong> labeled crossings.
+            Both missed frames {secondCamera.missedReferenceFrames.join(", ")}, with no unmatched prediction.
+            The alternate input produced more detector boxes but did not recover those crossings.</p>
+          <div className="mt-3 overflow-x-auto">
+            <table className="w-full min-w-80 text-left">
+              <caption className="sr-only">Second-camera outcomes by preprocessing mode</caption>
+              <thead className="border-b border-amber-200 text-slate-950">
+                <tr><th scope="col" className="p-2">Measure</th><th scope="col" className="p-2">RGB + nearest-sample</th><th scope="col" className="p-2">BGR + bilinear</th></tr>
+              </thead>
+              <tbody className="divide-y divide-amber-100">
+                <tr><th scope="row" className="p-2 font-medium">Matched crossings</th><td className="p-2">{secondCamera.legacy.matched}</td><td className="p-2">{secondCamera.upstream.matched}</td></tr>
+                <tr><th scope="row" className="p-2 font-medium">Missed crossings</th><td className="p-2">{secondCamera.referenceCrossings - secondCamera.legacy.matched}</td><td className="p-2">{secondCamera.referenceCrossings - secondCamera.upstream.matched}</td></tr>
+                <tr><th scope="row" className="p-2 font-medium">Unmatched predictions</th><td className="p-2">{secondCamera.legacy.unmatched}</td><td className="p-2">{secondCamera.upstream.unmatched}</td></tr>
+                <tr><th scope="row" className="p-2 font-medium">Detector boxes</th><td className="p-2 tabular-nums">{secondCamera.legacy.detectionBoxes.toLocaleString()}</td><td className="p-2 tabular-nums">{secondCamera.upstream.detectionBoxes.toLocaleString()}</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-2">This clip covers {secondCamera.frames} frames at {secondCamera.fps} fps.
+            Its ±1-frame match window and camera geometry differ from Hanoi, so the two scores should not be pooled.
+            The <a className="font-semibold text-primary underline underline-offset-4" href="https://zenodo.org/records/18195750">dataset deposit</a> lists the AICC22-Custom source.
+            Its TXT and JSON annotations disagree; the checked TXT rows were used, and the last crossing lies at the clip boundary.
+            Neither camera establishes a default-setting improvement.</p>
+        </section>
         <details className="rounded-xl border border-slate-200 p-4">
           <summary className="cursor-pointer font-semibold text-slate-950">Evaluation settings</summary>
           <p className="mt-3">Frames 0–500 at 30 fps, 1920 × 1080. A crossing occurs when the bottom center
