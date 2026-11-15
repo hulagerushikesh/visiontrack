@@ -1,0 +1,58 @@
+{
+  "analysis": "post-hoc mechanism audit; no tracker or preprocessing change",
+  "cameras": {
+    "aicc22_c002": {
+      "conditions": {
+        "bgr-bilinear": {
+          "detections": 2533,
+          "detections_sha256": "75c9593b60882f296ae484ea6ea559d56794ceec21bb14469d89396f13a299c9",
+          "frames": 200,
+          "frames_with_motion_veto": 181,
+          "frozen_observations_equal": true,
+          "frozen_observations_sha256": "32afc289080e5baeeb30b44885e5286cb144002c07a124d688a80c61cee3cbbf",
+          "iou_and_class_eligible_pairs": 1056,
+          "motion_vetoed_pairs": 464
+        },
+        "rgb-nearest": {
+          "detections": 1222,
+          "detections_sha256": "43b7d90fb40b6248982ddfecd59d05471e95d52366cbd74acbfe1ecd11db4bdc",
+          "frames": 200,
+          "frames_with_motion_veto": 107,
+          "frozen_observations_equal": true,
+          "frozen_observations_sha256": "462f6df4c579232d6d0267c60893b807ac59f0935001c38c957b4e3ad3a21ca3",
+          "iou_and_class_eligible_pairs": 403,
+          "motion_vetoed_pairs": 174
+        }
+      },
+      "fps": 10
+    },
+    "hanoi": {
+      "conditions": {
+        "bgr-bilinear": {
+          "detections": 7238,
+          "detections_sha256": "baa424f63dff159e1b1e3b624ac16ea61eaf60d26c0e7fa72c90c9c0f22c6289",
+          "frames": 501,
+          "frames_with_motion_veto": 342,
+          "frozen_observations_equal": true,
+          "frozen_observations_sha256": "27952ff4f4608630d790471579f73ee6a1a8df0522696946e1d0766be45e6da8",
+          "iou_and_class_eligible_pairs": 4188,
+          "motion_vetoed_pairs": 743
+        },
+        "rgb-nearest": {
+          "detections": 6712,
+          "detections_sha256": "94b365323ff869c5dec1ebba0be57deebcd3076460cada82848c10f860c6c58e",
+          "frames": 501,
+          "frames_with_motion_veto": 346,
+          "frozen_observations_equal": true,
+          "frozen_observations_sha256": "f2b09bf0e050cda0bbd11319937445d97f2f91459546c303e6b04b5f2cff8c53",
+          "iou_and_class_eligible_pairs": 3453,
+          "motion_vetoed_pairs": 640
+        }
+      },
+      "fps": 30
+    }
+  },
+  "definition": "IoU- and class-eligible candidate pairs rejected by the default 4D Mahalanobis gate in high-score association stages",
+  "limitations": "Pair veto counts are not object errors, independent events, or a comparable accuracy rate across cameras. Frozen crossing outcomes remain the separate performance measure.",
+  "schema": "visiontrack.association-gate-audit/v1"
+}
