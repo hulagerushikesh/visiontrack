@@ -1,0 +1,284 @@
+{
+  "cameras": {
+    "aicc_c002": {
+      "detection_sha256": "75c9593b60882f296ae484ea6ea559d56794ceec21bb14469d89396f13a299c9",
+      "fps": 10,
+      "frames": 200,
+      "reference_sha256": "b62ae99667039d43dc1df8e6e8c0a3da57808a7136880b4608877d0a22ddb497",
+      "variants": {
+        "variance_x1": {
+          "births": 180,
+          "extra": 0,
+          "extra_prediction_frames": [],
+          "match_overlap": [
+            {
+              "frame": 10,
+              "same_frame_iou": 0.9358611630567606
+            }
+          ],
+          "match_reference_frames": [
+            10
+          ],
+          "matched": 1,
+          "max_cardinality_matches": 1,
+          "miss_reference_frames": [
+            132,
+            145,
+            168,
+            199
+          ],
+          "missed": 4
+        },
+        "variance_x3": {
+          "births": 137,
+          "extra": 0,
+          "extra_prediction_frames": [],
+          "match_overlap": [
+            {
+              "frame": 10,
+              "same_frame_iou": 0.9399435045032125
+            },
+            {
+              "frame": 132,
+              "same_frame_iou": 0.6102040772760868
+            }
+          ],
+          "match_reference_frames": [
+            10,
+            132
+          ],
+          "matched": 2,
+          "max_cardinality_matches": 2,
+          "miss_reference_frames": [
+            145,
+            168,
+            199
+          ],
+          "missed": 3
+        },
+        "variance_x9": {
+          "births": 99,
+          "extra": 0,
+          "extra_prediction_frames": [],
+          "match_overlap": [
+            {
+              "frame": 10,
+              "same_frame_iou": 0.9370808288161985
+            },
+            {
+              "frame": 132,
+              "same_frame_iou": 0.619365819483632
+            },
+            {
+              "frame": 145,
+              "same_frame_iou": 0.7591052390451751
+            }
+          ],
+          "match_reference_frames": [
+            10,
+            132,
+            145
+          ],
+          "matched": 3,
+          "max_cardinality_matches": 3,
+          "miss_reference_frames": [
+            168,
+            199
+          ],
+          "missed": 2
+        }
+      }
+    },
+    "hanoi": {
+      "detection_sha256": "baa424f63dff159e1b1e3b624ac16ea61eaf60d26c0e7fa72c90c9c0f22c6289",
+      "fps": 30,
+      "frames": 501,
+      "reference_sha256": "ae1cd9d375698a3ccdc425a349570d36e2b7d1ccc2266394023c7c02c8fa54b6",
+      "variants": {
+        "variance_x1": {
+          "births": 137,
+          "extra": 1,
+          "extra_prediction_frames": [
+            479
+          ],
+          "match_overlap": [
+            {
+              "frame": 37,
+              "same_frame_iou": 0.8911544214450574
+            },
+            {
+              "frame": 170,
+              "same_frame_iou": 0.8824184913321319
+            },
+            {
+              "frame": 226,
+              "same_frame_iou": 0.7071868749498441
+            },
+            {
+              "frame": 284,
+              "same_frame_iou": 0.6040319346465689
+            },
+            {
+              "frame": 318,
+              "same_frame_iou": 0.7479508643221754
+            },
+            {
+              "frame": 378,
+              "same_frame_iou": 0.8692127943743736
+            },
+            {
+              "frame": 490,
+              "same_frame_iou": 0.7906147071908017
+            }
+          ],
+          "match_reference_frames": [
+            37,
+            170,
+            226,
+            284,
+            318,
+            378,
+            490
+          ],
+          "matched": 7,
+          "max_cardinality_matches": 7,
+          "miss_reference_frames": [
+            13,
+            42,
+            199,
+            278,
+            332,
+            369,
+            445,
+            464,
+            484
+          ],
+          "missed": 9
+        },
+        "variance_x3": {
+          "births": 105,
+          "extra": 1,
+          "extra_prediction_frames": [
+            479
+          ],
+          "match_overlap": [
+            {
+              "frame": 37,
+              "same_frame_iou": 0.888778092534731
+            },
+            {
+              "frame": 170,
+              "same_frame_iou": 0.8954536524888288
+            },
+            {
+              "frame": 226,
+              "same_frame_iou": 0.7224297871029569
+            },
+            {
+              "frame": 284,
+              "same_frame_iou": 0.5958593149307329
+            },
+            {
+              "frame": 318,
+              "same_frame_iou": 0.7507837837054306
+            },
+            {
+              "frame": 378,
+              "same_frame_iou": 0.8641559802085208
+            },
+            {
+              "frame": 490,
+              "same_frame_iou": 0.8154673557889891
+            }
+          ],
+          "match_reference_frames": [
+            37,
+            170,
+            226,
+            284,
+            318,
+            378,
+            490
+          ],
+          "matched": 7,
+          "max_cardinality_matches": 7,
+          "miss_reference_frames": [
+            13,
+            42,
+            199,
+            278,
+            332,
+            369,
+            445,
+            464,
+            484
+          ],
+          "missed": 9
+        },
+        "variance_x9": {
+          "births": 80,
+          "extra": 1,
+          "extra_prediction_frames": [
+            478
+          ],
+          "match_overlap": [
+            {
+              "frame": 37,
+              "same_frame_iou": 0.8905650212159073
+            },
+            {
+              "frame": 170,
+              "same_frame_iou": 0.9014128710603921
+            },
+            {
+              "frame": 226,
+              "same_frame_iou": 0.73827357073129
+            },
+            {
+              "frame": 284,
+              "same_frame_iou": 0.5868674202657651
+            },
+            {
+              "frame": 318,
+              "same_frame_iou": 0.7574619122146021
+            },
+            {
+              "frame": 378,
+              "same_frame_iou": 0.8596693511033271
+            },
+            {
+              "frame": 490,
+              "same_frame_iou": 0.8312978250902342
+            }
+          ],
+          "match_reference_frames": [
+            37,
+            170,
+            226,
+            284,
+            318,
+            378,
+            490
+          ],
+          "matched": 7,
+          "max_cardinality_matches": 7,
+          "miss_reference_frames": [
+            13,
+            42,
+            199,
+            278,
+            332,
+            369,
+            445,
+            464,
+            484
+          ],
+          "missed": 9
+        }
+      }
+    }
+  },
+  "rule": "Q x1/x3/x9; F, lifecycle, detections and frozen crossing scoring unchanged",
+  "schema": "visiontrack.process-noise-crossings/v1",
+  "scope": "post-hoc diagnostic on previously inspected cameras; not independent validation"
+}
