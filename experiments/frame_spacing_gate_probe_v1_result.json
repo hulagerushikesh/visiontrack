@@ -1,0 +1,128 @@
+{
+  "cases": [
+    {
+      "default_births": 1,
+      "default_motion_vetoed_pairs": 0,
+      "default_public_ids": 1,
+      "fps": 30,
+      "no_gate_births": 1,
+      "no_gate_public_ids": 1,
+      "samples": 60,
+      "speed_px_per_sec": 60
+    },
+    {
+      "default_births": 1,
+      "default_motion_vetoed_pairs": 0,
+      "default_public_ids": 1,
+      "fps": 10,
+      "no_gate_births": 1,
+      "no_gate_public_ids": 1,
+      "samples": 20,
+      "speed_px_per_sec": 60
+    },
+    {
+      "default_births": 1,
+      "default_motion_vetoed_pairs": 0,
+      "default_public_ids": 1,
+      "fps": 30,
+      "no_gate_births": 1,
+      "no_gate_public_ids": 1,
+      "samples": 60,
+      "speed_px_per_sec": 120
+    },
+    {
+      "default_births": 1,
+      "default_motion_vetoed_pairs": 0,
+      "default_public_ids": 1,
+      "fps": 10,
+      "no_gate_births": 1,
+      "no_gate_public_ids": 1,
+      "samples": 20,
+      "speed_px_per_sec": 120
+    },
+    {
+      "default_births": 1,
+      "default_motion_vetoed_pairs": 0,
+      "default_public_ids": 1,
+      "fps": 30,
+      "no_gate_births": 1,
+      "no_gate_public_ids": 1,
+      "samples": 60,
+      "speed_px_per_sec": 180
+    },
+    {
+      "default_births": 1,
+      "default_motion_vetoed_pairs": 0,
+      "default_public_ids": 1,
+      "fps": 10,
+      "no_gate_births": 1,
+      "no_gate_public_ids": 1,
+      "samples": 20,
+      "speed_px_per_sec": 180
+    },
+    {
+      "default_births": 1,
+      "default_motion_vetoed_pairs": 0,
+      "default_public_ids": 1,
+      "fps": 30,
+      "no_gate_births": 1,
+      "no_gate_public_ids": 1,
+      "samples": 60,
+      "speed_px_per_sec": 240
+    },
+    {
+      "default_births": 1,
+      "default_motion_vetoed_pairs": 0,
+      "default_public_ids": 1,
+      "fps": 10,
+      "no_gate_births": 1,
+      "no_gate_public_ids": 1,
+      "samples": 20,
+      "speed_px_per_sec": 240
+    },
+    {
+      "default_births": 1,
+      "default_motion_vetoed_pairs": 0,
+      "default_public_ids": 1,
+      "fps": 30,
+      "no_gate_births": 1,
+      "no_gate_public_ids": 1,
+      "samples": 60,
+      "speed_px_per_sec": 300
+    },
+    {
+      "default_births": 20,
+      "default_motion_vetoed_pairs": 19,
+      "default_public_ids": 0,
+      "fps": 10,
+      "no_gate_births": 1,
+      "no_gate_public_ids": 1,
+      "samples": 20,
+      "speed_px_per_sec": 300
+    },
+    {
+      "default_births": 1,
+      "default_motion_vetoed_pairs": 0,
+      "default_public_ids": 1,
+      "fps": 30,
+      "no_gate_births": 1,
+      "no_gate_public_ids": 1,
+      "samples": 60,
+      "speed_px_per_sec": 360
+    },
+    {
+      "default_births": 20,
+      "default_motion_vetoed_pairs": 19,
+      "default_public_ids": 0,
+      "fps": 10,
+      "no_gate_births": 1,
+      "no_gate_public_ids": 1,
+      "samples": 20,
+      "speed_px_per_sec": 360
+    }
+  ],
+  "caveat": "n_init and max_age are frame counts, so their elapsed-time meaning also changes with fps",
+  "geometry": "100x70 px box, constant horizontal velocity, 2 s, perfect 0.9-confidence car detections",
+  "schema": "visiontrack.frame-spacing-gate-probe/v1",
+  "scope": "exploratory synthetic mechanism probe; no real-data accuracy claim"
+}
