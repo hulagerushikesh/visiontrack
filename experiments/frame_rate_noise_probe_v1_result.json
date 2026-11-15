@@ -1,0 +1,274 @@
+{
+  "interpretation": "Increasing process variance reduces births in these streams and recovers a synthetic fast 10fps path at x9. Births and public ID counts do not establish correct association, crossing accuracy, or safe calibration. 30fps stream also changes, so effect is not specific to low fps. No default change.",
+  "saved_streams": {
+    "aicc22_c002_bgr_bilinear": {
+      "fps": 10.0,
+      "frames": 200,
+      "input_sha256": "75c9593b60882f296ae484ea6ea559d56794ceec21bb14469d89396f13a299c9",
+      "variance_x1": {
+        "births": 180,
+        "frames_with_public_track": 198,
+        "public_ids": 23
+      },
+      "variance_x3": {
+        "births": 137,
+        "frames_with_public_track": 197,
+        "public_ids": 23
+      },
+      "variance_x9": {
+        "births": 99,
+        "frames_with_public_track": 198,
+        "public_ids": 21
+      }
+    },
+    "aicc22_c002_rgb_nearest": {
+      "fps": 10.0,
+      "frames": 200,
+      "input_sha256": "43b7d90fb40b6248982ddfecd59d05471e95d52366cbd74acbfe1ecd11db4bdc",
+      "variance_x1": {
+        "births": 135,
+        "frames_with_public_track": 138,
+        "public_ids": 15
+      },
+      "variance_x3": {
+        "births": 105,
+        "frames_with_public_track": 160,
+        "public_ids": 13
+      },
+      "variance_x9": {
+        "births": 84,
+        "frames_with_public_track": 162,
+        "public_ids": 13
+      }
+    },
+    "hanoi_rgb_nearest": {
+      "fps": 30.0,
+      "frames": 501,
+      "input_sha256": "94b365323ff869c5dec1ebba0be57deebcd3076460cada82848c10f860c6c58e",
+      "variance_x1": {
+        "births": 124,
+        "frames_with_public_track": 499,
+        "public_ids": 66
+      },
+      "variance_x3": {
+        "births": 101,
+        "frames_with_public_track": 499,
+        "public_ids": 55
+      },
+      "variance_x9": {
+        "births": 92,
+        "frames_with_public_track": 499,
+        "public_ids": 49
+      }
+    }
+  },
+  "schema": "visiontrack.frame-rate-noise-probe/v1",
+  "scope": "exploratory; public-ID counts are not accuracy",
+  "synthetic": {
+    "120pxps_10fps": {
+      "variance_x1": {
+        "births": 1,
+        "frames_with_public_track": 18,
+        "public_ids": 1
+      },
+      "variance_x3": {
+        "births": 1,
+        "frames_with_public_track": 18,
+        "public_ids": 1
+      },
+      "variance_x9": {
+        "births": 1,
+        "frames_with_public_track": 18,
+        "public_ids": 1
+      }
+    },
+    "120pxps_30fps": {
+      "variance_x1": {
+        "births": 1,
+        "frames_with_public_track": 58,
+        "public_ids": 1
+      },
+      "variance_x3": {
+        "births": 1,
+        "frames_with_public_track": 58,
+        "public_ids": 1
+      },
+      "variance_x9": {
+        "births": 1,
+        "frames_with_public_track": 58,
+        "public_ids": 1
+      }
+    },
+    "180pxps_10fps": {
+      "variance_x1": {
+        "births": 1,
+        "frames_with_public_track": 18,
+        "public_ids": 1
+      },
+      "variance_x3": {
+        "births": 1,
+        "frames_with_public_track": 18,
+        "public_ids": 1
+      },
+      "variance_x9": {
+        "births": 1,
+        "frames_with_public_track": 18,
+        "public_ids": 1
+      }
+    },
+    "180pxps_30fps": {
+      "variance_x1": {
+        "births": 1,
+        "frames_with_public_track": 58,
+        "public_ids": 1
+      },
+      "variance_x3": {
+        "births": 1,
+        "frames_with_public_track": 58,
+        "public_ids": 1
+      },
+      "variance_x9": {
+        "births": 1,
+        "frames_with_public_track": 58,
+        "public_ids": 1
+      }
+    },
+    "240pxps_10fps": {
+      "variance_x1": {
+        "births": 1,
+        "frames_with_public_track": 18,
+        "public_ids": 1
+      },
+      "variance_x3": {
+        "births": 1,
+        "frames_with_public_track": 18,
+        "public_ids": 1
+      },
+      "variance_x9": {
+        "births": 1,
+        "frames_with_public_track": 18,
+        "public_ids": 1
+      }
+    },
+    "240pxps_30fps": {
+      "variance_x1": {
+        "births": 1,
+        "frames_with_public_track": 58,
+        "public_ids": 1
+      },
+      "variance_x3": {
+        "births": 1,
+        "frames_with_public_track": 58,
+        "public_ids": 1
+      },
+      "variance_x9": {
+        "births": 1,
+        "frames_with_public_track": 58,
+        "public_ids": 1
+      }
+    },
+    "300pxps_10fps": {
+      "variance_x1": {
+        "births": 20,
+        "frames_with_public_track": 0,
+        "public_ids": 0
+      },
+      "variance_x3": {
+        "births": 10,
+        "frames_with_public_track": 0,
+        "public_ids": 0
+      },
+      "variance_x9": {
+        "births": 1,
+        "frames_with_public_track": 18,
+        "public_ids": 1
+      }
+    },
+    "300pxps_30fps": {
+      "variance_x1": {
+        "births": 1,
+        "frames_with_public_track": 58,
+        "public_ids": 1
+      },
+      "variance_x3": {
+        "births": 1,
+        "frames_with_public_track": 58,
+        "public_ids": 1
+      },
+      "variance_x9": {
+        "births": 1,
+        "frames_with_public_track": 58,
+        "public_ids": 1
+      }
+    },
+    "360pxps_10fps": {
+      "variance_x1": {
+        "births": 20,
+        "frames_with_public_track": 0,
+        "public_ids": 0
+      },
+      "variance_x3": {
+        "births": 20,
+        "frames_with_public_track": 0,
+        "public_ids": 0
+      },
+      "variance_x9": {
+        "births": 1,
+        "frames_with_public_track": 18,
+        "public_ids": 1
+      }
+    },
+    "360pxps_30fps": {
+      "variance_x1": {
+        "births": 1,
+        "frames_with_public_track": 58,
+        "public_ids": 1
+      },
+      "variance_x3": {
+        "births": 1,
+        "frames_with_public_track": 58,
+        "public_ids": 1
+      },
+      "variance_x9": {
+        "births": 1,
+        "frames_with_public_track": 58,
+        "public_ids": 1
+      }
+    },
+    "60pxps_10fps": {
+      "variance_x1": {
+        "births": 1,
+        "frames_with_public_track": 18,
+        "public_ids": 1
+      },
+      "variance_x3": {
+        "births": 1,
+        "frames_with_public_track": 18,
+        "public_ids": 1
+      },
+      "variance_x9": {
+        "births": 1,
+        "frames_with_public_track": 18,
+        "public_ids": 1
+      }
+    },
+    "60pxps_30fps": {
+      "variance_x1": {
+        "births": 1,
+        "frames_with_public_track": 58,
+        "public_ids": 1
+      },
+      "variance_x3": {
+        "births": 1,
+        "frames_with_public_track": 58,
+        "public_ids": 1
+      },
+      "variance_x9": {
+        "births": 1,
+        "frames_with_public_track": 58,
+        "public_ids": 1
+      }
+    }
+  },
+  "variance_rule": "one-step Q multiplied by 1, 3, or 9; F and lifecycle unchanged"
+}
