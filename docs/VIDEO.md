@@ -8,6 +8,24 @@ pip install 'visiontrack-mot[video]'          # imageio + ffmpeg, lazily importe
 visiontrack track input.mp4 out.mp4 --model models/yolox_nano.onnx
 ```
 
+To compare detector input settings, install the optional OpenCV extra and run
+the same clip with upstream-style YOLOX preprocessing:
+
+```bash
+python -m pip install -e '.[video,yolox-upstream]'
+visiontrack track input.mp4 upstream.mp4 --model models/yolox_nano.onnx \
+  --yolox-preprocessing upstream
+```
+
+Run the install from a VisionTrack checkout containing the flag. The upstream
+mode converts RGB frames from the video reader to BGR and uses bilinear resize
+with truncated dimensions. The default keeps legacy nearest-sample
+preprocessing. Both use raw pixels, 114 padding, and the same decoding,
+suppression, and tracker configuration. For library use, pass
+`preprocessing="upstream"` to `YoloxDetector` and supply uint8 RGB frames.
+If you already have an OpenCV distribution installed, use that installation
+for this mode.
+
 Library use:
 
 ```python

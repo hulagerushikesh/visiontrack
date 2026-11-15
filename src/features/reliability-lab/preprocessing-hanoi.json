@@ -1,0 +1,118 @@
+{
+  "legacy": {
+    "detectionBoxes": 6712,
+    "unmatched": [
+      {
+        "frame": 257,
+        "direction": "left-to-right"
+      }
+    ]
+  },
+  "upstream": {
+    "detectionBoxes": 7238,
+    "unmatched": [
+      {
+        "frame": 479,
+        "direction": "left-to-right"
+      }
+    ]
+  },
+  "crossings": [
+    {
+      "frame": 13,
+      "direction": "left-to-right",
+      "legacy": null,
+      "upstream": null
+    },
+    {
+      "frame": 37,
+      "direction": "left-to-right",
+      "legacy": 37,
+      "upstream": 37
+    },
+    {
+      "frame": 42,
+      "direction": "left-to-right",
+      "legacy": null,
+      "upstream": null
+    },
+    {
+      "frame": 170,
+      "direction": "left-to-right",
+      "legacy": 169,
+      "upstream": 169
+    },
+    {
+      "frame": 199,
+      "direction": "left-to-right",
+      "legacy": null,
+      "upstream": null
+    },
+    {
+      "frame": 226,
+      "direction": "left-to-right",
+      "legacy": 227,
+      "upstream": 226
+    },
+    {
+      "frame": 278,
+      "direction": "left-to-right",
+      "legacy": null,
+      "upstream": null
+    },
+    {
+      "frame": 284,
+      "direction": "left-to-right",
+      "legacy": 284,
+      "upstream": 284
+    },
+    {
+      "frame": 318,
+      "direction": "left-to-right",
+      "legacy": null,
+      "upstream": 318
+    },
+    {
+      "frame": 332,
+      "direction": "right-to-left",
+      "legacy": null,
+      "upstream": null
+    },
+    {
+      "frame": 369,
+      "direction": "left-to-right",
+      "legacy": null,
+      "upstream": null
+    },
+    {
+      "frame": 378,
+      "direction": "left-to-right",
+      "legacy": 378,
+      "upstream": 378
+    },
+    {
+      "frame": 445,
+      "direction": "left-to-right",
+      "legacy": null,
+      "upstream": null
+    },
+    {
+      "frame": 464,
+      "direction": "left-to-right",
+      "legacy": null,
+      "upstream": null
+    },
+    {
+      "frame": 484,
+      "direction": "left-to-right",
+      "legacy": null,
+      "upstream": null
+    },
+    {
+      "frame": 490,
+      "direction": "left-to-right",
+      "legacy": null,
+      "upstream": 488
+    }
+  ]
+}

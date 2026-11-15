@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button"
 import { reliabilityReportFixture } from "./fixture"
 import { ReportFileReader } from "./report-import"
 import LabGuide from "./LabGuide"
+import PreprocessingCaseStudy from "./PreprocessingCaseStudy"
 import EvidenceProgress from "./EvidenceProgress"
 import MetricComparison from "./MetricComparison"
 import InitiationInspector from "./InitiationInspector"
@@ -896,11 +897,13 @@ export default function ReliabilityLab() {
             <a href="#metrics-title" className="underline underline-offset-4">Compare configurations</a>
             <a href="#events-title" className="underline underline-offset-4">Inspect tracking mistakes</a>
             <a href="/lab/crossings" className="underline underline-offset-4">Explore the rain case study</a>
+            <a href="#preprocessing-study" className="underline underline-offset-4">Compare detector inputs</a>
           </nav>
         )}
         {origin.kind !== "demo" && (
           <div className="mt-6 space-y-4">
             <LabGuide />
+            <PreprocessingCaseStudy />
             <AssociationLesson key={`${origin.kind}:${state.kind === "ready" ? state.report.report_id : "pending"}`} />
           </div>
         )}

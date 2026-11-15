@@ -263,8 +263,10 @@ def cmd_track(args: argparse.Namespace) -> int:
         input_size=args.input_size,
         conf_threshold=args.conf,
         class_filter=class_filter,
+        preprocessing=args.yolox_preprocessing,
     )
     print(f"tracking {args.input} -> {args.output}  (model={args.model})")
+    print(f"YOLOX preprocessing: {args.yolox_preprocessing}")
     summary = track_video(
         args.input,
         args.output,
@@ -840,6 +842,10 @@ def build_parser() -> argparse.ArgumentParser:
     p_track.add_argument("--model", required=True, help="YOLOX .onnx model path")
     p_track.add_argument("--input-size", type=int, default=416, help="YOLOX square input side")
     p_track.add_argument("--conf", type=float, default=0.25, help="detector confidence threshold")
+    p_track.add_argument(
+        "--yolox-preprocessing", choices=("legacy", "upstream"), default="legacy",
+        help="use upstream-style BGR and bilinear resize (needs [yolox-upstream])",
+    )
     p_track.add_argument(
         "--all-classes", action="store_true", help="track all COCO classes (default: person only)"
     )

@@ -44,9 +44,28 @@ class YoloxDetector:
         class_filter: set[int] | None = None,
         strides: tuple[int, ...] = (8, 16, 32),
         session=None,
+        *,
+        preprocessing: str = "legacy",
     ) -> None:
         """``session`` may be injected (a fake) for testing; otherwise an
-        onnxruntime session is created from ``model_path``."""
+        onnxruntime session is created from ``model_path``.
+
+        ``legacy`` preserves the caller's channel order and uses nearest samples.
+        ``upstream`` takes uint8 RGB frames, converts to BGR and resizes with
+        OpenCV bilinear interpolation using truncated dimensions.
+        """
+        self._cv2 = None
+        if preprocessing == "upstream":
+            try:
+                import cv2
+            except ImportError as exc:
+                raise ImportError(
+                    "Upstream YOLOX preprocessing requires OpenCV: "
+                    "pip install 'visiontrack-mot[video,yolox-upstream]'"
+                ) from exc
+            self._cv2 = cv2
+        elif preprocessing != "legacy":
+            raise ValueError("YOLOX preprocessing must be 'legacy' or 'upstream'")
         if session is not None:
             self._session = session
         else:  # pragma: no cover - needs onnxruntime + a real model
@@ -116,10 +135,17 @@ class YoloxDetector:
         """Resize keeping aspect ratio, pad to a square with 114 (YOLOX style)."""
         h, w = frame.shape[:2]
         scale = min(self.input_size / h, self.input_size / w)
-        nh, nw = int(round(h * scale)), int(round(w * scale))
-        ys = np.linspace(0, h - 1, nh).astype(int)
-        xs = np.linspace(0, w - 1, nw).astype(int)
-        resized = frame[ys][:, xs]
+        if self._cv2 is None:
+            nh, nw = int(round(h * scale)), int(round(w * scale))
+            ys = np.linspace(0, h - 1, nh).astype(int)
+            xs = np.linspace(0, w - 1, nw).astype(int)
+            resized = frame[ys][:, xs]
+        else:
+            nh, nw = int(h * scale), int(w * scale)
+            if not nh or not nw:
+                raise ValueError("Frame aspect ratio is too extreme for the YOLOX input size")
+            bgr = self._cv2.cvtColor(frame, self._cv2.COLOR_RGB2BGR)
+            resized = self._cv2.resize(bgr, (nw, nh), interpolation=self._cv2.INTER_LINEAR)
         canvas = np.full((self.input_size, self.input_size, 3), 114, dtype=np.uint8)
         canvas[:nh, :nw] = resized  # YOLOX pads bottom-right (origin top-left)
         return canvas, scale
