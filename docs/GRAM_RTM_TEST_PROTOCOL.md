@@ -24,6 +24,14 @@ completeness counts, and the archive lists of the images.
   mean best-overlap between label boxes and those detections at offsets −1, 0,
   +1 and +2. The offset with the highest mean is used. If it is not +1, record
   that here before going on. No tracker or counting is involved.
+
+  **Result and amendment, 2026-11-20, before the full detector run.**
+  M-30-HD: +1 is best (0.515, against 0.498 at 0 and 0.497 at +2). M-30 is
+  a near tie: +2 scores 0.311 and +1 scores 0.306. The 2013 detections find
+  only about half the vehicles, so this check is weak. It is repeated with the
+  pinned detector on the 20 timing frames per sequence. That repeat decides
+  the offset for each sequence. If it does not clearly favour one offset (a
+  lead under 0.01), +1 is kept, as both the numbering and M-30-HD indicate.
 - **Exclusion regions:** the kit marks areas where vehicles were not labelled
   (`ROI/M-30-map.jpg`, `ROI/M-30-HD-map.jpg`). A crossing whose point lies in
   an excluded area is dropped from both the reference and every variant. The

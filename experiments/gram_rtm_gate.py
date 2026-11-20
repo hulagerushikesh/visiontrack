@@ -116,16 +116,27 @@ def detector(model: Path):
 
 
 def time_detector(root: Path, model: Path, n: int = 20) -> dict:
+    """Time the pinned detector; also repeat the offset check with its boxes."""
     det = detector(model)
     out = {}
     for seq, (count, _, _) in SEQUENCES.items():
-        indices = [int(round(i)) for i in np.linspace(1, count, n)]
+        labels = load_labels(root, seq)
+        indices = [int(round(i)) for i in np.linspace(4, count - 3, n)]
         start = time.perf_counter()
-        boxes = sum(len(det.detect(img)) for _, img in frames_from_zip(root, seq, indices))
+        found = {i: [d.xyxy.tolist() for d in det.detect(img)]
+                 for i, img in frames_from_zip(root, seq, indices)}
         seconds = time.perf_counter() - start
+        offsets = {}
+        for off in OFFSETS:  # label k belongs to image k + off
+            scores = [max((iou(box, d) for d in found[i]), default=0.0)
+                      for i in indices for _, box in labels[i - off]]
+            offsets[str(off)] = round(float(np.mean(scores)), 4)
         out[seq] = {"frames": n, "seconds": round(seconds, 2),
-                    "seconds_per_frame": round(seconds / n, 3), "boxes": boxes,
-                    "full_run_minutes": round(seconds / n * count / 60, 1)}
+                    "seconds_per_frame": round(seconds / n, 3),
+                    "boxes": sum(map(len, found.values())),
+                    "full_run_minutes": round(seconds / n * count / 60, 1),
+                    "offset_mean_best_iou": offsets,
+                    "best_offset": int(max(OFFSETS, key=lambda o: offsets[str(o)]))}
     out["total_full_run_minutes"] = round(sum(v["full_run_minutes"] for v in out.values()), 1)
     return out
 
