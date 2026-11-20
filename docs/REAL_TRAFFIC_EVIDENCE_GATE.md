@@ -227,6 +227,17 @@ a fresh owner approval for its download:
    *k*−1 (zero-based): a fast truck's labelled box at frame 2000, outside the
    window, fits that frame and not frames 3 earlier or later. The 1,800 window
    frames were extracted at 1920×1080 for marking. Marking has not started.
+
+   **Protocol change, recorded before any marking — 2026-11-20.** Frame-by-frame
+   marking proved too slow for the owner, who asked Claude to do it. The owner
+   drew the line on frame 3633 (full-resolution points (491, 1396) and
+   (1245, 2108), across the near road arm at the crosswalk). Claude marks
+   crossings from the frames alone. A pixel motion scan near the line, using
+   no labels, lists candidate moments. Claude then inspects each candidate's
+   frames to set the crossing frame, the point and the direction, or to reject
+   it. The c002 label file is not read until every mark is written and saved.
+   The comparison rule and pass threshold are unchanged. This makes the marks
+   an independent second reading, not owner truth.
 3. If the audit agrees well enough under a rule fixed in advance, freeze one
    comparison on the remaining frames: the paper's initiation thresholds 0.60
    and 0.55, fixed detections, the same crossing rule. Detector compute on 4K
