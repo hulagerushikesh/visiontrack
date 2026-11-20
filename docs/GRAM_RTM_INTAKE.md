@@ -1,6 +1,6 @@
 # GRAM-RTM: label-kit intake
 
-Status, 2026-11-20: **backup source for the motion-gate test, not admitted.**
+Status, 2026-11-20: **backup source for the motion-gate test, not admitted.** Label kit and motorway images are owner-local; see below.
 The owner approved downloading the label kit only. No image was downloaded or
 opened. No tracker ran, no counting line was drawn, and no crossing was
 computed. These were format and completeness counts only, the same kind the
@@ -55,11 +55,29 @@ labelled boxes on M-30 (17,416 against 35,601). A test here would need our
 own detector run. At these resolutions the run is moderate, but it still needs
 laptop-load approval first.
 
+## Motorway images, downloaded 2026-11-20
+
+With owner approval, both CC BY 3.0 image archives were downloaded through
+the publisher's public OneDrive page in the browser pane. Only archive lists
+and integrity were checked. No image was opened or viewed.
+
+| Archive | Bytes | SHA-256 | Integrity | Images |
+| --- | ---: | --- | --- | ---: |
+| `M-30.zip` | 275,877,710 | `58b0c0a817b002138a6a22608f78e3701e0228c307a8f6bcc957e59290df3fb0` | No errors | 7,520 JPEG |
+| `M-30-HD.zip` | 1,817,487,796 | `7819e26b5342c43fdf7a5ced1e01b099b859d5bd0cc01f204e4ab16528dbe547` | No errors | 9,390 JPEG |
+
+The byte counts match the sizes the host reported. The first M-30-HD attempt
+stalled at 223 MB and was deleted. The publisher lists no checksums, so the
+hashes are our own receipts. Image counts match the label files exactly.
+**Numbering differs:** images run from 1, labels from 0. The label file for
+frame *k* most likely belongs to image *k*+1, as with the authors' detections,
+which start at 1. A box-to-detection distance check must confirm the offset
+before any run, as on RoundaboutHD.
+
 ## What would admit it
 
-1. Get the M-30 and M-30-HD images. Their download links point to a university
-   SharePoint that refused command-line access; try the browser with owner
-   approval. Urban1 waits on the authors' answer about its rights.
+1. Urban1 waits on the authors' answer about its rights. The motorway images
+   are in hand.
 2. With owner approval, run one pinned detector on those images. Freeze the
    detector and the dataset-specific protocol amendment (sequences, line rule)
    in writing before any label is used for counting.
