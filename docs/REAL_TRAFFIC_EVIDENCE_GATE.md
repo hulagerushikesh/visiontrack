@@ -217,6 +217,16 @@ a fresh owner approval for its download:
    - The comparison script was tested only on c001 labels with a made-up line.
      This window becomes development material and is excluded from any later
      test.
+
+   **Frames prepared — 2026-11-20, owner-approved download.** Only c002's
+   video member was fetched (1,248,996,690 bytes after decompression; member
+   CRC passed; SHA-256
+   `e825f236260a06c59933acf1899f50e95ecc478a5582fedd6335011c9562778f`).
+   It is 3840×2160 MPEG-4 at 15 frames per second with exactly 9,000 frames
+   (600 s), so the window is two minutes. Label frame *k* is video frame
+   *k*−1 (zero-based): a fast truck's labelled box at frame 2000, outside the
+   window, fits that frame and not frames 3 earlier or later. The 1,800 window
+   frames were extracted at 1920×1080 for marking. Marking has not started.
 3. If the audit agrees well enough under a rule fixed in advance, freeze one
    comparison on the remaining frames: the paper's initiation thresholds 0.60
    and 0.55, fixed detections, the same crossing rule. Detector compute on 4K
