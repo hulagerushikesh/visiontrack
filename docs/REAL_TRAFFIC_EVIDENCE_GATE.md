@@ -187,6 +187,36 @@ a fresh owner approval for its download:
 
    The labels are consistent enough to derive crossings, but not as checked
    per-frame truth. Step 2 is unchanged.
+
+   **Step 2 protocol, frozen 2026-11-20 before any frame is opened.**
+   - *Camera:* c002, the only camera with no conflicting duplicate rows; it
+     also has the smallest video (1.25 GB compressed in the archive).
+   - *Window:* frames 3633–5432 (1,800 frames), drawn with Python's
+     `random.Random(20261120)`. A 600-frame draw from the same seed was
+     rejected first because only 28 labelled vehicles appear in it; that
+     vehicle count is the only label information used to choose the window.
+     The 1,800-frame window has 58 labelled vehicles and avoids the one frame
+     with no label rows (2946).
+   - *Frames:* the archive stores each camera as one compressed `video.mp4`,
+     so a frame window cannot be range-read on its own. Fetch only c002's
+     video member, verify its CRC, check it has 9,000 frames, then extract the
+     window at half resolution for viewing.
+   - *Line:* the owner draws one straight counting line on the window's first
+     frame, before stepping to any other frame and without seeing labels.
+     Sides are A and B.
+   - *Marking:* the owner steps through the window and marks each vehicle at
+     the first frame its centre is past the line, with its direction. The
+     owner-local marking page shows no labels.
+   - *Comparison rule:* a label crossing is a box-centre step between
+     consecutive frames that crosses the owner's line segment. A match needs
+     the same direction, at most 5 frames apart, with the click within 200 px
+     of the crossing point, paired one to one. **Pass** if there are at least
+     20 owner crossings and both the share of owner crossings matched and the
+     share of label crossings matched are at least 0.95. Fewer than 20 owner
+     crossings is reported as underpowered, not a pass.
+   - The comparison script was tested only on c001 labels with a made-up line.
+     This window becomes development material and is excluded from any later
+     test.
 3. If the audit agrees well enough under a rule fixed in advance, freeze one
    comparison on the remaining frames: the paper's initiation thresholds 0.60
    and 0.55, fixed detections, the same crossing rule. Detector compute on 4K
