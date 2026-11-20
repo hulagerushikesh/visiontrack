@@ -367,6 +367,36 @@ a fresh owner approval for its download:
      changes from this test. A supported result opens a separate design task,
      because the gate also serves pedestrian tracking, where it was tuned.
    - Runner: `experiments/roundabouthd_gate.py`, committed before it runs.
+
+   **Gate test result — 2026-11-20: not supported under the frozen rule.**
+   The three `labels_xy` members were range-read, passed their CRCs and each
+   held 9,000 files. A box-distance check on frames 1000–1099 confirmed the
+   same one-frame file offset on every camera before the run. Every variant
+   repeated byte-identically.
+
+   | Camera | Reference crossings | Gate on: correct / false / missed | Gate off: correct / false / missed |
+   | --- | --- | --- | --- |
+   | c001 | 123 | 90 / 0 / 33 | 118 / 2 / 5 |
+   | c003 | 28 | 25 / 2 / 3 | 26 / 4 / 2 |
+   | c004 | 94 | 61 / 1 / 33 | 79 / 0 / 15 |
+   | **Pooled** | **245** | **176 / 3 / 69** | **223 / 6 / 22** |
+
+   Two of the three conditions passed. Pooled misses fell from 69 to 22, and
+   false crossings rose by 3, inside the allowance of 4.7. The third failed:
+   c003 had 6 total errors with the gate off against 5 with it on. By the rule
+   fixed in advance, the hypothesis is **not supported**, and nothing changes.
+
+   Post-decision observations, not results:
+   - Turning the gate off cut c001 misses from 27% to 4% and c004 misses from
+     35% to 16%, and roughly halved public IDs on c003 (1,186 to 551). The
+     effect is large on the two cameras with long, fast near-camera arms.
+   - c003's extra errors come from one gate-off track whose box centre
+     crossed the line three times within 10 frames (B→A, A→B, B→A). That is a
+     counter weakness (no hysteresis), which the gate change exposed but did
+     not cause. It matches the practitioner's point that changing box shapes
+     shift the tracking point.
+   - Any follow-up must be a new frozen test on frames not yet used. All four
+     cameras' full frame ranges have now been seen by at least one comparison.
 3. If the audit agrees well enough under a rule fixed in advance, freeze one
    comparison on the remaining frames: the paper's initiation thresholds 0.60
    and 0.55, fixed detections, the same crossing rule. Detector compute on 4K
