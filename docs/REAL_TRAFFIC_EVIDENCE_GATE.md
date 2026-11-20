@@ -424,6 +424,12 @@ contact. The owner sent the terms question to the first author on
 2026-11-20, at the address on his own page. No UA-DETRAC file is downloaded
 until the terms are confirmed in writing.
 
+**Development follow-up, 2026-11-20.** The gate mostly blocks vehicles on
+aspect-ratio change, not speed. A gate that ignores aspect recovers most of
+the gate-off gain with no extra false counts on the used cameras, and leaves
+MOT17 within noise. It is a development candidate for the UA-DETRAC test:
+[aspect-free gate record](ASPECT_GATE_DEVELOPMENT.md).
+
 **Status, 2026-11-20.** The owner sent the reply to Bath: thanks, a
 commitment to treat the dataset as test-only and keep the MIT notice, and
 one optional question on whether the per-camera detection labels were
