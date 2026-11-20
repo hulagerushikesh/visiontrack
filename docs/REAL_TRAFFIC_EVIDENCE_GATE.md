@@ -158,6 +158,35 @@ a fresh owner approval for its download:
    those frames. The owner marks crossings at one fixed line from the pixels
    alone, then compares them with crossings derived from `SCT_GT.txt`. This
    window becomes development material.
+   **Step 1 done — 2026-11-20, owner-approved.** Only the four label members
+   were range-read from the Bath archive (no frames or video). The central
+   directory hash matched the 2026-10-30 receipt and every member passed its
+   CRC. Files and hashes stay owner-local.
+
+   | Camera | Rows | IDs | Frames | Track length (min / median / max) | Conflicting duplicate rows | Small internal gaps |
+   | --- | --- | --- | --- | --- | --- | --- |
+   | c001 | 61,711 | 262 | 1–9,000 | 30 / 224.5 / 620 | 2 | 0 |
+   | c002 | 54,686 | 244 | 1–9,000 | 41 / 209 / 658 | 0 | 9 |
+   | c003 | 59,816 | 279 | 1–9,000 | 12 / 191 / 605 | 10 | 7 |
+   | c004 | 56,732 | 257 | 1–9,000 | 43 / 216 / 566 | 14 | 1 |
+
+   What the rows show:
+   - **Seven columns, not six.** The seventh is a constant class value (2) on
+     every row. c004 is tab-separated with Windows line endings; the others
+     use spaces. A reader must accept both.
+   - **26 conflicting duplicates.** In 26 cases one ID has two different boxes
+     in the same frame. Resolve these explicitly before any scoring.
+   - **Observed rows still cannot be recovered.** Whole-number boxes appear
+     almost only on each track's first row (1,037 of 1,042 tracks), plus about
+     460 other rows. Only 4–8% of rows lie exactly on a straight line between
+     their neighbours, so the fill is not simple linear interpolation either.
+     Neither pattern flags which boxes were checked, which agrees with the
+     authors' answer.
+   - Boxes run slightly past the 3840×2160 frame edge (up to x 3851, y 2161).
+     Clip them when scoring.
+
+   The labels are consistent enough to derive crossings, but not as checked
+   per-frame truth. Step 2 is unchanged.
 3. If the audit agrees well enough under a rule fixed in advance, freeze one
    comparison on the remaining frames: the paper's initiation thresholds 0.60
    and 0.55, fixed detections, the same crossing rule. Detector compute on 4K
