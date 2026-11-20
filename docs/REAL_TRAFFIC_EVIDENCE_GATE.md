@@ -238,6 +238,31 @@ a fresh owner approval for its download:
    it. The c002 label file is not read until every mark is written and saved.
    The comparison rule and pass threshold are unchanged. This makes the marks
    an independent second reading, not owner truth.
+
+   **Step 2 result — pass, 2026-11-20.** The motion scan found 23 moments when
+   the line band was occupied. The same 23 appeared at a lower sensitivity.
+   Visual inspection confirmed each one as a single vehicle driving over the
+   line. The marks were saved (SHA-256 `794a4fb9…db35cd`, owner-local) before
+   the c002 labels were read. The frozen comparison then gave:
+
+   | Independent crossings | Label crossings | Matched | Share of independent matched | Share of label matched | Verdict |
+   | --- | --- | --- | --- | --- | --- |
+   | 23 | 23 | 23 | 1.00 | 1.00 | **pass** |
+
+   Matched crossings differed by at most 2 frames (19 of 23 by 0) and at most
+   89 px at full resolution. There were no duplicate label rows in the window.
+
+   Scope of this pass: one camera, one two-minute window, one entry arm. All 23
+   vehicles travelled in the same direction (towards the roundabout), so exit
+   traffic, occlusion between vehicles, and the other three cameras are
+   untested. It supports using `SCT_GT.txt` crossings as the reference for this
+   kind of line on c002. It does not validate per-frame boxes or IDs. These
+   frames are now development material.
+
+   **Step 3 needs a fresh decision.** A tracker comparison needs detections for
+   c002's other frames. Running a detector on 4K frames is heavy laptop work
+   and needs owner approval first. The archive's per-camera `detection` ZIPs
+   may already hold usable detector outputs; inspect them before choosing.
 3. If the audit agrees well enough under a rule fixed in advance, freeze one
    comparison on the remaining frames: the paper's initiation thresholds 0.60
    and 0.55, fixed detections, the same crossing rule. Detector compute on 4K
