@@ -420,8 +420,9 @@ recommended route: its supplied detections and dense fixed-camera labels let
 a gate follow-up run like the RoundaboutHD tests, with no detector run on the
 laptop. One owner-sent question to its authors about reuse terms is needed
 first. A draft is kept owner-local. The authors' dataset page lists no
-contact; the first author's own page lists one address, to be confirmed by
-the owner before sending.
+contact. The owner sent the terms question to the first author on
+2026-11-20, at the address on his own page. No UA-DETRAC file is downloaded
+until the terms are confirmed in writing.
 
 **Status, 2026-11-20.** The owner sent the reply to Bath: thanks, a
 commitment to treat the dataset as test-only and keep the MIT notice, and
