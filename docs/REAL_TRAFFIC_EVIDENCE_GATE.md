@@ -282,6 +282,31 @@ a fresh owner approval for its download:
    detections may therefore share box errors. The crossing audit above was
    independent of both, but a tracker comparison on these inputs measures
    tracking given this detector, not detector quality.
+
+   **Step 3 protocol, frozen 2026-11-20 before any tracker run on RoundaboutHD.**
+   - *Question:* does lowering `new_track_thresh` from 0.60 to 0.55, the
+     paper's decision, recover real crossings on c002 without adding false
+     ones?
+   - *Inputs:* `labels_xy` detections for all 9,000 frames, all four classes,
+     unchanged (file *k* → frame *k*+1). Every other `TrackerConfig` setting is
+     the library default, as in the paper (class-aware matching, three-hit
+     confirmation, 30-frame maximum age). Nothing is tuned.
+   - *Run:* VisionTrack 0.5.1 source at the commit that adds the runner. Each
+     threshold runs over all 9,000 frames from a cold start. Each must repeat
+     byte-identically after reset and from a fresh tracker.
+   - *Counter:* a crossing is an adjacent-frame, same-public-ID box-centre
+     step across the owner's line segment, with its direction. The reference
+     is the same rule applied to `SCT_GT.txt`, as audited in step 2.
+   - *Test frames:* crossings at frames 1–3629 and 5436–9000. Development
+     frames 3633–5432, plus 3 frames either side, are excluded for both
+     reference and tracker events.
+   - *Matching:* same direction, at most 3 frames apart, crossing points
+     within 150 px, one to one. Maximize the number of matches, then minimize
+     total frame difference.
+   - *Decision:* adopt 0.55 only if it has more correct crossings than 0.60
+     and no more false crossings. Otherwise keep 0.60. Both results are
+     reported, and every unmatched event is listed for inspection after the
+     decision.
 3. If the audit agrees well enough under a rule fixed in advance, freeze one
    comparison on the remaining frames: the paper's initiation thresholds 0.60
    and 0.55, fixed detections, the same crossing rule. Detector compute on 4K
