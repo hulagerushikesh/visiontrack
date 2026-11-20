@@ -40,3 +40,40 @@ def test_match_uses_frame_and_pixel_limits():
     assert match(ref, late, 31.2) == {"tp": 0, "fp": 1, "fn": 1}
     assert match(ref, near, 20.0)["tp"] == 0
     assert iou([0, 0, 2, 2], [1, 1, 3, 3]) == 1 / 7
+
+
+class _FakeDetector:
+    def __init__(self):
+        self.calls = 0
+
+    def detect(self, img):
+        from types import SimpleNamespace
+        self.calls += 1
+        n = int(img)
+        return [SimpleNamespace(xyxy=np.array([n, 0.0, n + 1, 1.0]), score=0.5, class_id=2)]
+
+
+def test_detection_resumes_from_saved_parts(tmp_path, monkeypatch):
+    import experiments.gram_rtm_gate as g
+
+    monkeypatch.setitem(g.SEQUENCES, "M-30", (12, 800, 480))
+    monkeypatch.setattr(g, "frames_from_zip", lambda root, seq, idx: ((n, n) for n in idx))
+    (tmp_path / "images").mkdir()
+    (tmp_path / "images" / "M-30.zip").write_bytes(b"zip")
+    cache = tmp_path / "cache"
+
+    first = _FakeDetector()
+    out = g.detect_sequence(tmp_path, None, "M-30", cache, max_minutes=0, det=first, chunk=5)
+    assert out["status"] == "partial" and out["parts_done"] == 0 and first.calls == 0
+
+    # Simulate a stop after two parts: run, then delete the third part.
+    g.detect_sequence(tmp_path, None, "M-30", cache, det=_FakeDetector(), chunk=5)
+    (cache / "M-30-parts" / "frames-000011-000012.npy").unlink()
+    (cache / "M-30-detections.npy").unlink()
+
+    resumed = _FakeDetector()
+    out = g.detect_sequence(tmp_path, None, "M-30", cache, det=resumed, chunk=5)
+    assert resumed.calls == 2  # only frames 11 and 12 were redone
+    assert out["status"] == "complete" and out["detections"] == 12
+    array = np.load(cache / "M-30-detections.npy")
+    assert array[:, 0].tolist() == list(range(1, 13))

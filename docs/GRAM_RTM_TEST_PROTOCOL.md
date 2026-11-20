@@ -71,6 +71,16 @@ identically into every variant. The run is moderate laptop load and needs the
 owner's approval first. A 20-frame timing is measured and reported before the
 full run.
 
+**Run note, 2026-11-21. No rule changes.** The first full M-30 detector run
+was stopped by the owner after 2 hours 38 minutes, past the 2.5-hour limit set
+for it. It saved nothing, because the detections were written only at the end.
+No detection, tracker output or crossing from it exists or was seen. The
+20-frame timing had missed the slowdown a fanless laptop shows under long
+load. From now on the detector saves a part every 500 frames, resumes from the
+last saved part, and runs in owner-approved sessions of at most 40 minutes.
+The detector, its settings and the frames are unchanged. Parts are joined in
+frame order into the same single detections file and receipt as before.
+
 ## Counting lines
 
 Both sequences look along a motorway from above, so traffic moves mainly up

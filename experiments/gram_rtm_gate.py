@@ -9,7 +9,9 @@ The dataset stays owner-local. Expected layout under <root>:
 Steps, each run on its own:
   python -m experiments.gram_rtm_gate offset --root <root>
   python -m experiments.gram_rtm_gate time   --root <root> --model models/yolox_x.onnx
-  python -m experiments.gram_rtm_gate detect --root <root> --model models/yolox_x.onnx --seq M-30
+  python -m experiments.gram_rtm_gate detect --root <root> --seq M-30 \
+      --max-minutes 40
+    (resumable: repeat the same command until it reports status complete)
   python -m experiments.gram_rtm_gate run    --root <root> --output <json>
 """
 from __future__ import annotations
@@ -141,17 +143,51 @@ def time_detector(root: Path, model: Path, n: int = 20) -> dict:
     return out
 
 
-def detect_sequence(root: Path, model: Path, seq: str, cache: Path) -> dict:
-    det = detector(model)
+CHUNK = 500  # frames per saved part, so a stopped run loses at most one part
+
+
+def _part_path(cache: Path, seq: str, first: int, last: int) -> Path:
+    return cache / f"{seq}-parts" / f"frames-{first:06d}-{last:06d}.npy"
+
+
+def detect_sequence(root: Path, model: Path, seq: str, cache: Path,
+                    max_minutes: float | None = None, det=None, chunk: int = CHUNK) -> dict:
+    """Detect every frame, saving one part per `chunk` frames.
+
+    Parts already on disk are skipped, so a stopped run resumes where it left
+    off. With `max_minutes`, no new part starts once that time has passed. The
+    final detections file and receipt are written only when every part exists.
+    """
+    det = det if det is not None else detector(model)
     count = SEQUENCES[seq][0]
-    rows = []
-    for n, img in frames_from_zip(root, seq, range(1, count + 1)):
-        for d in det.detect(img):
-            rows.append([n, *map(float, d.xyxy), float(d.score), int(d.class_id)])
-    array = np.asarray(rows, dtype=np.float64).reshape(-1, 7)
+    spans = [(a, min(a + chunk - 1, count)) for a in range(1, count + 1, chunk)]
+    (cache / f"{seq}-parts").mkdir(parents=True, exist_ok=True)
+    start = time.perf_counter()
+    for i, (first, last) in enumerate(spans, 1):
+        path = _part_path(cache, seq, first, last)
+        if path.exists():
+            continue
+        minutes = (time.perf_counter() - start) / 60
+        if max_minutes is not None and minutes >= max_minutes:
+            break
+        rows = [[n, *map(float, d.xyxy), float(d.score), int(d.class_id)]
+                for n, img in frames_from_zip(root, seq, range(first, last + 1))
+                for d in det.detect(img)]
+        tmp = path.with_suffix(".tmp")
+        with tmp.open("wb") as handle:
+            np.save(handle, np.asarray(rows, dtype=np.float64).reshape(-1, 7))
+        tmp.replace(path)  # a part exists only once fully written
+        print(f"{seq}: part {i}/{len(spans)} saved, frames {first}-{last} of {count}, "
+              f"{(time.perf_counter() - start) / 60:.1f} min this session", flush=True)
+    done = [s for s in spans if _part_path(cache, seq, *s).exists()]
+    if len(done) < len(spans):
+        return {"sequence": seq, "status": "partial", "parts_done": len(done),
+                "parts_total": len(spans), "frames_done": sum(b - a + 1 for a, b in done)}
+    array = np.concatenate([np.load(_part_path(cache, seq, *s)) for s in spans])
     path = cache / f"{seq}-detections.npy"
     np.save(path, array)
-    receipt = {"sequence": seq, "frames": count, "detections": int(len(array)),
+    receipt = {"sequence": seq, "status": "complete", "frames": count,
+               "detections": int(len(array)), "parts": len(spans), "chunk": chunk,
                "model_sha256": MODEL_SHA256, "input_size": INPUT_SIZE, "conf": CONF,
                "nms": NMS, "classes": sorted(CLASSES), "preprocessing": "legacy, BGR",
                "image_zip_sha256": sha256(root / "images" / f"{seq}.zip"),
@@ -278,6 +314,8 @@ def main() -> None:
     parser.add_argument("--model", type=Path, default=Path("models/yolox_x.onnx"))
     parser.add_argument("--seq", choices=tuple(SEQUENCES))
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--max-minutes", type=float,
+                        help="detect: start no new part after this many minutes")
     args = parser.parse_args()
     cache = args.root / "gate-cache"
     cache.mkdir(exist_ok=True)
@@ -286,7 +324,7 @@ def main() -> None:
     elif args.step == "time":
         result = time_detector(args.root, args.model)
     elif args.step == "detect":
-        result = detect_sequence(args.root, args.model, args.seq, cache)
+        result = detect_sequence(args.root, args.model, args.seq, cache, args.max_minutes)
     else:
         result = run(args.root, cache)
     text = json.dumps(result, indent=1)
