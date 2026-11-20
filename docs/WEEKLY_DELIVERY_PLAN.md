@@ -24,6 +24,9 @@
       Confirmed 2026-11-20: independent researcher, Codex and Claude disclosed,
       CC BY 4.0. Final source is in [`paper/`](../paper/README.md).
 - [ ] Submit the preprint to arXiv `cs.CV` from the author's own account.
+      **Deferred by the owner on 2026-11-20:** three pages is too short to
+      publish alone; publish later with more content. The manuscript stays
+      unchanged until then.
 - [ ] Collect optional reader feedback on whether the
       [three cases](COUNTING_PAPER_OUTLINE.md#reader-verification) are easy to follow.
 - [x] Prepare a [five-minute practitioner check](LAB_WALKTHROUGH.md#five-minute-practitioner-check)
