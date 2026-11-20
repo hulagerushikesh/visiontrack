@@ -82,8 +82,9 @@ Runner: `python -m experiments.aspect_gate_dev --roundabout <root> --output
 
 ## Next: the frozen test on unused video
 
-When the UA-DETRAC terms allow use, fix in writing before downloading:
-sequences, counting lines, the reference-crossing rule, and the decision rule.
-Then compare three variants on identical supplied detections: gate on, gate
-off and aspect-free gate. Only a candidate that passes there moves toward a
+The rules are now fixed in writing, before any download: the
+[UA-DETRAC test protocol](UA_DETRAC_TEST_PROTOCOL.md) sets the sequences,
+counting lines, reference-crossing rule and decision rule. When the terms
+allow use, it compares three variants on identical supplied detections: gate
+on, gate off and aspect-free gate. Only a candidate that passes there moves toward a
 default change. Only then does C++ get a synchronisation milestone.

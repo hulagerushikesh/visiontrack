@@ -227,7 +227,10 @@ repeat screening while waiting.
       and closing the match lesson or failure details moves keyboard focus to
       the relevant content or its trigger. Practitioner comprehension remains
       open.
-- [ ] **Resolve one evidence route.** Update 2026-11-20: the authors answered.
+- [ ] **Resolve one evidence route.** Update 2026-11-20 (later): the motion-gate
+      follow-up waits on the UA-DETRAC authors' terms; its
+      [test protocol](UA_DETRAC_TEST_PROTOCOL.md) is frozen before any download.
+      Update 2026-11-20: the authors answered.
       Rights and version are settled; the single-camera labels are interpolated
       with no flag, so admission now rests on a small crossing-label audit.
       [Publisher answers](REAL_TRAFFIC_EVIDENCE_GATE.md#roundabouthd-publisher-answers-2026-11-20)

@@ -428,7 +428,9 @@ until the terms are confirmed in writing.
 aspect-ratio change, not speed. A gate that ignores aspect recovers most of
 the gate-off gain with no extra false counts on the used cameras, and leaves
 MOT17 within noise. It is a development candidate for the UA-DETRAC test:
-[aspect-free gate record](ASPECT_GATE_DEVELOPMENT.md).
+[aspect-free gate record](ASPECT_GATE_DEVELOPMENT.md). The test that decides
+it is frozen in the [UA-DETRAC test protocol](UA_DETRAC_TEST_PROTOCOL.md),
+written before any UA-DETRAC file is fetched.
 
 **Status, 2026-11-20.** The owner sent the reply to Bath: thanks, a
 commitment to treat the dataset as test-only and keep the MIT notice, and
