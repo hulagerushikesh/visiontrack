@@ -32,6 +32,13 @@ completeness counts, and the archive lists of the images.
   pinned detector on the 20 timing frames per sequence. That repeat decides
   the offset for each sequence. If it does not clearly favour one offset (a
   lead under 0.01), +1 is kept, as both the numbering and M-30-HD indicate.
+
+  **Repeat with the pinned detector: +1 on both sequences, clearly.** The
+  mean best overlap at offsets −1 / 0 / +1 / +2 was 0.663 / 0.753 / **0.808**
+  / 0.711 on M-30 and 0.732 / 0.825 / **0.874** / 0.804 on M-30-HD. Label
+  file *k* belongs to image *k*+1. The same run measured **0.91–0.94 seconds
+  per frame**, so the full detector run is about **1.9 hours for M-30 and
+  2.4 hours for M-30-HD**.
 - **Exclusion regions:** the kit marks areas where vehicles were not labelled
   (`ROI/M-30-map.jpg`, `ROI/M-30-HD-map.jpg`). A crossing whose point lies in
   an excluded area is dropped from both the reference and every variant. The
