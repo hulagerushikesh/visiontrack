@@ -307,6 +307,39 @@ a fresh owner approval for its download:
      and no more false crossings. Otherwise keep 0.60. Both results are
      reported, and every unmatched event is listed for inspection after the
      decision.
+
+   **Step 3 result — 2026-11-20: keep 0.60.** The runner is
+   `experiments/roundabouthd_threshold.py`. Both variants repeated
+   byte-identically after reset and from a fresh tracker. 188,021 detections
+   were used, and the test frames hold 93 reference crossings.
+
+   | Variant | Correct crossings | False crossings | Missed crossings | Public IDs |
+   | --- | --- | --- | --- | --- |
+   | 0.60 (baseline) | 40 | 2 | 53 | 985 |
+   | 0.55 (candidate) | 40 | 2 | 53 | 1,030 |
+
+   The lower threshold changed no crossing on this arm; it only added 45
+   public IDs elsewhere in the scene. The decision rule keeps 0.60.
+
+   **The larger finding: both settings miss 57% of real crossings.** After the
+   decision, inspection of the 53 misses found high-confidence detections
+   (scores about 0.95) at the crossing in every case checked. In 36 misses no
+   public track existed on either side of the line, and in 17 a track existed
+   on one side only. A post-hoc exploratory rerun identified the likely cause:
+
+   | Exploratory baseline change (not part of the frozen test) | Correct | False | Missed |
+   | --- | --- | --- | --- |
+   | Mahalanobis gating off | 87 | 3 | 6 |
+   | Class-agnostic matching | 43 | 2 | 50 |
+
+   The default motion gate was tuned for slow, roughly 30 fps pedestrian
+   video. It appears to reject the large, fast steps of near-camera vehicles at
+   15 fps, so tracks never confirm before the line. This matches the
+   practitioner's earlier point that pixel motion under camera perspective
+   breaks a single global Kalman configuration. These exploratory numbers used
+   the test frames, so they are a hypothesis, not a result. A gating change
+   needs its own frozen comparison on frames not yet used, such as another
+   camera, before any default changes.
 3. If the audit agrees well enough under a rule fixed in advance, freeze one
    comparison on the remaining frames: the paper's initiation thresholds 0.60
    and 0.55, fixed detections, the same crossing rule. Detector compute on 4K
