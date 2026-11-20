@@ -419,7 +419,15 @@ record metadata only (no media downloaded):
 recommended route: its supplied detections and dense fixed-camera labels let
 a gate follow-up run like the RoundaboutHD tests, with no detector run on the
 laptop. One owner-sent question to its authors about reuse terms is needed
-first. A draft is kept owner-local.
+first. A draft is kept owner-local. The authors' dataset page lists no
+contact; the first author's own page lists one address, to be confirmed by
+the owner before sending.
+
+**Status, 2026-11-20.** The owner sent the reply to Bath: thanks, a
+commitment to treat the dataset as test-only and keep the MIT notice, and
+one optional question on whether the per-camera detection labels were
+checked frame by frame or interpolated. Nothing is waiting on Bath; an answer
+would only change how the RoundaboutHD results are described.
 3. If the audit agrees well enough under a rule fixed in advance, freeze one
    comparison on the remaining frames: the paper's initiation thresholds 0.60
    and 0.55, fixed detections, the same crossing rule. Detector compute on 4K
