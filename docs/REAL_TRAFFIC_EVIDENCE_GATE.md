@@ -438,12 +438,17 @@ No media or label file was downloaded.
 
 | Candidate | Finding | Status |
 | --- | --- | --- |
-| [GRAM-RTM](https://gram.web.uah.es/data/datasets/rtm/index.html) Urban1 | The page states public availability "for scientific research purposes": manually annotated vehicles with unique IDs, and Urban1 is a fixed surveillance camera at a busy intersection (600×360, 25 fps, 23,435 frames, 237 vehicles). The annotation kit (`GRAM-RTMv4.zip`, 24.7 MB) now answers HTTP 200; on 2026-10-28 it returned 403. The Urban1 image link redirects to a university SharePoint file that returns 403 from the command line. | **First backup.** Supplies no detections, so it needs a detector run, which is light at this resolution. Next: with owner approval, download the 24.7 MB kit and check annotation completeness. Image access may need the browser or a request to the authors. |
+| [GRAM-RTM](https://gram.web.uah.es/data/datasets/rtm/index.html) Urban1 | The page states public availability "for scientific research purposes": manually annotated vehicles with unique IDs, and Urban1 is a fixed surveillance camera at a busy intersection (600×360, 25 fps, 23,435 frames, 237 vehicles). The annotation kit (`GRAM-RTMv4.zip`, 24.7 MB) now answers HTTP 200; on 2026-10-28 it returned 403. The Urban1 image link redirects to a university SharePoint file that returns 403 from the command line. | **First backup.** Needs a detector run, which is light at this resolution (the 2013 detections in the kit do not fit the protocol). Next: with owner approval, download the 24.7 MB kit and check annotation completeness. Image access may need the browser or a request to the authors. |
 | [SVMOT](https://zenodo.org/records/19468203) test scenes | CC BY-NC 4.0, fixed traffic scenes, a scene-disjoint split whose test scenes are still unopened. The [intake](SVMOT_INTAKE.md) found that its supplied detections copy the ground-truth boxes, and its focus is parked vehicles. | **Second backup.** Needs an 18.3 GB download and our own detector run, and its label-quality holds still apply. |
 | FastTracker benchmark | Traffic MOT ground truth for 12 videos. The card states a model licence (OpenRAIL-M) for data. The paper and card give no footage source or annotation method. | Not usable until footage provenance is known. |
 | LUMPI (Hannover) | CC BY-NC 3.0, fixed intersection cameras, but labels are lidar-based 3D boxes; 2D boxes would be projections. | Weak fit. |
 | V2X-Seq / DAIR-V2X | Roadside cameras with 3D tracking. Licence text not found; a survey says it follows Rope3D's terms. | Weak fit; terms unconfirmed. |
 | MC-GTA | CC BY 4.0 synthetic crossroad cameras with exact IDs, rendered from a commercial video game. | Upstream game-footage rights doubtful, and synthetic. Not usable for this claim. |
+
+**GRAM-RTM kit checked, 2026-11-20:** the labels are complete and gap-free.
+M-30 and M-30-HD images are CC BY 3.0, but Urban1's image rights are not
+stated. The supplied detections fail the score rule, so a detector run would
+be needed. See the [GRAM-RTM intake](GRAM_RTM_INTAKE.md).
 
 Any backup would run under the frozen [UA-DETRAC protocol](UA_DETRAC_TEST_PROTOCOL.md),
 with its dataset-specific parts (sequences, line rule, detector) amended in
