@@ -340,6 +340,33 @@ a fresh owner approval for its download:
    the test frames, so they are a hypothesis, not a result. A gating change
    needs its own frozen comparison on frames not yet used, such as another
    camera, before any default changes.
+
+   **Gate test protocol, frozen 2026-11-20 before any c001, c003 or c004
+   detection file is opened or any tracker runs on them.**
+   - *Hypothesis:* the default Mahalanobis gate causes most of the missed
+     crossings on near-camera roundabout arms.
+   - *Cameras and lines:* c001, c003 and c004, all 9,000 frames each, with no
+     development window, because none of these frames has been used. Claude
+     drew one line per camera on the publisher's camera-view image
+     (`geo-mapping/cam0N_info.png`), curb to curb across the nearest arm. It
+     used no labels, detections or tracker output. Full-resolution points:
+     c001 (223, 1377)–(1363, 1947); c003 (150, 1300)–(2850, 1300);
+     c004 (60, 1870)–(2050, 1750).
+   - *Variants:* library defaults (gate on) versus `use_mahalanobis_gating=False`.
+     Both use `new_track_thresh` 0.60, the setting step 3 kept, and every other
+     default. Inputs are the archive's raw `labels_xy` detections, unchanged.
+   - *Counter, reference, matching:* identical to step 3, applied to each
+     camera's own `SCT_GT.txt`. The crossing audit covered only c002, so
+     reference errors on these cameras are a stated limitation. They affect
+     both variants equally.
+   - *Decision:* the hypothesis is **supported** only if all three hold:
+     pooled missed crossings fall; pooled false crossings rise by no more than
+     2 or 10% of the pooled gain in correct crossings, whichever is larger;
+     and no camera has more total errors (false plus missed) with the gate
+     off. Otherwise it is **not supported**. Either way, no library default
+     changes from this test. A supported result opens a separate design task,
+     because the gate also serves pedestrian tracking, where it was tuned.
+   - Runner: `experiments/roundabouthd_gate.py`, committed before it runs.
 3. If the audit agrees well enough under a rule fixed in advance, freeze one
    comparison on the remaining frames: the paper's initiation thresholds 0.60
    and 0.55, fixed detections, the same crossing rule. Detector compute on 4K
