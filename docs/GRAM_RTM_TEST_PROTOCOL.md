@@ -42,8 +42,10 @@ detector is run instead:
 - local YOLOX-X ONNX file, SHA-256
   `c892d7aaf1c4746d8a4d675bec669a4db4f434b4ee1efb654bc9b353379c7c55`, the
   same file used in the SVMOT screens;
-- 640-pixel input, `upstream` preprocessing (the official YOLOX colour order
-  and resize);
+- 640-pixel input. **Amendment, 2026-11-20, before any detector run:** the
+  `upstream` preprocessing needs OpenCV, which is not installed. The run uses
+  the library's `legacy` resize instead, given frames in BGR order, which is
+  the colour order YOLOX was trained on. Nothing was installed for this test.
 - confidence floor 0.10, so the tracker's low-score recovery stage gets its
   inputs; NMS IoU 0.45;
 - COCO classes car (2), motorcycle (3), bus (5) and truck (7), each kept as
