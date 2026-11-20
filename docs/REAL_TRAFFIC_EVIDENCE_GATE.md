@@ -397,6 +397,29 @@ a fresh owner approval for its download:
      shift the tracking point.
    - Any follow-up must be a new frozen test on frames not yet used. All four
      cameras' full frame ranges have now been seen by at least one comparison.
+
+### Unused video for the gate follow-up — source search, 2026-11-20
+
+The follow-up needs fixed-camera traffic video with complete, human-checked
+single-camera vehicle IDs that VisionTrack has never touched. Raw detections
+with scores are a plus, and the reuse terms must be clear. Sources already in
+the screen above keep their status. New candidates, from public pages and
+record metadata only (no media downloaded):
+
+| Candidate | Fit | Blocker |
+| --- | --- | --- |
+| [UA-DETRAC](https://sites.google.com/view/daweidu/projects/ua-detrac) | **Best technical fit.** 100 fixed-camera traffic videos, over 140,000 frames, per-vehicle boxes, and a separate detections download, so no detector run is needed. | The authors' page states no licence, only a citation request. **Ask the authors for terms** before downloading, as with RoundaboutHD. |
+| [Vehicle Tracking Dataset](https://zenodo.org/records/18195750) | Record licence CC BY 4.0, 39.5 MB: two short videos with frame, track ID and box ground truth (zip index read by range request). | **Upstream footage rights are doubtful.** One video comes from AI City Challenge 2022, whose agreement limits use and redistribution; the other was taken from a broadcaster's YouTube channel. An uploader's CC BY label cannot license footage they do not own. No detections are included. |
+| [MEVDT](https://arxiv.org/abs/2407.20446) | Clean CC BY 4.0 licence, manual boxes and IDs, MOT format. | DAVIS 240c event camera with low-resolution grayscale frames and only 85 trajectories. Too small and too unlike the RoundaboutHD views to test the gate. |
+| [Multi-Camera-Tracking intersection](https://github.com/sli90/Multi-Camera-Tracking) | CC BY 4.0 data, four fixed intersection cameras at 15 fps. | No video in the release, and its single-camera tracks are tracker output, not checked labels. Not usable. |
+| TUMTraf Intersection | Fixed roadside cameras with object IDs. | CC BY-NC-ND 4.0, 10 Hz, mainly 3D labels, about 4,800 frames. Weak fit. |
+| UrbanTracker (Polytechnique Montréal) | Fixed urban intersection videos with manual trajectories. | No licence found on the dataset record. Ask before use. |
+
+**Decision.** No new source can be admitted today. UA-DETRAC is the
+recommended route: its supplied detections and dense fixed-camera labels let
+a gate follow-up run like the RoundaboutHD tests, with no detector run on the
+laptop. One owner-sent question to its authors about reuse terms is needed
+first. A draft is kept owner-local.
 3. If the audit agrees well enough under a rule fixed in advance, freeze one
    comparison on the remaining frames: the paper's initiation thresholds 0.60
    and 0.55, fixed detections, the same crossing rule. Detector compute on 4K
