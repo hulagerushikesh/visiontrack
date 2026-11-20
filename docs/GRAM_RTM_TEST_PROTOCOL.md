@@ -28,7 +28,11 @@ completeness counts, and the archive lists of the images.
   (`ROI/M-30-map.jpg`, `ROI/M-30-HD-map.jpg`). A crossing whose point lies in
   an excluded area is dropped from both the reference and every variant. The
   map is read as excluded wherever its pixel is dark (grey value below 128),
-  scaled to the frame size. Detections are not filtered.
+  scaled to the frame size. Detections are not filtered. The M-30 map was
+  viewed after freezing, to confirm this reading. It is a black-and-white mask
+  whose black part covers the top band and the upper-left corner, the far end
+  of the road, which fits "dark = not labelled". On M-30 the half-height line
+  loses about its leftmost 130 pixels to that region.
 
 ## Detector
 
