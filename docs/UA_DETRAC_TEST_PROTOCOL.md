@@ -59,11 +59,18 @@ check only. They do not decide the result.
 
 These are the RoundaboutHD rules, scaled for a smaller, faster video:
 
-- A crossing is a step between two adjacent frames, by the same ID, in which
-  the box centre moves from one side of the line to the other. Its direction is
-  kept. The counter is unchanged from the earlier tests, so a vehicle jittering
-  back across the line still counts twice. That affects every variant
-  equally. Fixing it is separate work.
+- A raw crossing is a step between two adjacent frames, by the same ID, in
+  which the box centre moves from one side of the line to the other. Its
+  direction is kept.
+- **Amendment, 2026-11-20, before any download, decided by the owner:** a
+  raw crossing followed by the same ID crossing back within **25 frames (one
+  second)** cancels both (`cancel_reversals` in
+  `experiments/crossing_rules.py`). The rule applies to the reference and to
+  every variant alike. It replaces the plain counter, which counted a vehicle
+  jittering on the line several times. That failure decided the earlier gate
+  test. The rule was developed on already-used RoundaboutHD video; see the
+  [counting rule record](COUNTING_RULE_DEVELOPMENT.md). Plain-counter totals
+  are reported as a secondary table and do not decide the result.
 - A tracker crossing matches a reference crossing one to one if both go in the
   same direction, are at most **5 frames** apart, and their crossing points are
   at most **38 pixels** apart. RoundaboutHD allowed 3 frames at 15 fps

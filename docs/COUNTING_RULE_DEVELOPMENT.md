@@ -77,6 +77,7 @@ owner-local with the dataset.
 - It does not show the rule is right on other video. The cameras and lines
   were seen before the rule was written.
 - It does not change any earlier verdict, any library code, or C++.
-- The [UA-DETRAC protocol](UA_DETRAC_TEST_PROTOCOL.md) still uses the plain
-  counter. Switching it needs a dated amendment before any download, decided
-  by the owner.
+- On 2026-11-20, before any download, the owner chose this rule for the
+  [UA-DETRAC protocol](UA_DETRAC_TEST_PROTOCOL.md): a dated amendment with a
+  25-frame window (one second at 25 fps). That test, not this record, decides
+  whether the rule holds on unused video.
