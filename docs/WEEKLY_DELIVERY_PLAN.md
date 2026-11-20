@@ -224,7 +224,11 @@ repeat screening while waiting.
       and closing the match lesson or failure details moves keyboard focus to
       the relevant content or its trigger. Practitioner comprehension remains
       open.
-- [ ] **Resolve one evidence route.** RoundaboutHD remains a rights-clarification
+- [ ] **Resolve one evidence route.** Update 2026-11-20: the authors answered.
+      Rights and version are settled; the single-camera labels are interpolated
+      with no flag, so admission now rests on a small crossing-label audit.
+      [Publisher answers](REAL_TRAFFIC_EVIDENCE_GATE.md#roundabouthd-publisher-answers-2026-11-20)
+      Earlier text: RoundaboutHD remains a rights-clarification
       lead, not admitted data. Reuse the [existing source gate](REAL_TRAFFIC_EVIDENCE_GATE.md)
       and spend at most one focused screening session on this route. Exact media
       rights, access, task fit and label provenance must be established before

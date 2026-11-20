@@ -125,6 +125,44 @@ If those answers are unavailable, report the unresolved requirement and stop
 this route; another broad source hunt or speculative tracker change is not its
 substitute. The candidate package delivery is a separate engineering milestone.
 
+### RoundaboutHD publisher answers — 2026-11-20
+
+Bath's Research Data Service relayed the dataset authors' written answers to
+the 2026-11-01 request. The message and ticket stay owner-local; this is a
+paraphrase.
+
+| Question | Authors' answer | Effect on this route |
+| --- | --- | --- |
+| Asset terms | The MIT licence covers everything in the archive, including videos and annotations. | **Rights pass** for local research, published code, methods and aggregate findings. Keep the MIT notice with any redistributed part. Public example images remain a separate owner choice. |
+| SCT label coverage | The `SCT_GT.txt` rows are interpolated, and generated rows cannot be told apart from directly checked boxes. | **Per-frame label truth fails.** The released SCT rows cannot serve as checked box or ID truth on their own. An event endpoint and an independent check are required (below). |
+| Development/evaluation split | None. The authors recommend using the whole dataset as a test set. | No tuning on RoundaboutHD. Any comparison is frozen from earlier development evidence before the first run. A slice used for a label audit is declared development and excluded from the reported test. |
+| Version and format | The Bath archive and the Hugging Face copy are both the latest version. Single-camera rows are `frame_id obj_id xmin ymin xmax ymax`. | Six columns, corner coordinates. The toolkit's seven-column reader is not the released convention. |
+
+**Integrity check, same day, metadata only.** Both hosts report the same
+archive size, 8,075,314,494 bytes. The final 1 MiB of the two copies is
+byte-identical. Hugging Face publishes a full-file SHA-256
+(`fad611b70065bb67dbd7eb6a1c03280b8c1252fe46c291537ccd0b9230f1dd54`), so any
+downloaded copy can now be verified end to end. No label rows, frames or videos
+were opened.
+
+**Decision.** Rights and version questions are closed. Admission now depends
+only on label evidence. Because interpolation mainly changes boxes between
+checked points, a line-crossing count is a better fit than per-frame tracking
+scores. Crossings are still not assumed correct. The next steps, each needing
+a fresh owner approval for its download:
+
+1. Range-read only the four `SCT_GT.txt` members (about 3.6 MB compressed)
+   and verify each member CRC. Inventory rows, IDs, frame coverage, track
+   lengths and straight-line runs that suggest generated rows.
+2. Pick one camera and one short window before looking at results. Read only
+   those frames. The owner marks crossings at one fixed line from the pixels
+   alone, then compares them with crossings derived from `SCT_GT.txt`. This
+   window becomes development material.
+3. If the audit agrees well enough under a rule fixed in advance, freeze one
+   comparison on the remaining frames: the paper's initiation thresholds 0.60
+   and 0.55, fixed detections, the same crossing rule. Detector compute on 4K
+   frames needs a separate laptop-load approval.
+
 **2026-10-30 Khan/Kelly V2 small-file screen:** the official
 [versioned record](https://data.mendeley.com/datasets/5d8k5bkb93/2) and
 [public file API](https://data.mendeley.com/public-api/datasets/5d8k5bkb93/files?folder_id=root&version=2)
@@ -206,11 +244,11 @@ decision, not only a public benchmark.
   to its large archive. Its scene-level split is useful for a future research
   comparison, but the non-commercial license and missing local integrity/truth
   checks keep it out of product evidence today.
-- Keep RoundaboutHD as the next fixed-camera **rights clarification** lead:
-  its official archive declares four single-camera GT streams and manually
-  checked detection labels, while the published dataset page does not clearly
-  license the media. Do not infer data rights from the toolkit's MIT licence
-  or start an 8 GB intake until the exact permitted use is established.
+- RoundaboutHD rights are settled (MIT for all assets, authors' answer
+  2026-11-20). Its single-camera labels are interpolated with no
+  observed/generated flag, so the route continues as a **crossing-label
+  audit**, not a per-frame benchmark. See the
+  [publisher answers](#roundabouthd-publisher-answers-2026-11-20).
 - When one candidate passes rights and integrity, make a source inventory and
   a small *development-only* annotation audit. Record any ambiguity before
   selecting a tracking variant.
