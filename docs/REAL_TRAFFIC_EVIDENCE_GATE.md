@@ -263,6 +263,25 @@ a fresh owner approval for its download:
    c002's other frames. Running a detector on 4K frames is heavy laptop work
    and needs owner approval first. The archive's per-camera `detection` ZIPs
    may already hold usable detector outputs; inspect them before choosing.
+
+   **c002 detection files inspected — 2026-11-20, owner-approved.** The three
+   members (about 7.6 MB compressed) were range-read and passed their CRCs.
+   Each ZIP holds 9,000 per-frame text files, `img000000`–`img008999`.
+   File *k* is label frame *k*+1; boxes in file 5 match SCT frame 6 to within
+   about 2 px.
+
+   | Member | Content | Fit for a tracker comparison |
+   | --- | --- | --- |
+   | `labels_xy` | Raw detector output: class, `xmin ymin xmax ymax`, full-precision score. 188,021 boxes, about 21 per frame, scores 0.30 and above (median 0.51; 49% below 0.5). Classes: car 165,809, truck 22,176, bus 35, motorcycle 1. | **Usable as fixed detections.** The score range covers both thresholds under study (0.55 and 0.60) and ByteTrack's low-score stage down to 0.30. |
+   | `labels_filtered` | The same detections, rounded, kept at score 0.35 and above (155,152 boxes). | A filtered copy; prefer the raw file. |
+   | `labels_sct2det` | The SCT labels rewritten as per-frame boxes with score 1. | Not detector output; no new information. |
+
+   So no detector needs to run on the laptop. The detector's identity and
+   settings are not documented in the files. One caveat: the labelling toolkit
+   builds labels by correcting detector proposals. The SCT reference and these
+   detections may therefore share box errors. The crossing audit above was
+   independent of both, but a tracker comparison on these inputs measures
+   tracking given this detector, not detector quality.
 3. If the audit agrees well enough under a rule fixed in advance, freeze one
    comparison on the remaining frames: the paper's initiation thresholds 0.60
    and 0.55, fixed detections, the same crossing rule. Detector compute on 4K
