@@ -74,6 +74,11 @@ frame *k* most likely belongs to image *k*+1, as with the authors' detections,
 which start at 1. A box-to-detection distance check must confirm the offset
 before any run, as on RoundaboutHD.
 
+## Test protocol
+
+Frozen on 2026-11-20 before any image was viewed: the
+[GRAM-RTM test protocol](GRAM_RTM_TEST_PROTOCOL.md).
+
 ## What would admit it
 
 1. Urban1 waits on the authors' answer about its rights. The motorway images
