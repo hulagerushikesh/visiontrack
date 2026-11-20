@@ -1,5 +1,37 @@
 # Daily checkpoints and the next weekly goal
 
+## Paper and practitioner checkpoints
+
+- [x] Draft the [counting paper outline](COUNTING_PAPER_OUTLINE.md) and rerun
+      its main threshold experiment from the frozen source. All 54 paired
+      results matched the saved summary byte for byte at the original commit.
+      A clean GitHub clone matched all results and source hashes with only the
+      two historical commit IDs excluded from the comparison.
+- [x] Generate the [main figure](COUNTING_PAPER_OUTLINE.md#figure-1) from
+      digest-checked replay outputs and retain a regeneration command.
+- [x] Package the [reader replay command](COUNTING_PAPER_OUTLINE.md#reproduce-the-main-experiment)
+      and verify all 54 pairs and the figure on macOS arm64 and two Linux
+      architectures. Linux x86-64 used emulation on the same host.
+- [x] Compare the study with [related work and the closest artifact](COUNTING_PAPER_OUTLINE.md#related-work).
+      Frame the manuscript around the specific birth-threshold decision and its
+      reproducible evidence. Fixed-detection replay and event scoring already
+      exist in related work.
+- [x] Compare publication routes and compile a local three-page manuscript
+      for author review. [Publication route](COUNTING_PAPER_OUTLINE.md#publication-route)
+- [x] Receive the author's first read of the draft. Pin the [public replay revision](https://github.com/hulagerushikesh/visiontrack/blob/b4ccff0dc415e9755c1dc2448d3b3defc5a87481/docs/INITIATION_THRESHOLD_FINDINGS.md#reproduce-the-study-and-figure)
+      with the replay command, figure and regeneration instructions.
+- [x] Confirm author metadata, disclosure and manuscript license before submission.
+      Confirmed 2026-11-20: independent researcher, Codex and Claude disclosed,
+      CC BY 4.0. Final source is in [`paper/`](../paper/README.md).
+- [ ] Submit the preprint to arXiv `cs.CV` from the author's own account.
+- [ ] Collect optional reader feedback on whether the
+      [three cases](COUNTING_PAPER_OUTLINE.md#reader-verification) are easy to follow.
+- [x] Prepare a [five-minute practitioner check](LAB_WALKTHROUGH.md#five-minute-practitioner-check)
+      using the shipped match-failure lesson and fixed interpretation criteria.
+- [ ] Observe an uncoached practitioner session and record where the evidence
+      is clear or difficult to find. This can proceed while the separate
+      RoundaboutHD intake remains open.
+
 ## Work resumes alongside the Bath enquiry — 2026-11-04
 
 The owner's latest direction supersedes a project-wide pause: **wait for Bath

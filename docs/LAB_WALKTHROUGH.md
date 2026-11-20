@@ -142,6 +142,34 @@ Overall ease of use (1–5):
 If a step blocks you, record it and move on. Completing every checkbox is less
 valuable than learning where the workflow needs help. A screenshot is optional.
 
+## Five-minute practitioner check
+
+Use this with someone who works with tracking outputs and has yet to see this
+Lab example. Give them only the prompt below, before showing the walkthrough.
+
+> Open the [Reliability Lab](https://visiontrack.hulage.in/lab). Find the saved
+> example of two overlapping boxes that fail to match. Explain what prevented
+> the match, what the tracker did next, and what the example lets you conclude
+> about a real tracking failure. Point to the evidence you used. Tell us if
+> you get stuck. You can use the page's help as you go.
+
+Allow up to five minutes without giving navigation or interpretation hints.
+Record elapsed time, where they looked first, whether they reached the saved
+example, any requested help, and their explanation. Ask afterward which screen
+element made the answer clearer or harder to find. Record a participant code
+and device type. Keep notes private and ask before saving any verbatim feedback.
+
+**Facilitator answer.** At frame 1, overlap passes (about 0.905 versus a 0.3
+minimum). The motion gate rejects the pair (squared distance about 132231
+versus a 9.4877 limit). Tentative ID 1 is deleted and ID 2 starts as tentative.
+There are zero public tracks at that frame. This is a deliberately strict
+synthetic run and explains one software decision. It cannot establish the
+cause of a real-world identity switch or a better tracker setting. Correct
+reasoning with a reference to the displayed evidence is enough. Exact values
+and terminology are optional. Record **independent**, **after help**, or
+**unresolved** for each of the three answers. One session can expose a concrete
+usability issue. It cannot establish general usability or tracking accuracy.
+
 ## Later: the real-data milestone
 
 No camera setup or volunteer recruitment is required for this walkthrough.
