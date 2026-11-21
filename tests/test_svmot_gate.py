@@ -2,6 +2,7 @@
 import json
 
 import numpy as np
+import pytest
 
 import experiments.svmot_gate as s
 
@@ -51,6 +52,7 @@ def test_judge_no_harm_and_inconclusive():
 
 
 def test_id_switches_counts_one_swap():
+    pytest.importorskip("trackeval", reason="trackeval not installed")
     box_a, box_b = [0.0, 0.0, 10.0, 10.0], [50.0, 0.0, 60.0, 10.0]
     reference = {(n, 1): box_a for n in range(1, 5)} | {(n, 2): box_b for n in range(1, 5)}
     clean = {(n, 7): box_a for n in range(1, 5)} | {(n, 8): box_b for n in range(1, 5)}
