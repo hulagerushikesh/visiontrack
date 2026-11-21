@@ -101,6 +101,38 @@ image archive hash in the receipt matches the intake record. No tracker has
 run on either sequence's detections, and no label has been used for counting
 yet. The tracker comparison is next and needs the owner's approval.
 
+## Result, 2026-11-21
+
+Run once, with the owner's approval, under the rules above. Each variant ran
+twice on each sequence, and both runs gave byte-identical output. Full numbers
+are in [`experiments/gram_rtm_gate_v1_result.json`](../experiments/gram_rtm_gate_v1_result.json).
+
+Main line, cancel-reversals counter (correct / false / missed):
+
+| Sequence (reference) | Gate on | Gate off | Aspect-free gate |
+|---|---|---|---|
+| M-30 (266) | 248 / 2 / 18 | 254 / 1 / 12 | 248 / 1 / 18 |
+| M-30-HD (236) | 224 / 0 / 12 | 224 / 0 / 12 | 224 / 0 / 12 |
+| **Pooled (502)** | 472 / 2 / 30 | 478 / 1 / 24 | 472 / 1 / 30 |
+
+- **Aspect-free gate versus gate on: no harm.** Missed crossings did not
+  fall (30 and 30). Pooled total errors fell by one, from 32 to 31.
+- **Gate off versus gate on: supported.** Missed crossings fell from 30 to
+  24, false crossings fell from 2 to 1, and neither sequence got worse.
+- **Preference:** both pass. Gate off has 25 pooled total errors against 31
+  for the aspect-free gate, 19% fewer, with no more false crossings, so by the
+  rule gate off is preferred on this data.
+- The plain counter gives identical totals. On M-30-HD the three variants tie
+  at the main and 40% lines. The 60% sensitivity line on M-30 is the one place
+  the aspect-free gate does worse than gate on: 31 missed against 27.
+
+**What this allows.** The aspect-free gate does not damage ordinary straight-road
+counting, but it does not improve it either. On its own this cannot back a
+default change. The stronger signal is that the motion gate itself cost six
+crossings on M-30, all with the same detections. That is a question for a new,
+separately frozen test, not a conclusion from this one. Turning traffic, which
+the gate was designed for, is not tested here.
+
 ## Counting lines
 
 Both sequences look along a motorway from above, so traffic moves mainly up

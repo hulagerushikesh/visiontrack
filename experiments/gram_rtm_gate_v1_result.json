@@ -1,0 +1,303 @@
+{
+ "protocol": "docs/GRAM_RTM_TEST_PROTOCOL.md",
+ "sequences": {
+  "M-30": {
+   "detections": {
+    "sequence": "M-30",
+    "status": "complete",
+    "frames": 7520,
+    "detections": 107842,
+    "parts": 16,
+    "chunk": 500,
+    "model_sha256": "c892d7aaf1c4746d8a4d675bec669a4db4f434b4ee1efb654bc9b353379c7c55",
+    "input_size": 640,
+    "conf": 0.1,
+    "nms": 0.45,
+    "classes": [
+     2,
+     3,
+     5,
+     7
+    ],
+    "preprocessing": "legacy, BGR",
+    "image_zip_sha256": "58b0c0a817b002138a6a22608f78e3701e0228c307a8f6bcc957e59290df3fb0",
+    "detections_sha256": "e62d4f3e2315c1253c3b8769c80fd10e1052bce14e1447f3b2160131e8616355"
+   },
+   "main": {
+    "cancel": {
+     "reference": 266,
+     "gate_on": {
+      "tp": 248,
+      "fp": 2,
+      "fn": 18
+     },
+     "gate_off": {
+      "tp": 254,
+      "fp": 1,
+      "fn": 12
+     },
+     "aspect_free_gate": {
+      "tp": 248,
+      "fp": 1,
+      "fn": 18
+     }
+    },
+    "plain": {
+     "reference": 266,
+     "gate_on": {
+      "tp": 248,
+      "fp": 2,
+      "fn": 18
+     },
+     "gate_off": {
+      "tp": 254,
+      "fp": 1,
+      "fn": 12
+     },
+     "aspect_free_gate": {
+      "tp": 248,
+      "fp": 1,
+      "fn": 18
+     }
+    }
+   },
+   "at_40": {
+    "cancel": {
+     "reference": 266,
+     "gate_on": {
+      "tp": 242,
+      "fp": 0,
+      "fn": 24
+     },
+     "gate_off": {
+      "tp": 245,
+      "fp": 0,
+      "fn": 21
+     },
+     "aspect_free_gate": {
+      "tp": 244,
+      "fp": 0,
+      "fn": 22
+     }
+    },
+    "plain": {
+     "reference": 266,
+     "gate_on": {
+      "tp": 242,
+      "fp": 0,
+      "fn": 24
+     },
+     "gate_off": {
+      "tp": 245,
+      "fp": 0,
+      "fn": 21
+     },
+     "aspect_free_gate": {
+      "tp": 244,
+      "fp": 0,
+      "fn": 22
+     }
+    }
+   },
+   "at_60": {
+    "cancel": {
+     "reference": 266,
+     "gate_on": {
+      "tp": 239,
+      "fp": 2,
+      "fn": 27
+     },
+     "gate_off": {
+      "tp": 245,
+      "fp": 3,
+      "fn": 21
+     },
+     "aspect_free_gate": {
+      "tp": 235,
+      "fp": 2,
+      "fn": 31
+     }
+    },
+    "plain": {
+     "reference": 266,
+     "gate_on": {
+      "tp": 239,
+      "fp": 2,
+      "fn": 27
+     },
+     "gate_off": {
+      "tp": 245,
+      "fp": 3,
+      "fn": 21
+     },
+     "aspect_free_gate": {
+      "tp": 235,
+      "fp": 2,
+      "fn": 31
+     }
+    }
+   },
+   "public_ids": {
+    "gate_on": 994,
+    "gate_off": 939,
+    "aspect_free_gate": 840
+   },
+   "output_sha256": {
+    "gate_on": "c6cf89f2abd54a135f93fddf82254e9627ee187532bdce9d3a858869f06b07af",
+    "gate_off": "7ad1154a28383e0ce05e40eb2fd6da4eaffc200ac9eacec5df7f5d54678a8b15",
+    "aspect_free_gate": "e2c4689f85e5900d32ed8fcf025338cce14bb77260e8953863bbd5848db4b22e"
+   }
+  },
+  "M-30-HD": {
+   "detections": {
+    "sequence": "M-30-HD",
+    "status": "complete",
+    "frames": 9390,
+    "detections": 135759,
+    "parts": 19,
+    "chunk": 500,
+    "model_sha256": "c892d7aaf1c4746d8a4d675bec669a4db4f434b4ee1efb654bc9b353379c7c55",
+    "input_size": 640,
+    "conf": 0.1,
+    "nms": 0.45,
+    "classes": [
+     2,
+     3,
+     5,
+     7
+    ],
+    "preprocessing": "legacy, BGR",
+    "image_zip_sha256": "7819e26b5342c43fdf7a5ced1e01b099b859d5bd0cc01f204e4ab16528dbe547",
+    "detections_sha256": "465fdf04475841338d9261224c73037a5e5304f8b1b2ebdeef75d7f35eb7f7db"
+   },
+   "main": {
+    "cancel": {
+     "reference": 236,
+     "gate_on": {
+      "tp": 224,
+      "fp": 0,
+      "fn": 12
+     },
+     "gate_off": {
+      "tp": 224,
+      "fp": 0,
+      "fn": 12
+     },
+     "aspect_free_gate": {
+      "tp": 224,
+      "fp": 0,
+      "fn": 12
+     }
+    },
+    "plain": {
+     "reference": 236,
+     "gate_on": {
+      "tp": 224,
+      "fp": 0,
+      "fn": 12
+     },
+     "gate_off": {
+      "tp": 224,
+      "fp": 0,
+      "fn": 12
+     },
+     "aspect_free_gate": {
+      "tp": 224,
+      "fp": 0,
+      "fn": 12
+     }
+    }
+   },
+   "at_40": {
+    "cancel": {
+     "reference": 236,
+     "gate_on": {
+      "tp": 224,
+      "fp": 0,
+      "fn": 12
+     },
+     "gate_off": {
+      "tp": 224,
+      "fp": 0,
+      "fn": 12
+     },
+     "aspect_free_gate": {
+      "tp": 224,
+      "fp": 0,
+      "fn": 12
+     }
+    },
+    "plain": {
+     "reference": 236,
+     "gate_on": {
+      "tp": 224,
+      "fp": 0,
+      "fn": 12
+     },
+     "gate_off": {
+      "tp": 224,
+      "fp": 0,
+      "fn": 12
+     },
+     "aspect_free_gate": {
+      "tp": 224,
+      "fp": 0,
+      "fn": 12
+     }
+    }
+   },
+   "at_60": {
+    "cancel": {
+     "reference": 236,
+     "gate_on": {
+      "tp": 225,
+      "fp": 1,
+      "fn": 11
+     },
+     "gate_off": {
+      "tp": 227,
+      "fp": 1,
+      "fn": 9
+     },
+     "aspect_free_gate": {
+      "tp": 226,
+      "fp": 1,
+      "fn": 10
+     }
+    },
+    "plain": {
+     "reference": 236,
+     "gate_on": {
+      "tp": 225,
+      "fp": 1,
+      "fn": 11
+     },
+     "gate_off": {
+      "tp": 227,
+      "fp": 1,
+      "fn": 9
+     },
+     "aspect_free_gate": {
+      "tp": 226,
+      "fp": 1,
+      "fn": 10
+     }
+    }
+   },
+   "public_ids": {
+    "gate_on": 1158,
+    "gate_off": 1077,
+    "aspect_free_gate": 894
+   },
+   "output_sha256": {
+    "gate_on": "873beab97b73843f8e8008e6b2d30ab371fdff59202f12fcf83f1a4a017ebcb6",
+    "gate_off": "439496f80c27fa4ec4847dbc1ec146a53cef89ae7740df59cfd9f770ebc87940",
+    "aspect_free_gate": "5ff6dfacd7deb3eff1ff3d348084acd8d563c8a44bfee5256855434d9825abc7"
+   }
+  }
+ },
+ "verdicts": {
+  "aspect_free_gate": "no harm",
+  "gate_off": "supported"
+ }
+}
