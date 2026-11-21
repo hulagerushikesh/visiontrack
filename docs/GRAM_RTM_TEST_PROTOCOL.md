@@ -90,6 +90,17 @@ image archive hash in the receipt matches the intake receipt. No tracker has
 run on these detections, and no label has been used for counting yet.
 M-30-HD comes next, in the same kind of sessions.
 
+**M-30-HD detections complete, 2026-11-21.** Six approved sessions saved
+all 19 parts. The first was stopped early by a power cut, which lost only the
+part in progress, and a 5-minute cool-down came before each later session.
+The joined file has **135,759 detections** on all 9,390 frames, in frame
+order, with scores from 0.10 to 0.96: 128,302 car, 6,654 truck, 461 bus and
+342 motorcycle. Its SHA-256 is
+`465fdf04475841338d9261224c73037a5e5304f8b1b2ebdeef75d7f35eb7f7db`. The
+image archive hash in the receipt matches the intake record. No tracker has
+run on either sequence's detections, and no label has been used for counting
+yet. The tracker comparison is next and needs the owner's approval.
+
 ## Counting lines
 
 Both sequences look along a motorway from above, so traffic moves mainly up
