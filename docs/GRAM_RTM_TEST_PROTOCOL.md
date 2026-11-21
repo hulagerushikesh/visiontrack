@@ -81,6 +81,15 @@ last saved part, and runs in owner-approved sessions of at most 40 minutes.
 The detector, its settings and the frames are unchanged. Parts are joined in
 frame order into the same single detections file and receipt as before.
 
+**M-30 detections complete, 2026-11-21.** Four approved sessions of 47, 42,
+48 and 9 minutes saved all 16 parts. The joined file has **107,842
+detections** on all 7,520 frames, in frame order, with scores from 0.10 to
+0.95: 97,764 car, 8,170 truck, 1,001 bus and 907 motorcycle. Its SHA-256 is
+`e62d4f3e2315c1253c3b8769c80fd10e1052bce14e1447f3b2160131e8616355`. The
+image archive hash in the receipt matches the intake receipt. No tracker has
+run on these detections, and no label has been used for counting yet.
+M-30-HD comes next, in the same kind of sessions.
+
 ## Counting lines
 
 Both sequences look along a motorway from above, so traffic moves mainly up
