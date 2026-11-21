@@ -49,6 +49,10 @@ on is **not supported**, whatever its counts.
 | B. SVMOT test scenes | None | 18.3 GB download, own detector run on 9 test sequences. | Non-commercial licence; mostly parked vehicles, so few line crossings; known label-quality concerns. |
 | C. GRAM-RTM Urban1 | Authors' reply on image rights | Light detector run at 600×360. | Blocked until the authors answer. |
 
+**Owner's choice, 2026-11-22: option B, SVMOT test scenes.** Its rules are
+frozen in the [SVMOT protocol](SVMOT_GATE_TEST_PROTOCOL.md). Only the nine
+test sequences are range-read, not the whole 18.3 GB archive.
+
 Option A is the only one that can start now. Its reference method has already
 passed once: our own crossing marks matched RoundaboutHD's labels on 23 of 23.
 
