@@ -29,6 +29,25 @@ test-scene member has been opened.
 per sequence, and confirm frame size and frame rate. Nothing is plotted or
 scored.
 
+**Download and format check, 2026-11-22. No rule changes.** With the owner's
+approval, the nine test sequences' images, labels, settings files and road
+masks were range-read from the publisher archive: **8,277 files, 5.2 GB, every
+ZIP CRC passed**, with a per-file SHA-256 receipt kept owner-local. The format
+check found:
+
+- **8,250 frames**, all 1920×1080 at 30 fps, numbered without gaps, matching
+  each settings file's length (1,200 for `seq_22_morning`, 900 for scene 5's
+  other three, 870 for each scene 6 sequence).
+- **70,220 label rows and 168 vehicle IDs** in total, 13 to 29 per sequence,
+  on every frame. All labelled classes are vehicle types.
+- A road mask in every sequence.
+- Four settings files name a different sequence than their folder
+  (`seq_22`→20, `seq_23`→22, `seq_25`→26, `seq_26`→25), as already seen on
+  training data. Folder names are used, as frozen.
+
+Only 168 vehicles appear, many of them parked, so the 30-crossing minimum is a
+real risk. No image was viewed, no line was drawn, and nothing was scored.
+
 ## Reference and counting line
 
 - **Reference:** the ground-truth tracks, using the box centre, on every
