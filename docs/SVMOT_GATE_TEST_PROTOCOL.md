@@ -119,6 +119,14 @@ The test has two scenes only, both elevated views of mostly straight roads.
 
 ## Runner
 
-`experiments/svmot_gate.py` will be written and committed before the
-detector run, reusing the GRAM-RTM runner's detection, replay, counting and
-matching code.
+`experiments/svmot_gate.py`, committed 2026-11-22 before the detector run. It
+reuses the GRAM-RTM runner's detector settings, exclusion filter and matching.
+Its tests cover the mask line rule, the decision rule with the ID-switch
+safeguard and the 30-crossing minimum, a known ID swap, and resuming detection.
+
+**Lines, computed from the masks alone, 2026-11-22.** Each scene uses one
+mask for all its sequences, so scene 5 and scene 6 each get one line. Both
+masks are clearly elongated (axis ratios 1.85 and 1.74), so both lines are
+the perpendicular kind: nearly vertical, near the middle of the frame, from
+about x = 1,215 to 1,342 (scene 5) and 1,190 to 1,291 (scene 6). No label was
+read to place them.
