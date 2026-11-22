@@ -36,7 +36,8 @@ the aspect-free gate on all 40 test sequences, with supplied detections. No
 detector run is needed, so it is light laptop work. It runs as frozen once the
 authors confirm the terms in writing.
 
-**Proposed amendment (needs owner approval, before any download):** add an
+**Amendment approved by the owner, 2026-11-22, and written into the
+protocol before any download:** add an
 identity safeguard, because counting alone cannot see swapped identities.
 UA-DETRAC has per-frame vehicle IDs. Report pooled ID switches for every
 variant. A candidate whose pooled ID switches rise by more than 10% over gate

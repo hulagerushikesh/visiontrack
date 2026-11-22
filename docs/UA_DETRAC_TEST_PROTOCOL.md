@@ -116,6 +116,17 @@ is preferred unless gate off has at least 10% fewer pooled total errors and no
 more pooled false crossings. If only one passes, that one is preferred. If
 neither passes, the default stays.
 
+**Amendment, 2026-11-22: identity safeguard. Approved by the owner before any
+UA-DETRAC file is downloaded or opened.** Counting alone cannot see swapped
+identities, and UA-DETRAC labels give every vehicle an ID on every frame. For
+each variant, ID switches are counted with TrackEval's CLEAR metric at IoU 0.5
+against the full ground truth and summed over
+sequences, the same method as the GRAM-RTM and SVMOT tests. A fourth condition
+is added for both questions: **pooled ID switches may rise by no more than
+10% over gate on.** A candidate that fails it is **not supported**, whatever
+its counts. Pooled and per-sequence ID switches are published for every
+variant.
+
 ## What a result allows
 
 - **Supported:** a proposal to change the library default may be written. It
