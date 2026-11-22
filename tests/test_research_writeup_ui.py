@@ -46,13 +46,22 @@ def test_writeup_reports_the_svmot_traffic_result_with_its_limits() -> None:
     assert '["traffic",' in page
     result = json.loads((ROOT / "experiments/svmot_gate_v1_result.json").read_text())
     seqs = list(result["sequences"].values())
-    labels = {"gate_on": "Gate on (default)", "gate_off": "Gate off", "aspect_free_gate": "Aspect-free gate"}
+    labels = {
+        "gate_on": "Gate on (default)",
+        "gate_off": "Gate off",
+        "aspect_free_gate": "Aspect-free gate",
+    }
     for key, label in labels.items():
         row = re.search(r"<tr><Td>" + re.escape(label) + r"</Td>(.*?)</tr>", page).group(1)
         cells = re.findall(r"<Td right>(\d+)</Td>", row)
         expected = [sum(s["crossings"][key][k] for s in seqs) for k in ("tp", "fp", "fn")]
         expected.append(sum(s["id_switches"][key] for s in seqs))
         assert [int(c) for c in cells] == expected
-    for phrase in ("not supported", "turning traffic at busy junctions", "library default stays unchanged",
-                   'preset("traffic")', "SVMOT_GATE_TEST_PROTOCOL.md"):
+    for phrase in (
+        "not supported",
+        "turning traffic at busy junctions",
+        "library default stays unchanged",
+        'preset("traffic")',
+        "SVMOT_GATE_TEST_PROTOCOL.md",
+    ):
         assert phrase in page
