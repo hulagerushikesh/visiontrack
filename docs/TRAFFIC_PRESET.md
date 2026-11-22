@@ -36,7 +36,8 @@ people tracking either.
 
 - **Not a default change.** The [traffic gate test plan](TRAFFIC_GATE_TEST_PLAN.md)
   needs UA-DETRAC as the partner venue first. Its [protocol](UA_DETRAC_TEST_PROTOCOL.md)
-  and runner are frozen, waiting on the authors' terms.
+  and runner are frozen, waiting on the authors' terms. A
+  [draft proposal](DEFAULT_CHANGE_PROPOSAL.md) is ready for that point.
 - **Straight roads only.** Both venues are elevated views of mostly straight
   roads. Turning traffic at busy junctions, which the gate was designed for, is
   untested.

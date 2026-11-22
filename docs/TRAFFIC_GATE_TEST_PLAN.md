@@ -74,7 +74,9 @@ passed once: our own crossing marks matched RoundaboutHD's labels on 23 of 23.
 
 **Meanwhile, 2026-11-22:** an opt-in [`traffic` preset](TRAFFIC_PRESET.md)
 (gate off) was added at the owner's request, backed by GRAM-RTM and SVMOT. It
-does not change the default or any rule here.
+does not change the default or any rule here. A
+[draft default-change proposal](DEFAULT_CHANGE_PROPOSAL.md) is ready, with
+its UA-DETRAC section left empty until that result exists.
 
 - **Both venues support one candidate:** a default-change proposal, a Python
   release, then a C++ synchronisation milestone.
