@@ -8,6 +8,7 @@ const sections = [
   ["appearance", "RQ1 · Appearance"],
   ["motion", "RQ2 · Learned motion"],
   ["uncertainty", "RQ3 · Uncertainty"],
+  ["traffic", "Follow-up · Traffic"],
   ["takeaway", "Why negatives matter"],
 ] as const
 
@@ -97,7 +98,7 @@ export default function ResearchWriteup() {
       <div className="soft-grid absolute inset-0 opacity-70" />
       <div className="orb -left-56 -top-56 bg-indigo-300/35" /><div className="orb -right-48 top-4 bg-cyan-200/45" />
       <div className="relative mx-auto max-w-5xl">
-        <div className="flex flex-wrap items-center gap-3 font-mono text-[10px] font-semibold uppercase tracking-[.16em] text-indigo-600"><span className="rounded-full border border-indigo-100 bg-white/75 px-3 py-1.5">Research write-up</span><span>Controlled study</span><span>·</span><span>11 min read</span></div>
+        <div className="flex flex-wrap items-center gap-3 font-mono text-[10px] font-semibold uppercase tracking-[.16em] text-indigo-600"><span className="rounded-full border border-indigo-100 bg-white/75 px-3 py-1.5">Research write-up</span><span>Controlled study</span><span>·</span><span>13 min read</span></div>
         <h1 className="mt-8 max-w-4xl text-balance text-5xl font-semibold leading-[1.02] tracking-[-.055em] text-slate-950 sm:text-7xl">A better trick that makes a <span className="gradient-text">worse tracker.</span></h1>
         <p className="mt-8 max-w-3xl text-pretty text-xl leading-9 text-slate-600">I built a multi-object tracker from first principles on NumPy—no ML framework in the core—and used it as a lab bench to ask: <strong className="font-semibold text-slate-900">when do the field’s standard tricks actually help?</strong></p>
         <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-slate-500"><span className="flex items-center gap-2"><FlaskConical className="size-4 text-indigo-500" />Frozen baselines</span><span className="flex items-center gap-2"><CheckCircle2 className="size-4 text-emerald-500" />Paired significance</span><span className="flex items-center gap-2"><BookOpen className="size-4 text-sky-500" />Honest negatives</span></div>
@@ -147,6 +148,23 @@ export default function ResearchWriteup() {
           <Figure src="/assets/kalman_calibration.png" alt="Kalman filter innovation chi-square reliability curve on MOT17" caption="The filter is drastically under-confident—the gate almost never rejects." width={605} height={605} />
           <p>So I fixed it. Tightening the filter to be properly calibrated (<code>kf_noise_scale = 0.19</code>) was <strong>catastrophic under detector noise</strong>: HOTA −0.205 and <strong>ID switches 40 → 400+</strong>. A gate tuned to clean motion rejects noisy-but-correct detections, and tracks fragment.</p>
           <Callout label="Honest negative" negative><p>The apparent under-confidence is doing real work. In tracking-by-detection the inputs are noisy in ways the motion model never sees, so a <em>loose</em> gate that forgives that noise is more robust than a “correct” tight one. Folding uncertainty in as a soft cost was null; <em>calibrating</em> was actively harmful. This unifies with an earlier ablation where disabling the gate entirely barely changed clean-data results—the gate was never the thing doing the work.</p></Callout>
+        </section>
+
+        <div className="my-16 flex items-center gap-4 text-slate-300"><Minus className="size-5" /><span className="h-px flex-1 bg-slate-200" /></div>
+        <section aria-labelledby="traffic">
+          <SectionHeading id="traffic" label="Follow-up · Fixed-camera traffic">The same gate, on the wrong traffic</SectionHeading>
+          <p>RQ3 ended with the gate looking harmless: switching it off barely moved pedestrian results. That was true for people walking past a camera. It stopped being true when I pointed the tracker at road traffic from a fixed camera. A car close to the camera moves much further between frames than a pedestrian, the pedestrian-tuned motion gate rejects the match, and the track never confirms. At a counting line, that is a vehicle that was never counted.</p>
+          <p>A question like that is easy to fool yourself on, so every test was frozen before its data was opened: the counting line, the matching limits, the decision rule and the safeguard on swapped identities. The first frozen test, on RoundaboutHD, was <strong>not supported</strong>: gate off cut misses overall, but one camera got worse by a single error, and the rule said no camera may get worse. GRAM-RTM then supported gate off (missed crossings 30 → 24 of 502). The latest, on nine unused SVMOT test sequences, is the clearest:</p>
+          <ResearchTable label="SVMOT frozen motion-gate test, pooled over nine sequences">
+            <thead><tr><Th>Variant</Th><Th right>Correct</Th><Th right>False</Th><Th right>Missed (of 99)</Th><Th right>ID switches</Th><Th>Verdict</Th></tr></thead>
+            <tbody>
+              <tr><Td>Gate on (default)</Td><Td right>76</Td><Td right>2</Td><Td right>23</Td><Td right>583</Td><Td>Baseline</Td></tr>
+              <tr><Td>Gate off</Td><Td right>95</Td><Td right>2</Td><Td right>4</Td><Td right>244</Td><Td good>Supported · preferred</Td></tr>
+              <tr><Td>Aspect-free gate</Td><Td right>95</Td><Td right>4</Td><Td right>4</Td><Td right>292</Td><Td warn>Supported · at false-count limit</Td></tr>
+            </tbody>
+          </ResearchTable>
+          <p>Switching the gate off recovered 19 of the 23 missed crossings without adding a single false one, and identity switches fell by more than half (583 → 244) instead of rising. Each variant ran twice on the same saved detections and gave byte-identical output. The full per-sequence table is in the <a href="https://github.com/hulagerushikesh/visiontrack/blob/main/docs/SVMOT_GATE_TEST_PROTOCOL.md" className="font-semibold text-indigo-600 underline decoration-indigo-200 underline-offset-4 hover:text-indigo-800">frozen protocol</a>.</p>
+          <Callout label="What it does and does not change"><p>The gate is not “bad”; it is tuned for one kind of motion. On straight-road traffic it costs counts, so gate off is now in the source as an opt-in <code>preset("traffic")</code>, due in the next package release. The library default stays unchanged: a default change needs a second partner venue, UA-DETRAC, whose protocol is frozen and waiting on the authors’ terms. Both venues so far are elevated views of mostly straight roads, so turning traffic at busy junctions, the case the gate was designed for, is still untested.</p></Callout>
         </section>
 
         <div className="my-16 flex items-center gap-4 text-slate-300"><Minus className="size-5" /><span className="h-px flex-1 bg-slate-200" /></div>
