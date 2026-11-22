@@ -130,3 +130,11 @@ masks are clearly elongated (axis ratios 1.85 and 1.74), so both lines are
 the perpendicular kind: nearly vertical, near the middle of the frame, from
 about x = 1,215 to 1,342 (scene 5) and 1,190 to 1,291 (scene 6). No label was
 read to place them.
+
+**Detections complete, 2026-11-22. No rule changes.** Five owner-approved
+sessions of at most 48 minutes, each after a 5-minute cool-down, saved every
+part with no heat warning. All nine sequences are complete: **8,250 frames and
+144,983 detections** (scene 5: 23,203, 18,614, 18,348 and 20,643; scene 6:
+13,256, 12,037, 14,045, 12,096 and 12,741). Each sequence's joined file is
+hashed in its receipt, kept owner-local with the frames. No tracker has run on
+them and no label has been used for counting yet.
