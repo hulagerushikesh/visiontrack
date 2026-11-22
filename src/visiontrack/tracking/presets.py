@@ -31,6 +31,21 @@ observation-centric momentum term and re-update live in
 :mod:`visiontrack.tracking.motion.oc` and are switched on here via ``w_ocm`` and
 ``use_oru``.
 
+Use-case presets
+----------------
+
+Separate from the lineage, :data:`USE_CASE_PRESETS` holds opt-in settings for
+a kind of video. They never change the library default and are not part of
+:data:`PRESET_NAMES`, so lineage comparisons are unchanged.
+
+``traffic``  ByteTrack with the Mahalanobis motion gate switched off, for
+fixed-camera vehicle counting. The default gate is tuned for slow pedestrians
+and stopped tracks from confirming on fast near-camera vehicles. Gate off was
+supported in two frozen tests on unused video (GRAM-RTM and SVMOT): pooled
+missed crossings fell from 53 to 28 of 601, false crossings from 4 to 3, and
+SVMOT ID switches from 583 to 244. It is untested on turning traffic at busy
+junctions and is not a default change. See ``docs/TRAFFIC_PRESET.md``.
+
 Usage::
 
     from visiontrack.tracking.presets import preset
@@ -44,7 +59,10 @@ from dataclasses import replace
 
 from .config import TrackerConfig
 
-__all__ = ["PRESETS", "PRESET_NAMES", "preset", "preset_overrides"]
+__all__ = [
+    "PRESETS", "PRESET_NAMES", "USE_CASE_PRESETS", "USE_CASE_PRESET_NAMES",
+    "preset", "preset_overrides",
+]
 
 # The single detection threshold used by the single-stage ("SORT-style") presets.
 # Collapsing the score band onto one value disables the recovery stage.
@@ -84,15 +102,30 @@ PRESETS: dict[str, dict] = {
 #: Insertion-ordered preset names (single-stage first, then the ByteTrack family).
 PRESET_NAMES: list[str] = list(PRESETS)
 
+#: Opt-in settings for a kind of video, kept apart from the lineage so that
+#: zoo and benchmark runs over :data:`PRESET_NAMES` are unchanged.
+USE_CASE_PRESETS: dict[str, dict] = {
+    "traffic": {
+        # Fixed-camera vehicle counting: switch the pedestrian-tuned motion
+        # gate off. Evidence: docs/TRAFFIC_PRESET.md.
+        "use_mahalanobis_gating": False,
+    },
+}
+
+#: Insertion-ordered use-case preset names.
+USE_CASE_PRESET_NAMES: list[str] = list(USE_CASE_PRESETS)
+
 
 def preset_overrides(name: str) -> dict:
     """Return a *copy* of the override dict for ``name`` (raises on unknown)."""
-    try:
+    if name in PRESETS:
         return dict(PRESETS[name])
-    except KeyError:
-        raise KeyError(
-            f"unknown preset {name!r}; choose one of {PRESET_NAMES}"
-        ) from None
+    if name in USE_CASE_PRESETS:
+        return dict(USE_CASE_PRESETS[name])
+    raise KeyError(
+        f"unknown preset {name!r}; choose one of "
+        f"{PRESET_NAMES + USE_CASE_PRESET_NAMES}"
+    )
 
 
 def preset(name: str, **extra) -> TrackerConfig:

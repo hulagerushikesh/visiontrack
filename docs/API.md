@@ -63,7 +63,13 @@ from visiontrack import preset, PRESET_NAMES, ByteTracker
 ByteTracker(preset("sort"))          # single-stage IoU
 ByteTracker(preset("bytetrack_reid"))# two-stage + appearance
 # PRESET_NAMES: sort, deepsort, bytetrack, bytetrack_reid, bytetrack_giou, oc_sort
+
+ByteTracker(preset("traffic"))       # opt-in: motion gate off, for vehicle counting
 ```
+
+`traffic` is an opt-in use-case preset, not part of `PRESET_NAMES` and not a
+default change. Its evidence and limits are in the
+[traffic preset record](TRAFFIC_PRESET.md).
 
 ## Run on real video (needs the `[video]` extra)
 

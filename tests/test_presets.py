@@ -92,3 +92,30 @@ def test_every_preset_runs_end_to_end_on_a_synthetic_scene():
                 assert o.xyxy.shape == (4,)
                 assert np.all(np.isfinite(o.xyxy))
         assert total_obs > 0, f"preset {name!r} produced no observations"
+
+
+def test_traffic_preset_only_switches_the_motion_gate_off():
+    from visiontrack.tracking.presets import USE_CASE_PRESET_NAMES, USE_CASE_PRESETS
+
+    assert USE_CASE_PRESET_NAMES == ["traffic"]
+    assert USE_CASE_PRESETS["traffic"] == {"use_mahalanobis_gating": False}
+    cfg = preset("traffic")
+    assert cfg.use_mahalanobis_gating is False
+    # every other setting is the library default (ByteTrack core)
+    assert cfg == TrackerConfig(use_mahalanobis_gating=False)
+    assert preset("traffic", max_age=60).max_age == 60
+
+
+def test_traffic_preset_leaves_default_and_lineage_unchanged():
+    assert TrackerConfig().use_mahalanobis_gating is True
+    assert "traffic" not in PRESETS
+    assert "traffic" not in PRESET_NAMES
+    d = preset_overrides("traffic")
+    d["use_mahalanobis_gating"] = True
+    assert preset("traffic").use_mahalanobis_gating is False  # registry untouched
+
+
+def test_traffic_preset_runs_end_to_end():
+    scene = SyntheticScene(SyntheticSceneConfig(num_objects=5, num_frames=30, seed=7))
+    tracker = ByteTracker(preset("traffic"))
+    assert sum(len(tracker.update(f.detections)) for f in scene) > 0

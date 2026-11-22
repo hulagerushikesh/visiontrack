@@ -72,6 +72,10 @@ passed once: our own crossing marks matched RoundaboutHD's labels on 23 of 23.
 
 ## What would follow
 
+**Meanwhile, 2026-11-22:** an opt-in [`traffic` preset](TRAFFIC_PRESET.md)
+(gate off) was added at the owner's request, backed by GRAM-RTM and SVMOT. It
+does not change the default or any rule here.
+
 - **Both venues support one candidate:** a default-change proposal, a Python
   release, then a C++ synchronisation milestone.
 - **They disagree or neither supports it:** the default stays, and every
