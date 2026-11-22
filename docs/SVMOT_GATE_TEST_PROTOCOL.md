@@ -138,3 +138,42 @@ part with no heat warning. All nine sequences are complete: **8,250 frames and
 13,256, 12,037, 14,045, 12,096 and 12,741). Each sequence's joined file is
 hashed in its receipt, kept owner-local with the frames. No tracker has run on
 them and no label has been used for counting yet.
+
+## Result, 2026-11-22
+
+Run once, with the owner's approval, under the rules above. Each variant ran
+twice on each sequence, and both runs gave byte-identical output. Full numbers
+are in [`experiments/svmot_gate_v1_result.json`](../experiments/svmot_gate_v1_result.json).
+
+Correct / false / missed crossings, and ID switches:
+
+| Sequence (reference) | Gate on | Gate off | Aspect-free gate |
+|---|---|---|---|
+| seq_22_morning (14) | 12 / 0 / 2, 111 | 14 / 0 / 0, 42 | 14 / 0 / 0, 46 |
+| seq_23_morning (4) | 3 / 2 / 1, 90 | 3 / 1 / 1, 69 | 3 / 3 / 1, 68 |
+| seq_24_morning (5) | 4 / 0 / 1, 49 | 4 / 0 / 1, 32 | 4 / 0 / 1, 32 |
+| seq_25_morning (9) | 9 / 0 / 0, 34 | 9 / 0 / 0, 18 | 9 / 0 / 0, 18 |
+| seq_26_evening (15) | 10 / 0 / 5, 71 | 15 / 0 / 0, 19 | 15 / 0 / 0, 23 |
+| seq_27_evening (21) | 16 / 0 / 5, 47 | 21 / 0 / 0, 10 | 21 / 0 / 0, 13 |
+| seq_28_evening (16) | 10 / 0 / 6, 56 | 16 / 0 / 0, 5 | 16 / 0 / 0, 30 |
+| seq_29_evening (9) | 8 / 0 / 1, 62 | 9 / 0 / 0, 36 | 9 / 0 / 0, 36 |
+| seq_30_evening (6) | 4 / 0 / 2, 63 | 4 / 1 / 2, 13 | 4 / 1 / 2, 26 |
+| **Pooled (99)** | **76 / 2 / 23, 583** | **95 / 2 / 4, 244** | **95 / 4 / 4, 292** |
+
+- **The test is conclusive:** 99 reference crossings, above the 30 minimum.
+- **Gate off versus gate on: supported.** Missed crossings fell from 23 to
+  4, false crossings stayed at 2, no sequence's errors rose by more than one,
+  and ID switches fell from 583 to 244.
+- **Aspect-free gate versus gate on: supported.** Missed crossings fell from
+  23 to 4. False crossings rose from 2 to 4, exactly at the allowed limit of
+  2. ID switches fell from 583 to 292.
+- **Preference:** both pass. Gate off has 6 pooled total errors against 8,
+  25% fewer, with fewer false crossings, so by the rule gate off is preferred.
+
+**What this allows.** This is the second unused venue after GRAM-RTM, and it
+points the same way: the default gate loses crossings on fast fixed-camera
+traffic, and switching it off recovers them without more identity swaps.
+The frozen plan names UA-DETRAC as the partner venue for a default-change
+proposal, so on its own this result cannot back one. The aspect-free gate
+passed only at the edge of its false-crossing limit. Both scenes are elevated
+views of mostly straight roads, so turning traffic is still untested.

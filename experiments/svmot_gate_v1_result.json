@@ -1,0 +1,676 @@
+{
+ "protocol": "docs/SVMOT_GATE_TEST_PROTOCOL.md",
+ "sequences": {
+  "seq_22_morning": {
+   "detections": {
+    "sequence": "seq_22_morning",
+    "status": "complete",
+    "frames": 1200,
+    "detections": 23203,
+    "parts": 3,
+    "chunk": 500,
+    "model_sha256": "c892d7aaf1c4746d8a4d675bec669a4db4f434b4ee1efb654bc9b353379c7c55",
+    "input_size": 640,
+    "conf": 0.1,
+    "nms": 0.45,
+    "classes": [
+     2,
+     3,
+     5,
+     7
+    ],
+    "preprocessing": "legacy, BGR",
+    "images_sha256": "c3e1d51e273252792b53736f93df3a88fbfcdc2e52d2e51a7c189276bfd1fdda",
+    "detections_sha256": "df800855f523227c94c9d4869f9f11f304bbb2e2d5aa6b89eb406fbf9075b687"
+   },
+   "line": {
+    "line": [
+     [
+      1214.75,
+      1105.62
+     ],
+     [
+      1341.68,
+      374.49
+     ]
+    ],
+    "centroid": [
+     1285.13,
+     700.23
+    ],
+    "axis_ratio": 1.845,
+    "rule": "perpendicular"
+   },
+   "crossings": {
+    "reference": 14,
+    "gate_on": {
+     "tp": 12,
+     "fp": 0,
+     "fn": 2
+    },
+    "gate_off": {
+     "tp": 14,
+     "fp": 0,
+     "fn": 0
+    },
+    "aspect_free_gate": {
+     "tp": 14,
+     "fp": 0,
+     "fn": 0
+    }
+   },
+   "id_switches": {
+    "gate_on": 111,
+    "gate_off": 42,
+    "aspect_free_gate": 46
+   },
+   "public_ids": {
+    "gate_on": 169,
+    "gate_off": 96,
+    "aspect_free_gate": 106
+   },
+   "output_sha256": {
+    "gate_on": "b314e6e4638c1bd600bac645f31829ce3648b6e1d70f29c63b5b7e4edb2f5599",
+    "gate_off": "e61eb8e7d0e857d2571ef5615fcc46addd3e7793604776b804d6d366e552df5e",
+    "aspect_free_gate": "df8fc78ff2f9f7e03e40e1351c1de3143a6a7e171270b6092a305a64248af5d2"
+   }
+  },
+  "seq_23_morning": {
+   "detections": {
+    "sequence": "seq_23_morning",
+    "status": "complete",
+    "frames": 900,
+    "detections": 18614,
+    "parts": 2,
+    "chunk": 500,
+    "model_sha256": "c892d7aaf1c4746d8a4d675bec669a4db4f434b4ee1efb654bc9b353379c7c55",
+    "input_size": 640,
+    "conf": 0.1,
+    "nms": 0.45,
+    "classes": [
+     2,
+     3,
+     5,
+     7
+    ],
+    "preprocessing": "legacy, BGR",
+    "images_sha256": "b41e83763b0ad3a9cd10fdd0f92c041728e86a143bbc198ca89f724e8261e6c4",
+    "detections_sha256": "7a9d68046b7fd613a77bd6d507c34e998edcfba5ab33f7e0093313c5f9ce179e"
+   },
+   "line": {
+    "line": [
+     [
+      1214.75,
+      1105.62
+     ],
+     [
+      1341.68,
+      374.49
+     ]
+    ],
+    "centroid": [
+     1285.13,
+     700.23
+    ],
+    "axis_ratio": 1.845,
+    "rule": "perpendicular"
+   },
+   "crossings": {
+    "reference": 4,
+    "gate_on": {
+     "tp": 3,
+     "fp": 2,
+     "fn": 1
+    },
+    "gate_off": {
+     "tp": 3,
+     "fp": 1,
+     "fn": 1
+    },
+    "aspect_free_gate": {
+     "tp": 3,
+     "fp": 3,
+     "fn": 1
+    }
+   },
+   "id_switches": {
+    "gate_on": 90,
+    "gate_off": 69,
+    "aspect_free_gate": 68
+   },
+   "public_ids": {
+    "gate_on": 58,
+    "gate_off": 38,
+    "aspect_free_gate": 40
+   },
+   "output_sha256": {
+    "gate_on": "624fcf4f808c897527341af220fb2f605e424cd12ca895dd0bea4dc5e7348bb0",
+    "gate_off": "81252212e3bb246ba32211f9a24b640c6b9ba9dcf9e71cdd17ae3fb7f898f306",
+    "aspect_free_gate": "a3b95fd5b94f2bedf62784882d1f980a3ddcf858dbd9857e174c61d6cedb1907"
+   }
+  },
+  "seq_24_morning": {
+   "detections": {
+    "sequence": "seq_24_morning",
+    "status": "complete",
+    "frames": 900,
+    "detections": 18348,
+    "parts": 2,
+    "chunk": 500,
+    "model_sha256": "c892d7aaf1c4746d8a4d675bec669a4db4f434b4ee1efb654bc9b353379c7c55",
+    "input_size": 640,
+    "conf": 0.1,
+    "nms": 0.45,
+    "classes": [
+     2,
+     3,
+     5,
+     7
+    ],
+    "preprocessing": "legacy, BGR",
+    "images_sha256": "b69c1b0d4d309c6fdc8f9191c69247e3d48380eca7c932023e9ce51babe10bd9",
+    "detections_sha256": "b7eeb93df7cf2552bda4e6b377b6b282045f20834ff9f16d5ddfff0f5d8203b7"
+   },
+   "line": {
+    "line": [
+     [
+      1214.75,
+      1105.62
+     ],
+     [
+      1341.68,
+      374.49
+     ]
+    ],
+    "centroid": [
+     1285.13,
+     700.23
+    ],
+    "axis_ratio": 1.845,
+    "rule": "perpendicular"
+   },
+   "crossings": {
+    "reference": 5,
+    "gate_on": {
+     "tp": 4,
+     "fp": 0,
+     "fn": 1
+    },
+    "gate_off": {
+     "tp": 4,
+     "fp": 0,
+     "fn": 1
+    },
+    "aspect_free_gate": {
+     "tp": 4,
+     "fp": 0,
+     "fn": 1
+    }
+   },
+   "id_switches": {
+    "gate_on": 49,
+    "gate_off": 32,
+    "aspect_free_gate": 32
+   },
+   "public_ids": {
+    "gate_on": 82,
+    "gate_off": 49,
+    "aspect_free_gate": 53
+   },
+   "output_sha256": {
+    "gate_on": "bf4c800003886f206df9ded3590cefe1ea2528c929b2868e478f7b97dc7716e8",
+    "gate_off": "e890113febb268c6e57c636bd6a41145f345bfc301cfbc1b40c729d0b6fb1164",
+    "aspect_free_gate": "6b954e1d20e8f59e344a600778fb5fd8ab734c4ef46ae6766c3b6ee3e6609332"
+   }
+  },
+  "seq_25_morning": {
+   "detections": {
+    "sequence": "seq_25_morning",
+    "status": "complete",
+    "frames": 900,
+    "detections": 20643,
+    "parts": 2,
+    "chunk": 500,
+    "model_sha256": "c892d7aaf1c4746d8a4d675bec669a4db4f434b4ee1efb654bc9b353379c7c55",
+    "input_size": 640,
+    "conf": 0.1,
+    "nms": 0.45,
+    "classes": [
+     2,
+     3,
+     5,
+     7
+    ],
+    "preprocessing": "legacy, BGR",
+    "images_sha256": "03ed2c1ad5a7bfe2e9e42c025ddb7ce70d926ffb49771eb925334f6597135df4",
+    "detections_sha256": "a3762b3c36464ca2619cd78eec88a94294a11cca130a0b9bec600519840164dd"
+   },
+   "line": {
+    "line": [
+     [
+      1214.75,
+      1105.62
+     ],
+     [
+      1341.68,
+      374.49
+     ]
+    ],
+    "centroid": [
+     1285.13,
+     700.23
+    ],
+    "axis_ratio": 1.845,
+    "rule": "perpendicular"
+   },
+   "crossings": {
+    "reference": 9,
+    "gate_on": {
+     "tp": 9,
+     "fp": 0,
+     "fn": 0
+    },
+    "gate_off": {
+     "tp": 9,
+     "fp": 0,
+     "fn": 0
+    },
+    "aspect_free_gate": {
+     "tp": 9,
+     "fp": 0,
+     "fn": 0
+    }
+   },
+   "id_switches": {
+    "gate_on": 34,
+    "gate_off": 18,
+    "aspect_free_gate": 18
+   },
+   "public_ids": {
+    "gate_on": 113,
+    "gate_off": 63,
+    "aspect_free_gate": 72
+   },
+   "output_sha256": {
+    "gate_on": "b0576ed41c51659827d0a8774fcb1db07d05cc9f004fe4cb3deb4736595e2be1",
+    "gate_off": "b1624da9b3ffa6b230014d298cfe7c99dd084e706d1bfce3efa51abbc445cc68",
+    "aspect_free_gate": "0587b0edd266c908603a74744de6350f1dfa51d591e6064b83991ab7b7849056"
+   }
+  },
+  "seq_26_evening": {
+   "detections": {
+    "sequence": "seq_26_evening",
+    "status": "complete",
+    "frames": 870,
+    "detections": 13256,
+    "parts": 2,
+    "chunk": 500,
+    "model_sha256": "c892d7aaf1c4746d8a4d675bec669a4db4f434b4ee1efb654bc9b353379c7c55",
+    "input_size": 640,
+    "conf": 0.1,
+    "nms": 0.45,
+    "classes": [
+     2,
+     3,
+     5,
+     7
+    ],
+    "preprocessing": "legacy, BGR",
+    "images_sha256": "735fc8fbf9b36d9e445abf2ac6e9fc0cc3f6b3ee86a79ba01b27ed03f4ea16c2",
+    "detections_sha256": "61b70c4fa88200e147d41ce347405e6164e3dce3bce71ce7e24f1eb1ac82aa33"
+   },
+   "line": {
+    "line": [
+     [
+      1189.93,
+      1116.87
+     ],
+     [
+      1290.81,
+      289.73
+     ]
+    ],
+    "centroid": [
+     1241.74,
+     692.03
+    ],
+    "axis_ratio": 1.735,
+    "rule": "perpendicular"
+   },
+   "crossings": {
+    "reference": 15,
+    "gate_on": {
+     "tp": 10,
+     "fp": 0,
+     "fn": 5
+    },
+    "gate_off": {
+     "tp": 15,
+     "fp": 0,
+     "fn": 0
+    },
+    "aspect_free_gate": {
+     "tp": 15,
+     "fp": 0,
+     "fn": 0
+    }
+   },
+   "id_switches": {
+    "gate_on": 71,
+    "gate_off": 19,
+    "aspect_free_gate": 23
+   },
+   "public_ids": {
+    "gate_on": 83,
+    "gate_off": 39,
+    "aspect_free_gate": 44
+   },
+   "output_sha256": {
+    "gate_on": "348522babd7c12e80149cebba85ae342860507ec0f8ac9f50803505c6c31a7da",
+    "gate_off": "cb14d72b41e22f152111d8ebf08bae46915c807bd135d5d3da80aafa932d39c8",
+    "aspect_free_gate": "51bd8feb31aa221555a094c01178385f7426ee67e02ebba8389c838ddb6ee9f3"
+   }
+  },
+  "seq_27_evening": {
+   "detections": {
+    "sequence": "seq_27_evening",
+    "status": "complete",
+    "frames": 870,
+    "detections": 12037,
+    "parts": 2,
+    "chunk": 500,
+    "model_sha256": "c892d7aaf1c4746d8a4d675bec669a4db4f434b4ee1efb654bc9b353379c7c55",
+    "input_size": 640,
+    "conf": 0.1,
+    "nms": 0.45,
+    "classes": [
+     2,
+     3,
+     5,
+     7
+    ],
+    "preprocessing": "legacy, BGR",
+    "images_sha256": "d6db79d22abfbc8f4cb4801ff2aeabed7e66be1c15d2b9327b1d9c551877a1cf",
+    "detections_sha256": "cb524e4fdd251b504b6a46d127ceffb1b878d58740bd192670bd8dcbf61510e7"
+   },
+   "line": {
+    "line": [
+     [
+      1189.93,
+      1116.87
+     ],
+     [
+      1290.81,
+      289.73
+     ]
+    ],
+    "centroid": [
+     1241.74,
+     692.03
+    ],
+    "axis_ratio": 1.735,
+    "rule": "perpendicular"
+   },
+   "crossings": {
+    "reference": 21,
+    "gate_on": {
+     "tp": 16,
+     "fp": 0,
+     "fn": 5
+    },
+    "gate_off": {
+     "tp": 21,
+     "fp": 0,
+     "fn": 0
+    },
+    "aspect_free_gate": {
+     "tp": 21,
+     "fp": 0,
+     "fn": 0
+    }
+   },
+   "id_switches": {
+    "gate_on": 47,
+    "gate_off": 10,
+    "aspect_free_gate": 13
+   },
+   "public_ids": {
+    "gate_on": 100,
+    "gate_off": 49,
+    "aspect_free_gate": 55
+   },
+   "output_sha256": {
+    "gate_on": "e7a39ba386229d4b22c912a414132adc99c85d0ca941e2399a91cf9e432d6995",
+    "gate_off": "42472a6b9e70d381d8a3a65eb9c4abb11f4920a5605002bd08c6218e3df9335e",
+    "aspect_free_gate": "88315a86a1a286492621495d040fdc4d191d82b8244714d0fba397e60b2dce31"
+   }
+  },
+  "seq_28_evening": {
+   "detections": {
+    "sequence": "seq_28_evening",
+    "status": "complete",
+    "frames": 870,
+    "detections": 14045,
+    "parts": 2,
+    "chunk": 500,
+    "model_sha256": "c892d7aaf1c4746d8a4d675bec669a4db4f434b4ee1efb654bc9b353379c7c55",
+    "input_size": 640,
+    "conf": 0.1,
+    "nms": 0.45,
+    "classes": [
+     2,
+     3,
+     5,
+     7
+    ],
+    "preprocessing": "legacy, BGR",
+    "images_sha256": "7b6b7f4fbb23ba736c47c6b70d2086d473aeb341ac52b054465fed240b84caf6",
+    "detections_sha256": "6927414e78ad397cc4aeac2754eb33e7c89d2936f370f1c809765e7b068d5d76"
+   },
+   "line": {
+    "line": [
+     [
+      1189.93,
+      1116.87
+     ],
+     [
+      1290.81,
+      289.73
+     ]
+    ],
+    "centroid": [
+     1241.74,
+     692.03
+    ],
+    "axis_ratio": 1.735,
+    "rule": "perpendicular"
+   },
+   "crossings": {
+    "reference": 16,
+    "gate_on": {
+     "tp": 10,
+     "fp": 0,
+     "fn": 6
+    },
+    "gate_off": {
+     "tp": 16,
+     "fp": 0,
+     "fn": 0
+    },
+    "aspect_free_gate": {
+     "tp": 16,
+     "fp": 0,
+     "fn": 0
+    }
+   },
+   "id_switches": {
+    "gate_on": 56,
+    "gate_off": 5,
+    "aspect_free_gate": 30
+   },
+   "public_ids": {
+    "gate_on": 71,
+    "gate_off": 39,
+    "aspect_free_gate": 52
+   },
+   "output_sha256": {
+    "gate_on": "39d634a2edc0add1412665c3543605445d481ed7f1d1e4e5447bc4d59df3e323",
+    "gate_off": "dd3786149e349d482b66419355b1232f48650776293c026a94493e4f9c34d02e",
+    "aspect_free_gate": "05312a52925324bef158d462ee4eafa3ffe01b349ffd19cd5e14beb02e3b1444"
+   }
+  },
+  "seq_29_evening": {
+   "detections": {
+    "sequence": "seq_29_evening",
+    "status": "complete",
+    "frames": 870,
+    "detections": 12096,
+    "parts": 2,
+    "chunk": 500,
+    "model_sha256": "c892d7aaf1c4746d8a4d675bec669a4db4f434b4ee1efb654bc9b353379c7c55",
+    "input_size": 640,
+    "conf": 0.1,
+    "nms": 0.45,
+    "classes": [
+     2,
+     3,
+     5,
+     7
+    ],
+    "preprocessing": "legacy, BGR",
+    "images_sha256": "7bf851afdad38c83d86259b2494c725269618ddec7aac8cc11d518a912e5ddd9",
+    "detections_sha256": "86782635b45f2c9634fdb92809fcb02478af2a1d257f243688782f5efa9fb07a"
+   },
+   "line": {
+    "line": [
+     [
+      1189.93,
+      1116.87
+     ],
+     [
+      1290.81,
+      289.73
+     ]
+    ],
+    "centroid": [
+     1241.74,
+     692.03
+    ],
+    "axis_ratio": 1.735,
+    "rule": "perpendicular"
+   },
+   "crossings": {
+    "reference": 9,
+    "gate_on": {
+     "tp": 8,
+     "fp": 0,
+     "fn": 1
+    },
+    "gate_off": {
+     "tp": 9,
+     "fp": 0,
+     "fn": 0
+    },
+    "aspect_free_gate": {
+     "tp": 9,
+     "fp": 0,
+     "fn": 0
+    }
+   },
+   "id_switches": {
+    "gate_on": 62,
+    "gate_off": 36,
+    "aspect_free_gate": 36
+   },
+   "public_ids": {
+    "gate_on": 63,
+    "gate_off": 33,
+    "aspect_free_gate": 33
+   },
+   "output_sha256": {
+    "gate_on": "41cdbe822e07db3a4182b4ac1038dcba0b27621b47bdc3fd4d227e88d2843fb8",
+    "gate_off": "51a22e4b63c3045c15e46f5fd5caa02b65f0279639125cc701ef285b2b1e837e",
+    "aspect_free_gate": "df26fe4823ddd38cbd652a064dfa1a87aa2e13483379d730f58f0806d9a53be3"
+   }
+  },
+  "seq_30_evening": {
+   "detections": {
+    "sequence": "seq_30_evening",
+    "status": "complete",
+    "frames": 870,
+    "detections": 12741,
+    "parts": 2,
+    "chunk": 500,
+    "model_sha256": "c892d7aaf1c4746d8a4d675bec669a4db4f434b4ee1efb654bc9b353379c7c55",
+    "input_size": 640,
+    "conf": 0.1,
+    "nms": 0.45,
+    "classes": [
+     2,
+     3,
+     5,
+     7
+    ],
+    "preprocessing": "legacy, BGR",
+    "images_sha256": "6531bd1db22d6b93ea4459361a38c963970e7ad378482c5447341c99cefb6dcb",
+    "detections_sha256": "0e215a97bb2be69d985998be6470bc9d1577194b6eb94569d121050d91cde342"
+   },
+   "line": {
+    "line": [
+     [
+      1189.93,
+      1116.87
+     ],
+     [
+      1290.81,
+      289.73
+     ]
+    ],
+    "centroid": [
+     1241.74,
+     692.03
+    ],
+    "axis_ratio": 1.735,
+    "rule": "perpendicular"
+   },
+   "crossings": {
+    "reference": 6,
+    "gate_on": {
+     "tp": 4,
+     "fp": 0,
+     "fn": 2
+    },
+    "gate_off": {
+     "tp": 4,
+     "fp": 1,
+     "fn": 2
+    },
+    "aspect_free_gate": {
+     "tp": 4,
+     "fp": 1,
+     "fn": 2
+    }
+   },
+   "id_switches": {
+    "gate_on": 63,
+    "gate_off": 13,
+    "aspect_free_gate": 26
+   },
+   "public_ids": {
+    "gate_on": 90,
+    "gate_off": 41,
+    "aspect_free_gate": 54
+   },
+   "output_sha256": {
+    "gate_on": "9567ad3c01c81506400d33b2285a8efa4473231ce3108be21623b8dcad215e0a",
+    "gate_off": "8afa46396868b4c450fb9d370f18c00c6f14bf5dba31a8d3bc87025c6ee5bb5a",
+    "aspect_free_gate": "c418055a1348b0f86e1f24de2f426468231c5513a3cb8bf8718fe0557b16dc10"
+   }
+  }
+ },
+ "verdicts": {
+  "aspect_free_gate": "supported",
+  "gate_off": "supported"
+ },
+ "preferred": "gate_off"
+}

@@ -17,6 +17,7 @@ no earlier comparison has touched, without hurting identities?
 | RoundaboutHD, development, 4 cameras | 135 → 28 of 361 | Used for development |
 | RoundaboutHD frozen test, c001/c003/c004 | 69 → 22 of 245 | Not supported: c003 got worse by one error |
 | GRAM-RTM frozen test, M-30 and M-30-HD | 30 → 24 of 502 | Gate off supported and preferred |
+| SVMOT frozen test, 9 sequences (2026-11-22) | 23 → 4 of 99; ID switches 583 → 244 | Gate off supported and preferred; aspect-free gate supported at its false-crossing limit |
 | MOT17 val-half, pedestrians | HOTA 47.78 → 47.97, ID switches 190 → 185 | Pedestrian guard passes for both candidates |
 
 The direction is consistent: the default gate, tuned for slow pedestrians,
