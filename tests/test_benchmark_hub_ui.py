@@ -84,3 +84,24 @@ def test_generator_owns_the_report_layout_and_keeps_evidence_sections() -> None:
     assert ".report-hero" in stylesheet
     assert ".report-section" in stylesheet
     assert ".report-reproduce" in stylesheet
+
+
+def test_benchmark_hub_svmot_numbers_match_the_committed_result() -> None:
+    import re
+
+    page = (ROOT / "src/features/benchmark-hub/BenchmarkHub.tsx").read_text()
+    result = json.loads((ROOT / "experiments/svmot_gate_v1_result.json").read_text())
+    seqs = result["sequences"].values()
+    names = {"gate_on": "Gate on", "gate_off": "Gate off", "aspect_free_gate": "Aspect-free gate"}
+    assert sum(s["crossings"]["reference"] for s in seqs) == 99
+    for key, label in names.items():
+        pooled = {k: sum(s["crossings"][key][k] for s in seqs) for k in ("tp", "fp", "fn")}
+        idsw = sum(s["id_switches"][key] for s in seqs)
+        row = re.search(r'\{ name: "' + re.escape(label) + r'",[^}]*\}', page).group(0)
+        assert f"correct: {pooled['tp']}," in row
+        assert f"falseCount: {pooled['fp']}," in row
+        assert f"missed: {pooled['fn']}," in row
+        assert f"idSwitches: {idsw}," in row
+    assert result["preferred"] == "gate_off"
+    assert "Supported · preferred" in page
+    assert "the library default is unchanged" in page
