@@ -145,3 +145,16 @@ variant.
 `experiments/ua_detrac_gate.py` will be written and committed after the
 format check and before the first tracker run. It reuses the RoundaboutHD
 crossing and matching code, with the limits above passed in.
+
+**Runner note, 2026-11-22. No rule changes.** At the owner's request the
+runner was written early, before the terms are confirmed and before any file
+is downloaded. It follows the file layout in the dataset's public
+description: one annotation file per sequence with its ignored regions, and
+one supplied detection file per set and sequence. It applies every rule above,
+including the identity safeguard: the fixed order of detection sets with the
+0-to-1 score rule, the half-height line with the 40% and 60% lines as
+sensitivity only, the 25-frame cancel-reversals counter with the plain counter
+as a secondary table, the 5-frame and 38-pixel matching limits, the one-sided
+sign test, and the byte-identical double run. Its tests use small made-up
+files only. If the format check finds a different layout, only the file
+readers change, recorded here with a date before the first tracker run.
