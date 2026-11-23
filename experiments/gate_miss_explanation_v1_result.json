@@ -1,0 +1,1291 @@
+{
+ "plan_item": "R1",
+ "explains": [
+  "docs/GRAM_RTM_TEST_PROTOCOL.md",
+  "docs/SVMOT_GATE_TEST_PROTOCOL.md"
+ ],
+ "lookback_frames": 30,
+ "vehicle_iou": 0.5,
+ "pooled": {
+  "GRAM-RTM": {
+   "missed": 30,
+   "rescued_by_gate_off": 7,
+   "with_refusal": 22,
+   "driver_of_missed": {
+    "centre_x": 0,
+    "centre_y": 3,
+    "aspect": 16,
+    "height": 3
+   },
+   "driver_of_rescued": {
+    "centre_x": 0,
+    "centre_y": 1,
+    "aspect": 1,
+    "height": 3
+   },
+   "all_refusals": 9077,
+   "driver_of_all_refusals": {
+    "centre_x": 315,
+    "centre_y": 294,
+    "aspect": 7716,
+    "height": 752
+   }
+  },
+  "SVMOT": {
+   "missed": 23,
+   "rescued_by_gate_off": 19,
+   "with_refusal": 22,
+   "driver_of_missed": {
+    "centre_x": 0,
+    "centre_y": 0,
+    "aspect": 21,
+    "height": 1
+   },
+   "driver_of_rescued": {
+    "centre_x": 0,
+    "centre_y": 0,
+    "aspect": 19,
+    "height": 0
+   },
+   "all_refusals": 9984,
+   "driver_of_all_refusals": {
+    "centre_x": 2001,
+    "centre_y": 212,
+    "aspect": 7270,
+    "height": 501
+   }
+  }
+ },
+ "venues": {
+  "GRAM-RTM": {
+   "M-30": {
+    "rows": [
+     {
+      "frame": 329,
+      "id": 14,
+      "speed_px_per_frame": 11.180339887498949,
+      "height_px": 50.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 4,
+       "d2": 10.043673451441947,
+       "iou": 0.3620276982519308,
+       "share": {
+        "centre_x": 0.020918376607106492,
+        "centre_y": 0.7889314934895714,
+        "aspect": 0.08669360815936519,
+        "height": 0.10345652174395695
+       },
+       "driver": "centre_y"
+      }
+     },
+     {
+      "frame": 512,
+      "id": 18,
+      "speed_px_per_frame": 6.324555320336759,
+      "height_px": 45.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 9,
+       "d2": 12.157076628371568,
+       "iou": 0.527732618828844,
+       "share": {
+        "centre_x": 0.05899433089225149,
+        "centre_y": 0.22515047121213283,
+        "aspect": 0.1232070132278058,
+        "height": 0.5926481846678099
+       },
+       "driver": "height"
+      }
+     },
+     {
+      "frame": 1306,
+      "id": 47,
+      "speed_px_per_frame": 4.47213595499958,
+      "height_px": 75.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 16.460586205757576,
+       "iou": 0.5389905418874871,
+       "share": {
+        "centre_x": 0.2938574586354648,
+        "centre_y": 0.1670520162458096,
+        "aspect": 0.05472578178023398,
+        "height": 0.48436474333849167
+       },
+       "driver": "height"
+      }
+     },
+     {
+      "frame": 1806,
+      "id": 68,
+      "speed_px_per_frame": 8.06225774829855,
+      "height_px": 69.0,
+      "rescued_by_gate_off": false,
+      "refusal": null
+     },
+     {
+      "frame": 2369,
+      "id": 86,
+      "speed_px_per_frame": 9.924716620639604,
+      "height_px": 45.0,
+      "rescued_by_gate_off": true,
+      "refusal": null
+     },
+     {
+      "frame": 2650,
+      "id": 99,
+      "speed_px_per_frame": 10.606601717798213,
+      "height_px": 49.0,
+      "rescued_by_gate_off": false,
+      "refusal": null
+     },
+     {
+      "frame": 2812,
+      "id": 106,
+      "speed_px_per_frame": 10.124228365658293,
+      "height_px": 47.0,
+      "rescued_by_gate_off": false,
+      "refusal": null
+     },
+     {
+      "frame": 2920,
+      "id": 109,
+      "speed_px_per_frame": 11.313708498984761,
+      "height_px": 69.0,
+      "rescued_by_gate_off": false,
+      "refusal": null
+     },
+     {
+      "frame": 3549,
+      "id": 130,
+      "speed_px_per_frame": 6.519202405202649,
+      "height_px": 50.0,
+      "rescued_by_gate_off": true,
+      "refusal": null
+     },
+     {
+      "frame": 3681,
+      "id": 136,
+      "speed_px_per_frame": 7.0178344238090995,
+      "height_px": 90.0,
+      "rescued_by_gate_off": false,
+      "refusal": null
+     },
+     {
+      "frame": 3818,
+      "id": 143,
+      "speed_px_per_frame": 7.0,
+      "height_px": 46.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 11,
+       "d2": 10.117096042487066,
+       "iou": 0.43165391471980913,
+       "share": {
+        "centre_x": 0.0035229604981665418,
+        "centre_y": 0.8485574893601913,
+        "aspect": 0.04076248543850301,
+        "height": 0.10715706470313928
+       },
+       "driver": "centre_y"
+      }
+     },
+     {
+      "frame": 3845,
+      "id": 144,
+      "speed_px_per_frame": 8.06225774829855,
+      "height_px": 50.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 17,
+       "d2": 13.77856013259076,
+       "iou": 0.7210364135041701,
+       "share": {
+        "centre_x": 0.05805462083153997,
+        "centre_y": 0.04263206757657133,
+        "aspect": 0.8641742290465012,
+        "height": 0.035139082545387536
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 4655,
+      "id": 175,
+      "speed_px_per_frame": 8.5,
+      "height_px": 58.0,
+      "rescued_by_gate_off": false,
+      "refusal": null
+     },
+     {
+      "frame": 5373,
+      "id": 198,
+      "speed_px_per_frame": 6.18465843842649,
+      "height_px": 67.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 16,
+       "d2": 10.023475970484009,
+       "iou": 0.7720315229956559,
+       "share": {
+        "centre_x": 0.005210839817373263,
+        "centre_y": 0.03203874338008801,
+        "aspect": 0.8471224240390031,
+        "height": 0.11562799276353565
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 5997,
+      "id": 212,
+      "speed_px_per_frame": 14.849242404917497,
+      "height_px": 45.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 8,
+       "d2": 16.89095391722205,
+       "iou": 0.3204193779972039,
+       "share": {
+        "centre_x": 0.3223143644883002,
+        "centre_y": 0.13054795613667533,
+        "aspect": 0.3331559146226237,
+        "height": 0.21398176475240085
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 6601,
+      "id": 237,
+      "speed_px_per_frame": 7.3824115301167,
+      "height_px": 47.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 20.502940582888296,
+       "iou": 0.68598105638332,
+       "share": {
+        "centre_x": 0.018136126868934347,
+        "centre_y": 0.07207267924213515,
+        "aspect": 0.35987953747526263,
+        "height": 0.5499116564136678
+       },
+       "driver": "height"
+      }
+     },
+     {
+      "frame": 6876,
+      "id": 244,
+      "speed_px_per_frame": 13.124404748406688,
+      "height_px": 46.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 2,
+       "d2": 19.099394834943148,
+       "iou": 0.3744540745570851,
+       "share": {
+        "centre_x": 0.2505573710347426,
+        "centre_y": 0.5296981422172545,
+        "aspect": 0.16991390027795186,
+        "height": 0.04983058647005104
+       },
+       "driver": "centre_y"
+      }
+     },
+     {
+      "frame": 7236,
+      "id": 257,
+      "speed_px_per_frame": 7.433034373659253,
+      "height_px": 70.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 8,
+       "d2": 15.981689147553462,
+       "iou": 0.31679847356863056,
+       "share": {
+        "centre_x": 0.08922508956136342,
+        "centre_y": 0.029240335603748346,
+        "aspect": 0.8136608763811772,
+        "height": 0.067873698453711
+       },
+       "driver": "aspect"
+      }
+     }
+    ],
+    "summary": {
+     "missed": 18,
+     "rescued_by_gate_off": 7,
+     "with_refusal": 10,
+     "driver_of_missed": {
+      "centre_x": 0,
+      "centre_y": 3,
+      "aspect": 4,
+      "height": 3
+     },
+     "driver_of_rescued": {
+      "centre_x": 0,
+      "centre_y": 1,
+      "aspect": 1,
+      "height": 3
+     },
+     "all_refusals": 4645,
+     "driver_of_all_refusals": {
+      "centre_x": 189,
+      "centre_y": 167,
+      "aspect": 3755,
+      "height": 534
+     }
+    },
+    "diagonal_error": 0.0
+   },
+   "M-30-HD": {
+    "rows": [
+     {
+      "frame": 96,
+      "id": 3,
+      "speed_px_per_frame": 5.522680508593631,
+      "height_px": 80.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 25,
+       "d2": 19.932464039303238,
+       "iou": 0.7350798013553376,
+       "share": {
+        "centre_x": 0.0003023457842509684,
+        "centre_y": 0.028087783592499804,
+        "aspect": 0.8612733813110609,
+        "height": 0.11033648931218827
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 2128,
+      "id": 55,
+      "speed_px_per_frame": 8.602325267042627,
+      "height_px": 85.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 26,
+       "d2": 11.1964062579307,
+       "iou": 0.725462143101673,
+       "share": {
+        "centre_x": 0.1194919070016916,
+        "centre_y": 0.03001465597953794,
+        "aspect": 0.754703880561003,
+        "height": 0.09578955645776743
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 2421,
+      "id": 59,
+      "speed_px_per_frame": 9.433981132056603,
+      "height_px": 68.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 24,
+       "d2": 17.726528269010938,
+       "iou": 0.6685722680771838,
+       "share": {
+        "centre_x": 0.0976330305586831,
+        "centre_y": 0.038183603874311044,
+        "aspect": 0.7376977440311601,
+        "height": 0.12648562153584586
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 3527,
+      "id": 89,
+      "speed_px_per_frame": 6.800735254367722,
+      "height_px": 71.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 28,
+       "d2": 10.12667099582847,
+       "iou": 0.6887676479531056,
+       "share": {
+        "centre_x": 0.12943356829281186,
+        "centre_y": 0.040349966806005694,
+        "aspect": 0.6594170532645964,
+        "height": 0.170799411636586
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 3875,
+      "id": 98,
+      "speed_px_per_frame": 7.810249675906654,
+      "height_px": 86.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 21,
+       "d2": 12.4171267136847,
+       "iou": 0.6525715321308053,
+       "share": {
+        "centre_x": 0.09275755323755132,
+        "centre_y": 0.10180124837174198,
+        "aspect": 0.8040388925498316,
+        "height": 0.0014023058408750948
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 4075,
+      "id": 104,
+      "speed_px_per_frame": 7.0178344238090995,
+      "height_px": 103.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 29,
+       "d2": 61.43849546540658,
+       "iou": 0.713343103934821,
+       "share": {
+        "centre_x": 8.30016852336012e-05,
+        "centre_y": 0.025956002993822558,
+        "aspect": 0.8569504722809563,
+        "height": 0.1170105230399875
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 4520,
+      "id": 117,
+      "speed_px_per_frame": 8.276472678623424,
+      "height_px": 81.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 28,
+       "d2": 36.84846590190203,
+       "iou": 0.7146147740809442,
+       "share": {
+        "centre_x": 0.00917852837390885,
+        "centre_y": 0.036152696317283524,
+        "aspect": 0.8101579421496472,
+        "height": 0.14451083315916047
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 5349,
+      "id": 130,
+      "speed_px_per_frame": 5.522680508593631,
+      "height_px": 86.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 25,
+       "d2": 9.923052121651544,
+       "iou": 0.7825559655253788,
+       "share": {
+        "centre_x": 5.794911462864692e-05,
+        "centre_y": 0.041243000174199955,
+        "aspect": 0.8158654817948829,
+        "height": 0.14283356891628846
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 6946,
+      "id": 171,
+      "speed_px_per_frame": 11.715374513859981,
+      "height_px": 89.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 23,
+       "d2": 16.941400825390453,
+       "iou": 0.7127514703260673,
+       "share": {
+        "centre_x": 0.08745290730768414,
+        "centre_y": 0.02520954052324089,
+        "aspect": 0.7810169907590235,
+        "height": 0.10632056141005138
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 7455,
+      "id": 183,
+      "speed_px_per_frame": 8.514693182963201,
+      "height_px": 82.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 23,
+       "d2": 27.62493260384491,
+       "iou": 0.6848620785500152,
+       "share": {
+        "centre_x": 0.08363177206467799,
+        "centre_y": 0.026692123090158375,
+        "aspect": 0.8003993314979746,
+        "height": 0.08927677334718905
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 7464,
+      "id": 184,
+      "speed_px_per_frame": 8.276472678623424,
+      "height_px": 83.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 24,
+       "d2": 21.165540757412213,
+       "iou": 0.7089342209104517,
+       "share": {
+        "centre_x": 0.01747611159983287,
+        "centre_y": 0.01685077253390472,
+        "aspect": 0.9068729158742327,
+        "height": 0.058800199992029796
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 7592,
+      "id": 187,
+      "speed_px_per_frame": 8.139410298049853,
+      "height_px": 77.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 26,
+       "d2": 16.153254796293695,
+       "iou": 0.7048267994580095,
+       "share": {
+        "centre_x": 0.06728473526202815,
+        "centre_y": 0.03651398811775129,
+        "aspect": 0.8677186294458955,
+        "height": 0.028482647174324992
+       },
+       "driver": "aspect"
+      }
+     }
+    ],
+    "summary": {
+     "missed": 12,
+     "rescued_by_gate_off": 0,
+     "with_refusal": 12,
+     "driver_of_missed": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 12,
+      "height": 0
+     },
+     "driver_of_rescued": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 0,
+      "height": 0
+     },
+     "all_refusals": 4432,
+     "driver_of_all_refusals": {
+      "centre_x": 126,
+      "centre_y": 127,
+      "aspect": 3961,
+      "height": 218
+     }
+    },
+    "diagonal_error": 0.0
+   }
+  },
+  "SVMOT": {
+   "seq_22_morning": {
+    "rows": [
+     {
+      "frame": 880,
+      "id": 2,
+      "speed_px_per_frame": 13.038404810405298,
+      "height_px": 121.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 13.950329825600692,
+       "iou": 0.5295986727935414,
+       "share": {
+        "centre_x": 0.004343675529935705,
+        "centre_y": 0.015211151188442866,
+        "aspect": 0.9327624690267753,
+        "height": 0.04768270425484616
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 943,
+      "id": 6,
+      "speed_px_per_frame": 6.800735254367722,
+      "height_px": 117.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 11.576672028107954,
+       "iou": 0.8142331493977272,
+       "share": {
+        "centre_x": 0.00043463988771045843,
+        "centre_y": 0.07362051866775425,
+        "aspect": 0.6469576512936589,
+        "height": 0.2789871901508764
+       },
+       "driver": "aspect"
+      }
+     }
+    ],
+    "summary": {
+     "missed": 2,
+     "rescued_by_gate_off": 2,
+     "with_refusal": 2,
+     "driver_of_missed": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 2,
+      "height": 0
+     },
+     "driver_of_rescued": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 2,
+      "height": 0
+     },
+     "all_refusals": 3068,
+     "driver_of_all_refusals": {
+      "centre_x": 1623,
+      "centre_y": 45,
+      "aspect": 1340,
+      "height": 60
+     }
+    },
+    "diagonal_error": 0.0
+   },
+   "seq_23_morning": {
+    "rows": [
+     {
+      "frame": 2,
+      "id": 11,
+      "speed_px_per_frame": 4.527692569068709,
+      "height_px": 99.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 23.554799899968568,
+       "iou": 0.3109999075950489,
+       "share": {
+        "centre_x": 0.18870930364450575,
+        "centre_y": 0.17565430927667722,
+        "aspect": 0.27068024535975416,
+        "height": 0.3649561417190629
+       },
+       "driver": "height"
+      }
+     }
+    ],
+    "summary": {
+     "missed": 1,
+     "rescued_by_gate_off": 0,
+     "with_refusal": 1,
+     "driver_of_missed": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 0,
+      "height": 1
+     },
+     "driver_of_rescued": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 0,
+      "height": 0
+     },
+     "all_refusals": 629,
+     "driver_of_all_refusals": {
+      "centre_x": 26,
+      "centre_y": 5,
+      "aspect": 328,
+      "height": 270
+     }
+    },
+    "diagonal_error": 0.0
+   },
+   "seq_24_morning": {
+    "rows": [
+     {
+      "frame": 403,
+      "id": 23,
+      "speed_px_per_frame": 17.10263137648707,
+      "height_px": 170.0,
+      "rescued_by_gate_off": false,
+      "refusal": null
+     }
+    ],
+    "summary": {
+     "missed": 1,
+     "rescued_by_gate_off": 0,
+     "with_refusal": 0,
+     "driver_of_missed": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 0,
+      "height": 0
+     },
+     "driver_of_rescued": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 0,
+      "height": 0
+     },
+     "all_refusals": 860,
+     "driver_of_all_refusals": {
+      "centre_x": 87,
+      "centre_y": 52,
+      "aspect": 693,
+      "height": 28
+     }
+    },
+    "diagonal_error": 0.0
+   },
+   "seq_25_morning": {
+    "rows": [],
+    "summary": {
+     "missed": 0,
+     "rescued_by_gate_off": 0,
+     "with_refusal": 0,
+     "driver_of_missed": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 0,
+      "height": 0
+     },
+     "driver_of_rescued": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 0,
+      "height": 0
+     },
+     "all_refusals": 781,
+     "driver_of_all_refusals": {
+      "centre_x": 85,
+      "centre_y": 11,
+      "aspect": 673,
+      "height": 12
+     }
+    },
+    "diagonal_error": 0.0
+   },
+   "seq_26_evening": {
+    "rows": [
+     {
+      "frame": 270,
+      "id": 8,
+      "speed_px_per_frame": 23.879907872519105,
+      "height_px": 414.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 11.671941267532189,
+       "iou": 0.7661986714749078,
+       "share": {
+        "centre_x": 0.006791062327034194,
+        "centre_y": 0.002677487019795209,
+        "aspect": 0.9131132850349563,
+        "height": 0.07741816561821435
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 340,
+      "id": 14,
+      "speed_px_per_frame": 22.147234590350102,
+      "height_px": 277.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 74.36938105644178,
+       "iou": 0.5547503440107767,
+       "share": {
+        "centre_x": 8.839422046644868e-05,
+        "centre_y": 0.0009505448060825898,
+        "aspect": 0.9497926954050068,
+        "height": 0.04916836556844423
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 406,
+      "id": 19,
+      "speed_px_per_frame": 17.00735135169495,
+      "height_px": 372.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 22.61433864435926,
+       "iou": 0.7029375283771594,
+       "share": {
+        "centre_x": 0.0031406580162796336,
+        "centre_y": 0.0025756456126586136,
+        "aspect": 0.9450063051040669,
+        "height": 0.049277391266994854
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 535,
+      "id": 21,
+      "speed_px_per_frame": 21.07723890835799,
+      "height_px": 305.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 57.9384568523751,
+       "iou": 0.597739976773087,
+       "share": {
+        "centre_x": 2.0328085645588236e-05,
+        "centre_y": 0.000296423452479341,
+        "aspect": 0.9762967902438611,
+        "height": 0.023386458218014074
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 717,
+      "id": 30,
+      "speed_px_per_frame": 18.607794065928395,
+      "height_px": 377.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 35.59560884008088,
+       "iou": 0.6658961297087287,
+       "share": {
+        "centre_x": 0.005451821779140742,
+        "centre_y": 0.002640437676306382,
+        "aspect": 0.9144566683291041,
+        "height": 0.07745107221544888
+       },
+       "driver": "aspect"
+      }
+     }
+    ],
+    "summary": {
+     "missed": 5,
+     "rescued_by_gate_off": 5,
+     "with_refusal": 5,
+     "driver_of_missed": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 5,
+      "height": 0
+     },
+     "driver_of_rescued": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 5,
+      "height": 0
+     },
+     "all_refusals": 909,
+     "driver_of_all_refusals": {
+      "centre_x": 13,
+      "centre_y": 3,
+      "aspect": 879,
+      "height": 14
+     }
+    },
+    "diagonal_error": 0.0
+   },
+   "seq_27_evening": {
+    "rows": [
+     {
+      "frame": 292,
+      "id": 10,
+      "speed_px_per_frame": 34.9857113690718,
+      "height_px": 424.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 34.974619008523874,
+       "iou": 0.6012268059703922,
+       "share": {
+        "centre_x": 0.02442698504076452,
+        "centre_y": 5.29078611386415e-05,
+        "aspect": 0.786391984750307,
+        "height": 0.18912812234778992
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 511,
+      "id": 22,
+      "speed_px_per_frame": 38.58108344772085,
+      "height_px": 437.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 10.37120900564825,
+       "iou": 0.7976830751083362,
+       "share": {
+        "centre_x": 0.04914964218871103,
+        "centre_y": 0.0023462257878810217,
+        "aspect": 0.7371216738928028,
+        "height": 0.21138245813060508
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 596,
+      "id": 24,
+      "speed_px_per_frame": 38.74596753211875,
+      "height_px": 467.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 11.701375168791218,
+       "iou": 0.7721694612350418,
+       "share": {
+        "centre_x": 0.04090121075471065,
+        "centre_y": 0.0022379196293103695,
+        "aspect": 0.8201637023775407,
+        "height": 0.13669716723843836
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 718,
+      "id": 27,
+      "speed_px_per_frame": 23.021728866442675,
+      "height_px": 406.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 28.03072849143117,
+       "iou": 0.6783977071616752,
+       "share": {
+        "centre_x": 0.0036064722232011367,
+        "centre_y": 0.001028999846850019,
+        "aspect": 0.9006504938484999,
+        "height": 0.0947140340814489
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 857,
+      "id": 32,
+      "speed_px_per_frame": 30.675723300355934,
+      "height_px": 446.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 13.052958801686568,
+       "iou": 0.7498682718576374,
+       "share": {
+        "centre_x": 0.01761314412553211,
+        "centre_y": 0.0031681786737065387,
+        "aspect": 0.8835292186084631,
+        "height": 0.09568945859229827
+       },
+       "driver": "aspect"
+      }
+     }
+    ],
+    "summary": {
+     "missed": 5,
+     "rescued_by_gate_off": 5,
+     "with_refusal": 5,
+     "driver_of_missed": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 5,
+      "height": 0
+     },
+     "driver_of_rescued": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 5,
+      "height": 0
+     },
+     "all_refusals": 1201,
+     "driver_of_all_refusals": {
+      "centre_x": 58,
+      "centre_y": 84,
+      "aspect": 1014,
+      "height": 45
+     }
+    },
+    "diagonal_error": 0.0
+   },
+   "seq_28_evening": {
+    "rows": [
+     {
+      "frame": 6,
+      "id": 1,
+      "speed_px_per_frame": 32.882366094914765,
+      "height_px": 309.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 42.90342024710719,
+       "iou": 0.6415333174459118,
+       "share": {
+        "centre_x": 0.0016192631618310947,
+        "centre_y": 0.0032056394942436444,
+        "aspect": 0.9864888434936807,
+        "height": 0.008686253850244581
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 94,
+      "id": 10,
+      "speed_px_per_frame": 39.19502519453202,
+      "height_px": 396.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 28.04904520126197,
+       "iou": 0.6685885298077769,
+       "share": {
+        "centre_x": 0.044703337323826274,
+        "centre_y": 0.0005613705035390952,
+        "aspect": 0.7927176676395092,
+        "height": 0.16201762453312543
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 305,
+      "id": 16,
+      "speed_px_per_frame": 38.62641583165593,
+      "height_px": 417.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 17.66670181554651,
+       "iou": 0.7177497568996122,
+       "share": {
+        "centre_x": 0.022521295617539246,
+        "centre_y": 0.00021417970993157858,
+        "aspect": 0.8378381119674141,
+        "height": 0.13942641270511516
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 397,
+      "id": 22,
+      "speed_px_per_frame": 30.64718584144391,
+      "height_px": 356.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 55.47213537400895,
+       "iou": 0.5894193730145911,
+       "share": {
+        "centre_x": 0.0032741866795288435,
+        "centre_y": 0.00058017387478639,
+        "aspect": 0.8969820345210623,
+        "height": 0.0991636049246225
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 443,
+      "id": 24,
+      "speed_px_per_frame": 31.016124838541646,
+      "height_px": 423.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 11.990481467926521,
+       "iou": 0.766595040293224,
+       "share": {
+        "centre_x": 0.017495074641868395,
+        "centre_y": 0.0027361437592650396,
+        "aspect": 0.8432575851564594,
+        "height": 0.13651119644240717
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 507,
+      "id": 25,
+      "speed_px_per_frame": 33.1058907144937,
+      "height_px": 304.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 101.7062342593413,
+       "iou": 0.4974887260635096,
+       "share": {
+        "centre_x": 0.00418199313666149,
+        "centre_y": 0.0005058894696886172,
+        "aspect": 0.9284831470008019,
+        "height": 0.066828970392848
+       },
+       "driver": "aspect"
+      }
+     }
+    ],
+    "summary": {
+     "missed": 6,
+     "rescued_by_gate_off": 6,
+     "with_refusal": 6,
+     "driver_of_missed": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 6,
+      "height": 0
+     },
+     "driver_of_rescued": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 6,
+      "height": 0
+     },
+     "all_refusals": 905,
+     "driver_of_all_refusals": {
+      "centre_x": 78,
+      "centre_y": 2,
+      "aspect": 775,
+      "height": 50
+     }
+    },
+    "diagonal_error": 0.0
+   },
+   "seq_29_evening": {
+    "rows": [
+     {
+      "frame": 704,
+      "id": 22,
+      "speed_px_per_frame": 8.602325267042627,
+      "height_px": 363.0,
+      "rescued_by_gate_off": true,
+      "refusal": {
+       "frames_before_crossing": 0,
+       "d2": 18.705442054944836,
+       "iou": 0.7257459462697625,
+       "share": {
+        "centre_x": 0.0006300611569046127,
+        "centre_y": 0.0006330374913266772,
+        "aspect": 0.9824173237932673,
+        "height": 0.0163195775585013
+       },
+       "driver": "aspect"
+      }
+     }
+    ],
+    "summary": {
+     "missed": 1,
+     "rescued_by_gate_off": 1,
+     "with_refusal": 1,
+     "driver_of_missed": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 1,
+      "height": 0
+     },
+     "driver_of_rescued": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 1,
+      "height": 0
+     },
+     "all_refusals": 546,
+     "driver_of_all_refusals": {
+      "centre_x": 10,
+      "centre_y": 3,
+      "aspect": 533,
+      "height": 0
+     }
+    },
+    "diagonal_error": 0.0
+   },
+   "seq_30_evening": {
+    "rows": [
+     {
+      "frame": 227,
+      "id": 1,
+      "speed_px_per_frame": 14.035668847618199,
+      "height_px": 71.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 5,
+       "d2": 36.950002116815284,
+       "iou": 0.7394782615744624,
+       "share": {
+        "centre_x": 0.00020615484930443841,
+        "centre_y": 0.00036789891403634023,
+        "aspect": 0.9739824007483555,
+        "height": 0.025443545488303757
+       },
+       "driver": "aspect"
+      }
+     },
+     {
+      "frame": 231,
+      "id": 10,
+      "speed_px_per_frame": 21.50581316760657,
+      "height_px": 761.0,
+      "rescued_by_gate_off": false,
+      "refusal": {
+       "frames_before_crossing": 3,
+       "d2": 9.80868977014689,
+       "iou": 0.7624222004449949,
+       "share": {
+        "centre_x": 0.002147746631558508,
+        "centre_y": 0.0021522430612602875,
+        "aspect": 0.979178643882517,
+        "height": 0.016521366424664227
+       },
+       "driver": "aspect"
+      }
+     }
+    ],
+    "summary": {
+     "missed": 2,
+     "rescued_by_gate_off": 0,
+     "with_refusal": 2,
+     "driver_of_missed": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 2,
+      "height": 0
+     },
+     "driver_of_rescued": {
+      "centre_x": 0,
+      "centre_y": 0,
+      "aspect": 0,
+      "height": 0
+     },
+     "all_refusals": 1085,
+     "driver_of_all_refusals": {
+      "centre_x": 21,
+      "centre_y": 7,
+      "aspect": 1035,
+      "height": 22
+     }
+    },
+    "diagonal_error": 0.0
+   }
+  }
+ }
+}
