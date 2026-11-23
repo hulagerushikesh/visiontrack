@@ -72,7 +72,10 @@ default should change. That question waits for the
       installed copy. These local installs reused already-installed
       dependencies rather than downloading fresh ones; hosted CI runs the full
       fresh-install check.
-- [ ] Pass hosted CI at the exact candidate commit.
+- [x] Pass hosted CI at the exact candidate commit: all seven jobs passed on
+      2026-11-23, including the isolated fresh wheel and source installs.
+      A later commit that only edits this checklist must pass CI again before
+      it is tagged.
 - [ ] Obtain owner approval for the verified commit, then publish the matching
       tag and verify the public files and a fresh public installation.
 - [ ] After publication, update the install instructions on the website and in
