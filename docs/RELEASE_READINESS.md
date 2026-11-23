@@ -1,5 +1,28 @@
 # VisionTrack release-readiness audit
 
+## Published 0.6.0 verification — 2026-11-23
+
+With explicit owner approval, the [0.6.0 scope](RELEASE_NOTES_0.6.0.md) was
+published from `2085dea8bff4f4614d60f0294ddfdf7826719ccf`. All seven hosted CI
+jobs passed at that exact commit, the release guard passed, and the release
+workflow built and published both files. [PyPI](https://pypi.org/project/visiontrack-mot/0.6.0/)
+and the [GitHub release](https://github.com/hulagerushikesh/visiontrack/releases/tag/v0.6.0)
+are live.
+
+| Public file | SHA-256 |
+| --- | --- |
+| `visiontrack_mot-0.6.0-py3-none-any.whl` | `1b2da8a87aff792fb743a33c5156600b3978fd2690ea785e8e58e5666c50eaf0` |
+| `visiontrack_mot-0.6.0.tar.gz` | `8c5fa5b234aa0255ad06f412f2fdc8814c8c867e117259741e0000e8206b97fc` |
+
+- [x] The wheel downloaded from PyPI matches the published digest, installs in
+      an isolated environment and loads version 0.6.0, the traffic preset,
+      `history_limit` and the command line from the installed copy.
+- [x] The default `TrackerConfig()` still has the motion gate on.
+- [x] Setup instructions updated to released 0.6.0; fixed teaching exports kept.
+
+C++ 0.1.1 and its accepted Python oracle are unchanged. A published 0.6.0/C++
+pairing is not established by this release.
+
 ## Published 0.5.1 verification — 2026-11-02
 
 With explicit owner approval, the [patch scope](RELEASE_NOTES_0.5.1.md) was

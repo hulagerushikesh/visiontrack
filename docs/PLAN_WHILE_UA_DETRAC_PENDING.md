@@ -9,7 +9,7 @@ about two weeks.
 - The traffic motion-gate question has three frozen tests behind it.
   RoundaboutHD did not support turning the gate off. GRAM-RTM supported it.
   SVMOT supported it and preferred it to the aspect-free gate.
-- The opt-in `preset("traffic")` is in the source. It is not on PyPI yet. The
+- The opt-in `preset("traffic")` is published in 0.6.0 (2026-11-23). The
   library default is unchanged.
 - The [default-change proposal](DEFAULT_CHANGE_PROPOSAL.md) is a draft. Its
   UA-DETRAC section is empty.

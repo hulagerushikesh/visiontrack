@@ -20,8 +20,8 @@ optional extras, and a build that produces a valid sdist + wheel
 
 `0.5.1` is published; see its [patch notes](RELEASE_NOTES_0.5.1.md) and
 [verification audit](RELEASE_READINESS.md). It delivers strict evidence readers
-and streaming diagnostic replay. `0.6.0` is a frozen candidate, not
-published; see its [release notes](RELEASE_NOTES_0.6.0.md). Previous releases
+and streaming diagnostic replay. `0.6.0` is published; see its
+[release notes](RELEASE_NOTES_0.6.0.md). It adds the opt-in traffic preset. Previous releases
 and their artifacts remain historical. For a future version, freeze scope and complete its readiness gates
 before tagging.
 Freezing scope or checking a

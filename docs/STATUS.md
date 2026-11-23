@@ -2,6 +2,13 @@
 
 A living checklist of what's shipped and what's planned. Tick items as they land.
 
+**Minor release published — 2026-11-23:** [0.6.0](RELEASE_NOTES_0.6.0.md)
+adds the opt-in `preset("traffic")` (motion gate off for fixed-camera traffic
+counting), optional track-history limits and opt-in YOLOX research options.
+Defaults, saved traces and the C++ parity contract are unchanged. Exact-head
+CI, the release workflow and an isolated install of the PyPI wheel pass. The
+default-change question still waits for UA-DETRAC.
+
 **Patch published — 2026-11-02:** [0.5.1](RELEASE_NOTES_0.5.1.md) delivers the
 two existing corrections below from approved `4a6b892`. Exact-head CI and both
 release jobs pass; public artifact bytes and a fresh public core/Lab install

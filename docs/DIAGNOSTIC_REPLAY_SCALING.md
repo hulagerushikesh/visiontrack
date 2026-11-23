@@ -6,7 +6,7 @@ The next engineering step removes the remaining per-match history growth from
 the **Lab diagnostic replay**. This is implemented in the checkout, not in the
 published 0.5.1 artifacts described below. The ordinary `ByteTracker()` still
 keeps full public history; callers can explicitly select
-[`history_limit`](API.md#optional-history-retention-checkout-only-not-published-in-051).
+[`history_limit`](API.md#optional-history-retention-added-in-060).
 
 The history audit found two built-in consumers: momentum reads the last box and
 the box `ocm_delta_t` matched observations earlier; the learned residual uses five

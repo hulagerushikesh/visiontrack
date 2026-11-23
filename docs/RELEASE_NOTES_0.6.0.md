@@ -2,16 +2,16 @@
 
 Scope status: **frozen on 2026-11-23**
 
-Release status: **candidate, not published**
+Release status: **published on 2026-11-23**
 
 This minor release packages the opt-in features added to the checkout since
 public 0.5.1. Every one is off unless asked for. The tracker's default
 behaviour, `TrackerConfig()`, the lineage presets, saved traces and the C++
-parity contract are unchanged. Publishing needs separate owner approval of the
-verified commit. Until then, install instructions keep naming the released
-0.5.1.
+parity contract are unchanged. With explicit owner approval, `v0.6.0` was
+published from `2085dea8bff4f4614d60f0294ddfdf7826719ccf`. Public 0.5.1 files
+and tags remain unchanged.
 
-Once published: `python -m pip install --upgrade "visiontrack-mot==0.6.0"`.
+Install with `python -m pip install --upgrade "visiontrack-mot==0.6.0"`.
 
 ## What is new
 
@@ -76,7 +76,7 @@ default should change. That question waits for the
       2026-11-23, including the isolated fresh wheel and source installs.
       A later commit that only edits this checklist must pass CI again before
       it is tagged.
-- [ ] Obtain owner approval for the verified commit, then publish the matching
+- [x] Obtain owner approval for the verified commit, then publish the matching
       tag and verify the public files and a fresh public installation.
-- [ ] After publication, update the install instructions on the website and in
+- [x] After publication, update the install instructions on the website and in
       the README to 0.6.0.

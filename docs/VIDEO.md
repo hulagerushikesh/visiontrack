@@ -129,9 +129,9 @@ the OpenCV window need physical hardware.
 - This is the first Horizon-2 piece (study → tool); see
   [`HORIZONS.md`](HORIZONS.md).
 
-## Optional research diagnostics (checkout only)
+## Optional research diagnostics (added in 0.6.0)
 
 The [bounded proposal-capture API](YOLOX_PROPOSAL_CAPTURE.md) preserves the
 rectangles and suppression decisions behind YOLOX detections, without changing
-the ordinary video pipeline. It is not in published 0.5.1 and does not estimate
+the ordinary video pipeline. It was added in 0.6.0 and does not estimate
 localization uncertainty or improve tracking by itself.

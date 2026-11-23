@@ -28,7 +28,7 @@ for frame_detections in stream:                    # list[Detection]
 - **`TrackObservation`** — one confirmed box: `frame, track_id, xyxy, score, class_id`.
 - **`Detection`** — one input box: `xyxy, score, class_id, feature=None`.
 
-### Optional history retention (checkout only; not published in 0.5.1)
+### Optional history retention (added in 0.6.0)
 
 ```python
 tracker = ByteTracker(history_limit=6)

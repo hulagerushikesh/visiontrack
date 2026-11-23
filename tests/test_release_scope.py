@@ -34,8 +34,7 @@ def test_current_release_versions_agree_with_frozen_published_scope() -> None:
     assert package_version.group(1) == visiontrack.__version__ == "0.6.0"
     assert validate_tag(ROOT, "refs/tags/v0.6.0") == "0.6.0"
     assert "Scope status: **frozen" in notes
-    # A candidate is never described as published before the owner publishes it.
-    assert "Release status: **candidate, not published**" in notes
+    assert "Release status: **published on 2026-11-23**" in notes
     patch = (ROOT / "docs/RELEASE_NOTES_0.5.1.md").read_text(encoding="utf-8")
     assert "Release status: **published on 2026-11-02**" in patch
     for version in ("0.4.0", "0.5.0"):
