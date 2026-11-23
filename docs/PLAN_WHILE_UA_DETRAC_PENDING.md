@@ -40,7 +40,10 @@ Publishing stays the owner's step.
 *B1 done 2026-11-23: 0.6.0 published. B2 done 2026-11-23: a gate-off parity
 fixture is checked by both runtimes, and C++ CI passes it. B3 done 2026-11-23:
 the measured list is in the
-[proposal](DEFAULT_CHANGE_PROPOSAL.md#dry-run-what-moves-if-the-default-flips-measured-2026-11-23).*
+[proposal](DEFAULT_CHANGE_PROPOSAL.md#dry-run-what-moves-if-the-default-flips-measured-2026-11-23).
+B4 done 2026-11-23: the [run sheet](UA_DETRAC_RUN_SHEET.md) needs two files
+(test annotations and detections, no images); a full-size made-up run took
+10 minutes.*
 
 **B2. C++ agreement with the gate off.** C++ 0.1.1 already has the gate
 switch. Add one gate-off case to the cross-runtime fixtures, so both runtimes
