@@ -43,7 +43,9 @@ the measured list is in the
 [proposal](DEFAULT_CHANGE_PROPOSAL.md#dry-run-what-moves-if-the-default-flips-measured-2026-11-23).
 B4 done 2026-11-23: the [run sheet](UA_DETRAC_RUN_SHEET.md) needs two files
 (test annotations and detections, no images); a full-size made-up run took
-10 minutes.*
+10 minutes. R1 done 2026-11-23: [why the gate misses](GATE_MISS_EXPLANATION.md);
+on SVMOT every recovered crossing was refused on width-to-height ratio, not
+speed.*
 
 **B2. C++ agreement with the gate off.** C++ 0.1.1 already has the gate
 switch. Add one gate-off case to the cross-runtime fixtures, so both runtimes
