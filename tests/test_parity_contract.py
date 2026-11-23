@@ -83,6 +83,61 @@ def test_digest_mismatch_and_noncanonical_bytes_are_rejected(tmp_path: Path) -> 
         load_contract(noncanonical)
 
 
+GATE_OFF_FIXTURE = Path(__file__).parent / "fixtures/tracker_parity_v1_gate_off.json"
+GATE_OFF_DIGEST = Path(__file__).parent / "fixtures/tracker_parity_v1_gate_off.sha256"
+
+
+def recorded_gate_off_digest() -> str:
+    digest, filename = GATE_OFF_DIGEST.read_text(encoding="utf-8").strip().split("  ")
+    assert filename == GATE_OFF_FIXTURE.name
+    return digest
+
+
+def test_gate_off_fixture_is_canonical_content_addressed_and_exact() -> None:
+    payload = load_contract(GATE_OFF_FIXTURE, expected_sha256=recorded_gate_off_digest())
+    assert payload["contract_id"] == CONTRACT_ID
+    assert payload["config"]["use_mahalanobis_gating"] is False
+    assert fixture_sha256(canonical_json(payload)) == recorded_gate_off_digest()
+    assert_contract(payload)
+
+
+def test_gate_off_fixture_differs_only_in_gate_and_tentative_threshold() -> None:
+    gate_on = load_contract(FIXTURE)["config"]
+    gate_off = load_contract(GATE_OFF_FIXTURE)["config"]
+    changed = {key for key in gate_on if gate_on[key] != gate_off[key]}
+    assert set(gate_on) == set(gate_off)
+    assert changed == {"use_mahalanobis_gating", "n_init"}
+
+
+def test_gate_off_fixture_discriminates_the_gate_switch() -> None:
+    """The same frames with the gate on must give a different track ID.
+
+    Frame 1 widens the tentative box: IoU 0.5 passes, but the aspect change puts
+    the squared Mahalanobis distance near 24.5, far above the 9.4877 threshold.
+    Gate off keeps the tentative track (ID 1), so the later stationary track is
+    ID 2. Gate on drops it and spawns ID 2 from the wide box, so the later track
+    is ID 3. Emitted boxes stay stationary and therefore exact on every backend.
+    """
+    payload = load_contract(GATE_OFF_FIXTURE)
+    assert {item["track_id"] for item in payload["expected_observations"]} == {2}
+
+    gated = copy.deepcopy(payload)
+    gated["config"]["use_mahalanobis_gating"] = True
+    gated_ids = {item["track_id"] for item in execute_contract(gated)}
+    assert gated_ids == {3}
+
+
+def test_public_cli_verifies_gate_off_fixture(capsys) -> None:
+    assert (
+        cli_main(["parity-contract", str(GATE_OFF_FIXTURE), "--digest", str(GATE_OFF_DIGEST)])
+        == 0
+    )
+    output = capsys.readouterr().out
+    assert recorded_gate_off_digest() in output
+    assert "observations: 3" in output
+    assert "parity: exact; reset: deterministic" in output
+
+
 def test_public_cli_verifies_fixture_digest_exact_output_and_reset(capsys) -> None:
     assert cli_main(["parity-contract", str(FIXTURE), "--digest", str(DIGEST)]) == 0
     output = capsys.readouterr().out

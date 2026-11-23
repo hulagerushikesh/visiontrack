@@ -44,6 +44,8 @@ jobs:
           visiontrack ablate
           visiontrack parity-contract tests/fixtures/tracker_parity_v1.json \
             --digest tests/fixtures/tracker_parity_v1.sha256
+          visiontrack parity-contract tests/fixtures/tracker_parity_v1_gate_off.json \
+            --digest tests/fixtures/tracker_parity_v1_gate_off.sha256
 
   installed-package:
     name: isolated wheel + sdist delivery
