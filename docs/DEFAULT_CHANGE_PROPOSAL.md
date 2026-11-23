@@ -78,6 +78,55 @@ Fixed now, before the UA-DETRAC result exists.
    is also gate on today. Until that milestone, the two packages' defaults
    differ, and the release notes say so.
 
+## Dry run: what moves if the default flips (measured 2026-11-23)
+
+On a local throwaway branch that is never pushed or merged, the one line
+`use_mahalanobis_gating: bool = True` was changed to `False`, and nothing else.
+Both test suites were then run against it. This measures the work a "go"
+decision would create. It is not a result about tracking accuracy.
+
+**Python suite: 45 tests fail, in 11 files.** Everything else passes.
+
+| Group | Tests | What they are | Work if the change goes ahead |
+|---|---|---|---|
+| Experiments that refuse a changed default | 31 | The continuity-warning scene and the MOT17 case intake check that the default is exactly what they were frozen with, and stop otherwise (28 stop with that message, and 3 more fail because they expected a later error). | Working as designed. Pin each experiment's frozen settings explicitly, with the gate on, so it keeps reproducing what it ran. |
+| Tests that assume the gate is on by default | 9 | Aspect-gate development, the frame-rate noise probe, Lab association explanations and the MOT17 case trace. They build `TrackerConfig()` and expect a gate distance, a 9.4877 threshold or a gate rejection. | Name the gate explicitly in each, since they test the gate itself. |
+| Pinned Lab output hashes | 4 | The Lab initiation conformance fixture and three preprocessing-version content IDs. Their recorded configuration changes, so the hashes change. | Regenerate them and record the new hashes as a new producer version. Older reports stay valid. |
+| Preset guard | 1 | The test that says `preset("traffic")` leaves the default unchanged. | Rewrite it for the new meaning: `traffic` matches the default, and a new gate-on preset restores the old behaviour. |
+
+**C++ suite against the flipped Python: 5 tests fail, 293 pass.** All five
+compare C++ defaults with Python defaults on real MOT17 sequences (two full
+trajectories, the gate-residual check and two parity-report tests). They fail
+because C++ still has the gate on, which is the expected split named in check
+6. Either the C++ default flips in the synchronisation milestone, or these
+tests name the gate explicitly on both sides until then.
+
+**Parity fixtures: no change.** Both cross-runtime fixtures name the gate
+explicitly (one on, one off), so neither moves.
+
+**The three web demo traces: no test fails, but a choice is needed.** They are
+fixed files checked by their bytes, and all three record the gate as on. The
+match-failure lesson exists to show a motion-gate rejection, so it must stay
+pinned with the gate on and say "gate on" rather than "default". The other two
+can stay as they are, labelled with the setting they ran with.
+
+**Saved experiment results: no change.** Five result files record the gate as
+on. They describe what ran and stay as they are.
+
+**Words to update.** These say or imply that the gate is on by default:
+`docs/TRAFFIC_PRESET.md`, `docs/API.md` (the preset line), the presets
+docstring, the readiness checklist line "the default still has the motion gate
+on", and five website pages that mention the gate (benchmark, crossing
+diagnosis, two Lab views and the write-up). Protocols and earlier records stay
+as written, because they describe the default at the time.
+
+**Not measured here:** the pedestrian guard (MOT17 val-half HOTA) on a real
+release candidate, and DanceTrack. They need full benchmark runs and belong to
+check 1.
+
+**Estimate:** about one day of edits for a "go", plus the benchmark runs for
+check 1 and a separate C++ milestone.
+
 ## What this proposal does not cover
 
 - **Turning traffic at busy junctions.** All three venues are elevated views of
