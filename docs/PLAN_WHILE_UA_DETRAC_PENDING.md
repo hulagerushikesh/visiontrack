@@ -37,6 +37,11 @@ install from the built files. A minor version, because it adds public names.
 *Done when:* the candidate is ready on main and the owner can publish it.
 Publishing stays the owner's step.
 
+*B1 done 2026-11-23: 0.6.0 published. B2 done 2026-11-23: a gate-off parity
+fixture is checked by both runtimes, and C++ CI passes it. B3 done 2026-11-23:
+the measured list is in the
+[proposal](DEFAULT_CHANGE_PROPOSAL.md#dry-run-what-moves-if-the-default-flips-measured-2026-11-23).*
+
 **B2. C++ agreement with the gate off.** C++ 0.1.1 already has the gate
 switch. Add one gate-off case to the cross-runtime fixtures, so both runtimes
 are checked with the gate off as well as on. This is a test, not a C++
