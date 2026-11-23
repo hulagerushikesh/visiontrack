@@ -146,6 +146,29 @@ visiontrack parity-contract tests/fixtures/tracker_parity_v1.json \
   --digest tests/fixtures/tracker_parity_v1.sha256
 ```
 
+## Gate-off fixture (added 2026-11-23)
+
+A second independent v1 fixture,
+`tests/fixtures/tracker_parity_v1_gate_off.json` with its digest beside it,
+checks both runtimes with `use_mahalanobis_gating: false`, the setting used by
+`preset("traffic")`. It changes only that switch and `n_init` (3 instead of 2)
+from the first fixture's configuration. The contract ID stays v1: no behavior
+or structure changed.
+
+In eight frames, a tentative track is offered a wider box (IoU 0.5, squared
+Mahalanobis distance about 24.5 against the 9.4877 threshold). With the gate
+off it keeps the match, so a later stationary track is emitted as ID 2. With
+the gate on the match is refused and that later track becomes ID 3. The Python
+tests check both outcomes, so the fixture fails if the switch is ignored.
+Emitted boxes are stationary, so they stay exact across numerical backends.
+It is a test addition only. The first fixture, its digest and the default
+configuration are unchanged.
+
+```bash
+visiontrack parity-contract tests/fixtures/tracker_parity_v1_gate_off.json \
+  --digest tests/fixtures/tracker_parity_v1_gate_off.sha256
+```
+
 Research behavior is accepted in Python first. A later contract version may add
 bounded anonymous identity continuity only after its gallery, abstention,
 expiry, eviction, privacy, and memory semantics have passed Python evaluation.
