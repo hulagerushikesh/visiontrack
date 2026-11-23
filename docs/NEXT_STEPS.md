@@ -4,6 +4,11 @@ VisionTrack is the NumPy reference, research platform, and learning product.
 Work here must protect readability, reproducibility, and the ability to explain
 why a tracking change helps or hurts.
 
+**Current plan — 2026-11-23:** while the UA-DETRAC terms are pending, follow
+the [two-week plan](PLAN_WHILE_UA_DETRAC_PENDING.md): ship the proven traffic
+preset as a release candidate, prepare the default change without making it,
+then explain the gate result on data already used. Decision point 2026-12-04.
+
 **Work resumed — 2026-11-04:** the owner has lifted the project-wide wait.
 Bath's clarification blocks the RoundaboutHD route, not independent work.
 The [current work package](WEEKLY_DELIVERY_PLAN.md#work-resumes-alongside-the-bath-enquiry-2026-11-04)
