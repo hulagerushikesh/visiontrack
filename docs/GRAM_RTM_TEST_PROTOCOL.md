@@ -105,7 +105,7 @@ yet. The tracker comparison is next and needs the owner's approval.
 
 Run once, with the owner's approval, under the rules above. Each variant ran
 twice on each sequence, and both runs gave byte-identical output. Full numbers
-are in [`experiments/gram_rtm_gate_v1_result.json`](../experiments/gram_rtm_gate_v1_result.json).
+are in [`experiments/gram_rtm_gate_v1_result.json`](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/gram_rtm_gate_v1_result.json).
 
 Main line, cancel-reversals counter (correct / false / missed):
 

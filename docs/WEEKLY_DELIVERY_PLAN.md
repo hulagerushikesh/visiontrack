@@ -22,7 +22,7 @@
       with the replay command, figure and regeneration instructions.
 - [x] Confirm author metadata, disclosure and manuscript license before submission.
       Confirmed 2026-11-20: independent researcher, Codex and Claude disclosed,
-      CC BY 4.0. Final source is in [`paper/`](../paper/README.md).
+      CC BY 4.0. Final source is in [`paper/`](https://github.com/hulagerushikesh/visiontrack/blob/main/paper/README.md).
 - [ ] Submit the preprint to arXiv `cs.CV` from the author's own account.
       **Deferred by the owner on 2026-11-20:** three pages is too short to
       publish alone; publish later with more content. The manuscript stays
