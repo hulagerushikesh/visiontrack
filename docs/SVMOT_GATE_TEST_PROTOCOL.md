@@ -143,7 +143,7 @@ them and no label has been used for counting yet.
 
 Run once, with the owner's approval, under the rules above. Each variant ran
 twice on each sequence, and both runs gave byte-identical output. Full numbers
-are in [`experiments/svmot_gate_v1_result.json`](../experiments/svmot_gate_v1_result.json).
+are in [`experiments/svmot_gate_v1_result.json`](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/svmot_gate_v1_result.json).
 
 Correct / false / missed crossings, and ID switches:
 

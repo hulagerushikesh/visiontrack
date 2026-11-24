@@ -32,7 +32,7 @@ We compare `new_track_thresh` at 0.60 and 0.55 across nine scripted scenarios, t
 
 **B.** Removing detections at frames 5 and 6 leaves the reference crossing intact. The candidate reports the same ID before and after the gap, with no public observations during the gap. The counter requires consecutive frames and emits no event.
 
-**C.** Scoring the emitted events against the reference produces one correct count for the object and one false count for clutter. Both thresholds miss the gap crossing. All three outcomes also hold at 2 px/frame. [Full 54-case results](../experiments/initiation_threshold_v1_results.json) · [Results and limitations](INITIATION_THRESHOLD_FINDINGS.md) · [Lab explanation](https://visiontrack.hulage.in/lab/crossings#controlled-threshold)
+**C.** Scoring the emitted events against the reference produces one correct count for the object and one false count for clutter. Both thresholds miss the gap crossing. All three outcomes also hold at 2 px/frame. [Full 54-case results](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/initiation_threshold_v1_results.json) · [Results and limitations](INITIATION_THRESHOLD_FINDINGS.md) · [Lab explanation](https://visiontrack.hulage.in/lab/crossings#controlled-threshold)
 
 ## Results and interpretation
 
@@ -104,7 +104,7 @@ The author has read the draft and confirmed the submission decisions on
 2026-11-20: author line "Rushikesh Hulage, Independent researcher"; a
 disclosure naming both OpenAI Codex and Anthropic Claude; and the CC BY 4.0
 manuscript license. The final LaTeX source and figure are in
-[`paper/`](../paper/README.md). All counts were rechecked against the saved
+[`paper/`](https://github.com/hulagerushikesh/visiontrack/blob/main/paper/README.md). All counts were rechecked against the saved
 summary, and every external link resolves. What remains is the author's own
 arXiv submission: check endorsement for `cs.CV`, upload the source and
 inspect the PDF arXiv builds. [arXiv submission guide](https://info.arxiv.org/help/submit/index.html)

@@ -1,6 +1,6 @@
 # Process-noise sensitivity: crossing check on two cameras
 
-The earlier [process-noise probe](../experiments/frame_rate_noise_probe_v1_result.json)
+The earlier [process-noise probe](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/frame_rate_noise_probe_v1_result.json)
 counted fewer track births when the Kalman filter's one-step process covariance
 was multiplied by 3 or 9. Births are not a measure of accuracy. This follow-up
 replayed the **same saved detector proposals** with each scale and scored
@@ -36,9 +36,9 @@ real-world traffic counts. The next test should freeze a new camera-separated
 comparison and inspect false associations and crossing errors before adopting
 any time-aware motion model.
 
-The [machine-readable result](../experiments/process_noise_crossing_v1_result.json)
+The [machine-readable result](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/process_noise_crossing_v1_result.json)
 includes input SHA-256 fingerprints, every matched/missed/extra event frame,
-and same-frame overlap. The [replay script](../experiments/process_noise_crossing_replay.py)
+and same-frame overlap. The [replay script](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/process_noise_crossing_replay.py)
 uses the private local walkthrough's frozen camera adapters and the saved
 detections; it does not rerun the detector or redistribute footage. Run it
 with the walkthrough root as its argument in the existing A40/trafficlens

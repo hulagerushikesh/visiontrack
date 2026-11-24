@@ -222,7 +222,7 @@ image files):
 }
 ```
 
-The local [detector replay tool](../experiments/localization_detector_replay.py)
+The local [detector replay tool](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/localization_detector_replay.py)
 closes the declared-box/proposal-provenance gap for a pinned YOLOX model. Start
 with the same manifest shape, but empty `detections` lists. Keep the images and
 manifest outside Git. From the repository root, use an environment with the

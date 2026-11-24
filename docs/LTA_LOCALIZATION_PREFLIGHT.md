@@ -121,13 +121,13 @@ PYTHONPATH=src:. python -m experiments.lta_localization_preflight \
 
 ## Development-only spread pilot — 2026-11-13
 
-The [cross-camera pilot](../experiments/lta_spread_pilot.py) ran the already
+The [cross-camera pilot](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/lta_spread_pilot.py) ran the already
 chosen X/640 model on the same 63 local images. It checked the pinned source,
 annotation and model hashes and exact ordinary/captured detection parity. It
 used one-to-one same-class IoU-0.5 matches, then fitted B2 (class, predicted
 box size and score) and B3 (B2 plus proposal spread) on seven cameras and
 ranked supported matches on the omitted camera. Each camera was omitted once.
-The [aggregate receipt](../experiments/lta_spread_pilot_v1_result.json) contains
+The [aggregate receipt](https://github.com/hulagerushikesh/visiontrack/blob/main/experiments/lta_spread_pilot_v1_result.json) contains
 no image or annotation rows.
 
 There were 406 returned road-class detections, 300 one-to-one matches to the
