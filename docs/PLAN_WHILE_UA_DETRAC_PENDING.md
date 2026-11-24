@@ -110,3 +110,7 @@ limits.
 - Publish 0.6.0 once the candidate is ready, if you want the preset on PyPI
   before the UA-DETRAC answer. This is optional.
 - Send the reminder email on 2026-12-01 if there is no reply by then.
+
+*2026-11-24: the owner also sent terms questions to the GRAM-RTM group
+(Urban1 image rights) and the TUMTraf Intersection contacts. Either could
+open a turning-traffic test; neither changes the 2026-12-04 decision.*
