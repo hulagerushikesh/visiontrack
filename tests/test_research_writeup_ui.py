@@ -65,3 +65,20 @@ def test_writeup_reports_the_svmot_traffic_result_with_its_limits() -> None:
         "SVMOT_GATE_TEST_PROTOCOL.md",
     ):
         assert phrase in page
+
+
+def test_writeup_closing_names_the_traffic_follow_up_and_its_limits() -> None:
+    page = (ROOT / "src/features/research-writeup/ResearchWriteup.tsx").read_text()
+    closing = page.split('<section aria-labelledby="takeaway">', 1)[1].split("</section>", 1)[0]
+    for phrase in (
+        "traffic follow-up",
+        'preset("traffic")',
+        "not a new default",
+        "GATE_MISS_EXPLANATION.md",
+        "mostly straight roads",
+        "one detector",
+        "no test yet at busy turning junctions",
+        "UA-DETRAC",
+    ):
+        assert phrase in closing
+    assert "moves much further between frames" not in page
