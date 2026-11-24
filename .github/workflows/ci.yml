@@ -101,6 +101,22 @@ jobs:
       - name: Ruff check
         run: ruff check src tests experiments data scripts/check_installed_package.py scripts/check_release.py
 
+  docs:
+    name: docs (strict build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install docs-site extras
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[docs-site]"
+      - name: Build docs, failing on any broken link or missing page
+        run: python -m mkdocs build --strict
+
   web:
     name: web contract + build
     runs-on: ubuntu-latest
