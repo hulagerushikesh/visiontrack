@@ -151,15 +151,19 @@ def _part_path(cache: Path, seq: str, first: int, last: int) -> Path:
 
 
 def detect_sequence(root: Path, model: Path, seq: str, cache: Path,
-                    max_minutes: float | None = None, det=None, chunk: int = CHUNK) -> dict:
+                    max_minutes: float | None = None, det=None, chunk: int = CHUNK,
+                    count: int | None = None, frames=None) -> dict:
     """Detect every frame, saving one part per `chunk` frames.
 
     Parts already on disk are skipped, so a stopped run resumes where it left
     off. With `max_minutes`, no new part starts once that time has passed. The
     final detections file and receipt are written only when every part exists.
+    `count` and `frames` (a reader like `frames_from_zip`) default to the
+    motorway sequences; the Urban1 runner passes its own.
     """
     det = det if det is not None else detector(model)
-    count = SEQUENCES[seq][0]
+    count = count if count is not None else SEQUENCES[seq][0]
+    frames = frames if frames is not None else frames_from_zip
     spans = [(a, min(a + chunk - 1, count)) for a in range(1, count + 1, chunk)]
     (cache / f"{seq}-parts").mkdir(parents=True, exist_ok=True)
     start = time.perf_counter()
@@ -171,7 +175,7 @@ def detect_sequence(root: Path, model: Path, seq: str, cache: Path,
         if max_minutes is not None and minutes >= max_minutes:
             break
         rows = [[n, *map(float, d.xyxy), float(d.score), int(d.class_id)]
-                for n, img in frames_from_zip(root, seq, range(first, last + 1))
+                for n, img in frames(root, seq, range(first, last + 1))
                 for d in det.detect(img)]
         tmp = path.with_suffix(".tmp")
         with tmp.open("wb") as handle:
