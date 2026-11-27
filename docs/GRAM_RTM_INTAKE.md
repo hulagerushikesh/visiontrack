@@ -32,6 +32,12 @@ and evaluation code under GPL v3.
   as local test data, with citation and no redistribution, and that its labels
   were manually annotated and verified. See the
   [Urban1 protocol](GRAM_RTM_URBAN1_TEST_PROTOCOL.md).
+  *Downloaded 2026-11-27, with the owner's approval:* the Urban1 image
+  archive from the publisher's link, 1,083,224,565 bytes, SHA-256
+  `dd82f2f564c36cca37523a26ab643c779612c9e25a05cb89fbfdc8470ba83b50`. It is
+  kept owner-local. The protocol's format check passed: 23,435 images for
+  23,435 label files, every image 600×360. No image was viewed, no detector
+  was run and nothing was scored.
 - **Labels:** no separate licence. The web page's research-use statement
   applies, with the 2013 IWINAC paper cited.
 
