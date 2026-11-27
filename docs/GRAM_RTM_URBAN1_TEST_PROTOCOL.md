@@ -143,3 +143,26 @@ The runner is extended for Urban1 (sequence size, the two-line rule, the
 turning split and the block rule) and tested on made-up files **before** the
 image download. Then, each with the owner's approval: the download, the
 format and alignment checks, the detector sessions, and the comparison.
+
+## Label-only steps, recorded 2026-11-27
+
+Run with the owner's approval, from the exclusion map and labels only. No
+image was viewed and no detector was run. The rules above are unchanged.
+
+- **Lines:** the labelled area is long and level (axis ratio 2.64), so the
+  across-and-along rule applies. The across line is vertical at x = 299.5,
+  from y = 133 to 359. The along line is horizontal at y = 246, across the
+  full width.
+- **Reference crossings at offset +1:** 272 in total (208 on the across line,
+  64 on the along line), well above the 30 needed.
+- **Turning split:** of 243 labelled vehicles, **1 is turning**, 184 are
+  straight and 58 are unclassified. None of the 272 reference crossings was
+  made by a turning vehicle. Traffic in this view runs almost entirely left
+  and right along one road.
+
+**What this means, stated before any detector run:** the turning safeguard
+in the decision rule has nothing to measure, so this test **cannot judge
+turning traffic**. It can still act as a harm check on dense two-way street
+traffic with hand-labelled identities, which no earlier venue covers. The
+turning definition is not changed after seeing this split; doing so now
+would be choosing a rule from the data.
