@@ -49,7 +49,7 @@ on is **not supported**, whatever its counts.
 | --- | --- | --- | --- |
 | **A. Own recording** | None | One fixed phone video of a road from a window or bridge, 30 fps, 5 minutes (9,000 frames). Detector about 2.5 hours, in approved 40-minute sessions. About an hour of the owner's time confirming crossings, as in the c002 label audit. | One site; we make the reference ourselves. Faces or plates may be visible, so the video stays owner-local and only counts are published. |
 | B. SVMOT test scenes | None | 18.3 GB download, own detector run on 9 test sequences. | Non-commercial licence; mostly parked vehicles, so few line crossings; known label-quality concerns. |
-| C. GRAM-RTM Urban1 | Authors' reply on image rights | Light detector run at 600×360. | Blocked until the authors answer. |
+| C. GRAM-RTM Urban1 | Authors' reply on image rights | Detector run at 600×360. | Blocked until the authors answer. *2026-11-27: cleared; now the junction test in the [Urban1 protocol](GRAM_RTM_URBAN1_TEST_PROTOCOL.md). The detector run is about 6 hours, not light, because the input is 640 pixels whatever the frame size.* |
 
 **Owner's choice, 2026-11-22: option B, SVMOT test scenes.** Its rules are
 frozen in the [SVMOT protocol](SVMOT_GATE_TEST_PROTOCOL.md). Only the nine

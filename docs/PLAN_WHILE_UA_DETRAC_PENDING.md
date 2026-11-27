@@ -114,3 +114,8 @@ limits.
 *2026-11-24: the owner also sent terms questions to the GRAM-RTM group
 (Urban1 image rights) and the TUMTraf Intersection contacts. Either could
 open a turning-traffic test; neither changes the 2026-12-04 decision.*
+
+*2026-11-27: GRAM-RTM said yes to Urban1. Its junction test rules are frozen
+in the [Urban1 protocol](GRAM_RTM_URBAN1_TEST_PROTOCOL.md). Next, before any
+download: extend and test the runner. The image download and the detector
+run (about 6 hours in 40-minute sessions) each need the owner's approval.*

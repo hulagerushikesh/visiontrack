@@ -27,7 +27,11 @@ and evaluation code under GPL v3.
   licence covers only the two M-30 sequences, so **Urban1's image rights are
   not stated**. The web page says the database is public "for scientific
   research purposes". That does not clearly cover third-party camera footage,
-  so ask the authors before using Urban1.
+  so ask the authors before using Urban1. *Answered 2026-11-27:* an author
+  confirmed Urban1 images and labels may be used for non-commercial research
+  as local test data, with citation and no redistribution, and that its labels
+  were manually annotated and verified. See the
+  [Urban1 protocol](GRAM_RTM_URBAN1_TEST_PROTOCOL.md).
 - **Labels:** no separate licence. The web page's research-use statement
   applies, with the 2013 IWINAC paper cited.
 

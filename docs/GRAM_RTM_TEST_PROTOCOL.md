@@ -16,6 +16,9 @@ completeness counts, and the archive lists of the images.
   1200×720), all frames, both 30 fps. Their images are CC BY 3.0, recorded by
   the dataset authors. Urban1 is excluded until the authors confirm its image
   rights. If it is later admitted, it gets its own dated amendment before use.
+  *2026-11-27: admitted under its own
+  [Urban1 protocol](GRAM_RTM_URBAN1_TEST_PROTOCOL.md); this result is
+  unchanged.*
 - **Reference:** every labelled vehicle (car, van, truck, big truck,
   motorbike), using the box centre.
 - **Frame alignment:** label file *k* is expected to belong to image *k*+1.
