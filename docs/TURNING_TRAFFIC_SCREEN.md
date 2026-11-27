@@ -47,7 +47,12 @@ no video). AI City, CityFlow, UrbanTracker and the other sources in the
    It was not; no email had been sent. The owner sent it on 2026-11-24.
    *Update, 2026-11-27:* the authors said yes. The test rules are frozen in
    the [Urban1 protocol](GRAM_RTM_URBAN1_TEST_PROTOCOL.md); no image is
-   downloaded yet.
+   downloaded yet. *Correction, later on 2026-11-27:* the label-only turning
+   split found **1 turning vehicle of 243** and no turning crossings. This
+   camera sees one road with two-way traffic, not turning traffic, so Urban1
+   cannot test the junction question. TUMTraf Intersection is now the only
+   listed turning candidate. See the
+   [label-only record](GRAM_RTM_URBAN1_TEST_PROTOCOL.md#label-only-steps-recorded-2026-11-27).
 2. **TUMTraf Intersection is the second choice,** if its 2D boxes and IDs hold
    up and the owner accepts non-commercial terms that forbid sharing derived
    labels. Results could still be published as counts. Its pages confirm 3D
